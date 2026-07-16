@@ -1,0 +1,603 @@
+{
+  "project": "BREAK NOTICE",
+  "baseline_version": "0.1.0",
+  "created": "2026-07-16",
+  "canonical_player_image": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
+  "locked_decisions": [
+    "3D TPS",
+    "Unity 6",
+    "URP",
+    "GameObject PhysX",
+    "No telekinesis",
+    "One active ally",
+    "Separate cargo strap",
+    "Grounded Corporate Action Realism"
+  ],
+  "files": [
+    {
+      "path": ".editorconfig",
+      "bytes": 254,
+      "sha256": "b18dd4c0ef678c62ad0cd9b137637a29a9b21889cf836de7b6a6d5683c36d6a8"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 332,
+      "sha256": "8cd18129b800ffa8192dde4059bac50094c6e3ed76ac7a8525b50598efea8874"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "bytes": 272,
+      "sha256": "202037187b940545a5118b1a357566e1394f739125f98288af9ba191d7c60334"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/change_request.md",
+      "bytes": 300,
+      "sha256": "7d3e82035ea62e9f4dd8f95884991b071e1c107ce5c1c40e495be5f5268af384"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "bytes": 373,
+      "sha256": "69ee75aee8f83edfdb0451f6b3522848573a4dd2162742126acb86b21dce9420"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 548,
+      "sha256": "13d1bed59536c54db6f7714d7a891d9e941a86d82f3d6f07bfa37080903c78c7"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 4096,
+      "sha256": "56d28a5423f10c231bb54da2693896e296e1d287e9053a6489a2013bc8ecfbea"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 567,
+      "sha256": "e2c996d94645669bc193e732ed2174cdfbe504865ad283211af07f321f35d6a2"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Environment/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Materials/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Props/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/UI/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/VFX/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Audio/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Editor/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Allies/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Core/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Enemies/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Physics/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Presentation/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Progression/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Data/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/00_Bootstrap/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/10_Prototype/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/20_VerticalSlice/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Assets/_Project/Settings/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/Packages/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/ProjectSettings/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Game/README.md",
+      "bytes": 564,
+      "sha256": "9e0ee12472fd1467c47984ba22c519c4f166ebf5e58d86f4ab8cac853aa0e9a6"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 747,
+      "sha256": "6f82a2798f3c734c9b5cea65e6dad178129574ab6e61c97fba6c40c03f49186a"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4606,
+      "sha256": "a0fbf4e1de90553da2b2afa40d0d1862c6b34946a163a4388f91bc4dfbcf93be"
+    },
+    {
+      "path": "docs/00_project/CHANGE_CONTROL.md",
+      "bytes": 1311,
+      "sha256": "13cf928731a03100a7fdc337390f7f0bcb84dd08c33764619079ab1fc2de5773"
+    },
+    {
+      "path": "docs/00_project/DECISION_LOG.md",
+      "bytes": 1371,
+      "sha256": "7e00835d4683ceaaee135345508118bd8bf9f1723034b582bcce8b93cd0afcc2"
+    },
+    {
+      "path": "docs/00_project/DESIGN_STATUS.md",
+      "bytes": 703,
+      "sha256": "0c6f2f50085b333be3b6ab1e98a1c2116f0443999c90bab3b9d5624f4722e29f"
+    },
+    {
+      "path": "docs/00_project/GLOSSARY.md",
+      "bytes": 2040,
+      "sha256": "53aab8bbb3a7e46989041ad721da17de5b2f49cbd7818403085658da1811eab4"
+    },
+    {
+      "path": "docs/00_project/PROJECT_CHARTER.md",
+      "bytes": 2369,
+      "sha256": "4825984a1cf7a98ef9271915147ff89acb1c9f88d15f9abbbd25f5b5c2694ef7"
+    },
+    {
+      "path": "docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md",
+      "bytes": 2598,
+      "sha256": "d4448f684fec96bbcb8478e8a697e52c62881154d8ca90576d60081185168aa7"
+    },
+    {
+      "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
+      "bytes": 3732,
+      "sha256": "b31da94a5d0e862cd6e056eeb685871b0a9631b52b4ac6b5f800cfee0a2ba98f"
+    },
+    {
+      "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
+      "bytes": 2078,
+      "sha256": "9c1c367392ac92d196a27fe3690fb34d9eb7d111e6b7ef1bc1323ff120875efc"
+    },
+    {
+      "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
+      "bytes": 2272,
+      "sha256": "6f8312e51734288ac77ccbf6eb9cd78f302ca3f88a302419e09623a12e763a70"
+    },
+    {
+      "path": "docs/02_design/COMBAT_AND_PHYSICS.md",
+      "bytes": 2330,
+      "sha256": "99f674d69d0920aaba21bdc7b7b78ab1e5e15356d4f719af6a1631e222b43778"
+    },
+    {
+      "path": "docs/02_design/ENEMY_AND_ENCOUNTER_DESIGN.md",
+      "bytes": 1969,
+      "sha256": "d11eabe16c62e2c7ba91cb7c53a8f31898a0d3f098527b95c09c96bdc6255073"
+    },
+    {
+      "path": "docs/02_design/GAMEPLAY_SPEC.md",
+      "bytes": 3571,
+      "sha256": "ac3588ac1ab746aeb9662d0f04bbfd8c7035c3924096ac1ef04cae1492d9dde9"
+    },
+    {
+      "path": "docs/02_design/MASTER_GDD.md",
+      "bytes": 9440,
+      "sha256": "327307fb4c4389c74867d786d66c6abb99f1c828837b3755b6ae165d4f325c8e"
+    },
+    {
+      "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
+      "bytes": 1903,
+      "sha256": "eb48d2883fce3a3c1e688a3a08e17ff74f1c08160714b9c0674b013e0f6c449d"
+    },
+    {
+      "path": "docs/02_design/OBJECT_TAXONOMY.md",
+      "bytes": 1217,
+      "sha256": "2deca0f6056556b8c62c9679abc92492c32d684d703dcd4537fc4420e6a41aa8"
+    },
+    {
+      "path": "docs/02_design/ROGUELITE_PROGRESSION.md",
+      "bytes": 1533,
+      "sha256": "eab424dfb4e7d105d08db0bd6e822e669d0697f54393e7351ceb593b8e445339"
+    },
+    {
+      "path": "docs/03_art/ALLY_VISUAL_SPEC.md",
+      "bytes": 1089,
+      "sha256": "7766f5af5bcd0c79a425f96689c7396e34363151032aea33328645e151165670"
+    },
+    {
+      "path": "docs/03_art/ART_DIRECTION.md",
+      "bytes": 2167,
+      "sha256": "335b07860c778a64dccdf0e3636788c7b2917fe3cbdc5f195496c3ef42b0970c"
+    },
+    {
+      "path": "docs/03_art/CAMERA_SPEC.md",
+      "bytes": 1937,
+      "sha256": "281d709669940f5d4a7dac01359fea774aacc19490c0d2593d9a56872570b8bf"
+    },
+    {
+      "path": "docs/03_art/CARGO_STRAP_SPEC.md",
+      "bytes": 1270,
+      "sha256": "fce9a2962ccd7e5ab954b089ab4e2ce0630fc5ad8b2ae65fc6ed9b6150587014"
+    },
+    {
+      "path": "docs/03_art/OFFICE_CORE_KIT.md",
+      "bytes": 1297,
+      "sha256": "b88b09c3e21521ad48f5ee356d6845ca7b53aba1c6d1989d4b9b870b1e0fb58b"
+    },
+    {
+      "path": "docs/03_art/PLAYER_VISUAL_SPEC.md",
+      "bytes": 1849,
+      "sha256": "19ed178e32bb6f4772d08174027a53d739fbf86789d5034fb0dddf0e1369ae07"
+    },
+    {
+      "path": "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
+      "bytes": 6291,
+      "sha256": "e1c216302eb43a4c81062b3256da58d03a8d37e444612eef602c9abc01bac031"
+    },
+    {
+      "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
+      "bytes": 1229,
+      "sha256": "8aefec65fa26a14928244d0db52170ca16b293d52e84b06251653b834057b1ef"
+    },
+    {
+      "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
+      "bytes": 1101,
+      "sha256": "54da06239da995fa884b8f14ba7c42194087a811fbfef654f5ffc419bade6582"
+    },
+    {
+      "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
+      "bytes": 1709,
+      "sha256": "004b8b700d4b9661101b4b50cd016b09b1cf6fddd8e43ec44385f14b6eb206fb"
+    },
+    {
+      "path": "docs/04_technical/DATA_AND_EVENTS.md",
+      "bytes": 1002,
+      "sha256": "33c30b02833fe9e56c1e5d5024f1ec81a3f61148e5abc0d4928db56ba8511538"
+    },
+    {
+      "path": "docs/04_technical/PERFORMANCE_BUDGET.md",
+      "bytes": 994,
+      "sha256": "dc3e9a76b52b4f5d5680c496b3162136baca42097daaac0fed71ed40dbfa4c64"
+    },
+    {
+      "path": "docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md",
+      "bytes": 1713,
+      "sha256": "644eaa4c02918a3cb45b16e9ff2b6130f47f369009e26991628fceefc9d57a89"
+    },
+    {
+      "path": "docs/04_technical/SAVE_AND_VERSIONING.md",
+      "bytes": 617,
+      "sha256": "508538074ebdbc5e06e7919ca1d9ee83849fb9ccc23e270434bec7992d1778e0"
+    },
+    {
+      "path": "docs/04_technical/SOFTWARE_ARCHITECTURE.md",
+      "bytes": 2168,
+      "sha256": "6e1f3bc6e6a9bd3ea2d143ead1c703c5e996a4bf71a5ba8155f5cfff13861462"
+    },
+    {
+      "path": "docs/04_technical/TECHNICAL_DESIGN.md",
+      "bytes": 2522,
+      "sha256": "5266e3e3ad1c495ffa273cfbc141cb71104bcdfc02a3f36b7fa8ccb50f26b4dc"
+    },
+    {
+      "path": "docs/04_technical/UNITY_PROJECT_STANDARD.md",
+      "bytes": 1445,
+      "sha256": "1a1a5c194cb7e30381a4b356cc45849eb3e35e5634b64b664cbc0b75115f34d6"
+    },
+    {
+      "path": "docs/05_production/ASSET_LIST.md",
+      "bytes": 1178,
+      "sha256": "2ad4c4aa09b28761758c41c9aa89270beacead7c9d99a4f19edf2afe2c2792c9"
+    },
+    {
+      "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
+      "bytes": 1135,
+      "sha256": "e6203755153eee9fed43a66c7f11ddf40060dd2466eb08a620f45ae385b8f460"
+    },
+    {
+      "path": "docs/05_production/MILESTONES_AND_GATES.md",
+      "bytes": 937,
+      "sha256": "8ad464bfdb3b221ca09996d13d29a74fe48a14bafddc65e636f96c12515166e2"
+    },
+    {
+      "path": "docs/05_production/RISK_REGISTER.md",
+      "bytes": 1569,
+      "sha256": "52884087ef863026d37f0a2c449d040f8af4de57b772a4cb4251f4c0a526b8bb"
+    },
+    {
+      "path": "docs/05_production/VERTICAL_SLICE_SCOPE.md",
+      "bytes": 1141,
+      "sha256": "9b390644eef207e062fb2b4516f2afd189ce93d547d55fde487960a322eea4c8"
+    },
+    {
+      "path": "docs/05_production/WATERFALL_PLAN.md",
+      "bytes": 1775,
+      "sha256": "657011d980bbc1b0d1f22822376bb3d0431759d76eedeb1f48483fb321a28ab5"
+    },
+    {
+      "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
+      "bytes": 1077,
+      "sha256": "a1fe0786cb5dfda760334058d63e6b6557471514a2b6071fea5eb7525d5c8137"
+    },
+    {
+      "path": "docs/06_codex/CODEX_EXECUTION_PROTOCOL.md",
+      "bytes": 1955,
+      "sha256": "049d13b8fe4bafe9a9ff4417cab7d4b183484a2a2c46775c38e4a9e49e952ae9"
+    },
+    {
+      "path": "docs/06_codex/DEFINITION_OF_DONE.md",
+      "bytes": 896,
+      "sha256": "dd0ab8b9cae867ac175fbf0a62a9935c9e6e57090e2a5aeb28d324cfa1b8d4d0"
+    },
+    {
+      "path": "docs/06_codex/PROMPT_LIBRARY.md",
+      "bytes": 1217,
+      "sha256": "5ff09a1aea1d497eadf5f913a475cd0c77cf6a45de967fc7df52fb27e2143a38"
+    },
+    {
+      "path": "docs/06_codex/REVIEW_CHECKLIST.md",
+      "bytes": 618,
+      "sha256": "1e7dccf3c1a39b730b868459272afeac8702bc6d65f9930e03a6a6492a67fde7"
+    },
+    {
+      "path": "docs/06_codex/TASK_TEMPLATE.md",
+      "bytes": 871,
+      "sha256": "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
+    },
+    {
+      "path": "docs/07_quality/ACCEPTANCE_TESTS.md",
+      "bytes": 4496,
+      "sha256": "ce61aa4d7adbb81cda2799b898e12cc877829f1a6e751a7a801d4d21410ebd98"
+    },
+    {
+      "path": "docs/07_quality/BUG_SEVERITY.md",
+      "bytes": 668,
+      "sha256": "b88d07db774ff7452a6dc7dec1c0d3e40accb3553bb407eb9c7d201289ca48a9"
+    },
+    {
+      "path": "docs/07_quality/PLAYTEST_PLAN.md",
+      "bytes": 1128,
+      "sha256": "a18b85483d8467c511c56ce67f0c1c2e54fa55ca9f2e07c0d12c2e1308d98adf"
+    },
+    {
+      "path": "docs/07_quality/TEST_STRATEGY.md",
+      "bytes": 804,
+      "sha256": "0893c1c4d57ea53a7ff7458cae5d4c395b45ee63f81379917950c34b8cd2140b"
+    },
+    {
+      "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",
+      "bytes": 656,
+      "sha256": "4007cf3d7034c148abf86e23abb15d2c7fc22bbb2cd7d4ee95f665a55dd9b6c0"
+    },
+    {
+      "path": "docs/08_marketing/POSITIONING.md",
+      "bytes": 776,
+      "sha256": "94c41515718fa78e9519ae32a9b9fb1904cce2aaaf86737994d0cfa26a0c6d9a"
+    },
+    {
+      "path": "docs/08_marketing/TRAILER_BEATS.md",
+      "bytes": 567,
+      "sha256": "aa8080bfb75f1a62f03205c7466ab7c48b0aa6224a971fad75ed7cf8234def5f"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0001-ENGINE-AND-RENDERING.md",
+      "bytes": 595,
+      "sha256": "ee066d3d72fde019beb8a5827abc3abf388ed5a00624a7dd65325667b0c748c7"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0002-THREE-DIMENSIONAL-TPS.md",
+      "bytes": 357,
+      "sha256": "dafd2164c32b0a08c95bab2dd3275a79fd7508f9e753cf297a6d666b553882bf"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0003-NO-TELEKINESIS.md",
+      "bytes": 430,
+      "sha256": "ba972dbcb929ef48b3dfd7262ce8d2900a373e690c8c1b5ec94e1dacd8beebb0"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0004-ALLY-SCOPE.md",
+      "bytes": 331,
+      "sha256": "4c9ad6aa737a2a2c49778c411e19aadc26e5b622ebb0ee5d1aa72d2a5ccbe329"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0005-ART-DIRECTION.md",
+      "bytes": 454,
+      "sha256": "a6975d5b44312f97eec38e85c28039dc9e456ea0850a5457fae99563fc13f3ac"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0006-WATERFALL-WITH-VALIDATION-GATE.md",
+      "bytes": 528,
+      "sha256": "49483831ef5ba98c1c9adbd7766bbaebf2b13657470b9dd337c9501238f46bdd"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md",
+      "bytes": 482,
+      "sha256": "d565fa1182d2fb449513d306144897dbbcc0b1dbf15b545449771f2617a2fd74"
+    },
+    {
+      "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
+      "bytes": 35663,
+      "sha256": "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
+    },
+    {
+      "path": "docs/archive/BREAK_NOTICE_Original_GDD_SUPERSEDED.md",
+      "bytes": 29249,
+      "sha256": "db1b37692a55feb7384f104ab37c06154e7342d050c9e45a93458efb0f7e1158"
+    },
+    {
+      "path": "docs/archive/README.md",
+      "bytes": 293,
+      "sha256": "2276416b9fab864c27525970a1fee107e045f1a7b3ced33e16d21e05c4e93be3"
+    },
+    {
+      "path": "references/README.md",
+      "bytes": 325,
+      "sha256": "4b2443dd92810622a88e71f4c623f6e82c74ecc22c4726443066ee83b7bc0564"
+    },
+    {
+      "path": "references/approved/README.md",
+      "bytes": 312,
+      "sha256": "462cb5f7f0ce2f2698140db39be8877558139c2ecb9bcfd1c9ec11301b8f0bda"
+    },
+    {
+      "path": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
+      "bytes": 2949592,
+      "sha256": "0004044cde346ec3eb9b379230cade2dda57e54725d61a606c1c8d6014bbd6b9"
+    },
+    {
+      "path": "references/archive/CHR_00_Player_Identity_Lock_v001.png",
+      "bytes": 2915523,
+      "sha256": "e949a5496e34ed1cd8d8fe0d7cc624cedd34c813f365aa3deeccb512f4231800"
+    },
+    {
+      "path": "references/archive/KEYART_Exploration_Office_Chaos_A.png",
+      "bytes": 2333160,
+      "sha256": "b5b9fd1550ea53e59c4816f26d373d1c83365bc4e81de1f75d17927cc5c866c9"
+    },
+    {
+      "path": "references/archive/KEYART_Exploration_Office_Chaos_B.png",
+      "bytes": 2447390,
+      "sha256": "3165adf35754a02b1ec7f76db69eac8848f8ba41fefb82be318ed4135a7ff904"
+    },
+    {
+      "path": "references/exploration/EXP_01_Cinematic_Key_Art.png",
+      "bytes": 3529048,
+      "sha256": "374855b69d8ea7d33668dcd804a01cc7f50efe86b717ddeaa8f29506f2bc2755"
+    },
+    {
+      "path": "references/exploration/EXP_02_Graphic_Comic.png",
+      "bytes": 4160196,
+      "sha256": "de8e184daba5ea1a3bc97711d53fd6fa4cb07c2cff97138790c864a35aafaeae"
+    },
+    {
+      "path": "references/exploration/EXP_03_Painterly_Concept.png",
+      "bytes": 3362512,
+      "sha256": "fcc985647e1d37a7a3d53214c1d7422e916407d09e3c4105a14f2d1fce7c39e7"
+    },
+    {
+      "path": "references/exploration/EXP_04_Isometric_Gameplay.png",
+      "bytes": 3291348,
+      "sha256": "74053ec592defdb2b47b6749dd8a5aa98c20ee2b7f8ba90b3d18d736156fd868"
+    },
+    {
+      "path": "references/exploration/EXP_05_Character_Team_Lineup.png",
+      "bytes": 3185725,
+      "sha256": "24da2c4120736224a5089ea06442bcfd7f3042630bccd2e9182ac97d381ce2cb"
+    },
+    {
+      "path": "references/exploration/EXP_06_Night_Fluorescent_Noir.png",
+      "bytes": 3243405,
+      "sha256": "a45c7f08e20b910aa0aedf3f64498ecc15a3393f7ccca857b47d30113be083bb"
+    },
+    {
+      "path": "references/exploration/EXP_07_Bright_Corporate_Satire.png",
+      "bytes": 3207166,
+      "sha256": "310eb8f8c40716502d947595ea57f43d9ddf6c9e8276c8abf0fcb7afbfccb6a6"
+    },
+    {
+      "path": "references/exploration/EXP_08_Copyroom_Paper_Storm.png",
+      "bytes": 3472821,
+      "sha256": "43111eebf7e08ce77cb1216fcc25a1f711d175e5b3da2e6b3f7a8b7debc3c0b4"
+    },
+    {
+      "path": "references/exploration/EXP_09_Chair_Redirect_Low_Angle.png",
+      "bytes": 3379140,
+      "sha256": "af54acf6fb13e6eb56b7ee9c0751b8a97bbaff18eaa00ad2b4f005348dc4e380"
+    },
+    {
+      "path": "references/exploration/EXP_10_Conference_Table_Finisher.png",
+      "bytes": 3466980,
+      "sha256": "425c220779c9b87e57c425defeea2f610e5abba056c11c9079377df581495aec"
+    },
+    {
+      "path": "references/exploration/README.md",
+      "bytes": 915,
+      "sha256": "27c58e7d694408a4d879aaf392357378015d3e95d1a3eb22ab7d08fae090ea47"
+    },
+    {
+      "path": "tasks/README.md",
+      "bytes": 249,
+      "sha256": "d14f48af5bbcace86cfc61a0b9540335b3b3ed7881e0414339ce9bfd4069b9de"
+    },
+    {
+      "path": "tasks/TASK_TEMPLATE.md",
+      "bytes": 871,
+      "sha256": "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
+    }
+  ]
+}
