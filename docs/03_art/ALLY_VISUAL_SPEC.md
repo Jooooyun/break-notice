@@ -1,40 +1,62 @@
 # Ally Visual Specification
 
-## 버티컬 슬라이스 Canon 후보
+## 승인 이미지
 
-첫 동료는 `Facilities Mover` 한 명이다. 다른 직군은 본 제작 승인 후 확장한다.
+![CHR_01](../../references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png)
 
-## 역할이 외형에 보여야 하는 요소
+`CHR_01_First_Ally_Identity_v001_FINAL`을 CHR_01 First Ally Identity Production Visual Canon으로 승인한다.
 
-- 현장·물류 직원용 짙은 남색 또는 회청색 작업 셔츠
+승인 범위는 이미지와 아래 Canonical Elements에 한정한다. 상세 동료 게임플레이, 애니메이션 수 또는 Unity 구현은 승인하지 않는다.
+
+## Canonical Elements
+
+- 평범하고 현실적인 시설·물류 직원 정체성
+- 회청색 계열의 실용 작업복
 - 회사 사원증
-- 작업 장갑과 안전화
-- 공구 벨트 또는 소형 유지보수 파우치
-- 의자·카트를 밀 수 있는 현실적인 현장 체형
-- 전투 갑옷과 총기 없음
+- 작업 장갑
+- 안전화
+- 소형 유지보수 파우치
+- 현실적인 현장 근무자 체형
+- 절제되고 진지한 표정
+- 현실적인 성인 해부학, 체중과 자세
+- Grounded Corporate Action Realism의 닳은 PBR 원단·가죽·고무·플라스틱·금속 재질
+- 1인 개발 가능한 부품 밀도
 
-## Silhouette
+## Visual Differentiation
 
-주인공과 구분:
+CHR_00과 구분:
 
-- 붉은 넥타이 없음
-- 한쪽 팔 브레이스 없음
-- 넓은 작업 셔츠와 공구 벨트
-- Medium을 밀 때 낮은 자세
+- 암적색 넥타이 없음
+- 플레이어 하중 분산 하네스와 외부 장착형 팔 브레이스 없음
+- 허리 릴, 검정·황색 화물 스트랩, 카라비너와 자산 클램프 없음
+- 플레이어 얼굴·비대칭 장비 실루엣·주인공형 영웅 자세를 복제하지 않음
 
-적과 구분:
+보안 적과 구분:
 
-- 보안 유니폼·방패 없음
-- 회사 지원 부서 색상과 사원증
-- 공격적인 전투 자세가 아니라 물류 작업 자세
+- 보안 유니폼·riot shield 없음
+- 갑옷·방탄복·총기·곤봉 없음
+- 경찰·군사·전술·슈퍼히어로 장비 없음
+- 공격적인 전투 전문가가 아닌 일반 직원 실루엣
 
-## Production Limits
+## Non-Canonical Elements
 
-- 일반 전투 화면 한 명
-- 기본 얼굴 표정 최소 세트
-- Pass Light, Push Medium, Suppressed, Relay Move 애니메이션 우선
-- 자유 전투 콤보·적 처치 애니메이션 제외
+- 이미지의 정확한 얼굴 세부
+- 성별 표현, 민족성, 정확한 나이와 머리 모양
+- 이름, 성격과 개인 배경 이야기
+- 피부·머리카락 렌더 품질
+- 정확한 주름·마모·흠집 위치
+- 생성 이미지의 미세 비대칭과 렌더링 아티팩트
+- `Facilities Mover` 영문 역할명과 부서별 공식 색상 체계
 
-## Pending Image
+## Draft Functional Behavior — Not Approved by the Visual Lock
 
-`CHR_01_Ally_Identity_Lock_v001`
+- 정확한 패스 재고, 거리와 타이밍
+- Catch mechanics
+- Relay Position 수, 배치와 이동 조건
+- Suppressed 규칙
+- Heavy 지원 행동
+- AI 우선순위와 로직
+- 애니메이션 우선순위와 정확한 수
+- 리깅, IK 또는 Unity 구현 방식
+
+CHR_01 Visual Canon은 위 기능을 암시하거나 승인하지 않는다.

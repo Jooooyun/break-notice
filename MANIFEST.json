@@ -10,12 +10,16 @@
   "canonical_gear_image": "references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png",
   "canonical_gear_visual_spec": "docs/03_art/CARGO_STRAP_SPEC.md",
   "canonical_gear_visual_adr": "docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md",
-  "locked_production_visual": "CHR_00 Player Identity; GEAR_01 Cargo Strapping System",
+  "canonical_ally_image": "references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png",
+  "canonical_ally_visual_spec": "docs/03_art/ALLY_VISUAL_SPEC.md",
+  "canonical_ally_visual_adr": "docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md",
+  "locked_production_visual": "CHR_00 Player Identity; GEAR_01 Cargo Strapping System; CHR_01 First Ally Identity",
   "locked_production_visuals": [
     "CHR_00 Player Identity",
-    "GEAR_01 — Cargo Strapping System"
+    "GEAR_01 — Cargo Strapping System",
+    "CHR_01 — First Ally Identity"
   ],
-  "next_production_visual_target": "CHR_01 — First Ally Identity",
+  "next_production_visual_target": "PGT_01 — Gameplay Camera",
   "production_visual_lock_sequence": [
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
@@ -71,13 +75,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 9721,
-      "sha256": "257d0c178ab8b17eb32241bcc3b67dfacbbeb7562cdd05f2892ab19f6d3e9ffb"
+      "bytes": 10773,
+      "sha256": "d7f766822fa8b298365c436d0e6e180775e620118cc85ba0484017da115748e1"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1175,
-      "sha256": "7e21ad044bf67032385b4835279dc336ca0d9df80e11e11b393b711db90b5cf1"
+      "bytes": 1470,
+      "sha256": "6d87058d9a069fb865d49d9549a7fb7ffdc0210d7837776fe21fa289ce8d3545"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -216,8 +220,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 4789,
-      "sha256": "03e647c2346e6c770175d22b69e2cb03b366e26615a6377b77b300b1ed56d2b2"
+      "bytes": 4918,
+      "sha256": "7cbfa2984f48c5196c4902fcd7cab659a317eaaf7a63671e8a0f7e9aab6e537e"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -226,13 +230,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 1547,
-      "sha256": "c7c673b2689fdb3ab7efa384e5490544f9b5dbeb01c8fd99f127eb0745c51056"
+      "bytes": 1714,
+      "sha256": "fcdf21ee91355aaa0010119d3a6bd88d6c65258e9144344608eed9518b8406f7"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 1829,
-      "sha256": "88430dd3981140a9dd753009165fe9568a72e810dde1c9db734a4b45b7877169"
+      "bytes": 1937,
+      "sha256": "e4291a8edfe5c73f91b8a04acad800e05c861dd5699a0991408e7f83720af49c"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -301,8 +305,8 @@
     },
     {
       "path": "docs/03_art/ALLY_VISUAL_SPEC.md",
-      "bytes": 1089,
-      "sha256": "7766f5af5bcd0c79a425f96689c7396e34363151032aea33328645e151165670"
+      "bytes": 2268,
+      "sha256": "b8635c48cfa9e3867d2a1f714c63a2b36b02c440cf4824f276862413792262cb"
     },
     {
       "path": "docs/03_art/ART_DIRECTION.md",
@@ -331,13 +335,13 @@
     },
     {
       "path": "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
-      "bytes": 6484,
-      "sha256": "b682cfe4c469ef53f786d7b23a024cd21c05af53b03184dcbef586af0f01f742"
+      "bytes": 6751,
+      "sha256": "01eb6fc2b2fe63cbd799759902be47052b1f920d4875c66609095fae1c60e7b0"
     },
     {
       "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
-      "bytes": 1842,
-      "sha256": "f67a427b2a3df08a2d5018bd5b163779a4abf6509b93332e003e6d4e5d6888d8"
+      "bytes": 1953,
+      "sha256": "65f6b948a5828e84aaf4b1a88d2f90176a213225d18d1d2df03a504c40828ce7"
     },
     {
       "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
@@ -346,8 +350,8 @@
     },
     {
       "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
-      "bytes": 2763,
-      "sha256": "2d18d9fb20690afad99749cd25ac5b3ef9800b49f30eebe664e52d81345cb335"
+      "bytes": 2961,
+      "sha256": "3dc7e99bc96b842f7148ba16f6093de56e257a01fb689434c71314e4223783a7"
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
@@ -386,18 +390,18 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 1261,
-      "sha256": "cb1c2cb2fba14869e0dcc19d4e6cc0c4e15693c77b40d6d4701d518a88b0d2c3"
+      "bytes": 1313,
+      "sha256": "55b2e6f2fac1db544621dc1768ceb4a5fe59af2c6a04f6223764e3df51ed608e"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
       "bytes": 1135,
-      "sha256": "53be393ad174f3d3028116371a17b24c4543b2fc2c0dc4f5b54967951066792e"
+      "sha256": "799479f2ae8dd950a8e5ddc584cf2b2cb16f0a31100f54ee00f37722c7159c5d"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 949,
-      "sha256": "fd712e690fd44ac06460bdc10aff1ea7b4f7d3cb4c14813b28eb8063a988ab9b"
+      "bytes": 1000,
+      "sha256": "6e5f4e0f28a44ddd05dd5eb5929281a8e4bef38128c5f6076a0737dd5d3df5a5"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -520,6 +524,11 @@
       "sha256": "a8e5c3c7f4419c7e344305e9ec2a682046934396c52b30a3ffb907ee321500fa"
     },
     {
+      "path": "docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md",
+      "bytes": 1394,
+      "sha256": "342c15a194aa6a0f1e564ea10e8ef4e260450200efe3b33829b27e2d77d20a6c"
+    },
+    {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
       "bytes": 35663,
       "sha256": "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
@@ -541,13 +550,18 @@
     },
     {
       "path": "references/approved/README.md",
-      "bytes": 332,
-      "sha256": "2dbc1a1de53a6b00838499ce71d6104d8531b104bb8cd57f10a62b2adb15c635"
+      "bytes": 354,
+      "sha256": "5590379dd9b6a19822b6955e20337b3b84377772aaf8d0b16704bdb7f41a7b99"
     },
     {
       "path": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
       "bytes": 2949592,
       "sha256": "0004044cde346ec3eb9b379230cade2dda57e54725d61a606c1c8d6014bbd6b9"
+    },
+    {
+      "path": "references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png",
+      "bytes": 1943223,
+      "sha256": "6bdb6564de2174ac91a5ca3a42f6d6fd5466a255dc60423e0f5e3e9b5cb6e7b9"
     },
     {
       "path": "references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png",

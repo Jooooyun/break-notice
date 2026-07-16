@@ -5,7 +5,7 @@
 | ID | Asset | Status |
 |---|---|---|
 | CHR-00 | Player | Visual locked, 3D pending |
-| CHR-01 | Facilities Mover | Visual pending |
+| CHR-01 | First Ally — facilities/logistics employee | Visual locked, 3D and gameplay pending |
 | ENY-01 | Compliance Runner | Design pending |
 | ENY-02 | Partition Guard | Design pending |
 | ENY-03 | Elite variant | Conditional |

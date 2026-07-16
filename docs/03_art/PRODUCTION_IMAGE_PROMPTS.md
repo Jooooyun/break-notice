@@ -40,6 +40,8 @@ The red necktie remains completely separate. No floating object and no rope-swin
 
 ## CHR_01 — Ally Identity
 
+Status: `LOCKED` as `references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png`. 아래 과거 프롬프트는 승인된 Revision 작업이 아닌 경우 재사용하지 않는다. Canonical Elements는 `ALLY_VISUAL_SPEC.md`와 ADR-0009를 따른다.
+
 ```text
 Use the approved CHR_00 realism, material, and office-world quality. Create one full-body three-quarter design for the Facilities Mover ally on a neutral gray background.
 The ally is a believable facilities/logistics employee in worn dark-blue workwear, employee badge, gloves, safety shoes, and a practical tool belt. No powered brace, no red necktie, no armor, no firearm.

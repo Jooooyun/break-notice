@@ -10,6 +10,8 @@
 
 ![승인된 GEAR_01 장비 시트](references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png)
 
+![승인된 CHR_01 첫 동료 비주얼](references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png)
+
 ## 현재 상태
 
 | 항목 | 상태 |
@@ -19,8 +21,8 @@
 | 초능력 Grab 제거 | LOCKED |
 | 직접 집기 + 화물 스트랩 + 동료 패스 | LOCKED |
 | 주인공 비주얼 `CHR_00 v002` | LOCKED |
-| 실제 게임 카메라 | PENDING |
-| 동료 1종 비주얼 | PENDING — NEXT |
+| 실제 게임 카메라 | PENDING — NEXT |
+| 동료 1종 비주얼 `CHR_01 v001` | LOCKED |
 | 장비 작동 시트 `GEAR_01 v002` | LOCKED |
 | Graybox 재미 검증 | NOT STARTED |
 | 본 제작 | BLOCKED BY GATES |

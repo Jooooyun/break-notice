@@ -4,6 +4,9 @@
 
 ### Changed
 
+- `CHR_01_First_Ally_Identity_v001_FINAL`을 승인된 Production Visual로 등록
+- CHR_01의 시설·물류 직원 Visual Canon과 비승인 신원·게임플레이 범위를 ADR-0009 및 Ally Visual 명세에 기록
+- 다음 Production Visual 대상을 `PGT_01 — Gameplay Camera`로 전환
 - `GEAR_01_Cargo_Strapping_System_v002_FINAL`을 승인된 Production Visual로 등록
 - GEAR_01의 시각 Canon과 비승인 기능 범위를 ADR-0008 및 Cargo Strap 명세에 기록
 - 다음 Production Visual 대상을 `CHR_01 — First Ally Identity`로 전환

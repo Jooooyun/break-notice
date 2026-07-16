@@ -10,19 +10,21 @@
 
 `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
 
-CHR_00 Player Identity와 GEAR_01 Cargo Strapping System이 `LOCKED`다.
+`references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png`
+
+CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity가 `LOCKED`다.
 
 ## Production Visual Lock Sequence
 
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
-2. `CHR_01 — First Ally Identity` — `NEXT`
-3. `PGT_01 — Gameplay Camera`
+2. `CHR_01 — First Ally Identity` — `LOCKED`
+3. `PGT_01 — Gameplay Camera` — `NEXT`
 4. `PGT_02 — Chair Redirect Core Loop`
 5. `PGT_03 — Chain Reaction Aftermath`
 6. `LGT_01 — Night Archive Lighting`
 7. `FIN_01 — Conference Table Team Finisher`
 
-즉시 다음 대상은 `CHR_01 — First Ally Identity`다.
+즉시 다음 대상은 `PGT_01 — Gameplay Camera`다.
 
 ## Deferred Production Support
 

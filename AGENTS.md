@@ -32,17 +32,20 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 승인되고 LOCK된 Production Visual은 다음 두 개다.
+현재 승인되고 LOCK된 Production Visual은 다음 세 개다.
 
 - `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 - `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
+- `references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png`
 
 관련 승인 문서:
 
 - `docs/03_art/PLAYER_VISUAL_SPEC.md`
 - `docs/03_art/CARGO_STRAP_SPEC.md`
+- `docs/03_art/ALLY_VISUAL_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -79,6 +82,21 @@ Implementation Gate는 `CLOSED`다.
 
 정확한 스트랩 거리, 각도, 힘, 타이밍, 입력, 장력 임계값, 내부 작동, 기술 구현, 미세 부품 위치는 GEAR_01 Canon이 아니다.
 
+승인된 CHR_01의 다음 요소는 임의로 변경하지 않는다.
+
+- 평범하고 현실적인 시설·물류 직원 정체성
+- 회청색 계열의 실용 작업복
+- 회사 사원증
+- 작업 장갑
+- 안전화
+- 소형 유지보수 파우치
+- 현실적인 현장 근무자 체형
+- 절제되고 진지한 표정
+- CHR_00의 넥타이·브레이스·하네스·허리 릴·화물 스트랩을 복제하지 않는 실루엣
+- 보안·군사·전술·슈퍼히어로 장비와 구분되는 일반 직원 실루엣
+
+정확한 얼굴 세부, 성별 표현, 민족성, 나이, 머리 모양, 이름, 배경 이야기, 피부·머리카락 렌더 품질, 주름·마모 위치, 미세 비대칭은 CHR_01 Canon이 아니다. 패스 재고·거리·타이밍, Relay Position, Suppressed, Heavy 지원, AI, 애니메이션 수와 Unity 구현도 승인되지 않았다.
+
 ---
 
 # 3. Production Visual Lock Progress
@@ -86,8 +104,8 @@ Implementation Gate는 `CLOSED`다.
 다음 순서로 Production Visual Lock을 진행한다.
 
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
-2. `CHR_01 — First Ally Identity` — `NEXT`
-3. `PGT_01 — Gameplay Camera`
+2. `CHR_01 — First Ally Identity` — `LOCKED`
+3. `PGT_01 — Gameplay Camera` — `NEXT`
 4. `PGT_02 — Chair Redirect Core Loop`
 5. `PGT_03 — Chain Reaction Aftermath`
 6. `LGT_01 — Night Archive Lighting`
@@ -95,7 +113,7 @@ Implementation Gate는 `CLOSED`다.
 
 현재 다음 작업 대상은:
 
-`CHR_01 — First Ally Identity`
+`PGT_01 — Gameplay Camera`
 
 이다.
 

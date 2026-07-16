@@ -2,7 +2,7 @@
 
 ## Canon Hierarchy
 
-1. 승인된 CHR_00 Player Identity와 GEAR_01 Cargo Strapping System 이미지
+1. 승인된 CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity 이미지
 2. 실제 게임플레이 목표 이미지(향후 PGT_01~03)
 3. Primary exploration references
 4. Secondary scenario references
@@ -14,20 +14,21 @@
 |---|---|---|---|
 | CHR-00-v002 | `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png` | LOCKED | CHR_00 Player Identity Canon |
 | GEAR-01-v002 | `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png` | LOCKED | Cargo Strapping System Visual Canon |
+| CHR-01-v001 | `references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png` | LOCKED | CHR_01 First Ally Identity Canon |
 
-CHR_00 Player Identity와 GEAR_01 Cargo Strapping System이 현재 `LOCKED`된 Production Visual이다.
+CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity가 현재 `LOCKED`된 Production Visual이다.
 
 ## Production Visual Lock Sequence
 
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
-2. `CHR_01 — First Ally Identity` — `NEXT`
-3. `PGT_01 — Gameplay Camera`
+2. `CHR_01 — First Ally Identity` — `LOCKED`
+3. `PGT_01 — Gameplay Camera` — `NEXT`
 4. `PGT_02 — Chair Redirect Core Loop`
 5. `PGT_03 — Chain Reaction Aftermath`
 6. `LGT_01 — Night Archive Lighting`
 7. `FIN_01 — Conference Table Team Finisher`
 
-즉시 다음 대상은 `CHR_01 — First Ally Identity`이며, 새 Production Visual은 사용자 승인 전까지 `REVIEW`다.
+즉시 다음 대상은 `PGT_01 — Gameplay Camera`이며, 새 Production Visual은 사용자 승인 전까지 `REVIEW`다.
 
 ## Deferred Production Support
 
