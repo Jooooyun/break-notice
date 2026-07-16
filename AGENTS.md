@@ -1,114 +1,346 @@
-# AGENTS.md — BREAK NOTICE Codex Constitution
+# AGENTS.md — BREAK NOTICE Preproduction Operating Rules
 
-이 파일은 저장소 전체에 적용되는 최상위 작업 규칙이다. Codex와 모든 자동화 도구는 작업을 시작하기 전에 반드시 읽는다.
+이 파일은 BREAK NOTICE 저장소 전체에 적용되는 최상위 Codex 작업 규칙이다.
 
-## 1. 프로젝트 목표
+Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
-`BREAK NOTICE`는 1인 개발자가 Unity 6로 제작하는 3D TPS 물리 액션 Roguelite다. 핵심 재미는 동료가 실제 공간에서 물체를 던지거나 굴려주고, 플레이어가 직접 집기·캐치·산업용 스트랩 리디렉션·투척으로 연쇄 충돌을 만드는 것이다.
+---
 
-## 2. Canon 우선순위
+# 1. Current Project Phase
 
-충돌이 있을 때 아래 순서가 우선한다.
+현재 단계:
 
-1. `AGENTS.md`
-2. 승인된 ADR (`docs/09_adrs/`)
-3. 요구사항 (`docs/01_requirements/`)
-4. 기술·게임·아트 명세 (`docs/02_design/` ~ `docs/04_technical/`)
-5. 인수 테스트 (`docs/07_quality/ACCEPTANCE_TESTS.md`)
-6. 승인된 비주얼 (`references/approved/`)
-7. 탐색 이미지와 과거 문서
+`PRE-PRODUCTION / PRODUCTION VISUAL LOCK`
 
-탐색 이미지의 우연한 디테일은 요구사항이 아니다.
+현재 프로젝트는 전체 Design Lock 상태가 아니다.
 
-## 3. Locked Decisions
+다음 항목은 아직 DRAFT다.
 
-다음 결정을 임의로 변경하지 않는다.
+- 상세 게임플레이 설계
+- 요구사항 명세
+- 인수 테스트
+- 밸런스 수치
+- 기술 아키텍처
+- Unity 구현 계획
+- Vertical Slice 구현 범위
 
-- 3D TPS
-- Unity 6 + URP + GameObject PhysX
-- Windows PC 우선
-- 초능력·염력 Grab 없음
-- Scoop + Cargo Strap Redirect + Ally Call & Catch
-- 붉은 넥타이는 물체에 연결하지 않음
-- 일반 전투 활성 동료 1명
+Implementation Gate는 `CLOSED`다.
+
+명시적인 사용자 승인과 Design Readiness Gate 통과 전에는 Unity 구현을 시작하지 않는다.
+
+---
+
+# 2. Current Approved Visual Canon
+
+현재 유일하게 승인되고 LOCK된 Production Visual은 다음이다.
+
+`art/production/player/CHR_00_Player_Identity_Lock_v002_FINAL.png`
+
+관련 승인 문서:
+
+- `docs/04_ART/PLAYER_VISUAL_LOCK.md`
+- `docs/decisions/ADR-007-player-visual-lock.md`
+
+승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
+
+- 현실적인 성인 남성 비율
+- 지치고 집중된 회사원 인상
+- 구겨진 흰색 셔츠
+- 걷어 올린 소매
+- 짧고 느슨한 암적색 넥타이
+- 사원증
+- 작업용 바지
+- 작업 장갑
+- 안전화
+- 산업용 하중 분산 하네스
+- 한쪽 팔의 외부 장착형 하중 보조 브레이스
+- 허리 장착형 수축식 화물 스트랩 릴
+- 검정·황색 화물 스트랩
+- 금속 카라비너
+
+이미지의 렌더링 품질, 미세 볼트 위치, 얼굴 모공, 흠집 위치는 Canon이 아니다.
+
+---
+
+# 3. Pending Production Visual Locks
+
+다음 순서로 Production Visual Lock을 진행한다.
+
+1. `GEAR_01` — Cargo Strapping System
+2. `CHR_01` — First Ally Identity
+3. `PGT_01` — Gameplay Camera
+4. `PGT_02` — Chair Redirect Core Loop
+5. `PGT_03` — Chain Reaction Aftermath
+6. `LGT_01` — Night Archive Lighting
+7. `FIN_01` — Conference Table Team Finisher
+
+현재 다음 작업 대상은:
+
+`GEAR_01 — Cargo Strapping System`
+
+이다.
+
+각 결과물은 사용자에게 명시적으로 승인받기 전까지 `REVIEW` 상태다.
+
+Codex는 스스로 결과물을 `APPROVED`, `FINAL`, `LOCKED`로 선언하지 않는다.
+
+---
+
+# 4. Approved High-Level Constraints
+
+다음은 현재 프리프로덕션 작업에서 유지할 상위 제약이다.
+
+- 1인 개발
+- 폭포수 기반 개발
+- 명시적 단계별 승인 게이트
+- Unity 6 예정
+- 3D Third-Person 예정
 - Grounded Corporate Action Realism
-- 미리 제작된 파손 상태와 제한된 큰 물리 파편
-- 1인 개발 범위 우선
-- 폭포수 기반 개발과 명시적 검증 게이트
+- Grounded world, absurd physics
+- 마법과 염력 없음
+- 초능력 Grab 없음
+- 붉은 넥타이는 일반 복장과 시각적 상징일 뿐임
+- 넥타이를 로프, 케이블, 무기, 연결 장치로 사용하지 않음
+- 물체 제어에는 별도의 산업용 화물 스트랩 사용
+- 일반 전투의 활성 동료는 한 명
+- 파괴는 통제되고 1인 개발 가능한 범위로 제한
+- 캐릭터는 상황을 진지하게 받아들임
+- 코미디는 과장된 얼굴이 아니라 물리적 결과에서 발생
 
-## 4. 작업 시작 조건
+이 제약들은 세부 게임 설계가 모두 완료되었다는 뜻이 아니다.
 
-Codex는 아래가 없는 기능을 구현하지 않는다.
+---
 
-- 작업 티켓 ID
-- 연결된 요구사항 ID
-- 변경 가능한 파일 목록
-- 금지된 변경 목록
-- 인수 조건
-- 필요한 테스트
-- 완료 후 보고 형식
+# 5. Instruction Authority
 
-티켓은 `tasks/TASK_TEMPLATE.md`를 복사해 작성한다.
+작업 중 정보가 충돌하면 다음 순서로 판단한다.
 
-## 5. 작업 방식
+1. 현재 사용자가 명시적으로 내린 작업 지시
+2. 저장소 루트 `AGENTS.md`
+3. 사용자가 승인한 ADR
+4. 현재 Phase 및 Status 문서
+5. 승인된 Visual Lock 문서
+6. 상세 설계 및 기술 문서
+7. 탐색 이미지
+8. 과거 문서와 Archive
 
-1. 관련 Canon 문서를 읽는다.
-2. 요청이 문서와 충돌하는지 확인한다.
-3. 충돌하면 코드를 작성하지 말고 Change Request 필요성을 보고한다.
-4. 구현 계획을 파일 단위로 작성한다.
-5. 승인된 범위만 수정한다.
-6. 테스트를 작성하거나 기존 테스트를 갱신한다.
-7. 인수 조건을 직접 검증한다.
-8. 변경 파일, 테스트 결과, 남은 위험을 보고한다.
+현재 작업 지시가 승인된 상위 결정과 충돌하면 임의로 실행하지 않는다.
 
-## 6. 금지 사항
+충돌 내용을 보고하고 사용자 판단을 기다린다.
 
+탐색 이미지의 우연한 디테일은 게임 요구사항이 아니다.
+
+승인 이미지도 해당 Visual Lock 문서에 기록된 Canonical Element만 권한을 가진다.
+
+---
+
+# 6. Duplicate Documentation Warning
+
+현재 저장소에는 서로 겹치는 문서 구조가 존재할 수 있다.
+
+예:
+
+- 대문자 기반 문서 폴더
+- 소문자 기반 문서 폴더
+- 유사한 요구사항 문서
+- 유사한 인수 테스트 문서
+- 유사한 Codex 프로토콜 문서
+
+Codex는 별도 정리 작업 없이 다음 행동을 하지 않는다.
+
+- 어느 문서가 Canon인지 임의 결정
+- 중복 파일 삭제
+- 문서 이동
+- 내용 병합
+- 요구사항 ID 변경
+- 폴더 이름 통일
+- Archive 처리
+
+중복이나 충돌을 발견하면 보고만 하고, 명시적인 정리 작업이 주어질 때까지 수정하지 않는다.
+
+---
+
+# 7. One Task, One Outcome
+
+하나의 Task는 하나의 명확한 결과만 만든다.
+
+허용되는 예:
+
+- 저장소 상태 감사
+- GEAR_01 시안 검토
+- 승인된 이미지 등록
+- 특정 문서 한 개 정리
+- 특정 시스템 하나 설계
+- 특정 기능 하나 구현
+
+금지되는 예:
+
+- 설계 확정과 Unity 구현을 동시에 진행
+- 이미지 생성과 저장소 전체 정리를 동시에 진행
 - 요청받지 않은 리팩터링
-- 새 패키지나 외부 의존성의 임의 추가
-- 싱글턴 남발
-- `FindObjectOfType`, 문자열 기반 이벤트, 전역 mutable state의 무분별한 사용
-- 모든 물체에 상시 Dynamic Rigidbody 적용
-- 모든 파편에 물리 계산 적용
-- 총기·마법·에너지 오라·염력 기능 추가
-- 일반 전투 동료 수 확대
-- 설계 문서와 테스트를 갱신하지 않은 동작 변경
-- “나중에 고친다”는 이유로 null 처리, 예외 처리, 로그를 생략
+- 관련 없는 파일 정리
+- 새로운 기능 추가
+- 프로젝트 전체를 알아서 완성
 
-## 7. 코드 방향
+---
 
-구현이 시작되면 다음을 따른다.
+# 8. Before Editing
 
-- C# 식별자는 영어
-- 문서와 주석은 한국어 또는 명확한 영어
-- 컴포넌트는 단일 책임
-- ScriptableObject는 데이터 정의에 사용하고 런타임 상태를 저장하지 않음
-- 시스템 간 통신은 명시적 인터페이스와 타입 안전 이벤트 사용
-- 물리 이벤트와 게임 판정 이벤트를 분리
-- 설정값은 하드코딩하지 않고 승인된 데이터 에셋으로 관리
-- EditMode와 PlayMode 테스트를 목적에 맞게 분리
+파일을 수정하기 전에 반드시 다음을 먼저 보고한다.
 
-## 8. Definition of Done
+- 이해한 작업 목표
+- 읽은 지침과 Canon 문서
+- 변경 예정 파일
+- 변경하지 않을 파일
+- 발견한 모호함
+- 범위 밖 항목
+- 사용자 승인이 필요한 사항
 
-기능은 다음을 모두 만족해야 완료다.
+모호함이 결과에 영향을 줄 경우 임의로 추측하지 않는다.
 
-- 요구사항 ID 충족
-- 인수 테스트 통과
-- 신규 경고와 오류 없음
-- 테스트 추가 또는 갱신
-- 문서 동기화
-- 성능 예산 위반 없음
-- 작업 범위 밖 파일의 불필요한 변경 없음
-- 변경 요약과 리스크 보고 완료
+---
 
-## 9. 설계 변경
+# 9. Repository Modification Rules
 
-Locked Decision을 바꾸려면 반드시:
+명시적으로 허용되지 않은 파일은 수정하지 않는다.
 
-1. `docs/00_project/CHANGE_CONTROL.md`의 Change Request 작성
-2. 영향 분석
-3. 관련 ADR 작성 또는 기존 ADR 대체
-4. 요구사항과 추적표 갱신
-5. 인수 테스트 갱신
-6. 승인 후 구현
+명시적인 요청 없이는 다음을 하지 않는다.
 
-**The specification is law. The image is evidence, not authority.**
+- 파일 생성
+- 파일 삭제
+- 파일 이동
+- 파일 이름 변경
+- 디렉터리 구조 변경
+- 외부 의존성 설치
+- Unity 패키지 설치
+- 브랜치 생성
+- Commit
+- Push
+- Pull Request 생성
+- Pull Request Merge
+
+자동 Merge는 금지한다.
+
+사용자가 허용한 경우에도 변경사항과 Diff를 먼저 보고한다.
+
+---
+
+# 10. Visual Workflow Rules
+
+비주얼 작업 상태는 다음을 사용한다.
+
+- `EXPLORATION`
+- `REVIEW`
+- `REVISION_REQUIRED`
+- `LOCKED`
+- `ARCHIVED`
+
+새로 생성된 시안의 기본 상태는 `REVIEW`다.
+
+사용자만 다음 판정을 내릴 수 있다.
+
+- `APPROVE`
+- `REVISION REQUIRED`
+- `REJECT`
+
+사용자가 명시적으로 `APPROVE`하기 전에는:
+
+- FINAL 파일명 사용 금지
+- LOCK 문서 등록 금지
+- ADR 승인 기록 금지
+- 다음 단계의 Canon으로 사용 금지
+
+이미지 생성은 사용자가 명시적으로 요청한 경우에만 수행한다.
+
+---
+
+# 11. Current Implementation Restrictions
+
+Implementation Gate가 닫혀 있으므로 다음은 금지한다.
+
+- Unity 프로젝트 초기화 또는 변경
+- C# 게임플레이 코드 작성
+- 패키지 설치
+- Input System 설정
+- Cinemachine 설정
+- Rigidbody 시스템 구현
+- 적 AI 구현
+- 씬 제작
+- Prefab 제작
+- 빌드 파이프라인 구성
+- 최적화 작업
+- 테스트 코드 구현
+
+현재 허용 범위는 명시적으로 요청된 프리프로덕션 작업뿐이다.
+
+- 저장소 상태 확인
+- 비주얼 시안 관리
+- 승인 기록
+- 문서 검토
+- 설계 조율
+- 범위 정의
+- 변경 관리
+
+---
+
+# 12. Scope Protection
+
+Codex는 다음을 임의로 추가하지 않는다.
+
+- Co-op
+- 총기
+- 마법
+- 염력
+- 슈퍼히어로 장비
+- 군사 SF 장비
+- 다수 동료 동행 시스템
+- 완전 절차적 파괴
+- 모든 벽 자유 파괴
+- 오픈월드
+- 온라인 기능
+- 추가 플랫폼
+- 보스
+- 메타 성장
+- 새로운 캐릭터
+- 새로운 게임 모드
+
+좋아 보인다는 이유만으로 범위를 확장하지 않는다.
+
+---
+
+# 13. Completion Report
+
+모든 작업 완료 보고에는 다음을 포함한다.
+
+1. 작업 요약
+2. 읽은 파일
+3. 변경한 파일
+4. 변경하지 않은 범위
+5. 승인된 결정과의 일치 여부
+6. 수행한 검사
+7. 남은 모호함
+8. 알려진 한계
+9. 다음 권장 작업 한 개
+10. 사용자 승인이 필요한 사항
+
+파일을 수정하지 않은 작업에서는 반드시 다음을 명시한다.
+
+`No files, branches, commits, pushes, or pull requests were created or modified.`
+
+---
+
+# 14. Final Operating Principle
+
+설계되지 않은 것을 구현하지 않는다.
+
+승인되지 않은 것을 LOCK하지 않는다.
+
+요청받지 않은 범위를 확장하지 않는다.
+
+문서 충돌을 조용히 해결하지 않는다.
+
+사용자가 승인하기 전에는 다음 단계로 넘어가지 않는다.
+
+**The specification is law.  
+The image is evidence, not authority.  
+Owner approval opens the next gate.**
