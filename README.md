@@ -1,0 +1,88 @@
+# BREAK NOTICE
+
+> 1인 개발용 3D TPS 물리 액션 Roguelite — Design Baseline `0.1.0`
+
+`BREAK NOTICE`는 해고 통보를 받은 사내 자산관리 직원이 **산업용 운반 장비와 동료 릴레이**를 이용해 사무용품을 실제 궤적으로 받아 던지고, 적·가구·설비 사이의 연쇄 충돌로 사무실을 재구성하는 게임이다.
+
+**Grounded world. Absurd physics.**
+
+![승인된 주인공 비주얼](references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png)
+
+## 현재 상태
+
+| 항목 | 상태 |
+|---|---|
+| 게임 정체성 | LOCKED |
+| 3D TPS / Unity 6 / URP | LOCKED |
+| 초능력 Grab 제거 | LOCKED |
+| 직접 집기 + 화물 스트랩 + 동료 패스 | LOCKED |
+| 주인공 비주얼 `CHR_00 v002` | LOCKED |
+| 실제 게임 카메라 | PENDING |
+| 동료 1종 비주얼 | PENDING |
+| 장비 작동 시트 | PENDING |
+| Graybox 재미 검증 | NOT STARTED |
+| 본 제작 | BLOCKED BY GATES |
+
+## 가장 먼저 읽을 문서
+
+1. [`AGENTS.md`](AGENTS.md) — Codex와 모든 작업자의 절대 규칙
+2. [`docs/00_project/PROJECT_CHARTER.md`](docs/00_project/PROJECT_CHARTER.md)
+3. [`docs/01_requirements/PRODUCT_REQUIREMENTS.md`](docs/01_requirements/PRODUCT_REQUIREMENTS.md)
+4. [`docs/02_design/MASTER_GDD.md`](docs/02_design/MASTER_GDD.md)
+5. [`docs/03_art/ART_DIRECTION.md`](docs/03_art/ART_DIRECTION.md)
+6. [`docs/04_technical/TECHNICAL_DESIGN.md`](docs/04_technical/TECHNICAL_DESIGN.md)
+7. [`docs/05_production/WATERFALL_PLAN.md`](docs/05_production/WATERFALL_PLAN.md)
+8. [`docs/06_codex/CODEX_EXECUTION_PROTOCOL.md`](docs/06_codex/CODEX_EXECUTION_PROTOCOL.md)
+9. [`docs/07_quality/ACCEPTANCE_TESTS.md`](docs/07_quality/ACCEPTANCE_TESTS.md)
+
+## 저장소 구조
+
+```text
+break-notice/
+├─ AGENTS.md                         # Codex 최상위 지시서
+├─ README.md
+├─ docs/
+│  ├─ 00_project/                    # 헌장, 용어, 의사결정, 변경관리
+│  ├─ 01_requirements/               # 요구사항, 비기능 요구, 추적표
+│  ├─ 02_design/                     # 게임 설계와 시스템 명세
+│  ├─ 03_art/                        # 아트, 캐릭터, 장비, VFX 기준
+│  ├─ 04_technical/                  # Unity 기술 설계와 아키텍처
+│  ├─ 05_production/                 # 폭포수 단계, 범위, 리스크, 게이트
+│  ├─ 06_codex/                      # Codex 실행 프로토콜과 작업 템플릿
+│  ├─ 07_quality/                    # 테스트, 인수 기준, 플레이테스트
+│  ├─ 08_marketing/                  # 포지셔닝, 트레일러, Incident Report
+│  ├─ 09_adrs/                       # Architecture Decision Records
+│  └─ archive/                       # 폐기·대체된 과거 문서
+├─ references/
+│  ├─ approved/                      # Canon 비주얼
+│  ├─ exploration/                   # 방향 탐색 이미지 10종
+│  └─ archive/                       # 이전 생성 결과와 구버전
+├─ Game/                             # Unity 프로젝트 예정 루트
+│  ├─ Assets/_Project/               # 구현 시작 전 빈 구조만 유지
+│  ├─ Packages/
+│  └─ ProjectSettings/
+├─ tasks/                            # 승인된 Codex 작업 티켓
+└─ .github/                          # 이슈·PR 템플릿
+```
+
+## 절대 고정 사항
+
+- 게임은 **3D TPS**다.
+- 엔진은 **Unity 6**, 렌더링은 **URP**, 물리는 **GameObject 기반 PhysX**다.
+- 원거리 염력이나 마법 Grab은 없다.
+- 붉은 넥타이는 복장과 시각적 상징일 뿐 물체 연결 도구가 아니다.
+- 물체 연결은 허리 릴에서 나오는 **검정·황색 산업용 화물 스트랩과 금속 카라비너**로만 수행한다.
+- 일반 전투의 활성 동료는 **1명**, 특수 피니셔에서만 최대 2명이다.
+- 코미디는 과장된 얼굴이 아니라 진지한 인물과 황당한 물리 결과의 대비에서 나온다.
+- 실제 구현은 승인된 요구사항과 인수 테스트 없이는 시작하지 않는다.
+
+## Git 사용 원칙
+
+- `main`: 승인된 기준선만 유지한다.
+- 기능 작업은 `task/<ID>-<short-name>` 브랜치에서 수행한다.
+- 커밋은 하나의 목적만 가진다.
+- 설계 변경은 코드로 먼저 밀어 넣지 않는다. 반드시 Change Request와 ADR을 먼저 승인한다.
+
+## 라이선스
+
+이 저장소의 게임 기획, 문서, 이미지와 프로젝트 자산은 공개 사용을 허가하지 않는 독점 자료다. 자세한 내용은 [`LICENSE.md`](LICENSE.md)를 따른다.
