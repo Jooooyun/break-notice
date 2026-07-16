@@ -2,8 +2,26 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
+  "current_phase": "PRE-PRODUCTION / PRODUCTION VISUAL LOCK",
+  "implementation_gate": "CLOSED",
   "canonical_player_image": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
-  "locked_decisions": [
+  "canonical_player_visual_spec": "docs/03_art/PLAYER_VISUAL_SPEC.md",
+  "canonical_player_visual_adr": "docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md",
+  "locked_production_visual": "CHR_00 Player Identity",
+  "next_production_visual_target": "GEAR_01 — Cargo Strapping System",
+  "production_visual_lock_sequence": [
+    "GEAR_01 — Cargo Strapping System",
+    "CHR_01 — First Ally Identity",
+    "PGT_01 — Gameplay Camera",
+    "PGT_02 — Chair Redirect Core Loop",
+    "PGT_03 — Chain Reaction Aftermath",
+    "LGT_01 — Night Archive Lighting",
+    "FIN_01 — Conference Table Team Finisher"
+  ],
+  "deferred_production_support": [
+    "CHR_00 Player Turnaround"
+  ],
+  "approved_high_level_constraints": [
     "3D TPS",
     "Unity 6",
     "URP",
@@ -46,13 +64,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 4096,
-      "sha256": "56d28a5423f10c231bb54da2693896e296e1d287e9053a6489a2013bc8ecfbea"
+      "bytes": 8627,
+      "sha256": "df5d4efb2801e44c5ef9b424efe9dea0bd29b2b7a34833d05b47fb297afb263c"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 567,
-      "sha256": "e2c996d94645669bc193e732ed2174cdfbe504865ad283211af07f321f35d6a2"
+      "bytes": 910,
+      "sha256": "c504c58c294eadb75780f9960ed27a54e17767e22c5490a903efc8a4c3fede71"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -206,8 +224,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 703,
-      "sha256": "0c6f2f50085b333be3b6ab1e98a1c2116f0443999c90bab3b9d5624f4722e29f"
+      "bytes": 1753,
+      "sha256": "163ed0a653a154d2e73b4cd383f6f82b30de70e40f0c368967c618a5f0e95b37"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -311,8 +329,8 @@
     },
     {
       "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
-      "bytes": 1229,
-      "sha256": "8aefec65fa26a14928244d0db52170ca16b293d52e84b06251653b834057b1ef"
+      "bytes": 1712,
+      "sha256": "6a6b7a3f88f4a6bf790c9164940a13562d7e6507d675fdf9ff6bae7866a372f3"
     },
     {
       "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
@@ -321,8 +339,8 @@
     },
     {
       "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
-      "bytes": 1709,
-      "sha256": "004b8b700d4b9661101b4b50cd016b09b1cf6fddd8e43ec44385f14b6eb206fb"
+      "bytes": 2544,
+      "sha256": "1100272011dc894a1ca89663c7fc5e73656be59f894b430fec5ef1dcff1a5335"
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
@@ -496,8 +514,8 @@
     },
     {
       "path": "docs/archive/BREAK_NOTICE_Original_GDD_SUPERSEDED.md",
-      "bytes": 29249,
-      "sha256": "db1b37692a55feb7384f104ab37c06154e7342d050c9e45a93458efb0f7e1158"
+      "bytes": 28081,
+      "sha256": "230cc5f5bad898d7fdaa7fa66f9b52c94566d947d20048104d1e91a691fa4fc0"
     },
     {
       "path": "docs/archive/README.md",

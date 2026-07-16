@@ -34,12 +34,12 @@ Implementation Gate는 `CLOSED`다.
 
 현재 유일하게 승인되고 LOCK된 Production Visual은 다음이다.
 
-`art/production/player/CHR_00_Player_Identity_Lock_v002_FINAL.png`
+`references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 
 관련 승인 문서:
 
-- `docs/04_ART/PLAYER_VISUAL_LOCK.md`
-- `docs/decisions/ADR-007-player-visual-lock.md`
+- `docs/03_art/PLAYER_VISUAL_SPEC.md`
+- `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -66,13 +66,13 @@ Implementation Gate는 `CLOSED`다.
 
 다음 순서로 Production Visual Lock을 진행한다.
 
-1. `GEAR_01` — Cargo Strapping System
-2. `CHR_01` — First Ally Identity
-3. `PGT_01` — Gameplay Camera
-4. `PGT_02` — Chair Redirect Core Loop
-5. `PGT_03` — Chain Reaction Aftermath
-6. `LGT_01` — Night Archive Lighting
-7. `FIN_01` — Conference Table Team Finisher
+1. `GEAR_01 — Cargo Strapping System`
+2. `CHR_01 — First Ally Identity`
+3. `PGT_01 — Gameplay Camera`
+4. `PGT_02 — Chair Redirect Core Loop`
+5. `PGT_03 — Chain Reaction Aftermath`
+6. `LGT_01 — Night Archive Lighting`
+7. `FIN_01 — Conference Table Team Finisher`
 
 현재 다음 작업 대상은:
 

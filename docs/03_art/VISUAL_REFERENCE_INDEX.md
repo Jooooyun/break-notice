@@ -2,7 +2,7 @@
 
 ## Canon Hierarchy
 
-1. 승인 주인공 이미지
+1. 승인된 CHR_00 Player Identity 이미지
 2. 실제 게임플레이 목표 이미지(향후 PGT_01~03)
 3. Primary exploration references
 4. Secondary scenario references
@@ -10,9 +10,27 @@
 
 ## Approved
 
-| ID | 파일 | 역할 |
-|---|---|---|
-| CHR-00-v002 | `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png` | 주인공 디자인 Canon |
+| ID | 파일 | 상태 | 역할 |
+|---|---|---|---|
+| CHR-00-v002 | `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png` | LOCKED | CHR_00 Player Identity Canon |
+
+CHR_00 Player Identity는 현재 유일하게 `LOCKED`된 Production Visual이다.
+
+## Production Visual Lock Sequence
+
+1. `GEAR_01 — Cargo Strapping System`
+2. `CHR_01 — First Ally Identity`
+3. `PGT_01 — Gameplay Camera`
+4. `PGT_02 — Chair Redirect Core Loop`
+5. `PGT_03 — Chain Reaction Aftermath`
+6. `LGT_01 — Night Archive Lighting`
+7. `FIN_01 — Conference Table Team Finisher`
+
+즉시 다음 대상은 `GEAR_01 — Cargo Strapping System`이며, 새 Production Visual은 사용자 승인 전까지 `REVIEW`다.
+
+## Deferred Production Support
+
+`CHR_00 Player Turnaround`은 향후 3D 모델링을 위한 `PENDING` Production Support 산출물이며 현재 Production Visual Lock 순서의 차단 항목이 아니다. 기존 프롬프트와 역사적 참조는 유지한다.
 
 ## User-Selected Primary/Secondary References
 

@@ -1,15 +1,35 @@
 # Design Status Board
 
+현재 단계: `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`
+
+Implementation Gate: `CLOSED`
+
 | 영역 | 상태 | 다음 산출물 | Gate |
 |---|---|---|---|
-| 제품 비전 | LOCKED | 없음 | G1 |
-| 핵심 전투 동사 | LOCKED | 수치 표 | G2 |
-| 동료 릴레이 | LOCKED | 첫 동료 비주얼 | G2 |
-| 화물 스트랩 | FUNCTION LOCKED | 장비 작동 시트 | G2 |
-| 주인공 디자인 | LOCKED | 턴어라운드 | G2 |
-| 카메라 | TARGET DEFINED | PGT_01 승인 이미지 | G2 |
-| 파괴 예산 | BASELINE | PGT_03 승인 이미지 | G2 |
-| 적 1~3종 | BASELINE | 실루엣 시트 | G2 |
-| 기술 아키텍처 | BASELINE | Prototype 상세 설계 | G3 |
-| Graybox | NOT STARTED | 5분 테스트 빌드 | G4 |
-| 본 제작 | BLOCKED | G5 이후 시작 | G5 |
+| 제품 비전 | HIGH-LEVEL BASELINE | 상세 설계 정렬 | G1 |
+| 핵심 전투 동사 | HIGH-LEVEL BASELINE | 상세 게임플레이 설계 | G2 |
+| 동료 릴레이 | HIGH-LEVEL BASELINE | `CHR_01 — First Ally Identity` | G2 |
+| 화물 스트랩 | HIGH-LEVEL BASELINE | `GEAR_01 — Cargo Strapping System` | G2 |
+| CHR_00 Player Identity | LOCKED | 없음 | G2 |
+| 카메라 | PENDING | `PGT_01 — Gameplay Camera` | G2 |
+| 파괴 예산 | HIGH-LEVEL BASELINE | `PGT_03 — Chain Reaction Aftermath` | G2 |
+| 적 1~3종 | DRAFT | 실루엣 시트 | G2 |
+| 기술 아키텍처 | DRAFT | Prototype 상세 설계 | G3 |
+| Graybox | PENDING | Design Readiness Gate 통과 후 | G4 |
+| 본 제작 | PENDING | Implementation Gate 개방 후 | G5 |
+
+## Production Visual Lock Sequence
+
+1. `GEAR_01 — Cargo Strapping System`
+2. `CHR_01 — First Ally Identity`
+3. `PGT_01 — Gameplay Camera`
+4. `PGT_02 — Chair Redirect Core Loop`
+5. `PGT_03 — Chain Reaction Aftermath`
+6. `LGT_01 — Night Archive Lighting`
+7. `FIN_01 — Conference Table Team Finisher`
+
+즉시 다음 대상은 `GEAR_01 — Cargo Strapping System`이다.
+
+`CHR_00 Player Turnaround`은 향후 3D 모델링용 `PENDING` Production Support 산출물이며 현재 Production Visual Lock 순서를 차단하지 않는다.
+
+상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`다. CHR_00 Player Identity 외의 Production Visual은 사용자 승인 전까지 `REVIEW` 또는 `PENDING`이다.

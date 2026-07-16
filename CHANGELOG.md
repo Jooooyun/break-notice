@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- DOC-001에 따라 Canon 경로, Production Visual Lock 순서, 현재 Draft 상태 용어를 실제 저장소 상태와 정렬
+- `CHR_00 Player Turnaround`을 비차단 Production Support 산출물로 분류하고 `GEAR_01`을 즉시 다음 대상으로 명시
+- Implementation Gate `CLOSED` 유지
+
 ## 0.1.0 — 2026-07-16
 
 ### Added
@@ -11,7 +19,7 @@
 - 주인공 승인 이미지 `CHR_00_Player_Identity_Lock_v002_FINAL`
 - Unity 프로젝트 예정 폴더 구조
 
-### Locked
+### High-Level Baseline
 
 - 3D TPS, Unity 6, URP, GameObject PhysX
 - 직접 집기 + 별도 화물 스트랩 + 동료 패스

@@ -4,17 +4,27 @@
 
 탐색 이미지에서 실제 게임 제작 기준으로 수렴한다. 한 번에 여러 스타일을 생성하지 않고 같은 Canon을 유지한 채 한 장씩 승인한다.
 
-## 순서
+## 현재 LOCKED Production Visual
 
-1. `CHR_00_Player_Identity_Lock_v002_FINAL` — DONE
-2. `GEAR_01_Cargo_Strapping_System_v001`
-3. `CHR_00_Player_Turnaround_v001`
-4. `CHR_01_Ally_Identity_Lock_v001`
-5. `PGT_01_Gameplay_Camera_Lock_v001`
-6. `PGT_02_Chair_Redirect_Core_Loop_v001`
-7. `PGT_03_Chain_Reaction_Aftermath_v001`
-8. `LGT_01_Night_Archive_Gameplay_v001`
-9. `FIN_01_Conference_Table_Team_Finisher_v001`
+`references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
+
+CHR_00 Player Identity만 `LOCKED`다.
+
+## Production Visual Lock Sequence
+
+1. `GEAR_01 — Cargo Strapping System`
+2. `CHR_01 — First Ally Identity`
+3. `PGT_01 — Gameplay Camera`
+4. `PGT_02 — Chair Redirect Core Loop`
+5. `PGT_03 — Chain Reaction Aftermath`
+6. `LGT_01 — Night Archive Lighting`
+7. `FIN_01 — Conference Table Team Finisher`
+
+즉시 다음 대상은 `GEAR_01 — Cargo Strapping System`이다.
+
+## Deferred Production Support
+
+`CHR_00 Player Turnaround`은 향후 3D 모델링을 위한 `PENDING` Production Support 산출물이다. 기존 프롬프트와 역사적 참조는 유지하되 현재 비주얼 방향 및 게임플레이 명세 진행을 차단하지 않는다.
 
 ## 승인 원칙
 
@@ -22,6 +32,7 @@
 - 새 스타일 발산 금지
 - 승인 이미지를 후속 이미지 Continuity Constraint로 사용
 - 이미지보다 문서가 상위
+- 새 산출물은 사용자 승인 전까지 `REVIEW`
 - 애니풍, 넥타이 케이블, 공중 물체, 과도한 NPC, 총기는 즉시 탈락
 
 ## PGT 이미지 승인 질문
