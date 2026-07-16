@@ -12,3 +12,4 @@
 | DL-008 | 2026-07-16 | 폭포수 + Graybox Validation Gate | LOCKED | 설계 흔들림을 막되 재미를 문서만으로 가정하지 않음 |
 | DL-009 | 2026-07-16 | `CHR_00_Player_Identity_Lock_v002_FINAL` 승인 | LOCKED | 주인공 실루엣과 산업 장비 정체성 확정 |
 | DL-010 | 2026-07-16 | 완전 절차 생성·Co-op·완전 파괴 제외 | LOCKED | 1인 개발 리스크 제한 |
+| DL-011 | 2026-07-17 | `GEAR_01_Cargo_Strapping_System_v002_FINAL` 승인 | LOCKED | 별도 산업용 스트랩의 장비 구성, 연결 체인, 여섯 시각 상태 확정 |

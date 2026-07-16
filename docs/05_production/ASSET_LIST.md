@@ -12,6 +12,8 @@
 
 ## Player Gear
 
+GEAR-01 Production Visual은 `LOCKED`이며 3D·기능 구현은 `PENDING`이다.
+
 - Industrial harness
 - Forearm load-assist brace
 - Waist cargo reel

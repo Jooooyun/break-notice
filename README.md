@@ -8,6 +8,8 @@
 
 ![승인된 주인공 비주얼](references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png)
 
+![승인된 GEAR_01 장비 시트](references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png)
+
 ## 현재 상태
 
 | 항목 | 상태 |
@@ -18,8 +20,8 @@
 | 직접 집기 + 화물 스트랩 + 동료 패스 | LOCKED |
 | 주인공 비주얼 `CHR_00 v002` | LOCKED |
 | 실제 게임 카메라 | PENDING |
-| 동료 1종 비주얼 | PENDING |
-| 장비 작동 시트 | PENDING |
+| 동료 1종 비주얼 | PENDING — NEXT |
+| 장비 작동 시트 `GEAR_01 v002` | LOCKED |
 | Graybox 재미 검증 | NOT STARTED |
 | 본 제작 | BLOCKED BY GATES |
 
@@ -71,7 +73,7 @@ break-notice/
 - 엔진은 **Unity 6**, 렌더링은 **URP**, 물리는 **GameObject 기반 PhysX**다.
 - 원거리 염력이나 마법 Grab은 없다.
 - 붉은 넥타이는 복장과 시각적 상징일 뿐 물체 연결 도구가 아니다.
-- 물체 연결은 허리 릴에서 나오는 **검정·황색 산업용 화물 스트랩과 금속 카라비너**로만 수행한다.
+- 물체 연결은 허리 릴에서 나오는 **검정·황색 산업용 화물 스트랩, 금속 카라비너, 교체식 클램프**로 하중 지지 금속 Anchor에 수행한다.
 - 일반 전투의 활성 동료는 **1명**, 특수 피니셔에서만 최대 2명이다.
 - 코미디는 과장된 얼굴이 아니라 진지한 인물과 황당한 물리 결과의 대비에서 나온다.
 - 실제 구현은 승인된 요구사항과 인수 테스트 없이는 시작하지 않는다.

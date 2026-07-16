@@ -4,8 +4,11 @@
 
 ### Changed
 
+- `GEAR_01_Cargo_Strapping_System_v002_FINAL`을 승인된 Production Visual로 등록
+- GEAR_01의 시각 Canon과 비승인 기능 범위를 ADR-0008 및 Cargo Strap 명세에 기록
+- 다음 Production Visual 대상을 `CHR_01 — First Ally Identity`로 전환
 - DOC-001에 따라 Canon 경로, Production Visual Lock 순서, 현재 Draft 상태 용어를 실제 저장소 상태와 정렬
-- `CHR_00 Player Turnaround`을 비차단 Production Support 산출물로 분류하고 `GEAR_01`을 즉시 다음 대상으로 명시
+- `CHR_00 Player Turnaround`을 비차단 Production Support 산출물로 분류하고 당시 `GEAR_01`을 다음 대상으로 지정
 - Implementation Gate `CLOSED` 유지
 
 ## 0.1.0 — 2026-07-16

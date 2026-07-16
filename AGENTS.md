@@ -32,14 +32,17 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 유일하게 승인되고 LOCK된 Production Visual은 다음이다.
+현재 승인되고 LOCK된 Production Visual은 다음 두 개다.
 
-`references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
+- `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
+- `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
 
 관련 승인 문서:
 
 - `docs/03_art/PLAYER_VISUAL_SPEC.md`
+- `docs/03_art/CARGO_STRAP_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -60,14 +63,30 @@ Implementation Gate는 `CLOSED`다.
 
 이미지의 렌더링 품질, 미세 볼트 위치, 얼굴 모공, 흠집 위치는 Canon이 아니다.
 
+승인된 GEAR_01의 다음 요소는 임의로 변경하지 않는다.
+
+- 허리 장착형 수축 릴
+- 검정·황색 직조 화물 스트랩
+- 은색 금속 카라비너
+- 보강 아이가 있는 교체식 자산 고정 클램프
+- `릴 → 스트랩 → 카라비너 → 클램프 → 하중 지지 금속 Anchor` 연결 체인
+- 캐스터·휠 축·플라스틱 하우징·취약 돌출부가 아닌 하중 지지 금속 Anchor
+- Stored, Attached, Tensioned Redirect, Safety Release, Brace Lock, Warning Behavior의 여섯 시각 상태
+- 바닥 지지 상태를 유지하는 의자 리디렉션
+- 체결 위치가 읽히는 브레이스 잠금 레버
+- 제한된 황색 기계식 경고 표시
+- 넥타이와 장비의 완전한 분리
+
+정확한 스트랩 거리, 각도, 힘, 타이밍, 입력, 장력 임계값, 내부 작동, 기술 구현, 미세 부품 위치는 GEAR_01 Canon이 아니다.
+
 ---
 
-# 3. Pending Production Visual Locks
+# 3. Production Visual Lock Progress
 
 다음 순서로 Production Visual Lock을 진행한다.
 
-1. `GEAR_01 — Cargo Strapping System`
-2. `CHR_01 — First Ally Identity`
+1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
+2. `CHR_01 — First Ally Identity` — `NEXT`
 3. `PGT_01 — Gameplay Camera`
 4. `PGT_02 — Chair Redirect Core Loop`
 5. `PGT_03 — Chain Reaction Aftermath`
@@ -76,7 +95,7 @@ Implementation Gate는 `CLOSED`다.
 
 현재 다음 작업 대상은:
 
-`GEAR_01 — Cargo Strapping System`
+`CHR_01 — First Ally Identity`
 
 이다.
 

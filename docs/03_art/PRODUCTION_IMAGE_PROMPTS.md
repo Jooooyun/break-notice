@@ -29,6 +29,8 @@ No oversized eyes, exaggerated heroic jaw, bodybuilder anatomy, rubber poses, sl
 
 ## GEAR_01 — Cargo Strapping System
 
+Status: `LOCKED` as `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`. 아래 프롬프트는 승인된 Revision 작업이 아닌 경우 재사용하지 않는다.
+
 ```text
 Use the approved CHR_00 player image as an exact continuity reference. Create a practical industrial equipment design sheet, not a character redesign.
 Show the waist-mounted retractable reel, black-and-yellow woven cargo strap, silver carabiner, replaceable asset clamp, forearm brace tension lock, safety release, load warning labels, and how the system connects to a wheeled office-chair frame.
