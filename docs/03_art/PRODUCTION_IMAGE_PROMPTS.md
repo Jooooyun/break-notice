@@ -50,6 +50,8 @@ Show a physically capable worker who can throw light office supplies and roll ch
 
 ## PGT_01 — Gameplay Camera Lock
 
+Status: `LOCKED` as `references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png`. 아래 과거 프롬프트는 승인된 Revision 작업이 아닌 경우 재사용하지 않는다. Canonical Elements는 `CAMERA_SPEC.md`와 ADR-0010을 따른다.
+
 ```text
 Create an actual in-game 16:9 third-person gameplay view, not key art. Use the approved player and ally exactly.
 Camera approximately 4.5 meters behind the player, 1.2 to 1.5 meters above head level, around 68-degree FOV, slightly elevated OTS, enough visible floor for object trajectories, no cinematic depth of field.
@@ -59,6 +61,8 @@ Clearly show 2-3 Light objects, two Medium objects, one Heavy candidate, a break
 ```
 
 ## PGT_02 — Chair Redirect
+
+Status: `NEXT / PENDING PREFLIGHT`. 이미지 생성 전에 별도 Canon preflight와 owner 승인이 필요하다. PGT_01의 정확한 방·적·소품·동료 위치·조명은 Non-Canon이며 그대로 고정하지 않는다.
 
 ```text
 Edit the approved PGT_01 image while preserving the same room, camera, characters, scale, lighting, and layout.

@@ -12,7 +12,8 @@ Implementation Gate: `CLOSED`
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
-| 카메라 | PENDING — NEXT | `PGT_01 — Gameplay Camera` | G2 |
+| 카메라 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 카메라 설계 | G2 |
+| Chair Redirect Core Loop | PENDING — NEXT | `PGT_02 — Chair Redirect Core Loop` | G2 |
 | 파괴 예산 | HIGH-LEVEL BASELINE | `PGT_03 — Chain Reaction Aftermath` | G2 |
 | 적 1~3종 | DRAFT | 실루엣 시트 | G2 |
 | 기술 아키텍처 | DRAFT | Prototype 상세 설계 | G3 |
@@ -23,14 +24,14 @@ Implementation Gate: `CLOSED`
 
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
 2. `CHR_01 — First Ally Identity` — `LOCKED`
-3. `PGT_01 — Gameplay Camera` — `NEXT`
-4. `PGT_02 — Chair Redirect Core Loop`
+3. `PGT_01 — Gameplay Camera` — `LOCKED`
+4. `PGT_02 — Chair Redirect Core Loop` — `NEXT`
 5. `PGT_03 — Chain Reaction Aftermath`
 6. `LGT_01 — Night Archive Lighting`
 7. `FIN_01 — Conference Table Team Finisher`
 
-즉시 다음 대상은 `PGT_01 — Gameplay Camera`다.
+즉시 다음 대상은 `PGT_02 — Chair Redirect Core Loop`다.
 
 `CHR_00 Player Turnaround`은 향후 3D 모델링용 `PENDING` Production Support 산출물이며 현재 Production Visual Lock 순서를 차단하지 않는다.
 
-상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`다. CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity만 `LOCKED`이며 그 외 Production Visual은 사용자 승인 전까지 `REVIEW` 또는 `PENDING`이다.
+상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 카메라 기능, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`다. CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera만 `LOCKED`이며 그 외 Production Visual은 사용자 승인 전까지 `REVIEW` 또는 `PENDING`이다.

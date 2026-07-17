@@ -32,20 +32,23 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 승인되고 LOCK된 Production Visual은 다음 세 개다.
+현재 승인되고 LOCK된 Production Visual은 다음 네 개다.
 
 - `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 - `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
 - `references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png`
+- `references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png`
 
 관련 승인 문서:
 
 - `docs/03_art/PLAYER_VISUAL_SPEC.md`
 - `docs/03_art/CARGO_STRAP_SPEC.md`
 - `docs/03_art/ALLY_VISUAL_SPEC.md`
+- `docs/03_art/CAMERA_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -97,6 +100,18 @@ Implementation Gate는 `CLOSED`다.
 
 정확한 얼굴 세부, 성별 표현, 민족성, 나이, 머리 모양, 이름, 배경 이야기, 피부·머리카락 렌더 품질, 주름·마모 위치, 미세 비대칭은 CHR_01 Canon이 아니다. 패스 재고·거리·타이밍, Relay Position, Suppressed, Heavy 지원, AI, 애니메이션 수와 Unity 구현도 승인되지 않았다.
 
+승인된 PGT_01의 다음 요소는 임의로 변경하지 않는다.
+
+- 실제 3인칭 Gameplay View
+- 약간 높은 Over-the-Shoulder 방향
+- 플레이어의 상대적 화면 비중
+- 전신 또는 거의 전신 가시성
+- 바닥과 물체 진행 공간의 가독성
+- 플레이어·동료·적 구분
+- 사용 가능 물체와 복수 이동 경로의 가독성
+
+정확한 카메라 거리, 높이, FOV, damping, collision, occlusion, 카메라 상태 전환, Camera Shake, Cinemachine과 Unity 구현은 PGT_01 Canon이 아니다. 이미지의 정확한 방 구조, 적 외형과 인원수, 소품 모델·배치·수량, 동료 위치, 조명과 collision surface도 incidental Non-Canon detail이다.
+
 ---
 
 # 3. Production Visual Lock Progress
@@ -105,15 +120,15 @@ Implementation Gate는 `CLOSED`다.
 
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
 2. `CHR_01 — First Ally Identity` — `LOCKED`
-3. `PGT_01 — Gameplay Camera` — `NEXT`
-4. `PGT_02 — Chair Redirect Core Loop`
+3. `PGT_01 — Gameplay Camera` — `LOCKED`
+4. `PGT_02 — Chair Redirect Core Loop` — `NEXT`
 5. `PGT_03 — Chain Reaction Aftermath`
 6. `LGT_01 — Night Archive Lighting`
 7. `FIN_01 — Conference Table Team Finisher`
 
 현재 다음 작업 대상은:
 
-`PGT_01 — Gameplay Camera`
+`PGT_02 — Chair Redirect Core Loop`
 
 이다.
 

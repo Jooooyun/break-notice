@@ -12,6 +12,8 @@
 
 ![승인된 CHR_01 첫 동료 비주얼](references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png)
 
+![승인된 PGT_01 Gameplay Camera](references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png)
+
 ## 현재 상태
 
 | 항목 | 상태 |
@@ -21,9 +23,10 @@
 | 초능력 Grab 제거 | LOCKED |
 | 직접 집기 + 화물 스트랩 + 동료 패스 | LOCKED |
 | 주인공 비주얼 `CHR_00 v002` | LOCKED |
-| 실제 게임 카메라 | PENDING — NEXT |
+| 실제 게임 카메라 `PGT_01 v002` | LOCKED |
 | 동료 1종 비주얼 `CHR_01 v001` | LOCKED |
 | 장비 작동 시트 `GEAR_01 v002` | LOCKED |
+| 의자 리디렉션 Core Loop | PENDING — NEXT |
 | Graybox 재미 검증 | NOT STARTED |
 | 본 제작 | BLOCKED BY GATES |
 

@@ -22,6 +22,13 @@ GEAR-01 Production Visual은 `LOCKED`이며 3D·기능 구현은 `PENDING`이다
 - ID badge
 - Red necktie
 
+## Gameplay Presentation
+
+| ID | Asset | Status |
+|---|---|---|
+| PGT-01 | Gameplay Camera | Visual locked; exact camera behavior and implementation pending |
+| PGT-02 | Chair Redirect Core Loop | Visual pending — next target |
+
 ## Props
 
 ### Light
