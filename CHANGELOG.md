@@ -4,6 +4,9 @@
 
 ### Changed
 
+- `PGT_02_Chair_Redirect_Core_Loop_v010_FINAL`을 승인된 Production Visual로 등록
+- PGT_02의 동료 공급·완전 해제, 플레이어 최종 리디렉션, 연속 GEAR_01 연결과 충돌 전 경계를 ADR-0011 및 Chair Redirect Visual 명세에 기록
+- 다음 Production Visual 대상을 `PGT_03 — Chain Reaction Aftermath`로 전환
 - `PGT_01_Gameplay_Camera_v002_FINAL`을 승인된 Production Visual로 등록
 - PGT_01의 gameplay framing Canon과 비승인 카메라·환경·적·구현 범위를 ADR-0010 및 Camera 명세에 기록
 - 다음 Production Visual 대상을 `PGT_02 — Chair Redirect Core Loop`로 전환

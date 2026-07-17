@@ -15,3 +15,4 @@
 | DL-011 | 2026-07-17 | `GEAR_01_Cargo_Strapping_System_v002_FINAL` 승인 | LOCKED | 별도 산업용 스트랩의 장비 구성, 연결 체인, 여섯 시각 상태 확정 |
 | DL-012 | 2026-07-17 | `CHR_01_First_Ally_Identity_v001_FINAL` 승인 | LOCKED | 첫 동료의 시설·물류 직원 정체성과 실용 작업복 실루엣 확정 |
 | DL-013 | 2026-07-17 | `PGT_01_Gameplay_Camera_v002_FINAL` 승인 | LOCKED | 실제 3인칭 gameplay framing과 전장 가독성 기준 확정 |
+| DL-014 | 2026-07-17 | `PGT_02_Chair_Redirect_Core_Loop_v010_FINAL` 승인 | LOCKED | 동료 공급·완전 해제에서 플레이어 기계식 리디렉션으로 이어지는 충돌 전 시각 인과 확정 |

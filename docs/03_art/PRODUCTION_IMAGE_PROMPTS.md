@@ -62,7 +62,7 @@ Clearly show 2-3 Light objects, two Medium objects, one Heavy candidate, a break
 
 ## PGT_02 — Chair Redirect
 
-Status: `NEXT / PENDING PREFLIGHT`. 이미지 생성 전에 별도 Canon preflight와 owner 승인이 필요하다. PGT_01의 정확한 방·적·소품·동료 위치·조명은 Non-Canon이며 그대로 고정하지 않는다.
+Status: `LOCKED` as `references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`. 아래 과거 프롬프트는 승인된 Revision 작업이 아닌 경우 재사용하지 않는다. Canonical Elements는 `CHAIR_REDIRECT_VISUAL_SPEC.md`와 ADR-0011을 따른다.
 
 ```text
 Edit the approved PGT_01 image while preserving the same room, camera, characters, scale, lighting, and layout.
@@ -72,6 +72,8 @@ Read clearly as coworker push -> chair rolls -> mechanical connection -> player 
 ```
 
 ## PGT_03 — Chain Aftermath
+
+Status: `NEXT / PENDING PREFLIGHT`. 이미지 생성 전에 별도 Canon preflight와 owner 승인이 필요하다. PGT_02의 정확한 방·조명·목표·의자·캐스터·배우 위치와 세부 포즈는 incidental Non-Canon이며 그대로 고정하지 않는다. 아래 과거 프롬프트는 권한 있는 생성 브리프가 아니다.
 
 ```text
 Edit the approved PGT_02 image, preserving camera and layout. Show the immediate causal result:

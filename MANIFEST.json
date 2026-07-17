@@ -16,14 +16,18 @@
   "canonical_gameplay_camera_image": "references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png",
   "canonical_gameplay_camera_visual_spec": "docs/03_art/CAMERA_SPEC.md",
   "canonical_gameplay_camera_visual_adr": "docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md",
-  "locked_production_visual": "CHR_00 Player Identity; GEAR_01 Cargo Strapping System; CHR_01 First Ally Identity; PGT_01 Gameplay Camera",
+  "canonical_chair_redirect_image": "references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png",
+  "canonical_chair_redirect_visual_spec": "docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md",
+  "canonical_chair_redirect_visual_adr": "docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md",
+  "locked_production_visual": "CHR_00 Player Identity; GEAR_01 Cargo Strapping System; CHR_01 First Ally Identity; PGT_01 Gameplay Camera; PGT_02 Chair Redirect Core Loop",
   "locked_production_visuals": [
     "CHR_00 Player Identity",
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
-    "PGT_01 — Gameplay Camera"
+    "PGT_01 — Gameplay Camera",
+    "PGT_02 — Chair Redirect Core Loop"
   ],
-  "next_production_visual_target": "PGT_02 — Chair Redirect Core Loop",
+  "next_production_visual_target": "PGT_03 — Chain Reaction Aftermath",
   "production_visual_lock_sequence": [
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
@@ -79,13 +83,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 11666,
-      "sha256": "f9d5f2ce36ef4313cc195c32a4ce35ad4674878ac5f9508dfd08e9169fcd6956"
+      "bytes": 12925,
+      "sha256": "86ae5b1e459c585b55879ab28770add563208383a4ab19078ca717508fa010c8"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1760,
-      "sha256": "206783c5c33dc5847f6788f5ba197a8fb0a8544f0fee0f168a04831ab4e1f424"
+      "bytes": 2107,
+      "sha256": "df6abb28f18597675402061ed806103e1bf8fb84f6936c01d5f69d8c28c8c07e"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -224,8 +228,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5080,
-      "sha256": "13e267e0cd7582266c43bbe24f21a13b6252fba616a14a7d1ec4eb6f0d788f4a"
+      "bytes": 5290,
+      "sha256": "929a50dfe0517252f210d7089fe3d2f786b2d7038946b682446ee953a7507c57"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -234,13 +238,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 1860,
-      "sha256": "2a9cf38dd417091bc1ba49d0875ae093893a723e031c867e502f84a90a4a6023"
+      "bytes": 2071,
+      "sha256": "40363755ba496cd6c66a2d38a29317a44ec3ea6ab78cfc52c5fd5e4f22097966"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 2105,
-      "sha256": "62e2cc5f549c9a62e6b9a60e2156fcb3809369c2ca96db26ba57d63b1b4ce998"
+      "bytes": 2189,
+      "sha256": "fa4cf35c3bf0ac8477fe201ae7220a2aa8be294731448919a30b7b04f49125ec"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -328,6 +332,11 @@
       "sha256": "c1b7cbd4c5a0acc2f68ae4de680c43f5e673c066393455fc78a16c8db0e5193e"
     },
     {
+      "path": "docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md",
+      "bytes": 2802,
+      "sha256": "d608cfff354b0896bdee12dac0641ebb06ee576f73a82de04bfd56fd1bf65c79"
+    },
+    {
       "path": "docs/03_art/OFFICE_CORE_KIT.md",
       "bytes": 1297,
       "sha256": "b88b09c3e21521ad48f5ee356d6845ca7b53aba1c6d1989d4b9b870b1e0fb58b"
@@ -339,13 +348,13 @@
     },
     {
       "path": "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
-      "bytes": 7237,
-      "sha256": "565207e78ba13650d58613b48686c3d8fb15ac182ad775103b1565bc4ffdd483"
+      "bytes": 7634,
+      "sha256": "eb2595dd7a5a71565d9a8ce4bb0660f75417f0f48fa7805b462b7514b5507c40"
     },
     {
       "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
-      "bytes": 2069,
-      "sha256": "c81e1bd3a1202bbc5f85e6e95cd261ee33dd93e18bd31c3f26d1bcd4b9860a61"
+      "bytes": 2196,
+      "sha256": "986eff1375f6ae6e395f46eed31b8c887126348f43043a38171563aa8f220f8b"
     },
     {
       "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
@@ -354,8 +363,8 @@
     },
     {
       "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
-      "bytes": 3328,
-      "sha256": "da0851472a72257c5b84da6848b25cbe393ef2ac6989bd1630278c4b4e5bbf8e"
+      "bytes": 3719,
+      "sha256": "29e33fe6030e119649950e954bc63e95fd199a0f060f5ae24653f9d88670ee43"
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
@@ -394,18 +403,18 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 1544,
-      "sha256": "20b3157c29f31b1d47405ee7eb71985bfaf6d069f6dfb163919aa642461bf5aa"
+      "bytes": 1651,
+      "sha256": "01107d62ab9a5265f4029ec0d8d62bf60fe399e77dbabb20db7bc9a83420716c"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
       "bytes": 1135,
-      "sha256": "eef178b09b0a70f322f9e7ac55235b22e9ec1774d725546ed0990866e0cb6036"
+      "sha256": "fbeba706991250d120fcf0ec0e987c0741dfa3f17e92f00973d53247a4d860de"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 1083,
-      "sha256": "8ab9ecc808aae9b761971369ed4b5d97c7119e555c8863116aeac8fdea4d815a"
+      "bytes": 1113,
+      "sha256": "8e2871fc7492df791df5a71dd9d1ca28336bd23d435baa4031477a86e1b186b5"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -538,6 +547,11 @@
       "sha256": "cfd130bcd387d67ea364fe9c70aecd543af1cb6397c1835ad91d51215e9ce753"
     },
     {
+      "path": "docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md",
+      "bytes": 2055,
+      "sha256": "694c988e657d9b166cb93f64516d43fda9475713daa7a6643c92fc47717b1ace"
+    },
+    {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
       "bytes": 35663,
       "sha256": "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
@@ -559,8 +573,8 @@
     },
     {
       "path": "references/approved/README.md",
-      "bytes": 368,
-      "sha256": "47217160bc681cda0b6cf342a930f9fe8b16cddc75ba62a3c763035f984b6b1e"
+      "bytes": 387,
+      "sha256": "28e4fcc5a87333d280f895ff3da542e8259f47ff8a1ecac4a8bb443281214036"
     },
     {
       "path": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
@@ -581,6 +595,11 @@
       "path": "references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png",
       "bytes": 2370613,
       "sha256": "603a423d98af61f2c22e363c7431375185d4060c0ec68cfeb8a4146d4f295f87"
+    },
+    {
+      "path": "references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png",
+      "bytes": 2522525,
+      "sha256": "9e7154afbf63eb7d82accdb61157fc437c6dfc83ccdf0be4528ca53dbcd6ad93"
     },
     {
       "path": "references/archive/CHR_00_Player_Identity_Lock_v001.png",

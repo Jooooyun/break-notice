@@ -24,7 +24,7 @@
 - [x] Cargo Strap 작동 시트
 - [x] 첫 동료 Identity Lock
 - [x] PGT_01 Camera Lock
-- [ ] PGT_02 Core Loop Lock
+- [x] PGT_02 Core Loop Lock
 - [ ] PGT_03 Destruction Budget Lock
 - [ ] Office Core Kit 목록
 

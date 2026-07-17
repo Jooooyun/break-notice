@@ -32,12 +32,13 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 승인되고 LOCK된 Production Visual은 다음 네 개다.
+현재 승인되고 LOCK된 Production Visual은 다음 다섯 개다.
 
 - `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 - `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
 - `references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png`
 - `references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png`
+- `references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`
 
 관련 승인 문서:
 
@@ -45,10 +46,12 @@ Implementation Gate는 `CLOSED`다.
 - `docs/03_art/CARGO_STRAP_SPEC.md`
 - `docs/03_art/ALLY_VISUAL_SPEC.md`
 - `docs/03_art/CAMERA_SPEC.md`
+- `docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -112,6 +115,18 @@ Implementation Gate는 `CLOSED`다.
 
 정확한 카메라 거리, 높이, FOV, damping, collision, occlusion, 카메라 상태 전환, Camera Shake, Cinemachine과 Unity 구현은 PGT_01 Canon이 아니다. 이미지의 정확한 방 구조, 적 외형과 인원수, 소품 모델·배치·수량, 동료 위치, 조명과 collision surface도 incidental Non-Canon detail이다.
 
+승인된 PGT_02의 다음 요소는 임의로 변경하지 않는다.
+
+- 승인된 동료가 바닥 지지 의자를 물리적으로 공급하고 완전히 놓는 인과
+- 플레이어가 GEAR_01의 연속된 물리 연결을 통해 최종 방향 전환의 주체가 되는 인과
+- `허리 릴 → 검정·황색 스트랩 → 은색 카라비너 → 교체식 금속 클램프 → 하중 지지 의자 금속 Anchor` 연결
+- 의자의 바닥 접촉 유지
+- 스트랩 장력선과 의자의 새 진행 방향 구분
+- 플레이어의 체중, 스탠스, 골반·상체 회전과 브레이스 자세로 읽히는 리디렉션
+- 목표와 충돌하기 전에 끝나는 장면
+
+정확한 입력, 거리, 각도, 속도, 힘, 장력, 마찰, 타이밍, 자동 연결·해제, 애니메이션, AI, 물리값, Rigidbody, Joint, IK, Cinemachine과 Unity 구현은 PGT_02 Canon이 아니다. 이미지의 정확한 방 구조, 조명, 목표 위치와 외형, 의자 모델, 캐스터 각도, 배우 위치와 세부 포즈도 incidental Non-Canon detail이다.
+
 ---
 
 # 3. Production Visual Lock Progress
@@ -121,14 +136,14 @@ Implementation Gate는 `CLOSED`다.
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
 2. `CHR_01 — First Ally Identity` — `LOCKED`
 3. `PGT_01 — Gameplay Camera` — `LOCKED`
-4. `PGT_02 — Chair Redirect Core Loop` — `NEXT`
-5. `PGT_03 — Chain Reaction Aftermath`
+4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
+5. `PGT_03 — Chain Reaction Aftermath` — `NEXT`
 6. `LGT_01 — Night Archive Lighting`
 7. `FIN_01 — Conference Table Team Finisher`
 
 현재 다음 작업 대상은:
 
-`PGT_02 — Chair Redirect Core Loop`
+`PGT_03 — Chain Reaction Aftermath`
 
 이다.
 
