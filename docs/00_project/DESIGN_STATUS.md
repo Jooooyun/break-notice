@@ -15,6 +15,8 @@ Implementation Gate: `CLOSED`
 | 카메라 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 카메라 설계 | G2 |
 | Chair Redirect Core Loop | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 Chair Redirect 설계 | G2 |
 | PGT_03 Chain Reaction Aftermath | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 Chain·파괴 결과 설계 | G2 |
+| LGT_01 Night Archive Lighting | VISUAL LOCKED / TECHNICAL DRAFT | 정확한 조명·렌더링 설계 | G2 |
+| FIN_01 Conference Table Team Finisher | PENDING — NEXT | Canon preflight | G2 |
 | 파괴 예산 | HIGH-LEVEL BASELINE | 정확한 파편·Particle·VFX·성능 예산 | G2 |
 | 적 1~3종 | DRAFT | 실루엣 시트 | G2 |
 | 기술 아키텍처 | DRAFT | Prototype 상세 설계 | G3 |
@@ -28,11 +30,11 @@ Implementation Gate: `CLOSED`
 3. `PGT_01 — Gameplay Camera` — `LOCKED`
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
 5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
-6. `LGT_01 — Night Archive Lighting` — `NEXT`
-7. `FIN_01 — Conference Table Team Finisher`
+6. `LGT_01 — Night Archive Lighting` — `LOCKED`
+7. `FIN_01 — Conference Table Team Finisher` — `NEXT`
 
-즉시 다음 대상은 `LGT_01 — Night Archive Lighting`이다.
+즉시 다음 대상은 `FIN_01 — Conference Table Team Finisher`다.
 
 `CHR_00 Player Turnaround`은 향후 3D 모델링용 `PENDING` Production Support 산출물이며 현재 Production Visual Lock 순서를 차단하지 않는다.
 
-상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 정확한 파괴 예산, 카메라 기능, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`다. CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop와 PGT_03 Chain Reaction Aftermath의 문서화된 Visual Canon만 `LOCKED`이며 그 외 Production Visual은 사용자 승인 전까지 `REVIEW` 또는 `PENDING`이다.
+상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 정확한 파괴 예산, 카메라 기능, 조명 수치와 렌더링 구현, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`다. CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath와 LGT_01 Night Archive Lighting의 문서화된 Visual Canon만 `LOCKED`이며 그 외 Production Visual은 사용자 승인 전까지 `REVIEW` 또는 `PENDING`이다.

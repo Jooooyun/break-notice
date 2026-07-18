@@ -32,7 +32,7 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 승인되고 LOCK된 Production Visual은 다음 여섯 개다.
+현재 승인되고 LOCK된 Production Visual은 다음 일곱 개다.
 
 - `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 - `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
@@ -40,6 +40,7 @@ Implementation Gate는 `CLOSED`다.
 - `references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png`
 - `references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`
 - `references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png`
+- `references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`
 
 관련 승인 문서:
 
@@ -49,12 +50,14 @@ Implementation Gate는 `CLOSED`다.
 - `docs/03_art/CAMERA_SPEC.md`
 - `docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md`
 - `docs/03_art/CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md`
+- `docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0012-PGT-03-PRODUCTION-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0013-LGT-01-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -143,6 +146,19 @@ Implementation Gate는 `CLOSED`다.
 
 정확한 Chain 순서와 hop 수, 적·물체·파편·Particle 수, 피해, Stability, Knockback, Ragdoll, Momentum, 보상, 정확한 방 구조와 소품 배치, 통로 치수, 스트랩 해제 시점, 애니메이션, 물리값, VFX, Rigidbody, Breakable, Cinemachine과 Unity 구현은 PGT_03 Canon이 아니다. 깨진 유리 구역은 새로운 visibility line으로 승인되지만 완전히 통과 가능한 경로의 정확한 형태와 치수는 Canon이 아니다.
 
+승인된 LGT_01의 다음 요소는 임의로 변경하지 않는다.
+
+- Records Archive에 한정된 after-hours 조명 변주
+- 현실적인 차가운 중성 형광등 Practical을 Primary Source로 사용하는 관계
+- 선반과 통로 암부의 절제된 Cool Neutral-to-Green-Blue Ambient
+- Black Crush 없이 유지되는 Shadow Detail
+- 거칠고 제한된 바닥·금속·유리·플라스틱 PBR Highlight
+- 플레이어, 동료, 임시 적, Stored GEAR_01, 사용 가능 물체와 복수 통로의 Gameplay Readability
+- 전경, 선반 Aisle과 후경 사이의 공간 깊이
+- 공포나 초자연 표현이 아닌 진지한 After-hours Corporate Tension
+
+LGT_01은 Records Archive 지역 조명 변주이며 게임 전체의 Global Lighting 또는 Color Grading 기준이 아니다. 정확한 색온도, RGB, Lux, Exposure, Contrast, 조명 기구 수와 위치, Fixture Failure, Flicker, Emergency Gameplay, Shadow, Reflection, LUT, Tone Mapping, Baked/Realtime/Mixed Lighting, GI, Probe, Volumetric, Post-processing, URP 설정과 Unity 구현은 LGT_01 Canon이 아니다. 이미지의 정확한 방 구조, 선반 수, Aisle 폭, 적·소품·카트 수와 위치, Actor 배치와 Level Layout도 incidental Non-Canon detail이다.
+
 ---
 
 # 3. Production Visual Lock Progress
@@ -154,12 +170,12 @@ Implementation Gate는 `CLOSED`다.
 3. `PGT_01 — Gameplay Camera` — `LOCKED`
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
 5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
-6. `LGT_01 — Night Archive Lighting` — `NEXT`
-7. `FIN_01 — Conference Table Team Finisher`
+6. `LGT_01 — Night Archive Lighting` — `LOCKED`
+7. `FIN_01 — Conference Table Team Finisher` — `NEXT`
 
 현재 다음 작업 대상은:
 
-`LGT_01 — Night Archive Lighting`
+`FIN_01 — Conference Table Team Finisher`
 
 이다.
 

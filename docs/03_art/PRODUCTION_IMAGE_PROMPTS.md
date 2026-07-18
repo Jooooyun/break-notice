@@ -84,7 +84,7 @@ Make the newly opened route and changed room state readable like actual gameplay
 
 ## LGT_01 — Night Archive
 
-Status: `NEXT / PENDING PREFLIGHT`. 이미지 생성 전에 별도 Canon preflight와 owner 승인이 필요하다. PGT_03의 정확한 방·소품·목표·파편·가시선·조명은 incidental Non-Canon이며 그대로 고정하지 않는다. 아래 과거 프롬프트는 권한 있는 생성 브리프가 아니다.
+Status: `LOCKED` as `references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`. 아래 과거 프롬프트는 승인된 Revision 작업이 아닌 경우 재사용하지 않는다. Canonical Elements는 `NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md`와 ADR-0013을 따른다.
 
 ```text
 Preserve approved gameplay camera and characters. Use the exploration night archive reference only for cold fluorescent lighting, narrow filing aisles, dark green-blue ambient tone, limited red emergency indicators, reflective floor highlights, and document-storage atmosphere.
@@ -92,6 +92,8 @@ Keep player, ally, enemies, strap, usable objects, and routes clearly readable. 
 ```
 
 ## FIN_01 — Table Finisher
+
+Status: `NEXT / PENDING PREFLIGHT`. 이미지 생성 전에 별도 Canon preflight와 owner 승인이 필요하다. LGT_01의 정확한 방·선반·통로·배우·소품·조명은 incidental Non-Canon이며 그대로 고정하지 않는다. 아래 과거 프롬프트는 권한 있는 생성 브리프가 아니다.
 
 ```text
 Create a rare scripted in-engine finisher using the approved player and two allies maximum. All three physically contact and push a heavy conference table on reinforced caster wheels toward two or three security enemies near a glass partition.

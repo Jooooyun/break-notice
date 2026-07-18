@@ -8,7 +8,8 @@
 - `gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png`
 - `gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`
 - `gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png`
+- `lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`
 
 다음 승인 예정:
 
-- `LGT_01_Night_Archive_Lighting_v001`
+- `FIN_01_Conference_Table_Team_Finisher_v001`

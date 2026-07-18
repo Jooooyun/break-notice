@@ -22,16 +22,20 @@
   "canonical_chain_reaction_aftermath_image": "references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png",
   "canonical_chain_reaction_aftermath_visual_spec": "docs/03_art/CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md",
   "canonical_chain_reaction_aftermath_visual_adr": "docs/09_adrs/ADR-0012-PGT-03-PRODUCTION-VISUAL-LOCK.md",
-  "locked_production_visual": "CHR_00 Player Identity; GEAR_01 Cargo Strapping System; CHR_01 First Ally Identity; PGT_01 Gameplay Camera; PGT_02 Chair Redirect Core Loop; PGT_03 Chain Reaction Aftermath",
+  "canonical_night_archive_lighting_image": "references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png",
+  "canonical_night_archive_lighting_visual_spec": "docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md",
+  "canonical_night_archive_lighting_visual_adr": "docs/09_adrs/ADR-0013-LGT-01-PRODUCTION-VISUAL-LOCK.md",
+  "locked_production_visual": "CHR_00 Player Identity; GEAR_01 Cargo Strapping System; CHR_01 First Ally Identity; PGT_01 Gameplay Camera; PGT_02 Chair Redirect Core Loop; PGT_03 Chain Reaction Aftermath; LGT_01 Night Archive Lighting",
   "locked_production_visuals": [
     "CHR_00 Player Identity",
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
     "PGT_01 — Gameplay Camera",
     "PGT_02 — Chair Redirect Core Loop",
-    "PGT_03 — Chain Reaction Aftermath"
+    "PGT_03 — Chain Reaction Aftermath",
+    "LGT_01 — Night Archive Lighting"
   ],
-  "next_production_visual_target": "LGT_01 — Night Archive Lighting",
+  "next_production_visual_target": "FIN_01 — Conference Table Team Finisher",
   "production_visual_lock_sequence": [
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
@@ -87,13 +91,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 14344,
-      "sha256": "7a245f996977930012f52bc32f778e6c0bcf81699f6b233295f11144bc0c6bd5"
+      "bytes": 15806,
+      "sha256": "e6594ffe44316b404dc9b44c7af9e7f63005be39863f13050d024a0da87ac7cd"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 2476,
-      "sha256": "d9da6169485ad29b0641ff62d8f1893692532529429d7d75b7a4aea9d5488713"
+      "bytes": 2838,
+      "sha256": "508d99a994dbb219ba799999a847611a24ad0755b4d1464b572a94dae034ef24"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -232,8 +236,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5489,
-      "sha256": "0e7ed5fdb9fa856df34d70c8008dd34df686062af0f1a8d93273c450422a5007"
+      "bytes": 5836,
+      "sha256": "d64bb3f5ac601099687c98293df080e83a74fa26ed2ac2d1372f9cca36874442"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -242,13 +246,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 2277,
-      "sha256": "eb9718a63444146762c70f75f6264526ebb9acdd1bc358ce1641a918a039fe68"
+      "bytes": 2454,
+      "sha256": "c58f79acf69ad26f116eb6f3f69693d72444ab4bb293e640086822a14f8b79b5"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 2383,
-      "sha256": "f32e06bfc7466c7cb89773b97fe27c2146402c7d81677dbd53ac33334319168c"
+      "bytes": 2661,
+      "sha256": "14b4650c6718d8239a964e1d51701fded9a5539d22d7ff8a3eb740c5c8a8c4ae"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -322,8 +326,8 @@
     },
     {
       "path": "docs/03_art/ART_DIRECTION.md",
-      "bytes": 2167,
-      "sha256": "335b07860c778a64dccdf0e3636788c7b2917fe3cbdc5f195496c3ef42b0970c"
+      "bytes": 3293,
+      "sha256": "abd792fce10d6ac571c1eadba176a58791d387f6e19a52e6da1eaf3b0fd91ab7"
     },
     {
       "path": "docs/03_art/CAMERA_SPEC.md",
@@ -346,6 +350,11 @@
       "sha256": "9a0034613836babf936b059386d2f4c8091a18feb42b486a34a3e38cd6aec753"
     },
     {
+      "path": "docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md",
+      "bytes": 3806,
+      "sha256": "2a17fe08ca446a1696f1b792dbf0efb3d5b210fd29e60c641444b4b512c2b3f3"
+    },
+    {
       "path": "docs/03_art/OFFICE_CORE_KIT.md",
       "bytes": 1297,
       "sha256": "b88b09c3e21521ad48f5ee356d6845ca7b53aba1c6d1989d4b9b870b1e0fb58b"
@@ -357,13 +366,13 @@
     },
     {
       "path": "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
-      "bytes": 7900,
-      "sha256": "bbc0bb1f7d8a12e1188500bcd94393554b3c13b4a91ecfa98966dfe46c06cce5"
+      "bytes": 8183,
+      "sha256": "e63734cc9f4296f26f4d59f6a3027425c2ee76d4e7a58bc21f607d8f19145f9a"
     },
     {
       "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
-      "bytes": 2322,
-      "sha256": "59a05b53cbc2659b87811d7e238f53f535c201e8d7da9e15e4c801f2eb6434a5"
+      "bytes": 2448,
+      "sha256": "26f61807f3cbd450e42212fc7acfe2801140fc7c8b9dc6c42fda1c4f01907e42"
     },
     {
       "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
@@ -372,8 +381,8 @@
     },
     {
       "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
-      "bytes": 4300,
-      "sha256": "329f3a052a7bbc8efd8245cccf54827355efd94190b3a165f204e8bf689eb5ac"
+      "bytes": 4837,
+      "sha256": "cd2cf349bbd76f9c1a9a8e0890b31df91524faa39aa8f98906d1f5bdad432c20"
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
@@ -412,18 +421,18 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 1768,
-      "sha256": "ee6ab82b81a7a0e147bbb8d1b7b783548340f7b4f87ea1daba8970b9113d7309"
+      "bytes": 1888,
+      "sha256": "b04b70beaf9cfd91474f7be61f7ba93e331a723d62eda65824eb2168f82892b9"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 1187,
-      "sha256": "d16cc2686b7c5e88f45a0d6a4787c0bcd9b2e9718205733259f9ae528c543065"
+      "bytes": 1277,
+      "sha256": "733bc8165c13c4eb43b1463de59623ed10257bc2c37846ae9d16d5e514f9b72e"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 1213,
-      "sha256": "b227cd2c4a3e2ecfca091d7ca53cc4189696fcdd044adc37547c570d44bd24e8"
+      "bytes": 1282,
+      "sha256": "496227d6e1d6764ed07fec5adaf033397b3c609022009341b7082638c5137000"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -566,6 +575,11 @@
       "sha256": "b7cc5a686cb7924d7ac96036fa6b379add6b3bc8236e9289bce1611260f4bd8e"
     },
     {
+      "path": "docs/09_adrs/ADR-0013-LGT-01-PRODUCTION-VISUAL-LOCK.md",
+      "bytes": 2290,
+      "sha256": "cd7c0feea587800556bc6088ef469dff057a8bcf5c860155b474aff5ee66e9b6"
+    },
+    {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
       "bytes": 35663,
       "sha256": "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
@@ -587,8 +601,8 @@
     },
     {
       "path": "references/approved/README.md",
-      "bytes": 445,
-      "sha256": "a836dc795afcf382e4f33c8c9ef8754b4d9d16be915be3d01824789fa5002340"
+      "bytes": 511,
+      "sha256": "9be61176e801b900e0438899ae3be3ec064360bd30c482ff13ebba390a1b0c48"
     },
     {
       "path": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
@@ -619,6 +633,11 @@
       "path": "references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png",
       "bytes": 2456623,
       "sha256": "1ada60f305cdc1756eee30bf85950a0ef3b31b5352060c45512a09c4d8d0d86d"
+    },
+    {
+      "path": "references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png",
+      "bytes": 2038222,
+      "sha256": "aa165a79d06eec48e92861fe09431ff8180e0939f7e2f4bee46812126e808e12"
     },
     {
       "path": "references/archive/CHR_00_Player_Identity_Lock_v001.png",

@@ -17,3 +17,4 @@
 | DL-013 | 2026-07-17 | `PGT_01_Gameplay_Camera_v002_FINAL` 승인 | LOCKED | 실제 3인칭 gameplay framing과 전장 가독성 기준 확정 |
 | DL-014 | 2026-07-17 | `PGT_02_Chair_Redirect_Core_Loop_v010_FINAL` 승인 | LOCKED | 동료 공급·완전 해제에서 플레이어 기계식 리디렉션으로 이어지는 충돌 전 시각 인과 확정 |
 | DL-015 | 2026-07-18 | `PGT_03_Chain_Reaction_Aftermath_v003_FINAL` 승인 | LOCKED | 국소 Chain Aftermath, 새로운 visibility line, 통제된 파괴와 느슨한 post-impact 스트랩 상태 확정 |
+| DL-016 | 2026-07-18 | `LGT_01_Night_Archive_Lighting_v001_FINAL` 승인 | LOCKED | Records Archive 지역의 after-hours 조명 변주와 gameplay readability 방향 확정 |

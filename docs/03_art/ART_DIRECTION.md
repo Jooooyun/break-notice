@@ -56,6 +56,20 @@
 - 화면 내 인물 수
 - 실시간 반사와 복잡한 조명
 
+## Approved Local Lighting Variant — LGT_01
+
+LGT_01은 Records Archive에 한정된 after-hours 조명 변주다. BREAK NOTICE 전체의 Global Lighting 또는 Color Grading 기준이 아니다.
+
+- 현실적인 차가운 중성 형광등 Practical을 Primary Source로 사용한다.
+- 선반과 통로 암부에는 절제된 Cool Neutral-to-Green-Blue Ambient를 사용한다.
+- Shadow Detail을 유지하고 Black Crush를 피한다.
+- 바닥·금속·유리·플라스틱의 PBR Highlight는 거칠고 제한적으로 유지한다.
+- 플레이어, 동료, 임시 적, Stored GEAR_01, 사용 가능 물체와 복수 통로가 gameplay distance에서 구분되어야 한다.
+- 전경, 선반 Aisle과 후경 사이의 공간 깊이를 유지한다.
+- 분위기는 진지한 After-hours Corporate Tension이며 공포 또는 초자연 표현이 아니다.
+
+정확한 색온도, RGB, Lux, Exposure, Contrast, 기구 수와 위치, Flicker, Emergency Gameplay, Shadow, Reflection, LUT, Tone Mapping, Lighting Mode, GI, Probe, Volumetric, Post-processing, URP 설정과 Unity 구현은 이 방향에서 승인하지 않는다.
+
 ## Strict Exclusions
 
 - Anime, manga, manhwa, cel shading

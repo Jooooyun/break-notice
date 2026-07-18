@@ -4,6 +4,9 @@
 
 ### Changed
 
+- `LGT_01_Night_Archive_Lighting_v001_FINAL`을 승인된 Production Visual로 등록
+- LGT_01의 Records Archive 지역 조명 변주 Canon과 비승인 조명 수치·전역 조명·렌더링 구현 범위를 ADR-0013 및 Night Archive Lighting Visual 명세에 기록
+- 다음 Production Visual 대상을 `FIN_01 — Conference Table Team Finisher`로 전환
 - `PGT_03_Chain_Reaction_Aftermath_v003_FINAL`을 승인된 Production Visual로 등록
 - PGT_03의 국소 Chain Aftermath, 새로운 visibility line, 느슨한 post-impact 스트랩과 비승인 파괴·구현 범위를 ADR-0012 및 Chain Reaction Aftermath Visual 명세에 기록
 - 다음 Production Visual 대상을 `LGT_01 — Night Archive Lighting`으로 전환

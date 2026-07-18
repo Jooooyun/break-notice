@@ -18,6 +18,8 @@
 
 ![승인된 PGT_03 Chain Reaction Aftermath](references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png)
 
+![승인된 LGT_01 Night Archive Lighting](references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png)
+
 ## 현재 상태
 
 | 항목 | 상태 |
@@ -32,7 +34,8 @@
 | 장비 작동 시트 `GEAR_01 v002` | LOCKED |
 | 의자 리디렉션 Core Loop `PGT_02 v010` | VISUAL LOCKED / FUNCTIONAL DRAFT |
 | Chain Reaction Aftermath `PGT_03 v003` | VISUAL LOCKED / FUNCTIONAL DRAFT |
-| Night Archive Lighting `LGT_01` | PENDING — NEXT |
+| Night Archive Lighting `LGT_01 v001` | VISUAL LOCKED / TECHNICAL DRAFT |
+| Conference Table Team Finisher `FIN_01` | PENDING — NEXT |
 | Graybox 재미 검증 | NOT STARTED |
 | 본 제작 | BLOCKED BY GATES |
 
@@ -86,6 +89,7 @@ break-notice/
 - 붉은 넥타이는 복장과 시각적 상징일 뿐 물체 연결 도구가 아니다.
 - 물체 연결은 허리 릴에서 나오는 **검정·황색 산업용 화물 스트랩, 금속 카라비너, 교체식 클램프**로 하중 지지 금속 Anchor에 수행한다.
 - 일반 전투의 활성 동료는 **1명**, 특수 피니셔에서만 최대 2명이다.
+- LGT_01은 Records Archive 지역의 after-hours 조명 변주이며 게임 전체의 Global Lighting 또는 Color Grading 기준이 아니다.
 - 코미디는 과장된 얼굴이 아니라 진지한 인물과 황당한 물리 결과의 대비에서 나온다.
 - 실제 구현은 승인된 요구사항과 인수 테스트 없이는 시작하지 않는다.
 
