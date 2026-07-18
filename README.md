@@ -16,6 +16,8 @@
 
 ![승인된 PGT_02 Chair Redirect Core Loop](references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png)
 
+![승인된 PGT_03 Chain Reaction Aftermath](references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png)
+
 ## 현재 상태
 
 | 항목 | 상태 |
@@ -29,7 +31,8 @@
 | 동료 1종 비주얼 `CHR_01 v001` | LOCKED |
 | 장비 작동 시트 `GEAR_01 v002` | LOCKED |
 | 의자 리디렉션 Core Loop `PGT_02 v010` | VISUAL LOCKED / FUNCTIONAL DRAFT |
-| Chain Reaction Aftermath `PGT_03` | PENDING — NEXT |
+| Chain Reaction Aftermath `PGT_03 v003` | VISUAL LOCKED / FUNCTIONAL DRAFT |
+| Night Archive Lighting `LGT_01` | PENDING — NEXT |
 | Graybox 재미 검증 | NOT STARTED |
 | 본 제작 | BLOCKED BY GATES |
 

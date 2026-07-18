@@ -32,13 +32,14 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 승인되고 LOCK된 Production Visual은 다음 다섯 개다.
+현재 승인되고 LOCK된 Production Visual은 다음 여섯 개다.
 
 - `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 - `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
 - `references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png`
 - `references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png`
 - `references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`
+- `references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png`
 
 관련 승인 문서:
 
@@ -47,11 +48,13 @@ Implementation Gate는 `CLOSED`다.
 - `docs/03_art/ALLY_VISUAL_SPEC.md`
 - `docs/03_art/CAMERA_SPEC.md`
 - `docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md`
+- `docs/03_art/CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0012-PGT-03-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -127,6 +130,19 @@ Implementation Gate는 `CLOSED`다.
 
 정확한 입력, 거리, 각도, 속도, 힘, 장력, 마찰, 타이밍, 자동 연결·해제, 애니메이션, AI, 물리값, Rigidbody, Joint, IK, Cinemachine과 Unity 구현은 PGT_02 Canon이 아니다. 이미지의 정확한 방 구조, 조명, 목표 위치와 외형, 의자 모델, 캐스터 각도, 배우 위치와 세부 포즈도 incidental Non-Canon detail이다.
 
+승인된 PGT_03의 다음 요소는 임의로 변경하지 않는다.
+
+- PGT_02의 리디렉션 의자가 시작 원인의 증거로 남는 인과
+- 하나의 임시 목표가 비치명적으로 이동·균형 상실 후 회복 중인 상태
+- 국소적인 유리 파손 구역
+- 이동식 롤링 수납 자산과 복사기급 사무 자산의 연쇄 이동 또는 전도
+- 파괴 결과로 읽히는 새로운 시야선과 변경된 국소 room state
+- 제한적이고 읽을 수 있는 큰 물리 조각과 절제된 작은 유리·종이·먼지·토너 반응
+- 의자에 연결된 채 느슨하고 더 이상 제어하지 않는 GEAR_01 스트랩
+- 실제 3인칭 gameplay view에서 읽히는 국소적이고 통제된 파괴
+
+정확한 Chain 순서와 hop 수, 적·물체·파편·Particle 수, 피해, Stability, Knockback, Ragdoll, Momentum, 보상, 정확한 방 구조와 소품 배치, 통로 치수, 스트랩 해제 시점, 애니메이션, 물리값, VFX, Rigidbody, Breakable, Cinemachine과 Unity 구현은 PGT_03 Canon이 아니다. 깨진 유리 구역은 새로운 visibility line으로 승인되지만 완전히 통과 가능한 경로의 정확한 형태와 치수는 Canon이 아니다.
+
 ---
 
 # 3. Production Visual Lock Progress
@@ -137,13 +153,13 @@ Implementation Gate는 `CLOSED`다.
 2. `CHR_01 — First Ally Identity` — `LOCKED`
 3. `PGT_01 — Gameplay Camera` — `LOCKED`
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
-5. `PGT_03 — Chain Reaction Aftermath` — `NEXT`
-6. `LGT_01 — Night Archive Lighting`
+5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
+6. `LGT_01 — Night Archive Lighting` — `NEXT`
 7. `FIN_01 — Conference Table Team Finisher`
 
 현재 다음 작업 대상은:
 
-`PGT_03 — Chain Reaction Aftermath`
+`LGT_01 — Night Archive Lighting`
 
 이다.
 

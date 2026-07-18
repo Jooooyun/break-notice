@@ -25,7 +25,8 @@
 - [x] 첫 동료 Identity Lock
 - [x] PGT_01 Camera Lock
 - [x] PGT_02 Core Loop Lock
-- [ ] PGT_03 Destruction Budget Lock
+- [x] PGT_03 Aftermath Visual Lock
+- [ ] 정확한 파괴 예산 수치와 구현 규칙
 - [ ] Office Core Kit 목록
 
 ## Technical

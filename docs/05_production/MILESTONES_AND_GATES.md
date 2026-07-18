@@ -13,4 +13,4 @@
 
 ## 현재 위치
 
-G1 요구사항 기준선과 G2 설계 기준선을 구축하는 단계다. 주인공 비주얼, GEAR_01 장비 작동 시트, CHR_01 첫 동료 비주얼, PGT_01 Gameplay Camera와 PGT_02 Chair Redirect Core Loop는 승인되었으며 PGT_03이 남아 있다. 다음 대상은 `PGT_03 — Chain Reaction Aftermath`다. Implementation Gate는 `CLOSED`다.
+G1 요구사항 기준선과 G2 설계 기준선을 구축하는 단계다. 주인공 비주얼, GEAR_01 장비 작동 시트, CHR_01 첫 동료 비주얼, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop와 PGT_03 Chain Reaction Aftermath는 승인되었다. 정확한 파괴 예산과 기능·기술 설계는 여전히 Draft이며, 다음 Production Visual 대상은 `LGT_01 — Night Archive Lighting`이다. Implementation Gate는 `CLOSED`다.

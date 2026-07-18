@@ -4,6 +4,9 @@
 
 ### Changed
 
+- `PGT_03_Chain_Reaction_Aftermath_v003_FINAL`을 승인된 Production Visual로 등록
+- PGT_03의 국소 Chain Aftermath, 새로운 visibility line, 느슨한 post-impact 스트랩과 비승인 파괴·구현 범위를 ADR-0012 및 Chain Reaction Aftermath Visual 명세에 기록
+- 다음 Production Visual 대상을 `LGT_01 — Night Archive Lighting`으로 전환
 - `PGT_02_Chair_Redirect_Core_Loop_v010_FINAL`을 승인된 Production Visual로 등록
 - PGT_02의 동료 공급·완전 해제, 플레이어 최종 리디렉션, 연속 GEAR_01 연결과 충돌 전 경계를 ADR-0011 및 Chair Redirect Visual 명세에 기록
 - 다음 Production Visual 대상을 `PGT_03 — Chain Reaction Aftermath`로 전환

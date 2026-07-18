@@ -28,7 +28,8 @@ GEAR-01 Production Visual은 `LOCKED`이며 3D·기능 구현은 `PENDING`이다
 |---|---|---|
 | PGT-01 | Gameplay Camera | Visual locked; exact camera behavior and implementation pending |
 | PGT-02 | Chair Redirect Core Loop | Visual locked; exact mechanics, physics and implementation pending |
-| PGT-03 | Chain Reaction Aftermath | Visual pending — next target |
+| PGT-03 | Chain Reaction Aftermath | Visual locked; exact Chain, destruction budget, VFX and implementation pending |
+| LGT-01 | Night Archive Lighting | Visual pending — next target |
 
 ## Props
 

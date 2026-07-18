@@ -1,5 +1,9 @@
 # VFX and Destruction Style Guide
 
+## Status
+
+`PGT_03_Chain_Reaction_Aftermath_v003_FINAL`의 문서화된 Canonical Elements만 Visual Lock이다. 아래 정확한 시간·파편 수·Particle·풀링·기술 구현 제안은 별도 승인 전까지 `DRAFT`다. PGT_03 Canon은 `CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md`와 ADR-0012를 따른다.
+
 ## 계층
 
 ### Primary Impact
