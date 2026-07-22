@@ -32,7 +32,7 @@ Implementation Gate는 `CLOSED`다.
 
 # 2. Current Approved Visual Canon
 
-현재 승인되고 LOCK된 Production Visual은 다음 일곱 개다.
+현재 승인되고 LOCK된 Production Visual은 다음 여덟 개다.
 
 - `references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png`
 - `references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png`
@@ -41,6 +41,7 @@ Implementation Gate는 `CLOSED`다.
 - `references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`
 - `references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png`
 - `references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`
+- `references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png`
 
 관련 승인 문서:
 
@@ -51,6 +52,7 @@ Implementation Gate는 `CLOSED`다.
 - `docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md`
 - `docs/03_art/CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md`
 - `docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md`
+- `docs/03_art/CONFERENCE_TABLE_TEAM_FINISHER_VISUAL_SPEC.md`
 - `docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md`
@@ -58,6 +60,7 @@ Implementation Gate는 `CLOSED`다.
 - `docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0012-PGT-03-PRODUCTION-VISUAL-LOCK.md`
 - `docs/09_adrs/ADR-0013-LGT-01-PRODUCTION-VISUAL-LOCK.md`
+- `docs/09_adrs/ADR-0014-FIN-01-PRODUCTION-VISUAL-LOCK.md`
 
 승인된 CHR_00의 다음 요소는 임의로 변경하지 않는다.
 
@@ -159,6 +162,21 @@ Implementation Gate는 `CLOSED`다.
 
 LGT_01은 Records Archive 지역 조명 변주이며 게임 전체의 Global Lighting 또는 Color Grading 기준이 아니다. 정확한 색온도, RGB, Lux, Exposure, Contrast, 조명 기구 수와 위치, Fixture Failure, Flicker, Emergency Gameplay, Shadow, Reflection, LUT, Tone Mapping, Baked/Realtime/Mixed Lighting, GI, Probe, Volumetric, Post-processing, URP 설정과 Unity 구현은 LGT_01 Canon이 아니다. 이미지의 정확한 방 구조, 선반 수, Aisle 폭, 적·소품·카트 수와 위치, Actor 배치와 Level Layout도 incidental Non-Canon detail이다.
 
+승인된 FIN_01의 다음 요소는 임의로 변경하지 않는다.
+
+- 승인된 CHR_00 플레이어 한 명, 승인된 CHR_01 동료 한 명과 익명의 Finisher-only 보조 직원 한 명
+- 세 사람이 하나의 Heavy 회의 테이블에 직접 접촉해 공동으로 미는 관계
+- 중앙 선행 위치에서 최종 방향과 타이밍을 주도하는 CHR_00
+- 플레이어를 지원하되 대체하지 않는 CHR_01과 익명 보조 직원
+- 세 인물의 양손 접촉, 체중 이동, 발 접지와 상체 기울기로 읽히는 공동 추진
+- 현실적인 하중 보조 상태로 읽히는 CHR_00의 외부 전완 브레이스
+- 통합 캐스터 구조로 바닥 지지를 유지하는 테이블
+- 임시 목표와 충돌하기 전에 끝나는 장면
+- Stored/Inactive 상태이며 테이블에 연결되지 않는 GEAR_01
+- 복장 전용이며 테이블·장비·인물과 연결되지 않는 붉은 넥타이
+
+FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이다. 익명의 보조 직원은 CHR_02, 일반 전투 Active Ally, 지속 Party Member 또는 승인된 Character Identity가 아니다. 정확한 인물 신원, 테이블·캐스터·목표·카메라·방·배우 배치와 자세는 incidental Non-Canon이다. Trigger, 빈도, Momentum/Pip 비용, 입력, 물리, 안무, 애니메이션, AI, IK, Rigidbody, Caster Physics, Cinemachine과 Unity 구현은 승인되지 않았다. FIN_01 Visual Lock은 Vertical Slice 또는 최종 제품 편입을 승인하지 않는다.
+
 ---
 
 # 3. Production Visual Lock Progress
@@ -171,13 +189,11 @@ LGT_01은 Records Archive 지역 조명 변주이며 게임 전체의 Global Lig
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
 5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
 6. `LGT_01 — Night Archive Lighting` — `LOCKED`
-7. `FIN_01 — Conference Table Team Finisher` — `NEXT`
+7. `FIN_01 — Conference Table Team Finisher` — `LOCKED`
 
-현재 다음 작업 대상은:
+현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았다.
 
-`FIN_01 — Conference Table Team Finisher`
-
-이다.
+이는 Full Design Lock 완료, FIN_01의 제품 범위 편입 또는 Implementation Gate 개방을 뜻하지 않는다.
 
 각 결과물은 사용자에게 명시적으로 승인받기 전까지 `REVIEW` 상태다.
 

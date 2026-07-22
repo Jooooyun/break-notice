@@ -2,11 +2,10 @@
 
 ## Canon Hierarchy
 
-1. 승인된 CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting 이미지
-2. 향후 피니셔 목표 이미지(FIN_01)
-3. Primary exploration references
-4. Secondary scenario references
-5. Non-canonical exploration
+1. 승인된 CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting, FIN_01 Conference Table Team Finisher 이미지
+2. Primary exploration references
+3. Secondary scenario references
+4. Non-canonical exploration
 
 ## Approved
 
@@ -19,8 +18,9 @@
 | PGT-02-v010 | `references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png` | LOCKED | Chair Redirect Core Loop Visual Canon |
 | PGT-03-v003 | `references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png` | LOCKED | Chain Reaction Aftermath Visual Canon |
 | LGT-01-v001 | `references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png` | LOCKED | Night Archive Lighting Visual Canon |
+| FIN-01-v003 | `references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png` | LOCKED | Conference Table Team Finisher Visual-only conditional Canon |
 
-CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath와 LGT_01 Night Archive Lighting이 현재 `LOCKED`된 Production Visual이다.
+CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting과 FIN_01 Conference Table Team Finisher가 현재 `LOCKED`된 Production Visual이다.
 
 PGT_01의 정확한 방 구조, 적 외형과 인원수, 소품 모델·배치·수량, 동료 위치, 조명과 collision surface는 incidental Non-Canon detail이다.
 
@@ -30,6 +30,8 @@ PGT_03의 정확한 Chain 순서와 hop 수, 개수, 방·소품·통로 치수,
 
 LGT_01은 Records Archive 지역의 after-hours 조명 변주이며 게임 전체의 Global Lighting 또는 Color Grading 기준이 아니다. 정확한 조명 수치·기구·Flicker·Emergency Behavior·렌더링 구현과 이미지의 방·선반·통로·배우·적·소품 배치는 incidental Non-Canon 또는 Draft다.
 
+FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이다. 익명의 Finisher-only 보조 직원은 CHR_02 또는 지속 Party Member가 아니며, 정확한 신원·테이블·캐스터·목표·카메라·방·자세와 모든 기능·구현 세부는 incidental Non-Canon, Draft 또는 미승인이다. Visual Lock은 Vertical Slice 또는 최종 제품 편입을 의미하지 않는다.
+
 ## Production Visual Lock Sequence
 
 1. `GEAR_01 — Cargo Strapping System` — `LOCKED`
@@ -38,9 +40,9 @@ LGT_01은 Records Archive 지역의 after-hours 조명 변주이며 게임 전�
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
 5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
 6. `LGT_01 — Night Archive Lighting` — `LOCKED`
-7. `FIN_01 — Conference Table Team Finisher` — `NEXT`
+7. `FIN_01 — Conference Table Team Finisher` — `LOCKED`
 
-즉시 다음 대상은 `FIN_01 — Conference Table Team Finisher`이며, 새 Production Visual은 사용자 승인 전까지 `REVIEW`다.
+현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았으며 Full Design Lock과 Implementation Gate 상태는 별도 승인 대상이다.
 
 ## Deferred Production Support
 

@@ -16,7 +16,7 @@ Implementation Gate: `CLOSED`
 | Chair Redirect Core Loop | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 Chair Redirect 설계 | G2 |
 | PGT_03 Chain Reaction Aftermath | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 Chain·파괴 결과 설계 | G2 |
 | LGT_01 Night Archive Lighting | VISUAL LOCKED / TECHNICAL DRAFT | 정확한 조명·렌더링 설계 | G2 |
-| FIN_01 Conference Table Team Finisher | PENDING — NEXT | Canon preflight | G2 |
+| FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
 | 파괴 예산 | HIGH-LEVEL BASELINE | 정확한 파편·Particle·VFX·성능 예산 | G2 |
 | 적 1~3종 | DRAFT | 실루엣 시트 | G2 |
 | 기술 아키텍처 | DRAFT | Prototype 상세 설계 | G3 |
@@ -31,10 +31,12 @@ Implementation Gate: `CLOSED`
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
 5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
 6. `LGT_01 — Night Archive Lighting` — `LOCKED`
-7. `FIN_01 — Conference Table Team Finisher` — `NEXT`
+7. `FIN_01 — Conference Table Team Finisher` — `LOCKED`
 
-즉시 다음 대상은 `FIN_01 — Conference Table Team Finisher`다.
+현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았다.
+
+FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이며 승인된 Vertical Slice 또는 최종 제품 범위에 포함되지 않는다. Full Design Lock은 여전히 미완료이고 Implementation Gate는 `CLOSED`다.
 
 `CHR_00 Player Turnaround`은 향후 3D 모델링용 `PENDING` Production Support 산출물이며 현재 Production Visual Lock 순서를 차단하지 않는다.
 
-상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 정확한 파괴 예산, 카메라 기능, 조명 수치와 렌더링 구현, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`다. CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath와 LGT_01 Night Archive Lighting의 문서화된 Visual Canon만 `LOCKED`이며 그 외 Production Visual은 사용자 승인 전까지 `REVIEW` 또는 `PENDING`이다.
+상세 게임플레이 설계, 요구사항, 인수 테스트, 밸런스 수치, 정확한 파괴 예산, 카메라 기능, 조명 수치와 렌더링 구현, FIN_01 제품 범위와 기능, 기술 아키텍처, 구현 계획, Vertical Slice 세부 범위는 모두 `DRAFT`, `COULD` 또는 미승인이다. CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting과 FIN_01 Conference Table Team Finisher의 문서화된 Visual Canon만 `LOCKED`다.

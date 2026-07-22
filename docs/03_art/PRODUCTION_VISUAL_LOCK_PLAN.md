@@ -20,7 +20,9 @@
 
 `references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`
 
-CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath와 LGT_01 Night Archive Lighting이 `LOCKED`다.
+`references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png`
+
+CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting과 FIN_01 Conference Table Team Finisher가 `LOCKED`다.
 
 ## Production Visual Lock Sequence
 
@@ -30,9 +32,11 @@ CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identi
 4. `PGT_02 — Chair Redirect Core Loop` — `LOCKED`
 5. `PGT_03 — Chain Reaction Aftermath` — `LOCKED`
 6. `LGT_01 — Night Archive Lighting` — `LOCKED`
-7. `FIN_01 — Conference Table Team Finisher` — `NEXT`
+7. `FIN_01 — Conference Table Team Finisher` — `LOCKED`
 
-즉시 다음 대상은 `FIN_01 — Conference Table Team Finisher`다.
+현재 Production Visual Lock sequence의 일곱 대상은 모두 `LOCKED`다. 다음 Production Visual 대상은 승인되지 않았다.
+
+Sequence 완료는 Full Design Lock 완료, PR-F-022 우선순위 변경, FIN_01의 Vertical Slice 편입 또는 Implementation Gate 개방을 의미하지 않는다.
 
 ## Deferred Production Support
 

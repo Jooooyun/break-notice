@@ -4,6 +4,9 @@
 
 ### Changed
 
+- `FIN_01_Conference_Table_Team_Finisher_v003_FINAL`을 승인된 Production Visual로 등록
+- FIN_01의 3인 Heavy 테이블 공동 추진 Visual Canon과 비승인 기능·제품 범위·구현 경계를 ADR-0014 및 Conference Table Team Finisher Visual 명세에 기록
+- 현재 Production Visual Lock sequence 완료를 기록하되 Full Design Lock 미완료와 Implementation Gate `CLOSED`를 유지
 - `LGT_01_Night_Archive_Lighting_v001_FINAL`을 승인된 Production Visual로 등록
 - LGT_01의 Records Archive 지역 조명 변주 Canon과 비승인 조명 수치·전역 조명·렌더링 구현 범위를 ADR-0013 및 Night Archive Lighting Visual 명세에 기록
 - 다음 Production Visual 대상을 `FIN_01 — Conference Table Team Finisher`로 전환

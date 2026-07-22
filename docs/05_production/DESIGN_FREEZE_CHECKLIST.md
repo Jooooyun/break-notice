@@ -27,7 +27,7 @@
 - [x] PGT_02 Core Loop Lock
 - [x] PGT_03 Aftermath Visual Lock
 - [x] LGT_01 Night Archive Lighting Lock
-- [ ] FIN_01 Conference Table Team Finisher Lock
+- [x] FIN_01 Conference Table Team Finisher Lock
 - [ ] 정확한 파괴 예산 수치와 구현 규칙
 - [ ] Office Core Kit 목록
 

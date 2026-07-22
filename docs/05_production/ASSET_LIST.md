@@ -30,7 +30,7 @@ GEAR-01 Production Visual은 `LOCKED`이며 3D·기능 구현은 `PENDING`이다
 | PGT-02 | Chair Redirect Core Loop | Visual locked; exact mechanics, physics and implementation pending |
 | PGT-03 | Chain Reaction Aftermath | Visual locked; exact Chain, destruction budget, VFX and implementation pending |
 | LGT-01 | Night Archive Lighting | Visual locked; exact lighting values and rendering implementation pending |
-| FIN-01 | Conference Table Team Finisher | Visual pending — next target |
+| FIN-01 | Conference Table Team Finisher | Visual locked; PR-F-022 remains COULD, outside approved Vertical Slice, exact function and implementation pending |
 
 ## Props
 

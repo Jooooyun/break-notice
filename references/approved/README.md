@@ -9,7 +9,8 @@
 - `gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png`
 - `gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png`
 - `lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`
+- `gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png`
 
-다음 승인 예정:
+현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았다.
 
-- `FIN_01_Conference_Table_Team_Finisher_v001`
+FIN_01은 Visual-only conditional direction이며 PR-F-022 `COULD`와 Vertical Slice 미편입 상태를 유지한다.

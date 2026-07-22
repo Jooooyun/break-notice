@@ -18,3 +18,4 @@
 | DL-014 | 2026-07-17 | `PGT_02_Chair_Redirect_Core_Loop_v010_FINAL` 승인 | LOCKED | 동료 공급·완전 해제에서 플레이어 기계식 리디렉션으로 이어지는 충돌 전 시각 인과 확정 |
 | DL-015 | 2026-07-18 | `PGT_03_Chain_Reaction_Aftermath_v003_FINAL` 승인 | LOCKED | 국소 Chain Aftermath, 새로운 visibility line, 통제된 파괴와 느슨한 post-impact 스트랩 상태 확정 |
 | DL-016 | 2026-07-18 | `LGT_01_Night_Archive_Lighting_v001_FINAL` 승인 | LOCKED | Records Archive 지역의 after-hours 조명 변주와 gameplay readability 방향 확정 |
+| DL-017 | 2026-07-22 | `FIN_01_Conference_Table_Team_Finisher_v003_FINAL` 승인 | LOCKED | 3인 Heavy 테이블 공동 추진과 CHR_00 주도권의 Visual-only conditional direction 확정; PR-F-022는 COULD 유지 |
