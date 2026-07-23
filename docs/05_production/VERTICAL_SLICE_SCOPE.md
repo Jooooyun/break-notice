@@ -1,62 +1,189 @@
 # Vertical Slice Scope
 
+> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+>
+> Document Decision Source: `DEC-G1-001`, `DEC-G1-002`,
+> `DEC-G1-004` through `DEC-G1-013`, `DEC-G1-016`, `DEC-G1-019`
+>
+> 이 문서는 G1 Owner 결정 방향을 적용한 범위 후보이다. 정확한
+> 콘텐츠 수, 플레이 시간, 성능값과 playtest threshold는 승인되지
+> 않았다. G1 또는 G2 통과, Graybox 시작과 제작 약속을 의미하지 않는다.
+
 ## 목표
 
-실제 제품의 핵심 재미, 시각 방향, 기술 위험, 상업적 전달력을 10~15분 안에 증명한다.
+Prototype Core에서 입증한 direct acquisition, physical relay,
+Queued Throw, cargo-strap redirect, causal attribution, meaningful
+impact, local room-state change와 Reset을 확장하여 실제 제품의
+핵심 재미, 시각 방향과 주요 기술 위험을 한정된 Slice에서 검증한다.
 
-## 포함
+## Scope Model
 
-### 캐릭터
+- `PROTOTYPE CORE MUST`: 첫 Graybox에서 먼저 입증
+- `VERTICAL SLICE MUST`: Prototype Core 입증 후 Slice에 필수 후보
+- `SHOULD`: 일정·기술 위험에 따라 축소 가능한 강화 범위
+- `COULD`: 별도 편입 결정 없이는 blocking scope가 아님
+- `P2`: 현재 Slice blocking scope 밖
+- `OUT / WON'T`: 현재 승인 대상 제품 범위 밖
 
-- 주인공 1
-- 활성 동료 `Facilities Mover` 1
-- 적 2~3종
-- Elite 1(기존 리그·애니메이션 변형 우선)
+## Character and Encounter Boundary
 
-### 방
+- 승인된 CHR_00 플레이어 한 명
+- 일반 전투에서 승인된 CHR_01 활성 동료 한 명
+- 명확한 역할과 읽을 수 있는 provisional enemy set
+- 일반 전투의 persistent multi-ally party 없음
+- FIN_01 익명 보조 직원은 Slice actor 또는 CHR_02가 아님
 
-1. Open Operations Office
-2. Copy and Meeting Hub
-3. Records Archive
+적 역할, 종류, 수, Elite 편입과 actor 배치는 G5 Scope와 G6
+Performance Validation 전까지 Draft다.
 
-### 물체
+## Environment Boundary
 
-- Light 4종
-- Medium 5종
-- Heavy 3종
-- Structural 3종
+Slice는 다음 gameplay 기능을 검증할 수 있는 제한된 모듈형
+corporate environment 후보를 사용한다.
 
-### 시스템
+- direct acquisition과 physical relay;
+- Medium 이동 경로와 collision surface;
+- causal result와 local room-state change;
+- Heavy-object 후보;
+- 조건부 Structural Feature 후보;
+- 복수의 읽을 수 있는 movement route.
 
-- Scoop
-- Normal/Perfect Catch
-- Queued Throw
-- Cargo Strap Redirect
-- Quick/Charged Throw
-- Stability
-- Causal Chain
-- Momentum/Pip
-- Breakable/Structural
-- Policy Violation 12개
-- Reset
-- Incident Report는 P2 조건부
+Open Operations Office, Copy and Meeting Hub와 Records Archive는
+현재 설계 후보다. 정확한 방 수, 순서, 구조, 통로 치수와 콘텐츠
+배치는 G5 전까지 Draft다.
 
-## 제외
+LGT_01은 Records Archive 지역에 한정된 `COULD` 조명 변주이며
+Global Lighting 또는 Color Grading 기준이 아니다.
+
+## Object Boundary
+
+- Light와 Medium은 Prototype Core에서 역할 차이를 먼저 검증
+- Heavy-object 사용은 `VERTICAL SLICE MUST` 후보
+- Structural Feature 사용은 `SHOULD`
+- 실제 물체 모델, 종류, 질량, 수와 파괴 예산은 G3/G5 Draft
+
+Prototype Core는 Heavy 후보를 별도 질량 계층으로 읽을 수 있게
+유지할 수 있지만, Heavy 사용, Pip 소비와 공간 변화는 요구하지 않는다.
+
+## Prototype Core
+
+Decision Source: `DEC-G1-002`, with the Owner-approved Prototype
+Weight-Scope clarification.
+
+첫 one-room Graybox에서 다음 결과만 우선 검증한다.
+
+- PR-F-001 direct near-object acquisition;
+- PR-F-002 continuous physical trajectory;
+- PR-F-003 one approved active ally physically supplying objects;
+- PR-F-004 Normal Catch;
+- PR-F-005 Queued Throw;
+- PR-F-006 cargo-strap redirect;
+- PR-F-007 necktie and gear separation;
+- PR-F-008 실제 등장하는 Light/Medium role readability;
+- PR-F-009 minimum causal attribution;
+- PR-F-012 meaningful impact;
+- PR-F-013 one active ally in normal combat;
+- PR-F-016 meaningful local room-state change;
+- PR-F-017 immediate Reset.
+
+Heavy는 별도 질량 계층 후보로 식별 가능할 수 있으나, 첫 Prototype
+Core는 Momentum, Heavy 사용이나 Pip 소비, Structural Feature,
+Relay Position 이동, Suppressed, Policy Violation, Incident Report,
+Night Archive 조명 또는 Team Finisher를 요구하지 않는다.
+
+## Later Graybox Increments
+
+Decision Source: `DEC-G1-004` through `DEC-G1-007`.
+
+Prototype Core 인과와 반복 흐름이 검증된 뒤 다음을 순차 후보로
+추가한다.
+
+- PR-F-023 Perfect Catch;
+- PR-F-010 Momentum;
+- PR-F-011 Heavy-object access and use;
+- PR-F-014 Relay Position movement.
+
+이는 Graybox 시작이나 해당 기능 구현을 현재 허가하지 않는다.
+
+## Vertical Slice Candidate
+
+Decision Source: `DEC-G1-004` through `DEC-G1-007`, `DEC-G1-009`.
+
+다음은 Proposed `VERTICAL SLICE / MUST` 후보이다.
+
+- PR-F-023 Perfect Catch;
+- PR-F-010 Momentum reward differentiation;
+- PR-F-011 Heavy-object use;
+- PR-F-014 Relay Position support;
+- PR-F-018 서로 다른 행동 변화를 주는 Policy Violation 후보 중
+  하나의 선택.
+
+Prototype Core에서 이미 검증한 `MUST` 결과도 Slice에서 회귀 없이
+유지해야 한다.
+
+## SHOULD
+
+Decision Source: `DEC-G1-006`, `DEC-G1-008`, `DEC-G1-010`.
+
+- PR-F-024 제한된 Structural Feature use;
+- PR-F-015 Suppressed;
+- PR-F-019 representative subset의 non-weight Behavior Tags.
+
+## Deferred / COULD
+
+Decision Source: `DEC-G1-011` through `DEC-G1-013`.
+
+- PR-F-020 Incident Report: `P2 / SHOULD / DEFERRED`; G1, Prototype
+  Core와 Vertical Slice의 비차단 범위;
+- PR-F-021 Night Archive local lighting variant: `VERTICAL SLICE /
+  COULD`; Records Archive 지역 후보이며 Global Lighting이 아님;
+- PR-F-022 Team Finisher: `OUT / COULD`; 승인된 Vertical Slice와
+  최종 제품 범위 밖이며 CHR_02나 지속 두-동료 Party를 만들지 않음.
+
+## Exact Values Deferred
+
+Decision Source: `DEC-G1-016`
+
+다음 값은 이 Proposed Scope에서 승인하지 않는다.
+
+- 플레이 시간과 room 수;
+- enemy 종류와 수;
+- Light, Medium, Heavy와 Structural asset 수;
+- Relay Position 수와 배치;
+- interaction range와 Catch timing;
+- Momentum, Pip와 Heavy 비용;
+- Chain depth;
+- room-state-change 수;
+- Policy Violation 제시 수와 전체 pool 수;
+- Rigidbody, debris와 destruction budget;
+- target PC, 해상도, FPS와 playtest threshold.
+
+정확한 값은 각각 G2 Draft, G3 Technical Budget, G4 Graybox
+Criterion, G5 Scope Freeze 또는 G6 Slice Acceptance에서 결정한다.
+
+## Excluded
 
 - Co-op
-- 메타 성장 허브
-- 스토리 컷신 다수
-- 자유 절차 생성
-- 보스 전용 복잡한 신규 리그
-- 총기 전투
-- 다수 동료 파티
-- 모드 지원
-- 콘솔 이식
+- 영구 다수 동료 파티
+- 총기 중심 전투
+- 염력·마법·초능력
+- 모든 벽의 자유 파괴
+- 완전 절차 생성 방
+- 모바일 동시 출시
+- FIN_01의 자동 제품·Slice 편입
+- 복잡한 메타 성장, 신규 게임 모드와 요청되지 않은 플랫폼 확대
 
-## 완료 기준
+## Completion Boundary
 
-- 모든 MUST 인수 테스트 통과
-- 1080p/60 FPS 목표 달성 또는 명확한 사양 문서화
-- 외부 테스트 재플레이 60% 이상
-- 첫 만족스러운 Chain 60초 이내
-- 게임 훅을 5초 영상으로 전달 가능
+Decision Source: `DEC-G1-019`
+
+Vertical Slice 완료 후보 조건은 다음과 같다.
+
+- Owner-approved `MUST` 요구사항의 활성 Acceptance Test 통과;
+- G3에서 승인된 기술 예산 안의 재현 가능한 성능;
+- G4에서 승인된 core-hook, 가독성, causal understanding과 replay 기준;
+- G5에서 승인된 actor, environment, object와 feature 범위 준수;
+- G6에서 승인된 성능·접근성·외부 검증 기준 통과.
+
+현재 요구사항, Acceptance Test와 수치는 `PROPOSED / DRAFT`이므로
+이 항목들은 G1, G2, G4, G5 또는 G6 통과 선언이 아니다.

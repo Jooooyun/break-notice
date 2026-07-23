@@ -1,114 +1,298 @@
 # Acceptance Tests
 
-## AT-SCOOP-001 — 근거리 직접 집기
+> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+>
+> Document Decision Source: `DEC-G1-017`
+>
+> 다음 항목의 정확한 문구는 최종 Acceptance Test가 아니다. G1 행동 결과,
+> G2 입력·상태 계약, G3 구현 기술·예산, G4/G6 성공 임계값을
+> 분리하기 위한 검토 후보이다.
 
-**Given** 플레이어 1.8m 안에 유효한 Light 물체가 있고 이동 중이다.  
-**When** InteractPrimary를 누른다.  
-**Then** 이동을 장시간 정지하지 않고 물체를 획득한다.  
-**And** 물체가 먼 거리에서 순간이동하지 않는다.
+## Acceptance-Test Policy
 
-## AT-PHY-001 — 실제 궤적
+Decision Source: `DEC-G1-017`
 
-**Given** 동료가 Light를 전달한다.  
-**When** 물체를 방출한다.  
-**Then** Rigidbody가 출발점부터 Catch 영역까지 연속된 공간 경로를 따른다.  
-**And** 적·가구가 경로를 가로막을 수 있다.
+- G1 test wording은 관찰 가능한 behavioral outcome만 요구한다.
+- 논리 입력 이름과 상태 전이는 G2 Draft다.
+- Rigidbody, IK, Cinemachine, Pooling 등 기술 선택은 G3 Draft다.
+- 거리, 시간, 힘, 비용과 수량은 별도 tuning 또는 Gate criterion이다.
+- 특정 물체·적·유리의 고정 순서는 causal requirement가 아니다.
+- `AT-FIN-001`은 PR-F-022가 `COULD / OUT`인 동안
+  `DORMANT / NON-BLOCKING`이다.
+- PR-F-020은 `P2 / DEFERRED`인 동안 활성 Acceptance Test가 없다.
 
-## AT-ALLY-001 — Medium 굴리기
+## Test Decision Sources
 
-**Given** Facilities Mover가 의자를 보유하고 패스 경로가 열려 있다.  
-**When** 플레이어가 Medium 패스를 요청한다.  
-**Then** 동료가 의자를 바닥에 접촉한 상태로 밀어 보낸다.  
-**And** 의자는 공중 소환되지 않는다.
+| Test or Policy | Decision Source |
+|---|---|
+| AT-SCOOP-001, AT-ALLY-001, AT-THROW-003, AT-STRAP-001, AT-ART-001, AT-IMPACT-001, AT-SCOPE-001, AT-ROOM-001 | DEC-G1-002, DEC-G1-017 |
+| AT-PHY-001, AT-CHAIN-001, AT-FLOW-001 | DEC-G1-002, DEC-G1-017 |
+| AT-CATCH-001, AT-CATCH-002 | DEC-G1-004, DEC-G1-017 |
+| AT-WEIGHT-001 | DEC-G1-002, DEC-G1-006 clarification, DEC-G1-017 |
+| AT-MOM-001 | DEC-G1-005, DEC-G1-017 |
+| AT-HEAVY-001, AT-STRUCT-001 | DEC-G1-006, DEC-G1-017 |
+| AT-ALLY-002 | DEC-G1-007, DEC-G1-017 |
+| AT-ALLY-003 | DEC-G1-008, DEC-G1-017 |
+| AT-ROGUE-001 | DEC-G1-009, DEC-G1-017 |
+| AT-PROP-001 | DEC-G1-010, DEC-G1-017 |
+| PR-F-020 deferred test gap | DEC-G1-011, DEC-G1-017 |
+| AT-FIN-001 dormant policy | DEC-G1-013, DEC-G1-017 |
 
-## AT-ALLY-002 — Relay Position
+## Prototype Core Behavioral Tests
 
-**Given** 전투 중 플레이어가 방을 이동한다.  
-**When** 동료가 위치를 바꿀 필요가 있다.  
-**Then** 승인된 Relay Position 중 하나로만 이동한다.  
-**And** 플레이어를 자유 추적하지 않는다.
+### AT-SCOOP-001 — 근거리 직접 집기
 
-## AT-ALLY-003 — Suppressed
+Requirement: `PR-F-001`
+Status: `PROPOSED / DRAFT`
 
-**Given** 적이 동료의 지원 위치를 압박한다.  
-**When** Suppressed 조건이 충족된다.  
-**Then** 패스가 일시 중단된다.  
-**And** 동료는 사망하거나 Run에서 제거되지 않는다.  
-**When** 압박이 해소된다.  
-**Then** 지원이 재개된다.
+**Given** 플레이어가 이동 중이고 가까운 곳에 유효 물체가 있다.
+**When** 플레이어가 직접 획득 의도를 실행한다.
+**Then** 이동 흐름을 장시간 중단하지 않고 물체를 획득한다.
+**And** 물체는 먼 위치에서 손으로 순간이동하지 않는다.
 
-## AT-CATCH-001 — Normal Catch
+정확한 interaction range와 입력 매핑은 G2 Draft다.
 
-**Given** 요청한 물체가 Catch 영역으로 진입한다.  
-**When** 플레이어가 올바른 방향을 보고 있다.  
-**Then** 넓은 보조 판정으로 물체를 받는다.
+### AT-PHY-001 — 연속 물리 경로
 
-## AT-CATCH-002 — Perfect Catch
+Requirement: `PR-F-002`
+Status: `PROPOSED / DRAFT`
 
-**Given** 물체가 Perfect Catch 창에 진입한다.  
-**When** 플레이어가 타이밍 입력한다.  
-**Then** Perfect 결과, 짧은 Contact Freeze, Momentum 보너스가 발생한다.
+**Given** 유효 물체가 전달, 투척 또는 리디렉션된다.
+**When** 물체가 출발점에서 해제된다.
+**Then** 물체는 목적 결과까지 연속된 공간 경로를 가진다.
+**And** 적, 가구와 충돌 표면이 그 경로를 가로막거나 바꿀 수 있다.
+**And** 물체는 공중 정지하거나 순간이동하지 않는다.
 
-## AT-THROW-003 — Queued Throw
+구체 physics component와 collision mode는 G3 Draft다.
 
-**Given** 물체가 패스 중이고 Throw가 유지되어 있다.  
-**When** Catch에 성공한다.  
-**Then** 별도 정지·재조준 없이 캐치 동작이 투척으로 이어진다.
+### AT-ALLY-001 — 동료의 실제 물체 공급
 
-## AT-STRAP-001 — 의자 리디렉션
+Requirement: `PR-F-003`
+Status: `PROPOSED / DRAFT`
 
-**Given** 굴러오는 의자에 유효 Anchor가 있고 최대 거리 안이다.  
-**When** 화물 스트랩을 연결하고 플레이어가 회전한다.  
-**Then** 의자는 바닥 운동량을 유지하면서 허용 범위 내에서 방향을 바꾼다.  
-**And** 넥타이는 의자에 연결되지 않는다.  
-**And** 의자는 공중에 정지하지 않는다.
+**Given** 승인된 활성 동료 주변에 유효한 실제 물체가 있다.
+**When** 플레이어가 해당 물체 계층의 공급을 요청한다.
+**Then** 동료는 Light를 물리적으로 던지거나 Medium을 바닥으로 밀어 공급한다.
+**And** 물체는 허공에서 생성되거나 원격 이동하지 않는다.
 
-## AT-ART-001 — 넥타이 기능 분리
+### AT-CATCH-001 — Normal Catch
 
-승인된 캐릭터·애니메이션·VFX·게임플레이에서 붉은 넥타이가 물체 연결, 당김, 공격, 이동에 사용되지 않는다.
+Requirement: `PR-F-004`
+Status: `PROPOSED / DRAFT`
 
-## AT-WEIGHT-001 — 무게 계층
+**Given** 요청된 물체가 유효한 Catch 관계로 플레이어에게 접근한다.
+**When** 플레이어가 Normal Catch 조건을 충족한다.
+**Then** 물체를 안정적으로 획득하고 다음 Carry 또는 Queued Throw 상태로 이어갈 수 있다.
 
-동일 조건에서 Light는 공격 차단, Medium은 위치 이동과 Chain, Heavy는 공간 변화가 명확히 발생한다.
+Catch 범위와 timing은 G2 Draft다.
 
-## AT-CHAIN-001 — 계보 전파
+### AT-THROW-003 — Queued Throw
 
-**Given** 의자가 적을 밀고 적이 유리벽을 깨고 프레임이 가구를 민다.  
-**Then** 하나의 Chain ID에서 깊이가 증가한다.  
-**And** 같은 충돌이 중복 보상되지 않는다.
+Requirement: `PR-F-005`
+Status: `PROPOSED / DRAFT`
 
-## AT-MOM-001 — 보상 차등
+**Given** 전달 물체가 도착하기 전에 플레이어가 투척 의도를 예약했다.
+**When** Catch가 성공한다.
+**Then** 별도 정지·재획득 없이 Catch에서 재투척으로 흐름이 이어진다.
 
-직접 적중보다 2-hop 이상의 Chain이 더 많은 Momentum을 지급한다.
+정확한 buffer와 animation timing은 G2/G3 Draft다.
 
-## AT-HEAVY-001 — Heavy 소비
+### AT-STRAP-001 — 화물 스트랩 리디렉션
 
-Pip이 부족하면 Heavy를 사용할 수 없고 명확한 피드백을 준다. 충분하면 Pip을 정확히 소비하고 공간 변화가 발생한다.
+Requirement: `PR-F-006`
+Status: `PROPOSED / DRAFT`
 
-## AT-IMPACT-001 — 결과
+**Given** 바닥 지지 이동 물체에 유효한 하중 지지 금속 Anchor가 있다.
+**When** 플레이어가 승인된 GEAR_01 연결 체인을 사용해 기계적으로 방향을 바꾼다.
+**Then** `허리 릴 → 검정·황색 스트랩 → 은색 카라비너 → 교체식 금속 클램프 → 하중 지지 금속 Anchor`가 연속된 물리 연결로 유지된다.
+**And** 물체는 바닥 접촉과 물리적 운동을 유지하면서 새 진행 방향을 보인다.
+**And** 넥타이는 연결에 사용되지 않는다.
+**And** 캐스터, 휠 축, 플라스틱 하우징 또는 취약 돌출부를 Anchor로 사용하지 않는다.
+**And** 물체는 공중 정지, 원격 towing 또는 telekinesis로 보이지 않는다.
 
-강한 충돌은 적 위치, 자세, 가구, 파손, 통로 중 최소 하나를 바꾼다.
+거리, 각도, 장력, release와 입력은 G2/G3 Draft다.
 
-## AT-SCOPE-001 — 동료 수
+### AT-ART-001 — 넥타이 기능 분리
 
-일반 전투 중 활성 지원 동료는 한 명을 초과하지 않는다.
+Requirement: `PR-F-007`
+Status: `PROPOSED / DRAFT`
 
-## AT-ROOM-001 — 방의 잔상
+승인된 캐릭터, 장비, animation, VFX와 Gameplay에서 붉은 넥타이는
+물체 연결, 당김, 공격 또는 이동에 사용되지 않는다.
 
-전투 종료 후 시작 스냅샷과 비교했을 때 최소 두 개의 의미 있는 공간 상태가 변경되어 있다.
+### AT-WEIGHT-001 — Prototype 무게 역할
 
-## AT-FLOW-001 — Reset
+Requirement: `PR-F-008`
+Status: `PROPOSED / DRAFT`
 
-Reset 후 물체, 적, 동료, Momentum, Chain, 파손, 이벤트 구독이 기준 상태로 돌아간다.
+**Given** Prototype Core의 대표 Light와 Medium 물체가 있다.
+**When** 동일한 encounter에서 사용한다.
+**Then** Light의 빠른 setup 역할과 Medium의 위치·causal result 역할이 피드백과 결과로 구분된다.
+**And** Heavy 후보는 별도 질량 계층으로 식별 가능하다.
+**But** Heavy 사용, Pip 소비와 공간 변화는 Prototype Core 통과 조건이 아니다.
 
-## AT-ROGUE-001 — 보상 선택
+### AT-CHAIN-001 — Sequence-Agnostic Causal Attribution
 
-방 클리어 후 서로 다른 행동 변화를 주는 Policy Violation 3개가 제시되고 하나만 적용된다.
+Requirement: `PR-F-009`
+Status: `PROPOSED / DRAFT`
 
-## AT-PROP-001 — 행동 태그
+**Given** 하나의 플레이어 행동이 하나 이상의 후속 물리 결과를 유발한다.
+**When** 대상과 환경이 서로 다른 순서 또는 조합으로 반응한다.
+**Then** 유효한 후속 결과는 동일한 causal origin에 귀속될 수 있다.
+**And** 동일한 결과는 중복 귀속되지 않는다.
 
-Rolling 의자는 일반 Medium보다 첫 충돌 후 수평 속도를 더 오래 유지한다.
+정확한 Chain depth, TTL과 reward는 G2/G3 Draft다.
 
-## AT-FIN-001 — 특수 합동 피니셔
+### AT-IMPACT-001 — 의미 있는 충돌 결과
 
-특수 조건에서만 동료 2명이 Heavy 테이블에 직접 접촉해 밀며, 일반 전투 동료 제한을 영구 변경하지 않는다.
+Requirement: `PR-F-012`
+Status: `PROPOSED / DRAFT`
+
+의미 있는 충돌은 적 자세·위치, 가구 위치, 파손 상태, 시야 또는
+통로 중 하나 이상의 읽을 수 있는 결과를 만든다.
+
+### AT-SCOPE-001 — 일반 전투 활성 동료
+
+Requirement: `PR-F-013`
+Status: `PROPOSED / DRAFT`
+
+일반 전투 중 활성 지원 동료는 한 명을 초과하지 않는다. FIN_01의
+익명 보조 직원은 이 일반 전투 범위에 포함되지 않는다.
+
+### AT-ROOM-001 — 의미 있는 국소 Room-State Change
+
+Requirement: `PR-F-016`
+Status: `PROPOSED / DRAFT`
+
+**Given** encounter의 시작 상태가 기록되어 있다.
+**When** 핵심 물리 상호작용 또는 전투가 종료된다.
+**Then** 시작 상태와 구분되는 의미 있는 국소 공간 변화가 남는다.
+
+정확한 변화 개수와 통로 치수는 G4 Graybox Criterion이다.
+
+### AT-FLOW-001 — Reset
+
+Requirement: `PR-F-017`, `NFR-R-003`
+Status: `PROPOSED / DRAFT`
+
+**When** Reset을 실행한다.
+**Then** 현재 범위에서 활성화된 물체, 적, 동료, causal attribution,
+자원, 파손과 이벤트 상태가 기준 상태로 돌아간다.
+**And** 같은 검증 상황을 다시 실행할 수 있다.
+
+복원 목록과 허용 시간은 G2/G4에서 정한다.
+
+## Vertical Slice Behavioral Tests
+
+### AT-CATCH-002 — Perfect Catch
+
+Requirement: `PR-F-023`
+Status: `PROPOSED / DRAFT`
+
+**Given** 물체가 선택적 Perfect Catch 조건으로 접근한다.
+**When** 플레이어가 해당 조건을 충족한다.
+**Then** 결과는 Normal Catch와 명확히 구분된다.
+
+정확한 timing window, Contact Freeze와 Momentum 보너스는 별도
+G2 Draft이며 이 G1 test outcome이 아니다.
+
+### AT-MOM-001 — Momentum 보상 차등
+
+Requirement: `PR-F-010`
+Status: `PROPOSED / DRAFT`
+
+직접 적중과 비교해 더 긴 후속 결과 또는 동료 릴레이가 포함된
+유효 결과는 더 큰 Momentum 보상으로 구분된다.
+
+정확한 Chain depth와 보상값은 G2 Draft다.
+
+### AT-HEAVY-001 — Heavy Object Access
+
+Requirement: `PR-F-011`
+Status: `PROPOSED / DRAFT`
+
+**Given** Heavy 물체와 승인 후보 자원 조건이 있다.
+**When** 자원 조건이 충족되지 않는다.
+**Then** Heavy 사용이 차단되고 원인을 읽을 수 있다.
+**When** 자원 조건이 충족된다.
+**Then** Heavy 사용이 허용되고 의미 있는 물리 결과가 발생한다.
+
+정확한 Pip 비용, 질량, 힘과 물리값은 G2/G3 Draft다.
+
+### AT-ALLY-002 — Relay Position
+
+Requirement: `PR-F-014`
+Status: `PROPOSED / DRAFT`
+
+**Given** 동료가 지원 위치를 바꿀 필요가 있다.
+**When** 위치 전환이 발생한다.
+**Then** 동료는 승인 후보 Relay Position 사이에서 이동한다.
+**And** 플레이어를 자유 추적하는 지속 파티가 되지 않는다.
+
+정확한 Position 수와 배치는 G2 Draft다.
+
+### AT-ALLY-003 — Suppressed
+
+Requirement: `PR-F-015`
+Status: `PROPOSED / DRAFT / CONDITIONAL`
+
+**Given** 동료 지원이 적 압박으로 안전하지 않다.
+**When** Suppressed 조건이 충족된다.
+**Then** 지원은 일시 중단되지만 동료는 사망하거나 영구 이탈하지 않는다.
+**When** 복구 조건이 충족된다.
+**Then** 지원이 재개될 수 있다.
+
+조건, timing과 AI는 G2/G3 Draft다.
+
+### AT-ROGUE-001 — 행동 변경 선택
+
+Requirement: `PR-F-018`
+Status: `PROPOSED / DRAFT`
+
+**Given** 방 완료 보상 단계에 진입한다.
+**Then** 서로 다른 행동 변화를 주는 복수 후보가 제시된다.
+**When** 플레이어가 하나를 선택한다.
+**Then** 선택한 행동 변화만 현재 run에 적용된다.
+
+화면 제시 수와 전체 upgrade pool 수는 각각 G2 Draft와 G5 Scope다.
+
+### AT-PROP-001 — 대표 행동 태그
+
+Requirement: `PR-F-019`
+Status: `PROPOSED / DRAFT / CONDITIONAL`
+
+선택된 대표 물체는 동일 무게 계층의 일반 물체와 구분되는
+비무게 행동 특성을 물리 결과로 보여준다.
+
+태그 종류와 적용 물체 수는 G2/G5 Draft다.
+
+### AT-STRUCT-001 — Structural Feature
+
+Requirement: `PR-F-024`
+Status: `PROPOSED / DRAFT / CONDITIONAL`
+
+**Given** 승인 후보 Structural Feature와 유효 사용 조건이 있다.
+**When** 해당 feature가 사용된다.
+**Then** 국소 시야, 통로 또는 공간 상태 중 하나 이상이 의미 있게 바뀐다.
+
+Feature 수, 파손 방식, 비용과 물리 구현은 G2/G3/G5 Draft다.
+
+## Dormant Tests
+
+### AT-FIN-001 — 특수 합동 피니셔
+
+Requirement: `PR-F-022`
+Status: `DORMANT / NON-BLOCKING`
+
+PR-F-022는 `COULD`이며 승인된 Vertical Slice와 최종 제품 범위
+밖이다. 별도 범위 승인 전에는 G1, G4 또는 G6 통과 조건으로
+사용하지 않는다.
+
+시각 방향은 FIN_01 Visual Canon만 따르며 Trigger, 비용, 물리,
+animation, AI와 Unity 구현은 승인되지 않았다.
+
+## Deferred Test Gap
+
+PR-F-020은 `P2 / DEFERRED`다. `AT-INC-001`은 현재 생성하지 않는다.
+PR-F-020이 Owner 결정으로 활성 범위에 승격될 경우 별도 승인
+작업에서 behavioral outcome과 검증 Gate를 먼저 정의한다.

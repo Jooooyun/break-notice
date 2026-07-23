@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
-      "bytes": 2040,
-      "sha256": "53aab8bbb3a7e46989041ad721da17de5b2f49cbd7818403085658da1811eab4"
+      "bytes": 4652,
+      "sha256": "40d077222e36cf8ba7b1db64590342cca9e148161dbbc935981ca59d41daa4a5"
     },
     {
       "path": "docs/00_project/PROJECT_CHARTER.md",
@@ -273,18 +273,18 @@
     },
     {
       "path": "docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md",
-      "bytes": 2598,
-      "sha256": "d4448f684fec96bbcb8478e8a697e52c62881154d8ca90576d60081185168aa7"
+      "bytes": 8524,
+      "sha256": "0b0a1dc3085b2ad7dcc88d441463c51cc42fb2ed58918992f7381585920b144f"
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 3732,
-      "sha256": "b31da94a5d0e862cd6e056eeb685871b0a9631b52b4ac6b5f800cfee0a2ba98f"
+      "bytes": 10998,
+      "sha256": "8032418088430efa57e2a237771f442b314f032611d321cfc14b3de935aeb0c7"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 2078,
-      "sha256": "9c1c367392ac92d196a27fe3690fb34d9eb7d111e6b7ef1bc1323ff120875efc"
+      "bytes": 21249,
+      "sha256": "a6f4ffcfe4dd67f6f8338de834f102df1c2c81b046c8890a24dba92e39ee8429"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
@@ -453,8 +453,8 @@
     },
     {
       "path": "docs/05_production/VERTICAL_SLICE_SCOPE.md",
-      "bytes": 1141,
-      "sha256": "9b390644eef207e062fb2b4516f2afd189ce93d547d55fde487960a322eea4c8"
+      "bytes": 6953,
+      "sha256": "1a03bf6a03e2fbd856753d2b4a01f83b8ad27cac44df08ae2ecd25dfda58e1ab"
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
@@ -493,8 +493,8 @@
     },
     {
       "path": "docs/07_quality/ACCEPTANCE_TESTS.md",
-      "bytes": 4496,
-      "sha256": "ce61aa4d7adbb81cda2799b898e12cc877829f1a6e751a7a801d4d21410ebd98"
+      "bytes": 11262,
+      "sha256": "4f00f4bbbc7845b34c96538634f671efe8aacff3758a6b127c15b7448b9b17c6"
     },
     {
       "path": "docs/07_quality/BUG_SEVERITY.md",
@@ -508,8 +508,8 @@
     },
     {
       "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 804,
-      "sha256": "0893c1c4d57ea53a7ff7458cae5d4c395b45ee63f81379917950c34b8cd2140b"
+      "bytes": 3342,
+      "sha256": "6cd0da2184f2cd7d0a28dbbd7eea2238a59d0293c336908c9fe82bac50f1c14d"
     },
     {
       "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",

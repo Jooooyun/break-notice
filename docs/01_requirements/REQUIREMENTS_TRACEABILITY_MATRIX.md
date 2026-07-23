@@ -1,24 +1,93 @@
 # Requirements Traceability Matrix
 
-| 요구사항 | 설계 문서 | 기술 문서 | 인수 테스트 | 상태 |
-|---|---|---|---|---|
-| PR-F-001 | GAMEPLAY_SPEC §Scoop | SOFTWARE_ARCHITECTURE §PlayerInteraction | AT-SCOOP-001 | DESIGNED |
-| PR-F-002 | MASTER_GDD §물리 원칙 | PHYSICS_DESTRUCTION §Trajectory | AT-PHY-001 | DESIGNED |
-| PR-F-003 | ALLY_RELAY_SYSTEM §Delivery | SOFTWARE_ARCHITECTURE §AllyRelay | AT-ALLY-001 | DESIGNED |
-| PR-F-004 | ALLY_RELAY_SYSTEM §Catch | DATA_AND_EVENTS §Catch events | AT-CATCH-001/002 | DESIGNED |
-| PR-F-005 | GAMEPLAY_SPEC §Queued Throw | SOFTWARE_ARCHITECTURE §ThrowController | AT-THROW-003 | DESIGNED |
-| PR-F-006 | ALLY_RELAY_SYSTEM §Redirect | PHYSICS_DESTRUCTION §Cargo Strap | AT-STRAP-001 | DESIGNED |
-| PR-F-007 | PLAYER_VISUAL_SPEC | CARGO_STRAP_SPEC | AT-ART-001 | VISUAL LOCKED |
-| PR-F-008 | COMBAT_AND_PHYSICS §Weight | PERFORMANCE_BUDGET | AT-WEIGHT-001 | DESIGNED |
-| PR-F-009 | MOMENTUM_AND_CAUSAL_CHAIN | DATA_AND_EVENTS §Lineage | AT-CHAIN-001 | DESIGNED |
-| PR-F-010 | MOMENTUM_AND_CAUSAL_CHAIN | SOFTWARE_ARCHITECTURE §Momentum | AT-MOM-001 | DESIGNED |
-| PR-F-011 | MASTER_GDD §Heavy | PHYSICS_DESTRUCTION §Heavy | AT-HEAVY-001 | DESIGNED |
-| PR-F-012 | COMBAT_AND_PHYSICS §Impact | PHYSICS_DESTRUCTION | AT-IMPACT-001 | DESIGNED |
-| PR-F-013 | ALLY_RELAY_SYSTEM §Scope | PERFORMANCE_BUDGET | AT-SCOPE-001 | LOCKED |
-| PR-F-014 | ALLY_RELAY_SYSTEM §Relay Position | SOFTWARE_ARCHITECTURE §Ally AI | AT-ALLY-002 | DESIGNED |
-| PR-F-015 | ALLY_RELAY_SYSTEM §Suppressed | DATA_AND_EVENTS | AT-ALLY-003 | DESIGNED |
-| PR-F-016 | ENCOUNTER_DESIGN §Room Change | PHYSICS_DESTRUCTION | AT-ROOM-001 | DESIGNED |
-| PR-F-017 | MASTER_GDD §Prototype | SAVE_AND_VERSIONING §Reset | AT-FLOW-001 | DESIGNED |
-| PR-F-018 | ROGUELITE_PROGRESSION | DATA_AND_EVENTS §Upgrade | AT-ROGUE-001 | BASELINE |
-| PR-F-019 | OBJECT_TAXONOMY | DATA_AND_EVENTS §Prop Definition | AT-PROP-001 | BASELINE |
-| PR-F-020 | INCIDENT_REPORT_FEATURE | SOFTWARE_ARCHITECTURE §Telemetry | AT-INC-001 | DEFERRED TO P2 |
+> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+>
+> Document Decision Source: `DEC-G1-001`, `DEC-G1-018`
+>
+> 정확한 repository path와 현재 존재하는 heading을 사용한다.
+> `DESIGNED`, `BASELINE`과 같이 권한·설계 성숙도·검증 상태를
+> 혼합하는 단일 상태는 사용하지 않는다.
+
+## Status Vocabulary
+
+| 축 | 허용 값 |
+|---|---|
+| 적용 단계 | `PROTOTYPE CORE`, `VERTICAL SLICE`, `P2`, `OUT` |
+| Priority | `MUST`, `SHOULD`, `COULD`, `WON'T` |
+| Authority | `DRAFT`, `DEFERRED`, `REJECTED`, `SUPERSEDED` |
+| Trace | `UNMAPPED`, `PARTIAL`, `MAPPED`, `VERIFIED` |
+
+`MAPPED`는 경로와 검증 의도가 연결되었다는 뜻이며 요구사항이나
+설계의 승인을 의미하지 않는다. 이 Proposed RTM에는 `VERIFIED`
+항목이 없다.
+
+## Functional Requirement Traceability
+
+| ID | Applicability | Priority | Authority | Requirement Source | Design Source | Technical Source | Validation Source | Trace Status | Decision Source |
+|---|---|---|---|---|---|---|---|---|---|
+| PR-F-001 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/GAMEPLAY_SPEC.md` — `## 3. Scoop Flow` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### PlayerInteractionController` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-SCOOP-001 — 근거리 직접 집기` | MAPPED | DEC-G1-002 |
+| PR-F-002 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MASTER_GDD.md` — `### 5.1 Physical Relay` | `docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md` — `## Collision Detection Baseline` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-PHY-001 — 연속 물리 경로` | MAPPED | DEC-G1-002, DEC-G1-017 |
+| PR-F-003 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/ALLY_RELAY_SYSTEM.md` — `## 6. 패스 경로` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### AllyRelayController` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-ALLY-001 — 동료의 실제 물체 공급` | MAPPED | DEC-G1-002 |
+| PR-F-004 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MASTER_GDD.md` — `### Normal Catch` | `docs/04_technical/DATA_AND_EVENTS.md` — `### CatchEvent` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-CATCH-001 — Normal Catch` | MAPPED | DEC-G1-002, DEC-G1-004 |
+| PR-F-005 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/GAMEPLAY_SPEC.md` — `### Queued Throw` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### ThrowController` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-THROW-003 — Queued Throw` | MAPPED | DEC-G1-002 |
+| PR-F-006 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/GAMEPLAY_SPEC.md` — `## 6. Cargo Strap Redirect` | `docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md` — `## Strap Simulation` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-STRAP-001 — 화물 스트랩 리디렉션` | MAPPED | DEC-G1-002 |
+| PR-F-007 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/03_art/PLAYER_VISUAL_SPEC.md` — `## Prohibited Changes`; `docs/03_art/CARGO_STRAP_SPEC.md` — `## Prohibited Visual Connections` | `docs/09_adrs/ADR-0003-NO-TELEKINESIS.md` — `## Decision` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-ART-001 — 넥타이 기능 분리` | MAPPED | DEC-G1-002 |
+| PR-F-008 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/COMBAT_AND_PHYSICS.md` — `## 2. 무게별 결과` | `docs/02_design/OBJECT_TAXONOMY.md` — `## Prototype Object Set` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-WEIGHT-001 — Prototype 무게 역할` | MAPPED | DEC-G1-002, DEC-G1-006 clarification |
+| PR-F-009 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md` — `## 3. Throw Lineage Data` | `docs/04_technical/DATA_AND_EVENTS.md` — `### ImpactEvent` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-CHAIN-001 — Sequence-Agnostic Causal Attribution` | MAPPED | DEC-G1-002, DEC-G1-017 |
+| PR-F-010 | VERTICAL SLICE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md` — `## 2. Momentum Baseline` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### MomentumService` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-MOM-001 — Momentum 보상 차등` | MAPPED | DEC-G1-005 |
+| PR-F-011 | VERTICAL SLICE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MASTER_GDD.md` — `### Heavy — Space Breaker` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### MomentumService` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-HEAVY-001 — Heavy Object Access` | MAPPED | DEC-G1-006 |
+| PR-F-012 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/COMBAT_AND_PHYSICS.md` — `## 2. 무게별 결과` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### ImpactResolver` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-IMPACT-001 — 의미 있는 충돌 결과` | MAPPED | DEC-G1-002 |
+| PR-F-013 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/ALLY_RELAY_SYSTEM.md` — `## 2. 활성 수` | `docs/09_adrs/ADR-0004-ALLY-SCOPE.md` — `## Decision` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-SCOPE-001 — 일반 전투 활성 동료` | MAPPED | DEC-G1-002 |
+| PR-F-014 | VERTICAL SLICE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/ALLY_RELAY_SYSTEM.md` — `## 3. Relay Position` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### AllyRelayController` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-ALLY-002 — Relay Position` | MAPPED | DEC-G1-007 |
+| PR-F-015 | VERTICAL SLICE | SHOULD | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/ALLY_RELAY_SYSTEM.md` — `## 7. Suppressed` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `### AllyRelayController` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-ALLY-003 — Suppressed` | MAPPED | DEC-G1-008 |
+| PR-F-016 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MASTER_GDD.md` — `### 5.4 Room Remembers` | `docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md` — `## Breakable Flow` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-ROOM-001 — 의미 있는 국소 Room-State Change` | MAPPED | DEC-G1-002 |
+| PR-F-017 | PROTOTYPE CORE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MASTER_GDD.md` — `## 23. 프로토타입 최소 범위` | `docs/04_technical/SAVE_AND_VERSIONING.md` — `## Prototype` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-FLOW-001 — Reset` | MAPPED | DEC-G1-002, DEC-G1-017 |
+| PR-F-018 | VERTICAL SLICE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/ROGUELITE_PROGRESSION.md` — `## 선택 흐름` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 5. 데이터 원칙` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-ROGUE-001 — 행동 변경 선택` | MAPPED | DEC-G1-009 |
+| PR-F-019 | VERTICAL SLICE | SHOULD | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/OBJECT_TAXONOMY.md` — `## Prototype Object Set` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 5. 데이터 원칙` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-PROP-001 — 대표 행동 태그` | MAPPED | DEC-G1-010 |
+| PR-F-020 | P2 | SHOULD | DEFERRED | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/08_marketing/INCIDENT_REPORT_FEATURE.md` — `## 목적` | `docs/08_marketing/INCIDENT_REPORT_FEATURE.md` — `## 기술 범위` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿`; no active AT before promotion | PARTIAL | DEC-G1-011 |
+| PR-F-021 | VERTICAL SLICE | COULD | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md` — `## Local-Variant Boundary` | `docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md` — `## Implementation Boundary` | `docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md` — `## Canonical Elements` | MAPPED | DEC-G1-012 |
+| PR-F-022 | OUT | COULD | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/03_art/CONFERENCE_TABLE_TEAM_FINISHER_VISUAL_SPEC.md` — `## Product and Implementation Boundary` | `docs/03_art/CONFERENCE_TABLE_TEAM_FINISHER_VISUAL_SPEC.md` — `## Non-Canonical Elements` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-FIN-001 — 특수 합동 피니셔` | PARTIAL | DEC-G1-013 |
+| PR-F-023 | VERTICAL SLICE | MUST | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/MASTER_GDD.md` — `### Perfect Catch` | `docs/04_technical/DATA_AND_EVENTS.md` — `### CatchEvent` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-CATCH-002 — Perfect Catch` | MAPPED | DEC-G1-004 |
+| PR-F-024 | VERTICAL SLICE | SHOULD | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Functional Requirements` | `docs/02_design/COMBAT_AND_PHYSICS.md` — `### Structural Feature` | `docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md` — `## Breakable Flow` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-STRUCT-001 — Structural Feature` | MAPPED | DEC-G1-006 |
+
+## Non-Functional Requirement Traceability
+
+| ID | Applicability | Priority | Authority | Owning Gate | Requirement Source | Design or Policy Source | Technical Source | Validation Source | Trace Status | Decision Source |
+|---|---|---|---|---|---|---|---|---|---|---|
+| NFR-P-001 | VERTICAL SLICE | MUST | DRAFT | G6 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Performance` | `docs/05_production/VERTICAL_SLICE_SCOPE.md` — `## Completion Boundary` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## Target` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## Gate` | PARTIAL | DEC-G1-015 |
+| NFR-P-002 | PROTOTYPE CORE | MUST | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Performance` | `docs/02_design/MASTER_GDD.md` — `### 5.5 Fun Before Content` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## Runtime Budget Baseline` | `docs/07_quality/TEST_STRATEGY.md` — `## Validation Layers` | PARTIAL | DEC-G1-015 |
+| NFR-P-003 | PROTOTYPE CORE | MUST | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Performance` | `docs/03_art/VFX_AND_DESTRUCTION_STYLE.md` — `## 예산` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## Runtime Budget Baseline` | `docs/07_quality/TEST_STRATEGY.md` — `## Validation Layers` | PARTIAL | DEC-G1-015 |
+| NFR-P-004 | PROTOTYPE CORE | MUST | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Performance` | `docs/03_art/VFX_AND_DESTRUCTION_STYLE.md` — `### Material Burst` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 4. 물리 원칙` | `docs/07_quality/TEST_STRATEGY.md` — `## Validation Layers` | PARTIAL | DEC-G1-015 |
+| NFR-P-005 | VERTICAL SLICE | SHOULD | DRAFT | G5/G6 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Performance` | `docs/02_design/ENEMY_AND_ENCOUNTER_DESIGN.md` — `## 3. Vertical Slice Enemy` | `docs/05_production/VERTICAL_SLICE_SCOPE.md` — `## Exact Values Deferred` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## Gate` | PARTIAL | DEC-G1-015 normalization |
+| NFR-P-006 | VERTICAL SLICE | MUST | DRAFT | G3/G6 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Performance` | `docs/03_art/VFX_AND_DESTRUCTION_STYLE.md` — `## 예산` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## CPU 위험` | `docs/04_technical/PERFORMANCE_BUDGET.md` — `## Gate` | PARTIAL | DEC-G1-015 normalization |
+| NFR-U-001 | PROTOTYPE CORE | MUST | DRAFT | G4 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Usability and Readability` | `docs/03_art/CAMERA_SPEC.md` — `## Canonical Elements` | `docs/03_art/CAMERA_SPEC.md` — `## Draft Functional Behavior — Not Approved by the Visual Lock` | `docs/07_quality/PLAYTEST_PLAN.md` — `## 핵심 지표` | PARTIAL | DEC-G1-015 |
+| NFR-U-002 | PROTOTYPE CORE | MUST | DRAFT | G4 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Usability and Readability` | `docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md` — `## Canonical Elements` | `docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md` — `## Implementation Boundary` | `docs/07_quality/PLAYTEST_PLAN.md` — `## 관찰 질문` | PARTIAL | DEC-G1-015 |
+| NFR-U-003 | PROTOTYPE CORE | MUST | DRAFT | G4 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Usability and Readability` | `docs/03_art/CAMERA_SPEC.md` — `### Collision and Occlusion` | `docs/03_art/CAMERA_SPEC.md` — `## Candidate Camera Starting Values — Draft` | `docs/07_quality/PLAYTEST_PLAN.md` — `## 핵심 지표` | PARTIAL | DEC-G1-015 |
+| NFR-U-004 | VERTICAL SLICE | SHOULD | DRAFT | G6 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Usability and Readability` | `docs/03_art/CAMERA_SPEC.md` — `### Accessibility` | `docs/03_art/CAMERA_SPEC.md` — `## Draft Functional Behavior — Not Approved by the Visual Lock` | `docs/05_production/VERTICAL_SLICE_SCOPE.md` — `## Completion Boundary` | PARTIAL | DEC-G1-015 |
+| NFR-U-005 | PROTOTYPE CORE | MUST | DRAFT | G2 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Usability and Readability` | `docs/03_art/ART_DIRECTION.md` — `## Strict Exclusions` | `docs/03_art/ART_DIRECTION.md` — `## 색상` | `docs/07_quality/PLAYTEST_PLAN.md` — `## 관찰 질문` | PARTIAL | DEC-G1-015 |
+| NFR-M-001 | PROTOTYPE CORE | MUST | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Maintainability` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `## Dependency Rule` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `## Component Responsibilities` | `docs/07_quality/TEST_STRATEGY.md` — `## Validation Layers` | PARTIAL | DEC-G1-015 |
+| NFR-M-002 | PROTOTYPE CORE | SHOULD | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Maintainability` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 5. 데이터 원칙` | `docs/04_technical/DATA_AND_EVENTS.md` — `## Stable IDs` | `docs/07_quality/TEST_STRATEGY.md` — `### EditMode Candidate` | PARTIAL | DEC-G1-015 |
+| NFR-M-003 | PROTOTYPE CORE | MUST | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Maintainability` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 5. 데이터 원칙` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `## Anti-Patterns` | `docs/07_quality/TEST_STRATEGY.md` — `### EditMode Candidate` | PARTIAL | DEC-G1-015 |
+| NFR-M-004 | PROTOTYPE CORE | MUST | DRAFT | G1 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Maintainability` | `docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md` — `## Status Vocabulary` | `docs/00_project/CHANGE_CONTROL.md` — `## 승인 규칙` | `docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md` — `## Functional Requirement Traceability` | MAPPED | DEC-G1-015, DEC-G1-018 |
+| NFR-M-005 | PROTOTYPE CORE | MUST | DRAFT | G1 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Maintainability` | `AGENTS.md` — `# 9. Repository Modification Rules` | `docs/04_technical/UNITY_PROJECT_STANDARD.md` — `## Package Rule` | `docs/00_project/CHANGE_CONTROL.md` — `## 승인 규칙` | MAPPED | DEC-G1-015 |
+| NFR-R-001 | PROTOTYPE CORE | MUST | DRAFT | G4 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Reliability` | `docs/02_design/COMBAT_AND_PHYSICS.md` — `## 7. 실패 기준` | `docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md` — `## Collision Detection Baseline` | `docs/07_quality/TEST_STRATEGY.md` — `### PlayMode Candidate` | PARTIAL | DEC-G1-015 |
+| NFR-R-002 | PROTOTYPE CORE | MUST | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Reliability` | `docs/02_design/COMBAT_AND_PHYSICS.md` — `## 7. 실패 기준` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 6. 디버깅` | `docs/07_quality/TEST_STRATEGY.md` — `### PlayMode Candidate` | PARTIAL | DEC-G1-015 |
+| NFR-R-003 | PROTOTYPE CORE | MUST | DRAFT | G4 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Reliability` | `docs/02_design/GAMEPLAY_SPEC.md` — `## 1. Logical Input Actions` | `docs/04_technical/SAVE_AND_VERSIONING.md` — `## Prototype` | `docs/07_quality/ACCEPTANCE_TESTS.md` — `### AT-FLOW-001 — Reset` | MAPPED | DEC-G1-015, DEC-G1-017 |
+| NFR-R-004 | VERTICAL SLICE | SHOULD | DEFERRED | G5/G6 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Reliability` | `docs/04_technical/SAVE_AND_VERSIONING.md` — `## Vertical Slice` | `docs/04_technical/SAVE_AND_VERSIONING.md` — `## Versioning` | `docs/05_production/VERTICAL_SLICE_SCOPE.md` — `## Completion Boundary` | PARTIAL | DEC-G1-015 normalization |
+| NFR-D-001 | PROTOTYPE CORE | MUST | DRAFT | G1 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Development Productivity` | `AGENTS.md` — `# 7. One Task, One Outcome` | `AGENTS.md` — `# 9. Repository Modification Rules` | `docs/00_project/CHANGE_CONTROL.md` — `## 승인 규칙` | MAPPED | DEC-G1-015 |
+| NFR-D-002 | PROTOTYPE CORE | MUST | DRAFT | G1 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Development Productivity` | `AGENTS.md` — `# 11. Current Implementation Restrictions` | `docs/07_quality/TEST_STRATEGY.md` — `## Validation Layers` | `docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md` — `## Functional Requirement Traceability` | MAPPED | DEC-G1-015 |
+| NFR-D-003 | PROTOTYPE CORE | SHOULD | DRAFT | G3 | `docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md` — `## Development Productivity` | `docs/04_technical/TECHNICAL_DESIGN.md` — `## 6. 디버깅` | `docs/04_technical/SOFTWARE_ARCHITECTURE.md` — `## Component Responsibilities` | `docs/07_quality/TEST_STRATEGY.md` — `## Regression Focus` | PARTIAL | DEC-G1-015 |
+
+## Non-Goal Disposition
+
+PR-X 항목은 기능 RTM 행과 섞지 않고 별도 Non-Goal 표로 관리한다.
+
+| ID | Applicability | Priority | Authority | Requirement Source | Exclusion Authority | Reconsideration Source | Trace Status | Decision Source |
+|---|---|---|---|---|---|---|---|---|
+| PR-X-001 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `AGENTS.md` — `# 12. Scope Protection` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
+| PR-X-002 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `AGENTS.md` — `# 4. Approved High-Level Constraints` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
+| PR-X-003 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `AGENTS.md` — `# 12. Scope Protection` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
+| PR-X-004 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `AGENTS.md` — `# 12. Scope Protection` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
+| PR-X-005 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `docs/09_adrs/ADR-0003-NO-TELEKINESIS.md` — `## Decision` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
+| PR-X-006 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `docs/02_design/ALLY_RELAY_SYSTEM.md` — `## 7. Suppressed` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
+| PR-X-007 | OUT | WON'T | DRAFT | `docs/01_requirements/PRODUCT_REQUIREMENTS.md` — `## Excluded Requirements` | `AGENTS.md` — `# 12. Scope Protection` | `docs/00_project/CHANGE_CONTROL.md` — `## Change Request 템플릿` | MAPPED | DEC-G1-014 |
