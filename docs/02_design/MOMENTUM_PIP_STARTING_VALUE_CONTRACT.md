@@ -83,6 +83,9 @@ save schema, widget 또는 다른 구현 자료형을 승인하지 않는다.
 수행하거나 유효한 GEAR_01 Redirect를 수행해 행동 소유권을 얻은 뒤에만
 reward origin이 될 수 있다. 동료가 공급한 물체의 우연한 결과가
 플레이어 소유 행동 전에 발생하면 reward를 주지 않는다.
+relay 수락, reservation, `PRE-RELEASE`, `RELEASED`와 abort의 권한은
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)의
+`## Momentum and Causal Provenance`를 따른다.
 
 ## Base Reward Categories
 
@@ -122,13 +125,17 @@ direct Light 5`
 적용한다.
 
 - 물체가 승인된 `ACTIVE_RELAY`를 통해 진입했다.
+- relay 요청이 수락되고 예약 물체가 `RELEASED` phase에 진입했다.
 - 플레이어가 Catch 뒤 Throw/Queued Throw 또는 GEAR_01 Redirect로
   후속 행동을 소유했다.
 - 그 player-owned origin이 하나 이상의 유효한 reward result를
   만들었다.
 
 `CallAlly` 요청, wind-up, supply, Catch 또는 Attach만으로는 reward를
-주지 않는다. modifier는 hop이나 collision마다 반복하지 않는다.
+주지 않는다. `PRE-RELEASE` abort와 player ownership 전의 accidental
+result도 reward나 provenance를 만들지 않는다. release 뒤 ally가
+Suppressed되어도 이미 유효한 provenance 또는 modifier 자격을
+제거하지 않는다. modifier는 hop이나 collision마다 반복하지 않는다.
 
 ## Perfect Catch Modifier
 

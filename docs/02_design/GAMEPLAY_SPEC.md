@@ -95,6 +95,33 @@ Owner-approved logical Chain rule은
 runtime lineage, simultaneous-origin settlement, exact natural-termination
 threshold, UI와 implementation은 Draft다.
 
+### Ally Relay, Relay Position, and Suppressed Contract
+
+Owner-approved physical ally-support boundary는
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)를
+따른다.
+
+- 일반 전투 active ally는 승인된 CHR_01 한 명뿐이다.
+- Prototype Core는 한 개의 고정 authored support position에서
+  Light airborne Catch-oriented supply와 이동 가능한 Medium
+  floor-supported Strap-oriented supply를 사용한다.
+- `CallAlly`는 exactly one current physical candidate가 있을 때만
+  하나의 relay를 요청하며 ally/class/position 선택 action이 아니다.
+- `ACTIVE_RELAY`는 `PRE-RELEASE`와 `RELEASED` design phase를 가지며
+  한 물체만 예약한다.
+- Heavy는 normal relay에 포함되지 않는다.
+- Relay Position 전환은 Vertical Slice에만 적용한다.
+- Suppressed는 Prototype Core에서 비활성이며 Vertical Slice
+  `SHOULD`인 조건부, 일시적, 회복 가능한 support state다.
+- player가 최종 Throw, GEAR_01 Redirect, HeavyAction과 resource
+  소비를 소유한다.
+
+exact candidate ranking, position count·placement, route, suppression
+threshold·duration, feedback, AI, animation, physics와 구현은 Draft다.
+이 절은 기존 input inventory, interaction arbitration, Weight envelope,
+Momentum/Pip 값, Chain 규칙, Catch flow 또는 physical tuning을
+변경하지 않는다.
+
 ### Deferred Candidates
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 모두

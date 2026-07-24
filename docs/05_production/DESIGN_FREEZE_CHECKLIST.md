@@ -14,7 +14,7 @@
 - [x] Light/Medium/Heavy 데이터 범위 정의
 - [x] Momentum/Pip 수치 시작값 정의
 - [x] Chain 전파와 종료 정의
-- [ ] Ally Relay와 Suppressed 정의
+- [x] Ally Relay와 Suppressed 정의
 - [ ] Prototype 적·방·물체 목록 고정
 
 ## Art
@@ -49,7 +49,7 @@
 
 ## Approval
 
-현재 체크 상태: `20 / 32`
+현재 체크 상태: `21 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay,
 Technical, Production Support와 첫 구현 티켓 항목은 미완료이며
@@ -60,8 +60,12 @@ Conflict Contract와 Weight-Class Functional Data Range Contract는
 Owner-approved다. Momentum/Pip profile도 시작값으로 승인되었지만
 final balance는 아니다. Causal Chain propagation과 termination의
 logical contract도 Owner-approved다. G2 Gameplay checklist는
-`5 / 7`이다. Ally Relay와 Suppressed, exact physical tuning과
-Prototype object list는 미해결이다. Chain runtime lineage와 exact
+`6 / 7`이다. 일반 전투 CHR_01 한 명, Prototype 고정 support
+position, 실제 Light/Medium supply, Vertical Slice Relay Position과
+조건부 `SHOULD` Suppressed의 logical contract는 Owner-approved다.
+Suppressed의 최종 Vertical Slice 편입은 보장되지 않으며 ally AI,
+exact position·ranking·inventory·timing, physical tuning과 Prototype
+적·방·물체 content lock은 미해결이다. Chain runtime lineage와 exact
 settlement threshold도 G3/G4 Draft이며 G2 Design은 `NOT PASSED`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.

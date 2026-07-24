@@ -17,8 +17,10 @@
   "g2_causal_chain_propagation_termination_contract_status": "OWNER-APPROVED / TECHNICAL AND PRESENTATION DETAILS REMAIN DRAFT",
   "g2_causal_chain_propagation_termination_contract_path": "docs/02_design/CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md",
   "g2_causal_chain_max_propagation_depth": 4,
-  "g2_gameplay_checklist_progress": "5/7",
-  "design_freeze_checklist_progress": "20/32",
+  "g2_ally_relay_suppressed_contract_status": "OWNER-APPROVED / SUPPRESSED REMAINS VERTICAL SLICE SHOULD",
+  "g2_ally_relay_suppressed_contract_path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
+  "g2_gameplay_checklist_progress": "6/7",
+  "design_freeze_checklist_progress": "21/32",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -116,13 +118,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 20703,
-      "sha256": "fbd517589b7cee97a270bded6bda5a36bd07b570b83ddc38bb848f89694c2317"
+      "bytes": 21860,
+      "sha256": "7c283bd18b161e740567d4ae46abf590fc6ced833291c6846f31f69984fe1875"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 5089,
-      "sha256": "497c36c3d6b722e8f63c0c3d8f367dd09cdbf40c0da10e1c7a8dc3e2feaf4cb5"
+      "bytes": 5485,
+      "sha256": "912c2aba1087abf73a1bc066a9595aa32ca0357bf4a9afd0b4b142579d0d0ae1"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -271,13 +273,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 5081,
-      "sha256": "e064877114b42cdc5842fd5637b09e329c0636335db821e2ad53ae4d30276c71"
+      "bytes": 5497,
+      "sha256": "0bbfb4d60a495fe2665ca9f181cfe22a9339e8b7efb0e676e168b84c5b7b6614"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 4710,
-      "sha256": "6cb496df81046c0f4fa88f77711c417f773739a771cb089ea60de0f4019c65c3"
+      "bytes": 5144,
+      "sha256": "7595f3ff8f75e1649b510b2c45fe760b7e3e60ab2074fced1bc483f4291d100b"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -301,18 +303,23 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 28420,
-      "sha256": "96d5f531b2096361d8f4ea62451bc6c0c627987a4f43b524a071e443d45c5578"
+      "bytes": 29510,
+      "sha256": "b8638ea4e8e6dcb445ce4a40b16a48485e38897206885dc1343f201dfa749eae"
+    },
+    {
+      "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
+      "bytes": 17346,
+      "sha256": "bed1b7d1ddd7624e8b1a557f8e37453faf2dc214041bd2060e5a5c82ad9af7ac"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
-      "bytes": 2272,
-      "sha256": "6f8312e51734288ac77ccbf6eb9cd78f302ca3f88a302419e09623a12e763a70"
+      "bytes": 4151,
+      "sha256": "c0612b07ebc8eaa45b4a9c3daaa4f767944af9e21811369c9ecd099be517659f"
     },
     {
       "path": "docs/02_design/CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md",
-      "bytes": 15351,
-      "sha256": "65e935e7bca4ba8085193eb11897f784bfa19f9b3f6342d43ea126726f2af722"
+      "bytes": 15976,
+      "sha256": "426cb706b17a3365d0642ca3a80b0f285330cadfd459e95b496fe97754eeec85"
     },
     {
       "path": "docs/02_design/COMBAT_AND_PHYSICS.md",
@@ -326,23 +333,23 @@
     },
     {
       "path": "docs/02_design/GAMEPLAY_SPEC.md",
-      "bytes": 10326,
-      "sha256": "c0582e139726cf59b2d184dc727ef8fdf011a885caf989612a98420d462b911a"
+      "bytes": 11703,
+      "sha256": "c403a3daa07954393d8451531805c1c57d3abe43cc73bd1eae92bcf530cac041"
     },
     {
       "path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-      "bytes": 16021,
-      "sha256": "27a06d3f3e2062c1bda3193e135e9ca236c410203fc4e59134a27fd9c05f23f4"
+      "bytes": 17680,
+      "sha256": "3422166ec4452c358ce521daeb68eac5ed285d125e1ea559339178134c14ff56"
     },
     {
       "path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
-      "bytes": 13070,
-      "sha256": "20496e1f3c0f0dcdcae27a093dda095536b056c3b0bf08d9f97f96f1aa64c15e"
+      "bytes": 14497,
+      "sha256": "a69bc73d172adcec2782f0695325dead3a128313a7147c749076b14d5effcb96"
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
-      "bytes": 11190,
-      "sha256": "ab4e0c3694e066e6c7b591b6c8b5f09b31072e1e16c5e46df2616e0e903bad7b"
+      "bytes": 12126,
+      "sha256": "eaa7c18a10f7cf9cfabd3044cf528e773e16baccaf26d890934205ccb0ad7e76"
     },
     {
       "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
@@ -351,8 +358,8 @@
     },
     {
       "path": "docs/02_design/MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md",
-      "bytes": 11744,
-      "sha256": "93ce4af84e3836c4e37be449e02936fc888297b0b32fc45e37d4768efc0cd14d"
+      "bytes": 12258,
+      "sha256": "663a24569b240c49ece407670f46fa2b2a2407a3e3fdee239d397e0db5d4414c"
     },
     {
       "path": "docs/02_design/OBJECT_TAXONOMY.md",
@@ -366,8 +373,8 @@
     },
     {
       "path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
-      "bytes": 14226,
-      "sha256": "c34519eb963210a4431801c585a0cd22d9447aab05ad70184f3997121a058850"
+      "bytes": 14844,
+      "sha256": "dc77959a50f13fb14586d7023c02ad8801afc300884254b0fc01f4421c93c0bf"
     },
     {
       "path": "docs/03_art/ALLY_VISUAL_SPEC.md",
@@ -481,8 +488,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 2059,
-      "sha256": "e021d1ae747079d8bd2b4217d7b9600080d1105895cde5695bea76c3c606a6e9"
+      "bytes": 2365,
+      "sha256": "dc107de18e620407eda8b1f429526c5ccc1929763efd86e70a1de7600010c67d"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

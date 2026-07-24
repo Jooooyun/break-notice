@@ -24,9 +24,9 @@ Implementation Gate: `CLOSED`
 | Interaction State and Conflict Contract | OWNER-APPROVED / G2 PARTIAL | Weight-Class Contract와 함께 유지 | G2 |
 | Weight-Class Functional Data Range Contract | OWNER-APPROVED / G2 PARTIAL | Momentum/Pip Contract와 함께 유지 | G2 |
 | Momentum/Pip Starting Profile | OWNER-APPROVED / G2 STARTING VALUES | Causal Chain Contract와 함께 유지 | G2 |
-| Causal Chain Propagation and Termination Contract | OWNER-APPROVED / G2 PARTIAL | Ally Relay and Suppressed contract | G2 |
+| Causal Chain Propagation and Termination Contract | OWNER-APPROVED / G2 PARTIAL | Ally Relay and Suppressed Contract와 함께 유지 | G2 |
 | 핵심 전투 동사 | REQUIREMENTS OWNER-APPROVED / DESIGN DRAFT | 상세 게임플레이 설계 | G2 |
-| 동료 릴레이 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
+| Ally Relay and Suppressed Contract | OWNER-APPROVED / G2 PARTIAL | Prototype Enemy, Room, Object Content Lock | G2 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -66,10 +66,16 @@ profile, per-origin cap, HeavyAction cost와 resource lifecycle도
 Owner-approved G2 starting values다. Causal Origin, Direct/Downstream
 classification, 최대 Depth `4`, Branch·duplicate·cycle·multiple-origin
 경계와 termination·Reset 규칙도 Owner-approved G2 logical design이다.
-다음 G2 산출물은 Ally Relay and Suppressed contract다. exact
+일반 전투의 CHR_01 한 명, Prototype 고정 support position,
+Light/Medium physical supply, Vertical Slice Relay Position 전환,
+player agency와 조건부 `VERTICAL SLICE / SHOULD` Suppressed 계약도
+Owner-approved G2 logical design이다. 다음 G2 산출물은 Prototype
+Enemy, Room, Object Content Lock이다. exact
 mass·size·speed·force·damage·Contact Freeze, Behavior Tag details,
 final Momentum/Pip balance, Chain runtime lineage·threshold·presentation,
-break value, Prototype object list,
+break value, Prototype enemy·room·object list, Relay Position
+count·placement·route, supply ranking·inventory·timing, Suppressed
+threshold·duration·recovery,
 Acceptance Test의 정확한 수치·임계값, 파괴 예산, 카메라 기능,
 조명·렌더링 구현, FIN_01 제품 편입, 기술 아키텍처, 구현 계획과
 Vertical Slice의 정확한 콘텐츠는 `DRAFT`, `COULD`, `DEFERRED` 또는

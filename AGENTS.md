@@ -61,6 +61,25 @@ Owner-approved다.
 - hard·natural termination, post-termination 비재개와 Reset 우선순위
 - PGT_03의 정확한 순서가 아닌 sequence-agnostic causal attribution
 
+다음 G2 Ally Relay, Relay Position and Suppressed logical contract도
+Owner-approved다.
+
+- 일반 전투 active ally는 승인된 CHR_01 한 명
+- Prototype Core는 한 개의 고정 authored support position, 실제
+  Light와 이동 가능한 Medium 공급, Relay Position 전환과 Suppressed
+  비활성
+- Vertical Slice는 유한한 authored Relay Position 전환을 사용할 수
+  있으며 Suppressed는 조건부 `SHOULD`
+- `READY`, `SUPPLY_COMMITTED`, `RELOCATING`, `SUPPRESSED` design state
+- 한 개의 physical supply candidate, reservation과 하나의
+  `ACTIVE_RELAY`
+- `PRE-RELEASE` safe abort와 `RELEASED` 이후 실제 물리 해소
+- Light는 airborne Catch-oriented, 이동 가능한 Medium은
+  floor-supported Strap-oriented, Heavy는 normal relay 제외
+- player의 최종 Throw·Redirect·HeavyAction·resource agency 보존
+- Ally Relay modifier는 release와 player ownership 이후의 유효한
+  Meaningful Result에만 origin당 `+5`
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -76,6 +95,9 @@ constraint와 구현은 계속 `DRAFT`다.
   Momentum/Pip balance와 break value
 - Chain·Momentum/Pip HUD, VFX, audio, animation, physics와 implementation
 - exact Prototype object list
+- exact Relay Position count·placement·support zone·route, ally supply
+  ranking·inventory·trajectory·timing, Suppressed threshold·duration·
+  recovery, feedback, AI와 navigation
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값

@@ -1,81 +1,95 @@
 # Ally Relay System
 
-## 1. 목표
+상태: `MIXED AUTHORITY — OWNER-APPROVED CONTRACT SUMMARY WITH
+HISTORICAL DRAFT DETAIL`
 
-동료는 자동 전투원이 아니라 **물체 공급, 각도, 템포, 환경 기회**를 제공한다. 플레이어가 행동의 최종 책임과 타격감을 가진다.
+## 1. Authority
 
-## 2. 활성 수
+동료 릴레이, Relay Position과 Suppressed의 현재 Owner-approved G2
+권한은
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)를
+따른다.
 
-- 일반 전투: 1명
-- 특수 피니셔: 추가 동료 1명, 총 2명까지
-- 자유 추적 파티 금지
+이 문서의 과거 세부안은 계약과 충돌할 경우 권한이 없다. exact AI,
+pathfinding, animation, physics, timing, count와 Unity 구현은 Draft다.
 
-## 3. Relay Position
+## 2. Owner-Approved Summary
 
-각 방에는 동료가 사용할 수 있는 2~3개의 안전 위치를 사전 배치한다.
+- 일반 전투 active ally는 승인된 CHR_01 한 명뿐이다.
+- Prototype Core는 한 개의 고정 authored support position에서 실제
+  Light와 이동 가능한 Medium을 공급한다.
+- Vertical Slice는 유한한 authored Relay Positions와 그 사이의
+  물리적 전환을 사용할 수 있다.
+- Light는 airborne Catch-oriented physical supply다.
+- 이동 가능한 Medium은 floor-supported Strap-oriented supply다.
+- Heavy는 normal `CallAlly` relay에 포함되지 않는다.
+- Suppressed는 Prototype Core에서 비활성이며 Vertical Slice
+  `SHOULD`인 조건부, 일시적, 회복 가능한 support state다.
+- 동료는 플레이어의 최종 Throw, Redirect, HeavyAction, resource
+  소비 또는 적 처치를 대신하지 않는다.
 
-예:
+## 3. Active Ally and Identity Boundary
 
-- 뒤집힌 책상 뒤
-- 복사실 창구
-- 유리 회의실 안
-- 높은 작업 통로
-- 파티션 뒤
+`Facilities Mover`는 승인된 이름, 직무 또는 Character Identity가
+아니다. 활성 동료의 시각적 정체성은 CHR_01 Canon을 따른다.
 
-동료 이동은 Relay Position 간 짧은 전환으로 제한한다. 복잡한 자유 NavMesh 추적을 피한다.
+FIN_01의 익명 Finisher-only 보조 직원은 CHR_02, 일반 전투 active
+ally 또는 지속 party member가 아니다. FIN_01은 계속 `OUT / COULD`다.
 
-## 4. 첫 동료 — Facilities Mover
+## 4. Relay Position Summary
 
-버티컬 슬라이스에서는 하나의 동료가 핵심 전달 행동을 담당한다.
+Prototype Core의 position은 encounter 동안 고정된다. Relay Position
+전환은 Vertical Slice에만 적용하며 authored position 사이에서만
+물리적으로 일어난다. free-follow와 teleport는 없다.
 
-- Light: 파일철, 키보드 등 손 투척
-- Medium: 의자, 카트 바닥 굴리기
-- Heavy: 고정부 해제, 방향 정렬 보조
+정확한 position 수, placement, support zone, route, navigation과
+전환 시간은 Draft다.
 
-## 5. 패스 요청
+## 5. Physical Supply Summary
 
-- 플레이어가 동료의 유효 범위 안에 있어야 한다.
-- 동료 주변의 실제 재고를 사용한다.
-- 요청 시 현재 제공 가능한 대표 물체 1~2개만 표시한다.
-- 쿨다운 대기보다 재고·위치·경로를 제약으로 사용한다.
+`CallAlly`는 현재 gameplay context가 정확히 한 개의 유효한 물체와
+readable supply lane을 만들 때만 수락된다. 후보는 실제 방에 존재하고,
+도달 가능하며, 예약되지 않았고, 승인된 Weight delivery envelope에
+속해야 한다.
 
-## 6. 패스 경로
+spawn, teleport, remote pull, hidden inventory와 duplication은 없다.
+한 relay는 한 물체만 예약하며 release 또는 safe abort에서 reservation을
+해소한다.
 
-패스는 실제 Rigidbody 궤적이다.
+## 6. Relay Lifecycle Summary
 
-- 적이 가로막을 수 있다.
-- 가구에 부딪힐 수 있다.
-- Light는 공중 투척
-- Medium은 바닥 굴림·밀기
-- Heavy는 동료가 던지지 않음
+동료 지원 상태는 `READY`, `SUPPLY_COMMITTED`, `RELOCATING`,
+`SUPPRESSED`로 구분한다. `ACTIVE_RELAY`는 release 전 `PRE-RELEASE`와
+release 후 `RELEASED` 논리 phase를 가진다.
+
+release 전 물체·경로·position 무효화, Suppressed, Reset 또는 lifecycle
+종료는 safe abort를 만들 수 있다. release 뒤 물체는 삭제되거나
+원격 제어되지 않고 실제 물리 경로를 계속 따른다.
 
 ## 7. Suppressed
 
-적이 동료의 시야·위치를 압박하면:
+Suppressed는 active hostile pressure가 current support position을
+contested 또는 unsafe하게 만들 때만 진입한다. 새 `CallAlly`,
+reservation과 relay 시작을 차단하지만 이미 `RELEASED`인 물체,
+유효한 provenance 또는 player-owned follow-through를 지우지 않는다.
 
-- 동료가 엄폐
-- 패스 일시 중단
-- 다음 Relay Position으로 이동 가능
-- 사망하지 않음
+hostile pressure가 해소되고 유효한 authored position에 있으며
+unresolved pre-release relay가 없으면 `READY`로 회복할 수 있다.
 
-플레이어는 적을 이동시키거나 가구로 시야를 차단해 지원을 복구한다.
+## 8. Historical Draft — Non-Authoritative
 
-## 8. 재고
+다음 과거 문구와 후보는 Owner-approved 계약이 아니며 이 문서에서
+활성 규칙으로 사용하지 않는다.
 
-- 동료는 허공에서 무한 생성하지 않는다.
-- 방 안에 배치된 실제 물체 목록을 사용한다.
-- 사용된 물체가 파괴되지 않았다면 회수 후보가 될 수 있다.
-- 파괴된 가구가 새 Light/Medium을 생성할 수 있다.
+- 방마다 Relay Position `2~3개`라는 고정 수;
+- `Facilities Mover`라는 Identity 또는 직무;
+- exact 유효 범위, 후보 표시 수, cooldown과 recovery;
+- 동료의 자동 Heavy 고정부 해제 또는 방향 정렬 지원;
+- 파괴된 가구가 자동으로 새 Light/Medium 공급물을 생성한다는 규칙;
+- 재고 자동 회수;
+- 고정 AI 우선순위;
+- NavMesh, behavior tree, animation, IK, Rigidbody, physics와 Unity
+  구현.
 
-## 9. AI 우선순위
-
-```text
-위험 회피
-→ Suppressed 처리
-→ 승인된 패스 요청 수행
-→ 재고 회수
-→ 다음 Relay Position 이동
-→ Idle 작업 애니메이션
-```
-
-동료가 임의로 적을 처치하는 공격 루틴은 없다.
+Prototype의 exact 적, 방, 물체 목록과 공급 inventory는 후속
+`Prototype Enemy, Room, Object Content Lock`에서 결정한다.

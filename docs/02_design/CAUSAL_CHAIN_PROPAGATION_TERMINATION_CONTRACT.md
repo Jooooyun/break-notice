@@ -72,6 +72,7 @@ Strap Attach만으로는 Origin이 생기지 않는다. `HeavyAction`은 물리�
 
 - Scoop, Carry 또는 Aim;
 - `CallAlly` 요청과 ally wind-up;
+- accepted reservation과 `PRE-RELEASE` relay;
 - player ownership 전의 ally physical supply;
 - Catch만 발생한 상태;
 - Strap Attach 또는 Strap Release만 발생한 상태;
@@ -93,6 +94,16 @@ Ally Relay와 Perfect Catch modifier 자격은 해당 Origin에만 속하며
 Origin의 행동 출처와 modifier 자격은 Origin 수명 동안 바뀌지 않는다.
 이 분류는 runtime type, tag, field 또는 inheritance 구조를 승인하지
 않는다.
+
+Ally provenance는 승인된 relay가 수락되고 실제 물체가 `RELEASED`된
+뒤 플레이어가 Catch→Throw/Queued Throw 또는 GEAR_01 Redirect로
+행동 소유권을 얻을 때만 해당 player-owned Origin에 붙을 수 있다.
+`PRE-RELEASE` abort와 player ownership 전 accidental result는 Origin
+또는 modifier provenance를 만들지 않는다. release 뒤 ally가
+Suppressed되어도 이미 유효한 Origin provenance를 지우지 않는다.
+relay lifecycle의 권한은
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)를
+따른다.
 
 ## Direct and Downstream Classification
 

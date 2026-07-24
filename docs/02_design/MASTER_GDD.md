@@ -158,17 +158,30 @@ REARM     파괴된 가구와 남은 물체로 다음 행동 준비
 
 ## 13. 동료
 
-- 일반 전투 활성 동료 1명
-- 자유 추적 AI가 아니라 2~3개의 Relay Position 사용
-- 실제 주변 물체를 소비
-- 적 압박 시 Suppressed, 죽거나 영구 이탈하지 않음
-- 플레이어 대신 적을 처치하지 않음
+현재 권한은
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)를
+따른다.
 
-버티컬 슬라이스 첫 동료는 `Facilities Mover` 하나로 통합한다.
+- 일반 전투 active ally는 승인된 CHR_01 한 명이다.
+- 동료는 실제 방의 유효하고 예약되지 않은 물체만 공급하며 player의
+  최종 행동 주체를 대체하지 않는다.
+- Prototype Core에서는 한 개의 고정 authored support position을
+  사용하고 Relay Position 전환을 활성화하지 않는다.
+- Vertical Slice에서는 유한한 authored Relay Positions 사이의 물리적
+  전환을 사용할 수 있다. free-follow와 teleport는 없다.
+- Light는 airborne Catch-oriented physical supply다.
+- 이동 가능한 Medium은 floor-supported Strap-oriented supply다.
+- Heavy는 normal `CallAlly` relay에 포함되지 않으며 자동 고정부
+  해제·정렬 지원도 승인되지 않았다.
+- Suppressed는 Prototype Core에서 비활성이며 Vertical Slice
+  `SHOULD`인 조건부, 일시적, 회복 가능한 support state다.
+- 동료는 적을 임의로 공격·처치하거나 GEAR_01을 조작하거나 resource를
+  소비하지 않는다.
 
-- Light 파일철/키보드 패스
-- Medium 의자/카트 굴리기
-- Heavy 고정부 해제 보조
+`Facilities Mover`는 승인된 이름·직무·Identity가 아니다. 정확한
+Relay Position 수와 배치, supply inventory, candidate ranking,
+trajectory, route, suppression threshold·duration, AI, animation,
+physics와 Unity 구현은 Draft다.
 
 ## 14. 적
 

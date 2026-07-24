@@ -56,7 +56,7 @@ console과 accessibility-remapping command는 이 gameplay 논리 입력
 | `Aim` | `PROTOTYPE CORE` | sustained Boolean intent | 의도적인 targeting 또는 directional-focus 요청을 표현한다. | 목표와 진행 방향을 명시하려는 지속 의도 | hold/toggle binding, lock-on, aim assist, camera values | PGT_01 Camera Canon; PR-F-002 | `OWNER-APPROVED` |
 | `InteractPrimary` | `PROTOTYPE CORE` | discrete interaction intent | 현재 유효한 primary physical interaction을 요청한다. | Scoop, Normal Catch, Perfect Catch timing attempt, Strap Attach의 가능한 context | context priority, target ranking, range, timing, automation, state conflicts | PR-F-001, PR-F-004, PR-F-006, PR-F-023; ADR-0003 | `OWNER-APPROVED` |
 | `Throw` | `PROTOTYPE CORE` | phase-aware throw intent | 직접 투척 또는 도착 전 Queued Throw 의도를 표현한다. | direct throw 및 pre-arrival Queued Throw intent | exact Quick/Charged split, hold duration, charge curve, buffer, impulse, animation | PR-F-005; ADR-0003 | `OWNER-APPROVED` |
-| `CallAlly` | `PROTOTYPE CORE` | discrete request intent | 한 명의 활성 동료에게 실제 물체 공급을 요청한다. | 승인된 active ally의 physical object supply 요청 | multiple allies, ally selection, inventory, pathfinding, exact timing, animation | PR-F-003, PR-F-013, PR-F-014; ADR-0004 | `OWNER-APPROVED` |
+| `CallAlly` | `PROTOTYPE CORE` | discrete request intent | 한 명의 활성 동료에게 현재 gameplay context가 모호하지 않게 가리키는 실제 물체 한 개의 공급을 요청한다. | 승인된 active ally의 physical object supply 요청 | multiple allies, ally selection, class cycle, position command, candidate ranking, pathfinding, exact timing, animation | PR-F-003, PR-F-013, PR-F-014; ADR-0004; TASK-0041 | `OWNER-APPROVED` |
 | `StrapRelease` | `PROTOTYPE CORE` | discrete release intent | 활성 GEAR_01 연결 종료를 명시적으로 요청한다. | 플레이어가 시작하는 explicit connection release intent | automatic Safety Release rule, priority, threshold, timing, implementation | PR-F-006; GEAR_01 Visual Canon | `OWNER-APPROVED` |
 | `ResetEncounter` | `PROTOTYPE CORE` | deliberate reset command | 현재 validation encounter의 기준 상태 복원을 요청한다. | 같은 검증 상황을 재실행하기 위한 reset 요청 | exact binding, confirmation, hold duration, reset time, snapshot implementation, save system | PR-F-017; AT-FLOW-001 | `OWNER-APPROVED` |
 | `HeavyAction` | `VERTICAL SLICE` | discrete Heavy-use intent | 후속 승인 조건이 충족될 때 Heavy 접근 또는 사용을 요청한다. | Vertical Slice의 Heavy-object access/use 요청; 시작 비용 `2 Banked Pips` | Prototype activation, Structural behavior, final balance, animation, physics, implementation | PR-F-011; Momentum/Pip Contract | `OWNER-APPROVED` |
@@ -94,8 +94,18 @@ charge와 force는 이 계약에서 결정하지 않는다.
 ### CallAlly
 
 일반 전투의 한 명의 활성 동료에게 물리적 물체 공급을 요청한다.
-동료 선택, 자유 추적 AI, 다수 동료, 재고, 경로와 timing은 이
-계약에서 결정하지 않는다.
+요청은 현재 gameplay context가 정확히 한 개의 eligible Light 또는
+이동 가능한 Medium과 readable supply lane을 만들 때만 의미가 있다.
+후속 수락, reservation, lifecycle, Relay Position과 Suppressed는
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)를
+따른다.
+
+후보가 없거나 모호하면 `NO EFFECT`이며 다른 class/object로 fallback하지
+않는다. `CallAlly`는 ally selection, class cycle, Relay Position
+명령 또는 두 번째 active ally action이 아니다. `MoveAlly`,
+`PositionSelect`, `AllySwap` 또는 `SecondAllyCommand`를 추가하지
+않는다. 기존 `Aim`은 정확히 한 candidate와 lane을 나타내는 context에
+사용할 수 있으나 exact ranking, range, angle, highlight와 UI는 Draft다.
 
 ### StrapRelease
 
@@ -224,6 +234,15 @@ Owner-approved되었다.
 - `HeavyAction` 시작 비용 `2 Banked Pips`;
 - reward starting profile과 resource lifecycle.
 
+TASK-0040에서 Causal Origin, propagation, attribution와 termination은
+[`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)로
+Owner-approved되었다.
+
+TASK-0041에서 `CallAlly`의 physical candidate selection, reservation,
+relay lifecycle, Relay Position과 Suppressed 경계는
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)로
+Owner-approved되었다. 이 결정은 새 logical action을 추가하지 않는다.
+
 다음 항목은 계속 `DRAFT`다.
 
 - same-context target ranking;
@@ -232,6 +251,8 @@ Owner-approved되었다.
 - tap, hold, release threshold와 physical bindings;
 - Carry/Strap/Throw/Heavy 중 movement restriction;
 - exact physical mass와 object-specific assignment;
+- exact ally candidate ranking, authored position count·placement,
+  transition route, suppression threshold·duration과 feedback;
 - exact size, speed와 force;
 - Heavy selection과 physical execution;
 - final Momentum/Pip balance;
@@ -241,4 +262,4 @@ Owner-approved되었다.
 - implementation class, component와 data contract.
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 계속 비활성 Draft candidate다.
-다음 G2 설계 산출물은 Chain propagation and termination contract다.
+다음 G2 설계 산출물은 Prototype Enemy, Room, Object Content Lock이다.

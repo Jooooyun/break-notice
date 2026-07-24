@@ -180,15 +180,41 @@ context switching으로 fallback하지 않는다.
 
 `CallAlly`는 `PLAYABLE`, Hand Ownership `FREE`, Cargo Strap
 `STORED`, Relay `NONE`이고 Throw/Heavy가 committed되지 않았을
-때만 하나의 `ACTIVE_RELAY`를 요청한다.
+때만 한 명의 active ally에게 하나의 `ACTIVE_RELAY`를 요청할 수 있다.
+추가 수락 조건과 physical supply authority는
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)의
+[`## Request-Acceptance Conditions`](ALLY_RELAY_SUPPRESSED_CONTRACT.md#request-acceptance-conditions)을
+따른다.
 
 차단된 `CallAlly`는 queue, 기존 relay 교체, carried object drop,
-Strap 자동 해제 또는 두 번째 relay를 만들지 않는다. 정확한 ally
-재고, 공급 대상 선택, 경로, timing, Relay Position과 AI는 Draft다.
+Strap 자동 해제, 다른 class/object fallback 또는 두 번째 relay를
+만들지 않는다. `CallAlly`는 ally 선택, class cycle, Relay Position
+이동 또는 두 번째 ally 명령이 아니다.
 
-`ACTIVE_RELAY`는 Catch, Strap Attach, 실제 공간의 miss/passage 또는
-Reset으로 해소한다. 물체가 Catch나 Attach에 실패하면 물리 경로를
-계속 따른다.
+`ACTIVE_RELAY`는 다음 두 design phase를 가진다. 이 phase는 새 runtime
+state 이름이 아니다.
+
+- `PRE-RELEASE`: 요청 수락과 한 실제 물체의 reservation 이후, 물체가
+  아직 동료 control을 떠나지 않은 상태;
+- `RELEASED`: 물체가 동료 control을 떠나 실제 trajectory에 진입한
+  상태.
+
+한 시점에는 하나의 `ACTIVE_RELAY`와 한 개의 예약 물체만 존재한다.
+`PRE-RELEASE`는 물체·경로·position 무효화, Suppressed, Reset 또는
+lifecycle 종료에서만 안전하게 abort한다. abort는 reservation과
+relay를 해소하고 물체를 실제 지지 상태로 남기며 unrelated fallback,
+Origin 또는 Momentum을 만들지 않는다.
+
+`RELEASED` 물체는 Catch, Strap Attach, 실제 공간의 miss/passage,
+world interception 또는 Reset으로 해소한다. Catch나 Attach에
+실패해도 삭제·고정·원격 steering되지 않고 물리 경로를 계속 따른다.
+release 뒤 ally가 Suppressed되어도 이미 진행 중인 물체, player input,
+유효한 provenance 또는 이후 player-owned 행동을 취소하지 않는다.
+
+동료 support availability는 `READY`, `SUPPLY_COMMITTED`,
+`RELOCATING`, `SUPPRESSED` 네 design state로 구분한다. 정확히 하나만
+관찰되며 runtime enum 또는 구현 state machine을 승인하지 않는다.
+`RELOCATING`과 `SUPPRESSED`에서는 새 `CallAlly`를 수락하지 않는다.
 
 class delivery profile은 다음과 같다.
 
@@ -303,8 +329,9 @@ event와 구현은 Draft다.
 - object-specific eligibility exception과 exact object assignment;
 - final Momentum/Pip balance와 Heavy cost tuning;
 - resource snapshot, persistence와 spend implementation;
-- ally supply selection, inventory, path와 exact timing;
-- Relay Position과 Suppressed;
+- ally supply ranking, exact zone·path·timing과 feedback;
+- exact Relay Position count·placement·route·navigation;
+- Suppressed threshold·duration·recovery·enemy pressure 판정;
 - 외부 Knockback, incapacity와 recovery interaction;
 - animation과 physics;
 - implementation class, component와 technical data structure;

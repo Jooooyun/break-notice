@@ -21,6 +21,10 @@
   logical action과
   [`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)의
   state·arbitration·Reset 규칙을 변경하지 않는다.
+- Weight Class별 delivery eligibility는 이 문서가 정하고, 실제
+  selection, reservation, release, abort와 Suppressed 중 실행은
+  [`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)가
+  정한다.
 - `HEAVY`의 active use는 `VERTICAL SLICE ONLY`이고 Prototype Core는
   식별 가능한 후보를 보여줄 수 있을 뿐 사용·자원 소비·공간 변화
   성공을 요구하지 않는다.
@@ -109,6 +113,8 @@ path가 모두 필요하다.
 - 동료는 실제 airborne physical throw로 공급한다.
 - 물체는 실제 trajectory를 따르며 spawn, teleport, hover 또는 remote
   control되지 않는다.
+- release와 miss를 포함한 실행 경계는 Ally Relay and Suppressed
+  Contract의 `## LIGHT Supply Envelope`를 따른다.
 
 ### Eligibility and Result Role
 
@@ -147,6 +153,9 @@ path가 모두 필요하다.
   grounded feed만 사용한다.
 - static 또는 부적합한 Medium은 ally-delivery profile 없이
   direct-acquisition-only일 수 있다.
+- 동료는 GEAR_01을 부착하거나 리디렉션하지 않으며 exact 실행 경계는
+  Ally Relay and Suppressed Contract의 `## MEDIUM Supply Envelope`를
+  따른다.
 
 ### Eligibility and Result Role
 
@@ -180,8 +189,8 @@ path가 모두 필요하다.
 
 - normal Direct Throw와 Queued Throw를 사용할 수 없다.
 - normal `CallAlly` relay로 던지거나 굴리거나 밀어 공급하지 않는다.
-- 후속 preparation 또는 alignment assistance는 별도 Ally Relay
-  계약 전까지 Draft다.
+- 동료의 자동 preparation, 고정부 해제 또는 alignment assistance는
+  승인된 기능이 아니며 미래 별도 Owner 결정 전까지 Draft다.
 - `CATCH_ELIGIBLE` 또는 normal `STRAP_ELIGIBLE`이 아니다.
 - GEAR_01로 remote tow, long-range redirect, room traversal pull,
   grapple 또는 airborne movement를 만들 수 없다.
@@ -280,7 +289,7 @@ Tag는 physical character를 바꿀 수 있지만 class boundary를 조용히
    ID와 Weight Class가 필요하다.
 7. parent object는 breakage만으로 Weight Class가 자동 변경되지 않는다.
 8. exact object ID, content count와 milestone inclusion은 별도 Prototype
-   content-lock 작업 전까지 Draft다.
+   Enemy, Room, Object Content Lock 작업 전까지 Draft다.
 
 ## Illustrative Non-Binding Examples
 
