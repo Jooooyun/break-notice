@@ -28,10 +28,15 @@ G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
 완료를 뜻하지 않는다.
 
+G2 logical input action inventory와 각 action의 intent 의미는
+Owner-approved다. 상태 가용성, interaction priority, state conflict,
+timing, physical binding과 구현은 계속 `DRAFT`다.
+
 다음 항목은 아직 `DRAFT`다.
 
 - 상세 게임플레이 설계
-- G2 논리 입력·상태 계약
+- G2 입력 상태 가용성·우선순위·충돌 계약
+- 논리 입력의 timing, physical binding과 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값
 - 밸런스와 성능 수치
 - 기술 아키텍처

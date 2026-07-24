@@ -9,7 +9,7 @@
 
 ## Gameplay
 
-- [ ] 모든 논리 입력 정의
+- [x] 모든 논리 입력 정의
 - [ ] Scoop/Catch/Throw/Strap 상태 충돌 정의
 - [ ] Light/Medium/Heavy 데이터 범위 정의
 - [ ] Momentum/Pip 수치 시작값 정의
@@ -49,10 +49,13 @@
 
 ## Approval
 
-현재 체크 상태: `15 / 32`
+현재 체크 상태: `16 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay,
 Technical, Production Support와 첫 구현 티켓 항목은 미완료이며
 Full Design Lock은 `INCOMPLETE`다.
+
+Logical Input Action Contract는 Owner-approved지만 상태 가용성,
+priority와 conflict는 미해결이다. G2 Design은 계속 `NOT PASSED`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.

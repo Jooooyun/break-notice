@@ -20,6 +20,7 @@ Implementation Gate: `CLOSED`
 |---|---|---|---|
 | G1 Requirements Baseline | OWNER-APPROVED / PASSED | G2 Design baseline | G1 PASSED |
 | 제품 비전 | OWNER-APPROVED G1 BASELINE | 상세 설계 정렬 | G1 PASSED |
+| Logical Input Action Contract | OWNER-APPROVED / G2 PARTIAL | interaction state and conflict contract | G2 |
 | 핵심 전투 동사 | REQUIREMENTS OWNER-APPROVED / DESIGN DRAFT | 상세 게임플레이 설계 | G2 |
 | 동료 릴레이 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |

@@ -6,6 +6,10 @@
   "g1_requirements_baseline_status": "OWNER-APPROVED",
   "g1_gate_status": "PASSED",
   "g2_gate_status": "NOT PASSED",
+  "g2_logical_input_contract_status": "OWNER-APPROVED",
+  "g2_logical_input_contract_path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
+  "g2_gameplay_checklist_progress": "1/7",
+  "design_freeze_checklist_progress": "16/32",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -103,13 +107,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 18446,
-      "sha256": "415d10afe6fc723f4351c4c7f8ce17083a2575cb402540d92edac7098b51f338"
+      "bytes": 18725,
+      "sha256": "cc84f2e6369948860ec339b2b9b20de38717572c82548ee2dee9493bb8e3ec39"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 3907,
-      "sha256": "16a1bbb778c202a17e3a1e51d72f0299bc7f481d966a834ad3739cc616208a64"
+      "bytes": 4093,
+      "sha256": "b3d2ef9e6965525c56c9d68274eb99cd0a26b78a6640fc7b3a49bec3b5745596"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -258,13 +262,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 3666,
-      "sha256": "57f47f13563e58f117a36e99a27ec49e76f16939d900df6048c5a8166bba6935"
+      "bytes": 3897,
+      "sha256": "becddcd3885813acf34e7d8b4e18a3b6b078a60d5a0ca9c9c157b4a741084764"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 3431,
-      "sha256": "1141546abefb99bef9e9e31b83d66ee08805c8d9e4c7c1ea305ba430c0e9a31e"
+      "bytes": 3542,
+      "sha256": "e4ece2e37f3c2eb9a3ca06020860120b3dc5e131f1e8930f6bcd623dd8350d13"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -288,8 +292,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 24009,
-      "sha256": "8acd8f6f22c5310e6494808689dbd30754b972f8dcf528f713149ca47605b6fc"
+      "bytes": 24677,
+      "sha256": "a5fcc77be7e566bfd993f3ad7dc78a5804005e83591535bcc4f8240ee8f1b826"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
@@ -308,8 +312,13 @@
     },
     {
       "path": "docs/02_design/GAMEPLAY_SPEC.md",
-      "bytes": 3571,
-      "sha256": "ac3588ac1ab746aeb9662d0f04bbfd8c7035c3924096ac1ef04cae1492d9dde9"
+      "bytes": 5281,
+      "sha256": "896d48ae703c223da1f3eba61724fa7f463bd3e66e67cefb99294d45e0970a7f"
+    },
+    {
+      "path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
+      "bytes": 10205,
+      "sha256": "404017622e4a5331712c510134abe62f2ef7e9c86576cb90d38112a045deb1ec"
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
@@ -443,8 +452,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 1499,
-      "sha256": "c7bd24efccb4538ced98b7307b097757d1d1b7621294e051b31cc9f98d05519e"
+      "bytes": 1650,
+      "sha256": "85222052ccbedc450af755b5878e2d1a20e167c46a27d69c1b49cb301c012761"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

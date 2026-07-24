@@ -2,22 +2,49 @@
 
 ## 1. Logical Input Actions
 
-실제 키 바인딩은 입력 설정 단계에서 확정한다. 시스템은 아래 논리 액션을 제공한다.
+논리 입력 의도의 Owner-approved 기준선은
+[`LOGICAL_INPUT_CONTRACT.md`](LOGICAL_INPUT_CONTRACT.md)를 따른다.
+이 절은 계약의 축약본이며 실제 키보드·게임패드 바인딩은 승인하지
+않는다.
 
-| Action | 역할 |
-|---|---|
-| Move | 평면 이동 |
-| Sprint | 전력질주 |
-| Evade | 짧은 회피 |
-| Vault | 낮은 장애물 넘기 |
-| Aim | 조준 상태 |
-| InteractPrimary | Scoop / Catch / Strap Attach 문맥 처리 |
-| Throw | Quick/Charged/Queued Throw |
-| Shove | 근거리 밀치기 |
-| CallAlly | 동료 패스 요청 |
-| StrapRelease | 스트랩 즉시 해제 |
-| HeavyAction | Momentum 기반 Heavy 사용 |
-| ResetEncounter | 프로토타입 즉시 초기화 |
+| Action | Applicability | 승인된 논리 의도 |
+|---|---|---|
+| `Move` | `PROTOTYPE CORE` | 원하는 평면 이동 방향 |
+| `Look` | `PROTOTYPE CORE` | 원하는 camera 및 facing-orientation 변화 |
+| `Aim` | `PROTOTYPE CORE` | targeting 또는 directional-focus 요청 |
+| `InteractPrimary` | `PROTOTYPE CORE` | 현재 유효한 primary physical interaction 요청 |
+| `Throw` | `PROTOTYPE CORE` | direct throw 또는 pre-arrival Queued Throw 의도 |
+| `CallAlly` | `PROTOTYPE CORE` | 한 명의 활성 동료에게 physical object supply 요청 |
+| `StrapRelease` | `PROTOTYPE CORE` | 활성 GEAR_01 연결의 명시적 종료 요청 |
+| `ResetEncounter` | `PROTOTYPE CORE` | validation encounter 기준 상태 복원 요청 |
+| `HeavyAction` | `VERTICAL SLICE` | 후속 승인 조건 아래 Heavy access/use 요청 |
+
+### Context and Mode Summary
+
+- Scoop, Normal Catch, Perfect Catch attempt와 Strap Attach는
+  `InteractPrimary`를 사용한다.
+- Direct Throw와 Queued Throw는 `Throw`를 사용한다.
+- Quick, Charged와 Queued는 별도 logical input ID가 아니라 단일
+  `Throw` intent의 후보 해석이다.
+- Explicit Strap Release는 `StrapRelease`, ally supply request는
+  `CallAlly`, Heavy request는 `HeavyAction`, encounter reset은
+  `ResetEncounter`를 사용한다.
+
+이 mapping은 state availability, interaction priority, target ranking,
+buffer, cancel 또는 timing을 결정하지 않는다.
+
+### Deferred Candidates
+
+`Sprint`, `Evade`, `Vault`, `Shove`는 모두
+`DRAFT CANDIDATE — NOT ACTIVE IN THE G2 LOGICAL INPUT BASELINE`이다.
+Owner-approved G1 Prototype Core에 필수적이지 않고 locomotion,
+combat, animation, physics 또는 state-conflict 범위를 추가하므로
+각각 별도 G2 scope decision이 필요하다. 기존 아래 설계 논의는
+역사적 Draft로 유지하며 활성 입력 계약으로 사용하지 않는다.
+
+아래 2~9절의 priority, flow, state conflict, feedback, timing과 value는
+별도 Owner 결정 전까지 `DRAFT`다. 이 작업은 `Player Interaction
+Priority`를 해결하지 않는다.
 
 ## 2. Player Interaction Priority
 
