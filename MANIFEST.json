@@ -32,6 +32,11 @@
   "g2_design_baseline_final_audit_next_task": "TASK-0044 — Define and Align the G2 Policy Violation Selection and Run-Application Contract",
   "g2_design_baseline_remediation_status": "CORRECTIONS COMPLETE / RE-AUDIT REQUIRED",
   "g2_design_baseline_remediation_next_output": "G2 Design Baseline Re-Audit",
+  "g2_design_baseline_reaudit_status": "READY FOR G2 GATE DECISION",
+  "g2_design_baseline_reaudit_path": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
+  "g2_design_baseline_reaudit_baseline_sha": "3231726a8c9ca37914721d11075da502d63bf6d3",
+  "g2_design_baseline_reaudit_original_audit_status": "REVISION REQUIRED / HISTORICAL",
+  "g2_design_baseline_reaudit_next_task": "TASK-0047 — Promote the G2 Design Baseline and Synchronize G3 Entry Status",
   "g2_master_gdd_authority_status": "MIXED AUTHORITY / CONTRACTS TAKE PRECEDENCE",
   "g2_rtm_optional_trace_honesty_status": "PR-F-019 AND PR-F-024 PARTIAL",
   "g2_rtm_usability_source_role_status": "CORRECTED / G3 TECHNICAL SOURCES PENDING",
@@ -144,8 +149,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 6876,
-      "sha256": "ba4d86b4c978470f00f969fd458a68122d7a602af1ea1624629d92457ab91fe9"
+      "bytes": 7130,
+      "sha256": "422c5a16b315b88d708ab832da3db683dcbab015b592d2012973fd6269c5f831"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -299,8 +304,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 6640,
-      "sha256": "1db3c83dcbc5c43114ba2caa005e415e459ed26f3a3539e6229779d950ed4e7e"
+      "bytes": 6897,
+      "sha256": "341ec7bdf5222c0cc938b401741e422d01092e5df0bf8cab3d63efe6616afa8b"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -526,6 +531,11 @@
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
       "bytes": 25973,
       "sha256": "ad69b69523892c7ef0ea6adc00341d4249b8eedaf08de613367475890988867d"
+    },
+    {
+      "path": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
+      "bytes": 27761,
+      "sha256": "9fe9f52d3868d0ac65b15b6be2265ad62569429d27b6427c73aa8a1133c91534"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

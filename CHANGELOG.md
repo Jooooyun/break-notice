@@ -4,6 +4,7 @@
 
 ### Changed
 
+- 교정된 G2 기준선을 재감사해 `READY FOR G2 GATE DECISION`으로 기록하되 G2 passage, G3 entry, Graybox 또는 구현 권한은 만들지 않고 기존 Final Audit의 역사적 `REVISION REQUIRED`와 Implementation Gate `CLOSED`를 유지
 - G2 stale-authority와 RTM source/trace honesty를 교정해 Master GDD를 계약 우선의 mixed-authority 문서로 분류하고, PR-F-019·PR-F-024를 `PARTIAL`로 조정하며 NFR-U-001~005의 Visual/Art evidence를 Technical Source에서 분리함; 기존 Final Audit은 역사적 `REVISION REQUIRED`로 유지하고 다음 산출물을 G2 Design Baseline Re-Audit로 전환
 - G2 Policy Violation Selection and Run-Application Contract를 승인 상태로 등록해 run당 한 선택 기회, 두 Candidate, 단일 current-run Active Policy와 next-encounter·Reset·run-end lifecycle을 정의하고, 역사적 12-Candidate/3-choice 목록은 superseded Draft로 격하하되 final Candidate content·UI·save·implementation은 Draft로 유지하며 G2는 통과시키지 않음
 - 기준선 `a0cf9b15d120b0842e2ddcfff1be697863581533`의 G2 Design Baseline Final Audit을 기록하고, PR-F-018 G2 계약 부재·stale Draft authority leak·RTM source/trace 과대 분류로 `REVISION REQUIRED`를 판정하되 G2 미통과와 Implementation Gate `CLOSED`를 유지

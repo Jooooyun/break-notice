@@ -31,6 +31,7 @@ Implementation Gate: `CLOSED`
 | G2 Design Baseline Final Audit | REVISION REQUIRED | 차단 수정 후 재감사 필요 | G2 |
 | G2 Stale Authority and RTM Source/Trace Honesty Correction | OWNER-APPROVED / COMPLETE | G2 Design Baseline Re-Audit | G2 |
 | Policy Violation Selection and Run-Application Contract | OWNER-APPROVED / G2 PARTIAL | G2 Design Baseline Re-Audit에서 재검증 | G2 |
+| G2 Design Baseline Re-Audit | READY FOR G2 GATE DECISION | TASK-0047 — Promote the G2 Design Baseline and Synchronize G3 Entry Status | G2 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -87,7 +88,8 @@ run-end clearing의 logical G2 blocker는 Owner-approved
 결과다. stale non-progression Master GDD authority prose,
 PR-F-019·PR-F-024 Trace Status와 NFR-U-001~005 Source role 교정은
 Owner-approved 상태로 완료되었다. G2 통과 판정에는 새 기준선의
-`G2 Design Baseline Re-Audit`가 필요하다. exact
+`G2 Design Baseline Re-Audit` 결과가 `READY FOR G2 GATE DECISION`으로
+기록되었으며, G2 Gate 판정은 별도 `TASK-0047`에서 수행해야 한다. exact
 mass·size·speed·force·damage·Contact Freeze, Behavior Tag details,
 final Momentum/Pip balance, Chain runtime lineage·threshold·presentation,
 break value, final enemy identity·room geometry·object art, Relay Position
