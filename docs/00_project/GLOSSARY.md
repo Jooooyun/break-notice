@@ -2,7 +2,7 @@
 
 > **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
 >
-> Decision Source: `DEC-G1-001`, `DEC-G1-018`,
+> Decision Source: `DEC-G1-001`, `DEC-G1-003`, `DEC-G1-018`,
 > `DEC-G1-FINAL-002`
 >
 > 아래 요구사항 관리 용어는 Owner가 최종 문구와 G1 Baseline을
