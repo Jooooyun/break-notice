@@ -6,7 +6,8 @@
 
 - G1 Requirements: `PASSED`
 - G2 Design: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
+- G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
+- G3 Technical Baseline: `OWNER-APPROVED / PASSED`
 - G3 Technical Decisions:
   `OWNER-APPROVED / BASELINE APPLIED`
 - G3 Causal Result-Family Alignment:
@@ -16,13 +17,18 @@
 - G3 Residual Active Status and Package-Authority Correction:
   `OWNER-APPROVED / COMPLETE`
 - G3 Technical Final Audit Remediation:
-  `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+  `COMPLETE / VERIFIED BY RE-AUDIT`
 - G3 Technical Baseline Re-Audit:
-  `READY FOR G3 GATE DECISION`
+  `READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE`
+- G3 Gate Passage Source:
+  `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
+  `9e1487e85be5a54ba0824c209deabcf738e1abf0`
+- G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+- G5 Freeze: `NOT PASSED`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
-- Current Phase label: `PRE-PRODUCTION / G3 TECHNICAL BASELINE`
+- Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -57,19 +63,23 @@ remediation and successful Re-Audit verified.
 
 Gate G3: 모든 핵심 요구사항이 구현 책임과 테스트에 매핑.
 
-Status: NOT PASSED / OWNER-APPROVED BASELINE / READY FOR G3 GATE DECISION
+Status: `PASSED — Owner-approved G3 baseline, corrections and successful Re-Audit verified.`
 
 책임, 데이터, 이벤트, 검증, 성능 예산, Reset과 test-harness 방향,
 exact Editor/package documentation lock은 적용되었고 Technical
 checklist는 `6 / 6`다. Causal Result Family taxonomy는 Owner-approved
 G2 계약과 정렬된 상태로 교정되었다. 역사적 Final Audit은
 `REVISION REQUIRED`이고 두 잔여 활성 권한 오류의 교정은 완료됐지만,
-remediation은 `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. Re-Audit은
-`READY FOR G3 GATE DECISION`이고 다음 단계는
-`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`이며
-G3는 아직 통과하지 않았다. G4, Graybox와 Unity 구현 권한은 없다.
+remediation은 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
+`READY FOR G3 GATE DECISION` 판정은 기준선
+`9e1487e85be5a54ba0824c209deabcf738e1abf0`에서 Owner-approved G3
+passage의 근거로 소비되었다. 다음 단일 작업은
+`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+G4와 G5는 아직 통과하지 않았고 Graybox와 Unity 구현 권한은 없다.
 
 ## Phase 4 — Graybox Validation
+
+Status: `NOT STARTED / NOT AUTHORIZED`
 
 `G4 DRAFT CONTENT CANDIDATE — NOT G1-APPROVED VALUES`
 
@@ -80,6 +90,8 @@ Gate G4: 5분 재미와 재플레이 행동 통과.
 실패 시 수치·카메라·배치·타이밍만 조정한다. 핵심 정체성을 바꾸려면 C3 Change Request가 필요하다.
 
 ## Phase 5 — Design Freeze
+
+Status: `NOT PASSED / CURRENT DESIGN FREEZE COMPLETION WORK — 28 / 32`
 
 Graybox 결과를 반영해 문서 최종 동결.
 

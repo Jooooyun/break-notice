@@ -10,7 +10,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 현재 단계:
 
-`PRE-PRODUCTION / G3 TECHNICAL BASELINE`
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 
 현재 프로젝트는 전체 Design Lock 상태가 아니다.
 
@@ -18,7 +18,8 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 - G1 Requirements: `PASSED`
 - G2 Design: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
+- G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
+- G3 Technical Baseline: `OWNER-APPROVED / PASSED`
 - G3 Technical Decisions:
   `OWNER-APPROVED / BASELINE APPLIED`
 - G3 Causal Result-Family Alignment:
@@ -28,9 +29,14 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G3 Residual Active Status and Package-Authority Correction:
   `OWNER-APPROVED / COMPLETE`
 - G3 Technical Final Audit Remediation:
-  `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+  `COMPLETE / VERIFIED BY RE-AUDIT`
 - G3 Technical Baseline Re-Audit:
-  `READY FOR G3 GATE DECISION`
+  `READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE`
+- G3 Gate Passage Source:
+  `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
+  `9e1487e85be5a54ba0824c209deabcf738e1abf0`
+- G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+- G5 Freeze: `NOT PASSED`
 - G3 Technical Checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -156,11 +162,12 @@ Owner 승인에 따라 G2 Design Baseline으로 승인되었고 G2 Gate는
 `REVISION REQUIRED`로 유지된다. Re-Audit은 G2 passage에 소비된
 권한 근거다. Owner-approved G3 Technical Baseline의 역사적 Final
 Audit은 `REVISION REQUIRED`이며, 두 활성 권한 오류의 교정은
-`OWNER-APPROVED / COMPLETE`다. 교정 기준선 Re-Audit은
-`READY FOR G3 GATE DECISION`이며 별도 Gate 결정은 아직 필요하다.
-G2 passage는 구현 또는 테스트 완료를
-뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한 later-Gate deferral로
-유지된다. 어떠한 RTM 행도 `VERIFIED`로 승격되지 않았다.
+`OWNER-APPROVED / COMPLETE`다. 교정 기준선 Re-Audit의
+`READY FOR G3 GATE DECISION` 판정은 Owner-approved G3 passage의
+근거로 소비되었고 G3 Gate는 `PASSED`다. G3 passage는 구현 또는
+테스트 완료를 뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한
+later-Gate deferral로 유지된다. 어떠한 RTM 행도 `VERIFIED`로
+승격되지 않았다.
 
 다음 G3 documentation-level technical baseline은 Owner-approved다.
 
@@ -228,19 +235,22 @@ constraint와 구현은 계속 `DRAFT`다.
 Implementation Gate는 `CLOSED`다.
 
 현재 Phase label은 Owner 승인에 따라
-`PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 변경되었다. G3 Technical은
-`NOT PASSED / CURRENT BASELINE WORK`이며 기술 책임·데이터·이벤트·
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. G3 Technical은
+`PASSED / OWNER-APPROVED BASELINE`이며 기술 책임·데이터·이벤트·
 검증·예산·Reset·test-harness 기준은 Owner-approved baseline으로
-적용되었다. 역사적 Final Audit은 `REVISION REQUIRED / HISTORICAL
+승격되었다. 역사적 Final Audit은 `REVISION REQUIRED / HISTORICAL
 BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
 `OWNER-APPROVED / COMPLETE`, remediation은
-`CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. Re-Audit 결과는
-`READY FOR G3 GATE DECISION`이다. Technical checklist는
+`COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
+`READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었지만
+Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
 `6 / 6`, Design Freeze는 `28 / 32`다. 현재 `Game/**`에는 placeholder만
-있고 Unity project는 생성되지 않았다. 다음 작업은
-`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`다.
-G3 passage, remaining Design Freeze와 final pre-implementation review
-전에는 Graybox 또는 Unity 구현을 시작하지 않는다.
+있고 Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며
+다음 작업은
+`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+remaining Design Freeze와 final pre-implementation review 전에는
+Graybox 또는 Unity 구현을 시작하지 않으며 Implementation Gate는
+`CLOSED`다.
 
 ---
 

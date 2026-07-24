@@ -1,12 +1,15 @@
 # Design Status Board
 
-현재 단계: `PRE-PRODUCTION / G3 TECHNICAL BASELINE`
+현재 단계: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 
 G1 Requirements: `PASSED`
 
 G2 Design: `PASSED / OWNER-APPROVED BASELINE`
 
-G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
+G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
+
+G3 Technical Baseline:
+`OWNER-APPROVED / PASSED`
 
 G3 Technical Decisions:
 `OWNER-APPROVED / BASELINE APPLIED`
@@ -21,10 +24,18 @@ G3 Residual Active Status and Package-Authority Correction:
 `OWNER-APPROVED / COMPLETE`
 
 G3 Technical Final Audit Remediation:
-`CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+`COMPLETE / VERIFIED BY RE-AUDIT`
 
 G3 Technical Baseline Re-Audit:
-`READY FOR G3 GATE DECISION`
+`READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE`
+
+G3 Gate Passage Source:
+`docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
+`9e1487e85be5a54ba0824c209deabcf738e1abf0`
+
+G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+
+G5 Freeze: `NOT PASSED`
 
 G3 Technical Checklist: `6 / 6`
 
@@ -58,11 +69,11 @@ Implementation Gate: `CLOSED`
 | Policy Violation Selection and Run-Application Contract | OWNER-APPROVED / G2 PARTIAL | G3 기술 매핑에서 유지 | G2 PASSED |
 | G2 Design Baseline Re-Audit | READY FOR G2 GATE DECISION — CONSUMED BY G2 PASSAGE | G3 Technical Baseline Preflight Audit | G2 PASSED |
 | G3 Technical Baseline Preflight Audit | READY FOR OWNER G3 TECHNICAL DECISIONS / CONSUMED BY OWNER DECISION | G3 Technical Baseline | G3 |
-| G3 Technical Baseline Decisions | OWNER-APPROVED / BASELINE APPLIED | TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage | G3 NOT PASSED |
-| G3 Causal Result-Family Alignment | OWNER-APPROVED / CORRECTED | TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage | G3 NOT PASSED |
-| G3 Technical Baseline Final Audit | REVISION REQUIRED / HISTORICAL BASELINE AUDIT | Re-Audit에서 blocker closure 검증 완료 | G3 NOT PASSED |
-| G3 Residual Active Status and Package-Authority Correction | OWNER-APPROVED / COMPLETE | CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT | G3 NOT PASSED |
-| G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION | TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage | G3 NOT PASSED |
+| G3 Technical Baseline Decisions | OWNER-APPROVED / BASELINE APPLIED | G3 passage 기록 완료 | G3 PASSED |
+| G3 Causal Result-Family Alignment | OWNER-APPROVED / CORRECTED | 현 taxonomy 유지 | G3 PASSED |
+| G3 Technical Baseline Final Audit | REVISION REQUIRED / HISTORICAL BASELINE AUDIT | Re-Audit에서 blocker closure 검증 완료 | HISTORICAL / G3 PASSED |
+| G3 Residual Active Status and Package-Authority Correction | OWNER-APPROVED / COMPLETE | COMPLETE / VERIFIED BY RE-AUDIT | G3 PASSED |
+| G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE | G3 passage 근거로 소비됨 | G3 PASSED |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -73,9 +84,9 @@ Implementation Gate: `CLOSED`
 | FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
 | 파괴 예산 | HIGH-LEVEL BASELINE | 정확한 파편·Particle·VFX·성능 예산 | G2 |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
-| G3 Technical Baseline | OWNER-APPROVED / BASELINE APPLIED | TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage | G3 NOT PASSED |
-| 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | 별도 G3 Gate 결정 | G3 |
-| Graybox | NOT STARTED | Design Readiness Gate 통과 후 | G4 |
+| G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
+| 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
+| Graybox | NOT STARTED / NOT AUTHORIZED | G4 별도 승인 후 | G4 NOT PASSED |
 | 본 제작 | PENDING | Implementation Gate 개방 후 | G5 |
 
 ## Production Visual Lock Sequence
@@ -134,8 +145,8 @@ tuning, Unity Bootstrap·구현 ticket과 Vertical Slice의 정확한
 콘텐츠는 `DRAFT`, `COULD`, `DEFERRED` 또는 미승인이다. 승인된 여덟
 Visual의 문서화된 Canonical Elements만
 `LOCKED`이며 현재 Phase label은 Owner가 승인한
-`PRE-PRODUCTION / G3 TECHNICAL BASELINE`이다. G3 Technical은
-`NOT PASSED / CURRENT BASELINE WORK`이다. G3 Technical Draft와 빈
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. G3 Technical은
+`PASSED / OWNER-APPROVED BASELINE`이다. G3 Technical Draft와 빈
 Unity 예정 구조를 기준선에 대조한 Preflight Audit 결과는
 Owner의 `DEC-G3-001`~`DEC-G3-013: A` 승인으로 소비되었다.
 기술 책임·dependency·state/event/causal/physics/Strap/budget/Reset/
@@ -151,8 +162,11 @@ optional design role로 유지된다. Final Audit은 active Phase와
 AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
 판정한 역사적 기준선 감사다. 두 잔여 권한 오류의 교정은
 `OWNER-APPROVED / COMPLETE`, remediation은
-`CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. 교정 기준선 Re-Audit은
-`READY FOR G3 GATE DECISION`이다. 다음 단일 산출물은
-`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`다.
-별도 Gate 결정 전에는 G3를 통과시키지 않으며 Bootstrap, Graybox와
-구현 권한은 없다.
+`COMPLETE / VERIFIED BY RE-AUDIT`다. 교정 기준선 Re-Audit의
+`READY FOR G3 GATE DECISION` 판정은 기준선
+`9e1487e85be5a54ba0824c209deabcf738e1abf0`에서 Owner-approved G3
+passage의 근거로 소비되었고 Re-Audit 문서 자체는 변경하지 않는다.
+G4와 G5는 `NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Graybox는
+`NOT STARTED`, Implementation Gate는 `CLOSED`다. 다음 단일 산출물은
+`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+Bootstrap, Graybox와 구현 권한은 없다.

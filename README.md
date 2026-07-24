@@ -31,16 +31,19 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 
 | 항목 | 상태 |
 |---|---|
-| 현재 Phase label | PRE-PRODUCTION / G3 TECHNICAL BASELINE |
+| 현재 Phase label | PRE-PRODUCTION / DESIGN FREEZE COMPLETION |
 | G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
 | G2 Design | PASSED / OWNER-APPROVED BASELINE |
-| G3 Technical | NOT PASSED / CURRENT BASELINE WORK |
-| G3 Technical Baseline | OWNER-APPROVED / BASELINE APPLIED |
+| G3 Technical | PASSED / OWNER-APPROVED BASELINE |
+| G3 Technical Baseline | OWNER-APPROVED / PASSED |
 | G3 Technical Final Audit | REVISION REQUIRED / HISTORICAL BASELINE AUDIT |
 | G3 Residual Active Status and Package-Authority Correction | OWNER-APPROVED / COMPLETE |
-| G3 Technical Final Audit Remediation | CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT |
-| G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION |
-| G3 Current Next Task | TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage |
+| G3 Technical Final Audit Remediation | COMPLETE / VERIFIED BY RE-AUDIT |
+| G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE |
+| G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
+| G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
+| G5 Freeze | NOT PASSED |
+| Current Next Task | TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules |
 | G3 Technical checklist | 6 / 6 |
 | Design Freeze | 28 / 32 |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
@@ -62,16 +65,18 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Graybox 재미 검증 | NOT STARTED |
 | Implementation Gate | CLOSED |
 | Unity project | NOT CREATED / PLACEHOLDERS ONLY |
-| 본 제작 | BLOCKED BY G3 GATE DECISION + REMAINING GATES |
+| 본 제작 | BLOCKED BY REMAINING DESIGN FREEZE + G4/G5 + FINAL PRE-IMPLEMENTATION REVIEW |
 
-G3 기술 책임과 exact documentation lock은 Owner-approved지만 역사적
-Final Audit은 `REVISION REQUIRED`다. 두 활성 권한 오류의 교정은
-완료됐고 Re-Audit은 `READY FOR G3 GATE DECISION`이다. 별도 Gate
-결정 전까지 G3는 계속 `NOT PASSED`다.
+G3 기술 책임과 exact documentation lock은 성공한 Re-Audit과 Owner
+승인에 따라 `OWNER-APPROVED / PASSED`로 승격되었다. 역사적 Final
+Audit은 `REVISION REQUIRED`로 변경 없이 유지하고, Re-Audit의
+`READY FOR G3 GATE DECISION` 판정은 G3 passage의 근거로 소비되었다.
+Design Freeze는 `28 / 32`이며 G4와 G5는 `NOT PASSED`다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지
-않았으며 Bootstrap, Graybox와 구현은 승인되지 않았다.
+않았으며 Bootstrap, Graybox와 구현은 승인되지 않았다. Implementation
+Gate는 `CLOSED`다.
 
 ## 가장 먼저 읽을 문서
 

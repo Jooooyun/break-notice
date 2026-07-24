@@ -15,7 +15,8 @@
 
 - G1 Requirements: `PASSED`
 - G2 Design: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
+- G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
+- G3 Technical Baseline: `OWNER-APPROVED / PASSED`
 - G3 Technical Decisions:
   `OWNER-APPROVED / BASELINE APPLIED`
 - G3 Causal Result-Family Alignment:
@@ -25,15 +26,20 @@
 - G3 Residual Active Status and Package-Authority Correction:
   `OWNER-APPROVED / COMPLETE`
 - G3 Technical Final Audit Remediation:
-  `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+  `COMPLETE / VERIFIED BY RE-AUDIT`
 - G3 Technical Baseline Re-Audit:
-  `READY FOR G3 GATE DECISION`
+  `READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE`
+- G3 Gate Passage Source:
+  `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
+  `9e1487e85be5a54ba0824c209deabcf738e1abf0`
+- G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+- G5 Freeze: `NOT PASSED`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
-- Phase label: `PRE-PRODUCTION / G3 TECHNICAL BASELINE` — Owner-approved transition
+- Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION` — Owner-approved transition
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Implementation Gate: `CLOSED`
 
@@ -42,13 +48,15 @@ G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계, 여덟
 Gate는 `PASSED`다. G3의 책임·데이터·이벤트·검증·예산·Reset·
 test-harness 방향과 exact Editor/package documentation lock은
 Owner-approved 기준선으로 적용되었고 Technical checklist는 `6 / 6`다.
-현재 다음 Gate 작업은
-`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`다.
-역사적 Final Audit의 두 잔여 권한 오류는 교정됐고 Re-Audit은
-`READY FOR G3 GATE DECISION`이지만 별도 Gate 결정 전까지 G3는
-`NOT PASSED`이며 G4, Graybox와 구현 권한이
-없다. 승인된 여덟 Production Visual의
+역사적 Final Audit의 두 잔여 권한 오류는 교정됐고 Re-Audit의
+`READY FOR G3 GATE DECISION` 판정과 Owner 승인을 근거로 G3 Gate는
+`PASSED`다. Re-Audit 문서와 역사적 Final Audit은 변경하지 않는다.
+현재 다음 단일 작업은
+`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+G4와 G5는 `NOT PASSED`, Graybox는 `NOT STARTED`이고 구현 권한이 없다.
+승인된 여덟 Production Visual의
 Canon은 유지되지만 Full Design Lock은 미완료다. FIN_01은 PR-F-022
 `OUT / COULD`이며 승인된 Vertical Slice와 최종 제품 범위 밖이다.
 정확한 조명·파괴·피니셔 기능, tuning, implementation class와
-pass threshold는 Draft 또는 미승인 상태다.
+pass threshold는 Draft 또는 미승인 상태이며 Implementation Gate는
+`CLOSED`다.

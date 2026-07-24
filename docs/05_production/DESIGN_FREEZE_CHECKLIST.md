@@ -54,10 +54,12 @@
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay의
 일곱 항목은 Owner-approved G2 Design Baseline으로 완료되었다.
 Technical 여섯 항목은 Owner-approved G3 documentation baseline으로
-`6 / 6` 검토되었다. Unity/package checkbox는 exact documentation
-lock을 뜻하며 Unity 또는 package file 설치를 뜻하지 않는다.
-체크되지 않은 Art/Production Support 세 항목과 첫 구현 티켓 한
-항목은 미완료이며 Full Design Lock은 `INCOMPLETE`다.
+`6 / 6` 검토되었고 성공한 Re-Audit과 Owner 승인에 따라 G3 Gate는
+`PASSED`다. Unity/package checkbox는 exact documentation lock을
+뜻하며 Unity 또는 package file 설치를 뜻하지 않는다. 체크되지 않은
+항목은 `주인공 Turnaround`, `정확한 파괴 예산 수치와 구현 규칙`,
+`Office Core Kit 목록`, `첫 구현 티켓 세분화`의 정확히 네 개다.
+Design Freeze는 `28 / 32`, Full Design Lock은 `INCOMPLETE`다.
 
 Logical Input Action Contract, Interaction State, Arbitration, and
 Conflict Contract와 Weight-Class Functional Data Range Contract는
@@ -79,11 +81,14 @@ Editor/package documentation lock은 Owner-approved다. G3 Causal Result
 Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `REVISION REQUIRED / HISTORICAL BASELINE AUDIT`, 잔여 활성 상태·패키지
 권한 교정은 `OWNER-APPROVED / COMPLETE`, remediation은
-`CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. Re-Audit은
-`READY FOR G3 GATE DECISION`이며 다음 작업은
-`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`다.
-G3 Technical은 `NOT PASSED / CURRENT BASELINE WORK`, Technical
-Checklist는 `6 / 6`, Design Freeze는 `28 / 32`, Full Design Lock은
-`INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`다.
+`COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
+`READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었고 문서
+자체는 변경하지 않는다. 현재 Phase는
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 작업은
+`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
+`6 / 6`, Design Freeze는 `28 / 32`, G4와 G5는 `NOT PASSED`, Full
+Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation
+Gate는 `CLOSED`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.
