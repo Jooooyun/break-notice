@@ -116,13 +116,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 20662,
-      "sha256": "b80eeb28bee349883219cb242c0d1b72c4977ede4b95584debd89cfa11bf1631"
+      "bytes": 20703,
+      "sha256": "fbd517589b7cee97a270bded6bda5a36bd07b570b83ddc38bb848f89694c2317"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 5078,
-      "sha256": "df78164286a3b27295ba88c7f152d34e534d62815690facdb6ffd23a8c6b3849"
+      "bytes": 5089,
+      "sha256": "497c36c3d6b722e8f63c0c3d8f367dd09cdbf40c0da10e1c7a8dc3e2feaf4cb5"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -301,8 +301,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 28015,
-      "sha256": "4247995a955599ade9ce492ee11bec385a6c89ae322a58db16b8b7e56f7fdf65"
+      "bytes": 28420,
+      "sha256": "96d5f531b2096361d8f4ea62451bc6c0c627987a4f43b524a071e443d45c5578"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
@@ -311,8 +311,8 @@
     },
     {
       "path": "docs/02_design/CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md",
-      "bytes": 14830,
-      "sha256": "80bd6183b5d2e941aaa2a47d5365fd7f0c735998398ccc6ab7b6291874fb0409"
+      "bytes": 15351,
+      "sha256": "65e935e7bca4ba8085193eb11897f784bfa19f9b3f6342d43ea126726f2af722"
     },
     {
       "path": "docs/02_design/COMBAT_AND_PHYSICS.md",
@@ -481,8 +481,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 1985,
-      "sha256": "ba625f925f2dabd4c8d9272792bcebc248b67131990620a8d639328d0ef8a385"
+      "bytes": 2059,
+      "sha256": "e021d1ae747079d8bd2b4217d7b9600080d1105895cde5695bea76c3c606a6e9"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

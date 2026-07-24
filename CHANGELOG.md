@@ -4,7 +4,7 @@
 
 ### Changed
 
-- G2 Causal Chain의 Origin 생성, Direct/Downstream 분류, 최대 Depth `4`, Branch·중복·순환·다중 Origin 경계와 종료·Reset 규칙을 승인 상태로 등록하고 runtime lineage·threshold·표현·Unity 구현은 Draft로 유지
+- G2 Causal Chain의 Origin 생성, Direct/Downstream 분류, 최대 Depth `4`, Branch·중복·순환·다중 Origin 경계와 종료·Reset 규칙을 승인 상태로 등록하고 runtime lineage·settlement threshold·표현·Unity 구현은 Draft로 유지
 - G2 Momentum/Pip 시작 profile의 reward table·modifier·origin cap·resource lifecycle·HeavyAction 비용을 승인 상태로 등록하고, Chain propagation·final tuning·UI·physics·구현은 Draft로 유지
 - G2 Light/Medium/Heavy functional envelope과 Catch/Strap/Carry/Throw/Relay eligibility를 승인 상태로 등록하고, Heavy는 Vertical Slice의 HeavyAction-only로 유지하며 수치·물리·구현값은 Draft로 보존
 - G2 Interaction State, Arbitration, and Conflict Contract를 승인 상태로 등록해 Scoop/Catch/Throw/CallAlly/Cargo Strap/Heavy/Reset의 소유권·가용성·충돌·안전 거부를 정의하고, exact timing·binding·weight assignment·ranking·physics·구현은 Draft로 유지

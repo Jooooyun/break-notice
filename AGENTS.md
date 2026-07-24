@@ -70,7 +70,8 @@ constraint와 구현은 계속 `DRAFT`다.
 - Light/Medium/Heavy의 exact physical mass·dimension·speed·force·
   damage와 object-specific assignment
 - Chain runtime lineage field·ID·event·storage, exact natural-termination
-  threshold와 simultaneous-origin settlement algorithm
+  threshold, maximum simultaneously active origins와 simultaneous-origin
+  settlement algorithm
 - Perfect Catch timing, Contact Freeze, Behavior Tag details, final
   Momentum/Pip balance와 break value
 - Chain·Momentum/Pip HUD, VFX, audio, animation, physics와 implementation

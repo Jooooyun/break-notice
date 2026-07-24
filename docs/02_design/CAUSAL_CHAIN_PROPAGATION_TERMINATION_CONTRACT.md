@@ -115,12 +115,16 @@ Origin의 행동 출처와 modifier 자격은 Origin 수명 동안 바뀌지 않
 최대 전파 깊이는 정확히 `4`다.
 
 - Depth `0`: Initiating Carrier와 그 Direct Result;
-- Depth `1` through `4`: Transfer를 받은 Attributed Carrier와 그 Result;
+- Depth `1`: 첫 번째 Transfer를 받은 Attributed Carrier와 그 Result;
+- Depth `2`: 두 번째 Transfer를 받은 Attributed Carrier와 그 Result;
+- Depth `3`: 세 번째 Transfer를 받은 Attributed Carrier와 그 Result;
+- Depth `4`: 네 번째 Transfer를 받은 Attributed Carrier와 그 Result;
 - Depth `4` Carrier는 Meaningful Result를 만들 수 있으나 Depth `5`
   Transfer를 만들 수 없다.
 
 깊이는 collision 횟수, 경과 시간, Entity 수, spectacle 또는 damage가
-아니라 Origin 시작 후 발생한 `Transfer count`다. Depth 한도 뒤에도
+아니라 Origin 시작 후 발생한 `Transfer count`이며 유효한 Transfer마다
+정확히 `1` 증가한다. Depth 한도 뒤에도
 물리 simulation은 계속될 수 있지만 해당 분기에는 새 Carrier, reward
 또는 Origin 재개가 생기지 않는다.
 
@@ -203,6 +207,8 @@ comparison order와 storage 방식은 G3 Draft다.
 ## Multiple-Origin Conflict
 
 - 하나의 Origin은 다른 Origin을 흡수하거나 reparent하지 않는다.
+- 이미 Attributed Carrier인 Entity를 다른 Origin의 Carrier로
+  reparent하지 않는다.
 - 하나의 Meaningful Result는 최대 하나의 Origin에만 reward 귀속된다.
 - 동일한 즉시 결과의 Origin 소유권을 읽을 수 있게 결정할 수 없으면
   world result는 유효하게 남지만 Momentum을 주지 않는다.
@@ -310,6 +316,8 @@ Draft다.
 - PGT_03는 읽을 수 있는 국소 인과와 aftermath의 Visual Canon
   evidence이며 정확한 Chain 순서, hop 수, target 수 또는 물리 결과를
   고정하지 않는다.
+- 이 계약은 고정 room, actor 수, object 수 또는 Branch 수를 요구하지
+  않는다.
 
 ## Deferred Technical and Presentation Decisions
 
@@ -319,6 +327,7 @@ Draft다.
 - lineage storage, parent reference, target/result key와 branch container;
 - collision callback, ordering, simultaneous-origin tie-break와 settlement;
 - timeout, TTL, grace window, velocity, sleep, distance, frame와 layer 기준;
+- maximum simultaneously active origins;
 - pooling, cleanup implementation, performance budget와 debug tooling;
 - HUD, VFX, audio, animation, camera와 UI wording;
 - damage, Stability, Knockback, ragdoll, break threshold와 force;

@@ -61,6 +61,7 @@ Owner-approved다. Momentum/Pip profile도 시작값으로 승인되었지만
 final balance는 아니다. Causal Chain propagation과 termination의
 logical contract도 Owner-approved다. G2 Gameplay checklist는
 `5 / 7`이다. Ally Relay와 Suppressed, exact physical tuning과
-Prototype object list는 미해결이며 G2 Design은 `NOT PASSED`다.
+Prototype object list는 미해결이다. Chain runtime lineage와 exact
+settlement threshold도 G3/G4 Draft이며 G2 Design은 `NOT PASSED`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.
