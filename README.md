@@ -31,9 +31,10 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 
 | 항목 | 상태 |
 |---|---|
-| 현재 Phase label | PRE-PRODUCTION / G2 DESIGN BASELINE |
+| 현재 Phase label | PRE-PRODUCTION / G3 TECHNICAL BASELINE |
 | G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
-| G2 Design | NOT PASSED / CURRENT BASELINE WORK |
+| G2 Design | PASSED / OWNER-APPROVED BASELINE |
+| G3 Technical | NOT PASSED / CURRENT BASELINE WORK |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
 | Phase label review | COMPLETED / OWNER-APPROVED |
@@ -51,7 +52,10 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Conference Table Team Finisher `FIN_01 v003` | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT |
 | Graybox 재미 검증 | NOT STARTED |
 | Implementation Gate | CLOSED |
-| 본 제작 | BLOCKED BY G2+ GATES |
+| 본 제작 | BLOCKED BY G3+ GATES |
+
+G3 진입은 프리프로덕션 기술 기준선 작업만 허용하며 Graybox 또는
+Unity 구현을 승인하지 않는다.
 
 ## 가장 먼저 읽을 문서
 

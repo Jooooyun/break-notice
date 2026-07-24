@@ -5,9 +5,10 @@
 ## Current Gate Status
 
 - G1 Requirements: `PASSED`
-- G2 Design: `NOT PASSED / CURRENT BASELINE WORK`
+- G2 Design: `PASSED / OWNER-APPROVED BASELINE`
+- G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
 - Production Visual Lock sequence: `COMPLETE`
-- Current Phase label: `PRE-PRODUCTION / G2 DESIGN BASELINE`
+- Current Phase label: `PRE-PRODUCTION / G3 TECHNICAL BASELINE`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -33,13 +34,20 @@ Status: `PASSED` — Owner-approved G1 Baseline 동기화와 검증 완료.
 
 Gate G2: 핵심 루프, 카메라, 장비, 동료, 파괴 예산의 모순 제거.
 
-Status: `NOT PASSED / CURRENT BASELINE WORK`.
+Status: PASSED — Owner-approved G2 contracts, exact Prototype content,
+remediation and successful Re-Audit verified.
 
 ## Phase 3 — Technical Design
 
 산출물: 아키텍처, 데이터, 성능 예산, 테스트 설계, Codex 프로토콜.
 
 Gate G3: 모든 핵심 요구사항이 구현 책임과 테스트에 매핑.
+
+Status: NOT PASSED / CURRENT BASELINE WORK
+
+현재 범위는 책임, 데이터, 이벤트, 검증, 성능 예산, Reset과
+test-harness 계획의 프리프로덕션 감사 및 결정 준비뿐이다. Graybox와
+Unity 구현 권한은 없다.
 
 ## Phase 4 — Graybox Validation
 

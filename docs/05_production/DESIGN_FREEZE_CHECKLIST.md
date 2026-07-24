@@ -51,9 +51,10 @@
 
 현재 체크 상태: `22 / 32`
 
-Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay,
-Technical, Production Support와 첫 구현 티켓 항목은 미완료이며
-Full Design Lock은 `INCOMPLETE`다.
+Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay의
+일곱 항목은 Owner-approved G2 Design Baseline으로 완료되었다.
+체크되지 않은 Art/Production Support 세 항목, Technical 여섯 항목과
+첫 구현 티켓 한 항목은 미완료이며 Full Design Lock은 `INCOMPLETE`다.
 
 Logical Input Action Contract, Interaction State, Arbitration, and
 Conflict Contract와 Weight-Class Functional Data Range Contract는
@@ -68,9 +69,11 @@ object definition·일곱 instance와 두 physical pool도 Owner-approved다.
 Suppressed의 최종 Vertical Slice 편입은 보장되지 않으며 ally AI,
 exact geometry·position·ranking·timing, physical tuning, final art와
 technical scope는 미해결이다. Chain runtime lineage와 exact settlement
-threshold도 G3/G4 Draft다. Gameplay 7/7은 G2 통과가 아니며
-`G2 Design Baseline Final Audit`이 다음 작업이다. G2 Design은
-`NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Implementation Gate는
-`CLOSED`다.
+threshold도 G3/G4 Draft다. Gameplay `7 / 7`과 교정 기준선 Re-Audit의
+성공, Owner 승인을 근거로 G2 Design Gate는 `PASSED`다. 다음 작업은
+G3 Technical Baseline의 책임·데이터·이벤트·검증·예산·Reset·
+test-harness preflight이며, G3 Technical은
+`NOT PASSED / CURRENT BASELINE WORK`, Full Design Lock은 `INCOMPLETE`, Graybox는
+`NOT STARTED`, Implementation Gate는 `CLOSED`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.

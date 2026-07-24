@@ -10,14 +10,15 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 현재 단계:
 
-`PRE-PRODUCTION / G2 DESIGN BASELINE`
+`PRE-PRODUCTION / G3 TECHNICAL BASELINE`
 
 현재 프로젝트는 전체 Design Lock 상태가 아니다.
 
 현재 Gate 상태:
 
 - G1 Requirements: `PASSED`
-- G2 Design: `NOT PASSED / CURRENT BASELINE WORK`
+- G2 Design: `PASSED / OWNER-APPROVED BASELINE`
+- G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -132,10 +133,16 @@ activation과 production content가 미승인인 동안 RTM Trace Status는
 readability의 Design/Canon evidence이며 technical implementation
 source가 아니다. 관련 technical source는 G3에서 별도로 승인해야 한다.
 
-G2 stale-authority와 RTM source/trace 교정은 완료되었지만 기존
-`G2 Design Baseline Final Audit` 판정은 역사적 `REVISION REQUIRED`로
-남는다. 다음 산출물은 `G2 Design Baseline Re-Audit`이며, 그 전에는
-G2를 통과시키거나 G3, Graybox, Unity 구현을 시작하지 않는다.
+여덟 G2 계약과 교정된 authority/trace 기준선은
+`G2 Design Baseline Re-Audit`의 `READY FOR G2 GATE DECISION` 판정과
+Owner 승인에 따라 G2 Design Baseline으로 승인되었고 G2 Gate는
+`PASSED`다. 기존 `G2 Design Baseline Final Audit` 판정은 기준선
+`a0cf9b15d120b0842e2ddcfff1be697863581533`에 대한 역사적
+`REVISION REQUIRED`로 유지된다. Re-Audit은 G2 passage에 소비된
+권한 근거이며, 현재 작업은 G3 Technical Baseline의 프리프로덕션
+문서 감사와 결정 준비다. G2 passage는 구현 또는 테스트 완료를
+뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한 later-Gate deferral로
+유지된다. 어떠한 RTM 행도 `VERIFIED`로 승격되지 않았다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -170,10 +177,11 @@ constraint와 구현은 계속 `DRAFT`다.
 Implementation Gate는 `CLOSED`다.
 
 현재 Phase label은 Owner 승인에 따라
-`PRE-PRODUCTION / G2 DESIGN BASELINE`으로 변경되었다. 이후 변경은
-별도 Owner 결정 전까지 수행하지 않는다.
+`PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 변경되었다. G3 Technical은
+`NOT PASSED / CURRENT BASELINE WORK`이며 기술 책임·데이터·이벤트·
+검증·예산·Reset·test-harness 기준은 아직 승인되지 않았다.
 명시적인 사용자 승인과 후속 Design Readiness Gate 통과 전에는
-Unity 구현을 시작하지 않는다.
+Graybox 또는 Unity 구현을 시작하지 않는다.
 
 ---
 

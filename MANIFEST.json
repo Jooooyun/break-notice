@@ -2,10 +2,13 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
-  "current_phase": "PRE-PRODUCTION / G2 DESIGN BASELINE",
+  "current_phase": "PRE-PRODUCTION / G3 TECHNICAL BASELINE",
   "g1_requirements_baseline_status": "OWNER-APPROVED",
   "g1_gate_status": "PASSED",
-  "g2_gate_status": "NOT PASSED",
+  "g2_design_baseline_status": "OWNER-APPROVED",
+  "g2_gate_status": "PASSED",
+  "g2_gate_passage_source": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
+  "g2_gate_passage_source_sha": "439afeb3098277b8caa8856cfbc45e7020a5a3d2",
   "g2_logical_input_contract_status": "OWNER-APPROVED",
   "g2_logical_input_contract_path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
   "g2_interaction_state_conflict_contract_status": "OWNER-APPROVED",
@@ -30,13 +33,14 @@
   "g2_design_baseline_final_audit_path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
   "g2_design_baseline_final_audit_baseline_sha": "a0cf9b15d120b0842e2ddcfff1be697863581533",
   "g2_design_baseline_final_audit_next_task": "TASK-0044 — Define and Align the G2 Policy Violation Selection and Run-Application Contract",
-  "g2_design_baseline_remediation_status": "CORRECTIONS COMPLETE / RE-AUDIT REQUIRED",
+  "g2_design_baseline_remediation_status": "COMPLETE / VERIFIED BY RE-AUDIT",
   "g2_design_baseline_remediation_next_output": "G2 Design Baseline Re-Audit",
   "g2_design_baseline_reaudit_status": "READY FOR G2 GATE DECISION",
   "g2_design_baseline_reaudit_path": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
   "g2_design_baseline_reaudit_baseline_sha": "3231726a8c9ca37914721d11075da502d63bf6d3",
   "g2_design_baseline_reaudit_original_audit_status": "REVISION REQUIRED / HISTORICAL",
   "g2_design_baseline_reaudit_next_task": "TASK-0047 — Promote the G2 Design Baseline and Synchronize G3 Entry Status",
+  "g2_design_baseline_reaudit_disposition": "CONSUMED BY OWNER-APPROVED G2 PASSAGE",
   "g2_master_gdd_authority_status": "MIXED AUTHORITY / CONTRACTS TAKE PRECEDENCE",
   "g2_rtm_optional_trace_honesty_status": "PR-F-019 AND PR-F-024 PARTIAL",
   "g2_rtm_usability_source_role_status": "CORRECTED / G3 TECHNICAL SOURCES PENDING",
@@ -47,6 +51,9 @@
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
   "design_freeze_checklist_progress": "22/32",
+  "g3_gate_status": "NOT PASSED",
+  "g3_entry_status": "CURRENT BASELINE WORK / PREPRODUCTION DOCUMENTATION ONLY",
+  "g3_current_next_task": "TASK-0048 — G3 Technical Baseline Preflight Audit and Decision Package",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -144,13 +151,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 24975,
-      "sha256": "2fb4ddf8f9bf2e5a493aec1f71dbdfb9ba94fafd8028adb4bc3ad9a31641ce0b"
+      "bytes": 25569,
+      "sha256": "97938e8df8bb40813efc20de734753eea0ef570bc23e9633b5b196aad0790ba9"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 7130,
-      "sha256": "422c5a16b315b88d708ab832da3db683dcbab015b592d2012973fd6269c5f831"
+      "bytes": 7579,
+      "sha256": "14f29ff50fd858cf154d56fcfc7f4719e80f93514032af66c90b81061701d231"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -289,8 +296,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6625,
-      "sha256": "a79a52c8f292431ab257dba6eff5f1dd4d77a4f9f80dddd21fce882635e6b7d7"
+      "bytes": 6808,
+      "sha256": "fb55342231339b4b4e566efe38a9a7d6ce2c56afafaad4594162c3d18aeaa611"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -299,13 +306,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 6652,
-      "sha256": "9a4f12c61fe1db9f1e936ba99083e5c3cb7a098c1a5cd07559f53b1d26057188"
+      "bytes": 6969,
+      "sha256": "f5056855b1c6ca55994acdd774d4bce1ae4f40f352aff017f195ae8bca19715d"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 6897,
-      "sha256": "341ec7bdf5222c0cc938b401741e422d01092e5df0bf8cab3d63efe6616afa8b"
+      "bytes": 7444,
+      "sha256": "62305e72dcbec647f56298b3711078c5acf2387ee74de007fa405ee2c63d4a71"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -524,8 +531,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 2658,
-      "sha256": "c22866c522d2dcc28544da959827ed76812582d0ac9388a869779669dd11dd0a"
+      "bytes": 2984,
+      "sha256": "310453823359cd6cab322dc4a3cef38f38ed3a2529b014e9522a84a554144fe2"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -539,8 +546,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 1621,
-      "sha256": "e200acd0156f598d2ac449c8907522b95eb85a3329c9274bdf923e13243369ba"
+      "bytes": 1917,
+      "sha256": "d599d44def3ef689befe58c325dbccc83970b4a8d85e0257d11d6aa4b1604d84"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -554,8 +561,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 2367,
-      "sha256": "1d3b05c373d2ef736a5ff4fbe10c36374bf7e508328ffa6a1a41cc40f3fe5b10"
+      "bytes": 2737,
+      "sha256": "40052e95da86141488dd7d1ce8f16ffa482a25ec0c1fd267677f82b51e5d0e75"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
