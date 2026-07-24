@@ -4,6 +4,9 @@
 
 ### Changed
 
+- 커밋 `b701a321d03e9c74ad2e3ec9bb8c4ee4fa921c30`의 정확한 G1 요구사항·NFR·기술 중립적 검증 의도·범위 문구를 Owner-approved Baseline으로 승격
+- 제품 정의, Target Player, Windows PC 기준 플랫폼과 정성적 5분 재미 의도를 동기화하고, 전체 검증 후 G1 Requirements Gate를 `PASSED`로 기록
+- 현재 Phase label 유지, G2 미통과, Full Design Lock 미완료, Graybox 미시작과 Implementation Gate `CLOSED`를 명시
 - `FIN_01_Conference_Table_Team_Finisher_v003_FINAL`을 승인된 Production Visual로 등록
 - FIN_01의 3인 Heavy 테이블 공동 추진 Visual Canon과 비승인 기능·제품 범위·구현 경계를 ADR-0014 및 Conference Table Team Finisher Visual 명세에 기록
 - 현재 Production Visual Lock sequence 완료를 기록하되 Full Design Lock 미완료와 Implementation Gate `CLOSED`를 유지

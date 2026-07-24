@@ -1,12 +1,12 @@
 # Acceptance Tests
 
-> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+> **OWNER-APPROVED G1 BEHAVIORAL BASELINE — G2/G3/G4/G6 DETAILS REMAIN DRAFT**
 >
 > Document Decision Source: `DEC-G1-017`
 >
-> 다음 항목의 정확한 문구는 최종 Acceptance Test가 아니다. G1 행동 결과,
-> G2 입력·상태 계약, G3 구현 기술·예산, G4/G6 성공 임계값을
-> 분리하기 위한 검토 후보이다.
+> 기술 중립적 행동 결과는 G1 기준으로 Owner-approved다. G2 입력·상태
+> 계약, G3 구현 기술·예산, G4/G6 성공 임계값은 Draft이며 어떤
+> gameplay test도 실행 또는 통과되지 않았다.
 
 ## Acceptance-Test Policy
 
@@ -43,7 +43,7 @@ Decision Source: `DEC-G1-017`
 ### AT-SCOOP-001 — 근거리 직접 집기
 
 Requirement: `PR-F-001`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 플레이어가 이동 중이고 가까운 곳에 유효 물체가 있다.
 **When** 플레이어가 직접 획득 의도를 실행한다.
@@ -55,7 +55,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-PHY-001 — 연속 물리 경로
 
 Requirement: `PR-F-002`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 유효 물체가 전달, 투척 또는 리디렉션된다.
 **When** 물체가 출발점에서 해제된다.
@@ -68,7 +68,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-ALLY-001 — 동료의 실제 물체 공급
 
 Requirement: `PR-F-003`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 승인된 활성 동료 주변에 유효한 실제 물체가 있다.
 **When** 플레이어가 해당 물체 계층의 공급을 요청한다.
@@ -78,7 +78,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-CATCH-001 — Normal Catch
 
 Requirement: `PR-F-004`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 요청된 물체가 유효한 Catch 관계로 플레이어에게 접근한다.
 **When** 플레이어가 Normal Catch 조건을 충족한다.
@@ -89,7 +89,7 @@ Catch 범위와 timing은 G2 Draft다.
 ### AT-THROW-003 — Queued Throw
 
 Requirement: `PR-F-005`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 전달 물체가 도착하기 전에 플레이어가 투척 의도를 예약했다.
 **When** Catch가 성공한다.
@@ -100,7 +100,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-STRAP-001 — 화물 스트랩 리디렉션
 
 Requirement: `PR-F-006`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 바닥 지지 이동 물체에 유효한 하중 지지 금속 Anchor가 있다.
 **When** 플레이어가 승인된 GEAR_01 연결 체인을 사용해 기계적으로 방향을 바꾼다.
@@ -115,7 +115,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-ART-001 — 넥타이 기능 분리
 
 Requirement: `PR-F-007`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 승인된 캐릭터, 장비, animation, VFX와 Gameplay에서 붉은 넥타이는
 물체 연결, 당김, 공격 또는 이동에 사용되지 않는다.
@@ -123,7 +123,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-WEIGHT-001 — Prototype 무게 역할
 
 Requirement: `PR-F-008`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** Prototype Core의 대표 Light와 Medium 물체가 있다.
 **When** 동일한 encounter에서 사용한다.
@@ -134,7 +134,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-CHAIN-001 — Sequence-Agnostic Causal Attribution
 
 Requirement: `PR-F-009`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 하나의 플레이어 행동이 하나 이상의 후속 물리 결과를 유발한다.
 **When** 대상과 환경이 서로 다른 순서 또는 조합으로 반응한다.
@@ -146,7 +146,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-IMPACT-001 — 의미 있는 충돌 결과
 
 Requirement: `PR-F-012`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 의미 있는 충돌은 적 자세·위치, 가구 위치, 파손 상태, 시야 또는
 통로 중 하나 이상의 읽을 수 있는 결과를 만든다.
@@ -154,7 +154,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-SCOPE-001 — 일반 전투 활성 동료
 
 Requirement: `PR-F-013`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 일반 전투 중 활성 지원 동료는 한 명을 초과하지 않는다. FIN_01의
 익명 보조 직원은 이 일반 전투 범위에 포함되지 않는다.
@@ -162,7 +162,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-ROOM-001 — 의미 있는 국소 Room-State Change
 
 Requirement: `PR-F-016`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** encounter의 시작 상태가 기록되어 있다.
 **When** 핵심 물리 상호작용 또는 전투가 종료된다.
@@ -173,7 +173,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-FLOW-001 — Reset
 
 Requirement: `PR-F-017`, `NFR-R-003`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **When** Reset을 실행한다.
 **Then** 현재 범위에서 활성화된 물체, 적, 동료, causal attribution,
@@ -187,7 +187,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-CATCH-002 — Perfect Catch
 
 Requirement: `PR-F-023`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 물체가 선택적 Perfect Catch 조건으로 접근한다.
 **When** 플레이어가 해당 조건을 충족한다.
@@ -199,7 +199,7 @@ G2 Draft이며 이 G1 test outcome이 아니다.
 ### AT-MOM-001 — Momentum 보상 차등
 
 Requirement: `PR-F-010`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 직접 적중과 비교해 더 긴 후속 결과 또는 동료 릴레이가 포함된
 유효 결과는 더 큰 Momentum 보상으로 구분된다.
@@ -209,7 +209,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-HEAVY-001 — Heavy Object Access
 
 Requirement: `PR-F-011`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** Heavy 물체와 승인 후보 자원 조건이 있다.
 **When** 자원 조건이 충족되지 않는다.
@@ -222,7 +222,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-ALLY-002 — Relay Position
 
 Requirement: `PR-F-014`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 동료가 지원 위치를 바꿀 필요가 있다.
 **When** 위치 전환이 발생한다.
@@ -234,7 +234,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-ALLY-003 — Suppressed
 
 Requirement: `PR-F-015`
-Status: `PROPOSED / DRAFT / CONDITIONAL`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / CONDITIONAL / G2+ DETAILS DRAFT`
 
 **Given** 동료 지원이 적 압박으로 안전하지 않다.
 **When** Suppressed 조건이 충족된다.
@@ -247,7 +247,7 @@ Status: `PROPOSED / DRAFT / CONDITIONAL`
 ### AT-ROGUE-001 — 행동 변경 선택
 
 Requirement: `PR-F-018`
-Status: `PROPOSED / DRAFT`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 **Given** 방 완료 보상 단계에 진입한다.
 **Then** 서로 다른 행동 변화를 주는 복수 후보가 제시된다.
@@ -259,7 +259,7 @@ Status: `PROPOSED / DRAFT`
 ### AT-PROP-001 — 대표 행동 태그
 
 Requirement: `PR-F-019`
-Status: `PROPOSED / DRAFT / CONDITIONAL`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / CONDITIONAL / G2+ DETAILS DRAFT`
 
 선택된 대표 물체는 동일 무게 계층의 일반 물체와 구분되는
 비무게 행동 특성을 물리 결과로 보여준다.
@@ -269,7 +269,7 @@ Status: `PROPOSED / DRAFT / CONDITIONAL`
 ### AT-STRUCT-001 — Structural Feature
 
 Requirement: `PR-F-024`
-Status: `PROPOSED / DRAFT / CONDITIONAL`
+Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / CONDITIONAL / G2+ DETAILS DRAFT`
 
 **Given** 승인 후보 Structural Feature와 유효 사용 조건이 있다.
 **When** 해당 feature가 사용된다.

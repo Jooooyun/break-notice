@@ -19,3 +19,6 @@
 | DL-015 | 2026-07-18 | `PGT_03_Chain_Reaction_Aftermath_v003_FINAL` 승인 | LOCKED | 국소 Chain Aftermath, 새로운 visibility line, 통제된 파괴와 느슨한 post-impact 스트랩 상태 확정 |
 | DL-016 | 2026-07-18 | `LGT_01_Night_Archive_Lighting_v001_FINAL` 승인 | LOCKED | Records Archive 지역의 after-hours 조명 변주와 gameplay readability 방향 확정 |
 | DL-017 | 2026-07-22 | `FIN_01_Conference_Table_Team_Finisher_v003_FINAL` 승인 | LOCKED | 3인 Heavy 테이블 공동 추진과 CHR_00 주도권의 Visual-only conditional direction 확정; PR-F-022는 COULD 유지 |
+| DL-018 | 2026-07-24 | G1 요구사항·NFR·기술 중립적 행동 검증 의도·적용 범위의 정확한 문구와 disposition 승인 | OWNER-APPROVED | Owner의 TASK-0033 G1 Baseline 승인; 구현·검증 완료와 G2 통과는 별도 |
+| DL-019 | 2026-07-24 | 한 문장 제품 정의, Target Player, Windows PC 기준 플랫폼과 정성적 5분 재미 의도 승인 | OWNER-APPROVED | 정확한 시간·비율·표본·횟수·하드웨어·해상도·성능값은 G4/G5/G6 Draft 유지 |
+| DL-020 | 2026-07-24 | 동기화 및 전체 검증 성공 후 G1 Requirements Gate 통과 기록 | PASSED | 현재 Phase label 유지, G2 미통과, Full Design Lock 미완료, Graybox 미시작, Implementation Gate CLOSED |

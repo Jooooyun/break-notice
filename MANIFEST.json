@@ -3,6 +3,11 @@
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
   "current_phase": "PRE-PRODUCTION / PRODUCTION VISUAL LOCK",
+  "g1_requirements_baseline_status": "OWNER-APPROVED",
+  "g1_gate_status": "PASSED",
+  "g2_gate_status": "NOT PASSED",
+  "phase_label_review": "PENDING OWNER DECISION",
+  "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
   "canonical_player_image": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
   "canonical_player_visual_spec": "docs/03_art/PLAYER_VISUAL_SPEC.md",
@@ -98,13 +103,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 17694,
-      "sha256": "6048d1f3f611515268f6626a0669db602a278ace1f19b6e770ee54a3a8b9cf85"
+      "bytes": 18345,
+      "sha256": "01a759fecac8ba8e38fb8747d88e38797b4bf6d1f3d55a7814772fe487038b5d"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 3246,
-      "sha256": "fb9f841bd2d346cef3fb9d6d6c7ce0da07dd6941e1d20e59061decd7d2e7c158"
+      "bytes": 3723,
+      "sha256": "a88c295423b9a3abfc8be47dbde954d315bb047740421c905eadf6bd852ba7a2"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -243,8 +248,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6164,
-      "sha256": "f6554efcac82dba869be4040d0f7ccc624f2371647d1f3bde352befdb2cdc84e"
+      "bytes": 6625,
+      "sha256": "7f378b5c96419e69c6521570b1b7afe3354aa27bff88b4277679f40a8b326784"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -253,38 +258,38 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 2674,
-      "sha256": "31db93e5021a0dbfa8627cbeb65d40049722a59f63079d7dd9829c341c84beb0"
+      "bytes": 3401,
+      "sha256": "6a1874eec830ea9a40630ca2942a1d3d5cdb6726a5891a93c59e3db8cea19c2c"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 3013,
-      "sha256": "6d583d902864254add28c1d3d7546106c70a5153ce562003b69edb6c1c0f59fa"
+      "bytes": 3411,
+      "sha256": "6b9833c4cff328b940d8c8924af2401476c2bb7a6cd702b7e984a1ac5b575594"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
-      "bytes": 5062,
-      "sha256": "aacc02100322f357304db8378ac6789b574eb0968d9217fbcbc7f75ad20d8dbc"
+      "bytes": 5092,
+      "sha256": "1bb8ca37677523ba5fb2df82b5f50b33bfecd84ff087883d175d04b8a335d70b"
     },
     {
       "path": "docs/00_project/PROJECT_CHARTER.md",
-      "bytes": 2369,
-      "sha256": "4825984a1cf7a98ef9271915147ff89acb1c9f88d15f9abbbd25f5b5c2694ef7"
+      "bytes": 3675,
+      "sha256": "286542f43ad766335a65dfad8bd74c51295a59a03bcf16d981c5335d4c8ffb6b"
     },
     {
       "path": "docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md",
-      "bytes": 8524,
-      "sha256": "0b0a1dc3085b2ad7dcc88d441463c51cc42fb2ed58918992f7381585920b144f"
+      "bytes": 8692,
+      "sha256": "73415565658c1c0fe33d41e3729decf3a6e810a8efc5b9a4cae5023231991d17"
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 11963,
-      "sha256": "1fd3fdd0d930b76db4688a3bd230822f45f13babd6d94973414e5132db0ac874"
+      "bytes": 12212,
+      "sha256": "72b7c274b93786adf50c33ae24c532c5aa8de1609329dae8bcf3aa1fd93eef95"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 23609,
-      "sha256": "d74ee18c791bc72343ec882c5f9a0653ffc5ba3ad9546c0180b7f8ca0f54a550"
+      "bytes": 24009,
+      "sha256": "8acd8f6f22c5310e6494808689dbd30754b972f8dcf528f713149ca47605b6fc"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
@@ -438,13 +443,13 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 1277,
-      "sha256": "b086923dfd75e719a109e9cd2b487e93c818a97a74a25f913772b6b93d0742ce"
+      "bytes": 1499,
+      "sha256": "c7bd24efccb4538ced98b7307b097757d1d1b7621294e051b31cc9f98d05519e"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 1432,
-      "sha256": "8f8403c9112952d475fa64dc914814ab8b0cb73fd2928adec30d6e4e8e20a8d8"
+      "bytes": 1609,
+      "sha256": "071040fd6681a38c8b21dc4599309647500641f2dff1f1bcce968f3f270b6555"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -453,13 +458,13 @@
     },
     {
       "path": "docs/05_production/VERTICAL_SLICE_SCOPE.md",
-      "bytes": 6953,
-      "sha256": "1a03bf6a03e2fbd856753d2b4a01f83b8ad27cac44df08ae2ecd25dfda58e1ab"
+      "bytes": 7056,
+      "sha256": "5cad99e305b8c3a3a7b0cc72caf6d0b98b662fe7f1c806f85f224958d41f8057"
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 1775,
-      "sha256": "657011d980bbc1b0d1f22822376bb3d0431759d76eedeb1f48483fb321a28ab5"
+      "bytes": 2321,
+      "sha256": "305ca9ded337d3910859f651ea597dde2d8f9d41278e8c786056f8a1849ff744"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -493,8 +498,8 @@
     },
     {
       "path": "docs/07_quality/ACCEPTANCE_TESTS.md",
-      "bytes": 11262,
-      "sha256": "4f00f4bbbc7845b34c96538634f671efe8aacff3758a6b127c15b7448b9b17c6"
+      "bytes": 12067,
+      "sha256": "9ec09da7c572c530dcc628fd34441c8bb048efb2626a69dafe5042530172b663"
     },
     {
       "path": "docs/07_quality/BUG_SEVERITY.md",
@@ -503,13 +508,13 @@
     },
     {
       "path": "docs/07_quality/PLAYTEST_PLAN.md",
-      "bytes": 1128,
-      "sha256": "a18b85483d8467c511c56ce67f0c1c2e54fa55ca9f2e07c0d12c2e1308d98adf"
+      "bytes": 2055,
+      "sha256": "47cc238e43cd717be31416eee4930bfa7c21f5adb5d2baf25b1b756145652b87"
     },
     {
       "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 3342,
-      "sha256": "6cd0da2184f2cd7d0a28dbbd7eea2238a59d0293c336908c9fe82bac50f1c14d"
+      "bytes": 3427,
+      "sha256": "3f6c2d8d014e3a79531d296905e5a6524bc94d015bffc5123a1e4919f6f45857"
     },
     {
       "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",

@@ -1,13 +1,14 @@
 # Vertical Slice Scope
 
-> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+> **OWNER-APPROVED G1 APPLICABILITY AND PRIORITY BASELINE**
 >
 > Document Decision Source: `DEC-G1-001`, `DEC-G1-002`,
 > `DEC-G1-004` through `DEC-G1-013`, `DEC-G1-016`, `DEC-G1-019`
 >
-> 이 문서는 G1 Owner 결정 방향을 적용한 범위 후보이다. 정확한
-> 콘텐츠 수, 플레이 시간, 성능값과 playtest threshold는 승인되지
-> 않았다. G1 또는 G2 통과, Graybox 시작과 제작 약속을 의미하지 않는다.
+> Prototype Core, Vertical Slice, SHOULD, Deferred/COULD와 OUT/WON'T의
+> Applicability 및 Priority 경계는 G1 기준으로 Owner-approved다.
+> 정확한 콘텐츠 수, 플레이 시간, 성능값과 playtest threshold는
+> 승인되지 않았으며 G2 통과, Graybox 시작과 제작 약속을 의미하지 않는다.
 
 ## 목표
 
@@ -109,7 +110,7 @@ Prototype Core 인과와 반복 흐름이 검증된 뒤 다음을 순차 후보�
 
 Decision Source: `DEC-G1-004` through `DEC-G1-007`, `DEC-G1-009`.
 
-다음은 Proposed `VERTICAL SLICE / MUST` 후보이다.
+다음은 Owner-approved G1 `VERTICAL SLICE / MUST` 범위이다.
 
 - PR-F-023 Perfect Catch;
 - PR-F-010 Momentum reward differentiation;
@@ -144,7 +145,7 @@ Decision Source: `DEC-G1-011` through `DEC-G1-013`.
 
 Decision Source: `DEC-G1-016`
 
-다음 값은 이 Proposed Scope에서 승인하지 않는다.
+다음 값은 이 G1 Scope에서 승인하지 않는다.
 
 - 플레이 시간과 room 수;
 - enemy 종류와 수;
@@ -185,5 +186,6 @@ Vertical Slice 완료 후보 조건은 다음과 같다.
 - G5에서 승인된 actor, environment, object와 feature 범위 준수;
 - G6에서 승인된 성능·접근성·외부 검증 기준 통과.
 
-현재 요구사항, Acceptance Test와 수치는 `PROPOSED / DRAFT`이므로
-이 항목들은 G1, G2, G4, G5 또는 G6 통과 선언이 아니다.
+요구사항과 기술 중립적 Acceptance Test 의도는 G1
+Owner-approved다. 정확한 수치, G2 논리 계약, G3 구현과 G4/G5/G6
+기준은 Draft이며 이 항목들은 G2, G4, G5 또는 G6 통과 선언이 아니다.

@@ -2,7 +2,12 @@
 
 > 1인 개발용 3D TPS 물리 액션 Roguelite — Design Baseline `0.1.0`
 
-`BREAK NOTICE`는 해고 통보를 받은 사내 자산관리 직원이 **산업용 운반 장비와 동료 릴레이**를 이용해 사무용품을 실제 궤적으로 받아 던지고, 적·가구·설비 사이의 연쇄 충돌로 사무실을 재구성하는 게임이다.
+`0.1.0`은 저장소·설계 문서 버전이며 Gate 통과 상태를 뜻하지 않는다.
+
+BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
+화물 장비와 동료의 물리적 릴레이로 사무용품을 직접 받아 던지고
+방향을 바꾸며, 읽을 수 있는 연쇄 충돌로 사무실의 국소 상태를
+재구성하는 3인칭 물리 액션 게임이다.
 
 **Grounded world. Absurd physics.**
 
@@ -26,6 +31,12 @@
 
 | 항목 | 상태 |
 |---|---|
+| 현재 Phase label | PRE-PRODUCTION / PRODUCTION VISUAL LOCK |
+| G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
+| G2 Design | NOT PASSED / CURRENT BASELINE WORK |
+| Production Visual Lock sequence | COMPLETE |
+| Full Design Lock | INCOMPLETE |
+| Phase label review | PENDING OWNER DECISION |
 | 게임 정체성 | LOCKED |
 | 3D TPS / Unity 6 / URP | LOCKED |
 | 초능력 Grab 제거 | LOCKED |
@@ -39,7 +50,8 @@
 | Night Archive Lighting `LGT_01 v001` | VISUAL LOCKED / TECHNICAL DRAFT |
 | Conference Table Team Finisher `FIN_01 v003` | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT |
 | Graybox 재미 검증 | NOT STARTED |
-| 본 제작 | BLOCKED BY GATES |
+| Implementation Gate | CLOSED |
+| 본 제작 | BLOCKED BY G2+ GATES |
 
 ## 가장 먼저 읽을 문서
 

@@ -1,11 +1,12 @@
 # Test Strategy
 
-> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+> **OWNER-APPROVED G1 VALIDATION POLICY**
 >
 > Document Decision Source: `DEC-G1-017`
 >
-> G1 Owner 결정 방향을 반영한 검토 후보이다. 테스트 구현,
-> Unity Test Framework 구성과 Build Gate 통과를 승인하지 않는다.
+> 다섯 검증 Layer와 활성화 정책은 G1 기준으로 Owner-approved다.
+> 테스트 구현, Unity Test Framework, 정확한 수치와 Build Gate
+> 통과는 승인하지 않는다.
 
 ## Validation Layers
 
@@ -39,7 +40,7 @@ G5는 위 다섯 검증 Layer와 별도로 실제 actor, asset, room과 feature
 `DORMANT / NON-BLOCKING`이다. PR-F-020에는 승격 전
 `AT-INC-001`을 만들지 않는다.
 
-## Proposed Test Pyramid
+## Candidate Test Pyramid
 
 ### EditMode Candidate
 
@@ -87,5 +88,6 @@ G5는 위 다섯 검증 Layer와 별도로 실제 actor, asset, room과 feature
 Owner가 승인한 활성 `MUST` 요구사항의 blocking test가 실패하면
 해당 Gate를 통과할 수 없다.
 
-현재 Acceptance Tests는 `PROPOSED / DRAFT`이므로 이 문구는
-G1 통과나 배포 빌드 권한을 부여하지 않는다.
+Acceptance Tests의 기술 중립적 행동 의도만 G1 Owner-approved다.
+어떤 테스트도 실행 또는 통과되지 않았으며 G2 논리 계약, G3 구현,
+G4/G6 임계값과 배포 빌드 권한은 별도 Draft와 Gate에 남는다.

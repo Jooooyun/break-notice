@@ -1,12 +1,13 @@
 # Glossary
 
-> **PROPOSED G1 BASELINE — DECISIONS INCORPORATED, PENDING FINAL OWNER WORDING AND BASELINE APPROVAL**
+> **OWNER-APPROVED G1 REQUIREMENTS BASELINE**
 >
 > Decision Source: `DEC-G1-001`, `DEC-G1-003`, `DEC-G1-018`,
 > `DEC-G1-FINAL-002`
 >
-> 아래 요구사항 관리 용어는 Owner가 최종 문구와 G1 Baseline을
-> 승인하기 전까지 `DRAFT`다. 기존에 별도 승인된 Visual Canon의
+> 아래 요구사항 관리 용어와 정확한 disposition은 G1 기준으로
+> Owner-approved다. `OWNER-APPROVED`는 구현, 검증 완료, G2 통과
+> 또는 후속 Gate 개방을 뜻하지 않으며 기존 Visual Canon의
 > `LOCKED` 상태를 변경하지 않는다.
 
 | 용어 | 정의 |
@@ -32,8 +33,8 @@
 | PARTIAL | 일부 연결은 있으나 후속 Gate 또는 자료가 필요 |
 | MAPPED | 현재 의도한 근거와 검증 경로가 연결됨. 승인이나 검증 완료를 의미하지 않음 |
 | VERIFIED | 승인된 기준에 따라 연결과 결과가 실제로 확인됨 |
-| Decision Source | Proposed 문구나 분류 변경을 발생시킨 Owner 결정 ID |
-| Proposed G1 Baseline | Owner 결정 방향을 반영했지만 정확한 문구와 G1 통과가 아직 승인되지 않은 요구사항 후보 |
+| Decision Source | 문구나 분류 변경을 발생시킨 Owner 결정 ID |
+| G1 Requirements Baseline | Owner가 정확한 문구와 disposition을 승인한 G1 요구사항 기준선. 구현·검증 완료나 후속 Gate 통과를 뜻하지 않음 |
 | Scoop | 플레이어 근처의 물체를 직접 빠르게 집는 행동 |
 | Cargo Strap | 허리 릴에서 나오는 검정·황색 산업용 화물 스트랩 |
 | Snag / Redirect | 승인된 GEAR_01 연결 체인을 하중 지지 금속 Anchor에 연결해 바닥 지지 물체의 진행 방향을 바꾸는 후보 행동 |

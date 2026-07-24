@@ -2,6 +2,16 @@
 
 순수 폭포수는 게임의 재미를 문서만으로 증명할 수 없다는 문제가 있다. 본 프로젝트는 설계를 고정하되, 본 제작 전 단 한 번의 Graybox Validation Gate를 둔다.
 
+## Current Gate Status
+
+- G1 Requirements: `PASSED`
+- G2 Design: `NOT PASSED / CURRENT BASELINE WORK`
+- Current Phase label: `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`
+- Phase label review: `PENDING OWNER DECISION`
+- Full Design Lock: `INCOMPLETE`
+- Graybox: `NOT STARTED`
+- Implementation Gate: `CLOSED`
+
 ## Phase 0 — Charter
 
 산출물: Project Charter, 제약, 성공 기준.
@@ -14,11 +24,15 @@ Gate G0: 프로젝트 목적과 1인 범위 승인.
 
 Gate G1: 모든 MUST 요구사항에 ID와 검증 방식 존재.
 
+Status: `PASSED` — Owner-approved G1 Baseline 동기화와 검증 완료.
+
 ## Phase 2 — Game & Art Design
 
 산출물: GDD, Gameplay Spec, Ally/Physics, Art Direction, Canon 이미지.
 
 Gate G2: 핵심 루프, 카메라, 장비, 동료, 파괴 예산의 모순 제거.
+
+Status: `NOT PASSED / CURRENT BASELINE WORK`.
 
 ## Phase 3 — Technical Design
 
@@ -27,6 +41,8 @@ Gate G2: 핵심 루프, 카메라, 장비, 동료, 파괴 예산의 모순 제�
 Gate G3: 모든 핵심 요구사항이 구현 책임과 테스트에 매핑.
 
 ## Phase 4 — Graybox Validation
+
+`G4 DRAFT CONTENT CANDIDATE — NOT G1-APPROVED VALUES`
 
 한 방, 한 동료, 적 3명, Light 2, Medium 2, Heavy 1.
 
@@ -41,6 +57,8 @@ Graybox 결과를 반영해 문서 최종 동결.
 Gate G5: 본 제작 범위, 에셋 목록, 일정, 리스크 승인.
 
 ## Phase 6 — Vertical Slice Production
+
+`G5/G6 DRAFT CONTENT CANDIDATE — NOT G1-APPROVED VALUES`
 
 3개 방, 10~15분 Run, 핵심 VFX/Audio/UI, 12개 업그레이드.
 

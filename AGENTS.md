@@ -14,19 +14,35 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 현재 프로젝트는 전체 Design Lock 상태가 아니다.
 
-다음 항목은 아직 DRAFT다.
+현재 Gate 상태:
+
+- G1 Requirements: `PASSED`
+- G2 Design: `NOT PASSED / CURRENT BASELINE WORK`
+- Production Visual Lock sequence: `COMPLETE`
+- Full Design Lock: `INCOMPLETE`
+- Graybox: `NOT STARTED`
+- Implementation Gate: `CLOSED`
+- Phase label review: `PENDING OWNER DECISION`
+
+G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
+기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
+완료를 뜻하지 않는다.
+
+다음 항목은 아직 `DRAFT`다.
 
 - 상세 게임플레이 설계
-- 요구사항 명세
-- 인수 테스트
-- 밸런스 수치
+- G2 논리 입력·상태 계약
+- Acceptance Test의 정확한 입력·수치·성공 임계값
+- 밸런스와 성능 수치
 - 기술 아키텍처
 - Unity 구현 계획
-- Vertical Slice 구현 범위
+- Vertical Slice의 정확한 콘텐츠와 구현 범위
 
 Implementation Gate는 `CLOSED`다.
 
-명시적인 사용자 승인과 Design Readiness Gate 통과 전에는 Unity 구현을 시작하지 않는다.
+현재 Phase label은 별도 Owner 결정 전까지 변경하지 않는다.
+명시적인 사용자 승인과 후속 Design Readiness Gate 통과 전에는
+Unity 구현을 시작하지 않는다.
 
 ---
 

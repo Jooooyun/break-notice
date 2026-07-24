@@ -13,4 +13,19 @@
 
 ## 현재 위치
 
-G1 요구사항 기준선과 G2 설계 기준선을 구축하는 단계다. 주인공 비주얼, GEAR_01 장비 작동 시트, CHR_01 첫 동료 비주얼, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting과 FIN_01 Conference Table Team Finisher의 문서화된 Visual Canon은 승인되었다. 현재 Production Visual Lock sequence는 완료되었지만 Full Design Lock은 미완료다. FIN_01은 PR-F-022 `COULD`이며 승인된 Vertical Slice 범위 밖이다. 정확한 조명·파괴·피니셔 기능과 기술 설계는 여전히 Draft 또는 미승인이며 Implementation Gate는 `CLOSED`다.
+- G1 Requirements: `PASSED`
+- G2 Design: `NOT PASSED / CURRENT BASELINE WORK`
+- Production Visual Lock sequence: `COMPLETE`
+- Full Design Lock: `INCOMPLETE`
+- Graybox: `NOT STARTED`
+- Phase label: `PRE-PRODUCTION / PRODUCTION VISUAL LOCK` — 변경 없음
+- Phase label review: `PENDING OWNER DECISION`
+- Implementation Gate: `CLOSED`
+
+G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계는
+Owner-approved다. 현재 다음 Gate 작업은 G2 Design baseline
+construction이며 G1 통과는 Graybox나 구현 권한이 아니다. 승인된
+여덟 Production Visual의 Canon은 유지되지만 Full Design Lock은
+미완료다. FIN_01은 PR-F-022 `OUT / COULD`이며 승인된 Vertical
+Slice와 최종 제품 범위 밖이다. 정확한 조명·파괴·피니셔 기능,
+수치와 기술 설계는 Draft 또는 미승인 상태다.

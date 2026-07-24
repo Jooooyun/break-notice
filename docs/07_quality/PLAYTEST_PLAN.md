@@ -1,6 +1,22 @@
 # Playtest Plan
 
+> **OWNER-APPROVED G1 QUALITATIVE INTENT — G4/G5/G6 NUMERICAL METRICS REMAIN DRAFT**
+>
+> G1은 아래 정성적 재미 의도만 승인한다. 정확한 시간, 비율,
+> 표본 수, 횟수와 합격 임계값은 G4/G5/G6 Draft 후보이며,
+> 아직 어떤 playtest도 실행되거나 통과하지 않았다.
+
+## G1 Qualitative Intent
+
+짧은 첫 플레이에서 플레이어는 직접 획득, 동료의 물리적 릴레이와
+화물 스트랩 리디렉션이 실제 경로와 기계적 연결로 작동함을
+이해하고, 이해 가능한 국소 room-state change를 만든 뒤
+다른 물체·각도·순서를 자발적으로 시험하거나 Reset하며,
+이를 염력이 아닌 물리적 팀워크로 설명할 수 있어야 한다.
+
 ## 대상
+
+다음 표본 수는 `G4/G6 DRAFT CANDIDATE`이며 G1 승인값이 아니다.
 
 첫 외부 테스트 20명 권장. 물리 액션 경험자와 비경험자를 섞는다.
 
@@ -11,6 +27,9 @@
 - 동료 패스를 발견하는 행동 관찰
 
 ## 핵심 지표
+
+아래 수치는 모두 `G4/G5/G6 DRAFT CANDIDATE METRICS`이며
+G1-approved pass threshold가 아니다.
 
 | 지표 | 합격 기준 |
 |---|---:|

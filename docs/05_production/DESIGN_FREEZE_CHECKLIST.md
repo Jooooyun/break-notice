@@ -2,10 +2,10 @@
 
 ## Product
 
-- [ ] 한 문장 정의 승인
-- [ ] 타깃 플레이어와 플랫폼 승인
-- [ ] MUST/SHOULD/WON'T 승인
-- [ ] 5분 재미 기준 승인
+- [x] 한 문장 정의 승인
+- [x] 타깃 플레이어와 플랫폼 승인
+- [x] MUST/SHOULD/WON'T 승인
+- [x] 5분 재미 기준 승인
 
 ## Gameplay
 
@@ -48,5 +48,11 @@
 - [ ] 첫 구현 티켓 세분화
 
 ## Approval
+
+현재 체크 상태: `15 / 32`
+
+Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay,
+Technical, Production Support와 첫 구현 티켓 항목은 미완료이며
+Full Design Lock은 `INCOMPLETE`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.
