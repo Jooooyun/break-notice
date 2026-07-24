@@ -21,6 +21,10 @@
   "g2_ally_relay_suppressed_contract_path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
   "g2_prototype_content_lock_status": "OWNER-APPROVED",
   "g2_prototype_content_lock_path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
+  "g2_design_baseline_final_audit_status": "REVISION REQUIRED",
+  "g2_design_baseline_final_audit_path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
+  "g2_design_baseline_final_audit_baseline_sha": "a0cf9b15d120b0842e2ddcfff1be697863581533",
+  "g2_design_baseline_final_audit_next_task": "TASK-0044 — Define and Align the G2 Policy Violation Selection and Run-Application Contract",
   "g2_prototype_room_count": 1,
   "g2_prototype_enemy_archetype_count": 1,
   "g2_prototype_enemy_instance_count": 2,
@@ -130,8 +134,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 5804,
-      "sha256": "3979951684414c5bd79d661e91d2c22e977ac34273e247e064fb56fc4d643855"
+      "bytes": 6090,
+      "sha256": "49e9472f8e309ef28bda0cfe0f83a2de4c4525deaa6289c1f99da293b92a138f"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -285,8 +289,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 5557,
-      "sha256": "077f52ed5f09ac9a12d39ddce5c4ac509fb955409486d24f35676685fa0f82f1"
+      "bytes": 5792,
+      "sha256": "b358b805978d01f0ea47bf7c5997cdbce52b9520a45242b9ae7f42877476d01c"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -502,6 +506,11 @@
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
       "bytes": 2658,
       "sha256": "c22866c522d2dcc28544da959827ed76812582d0ac9388a869779669dd11dd0a"
+    },
+    {
+      "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
+      "bytes": 25973,
+      "sha256": "ad69b69523892c7ef0ea6adc00341d4249b8eedaf08de613367475890988867d"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

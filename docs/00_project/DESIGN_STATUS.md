@@ -27,7 +27,8 @@ Implementation Gate: `CLOSED`
 | Causal Chain Propagation and Termination Contract | OWNER-APPROVED / G2 PARTIAL | Ally Relay and Suppressed Contract와 함께 유지 | G2 |
 | 핵심 전투 동사 | REQUIREMENTS OWNER-APPROVED / DESIGN DRAFT | 상세 게임플레이 설계 | G2 |
 | Ally Relay and Suppressed Contract | OWNER-APPROVED / G2 PARTIAL | Prototype Content Lock와 함께 유지 | G2 |
-| Prototype Enemy, Room, and Object Content Lock | OWNER-APPROVED / G2 GAMEPLAY SET COMPLETE | G2 Design Baseline Final Audit | G2 |
+| Prototype Enemy, Room, and Object Content Lock | OWNER-APPROVED / G2 GAMEPLAY SET COMPLETE | Final Audit에서 검증 완료 / 현 Lock 유지 | G2 |
+| G2 Design Baseline Final Audit | REVISION REQUIRED | G2 Policy Violation Selection and Run-Application Contract | G2 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -73,8 +74,10 @@ player agency와 조건부 `VERTICAL SLICE / SHOULD` Suppressed 계약도
 Owner-approved G2 logical design이다. `PRT-RM-001` 한 room, CHR_00·
 CHR_01·Compliance Runner 두 명, `PRT-RP-001`, 네 object definition·
 일곱 instance와 검증 affordance도 Owner-approved다. G2 Gameplay
-checklist는 `7 / 7`이지만 G2 Design은 아직 통과하지 않았고, 다음
-산출물은 `G2 Design Baseline Final Audit`이다. exact
+checklist는 `7 / 7`이지만 G2 Design은 아직 통과하지 않았다.
+`G2 Design Baseline Final Audit` 결과는 `REVISION REQUIRED`이며,
+다음 산출물은 `G2 Policy Violation Selection and Run-Application
+Contract`다. exact
 mass·size·speed·force·damage·Contact Freeze, Behavior Tag details,
 final Momentum/Pip balance, Chain runtime lineage·threshold·presentation,
 break value, final enemy identity·room geometry·object art, Relay Position
