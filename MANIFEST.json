@@ -50,8 +50,8 @@
   "g2_prototype_object_definition_count": 4,
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
-  "design_freeze_checklist_progress": "28/32",
-  "design_freeze_completion_status": "IN PROGRESS / 28/32",
+  "design_freeze_checklist_progress": "29/32",
+  "design_freeze_completion_status": "IN PROGRESS / 29/32",
   "g3_gate_status": "PASSED",
   "g3_entry_status": "PASSED / OWNER-APPROVED BASELINE",
   "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
@@ -98,10 +98,28 @@
   "g3_gate_passage_source_sha": "9e1487e85be5a54ba0824c209deabcf738e1abf0",
   "g3_gate_passage_task": "TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage",
   "g3_technical_reaudit_original_next_task": "TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage",
+  "destruction_budget_status": "OWNER-APPROVED / LOCKED",
+  "destruction_budget_path": "docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md",
+  "destruction_budget_adr": "docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md",
+  "prototype_breakable_instance_cap": 0,
+  "prototype_structural_feature_cap": 0,
+  "prototype_large_physical_fragment_cap": 0,
+  "slice_ordinary_breakable_instance_cap_per_room": 2,
+  "slice_conditional_structural_feature_cap_per_room": 1,
+  "ordinary_large_fragment_cap_per_event": 4,
+  "structural_large_fragment_cap_per_event": 8,
+  "large_fragment_pool_cap_per_room": 16,
+  "awake_large_fragment_cap_per_room": 12,
+  "causal_carrier_fragment_cap_per_event": 2,
+  "small_dynamic_debris_cap": 0,
+  "ordinary_small_material_element_cap_per_event": 32,
+  "structural_small_material_element_cap_per_event": 64,
+  "concurrent_small_material_element_cap_per_room": 96,
+  "runtime_mesh_fracture_status": "PROHIBITED",
   "g4_gate_status": "NOT PASSED",
   "g5_gate_status": "NOT PASSED",
-  "design_freeze_current_next_task": "TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules",
-  "current_next_task": "TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules",
+  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055",
+  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -199,13 +217,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 28907,
-      "sha256": "53223ee90a70f3e971eb2db7fd7a7d58fafe733f547340412c3c198feee05cea"
+      "bytes": 31047,
+      "sha256": "d9f0ae961958b7b011762ab68caf8f1fee8b0233890d445c337afda392cc069c"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 10865,
-      "sha256": "b327702c46cff42fa20d5ae94ce999e94440f4f11004f2b31c19d1b537410d68"
+      "bytes": 11588,
+      "sha256": "36fff8ad305883a138ca03b0dc6863743a36a25a640b60101e8e47e4943ecbeb"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -344,8 +362,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8499,
-      "sha256": "329c193762408ead4d89cf0daf274e9b409ccdb636e2ed3c978b1c20ef44678d"
+      "bytes": 9264,
+      "sha256": "19817cba9c6fc09da85aaf66f8d518ab9f2986ff3c793b2c6bfed19fc0e4608f"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -354,13 +372,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 8238,
-      "sha256": "56f0e51181bfa185c59cf14a722b2083cd87038ab55d2a8c5912014d8a161995"
+      "bytes": 8636,
+      "sha256": "e863531eeb4a4ad1acbe8d6b260d01638cbda1c7a38aa7ba27ff190b54e4bef8"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 10512,
-      "sha256": "c0c8d5046ee09ac2060eea97d31de0e8081af7ce2209f31a0a4d5f0ba0f2e7a2"
+      "bytes": 11344,
+      "sha256": "9fc30b95c74cb2b191642767a688bfea6bcae77bf853deada7c3a7abb9fb5e9e"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -384,8 +402,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 33659,
-      "sha256": "bf777f471b12c8a23bad2109c85935c0d2f24d4e2f891b56e74ea983a60c3423"
+      "bytes": 35608,
+      "sha256": "c6ab36d81e8db566f51e435e3ab84de25bcc8d02661c926b679a4f882fb65ddc"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
@@ -529,8 +547,8 @@
     },
     {
       "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
-      "bytes": 1414,
-      "sha256": "ad704e1cf1488e4af25e4bb75646737a59d55439e475ef6bff952fcd29d9aeb2"
+      "bytes": 3317,
+      "sha256": "c1264475ed9e0ce03362170d62bf8fd69558c00b124dc015deeef6e66681484d"
     },
     {
       "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
@@ -543,19 +561,24 @@
       "sha256": "042cba3ea908ff00ca5bef5066e1c45774cee79a032d1cf1e0231ea238dad25b"
     },
     {
+      "path": "docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md",
+      "bytes": 15484,
+      "sha256": "e3bd509be598fae97cbbc929c4dd50da8b8740c2be282266a9c140df534aab27"
+    },
+    {
       "path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
       "bytes": 16720,
       "sha256": "de52dbce257768218b4589682d69c9779b7b08494fe2a4b23e7a0014329cbfff"
     },
     {
       "path": "docs/04_technical/PERFORMANCE_BUDGET.md",
-      "bytes": 2577,
-      "sha256": "7af869784d38aeb3709ee5643027982b782b83b4606fb9d328373cb99542cd7f"
+      "bytes": 4768,
+      "sha256": "c3c19417cb3c27f784751a0a87ffce15a16f5d6487489930d363661f63873434"
     },
     {
       "path": "docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md",
-      "bytes": 2620,
-      "sha256": "91d01fa2cb037c4c2c91bbe5a935b46e5b64181c88d2f82559332a63b64cbe84"
+      "bytes": 5959,
+      "sha256": "33df07a419e52464387380f75ef3425fae66df014d7ad27d5c7631e6f2f05052"
     },
     {
       "path": "docs/04_technical/SAVE_AND_VERSIONING.md",
@@ -579,13 +602,13 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 1971,
-      "sha256": "9111523183f0ff057d10ac4d8c28230cc7d5a6eb212cc22c29f6945812767ed1"
+      "bytes": 3017,
+      "sha256": "59b6edaa5c765b25c8a79ad21a1abf9fc28089bd3b73f44eb59c4697d5dd286c"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 4034,
-      "sha256": "6de60f58f22283ef55d2bf89b8c0f6349f9fe1b83f51156af41f093ee9a75543"
+      "bytes": 4542,
+      "sha256": "c9f6d99c06388951d55cdb6c714f19683235a28b83ede71f6c9b31415b4868d1"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -614,8 +637,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 3158,
-      "sha256": "44cdabd89f850a417e58ace018cbbd4889afeab3cbd2948b19e1f63816ea9794"
+      "bytes": 3757,
+      "sha256": "fc40b6e308d5354dcf67a42960e885384f9f716d29f9ee97828c6a1bcf60ec79"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -629,8 +652,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 4316,
-      "sha256": "b063fad1f173aef136215bb45523d366fc61900904ab573f10fcd9edd2e5fec7"
+      "bytes": 4815,
+      "sha256": "b21b5fc1ed7b3aacd5c3d8ed9a0df52767724688704a50f76e6bf7171ab2d3ca"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -679,8 +702,8 @@
     },
     {
       "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 5462,
-      "sha256": "d2c1e103c34c722512bfe6084a13b02ee5b69cc577f4193e5be9a5688ca18e83"
+      "bytes": 7171,
+      "sha256": "9d9b9cbf6973bb02239d32677cca343699e006c037abb5147b0274df601c33ae"
     },
     {
       "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",
@@ -771,6 +794,11 @@
       "path": "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
       "bytes": 3953,
       "sha256": "be53751df28fbc4a198c3752f6ddc39b0ac00df93aa2aeb33df3dcab3643cc26"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md",
+      "bytes": 5413,
+      "sha256": "0a5cbf2aaf983a36e7db55f7ef0573b35d0d5695c4d80302aa2de8d539758b39"
     },
     {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",

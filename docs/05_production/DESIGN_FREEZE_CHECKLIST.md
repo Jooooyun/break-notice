@@ -28,7 +28,7 @@
 - [x] PGT_03 Aftermath Visual Lock
 - [x] LGT_01 Night Archive Lighting Lock
 - [x] FIN_01 Conference Table Team Finisher Lock
-- [ ] 정확한 파괴 예산 수치와 구현 규칙
+- [x] 정확한 파괴 예산 수치와 구현 규칙
 - [ ] Office Core Kit 목록
 
 ## Technical
@@ -49,17 +49,25 @@
 
 ## Approval
 
-현재 체크 상태: `28 / 32`
+현재 체크 상태: `29 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay의
 일곱 항목은 Owner-approved G2 Design Baseline으로 완료되었다.
 Technical 여섯 항목은 Owner-approved G3 documentation baseline으로
 `6 / 6` 검토되었고 성공한 Re-Audit과 Owner 승인에 따라 G3 Gate는
 `PASSED`다. Unity/package checkbox는 exact documentation lock을
-뜻하며 Unity 또는 package file 설치를 뜻하지 않는다. 체크되지 않은
-항목은 `주인공 Turnaround`, `정확한 파괴 예산 수치와 구현 규칙`,
-`Office Core Kit 목록`, `첫 구현 티켓 세분화`의 정확히 네 개다.
-Design Freeze는 `28 / 32`, Full Design Lock은 `INCOMPLETE`다.
+뜻하며 Unity 또는 package file 설치를 뜻하지 않는다. 파괴 예산과
+구현 규칙은 Owner-approved로 LOCK되었다. Prototype의 모든 파괴
+category cap은 `0`이고 Later-Slice의 bounded hard cap, pre-authored
+state, preallocated pool, atomic admission, causal-carrier·collision·
+navigation·Reset·fault 경계는
+`docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`와
+ADR-0016을 따른다. Structural Feature는 `VERTICAL SLICE / SHOULD /
+PARTIAL`이며 별도 G5 승인 없이는 활성화되지 않는다. 이는 Unity,
+Graybox, 성능 합격값 또는 구현 권한이 아니다. 체크되지 않은 항목은
+`주인공 Turnaround`, `Office Core Kit 목록`, `첫 구현 티켓 세분화`의
+정확히 세 개다. Design Freeze는 `29 / 32`, Full Design Lock은
+`INCOMPLETE`다.
 
 Logical Input Action Contract, Interaction State, Arbitration, and
 Conflict Contract와 Weight-Class Functional Data Range Contract는
@@ -85,9 +93,10 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었고 문서
 자체는 변경하지 않는다. 현재 Phase는
 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 작업은
-`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`다. 새 numbered
+task는 승인되지 않았다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
-`6 / 6`, Design Freeze는 `28 / 32`, G4와 G5는 `NOT PASSED`, Full
+`6 / 6`, Design Freeze는 `29 / 32`, G4와 G5는 `NOT PASSED`, Full
 Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation
 Gate는 `CLOSED`다.
 

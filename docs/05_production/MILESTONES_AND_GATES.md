@@ -35,7 +35,9 @@
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 - G5 Freeze: `NOT PASSED`
 - G3 Technical checklist: `6 / 6`
-- Design Freeze: `28 / 32`
+- Design Freeze: `29 / 32`
+- Destruction Budget and Implementation Rules:
+  `OWNER-APPROVED / LOCKED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -51,12 +53,19 @@ Owner-approved 기준선으로 적용되었고 Technical checklist는 `6 / 6`다
 역사적 Final Audit의 두 잔여 권한 오류는 교정됐고 Re-Audit의
 `READY FOR G3 GATE DECISION` 판정과 Owner 승인을 근거로 G3 Gate는
 `PASSED`다. Re-Audit 문서와 역사적 Final Audit은 변경하지 않는다.
-현재 다음 단일 작업은
-`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
+Prototype의 모든 파괴 category cap `0`과 Later-Slice의 bounded
+room·event·fragment·small-material hard cap, authored-state·pooling·
+atomic-admission·causal-carrier·Reset·fault 규칙은 Owner-approved로
+LOCK되었다. Structural Feature는 `VERTICAL SLICE / SHOULD / PARTIAL`
+및 별도 G5 승인 조건을 유지한다. Design Freeze는 `29 / 32`이며 남은
+항목은 `CHR_00 Player Turnaround`, `Office Core Kit 목록`, `첫 구현
+티켓 세분화`의 정확히 세 개다. 현재 다음 단일 작업은
+`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`이며 새 numbered
+task는 승인되지 않았다.
 G4와 G5는 `NOT PASSED`, Graybox는 `NOT STARTED`이고 구현 권한이 없다.
 승인된 여덟 Production Visual의
 Canon은 유지되지만 Full Design Lock은 미완료다. FIN_01은 PR-F-022
 `OUT / COULD`이며 승인된 Vertical Slice와 최종 제품 범위 밖이다.
-정확한 조명·파괴·피니셔 기능, tuning, implementation class와
-pass threshold는 Draft 또는 미승인 상태이며 Implementation Gate는
-`CLOSED`다.
+정확한 조명·피니셔 기능, destruction hard cap을 제외한 tuning,
+implementation class와 pass threshold는 Draft 또는 미승인 상태이며
+Implementation Gate는 `CLOSED`다.

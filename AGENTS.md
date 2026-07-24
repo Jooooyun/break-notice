@@ -38,7 +38,9 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 - G5 Freeze: `NOT PASSED`
 - G3 Technical Checklist: `6 / 6`
-- Design Freeze: `28 / 32`
+- Design Freeze: `29 / 32`
+- Destruction Budget and Implementation Rules:
+  `OWNER-APPROVED / LOCKED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -202,6 +204,39 @@ design role이며 Result Family가 아니다.
 실제 Unity project, package resolution, code, test, Scene, Prefab,
 build 또는 Graybox를 승인하지 않는다.
 
+다음 파괴 예산과 구현 경계는 Owner-approved Design Freeze
+baseline이다.
+
+- Prototype Core의 Breakable, Structural Feature, Break Event,
+  large physical fragment, causal-carrier fragment, small dynamic
+  debris, destruction-specific particle와 runtime fracture cap은 모두 `0`
+- Later-Slice room당 ordinary Breakable `2`, 별도 G5 승인이 있을 때만
+  허용되는 conditional Structural Feature `1`, ordinary Break Event
+  `2`, Structural Event `1`, 총 break transition `3`
+- ordinary/Structural event당 large fragment `4`/`8`, room pool `16`,
+  awake `12`, event당 causal-carrier `2`, recursive/player-interactive
+  fragment와 small dynamic debris `0`
+- fixed step당 새 Break Event `1`
+- ordinary/Structural event당 small material response `32`/`64`,
+  event당 Primary Impact emitter `1`, Material Burst `1`,
+  Persistent Aftermath marker `1`, room당 marker `3`,
+  동시 live small element `96`
+- 모든 small material element의 gameplay collision과 causal-carrier
+  역할 `0`
+- pre-authored intact→broken state, preallocated pool, active event 중
+  `Instantiate`/`Destroy` 금지, atomic admission, partial break 금지,
+  `DESTRUCTION_BUDGET_REJECTED` 관측
+- runtime fracture·shattering·recursive destruction·runtime NavMesh
+  rebuild·arbitrary wall destruction·room collapse 금지
+- 완전한 Reset restore와 observable quarantine·baseline·fallback
+
+정확한 권위는
+`docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`와
+`docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md`를 따른다.
+Structural Feature는 계속 `VERTICAL SLICE / SHOULD / PARTIAL`이며 이
+baseline은 G4·G5 passage, FPS·hardware·frame-time 기준, Unity 구현,
+Graybox 또는 Implementation Gate 개방을 승인하지 않는다.
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -227,7 +262,8 @@ constraint와 구현은 계속 `DRAFT`다.
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값
-- 밸런스와 성능 수치
+- 파괴 hard cap을 제외한 밸런스·성능 tuning과 FPS·hardware·
+  frame-time 기준
 - exact implementation class, payload, schema와 tuning
 - Unity Bootstrap 및 구현 ticket
 - Vertical Slice의 정확한 콘텐츠와 구현 범위
@@ -244,13 +280,15 @@ BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었지만
 Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
-`6 / 6`, Design Freeze는 `28 / 32`다. 현재 `Game/**`에는 placeholder만
-있고 Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며
-다음 작업은
-`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
-remaining Design Freeze와 final pre-implementation review 전에는
-Graybox 또는 Unity 구현을 시작하지 않으며 Implementation Gate는
-`CLOSED`다.
+`6 / 6`, Design Freeze는 `29 / 32`다. 파괴 예산과 구현 규칙은
+`OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
+Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며 다음
+단일 작업은 `PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`다.
+남은 Design Freeze 항목은 `CHR_00 Player Turnaround`,
+`Office Core Kit 목록`, `첫 구현 티켓 세분화`의 정확히 세 개다.
+새 numbered task는 승인되지 않았다. remaining Design Freeze와
+final pre-implementation review 전에는 Graybox 또는 Unity 구현을
+시작하지 않으며 Implementation Gate는 `CLOSED`다.
 
 ---
 

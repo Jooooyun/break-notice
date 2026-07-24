@@ -119,6 +119,50 @@ fixture와 test implementation은 Draft다.
 - 파손 후 통로·collision 상태 불일치
 - Momentum 중복 지급
 
+## Destruction-Budget Validation Plan
+
+Status:
+`DOCUMENTATION-LEVEL PLAN / NO TEST CREATED, EXECUTED OR PASSED`
+
+Authority:
+`docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`
+
+### Destruction EditMode Candidates
+
+- exact Prototype/Later-Slice cap-table validation;
+- Breakable-profile document completeness;
+- atomic admission과 deterministic request ordering;
+- observable budget-rejection behavior와 no-partial-break invariant;
+- Reset-plan completeness;
+- fragment interaction exclusion.
+
+### Destruction PlayMode Candidates
+
+- ordinary event의 Large Fragment가 `4`를 넘지 않음;
+- conditional Structural event의 Large Fragment가 `8`을 넘지 않음;
+- event당 Causal-carrier fragment가 `2`를 넘지 않음;
+- room awake/pool cap이 각각 `12`/`16`임;
+- small dynamic debris가 `0`임;
+- ordinary/Structural small-response cap이 `32`/`64`, room live cap이
+  `96`임;
+- fixed simulation step당 새 Break Event admission이 최대 `1`임;
+- partial break와 recursive fragment breakage가 없음;
+- fragment가 player interaction 대상이 아님;
+- Reset이 intact/Structural state, fragment, emitter, marker, collider,
+  occluder, room state, attribution, request와 reservation을 복원함.
+
+### Destruction Manual / Profiling
+
+- local aftermath와 causal direction이 읽힘;
+- screen-covering response가 없음;
+- frame/fixed-step capture;
+- pool, awake, carrier, small-response, collision과 fault counter;
+- G4/G6의 lower-cap 및 performance evidence.
+
+이는 future harness ownership이다. test, fixture, Scene, Prefab, code,
+profiling capture 또는 실행 결과를 만들지 않는다. Acceptance Tests의
+기술 중립적 문구는 변경하지 않는다.
+
 ## Build Gate
 
 Owner가 승인한 활성 `MUST` 요구사항의 blocking test가 실패하면

@@ -43,9 +43,10 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
 | G5 Freeze | NOT PASSED |
-| Current Next Task | TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules |
+| Current Next Task | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055 |
 | G3 Technical checklist | 6 / 6 |
-| Design Freeze | 28 / 32 |
+| Design Freeze | 29 / 32 |
+| Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
@@ -71,7 +72,18 @@ G3 기술 책임과 exact documentation lock은 성공한 Re-Audit과 Owner
 승인에 따라 `OWNER-APPROVED / PASSED`로 승격되었다. 역사적 Final
 Audit은 `REVISION REQUIRED`로 변경 없이 유지하고, Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage의 근거로 소비되었다.
-Design Freeze는 `28 / 32`이며 G4와 G5는 `NOT PASSED`다.
+Prototype 파괴 profile은 모든 category cap `0`이며 Later-Slice의
+bounded destruction hard cap과 authored-state·pooling·atomic-admission
+규칙은 Owner-approved로 LOCK되었다. 정확한 권위는
+[`docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`](docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md)와
+[`ADR-0016`](docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md)를
+따른다. 이는 G4/G5 passage, Structural Feature 편입, 성능 합격값 또는
+구현 권한을 뜻하지 않는다.
+
+Design Freeze는 `29 / 32`이며 남은 항목은 `CHR_00 Player
+Turnaround`, `Office Core Kit 목록`, `첫 구현 티켓 세분화`의 세
+개다. 다음 단일 작업은 `PENDING DESIGN AUTHORITY REVIEW AFTER
+TASK-0055`이고 G4와 G5는 `NOT PASSED`다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지

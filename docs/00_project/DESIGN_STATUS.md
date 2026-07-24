@@ -39,7 +39,10 @@ G5 Freeze: `NOT PASSED`
 
 G3 Technical Checklist: `6 / 6`
 
-Design Freeze: `28 / 32`
+Design Freeze: `29 / 32`
+
+Destruction Budget and Implementation Rules:
+`OWNER-APPROVED / LOCKED`
 
 Production Visual Lock sequence: `COMPLETE`
 
@@ -82,7 +85,7 @@ Implementation Gate: `CLOSED`
 | PGT_03 Chain Reaction Aftermath | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 Chain·파괴 결과 설계 | G2 |
 | LGT_01 Night Archive Lighting | VISUAL LOCKED / TECHNICAL DRAFT | 정확한 조명·렌더링 설계 | G2 |
 | FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
-| 파괴 예산 | HIGH-LEVEL BASELINE | 정확한 파편·Particle·VFX·성능 예산 | G2 |
+| 파괴 예산과 구현 규칙 | OWNER-APPROVED / LOCKED | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055 | DESIGN FREEZE |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
@@ -139,10 +142,11 @@ final Momentum/Pip balance, Chain runtime lineage·threshold·presentation,
 break value, final enemy identity·room geometry·object art, Relay Position
 coordinates·route, supply ranking·timing, Suppressed
 threshold·duration·recovery,
-Acceptance Test의 정확한 수치·임계값, 파괴 예산, 카메라 기능,
-조명·렌더링 구현, FIN_01 제품 편입, exact class·payload·schema·
-tuning, Unity Bootstrap·구현 ticket과 Vertical Slice의 정확한
-콘텐츠는 `DRAFT`, `COULD`, `DEFERRED` 또는 미승인이다. 승인된 여덟
+Acceptance Test의 정확한 수치·임계값, 카메라 기능,
+조명·렌더링 구현, FIN_01 제품 편입, destruction hard cap을 제외한
+exact class·payload·schema·성능 tuning, Unity Bootstrap·구현
+ticket과 Vertical Slice의 정확한 콘텐츠는 `DRAFT`, `COULD`,
+`DEFERRED` 또는 미승인이다. 승인된 여덟
 Visual의 문서화된 Canonical Elements만
 `LOCKED`이며 현재 Phase label은 Owner가 승인한
 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. G3 Technical은
@@ -153,10 +157,19 @@ Owner의 `DEC-G3-001`~`DEC-G3-013: A` 승인으로 소비되었다.
 harness 정책과 exact documentation lock
 (`6000.3.20f1`, URP `17.3.0`, Input System `1.20.0`, Cinemachine
 `3.1.7`, Test Framework `1.6.0`)은 Owner-approved G3 baseline이다.
-AI Navigation은 Prototype에서 Deferred다. Technical checklist는
-`6 / 6`, Design Freeze는 `28 / 32`다. 실제 Unity project와 package
-file은 생성되지 않았고 exact tuning, implementation class와
-pass threshold는 Draft다. G3 Causal Result Family는 Owner-approved
+AI Navigation은 Prototype에서 Deferred다. Prototype의 모든 파괴
+category cap `0`, Later-Slice의 bounded room·event·fragment·
+small-material hard cap, pre-authored state, preallocated pool,
+atomic admission, causal-carrier 제한, Reset·fault observability와
+runtime fracture·recursive destruction 금지는 Owner-approved다.
+정확한 권위는
+`docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`와
+`docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md`를 따른다.
+Structural Feature는 `VERTICAL SLICE / SHOULD / PARTIAL`이며 별도 G5
+승인 없이는 cap `0`이다. Technical checklist는 `6 / 6`, Design
+Freeze는 `29 / 32`다. 실제 Unity project와 package file은 생성되지
+않았고 exact tuning, implementation class와 pass threshold는 Draft다.
+G3 Causal Result Family는 Owner-approved
 G2 계약의 정확한 네 family로 교정되었으며 Structural Feature는 별도
 optional design role로 유지된다. Final Audit은 active Phase와
 AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
@@ -168,5 +181,7 @@ AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
 passage의 근거로 소비되었고 Re-Audit 문서 자체는 변경하지 않는다.
 G4와 G5는 `NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Graybox는
 `NOT STARTED`, Implementation Gate는 `CLOSED`다. 다음 단일 산출물은
-`TASK-0055 — Lock the Prototype and Later-Slice Destruction Budget and Implementation Rules`다.
-Bootstrap, Graybox와 구현 권한은 없다.
+`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`다. 남은 Design
+Freeze 항목은 `CHR_00 Player Turnaround`, `Office Core Kit 목록`,
+`첫 구현 티켓 세분화`의 정확히 세 개이며 새 numbered task는 승인되지
+않았다. Bootstrap, Graybox와 구현 권한은 없다.
