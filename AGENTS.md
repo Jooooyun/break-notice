@@ -28,7 +28,9 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G3 Residual Active Status and Package-Authority Correction:
   `OWNER-APPROVED / COMPLETE`
 - G3 Technical Final Audit Remediation:
-  `CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
+  `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+- G3 Technical Baseline Re-Audit:
+  `READY FOR G3 GATE DECISION`
 - G3 Technical Checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -154,7 +156,8 @@ Owner 승인에 따라 G2 Design Baseline으로 승인되었고 G2 Gate는
 `REVISION REQUIRED`로 유지된다. Re-Audit은 G2 passage에 소비된
 권한 근거다. Owner-approved G3 Technical Baseline의 역사적 Final
 Audit은 `REVISION REQUIRED`이며, 두 활성 권한 오류의 교정은
-`OWNER-APPROVED / COMPLETE`다. 별도 Re-Audit은 아직 필요하다.
+`OWNER-APPROVED / COMPLETE`다. 교정 기준선 Re-Audit은
+`READY FOR G3 GATE DECISION`이며 별도 Gate 결정은 아직 필요하다.
 G2 passage는 구현 또는 테스트 완료를
 뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한 later-Gate deferral로
 유지된다. 어떠한 RTM 행도 `VERIFIED`로 승격되지 않았다.
@@ -231,10 +234,11 @@ Implementation Gate는 `CLOSED`다.
 적용되었다. 역사적 Final Audit은 `REVISION REQUIRED / HISTORICAL
 BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
 `OWNER-APPROVED / COMPLETE`, remediation은
-`CORRECTIONS APPLIED / RE-AUDIT REQUIRED`다. Technical checklist는
+`CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. Re-Audit 결과는
+`READY FOR G3 GATE DECISION`이다. Technical checklist는
 `6 / 6`, Design Freeze는 `28 / 32`다. 현재 `Game/**`에는 placeholder만
 있고 Unity project는 생성되지 않았다. 다음 작업은
-`TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness`다.
+`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`다.
 G3 passage, remaining Design Freeze와 final pre-implementation review
 전에는 Graybox 또는 Unity 구현을 시작하지 않는다.
 

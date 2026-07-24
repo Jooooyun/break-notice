@@ -16,7 +16,9 @@
 - G3 Residual Active Status and Package-Authority Correction:
   `OWNER-APPROVED / COMPLETE`
 - G3 Technical Final Audit Remediation:
-  `CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
+  `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+- G3 Technical Baseline Re-Audit:
+  `READY FOR G3 GATE DECISION`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -55,15 +57,16 @@ remediation and successful Re-Audit verified.
 
 Gate G3: 모든 핵심 요구사항이 구현 책임과 테스트에 매핑.
 
-Status: NOT PASSED / OWNER-APPROVED BASELINE / RE-AUDIT REQUIRED
+Status: NOT PASSED / OWNER-APPROVED BASELINE / READY FOR G3 GATE DECISION
 
 책임, 데이터, 이벤트, 검증, 성능 예산, Reset과 test-harness 방향,
 exact Editor/package documentation lock은 적용되었고 Technical
 checklist는 `6 / 6`다. Causal Result Family taxonomy는 Owner-approved
 G2 계약과 정렬된 상태로 교정되었다. 역사적 Final Audit은
 `REVISION REQUIRED`이고 두 잔여 활성 권한 오류의 교정은 완료됐지만,
-remediation은 `CORRECTIONS APPLIED / RE-AUDIT REQUIRED`다. 다음 단계는
-`TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness`이며
+remediation은 `CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. Re-Audit은
+`READY FOR G3 GATE DECISION`이고 다음 단계는
+`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`이며
 G3는 아직 통과하지 않았다. G4, Graybox와 Unity 구현 권한은 없다.
 
 ## Phase 4 — Graybox Validation

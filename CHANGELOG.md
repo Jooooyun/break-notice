@@ -4,6 +4,7 @@
 
 ### Changed
 
+- corrected G3 baseline을 repository-wide Re-Audit해 역사적 Final Audit의 blocker `2/2` closure, exact Editor/package lock, six Technical checklist evidence, G1/G2-to-G3 owner·harness coverage, RTM path/heading honesty, Prototype/later scope와 empty Unity implementation state를 `35/35 PASS`로 확인하고 `READY FOR G3 GATE DECISION`을 기록하되, G3는 `NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`로 유지하며 다음 단일 작업을 `TASK-0054`로 지정
 - G3 Final Audit의 두 잔여 활성 권한 오류를 교정해 AI Navigation을 Prototype Bootstrap package 권한에서 제거하고 exact Editor/package documentation lock은 유지했으며, Product Requirements의 active Phase를 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 동기화함; Final Audit은 역사적 `REVISION REQUIRED`, remediation은 `CORRECTIONS APPLIED / RE-AUDIT REQUIRED`, 다음 작업은 `TASK-0053`으로 기록하되 G3 passage·Unity·package·code·Graybox 권한은 만들지 않음
 - G3 Technical Baseline과 Result-Family correction을 최종 감사해 technical owner·harness·RTM·scope·exact version lock은 정렬됐지만 `Game/README.md`의 AI Navigation package 권위와 `PRODUCT_REQUIREMENTS.md`의 active Phase가 현재 기준선과 충돌함을 확인하여 `REVISION REQUIRED`로 기록하되, G3 passage·Unity·package·code·Graybox·구현 권한은 만들지 않음
 - G3 Causal Result Family taxonomy를 Owner-approved G2 Chain 계약의 `ACTOR_STATE_CHANGE`, `OBJECT_STATE_CHANGE`, `BREAK_STATE_CHANGE`, `ROOM_STATE_CHANGE`로 교정해 `BREAK_STATE_CHANGE`를 복구하고 무단 `STRUCTURAL` Result Family를 제거하되 설계·보상·범위·Gate·구현 상태는 변경하지 않으며 G3 Final Audit을 계속 대기

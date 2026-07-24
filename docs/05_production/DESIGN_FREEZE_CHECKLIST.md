@@ -79,8 +79,9 @@ Editor/package documentation lock은 Owner-approved다. G3 Causal Result
 Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `REVISION REQUIRED / HISTORICAL BASELINE AUDIT`, 잔여 활성 상태·패키지
 권한 교정은 `OWNER-APPROVED / COMPLETE`, remediation은
-`CORRECTIONS APPLIED / RE-AUDIT REQUIRED`다. 다음 작업은
-`TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness`이며
+`CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`다. Re-Audit은
+`READY FOR G3 GATE DECISION`이며 다음 작업은
+`TASK-0054 — Promote G3 Technical Baseline and Record G3 Passage`다.
 G3 Technical은 `NOT PASSED / CURRENT BASELINE WORK`, Technical
 Checklist는 `6 / 6`, Design Freeze는 `28 / 32`, Full Design Lock은
 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`다.
