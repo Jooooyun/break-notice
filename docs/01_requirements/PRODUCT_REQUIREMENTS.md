@@ -122,7 +122,7 @@ Decision Source: `DEC-G1-019`
 - G1 승인 자체는 Phase를 자동 변경하지 않는다.
 - G2 Design, Graybox, Full Design Lock과 Unity 구현에는 각각 별도
   Gate와 Owner 승인이 필요하다.
-- 현재 Phase는 `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`이며
+- 현재 Phase는 `PRE-PRODUCTION / G2 DESIGN BASELINE`이며
   Implementation Gate는 `CLOSED`다.
 
 ## Excluded Requirements

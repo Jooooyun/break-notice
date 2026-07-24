@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Post-G1 Phase label을 `PRE-PRODUCTION / G2 DESIGN BASELINE`으로 동기화하고 G2를 현재 baseline work로 표시하되, G2 미통과와 Implementation Gate `CLOSED`를 유지
 - 커밋 `b701a321d03e9c74ad2e3ec9bb8c4ee4fa921c30`의 정확한 G1 요구사항·NFR·기술 중립적 검증 의도·범위 문구를 Owner-approved Baseline으로 승격
 - 제품 정의, Target Player, Windows PC 기준 플랫폼과 정성적 5분 재미 의도를 동기화하고, 전체 검증 후 G1 Requirements Gate를 `PASSED`로 기록
 - 현재 Phase label 유지, G2 미통과, Full Design Lock 미완료, Graybox 미시작과 Implementation Gate `CLOSED`를 명시

@@ -22,3 +22,4 @@
 | DL-018 | 2026-07-24 | G1 요구사항·NFR·기술 중립적 행동 검증 의도·적용 범위의 정확한 문구와 disposition 승인 | OWNER-APPROVED | Owner의 TASK-0033 G1 Baseline 승인; 구현·검증 완료와 G2 통과는 별도 |
 | DL-019 | 2026-07-24 | 한 문장 제품 정의, Target Player, Windows PC 기준 플랫폼과 정성적 5분 재미 의도 승인 | OWNER-APPROVED | 정확한 시간·비율·표본·횟수·하드웨어·해상도·성능값은 G4/G5/G6 Draft 유지 |
 | DL-020 | 2026-07-24 | 동기화 및 전체 검증 성공 후 G1 Requirements Gate 통과 기록 | PASSED | 현재 Phase label 유지, G2 미통과, Full Design Lock 미완료, Graybox 미시작, Implementation Gate CLOSED |
+| DL-021 | 2026-07-24 | Phase label을 `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`에서 `PRE-PRODUCTION / G2 DESIGN BASELINE`으로 변경 | OWNER-APPROVED | G1 PASSED 유지; G2 미통과, Full Design Lock 미완료, Graybox 미시작, Implementation Gate CLOSED |

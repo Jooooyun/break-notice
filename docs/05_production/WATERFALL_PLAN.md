@@ -6,8 +6,9 @@
 
 - G1 Requirements: `PASSED`
 - G2 Design: `NOT PASSED / CURRENT BASELINE WORK`
-- Current Phase label: `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`
-- Phase label review: `PENDING OWNER DECISION`
+- Production Visual Lock sequence: `COMPLETE`
+- Current Phase label: `PRE-PRODUCTION / G2 DESIGN BASELINE`
+- Phase label review: `COMPLETED / OWNER-APPROVED`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`

@@ -1,6 +1,6 @@
 # Design Status Board
 
-현재 단계: `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`
+현재 단계: `PRE-PRODUCTION / G2 DESIGN BASELINE`
 
 G1 Requirements: `PASSED`
 
@@ -12,7 +12,7 @@ Full Design Lock: `INCOMPLETE`
 
 Graybox: `NOT STARTED`
 
-Phase label review: `PENDING OWNER DECISION`
+Phase label review: `COMPLETED / OWNER-APPROVED`
 
 Implementation Gate: `CLOSED`
 
@@ -59,5 +59,5 @@ Requirements Gate는 `PASSED`다. 상세 게임플레이 설계, G2
 카메라 기능, 조명·렌더링 구현, FIN_01 제품 편입, 기술 아키텍처,
 구현 계획과 Vertical Slice의 정확한 콘텐츠는 `DRAFT`, `COULD`,
 `DEFERRED` 또는 미승인이다. 승인된 여덟 Visual의 문서화된
-Canonical Elements만 `LOCKED`이며 현재 Phase label은 별도 Owner
-결정 전까지 유지된다.
+Canonical Elements만 `LOCKED`이며 현재 Phase label은 Owner가
+승인한 `PRE-PRODUCTION / G2 DESIGN BASELINE`이다.

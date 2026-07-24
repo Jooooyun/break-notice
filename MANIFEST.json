@@ -2,11 +2,11 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
-  "current_phase": "PRE-PRODUCTION / PRODUCTION VISUAL LOCK",
+  "current_phase": "PRE-PRODUCTION / G2 DESIGN BASELINE",
   "g1_requirements_baseline_status": "OWNER-APPROVED",
   "g1_gate_status": "PASSED",
   "g2_gate_status": "NOT PASSED",
-  "phase_label_review": "PENDING OWNER DECISION",
+  "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
   "canonical_player_image": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
@@ -103,13 +103,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 18345,
-      "sha256": "01a759fecac8ba8e38fb8747d88e38797b4bf6d1f3d55a7814772fe487038b5d"
+      "bytes": 18446,
+      "sha256": "415d10afe6fc723f4351c4c7f8ce17083a2575cb402540d92edac7098b51f338"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 3723,
-      "sha256": "a88c295423b9a3abfc8be47dbde954d315bb047740421c905eadf6bd852ba7a2"
+      "bytes": 3907,
+      "sha256": "16a1bbb778c202a17e3a1e51d72f0299bc7f481d966a834ad3739cc616208a64"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -249,7 +249,7 @@
     {
       "path": "README.md",
       "bytes": 6625,
-      "sha256": "7f378b5c96419e69c6521570b1b7afe3354aa27bff88b4277679f40a8b326784"
+      "sha256": "a79a52c8f292431ab257dba6eff5f1dd4d77a4f9f80dddd21fce882635e6b7d7"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -258,13 +258,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 3401,
-      "sha256": "6a1874eec830ea9a40630ca2942a1d3d5cdb6726a5891a93c59e3db8cea19c2c"
+      "bytes": 3666,
+      "sha256": "57f47f13563e58f117a36e99a27ec49e76f16939d900df6048c5a8166bba6935"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 3411,
-      "sha256": "6b9833c4cff328b940d8c8924af2401476c2bb7a6cd702b7e984a1ac5b575594"
+      "bytes": 3431,
+      "sha256": "1141546abefb99bef9e9e31b83d66ee08805c8d9e4c7c1ea305ba430c0e9a31e"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -283,8 +283,8 @@
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 12212,
-      "sha256": "72b7c274b93786adf50c33ae24c532c5aa8de1609329dae8bcf3aa1fd93eef95"
+      "bytes": 12208,
+      "sha256": "348c586d0e1445e5b8db242dbd83e1086ebfab9259ea461f04f58fdf94d36fd9"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
@@ -448,8 +448,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 1609,
-      "sha256": "071040fd6681a38c8b21dc4599309647500641f2dff1f1bcce968f3f270b6555"
+      "bytes": 1621,
+      "sha256": "e200acd0156f598d2ac449c8907522b95eb85a3329c9274bdf923e13243369ba"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -463,8 +463,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 2321,
-      "sha256": "305ca9ded337d3910859f651ea597dde2d8f9d41278e8c786056f8a1849ff744"
+      "bytes": 2367,
+      "sha256": "1d3b05c373d2ef736a5ff4fbe10c36374bf7e508328ffa6a1a41cc40f3fe5b10"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",

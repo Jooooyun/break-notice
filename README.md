@@ -31,12 +31,12 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 
 | 항목 | 상태 |
 |---|---|
-| 현재 Phase label | PRE-PRODUCTION / PRODUCTION VISUAL LOCK |
+| 현재 Phase label | PRE-PRODUCTION / G2 DESIGN BASELINE |
 | G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
 | G2 Design | NOT PASSED / CURRENT BASELINE WORK |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
-| Phase label review | PENDING OWNER DECISION |
+| Phase label review | COMPLETED / OWNER-APPROVED |
 | 게임 정체성 | LOCKED |
 | 3D TPS / Unity 6 / URP | LOCKED |
 | 초능력 Grab 제거 | LOCKED |

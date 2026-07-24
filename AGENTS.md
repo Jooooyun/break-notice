@@ -10,7 +10,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 현재 단계:
 
-`PRE-PRODUCTION / PRODUCTION VISUAL LOCK`
+`PRE-PRODUCTION / G2 DESIGN BASELINE`
 
 현재 프로젝트는 전체 Design Lock 상태가 아니다.
 
@@ -22,7 +22,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
-- Phase label review: `PENDING OWNER DECISION`
+- Phase label review: `COMPLETED / OWNER-APPROVED`
 
 G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
@@ -40,7 +40,9 @@ G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 
 Implementation Gate는 `CLOSED`다.
 
-현재 Phase label은 별도 Owner 결정 전까지 변경하지 않는다.
+현재 Phase label은 Owner 승인에 따라
+`PRE-PRODUCTION / G2 DESIGN BASELINE`으로 변경되었다. 이후 변경은
+별도 Owner 결정 전까지 수행하지 않는다.
 명시적인 사용자 승인과 후속 Design Readiness Gate 통과 전에는
 Unity 구현을 시작하지 않는다.
 

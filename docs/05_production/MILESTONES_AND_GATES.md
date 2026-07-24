@@ -18,8 +18,8 @@
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
-- Phase label: `PRE-PRODUCTION / PRODUCTION VISUAL LOCK` — 변경 없음
-- Phase label review: `PENDING OWNER DECISION`
+- Phase label: `PRE-PRODUCTION / G2 DESIGN BASELINE` — Owner-approved transition
+- Phase label review: `COMPLETED / OWNER-APPROVED`
 - Implementation Gate: `CLOSED`
 
 G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계는
