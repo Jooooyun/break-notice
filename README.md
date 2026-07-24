@@ -35,7 +35,11 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
 | G2 Design | PASSED / OWNER-APPROVED BASELINE |
 | G3 Technical | NOT PASSED / CURRENT BASELINE WORK |
-| G3 Technical Baseline | OWNER-APPROVED / FINAL AUDIT PENDING |
+| G3 Technical Baseline | OWNER-APPROVED / BASELINE APPLIED |
+| G3 Technical Final Audit | REVISION REQUIRED / HISTORICAL BASELINE AUDIT |
+| G3 Residual Active Status and Package-Authority Correction | OWNER-APPROVED / COMPLETE |
+| G3 Technical Final Audit Remediation | CORRECTIONS APPLIED / RE-AUDIT REQUIRED |
+| G3 Current Next Task | TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness |
 | G3 Technical checklist | 6 / 6 |
 | Design Freeze | 28 / 32 |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
@@ -57,11 +61,13 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Graybox 재미 검증 | NOT STARTED |
 | Implementation Gate | CLOSED |
 | Unity project | NOT CREATED / PLACEHOLDERS ONLY |
-| 본 제작 | BLOCKED BY G3 FINAL AUDIT + REMAINING GATES |
+| 본 제작 | BLOCKED BY G3 RE-AUDIT + REMAINING GATES |
 
-G3 기술 책임과 exact documentation lock은 Owner-approved지만 G3는
-Final Audit 전까지 `NOT PASSED`다. AI Navigation은 Prototype에서
-Deferred이고 optional/later system은 first wave 밖이다. 현재
+G3 기술 책임과 exact documentation lock은 Owner-approved지만 역사적
+Final Audit은 `REVISION REQUIRED`다. 두 활성 권한 오류의 교정은
+완료됐고 별도 Re-Audit이 필요하므로 G3는 계속 `NOT PASSED`다.
+AI Navigation은 Prototype에서 Deferred이고 optional/later system은
+first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지
 않았으며 Bootstrap, Graybox와 구현은 승인되지 않았다.
 

@@ -20,9 +20,15 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G2 Design: `PASSED / OWNER-APPROVED BASELINE`
 - G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
 - G3 Technical Decisions:
-  `OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING`
+  `OWNER-APPROVED / BASELINE APPLIED`
 - G3 Causal Result-Family Alignment:
   `OWNER-APPROVED / CORRECTED`
+- G3 Technical Final Audit:
+  `REVISION REQUIRED / HISTORICAL BASELINE AUDIT`
+- G3 Residual Active Status and Package-Authority Correction:
+  `OWNER-APPROVED / COMPLETE`
+- G3 Technical Final Audit Remediation:
+  `CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
 - G3 Technical Checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -146,8 +152,10 @@ Owner 승인에 따라 G2 Design Baseline으로 승인되었고 G2 Gate는
 `PASSED`다. 기존 `G2 Design Baseline Final Audit` 판정은 기준선
 `a0cf9b15d120b0842e2ddcfff1be697863581533`에 대한 역사적
 `REVISION REQUIRED`로 유지된다. Re-Audit은 G2 passage에 소비된
-권한 근거다. Owner-approved G3 Technical Baseline은 별도 Final
-Audit을 기다린다. G2 passage는 구현 또는 테스트 완료를
+권한 근거다. Owner-approved G3 Technical Baseline의 역사적 Final
+Audit은 `REVISION REQUIRED`이며, 두 활성 권한 오류의 교정은
+`OWNER-APPROVED / COMPLETE`다. 별도 Re-Audit은 아직 필요하다.
+G2 passage는 구현 또는 테스트 완료를
 뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한 later-Gate deferral로
 유지된다. 어떠한 RTM 행도 `VERIFIED`로 승격되지 않았다.
 
@@ -220,10 +228,13 @@ Implementation Gate는 `CLOSED`다.
 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 변경되었다. G3 Technical은
 `NOT PASSED / CURRENT BASELINE WORK`이며 기술 책임·데이터·이벤트·
 검증·예산·Reset·test-harness 기준은 Owner-approved baseline으로
-적용되었지만 Final Audit은 아직 통과하지 않았다. Technical checklist는
+적용되었다. 역사적 Final Audit은 `REVISION REQUIRED / HISTORICAL
+BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
+`OWNER-APPROVED / COMPLETE`, remediation은
+`CORRECTIONS APPLIED / RE-AUDIT REQUIRED`다. Technical checklist는
 `6 / 6`, Design Freeze는 `28 / 32`다. 현재 `Game/**`에는 placeholder만
 있고 Unity project는 생성되지 않았다. 다음 작업은
-`TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness`다.
+`TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness`다.
 G3 passage, remaining Design Freeze와 final pre-implementation review
 전에는 Graybox 또는 Unity 구현을 시작하지 않는다.
 

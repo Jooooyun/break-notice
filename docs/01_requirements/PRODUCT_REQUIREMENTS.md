@@ -118,12 +118,13 @@ Decision Source: `DEC-G1-019`
 - 이 문서는 Owner-approved G1 Requirements Baseline이다.
 - G1 Requirements Gate는 동기화와 검증을 통과하여 `PASSED`로
   기록되었다.
-- Phase label은 G1 동기화 이후 별도 Owner 결정으로 검토한다.
-- G1 승인 자체는 Phase를 자동 변경하지 않는다.
-- G2 Design, Graybox, Full Design Lock과 Unity 구현에는 각각 별도
-  Gate와 Owner 승인이 필요하다.
-- 현재 Phase는 `PRE-PRODUCTION / G2 DESIGN BASELINE`이며
-  Implementation Gate는 `CLOSED`다.
+- G2 Design Gate는 `PASSED`다.
+- G3 Technical은 `NOT PASSED / CURRENT BASELINE WORK`다.
+- 현재 Phase는 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`이다.
+- Full Design Lock은 `INCOMPLETE`다.
+- Graybox는 `NOT STARTED`다.
+- Implementation Gate는 `CLOSED`다.
+- G1 승인 자체는 구현을 승인하지 않는다.
 
 ## Excluded Requirements
 

@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G3 Final Audit의 두 잔여 활성 권한 오류를 교정해 AI Navigation을 Prototype Bootstrap package 권한에서 제거하고 exact Editor/package documentation lock은 유지했으며, Product Requirements의 active Phase를 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 동기화함; Final Audit은 역사적 `REVISION REQUIRED`, remediation은 `CORRECTIONS APPLIED / RE-AUDIT REQUIRED`, 다음 작업은 `TASK-0053`으로 기록하되 G3 passage·Unity·package·code·Graybox 권한은 만들지 않음
 - G3 Technical Baseline과 Result-Family correction을 최종 감사해 technical owner·harness·RTM·scope·exact version lock은 정렬됐지만 `Game/README.md`의 AI Navigation package 권위와 `PRODUCT_REQUIREMENTS.md`의 active Phase가 현재 기준선과 충돌함을 확인하여 `REVISION REQUIRED`로 기록하되, G3 passage·Unity·package·code·Graybox·구현 권한은 만들지 않음
 - G3 Causal Result Family taxonomy를 Owner-approved G2 Chain 계약의 `ACTOR_STATE_CHANGE`, `OBJECT_STATE_CHANGE`, `BREAK_STATE_CHANGE`, `ROOM_STATE_CHANGE`로 교정해 `BREAK_STATE_CHANGE`를 복구하고 무단 `STRUCTURAL` Result Family를 제거하되 설계·보상·범위·Gate·구현 상태는 변경하지 않으며 G3 Final Audit을 계속 대기
 - Owner-approved `DEC-G3-001`~`DEC-G3-013`을 G3 Technical Baseline과 ADR-0015로 적용하고 Unity `6000.3.20f1`, URP `17.3.0`, Input System `1.20.0`, Cinemachine `3.1.7`, Test Framework `1.6.0` documentation lock, Prototype/later scope, architecture·state·event·causal·physics·Strap·budget·Reset·harness 책임을 동기화해 Technical checklist를 `6/6`, Design Freeze를 `28/32`로 갱신하되 G3는 `NOT PASSED`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`로 유지하고 Unity 또는 구현 파일은 만들지 않음

@@ -58,7 +58,7 @@
   "g3_technical_preflight_baseline_sha": "3bf04d7a86601f07ccbd65f635b1f9a05aaaa5df",
   "g3_technical_preflight_decision_count": 13,
   "g3_technical_preflight_next_task": "TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions",
-  "g3_technical_baseline_status": "OWNER-APPROVED / FINAL AUDIT PENDING",
+  "g3_technical_baseline_status": "OWNER-APPROVED / BASELINE APPLIED",
   "g3_technical_baseline_path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
   "g3_technical_baseline_adr": "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
   "g3_causal_result_family_alignment_status": "OWNER-APPROVED / CORRECTED",
@@ -73,16 +73,21 @@
   "g3_technical_final_audit_baseline_sha": "920f81f51f4a048ab223c03b9a3732aee486bfd0",
   "g3_technical_final_audit_result_family_alignment": "VERIFIED AGAINST G2",
   "g3_technical_final_audit_exit_check_count": 35,
-  "g3_technical_final_audit_next_task": "TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift",
+  "g3_technical_final_audit_original_next_task": "TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift",
+  "g3_technical_final_audit_remediation_status": "CORRECTIONS APPLIED / RE-AUDIT REQUIRED",
+  "g3_residual_active_status_package_authority_correction_status": "OWNER-APPROVED / COMPLETE",
+  "g3_product_requirements_phase_alignment_status": "CORRECTED / PRE-PRODUCTION G3 TECHNICAL BASELINE",
   "g3_unity_editor_lock": "6000.3.20f1",
   "g3_urp_lock": "17.3.0",
   "g3_input_system_lock": "1.20.0",
   "g3_cinemachine_lock": "3.1.7",
   "g3_test_framework_lock": "1.6.0",
   "g3_ai_navigation_status": "DEFERRED / NOT IN PROTOTYPE PACKAGE BASELINE",
+  "g3_ai_navigation_package_authority_status": "DEFERRED / NOT IN PROTOTYPE PACKAGE BASELINE",
   "g3_decision_status": "DEC-G3-001 THROUGH DEC-G3-013 OWNER-APPROVED",
   "g3_technical_checklist_progress": "6/6",
-  "g3_current_next_task": "TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift",
+  "g3_current_next_task": "TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness",
+  "g3_technical_reaudit_next_task": "TASK-0053 — G3 Technical Baseline Re-Audit and Gate Readiness",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -180,13 +185,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 27736,
-      "sha256": "800ab786cabd528b83bceb6a967f960fec652e87639201e1f74a264e34ec8bbb"
+      "bytes": 28256,
+      "sha256": "647c9dd765feb4f48c34b7ebf91dd01718566528c0929832cd33680ae2a2fc02"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 9181,
-      "sha256": "b0b74f9d386c64ef894042c071aa2e5c5d380d511ea01dfa1f9fd7139a815a42"
+      "bytes": 9699,
+      "sha256": "8fb88ec14b6d3acd0caafbeda44336409d962e7ef8ecc3ec12e2ae131d696c54"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -315,8 +320,8 @@
     },
     {
       "path": "Game/README.md",
-      "bytes": 564,
-      "sha256": "9e0ee12472fd1467c47984ba22c519c4f166ebf5e58d86f4ab8cac853aa0e9a6"
+      "bytes": 1279,
+      "sha256": "29bb52aee74dccd6a3de80f18f26bc529360130ea39433cf7049fb8dc8640851"
     },
     {
       "path": "LICENSE.md",
@@ -325,8 +330,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7521,
-      "sha256": "c17537e0ad19cb09728cf8f4ddc5d25752dd5722b33b89477a1d1cfcc9f520d4"
+      "bytes": 7977,
+      "sha256": "cd81f5208e4ce0c622df7f1dcc305d85760c01af02df30caa7958d41c6c7e80e"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -335,13 +340,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 7567,
-      "sha256": "2d561aba70fa68bfb51148ad59b1b50cc81616c71a316ba47d20995941a7f3f6"
+      "bytes": 7884,
+      "sha256": "8f7252154ccf895cd435cbc259ed8ab24a8d95266d493808dfe7c092c97fca79"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 9448,
-      "sha256": "6c86208bdacc70da462152da7deb118dc148fc7db18765aeebd68840c4c1d9e9"
+      "bytes": 9904,
+      "sha256": "1f931ebade0501af1b18b02f5b6b90b794f47c464d91b13a05413faf265acd73"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -360,8 +365,8 @@
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 12208,
-      "sha256": "348c586d0e1445e5b8db242dbd83e1086ebfab9259ea461f04f58fdf94d36fd9"
+      "bytes": 12176,
+      "sha256": "621cdb5dc3795f687e7cde5fcc67b7fc9320983d9dcd98dd6d155e890933412d"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
@@ -565,8 +570,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 3363,
-      "sha256": "86661aafb3a74c5c25065e019ad223c8ddc3af6016fbf288f1200ca7ff215323"
+      "bytes": 3626,
+      "sha256": "a9187cf57f300f63a5516a4a1d9caa378f5da04a7ddde3260ec4c1929d0ce35f"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -590,8 +595,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 2280,
-      "sha256": "a3ff6a5bcdcc982b2cbd69c14dee66a30ce7c4a4378661848de46ea4b16649d1"
+      "bytes": 2597,
+      "sha256": "9a38c15d3b1e8918cdb24e615bdf2c90556515f6d1a45baa23fabe57505ce1a7"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -605,8 +610,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 3228,
-      "sha256": "eb7e3e57c3834140864c78c84f552d824262f0903a1c2fd197c6147b28db4720"
+      "bytes": 3629,
+      "sha256": "83c504e15a223a978eebf1fb5c2c2b281487158abfce018a3bfb204817eb221e"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
