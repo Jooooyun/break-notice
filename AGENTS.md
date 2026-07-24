@@ -38,8 +38,10 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 - G5 Freeze: `NOT PASSED`
 - G3 Technical Checklist: `6 / 6`
-- Design Freeze: `29 / 32`
+- Design Freeze: `30 / 32`
 - Destruction Budget and Implementation Rules:
+  `OWNER-APPROVED / LOCKED`
+- Office Core Kit:
   `OWNER-APPROVED / LOCKED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
@@ -237,6 +239,39 @@ Structural Feature는 계속 `VERTICAL SLICE / SHOULD / PARTIAL`이며 이
 baseline은 G4·G5 passage, FPS·hardware·frame-time 기준, Unity 구현,
 Graybox 또는 Implementation Gate 개방을 승인하지 않는다.
 
+다음 Office Core Kit asset-family와 reuse policy는 Owner-approved
+Design Freeze baseline이다.
+
+- 정확히 `16`개의 Prototype-required family:
+  - architecture/fixed fixture `7`
+  - furniture/gameplay `5`
+  - decorative/dressing `4`
+- gameplay-interactive definition은 File Binder, Wheeled Office Chair,
+  Rolling Drawer Cabinet의 정확히 `3`
+- Copier-Class Asset은 recognition-only definition의 정확히 `1`
+- 나머지 fixed/decorative family는 정확히 `12`
+- Prototype instance는 Binder `3`, Chair `2`, Drawer `1`, Copier `1`,
+  총 `7`
+- 정확히 `8`개의 Later-Slice extension candidate는 G5 선택 전까지
+  Prototype 또는 Vertical Slice content가 아님
+- 모든 Prototype Kit family의 Breakable·Structural state `NONE`,
+  runtime fracture `PROHIBITED`, destruction fragment budget `0`
+- furniture/gameplay family당 base geometry family `1`,
+  architecture system당 base system `1`과 필요한 modular shape piece
+  최대 `3`, decorative cluster당 non-interactive prop form 최대 `3`,
+  family당 finish/material variant 최대 `2`
+- department 변주는 shared material, decal, signage, tag, paper,
+  wear/dirt, 별도 승인 lighting과 arrangement를 재사용
+- LGT_01은 Records Archive-local `COULD`, FIN_01은 `OUT / COULD`이며
+  Kit family의 존재로 자동 활성화되지 않음
+
+정확한 권위는 `docs/03_art/OFFICE_CORE_KIT.md`와
+`docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md`를 따른다.
+`OCK-*` ID는 문서 참조 ID일 뿐 file, Prefab 또는 runtime identity가
+아니다. 실제 model, texture, material, layout, Breakable/Structural
+identity, Unity asset과 구현은 승인되지 않았고 actual asset creation은
+`NOT STARTED / NOT AUTHORIZED`다. G5는 계속 `NOT PASSED`다.
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -280,12 +315,13 @@ BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었지만
 Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
-`6 / 6`, Design Freeze는 `29 / 32`다. 파괴 예산과 구현 규칙은
+`6 / 6`, Design Freeze는 `30 / 32`다. 파괴 예산과 구현 규칙 및
+Office Core Kit asset-family/reuse policy는
 `OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
 Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며 다음
-단일 작업은 `PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`다.
-남은 Design Freeze 항목은 `CHR_00 Player Turnaround`,
-`Office Core Kit 목록`, `첫 구현 티켓 세분화`의 정확히 세 개다.
+단일 작업은 `PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`다.
+남은 Design Freeze 항목은 `CHR_00 Player Turnaround`과
+`첫 구현 티켓 세분화`의 정확히 두 개다.
 새 numbered task는 승인되지 않았다. remaining Design Freeze와
 final pre-implementation review 전에는 Graybox 또는 Unity 구현을
 시작하지 않으며 Implementation Gate는 `CLOSED`다.

@@ -39,9 +39,12 @@ G5 Freeze: `NOT PASSED`
 
 G3 Technical Checklist: `6 / 6`
 
-Design Freeze: `29 / 32`
+Design Freeze: `30 / 32`
 
 Destruction Budget and Implementation Rules:
+`OWNER-APPROVED / LOCKED`
+
+Office Core Kit:
 `OWNER-APPROVED / LOCKED`
 
 Production Visual Lock sequence: `COMPLETE`
@@ -85,7 +88,8 @@ Implementation Gate: `CLOSED`
 | PGT_03 Chain Reaction Aftermath | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 Chain·파괴 결과 설계 | G2 |
 | LGT_01 Night Archive Lighting | VISUAL LOCKED / TECHNICAL DRAFT | 정확한 조명·렌더링 설계 | G2 |
 | FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
-| 파괴 예산과 구현 규칙 | OWNER-APPROVED / LOCKED | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055 | DESIGN FREEZE |
+| 파괴 예산과 구현 규칙 | OWNER-APPROVED / LOCKED | 현 Lock 유지 | DESIGN FREEZE |
+| Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056 | DESIGN FREEZE |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
@@ -166,8 +170,16 @@ runtime fracture·recursive destruction 금지는 Owner-approved다.
 `docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`와
 `docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md`를 따른다.
 Structural Feature는 `VERTICAL SLICE / SHOULD / PARTIAL`이며 별도 G5
-승인 없이는 cap `0`이다. Technical checklist는 `6 / 6`, Design
-Freeze는 `29 / 32`다. 실제 Unity project와 package file은 생성되지
+승인 없이는 cap `0`이다. Office Core Kit은 정확한 Prototype family
+`16`개(architecture/fixed fixture `7`, furniture/gameplay `5`,
+decorative/dressing `4`)와 Later-Slice candidate `8`개, interactive
+definition `3`, recognition-only definition `1`, fixed/decorative
+family `12`의 asset-family 및 reuse policy로
+`OWNER-APPROVED / LOCKED`다. Prototype instance `7`과 destruction
+`0`은 유지되고, 실제 model·texture·material·layout·Unity asset
+creation은 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records
+Archive-local `COULD`, FIN_01은 `OUT / COULD`를 유지한다. Technical
+checklist는 `6 / 6`, Design Freeze는 `30 / 32`다. 실제 Unity project와 package file은 생성되지
 않았고 exact tuning, implementation class와 pass threshold는 Draft다.
 G3 Causal Result Family는 Owner-approved
 G2 계약의 정확한 네 family로 교정되었으며 Structural Feature는 별도
@@ -181,7 +193,7 @@ AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
 passage의 근거로 소비되었고 Re-Audit 문서 자체는 변경하지 않는다.
 G4와 G5는 `NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Graybox는
 `NOT STARTED`, Implementation Gate는 `CLOSED`다. 다음 단일 산출물은
-`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`다. 남은 Design
-Freeze 항목은 `CHR_00 Player Turnaround`, `Office Core Kit 목록`,
-`첫 구현 티켓 세분화`의 정확히 세 개이며 새 numbered task는 승인되지
+`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`다. 남은 Design
+Freeze 항목은 `CHR_00 Player Turnaround`과
+`첫 구현 티켓 세분화`의 정확히 두 개이며 새 numbered task는 승인되지
 않았다. Bootstrap, Graybox와 구현 권한은 없다.

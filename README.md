@@ -43,10 +43,11 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
 | G5 Freeze | NOT PASSED |
-| Current Next Task | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055 |
+| Current Next Task | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056 |
 | G3 Technical checklist | 6 / 6 |
-| Design Freeze | 29 / 32 |
+| Design Freeze | 30 / 32 |
 | Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
+| Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
@@ -80,10 +81,21 @@ bounded destruction hard cap과 authored-state·pooling·atomic-admission
 따른다. 이는 G4/G5 passage, Structural Feature 편입, 성능 합격값 또는
 구현 권한을 뜻하지 않는다.
 
-Design Freeze는 `29 / 32`이며 남은 항목은 `CHR_00 Player
-Turnaround`, `Office Core Kit 목록`, `첫 구현 티켓 세분화`의 세
-개다. 다음 단일 작업은 `PENDING DESIGN AUTHORITY REVIEW AFTER
-TASK-0055`이고 G4와 G5는 `NOT PASSED`다.
+Office Core Kit은 정확한 Prototype-required family `16`개와
+Later-Slice extension candidate `8`개, gameplay-interactive definition
+`3`, recognition-only definition `1`, fixed/decorative family `12`의
+asset-family 및 reuse policy로 Owner-approved/LOCKED되었다. 정확한
+권위는 [`OFFICE_CORE_KIT.md`](docs/03_art/OFFICE_CORE_KIT.md)와
+[`ADR-0017`](docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md)를
+따른다. 모든 Prototype Kit family의 destruction은 `0`이며 실제 model,
+texture, material, layout과 Unity asset creation은
+`NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records Archive-local
+`COULD`, FIN_01은 `OUT / COULD`를 유지한다.
+
+Design Freeze는 `30 / 32`이며 남은 항목은 `CHR_00 Player
+Turnaround`과 `첫 구현 티켓 세분화`의 정확히 두 개다. 다음 단일
+산출물은 `PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`이고 G4와
+G5는 `NOT PASSED`다. 새 numbered task는 승인되지 않았다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지

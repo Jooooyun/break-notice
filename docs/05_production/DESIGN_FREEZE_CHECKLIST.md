@@ -29,7 +29,7 @@
 - [x] LGT_01 Night Archive Lighting Lock
 - [x] FIN_01 Conference Table Team Finisher Lock
 - [x] 정확한 파괴 예산 수치와 구현 규칙
-- [ ] Office Core Kit 목록
+- [x] Office Core Kit 목록
 
 ## Technical
 
@@ -49,7 +49,7 @@
 
 ## Approval
 
-현재 체크 상태: `29 / 32`
+현재 체크 상태: `30 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay의
 일곱 항목은 Owner-approved G2 Design Baseline으로 완료되었다.
@@ -64,9 +64,15 @@ navigation·Reset·fault 경계는
 `docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`와
 ADR-0016을 따른다. Structural Feature는 `VERTICAL SLICE / SHOULD /
 PARTIAL`이며 별도 G5 승인 없이는 활성화되지 않는다. 이는 Unity,
-Graybox, 성능 합격값 또는 구현 권한이 아니다. 체크되지 않은 항목은
-`주인공 Turnaround`, `Office Core Kit 목록`, `첫 구현 티켓 세분화`의
-정확히 세 개다. Design Freeze는 `29 / 32`, Full Design Lock은
+Graybox, 성능 합격값 또는 구현 권한이 아니다.
+Office Core Kit checkbox는 exact `16` Prototype-required family와
+exact `8` Later-Slice extension candidate, interaction·variant·reuse·
+Prototype zero-destruction boundary의 asset-family list가
+Owner-approved/LOCKED되었음을 뜻한다. 3D model, texture, material 또는
+Unity asset은 생성되지 않았고 G5는 `NOT PASSED`이며 Unity 또는 Graybox
+권한이 없다. 체크되지 않은 항목은
+`주인공 Turnaround`과 `첫 구현 티켓 세분화`의
+정확히 두 개다. Design Freeze는 `30 / 32`, Full Design Lock은
 `INCOMPLETE`다.
 
 Logical Input Action Contract, Interaction State, Arbitration, and
@@ -93,10 +99,10 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었고 문서
 자체는 변경하지 않는다. 현재 Phase는
 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 작업은
-`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`다. 새 numbered
+`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`다. 새 numbered
 task는 승인되지 않았다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
-`6 / 6`, Design Freeze는 `29 / 32`, G4와 G5는 `NOT PASSED`, Full
+`6 / 6`, Design Freeze는 `30 / 32`, G4와 G5는 `NOT PASSED`, Full
 Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation
 Gate는 `CLOSED`다.
 

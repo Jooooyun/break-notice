@@ -50,8 +50,8 @@
   "g2_prototype_object_definition_count": 4,
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
-  "design_freeze_checklist_progress": "29/32",
-  "design_freeze_completion_status": "IN PROGRESS / 29/32",
+  "design_freeze_checklist_progress": "30/32",
+  "design_freeze_completion_status": "IN PROGRESS / 30/32",
   "g3_gate_status": "PASSED",
   "g3_entry_status": "PASSED / OWNER-APPROVED BASELINE",
   "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
@@ -116,10 +116,22 @@
   "structural_small_material_element_cap_per_event": 64,
   "concurrent_small_material_element_cap_per_room": 96,
   "runtime_mesh_fracture_status": "PROHIBITED",
+  "office_core_kit_status": "OWNER-APPROVED / LOCKED",
+  "office_core_kit_path": "docs/03_art/OFFICE_CORE_KIT.md",
+  "office_core_kit_adr": "docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md",
+  "office_core_kit_prototype_required_family_count": 16,
+  "office_core_kit_prototype_architecture_fixture_family_count": 7,
+  "office_core_kit_prototype_furniture_gameplay_family_count": 5,
+  "office_core_kit_prototype_dressing_family_count": 4,
+  "office_core_kit_prototype_interactive_definition_count": 3,
+  "office_core_kit_prototype_recognition_only_definition_count": 1,
+  "office_core_kit_prototype_fixed_or_decorative_family_count": 12,
+  "office_core_kit_later_slice_candidate_family_count": 8,
+  "office_core_kit_actual_asset_creation_status": "NOT STARTED / NOT AUTHORIZED",
   "g4_gate_status": "NOT PASSED",
   "g5_gate_status": "NOT PASSED",
-  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055",
-  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055",
+  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056",
+  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -217,13 +229,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 31047,
-      "sha256": "d9f0ae961958b7b011762ab68caf8f1fee8b0233890d445c337afda392cc069c"
+      "bytes": 32876,
+      "sha256": "6b15ca6571970926416138180c160fd5c746e2f9f59575f0af3b8217a739d3b1"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 11588,
-      "sha256": "36fff8ad305883a138ca03b0dc6863743a36a25a640b60101e8e47e4943ecbeb"
+      "bytes": 12364,
+      "sha256": "734050b08fdb0694d1a8250cdbc013268c8db112d5fb7b2e96530a4a5c9d4280"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -362,8 +374,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9264,
-      "sha256": "19817cba9c6fc09da85aaf66f8d518ab9f2986ff3c793b2c6bfed19fc0e4608f"
+      "bytes": 10046,
+      "sha256": "2dd1a28557bc33c9f10c52b42067f34a4eed29bc17fc18a88c329120f2684a3d"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -372,13 +384,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 8636,
-      "sha256": "e863531eeb4a4ad1acbe8d6b260d01638cbda1c7a38aa7ba27ff190b54e4bef8"
+      "bytes": 8972,
+      "sha256": "fdbc6179c23cebc7893e161c42296f176eaec4006448c828393815f92034ddfa"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 11344,
-      "sha256": "9fc30b95c74cb2b191642767a688bfea6bcae77bf853deada7c3a7abb9fb5e9e"
+      "bytes": 12039,
+      "sha256": "1dc74579883a9354d6b7126cd5b4603680d65d640320bc58ab9851f6d0a376bf"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -527,8 +539,8 @@
     },
     {
       "path": "docs/03_art/OFFICE_CORE_KIT.md",
-      "bytes": 1297,
-      "sha256": "b88b09c3e21521ad48f5ee356d6845ca7b53aba1c6d1989d4b9b870b1e0fb58b"
+      "bytes": 10489,
+      "sha256": "4027eddc35559ca628d057607451bb2421285f0694e8cc6c2a1286c180ae0a82"
     },
     {
       "path": "docs/03_art/PLAYER_VISUAL_SPEC.md",
@@ -602,13 +614,13 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 3017,
-      "sha256": "59b6edaa5c765b25c8a79ad21a1abf9fc28089bd3b73f44eb59c4697d5dd286c"
+      "bytes": 6546,
+      "sha256": "aa3183961872bed284cd2d4d7fd54c52f89f7d200e182d3e902e756de2ca1826"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 4542,
-      "sha256": "c9f6d99c06388951d55cdb6c714f19683235a28b83ede71f6c9b31415b4868d1"
+      "bytes": 4901,
+      "sha256": "48490498fe34d49182072bd882e153e68b688c8bb0639f5aebdb20460d8f7c2e"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -637,8 +649,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 3757,
-      "sha256": "fc40b6e308d5354dcf67a42960e885384f9f716d29f9ee97828c6a1bcf60ec79"
+      "bytes": 4224,
+      "sha256": "f0c45438f56f01e07280625a2daecc6b9b53100581aa4ff360c80775ff1f462e"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -652,8 +664,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 4815,
-      "sha256": "b21b5fc1ed7b3aacd5c3d8ed9a0df52767724688704a50f76e6bf7171ab2d3ca"
+      "bytes": 5203,
+      "sha256": "a06bb7f71d9d4a2b4dc62ddfa09631810696e183f1fe141ebcc8ed824b269cbf"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -799,6 +811,11 @@
       "path": "docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md",
       "bytes": 5413,
       "sha256": "0a5cbf2aaf983a36e7db55f7ef0573b35d0d5695c4d80302aa2de8d539758b39"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md",
+      "bytes": 6960,
+      "sha256": "aa6663323ee913dd15ee9f1752ea9e03b8c14a31ac9d6cde7904babc6a1a1839"
     },
     {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",

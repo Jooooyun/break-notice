@@ -35,8 +35,10 @@
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 - G5 Freeze: `NOT PASSED`
 - G3 Technical checklist: `6 / 6`
-- Design Freeze: `29 / 32`
+- Design Freeze: `30 / 32`
 - Destruction Budget and Implementation Rules:
+  `OWNER-APPROVED / LOCKED`
+- Office Core Kit:
   `OWNER-APPROVED / LOCKED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
@@ -57,10 +59,16 @@ Prototype의 모든 파괴 category cap `0`과 Later-Slice의 bounded
 room·event·fragment·small-material hard cap, authored-state·pooling·
 atomic-admission·causal-carrier·Reset·fault 규칙은 Owner-approved로
 LOCK되었다. Structural Feature는 `VERTICAL SLICE / SHOULD / PARTIAL`
-및 별도 G5 승인 조건을 유지한다. Design Freeze는 `29 / 32`이며 남은
-항목은 `CHR_00 Player Turnaround`, `Office Core Kit 목록`, `첫 구현
-티켓 세분화`의 정확히 세 개다. 현재 다음 단일 작업은
-`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0055`이며 새 numbered
+및 별도 G5 승인 조건을 유지한다. Office Core Kit은 정확한
+Prototype-required family `16`개와 Later-Slice extension candidate
+`8`개, interaction·variant·reuse 및 Prototype destruction `0`
+경계로 `OWNER-APPROVED / LOCKED`되었다. 실제 model, texture, material,
+layout과 Unity asset creation은 `NOT STARTED / NOT AUTHORIZED`이며
+LGT_01은 Records Archive-local `COULD`, FIN_01은 `OUT / COULD`를
+유지한다. 이 Lock은 G5를 통과시키지 않는다. Design Freeze는
+`30 / 32`이며 남은 항목은 `CHR_00 Player Turnaround`과 `첫 구현
+티켓 세분화`의 정확히 두 개다. 현재 다음 단일 산출물은
+`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`이며 새 numbered
 task는 승인되지 않았다.
 G4와 G5는 `NOT PASSED`, Graybox는 `NOT STARTED`이고 구현 권한이 없다.
 승인된 여덟 Production Visual의

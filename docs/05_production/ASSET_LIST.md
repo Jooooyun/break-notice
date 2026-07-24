@@ -32,34 +32,81 @@ GEAR-01 Production Visual은 `LOCKED`이며 3D·기능 구현은 `PENDING`이다
 | LGT-01 | Night Archive Lighting | Visual locked; exact lighting values and rendering implementation pending |
 | FIN-01 | Conference Table Team Finisher | Visual locked; PR-F-022 remains COULD, outside approved Vertical Slice, exact function and implementation pending |
 
-## Props
+## Office Core Kit
 
-### Light
+Status: `OWNER-APPROVED / LOCKED`
 
-- File binder
-- Keyboard
-- Stapler
-- Mug
+Authority:
 
-### Medium
+- `docs/03_art/OFFICE_CORE_KIT.md`
+- `docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md`
 
-- Office chair
-- Monitor
-- Mobile whiteboard
-- Rolling drawer
-- Records cart
+Actual 3D assets: `NOT CREATED / PRODUCTION PENDING`
 
-### Heavy
+이 목록은 production-family 및 reuse scope만 고정한다. model, texture,
+material, room layout, Prefab 또는 Unity asset은 생성되지 않았고
+제작 권한도 없다.
 
-- Copier
-- Metal cabinet
-- Conference table
+### Prototype-Required Architecture and Fixed Fixture Families — 7
 
-## Structural
+| ID | Family | Prototype status |
+|---|---|---|
+| OCK-A-001 | Solid Office Wall System | Fixed / non-interactive |
+| OCK-A-002 | Fixed Office Door and Frame | Fixed / non-interactive |
+| OCK-A-003 | Low Cubicle Partition System | Fixed / non-interactive |
+| OCK-A-004 | Office Floor Surface | Fixed / non-interactive |
+| OCK-A-005 | Suspended Ceiling System | Fixed / non-interactive |
+| OCK-A-006 | Fixed Column / Impact Surface | Fixed / non-Structural |
+| OCK-A-007 | Neutral Fluorescent Ceiling Fixture | Visual only / no LGT_01 activation |
 
-- Glass partition
-- Ceiling cable tray or archive rack
-- Meeting-room wall/door feature
+### Prototype-Required Furniture and Gameplay Families — 5
+
+| ID | Family | Prototype mapping |
+|---|---|---|
+| OCK-F-001 | Fixed Work Desk | Fixed / non-interactive |
+| OCK-F-002 | Wheeled Office Chair | `OBJ-P-M-001` / gameplay-interactive |
+| OCK-F-003 | Rolling Drawer Cabinet | `OBJ-P-M-002` / gameplay-interactive |
+| OCK-F-004 | Copier-Class Asset | `OBJ-P-H-001` / recognition-only |
+| OCK-P-001 | File Binder | `OBJ-P-L-001` / gameplay-interactive |
+
+### Prototype-Required Decorative and Dressing Families — 4
+
+| ID | Family | Prototype status |
+|---|---|---|
+| OCK-D-001 | Workstation Electronics Cluster | Non-interactive |
+| OCK-D-002 | Paper and Archive Box Cluster | Non-interactive |
+| OCK-D-003 | Office Plant and Waste Bin Cluster | Non-interactive |
+| OCK-D-004 | Signage, Asset Tag, Tape and Wear Decal Set | Shared visual variation only |
+
+Prototype Office Core Kit total은 정확히 `16`개 family다.
+
+### Exact Prototype Gameplay Mapping
+
+- Gameplay-interactive definition: File Binder, Wheeled Office Chair,
+  Rolling Drawer Cabinet의 정확히 `3`
+- Recognition-only definition: Copier-Class Asset의 정확히 `1`
+- Fixed/decorative family: 정확히 `12`
+- Instance: File Binder `3`, Wheeled Office Chair `2`, Rolling Drawer
+  Cabinet `1`, Copier-Class Asset `1` — 총 `7`
+
+Office Core Kit은 새 definition 또는 instance를 추가하지 않는다.
+
+### Later-Slice Extension Candidates — 8
+
+| ID | Candidate family | Current boundary |
+|---|---|---|
+| OCK-X-A-001 | Glass Partition System | Static default; separate G5 Breakable decision required |
+| OCK-X-A-002 | Meeting Room Frame and Double-Door System | Static authored candidate |
+| OCK-X-A-003 | Archive Shelving Bay | Static default; not automatically Structural |
+| OCK-X-A-004 | Exposed Ceiling and Cable-Tray System | Static default; not automatically Structural |
+| OCK-X-F-001 | Records Cart | Potential movable; not included |
+| OCK-X-F-002 | Mobile Whiteboard | Potential movable; not included |
+| OCK-X-F-003 | Metal Storage Cabinet | Potential Heavy/fixed; G5 classification required |
+| OCK-X-F-004 | Conference Table | Potential Heavy; no FIN_01 activation |
+
+이 정확히 여덟 family는 Prototype 또는 자동 Vertical Slice content가
+아니며 asset creation, Breakable identity 또는 Structural Feature
+승인이 아니다.
 
 ## Destruction Scope Status
 
@@ -79,11 +126,20 @@ Status: `OWNER-APPROVED BUDGET / G5 ASSET IDENTITIES DRAFT`
 - small dynamic debris, runtime mesh fracture, recursively breakable
   fragment와 player-interactive fragment asset은 만들지 않는다.
 
-Office Core Kit과 final Breakable asset list는 `DRAFT`다.
+final Breakable asset list는 `DRAFT`이고 Structural inclusion은
+conditional `SHOULD / PARTIAL`이다. Office Core Kit Lock은 G5를
+통과시키지 않는다.
 
-## Environment
+LGT_01은 Records Archive-local `COULD`이고 Office Core Kit의 fixture,
+shelving 또는 archive candidate로 자동 활성화되지 않는다. FIN_01은
+계속 `OUT / COULD`이며 Conference Table candidate로 자동 활성화되지
+않는다.
 
-Office Core Kit 문서의 모듈과 Room 1~3 변주.
+## Remaining Production-Support Boundary
+
+`CHR_00 Player Turnaround`은 계속 `PENDING`이다. Office Core Kit Lock은
+character, gameplay feature 또는 Visual Canon authority를 변경하지
+않는다.
 
 ## VFX
 
