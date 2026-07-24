@@ -119,6 +119,24 @@ contract도 Owner-approved다.
   `docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`를
   따름
 
+`docs/02_design/MASTER_GDD.md`는
+`MIXED-AUTHORITY CONSOLIDATION DOCUMENT`다. 연결된 Owner-approved
+G1 기준선과 G2 계약이 우선하며, 연결되지 않은 정확한 mechanics,
+수치, 콘텐츠와 제작 가정은 Draft 또는 historical
+non-authoritative material이다.
+
+PR-F-019 Behavior Tags와 PR-F-024 Structural Feature는 각각
+`VERTICAL SLICE / SHOULD`인 optional scope이며 exact behavior,
+activation과 production content가 미승인인 동안 RTM Trace Status는
+`PARTIAL`이다. NFR-U-001~005의 Visual Spec과 Art Direction은
+readability의 Design/Canon evidence이며 technical implementation
+source가 아니다. 관련 technical source는 G3에서 별도로 승인해야 한다.
+
+G2 stale-authority와 RTM source/trace 교정은 완료되었지만 기존
+`G2 Design Baseline Final Audit` 판정은 역사적 `REVISION REQUIRED`로
+남는다. 다음 산출물은 `G2 Design Baseline Re-Audit`이며, 그 전에는
+G2를 통과시키거나 G3, Graybox, Unity 구현을 시작하지 않는다.
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 

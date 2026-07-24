@@ -1,10 +1,28 @@
 # BREAK NOTICE — Master Game Design Document
 
+> **MIXED-AUTHORITY CONSOLIDATION DOCUMENT**
+>
+> 이 문서는 제품 비전, Owner-approved G1 기준선, Owner-approved G2
+> 계약, 역사적 설계 후보를 한곳에서 설명한다. 연결된 Owner-approved
+> 요구사항·G2 계약·Accepted ADR·Visual Canon 문서가 각 항목의
+> 권한을 소유하며 이 문서는 그 권한을 덮어쓰지 않는다. 연결되지 않은
+> 정확한 mechanics, 수치, 콘텐츠, 제작 가정은 `DRAFT`,
+> `SUPERSEDED` 또는 `HISTORICAL / NON-AUTHORITATIVE`다. 이 문서는
+> 기술 명세나 구현 권한이 아니다.
+
 ## 1. 한 문장 정의
 
-해고 통보를 받은 사내 자산관리 직원이 산업용 운반 장비와 동료의 물체 패스를 이용해 사무용품을 받아 던지고, 적·가구·설비 사이의 연쇄 충돌로 회사 건물의 전투 공간을 재구성하는 3인칭 물리 액션 Roguelite.
+BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용 화물
+장비와 동료의 물리적 릴레이로 사무용품을 직접 받아 던지고 방향을
+바꾸며, 읽을 수 있는 연쇄 충돌로 사무실의 국소 상태를 재구성하는
+3인칭 물리 액션 게임이다.
 
 ## 2. 대표 장면
+
+아래 장면은 Physical Relay와 읽을 수 있는 국소 인과를 설명하는
+`ILLUSTRATIVE / NON-BINDING EXAMPLE`이다. 고정 gameplay sequence,
+actor·object 수, 충돌 순서, room layout, force, destruction 또는
+결과를 승인하지 않는다.
 
 ```text
 시설 동료가 의자를 바닥으로 굴린다.
@@ -17,6 +35,12 @@
 ```
 
 **No magic. Just teamwork, momentum, and office violence.**
+
+PGT_02와 PGT_03는 각각 충돌 전 리디렉션 인과와 국소 aftermath의
+Visual Canon evidence다. 두 이미지의 구도나 사건 순서는 gameplay
+choreography 또는 구현 script가 아니다. Prototype의 정확한 콘텐츠와
+affordance는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)가 소유한다.
 
 ## 3. 플레이어 판타지
 
@@ -93,81 +117,136 @@ encounter 완료 뒤 다른 combat encounter가 남아 있을 때 다음 encount
 
 ## 8. 전투 루프
 
+아래 순환은 승인된 동작들의 관계를 설명하는 예시이며 고정 입력 순서,
+필수 choreography 또는 하나의 attempt 순서가 아니다.
+
 ```text
 SCOUT     사용할 물체, 동료 위치, 충돌 표면 확인
-CALL      동료에게 Light 또는 Medium 전달 요청
-CATCH     Normal Catch 또는 Perfect Catch
-SETUP     Light로 공격·방패·약점을 끊음
-FEED      Medium을 직접 집거나 동료가 굴림
-REDIRECT  화물 스트랩과 몸의 회전으로 방향 수정
-LAUNCH    적을 벽·가구·다른 적으로 이동
-RELAY     후속 충돌과 환경 변화 발생
-BANK      Momentum Pip 저장
-CASH OUT  Heavy 또는 Structural Feature 사용
-REARM     파괴된 가구와 남은 물체로 다음 행동 준비
+→ 직접 물체 획득 또는 동료의 실제 물체 공급
+→ Normal Catch·Queued Throw 또는 Medium feed·redirect
+→ 읽을 수 있는 물리 결과와 인과 귀속
+→ 국소 room-state change 확인
+→ 필요할 때 Reset하고 다른 물체·각도·순서 재시도
 ```
 
-## 9. 기본 전투 동사
+권한별 활성 범위는 다음과 같다.
 
-- 이동, 전력질주, 짧은 회피
-- 낮은 가구 넘기
-- Scoop
-- Aim
-- Quick Throw
-- Charged Throw
-- Shove
-- Call & Catch
-- Perfect Catch
-- Queued Throw
-- Cargo Strap Attach/Release/Redirect
-- Heavy Overgrip
+- `PROTOTYPE CORE`: direct acquisition, physical ally relay, Normal
+  Catch, Queued Throw, Medium feed와 Cargo Strap redirect, causal
+  result, meaningful local room-state change, Reset.
+- `VERTICAL SLICE ONLY`: Perfect Catch, Momentum/Pip, HeavyAction,
+  Relay Position, Policy Violation.
+- `VERTICAL SLICE / SHOULD`: Suppressed, representative Behavior Tags,
+  Structural Feature.
+- `VERTICAL SLICE / COULD`: LGT_01 Records Archive-local variant.
+- `OUT / COULD`: FIN_01.
+- `P2 / DEFERRED`: Incident Report.
+
+정확한 action/state/class/resource/chain/ally/content authority는
+각 Owner-approved G2 계약을 따른다:
+[`LOGICAL_INPUT_CONTRACT.md`](LOGICAL_INPUT_CONTRACT.md),
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md),
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md),
+[`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md),
+[`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md),
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md),
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md),
+[`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md).
+
+## 9. 기본 논리 액션
+
+현재 활성 logical action은 정확히 아홉 개다.
+
+| Applicability | Active logical action |
+|---|---|
+| `PROTOTYPE CORE` | `Move`, `Look`, `Aim`, `InteractPrimary`, `Throw`, `CallAlly`, `StrapRelease`, `ResetEncounter` |
+| `VERTICAL SLICE ONLY` | `HeavyAction` |
+
+- Scoop, Normal Catch, Perfect Catch attempt와 Strap Attach는
+  `InteractPrimary`의 context result다.
+- Direct Throw와 Queued Throw는 같은 `Throw` action을 사용한다.
+- Quick Throw와 Charged Throw는 미결정 action mode 후보다.
+- `Sprint`, `Evade`, `Vault`, `Shove`는 비활성
+  `DRAFT CANDIDATE`이며 현재 논리 입력 기준선에 포함되지 않는다.
+
+정확한 intent, availability와 conflict는
+[`LOGICAL_INPUT_CONTRACT.md`](LOGICAL_INPUT_CONTRACT.md)와
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)를
+따른다. physical binding, timing, buffer, target ranking, locomotion,
+animation과 구현은 Draft다.
 
 ## 10. Scoop
 
-- 범위 목표: 1.5~2m
-- Light는 이동 중 한 손 획득
-- Medium은 짧은 자세 보정 후 집기
-- Heavy는 Momentum 없이는 즉시 집을 수 없음
-- 바닥 물체는 손에 자연스럽게 들어오도록 자세·회전 보정 가능
-- 물체가 공간을 순간이동하는 연출은 금지
+현재 Scoop 권한은 다음 네 계약에 있다.
+
+- [`LOGICAL_INPUT_CONTRACT.md`](LOGICAL_INPUT_CONTRACT.md)
+- [`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)
+- [`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)
+- [`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)
+
+Scoop은 유효한 가까운 Light 또는 Medium의 직접 획득 결과다. Heavy는
+normal Scoop 대상이 아니며 Prototype의 Copier-Class Asset은
+recognition-only다. 물체를 순간이동시키거나 hidden inventory로 바꾸지
+않는다.
+
+역사적 `1.5~2m`, one-hand handling, 자세·회전 자동 보정과 정확한
+획득 자세는 `HISTORICAL / NON-AUTHORITATIVE G2-G4 DRAFT`다.
 
 ## 11. Cargo Strap
 
-붉은 넥타이와 완전히 별개의 검정·황색 산업용 스트랩이다.
+시각·물리 연결 Canon은
+[`CARGO_STRAP_SPEC.md`](../03_art/CARGO_STRAP_SPEC.md), 기능 범위는
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md),
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md),
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md)를
+따른다.
 
-가능:
+- 대상은 바닥 지지를 유지하고 실제로 이동 가능한 eligible
+  `MEDIUM`이다.
+- Anchor는 하중 지지 금속 구조여야 한다.
+- `허리 릴 → 검정·황색 스트랩 → 은색 카라비너 → 교체식 금속
+  클램프 → 하중 지지 금속 Anchor`의 물리 연결을 유지한다.
+- 붉은 넥타이는 장비와 완전히 분리한다.
+- 캐스터, 휠 축, 플라스틱 하우징, 취약 돌출부에 연결하지 않는다.
+- Heavy towing, grapple, 공중 부유, 장애물 관통, 원격 제어와
+  telekinesis를 허용하지 않는다.
 
-- 연결 가능한 손잡이·프레임에 짧게 연결
-- 굴러오는 의자·카트의 방향 변경
-- 흔들리는 가구의 최종 전도 방향 보정
-- 방패나 자세가 무너진 적을 짧게 당김
+적을 당긴다는 역사적 문구는
+`SUPERSEDED / UNAPPROVED HISTORICAL DRAFT`이며 active authority가
+아니다. Automatic Safety Release의 조건과 동작도 `DRAFT`다.
 
-불가능:
+## 12. Catch and Throw
 
-- 방 전체의 물체를 손으로 끌어오기
-- 공중 정지·비행
-- Heavy를 원거리에서 당김
-- 이동용 그래플링
-- 넥타이 연결
-
-## 12. Call & Catch
+Catch와 Throw의 권한은
+[`LOGICAL_INPUT_CONTRACT.md`](LOGICAL_INPUT_CONTRACT.md),
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md),
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md),
+[`ALLY_RELAY_SUPPRESSED_CONTRACT.md`](ALLY_RELAY_SUPPRESSED_CONTRACT.md),
+[`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+따른다.
 
 ### Normal Catch
 
-- 요청한 동료와 대략적인 방향을 보고 있으면 넓은 보조 판정
-- 실패 스트레스보다 전투 템포 유지 우선
+Normal Catch는 `CATCH_ELIGIBLE` Light relay의 Prototype baseline
+Catch outcome이다. 성공하면 Carry 또는 Queued Throw로 이어질 수
+있다.
 
 ### Perfect Catch
 
-- 도착 직전 짧은 입력 창
-- 다음 투척 안정화와 Momentum 보너스
-- 짧은 Contact Freeze와 기계적 충격음
+Perfect Catch는 `VERTICAL SLICE ONLY`이며 Normal Catch와 구분되는
+선택적 결과다. Catch 자체가 아니라 이후 player-owned action이
+유효한 Meaningful Result를 만들면 현재 승인 계약의 origin당
+`+5 Momentum` modifier를 적용할 수 있다.
 
 ### Queued Throw
 
-- 물체가 오기 전 Throw를 유지
-- 캐치 충격을 몸 회전으로 이어 즉시 재투척
-- 캐치 후 정지·재조준 단계 최소화
+Queued Throw는 별도 logical action이 아니라 같은 `Throw` intent의
+pre-arrival mode이며 Catch 성공 뒤 정지·재획득 없이 투척 결과로
+전환할 수 있다.
+
+Normal Catch의 넓은 assistance, facing, exact timing, Perfect Catch
+window, Contact Freeze, hold/release 해석, Quick/Charged 구분,
+animation과 feedback은 모두 `DRAFT`다.
 
 ## 13. 동료
 
@@ -311,17 +390,19 @@ threshold, runtime lineage와 Unity 구현은 Draft다.
 
 ## 19. 타격감
 
-### Contact Freeze
-
-- Light: 20~35ms 시작점
-- Medium: 55~80ms 시작점
-- Heavy: 90~130ms 시작점
+역사적 Light `20~35ms`, Medium `55~80ms`, Heavy `90~130ms`
+Contact Freeze 범위는
+`SUPERSEDED / HISTORICAL TUNING — NOT ACTIVE G2 AUTHORITY`다.
+Contact Freeze 자체의 정확한 값과 적용 조건은 Draft다.
 
 ### Impulse Release
 
-정지 직후 적과 물체가 명확히 이동한다. 화면 흔들림보다 결과의 위치 변화가 우선이다.
+읽을 수 있는 물리적 변위가 spectacle보다 우선한다. 정확한 freeze,
+impulse, force, damage, camera와 animation은 Draft다.
 
 ### Sound Layers
+
+다음은 presentation 분리의 `DRAFT CANDIDATE`다.
 
 1. 비행음
 2. 물체 재질 접촉음
@@ -330,11 +411,22 @@ threshold, runtime lineage와 Unity 구현은 Draft다.
 
 ## 20. 파괴
 
-- Dynamic Prop
-- Pre-fractured Breakable Furniture
-- Authored Structural Feature
+Prototype Content Lock은 breakage, glass, debris, destruction VFX와
+Structural Feature를 모두 제외한다. Prototype의 meaningful
+room-state change는 Rolling Drawer Cabinet의 비파괴 side-lane
+clearance로 검증한다.
 
-작은 유리·종이·먼지는 VFX다. 큰 프레임·상판·문·용지함만 물리 오브젝트다.
+PR-F-024 Structural Feature는 `VERTICAL SLICE / SHOULD`이며 현재
+activation, cost, feature content와 물리 동작이 승인되지 않았다.
+Dynamic Prop, pre-fractured Breakable Furniture와 authored Structural
+Feature라는 역사적 분류는 later design/production
+`DRAFT CANDIDATE`다.
+
+breakable 수, debris·particle 수, Rigidbody budget, fracture,
+Pooling과 staged activation은 G3/G5 Draft다. PGT_03는 읽을 수 있는
+국소 aftermath의 Visual Canon이며 정확한 content, sequence 또는
+destruction budget이 아니다. unrestricted room-wide destruction은
+금지한다.
 
 ## 21. Roguelite 보상
 
@@ -351,37 +443,52 @@ UI, save와 구현은 Draft 또는 Deferred다.
 
 ## 22. 버티컬 슬라이스 방
 
-### Room 1 — Open Operations Office
+Open Operations Office, Copy and Meeting Hub, Records Archive와 그
+역사적 순서·enemy·object·objective는
+`NON-AUTHORITATIVE G5/G6 DRAFT PRODUCTION CANDIDATES`다. 정확한 방
+수, 순서, layout, enemy·object 수와 Elite 편입은 승인되지 않았다.
 
-Scoop, Light/Medium, 기본 패스, 첫 Chain.
+Records Archive 후보는 LGT_01을 자동 활성화하지 않는다. LGT_01은
+Records Archive-local `COULD`이고 Global Lighting 기준이 아니다.
+FIN_01은 계속 `OUT / COULD`이며 Vertical Slice 또는 최종 제품 범위에
+편입되지 않는다.
 
-### Room 2 — Copy and Meeting Hub
-
-유리, 복사기, 토너, Partition Guard, 첫 Heavy.
-
-### Room 3 — Records Archive
-
-좁은 통로, 이동식 선반, 야간 조명 변주, Elite 전투.
+현재 Prototype은
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)의
+`PRT-RM-001` 한 room만 사용한다.
 
 ## 23. 프로토타입 최소 범위
 
-현재 exact enemy·room·object content는
-[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)가 우선한다.
-아래 역사적 수량·기능 목록 중 이 잠금과 충돌하는 항목은
-`SUPERSEDED PROTOTYPE DRAFT`다.
+현재 exact authority는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md) 하나다.
+Prototype은 한 room, CHR_00 한 명, CHR_01 한 명, 동일한 Compliance
+Runner 두 명, 네 object definition과 일곱 instance, 일곱 validation
+affordance를 사용한다. Heavy Copier-Class Asset은 recognition-only이며
+breakage, Momentum/Pip과 active Heavy use는 없다.
 
-- Graybox 방 1개
-- 플레이어 1명
-- Relay 동료 1명
-- 기본 적 3명
-- Light 2종
-- Medium 2종
-- Heavy 1종
-- 유리벽 1개
-- Scoop, 패스, 캐치, 즉시 투척
-- 의자 굴리기와 스트랩 리디렉션
-- 기본 Stability, Momentum, 1-hop 이상 Chain
-- 즉시 Reset
+### Superseded Historical Prototype List
+
+아래 과거 목록은 더 이상 독립적인 authority가 아니다. 현재 잠금과
+일치하는 항목도 위 Content Lock과 관련 G2 계약에서만 권한을 얻는다.
+충돌하는 수량·기능은
+`SUPERSEDED PROTOTYPE DRAFT — NOT ACTIVE AUTHORITY`다.
+
+- Graybox 방 1개 — 현재 authority는 `PRT-RM-001` 한 room
+- 플레이어 1명 — 현재 authority는 CHR_00 한 명
+- Relay 동료 1명 — 현재 authority는 CHR_01 한 명
+- 기본 적 3명 — `SUPERSEDED`; 현재 Compliance Runner 두 명
+- Light 2종 — `SUPERSEDED`; 현재 Binder 한 definition, 세 instance
+- Medium 2종 — `SUPERSEDED`; 현재 Chair와 Drawer 두 definition
+- Heavy 1종 — `SUPERSEDED`인 active-use 표현; 현재 Copier 한
+  definition은 recognition-only
+- 유리벽 1개 — `SUPERSEDED`; Prototype에 glass/breakage 없음
+- Scoop, 패스, 캐치, 즉시 투척 — 현재 authority는 각 G2 계약과
+  Content Lock affordance
+- 의자 굴리기와 스트랩 리디렉션 — 현재 authority는 grounded Chair
+  feed와 player-owned redirect affordance
+- 기본 Stability, Momentum, 1-hop 이상 Chain — `SUPERSEDED`;
+  Prototype Momentum은 비활성이고 causal opportunity는 Depth `1`
+- 즉시 Reset — 현재 authority는 Reset 계약과 Content Lock
 
 ## 24. 절대 하지 않을 것
 

@@ -30,8 +30,11 @@
   "g2_design_baseline_final_audit_path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
   "g2_design_baseline_final_audit_baseline_sha": "a0cf9b15d120b0842e2ddcfff1be697863581533",
   "g2_design_baseline_final_audit_next_task": "TASK-0044 — Define and Align the G2 Policy Violation Selection and Run-Application Contract",
-  "g2_design_baseline_remediation_status": "IN PROGRESS",
-  "g2_design_baseline_remediation_next_output": "G2 Stale Authority and RTM Source/Trace Honesty Correction",
+  "g2_design_baseline_remediation_status": "CORRECTIONS COMPLETE / RE-AUDIT REQUIRED",
+  "g2_design_baseline_remediation_next_output": "G2 Design Baseline Re-Audit",
+  "g2_master_gdd_authority_status": "MIXED AUTHORITY / CONTRACTS TAKE PRECEDENCE",
+  "g2_rtm_optional_trace_honesty_status": "PR-F-019 AND PR-F-024 PARTIAL",
+  "g2_rtm_usability_source_role_status": "CORRECTED / G3 TECHNICAL SOURCES PENDING",
   "g2_prototype_room_count": 1,
   "g2_prototype_enemy_archetype_count": 1,
   "g2_prototype_enemy_instance_count": 2,
@@ -136,13 +139,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 23949,
-      "sha256": "4b3316ffe5a1a30b2ab266c44918a7963ea6c0567251fab3655f560b48f3f6e8"
+      "bytes": 24975,
+      "sha256": "2fb4ddf8f9bf2e5a493aec1f71dbdfb9ba94fafd8028adb4bc3ad9a31641ce0b"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 6495,
-      "sha256": "ed48b114c049f5f8f43ae47b9d8e08d66e0f3e82d7c656ca34f1a1f085f5ca02"
+      "bytes": 6876,
+      "sha256": "ba4d86b4c978470f00f969fd458a68122d7a602af1ea1624629d92457ab91fe9"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -291,13 +294,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 6261,
-      "sha256": "94f1c59ba32213de5e1684d6bd1c6576b06f2fe404fa048f87ae3f3a798b6cde"
+      "bytes": 6652,
+      "sha256": "9a4f12c61fe1db9f1e936ba99083e5c3cb7a098c1a5cd07559f53b1d26057188"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 6407,
-      "sha256": "e96dbbde45bc8450c7e4470d3fd11f9f61da5ac85f2edddd1ae78d1748cd6fde"
+      "bytes": 6640,
+      "sha256": "1db3c83dcbc5c43114ba2caa005e415e459ed26f3a3539e6229779d950ed4e7e"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -321,8 +324,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 31593,
-      "sha256": "8d02838b736420cf1a3988fc73b4eac767e8497906191977fccd03d02e870517"
+      "bytes": 31780,
+      "sha256": "343a3a04f352b090f0ae7e6ae3f958525eeeb2091b867f3378aa0e26cab9d628"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
@@ -366,8 +369,8 @@
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
-      "bytes": 14592,
-      "sha256": "9cc53328e93723a22a73caae5fce254393bc31cf636904cfda7fb7348e907d95"
+      "bytes": 22059,
+      "sha256": "c0e06ca9b1f0d6ec2b2f9e8ba7d7248e15086f4ed1557348cfa04df61b3b7eb8"
     },
     {
       "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
