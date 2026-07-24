@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G3 Technical Draft 여섯 개와 빈 Unity 예정 구조를 Owner-approved G1/G2 기준선에 대조해 `READY FOR OWNER G3 TECHNICAL DECISIONS`로 기록하고 13개 bounded 기술 결정을 준비하되, 기술 선택·G3 passage·Unity·Graybox·구현 권한은 만들지 않음
 - 성공한 G2 Re-Audit과 위임된 Owner 승인을 근거로 교정 기준선을 Owner-approved G2 Design Baseline으로 승격하고 G2 Gate를 `PASSED`로 기록한 뒤 현재 Phase를 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 전환하되, G3는 `NOT PASSED / CURRENT BASELINE WORK`, Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`로 유지하며 Unity 또는 구현 권한을 만들지 않음
 - 교정된 G2 기준선을 재감사해 `READY FOR G2 GATE DECISION`으로 기록하되 G2 passage, G3 entry, Graybox 또는 구현 권한은 만들지 않고 기존 Final Audit의 역사적 `REVISION REQUIRED`와 Implementation Gate `CLOSED`를 유지
 - G2 stale-authority와 RTM source/trace honesty를 교정해 Master GDD를 계약 우선의 mixed-authority 문서로 분류하고, PR-F-019·PR-F-024를 `PARTIAL`로 조정하며 NFR-U-001~005의 Visual/Art evidence를 Technical Source에서 분리함; 기존 Final Audit은 역사적 `REVISION REQUIRED`로 유지하고 다음 산출물을 G2 Design Baseline Re-Audit로 전환

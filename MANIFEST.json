@@ -53,7 +53,13 @@
   "design_freeze_checklist_progress": "22/32",
   "g3_gate_status": "NOT PASSED",
   "g3_entry_status": "CURRENT BASELINE WORK / PREPRODUCTION DOCUMENTATION ONLY",
-  "g3_current_next_task": "TASK-0048 — G3 Technical Baseline Preflight Audit and Decision Package",
+  "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
+  "g3_technical_preflight_path": "docs/05_production/G3_TECHNICAL_BASELINE_PREFLIGHT_AUDIT.md",
+  "g3_technical_preflight_baseline_sha": "3bf04d7a86601f07ccbd65f635b1f9a05aaaa5df",
+  "g3_technical_preflight_decision_count": 13,
+  "g3_technical_preflight_next_task": "TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions",
+  "g3_technical_checklist_progress": "0/6",
+  "g3_current_next_task": "TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -156,8 +162,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 7579,
-      "sha256": "14f29ff50fd858cf154d56fcfc7f4719e80f93514032af66c90b81061701d231"
+      "bytes": 7864,
+      "sha256": "7963b39ed46baf993af3bebe805d854a3bdbb9988842f811c3c9695908a3b931"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -311,8 +317,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 7444,
-      "sha256": "62305e72dcbec647f56298b3711078c5acf2387ee74de007fa405ee2c63d4a71"
+      "bytes": 7871,
+      "sha256": "5cf8b3d2710f078041796223af6a5a779735075587915ecb55e615a501c2be97"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -543,6 +549,11 @@
       "path": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
       "bytes": 27761,
       "sha256": "9fe9f52d3868d0ac65b15b6be2265ad62569429d27b6427c73aa8a1133c91534"
+    },
+    {
+      "path": "docs/05_production/G3_TECHNICAL_BASELINE_PREFLIGHT_AUDIT.md",
+      "bytes": 59292,
+      "sha256": "06df91577d7e107e04f8d7f37a8d97f1016e80103321d391c9f6363ffe6c2d19"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

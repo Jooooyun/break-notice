@@ -35,6 +35,7 @@ Implementation Gate: `CLOSED`
 | G2 Stale Authority and RTM Source/Trace Honesty Correction | OWNER-APPROVED / COMPLETE / VERIFIED BY RE-AUDIT | G2 passage에 반영 완료 | G2 PASSED |
 | Policy Violation Selection and Run-Application Contract | OWNER-APPROVED / G2 PARTIAL | G3 기술 매핑에서 유지 | G2 PASSED |
 | G2 Design Baseline Re-Audit | READY FOR G2 GATE DECISION — CONSUMED BY G2 PASSAGE | G3 Technical Baseline Preflight Audit | G2 PASSED |
+| G3 Technical Baseline Preflight Audit | READY FOR OWNER G3 TECHNICAL DECISIONS | TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions | G3 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -45,7 +46,7 @@ Implementation Gate: `CLOSED`
 | FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
 | 파괴 예산 | HIGH-LEVEL BASELINE | 정확한 파편·Particle·VFX·성능 예산 | G2 |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
-| G3 Technical Baseline | NOT PASSED / CURRENT BASELINE WORK | TASK-0048 — G3 Technical Baseline Preflight Audit and Decision Package | G3 |
+| G3 Technical Baseline | NOT PASSED / CURRENT BASELINE WORK | TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions | G3 |
 | 기술 아키텍처 | DRAFT | 책임·데이터·이벤트·검증·예산·Reset·test harness 감사 | G3 |
 | Graybox | NOT STARTED | Design Readiness Gate 통과 후 | G4 |
 | 본 제작 | PENDING | Implementation Gate 개방 후 | G5 |
@@ -106,5 +107,9 @@ Vertical Slice의 정확한 콘텐츠는 `DRAFT`, `COULD`, `DEFERRED` 또는
 미승인이다. 승인된 여덟 Visual의 문서화된 Canonical Elements만
 `LOCKED`이며 현재 Phase label은 Owner가 승인한
 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`이다. G3 Technical은
-`NOT PASSED / CURRENT BASELINE WORK`이고, 다음 단일 작업은
-`TASK-0048 — G3 Technical Baseline Preflight Audit and Decision Package`다.
+`NOT PASSED / CURRENT BASELINE WORK`이다. G3 Technical Draft와 빈
+Unity 예정 구조를 기준선에 대조한 Preflight Audit 결과는
+`READY FOR OWNER G3 TECHNICAL DECISIONS`이며, 어떤 기술 결정이나
+정확한 Editor/package version도 아직 승인되지 않았다. 다음 단일
+작업은 Owner가 13개 결정을 승인한 뒤의
+`TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions`다.
