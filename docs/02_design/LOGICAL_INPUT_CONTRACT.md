@@ -15,7 +15,9 @@
 - Prototype Core의 활성 논리 액션은 정확히 8개다.
 - Vertical Slice의 활성 논리 액션은 정확히 1개다.
 - 이 계약은 action availability, arbitration 또는 state transition을
-  결정하지 않는다.
+  직접 결정하지 않는다. 해당 Owner-approved 기준은
+  [`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)를
+  따른다.
 - exact tap/hold/release 해석, 접근성 remapping과 물리적 binding은
   별도 G2/G3 결정 전까지 Draft다.
 - G1 Requirement 문구, Priority, Applicability와 Authority는
@@ -162,18 +164,29 @@ FIN_01은 계속 `OUT / COULD`이고 일반 전투에 두 번째 active ally를
 
 ## Remaining G2 and G3 Decisions
 
-다음 항목은 이 계약 이후에도 `DRAFT`다.
+TASK-0037에서 다음 G2 항목은
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)로
+Owner-approved되었다.
 
-- action state availability;
-- interaction priority와 state conflicts;
+- logical state ownership과 action availability;
+- cross-context `InteractPrimary` arbitration;
+- Scoop, Catch, Throw와 Cargo Strap conflict;
+- Queued Throw와 active relay의 안전한 해소;
+- `ResetEncounter` 우선순위;
+- `HeavyAction` exclusivity.
+
+다음 항목은 계속 `DRAFT`다.
+
+- same-context target ranking;
+- exact timing, range와 angle;
 - input buffering과 cancellation windows;
-- tap, hold, release threshold;
-- keyboard, mouse와 gamepad bindings;
+- tap, hold, release threshold와 physical bindings;
+- Carry/Strap/Throw/Heavy 중 movement restriction;
+- weight/object eligibility와 정확한 Light/Medium/Heavy 데이터 범위;
 - accessibility remapping;
 - exact feedback, animation과 physics behavior;
 - Unity Input System 구성;
 - implementation class, component와 data contract.
 
-다음 G2 설계 산출물은 interaction state and conflict contract다.
-그 전에는 `GAMEPLAY_SPEC.md`의 관련 우선순위·상태·timing 문구를
-승인된 계약으로 취급하지 않는다.
+`Sprint`, `Evade`, `Vault`, `Shove`는 계속 비활성 Draft candidate다.
+다음 G2 설계 산출물은 Light/Medium/Heavy data range contract다.

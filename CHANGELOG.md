@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G2 Interaction State, Arbitration, and Conflict Contract를 승인 상태로 등록해 Scoop/Catch/Throw/CallAlly/Cargo Strap/Heavy/Reset의 소유권·가용성·충돌·안전 거부를 정의하고, exact timing·binding·weight assignment·ranking·physics·구현은 Draft로 유지
 - G2 Logical Input Action Contract를 승인 상태로 등록해 9개 active action과 4개 deferred candidate를 분리하고, state·binding·timing·implementation은 Draft로 유지
 - Post-G1 Phase label을 `PRE-PRODUCTION / G2 DESIGN BASELINE`으로 동기화하고 G2를 현재 baseline work로 표시하되, G2 미통과와 Implementation Gate `CLOSED`를 유지
 - 커밋 `b701a321d03e9c74ad2e3ec9bb8c4ee4fa921c30`의 정확한 G1 요구사항·NFR·기술 중립적 검증 의도·범위 문구를 Owner-approved Baseline으로 승격

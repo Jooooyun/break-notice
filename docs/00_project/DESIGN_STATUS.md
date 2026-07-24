@@ -20,7 +20,8 @@ Implementation Gate: `CLOSED`
 |---|---|---|---|
 | G1 Requirements Baseline | OWNER-APPROVED / PASSED | G2 Design baseline | G1 PASSED |
 | 제품 비전 | OWNER-APPROVED G1 BASELINE | 상세 설계 정렬 | G1 PASSED |
-| Logical Input Action Contract | OWNER-APPROVED / G2 PARTIAL | interaction state and conflict contract | G2 |
+| Logical Input Action Contract | OWNER-APPROVED / G2 PARTIAL | Interaction State and Conflict Contract와 함께 유지 | G2 |
+| Interaction State and Conflict Contract | OWNER-APPROVED / G2 PARTIAL | Light/Medium/Heavy data range contract | G2 |
 | 핵심 전투 동사 | REQUIREMENTS OWNER-APPROVED / DESIGN DRAFT | 상세 게임플레이 설계 | G2 |
 | 동료 릴레이 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
@@ -56,7 +57,7 @@ FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이며 승
 G1 요구사항·NFR의 정확한 문구와 disposition, 기술 중립적 검증
 의도와 Applicability/Priority 경계는 Owner-approved이며 G1
 Requirements Gate는 `PASSED`다. 상세 게임플레이 설계, G2
-입력·상태 계약, Acceptance Test의 정확한 수치·임계값, 파괴 예산,
+Light/Medium/Heavy 데이터 범위, Acceptance Test의 정확한 수치·임계값, 파괴 예산,
 카메라 기능, 조명·렌더링 구현, FIN_01 제품 편입, 기술 아키텍처,
 구현 계획과 Vertical Slice의 정확한 콘텐츠는 `DRAFT`, `COULD`,
 `DEFERRED` 또는 미승인이다. 승인된 여덟 Visual의 문서화된

@@ -30,8 +30,10 @@
   `CallAlly`, Heavy request는 `HeavyAction`, encounter reset은
   `ResetEncounter`를 사용한다.
 
-이 mapping은 state availability, interaction priority, target ranking,
-buffer, cancel 또는 timing을 결정하지 않는다.
+state availability, cross-context arbitration와 conflict는
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)를
+따른다. 동일 context의 target ranking, buffer, cancel과 timing은
+계속 Draft다.
 
 ### Deferred Candidates
 
@@ -42,20 +44,28 @@ combat, animation, physics 또는 state-conflict 범위를 추가하므로
 각각 별도 G2 scope decision이 필요하다. 기존 아래 설계 논의는
 역사적 Draft로 유지하며 활성 입력 계약으로 사용하지 않는다.
 
-아래 2~9절의 priority, flow, state conflict, feedback, timing과 value는
-별도 Owner 결정 전까지 `DRAFT`다. 이 작업은 `Player Interaction
-Priority`를 해결하지 않는다.
+아래 2절과 8절은 Owner-approved Interaction State and Conflict
+Contract의 축약본이다. 3~7절과 9절의 상세 flow, feedback, timing과
+value는 별도 Owner 결정 전까지 `DRAFT`다. 따라서 6절의 자동
+안전 해제 문구도 승인된 rule이 아닌 역사적 Draft 후보다.
 
 ## 2. Player Interaction Priority
 
-하나의 입력이 여러 대상과 겹칠 때 아래 순서를 따른다.
+Owner-approved cross-context arbitration은
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)
+`## InteractPrimary Arbitration`을 따른다.
 
-1. 도착 중인 Catch 대상
-2. 명시적으로 조준된 Strap Anchor
-3. 손이 닿는 Scoop 물체
-4. 문맥 환경 상호작용
+- `ACTIVE_RELAY`에서는 명시적으로 조준한 유효
+  `STRAP_ELIGIBLE` Anchor가 먼저 Strap Attach context를 만들고,
+  그렇지 않으면 유효한 `CATCH_ELIGIBLE` Catch context만 평가한다.
+- `ACTIVE_RELAY` 중 unrelated Scoop 또는 다른 context fallback은
+  없다.
+- relay가 없으면 명시적 Strap context를 먼저 평가하고, 그 context가
+  없을 때만 Scoop candidate를 평가한다.
+- 유효하지 않은 명시적 Strap context는 Scoop으로 fallback하지
+  않는다.
 
-모호한 자동 선택으로 플레이어 의도를 바꾸지 않는다. 현재 선택 대상은 실루엣·작은 기계 표시로 피드백한다.
+동일 context 안의 target ranking과 정확한 feedback은 Draft다.
 
 ## 3. Scoop Flow
 
@@ -130,6 +140,9 @@ Pass Requested
 
 ## 7. Shove
 
+> `Shove`는 비활성 `DRAFT CANDIDATE`이며 현재 G2 logical-action
+> baseline이나 state-conflict contract에 포함되지 않는다.
+
 - 적과 거리 벌리기
 - 적을 충돌 선상에 배치
 - 흔들리는 가구 전도
@@ -138,14 +151,22 @@ Pass Requested
 
 ## 8. State Conflicts
 
-| 현재 상태 | 금지/제한 |
-|---|---|
-| Carry Light | Sprint 가능, Evade 가능 |
-| Carry Medium | Sprint 제한, Evade 제한적 |
-| Carry Heavy | Sprint 불가, 회전 제한, 피격 위험 |
-| Strap Attached | 최대 거리 제한, 일부 회피 제한 |
-| Catch Window | Scoop보다 Catch 우선 |
-| Knockback | 입력 버퍼 최소화, 회복 후 명확히 복귀 |
+Owner-approved 상태 소유권과 conflict의 전체 기준은
+[`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)를
+따른다.
+
+- Carry, active Cargo Strap, Throw commitment와 Heavy commitment는
+  서로 배타적이다.
+- `ACTIVE_RELAY` 중 unrelated Scoop과 추가 `CallAlly`를 차단한다.
+- active Cargo Strap 중 `InteractPrimary`, `Throw`, `CallAlly`와
+  `HeavyAction`을 차단하고 명시적 `StrapRelease`를 허용한다.
+- Queued Throw는 eligible active relay에서 하나만 arm하며 Catch
+  이외의 relay 해소, Strap Attach 또는 Reset에서 clear한다.
+- `ResetEncounter`는 모든 상호작용 소유권보다 우선한다.
+- invalid context는 unrelated action으로 fallback하지 않는다.
+
+Carry/Strap/Throw/Heavy 중의 정확한 movement restriction, 외부
+Knockback 처리, buffer와 cancel은 Draft다.
 
 ## 9. Feedback Requirements
 
