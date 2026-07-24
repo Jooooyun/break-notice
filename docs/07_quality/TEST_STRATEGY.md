@@ -5,8 +5,9 @@
 > Document Decision Source: `DEC-G1-017`
 >
 > 다섯 검증 Layer와 활성화 정책은 G1 기준으로 Owner-approved다.
-> 테스트 구현, Unity Test Framework, 정확한 수치와 Build Gate
-> 통과는 승인하지 않는다.
+> G3 harness 책임과 Unity Test Framework `1.6.0` 문서 lock은
+> Owner-approved다. 테스트 구현·실행, fixture, 정확한 수치와 Build
+> Gate 통과는 승인하지 않는다.
 
 ## Validation Layers
 
@@ -40,6 +41,40 @@ G5는 위 다섯 검증 Layer와 별도로 실제 actor, asset, room과 feature
 `DORMANT / NON-BLOCKING`이다. PR-F-020에는 승격 전
 `AT-INC-001`을 만들지 않는다.
 
+## Owner-Approved G3 Harness Plan
+
+Decision Source: `ADR-0015`, `DEC-G3-012`
+
+Harness의 semantic owner와 observability plan은 G3 기준으로
+Owner-approved다. Unity Test Framework의 documentation lock은
+`1.6.0`이지만 test assembly, API, fixture, overlay, CI와 실행 결과는
+아직 없다.
+
+| Activation group | Harness ownership | Acceptance-Test mapping |
+|---|---|---|
+| Prototype logical support | EditMode | state transition, arbitration, safe rejection, identity separation, causal depth/uniqueness/branch/termination, Reset-plan comparison |
+| Prototype physical/lifecycle | PlayMode | AT-SCOOP-001, AT-PHY-001, AT-ALLY-001, AT-CATCH-001, AT-THROW-003, AT-STRAP-001, AT-WEIGHT-001, AT-CHAIN-001, AT-IMPACT-001, AT-SCOPE-001, AT-ROOM-001, AT-FLOW-001 |
+| Prototype readability | Manual / Playtest | AT-ART-001과 위 Prototype test의 physical readability, agency, camera/route readability, non-telekinetic interpretation |
+| Later Vertical Slice | Later EditMode / PlayMode / Manual | AT-CATCH-002, AT-MOM-001, AT-HEAVY-001, AT-ALLY-002, AT-ROGUE-001 |
+| Conditional SHOULD | Later only if promoted | AT-ALLY-003, AT-PROP-001, AT-STRUCT-001 |
+| Dormant | No active harness | AT-FIN-001 — `DORMANT / NON-BLOCKING` |
+| Deferred gap | No test before promotion | PR-F-020; no active AT-INC-001 |
+
+Required observability:
+
+- active logical intent/context와 interaction state;
+- ownership;
+- Strap state와 Anchor validity;
+- Ally state, reservation과 relay phase;
+- Origin, parent, carrier, depth와 Result family;
+- duplicate/cycle rejection reason;
+- room-state flag;
+- Reset diff와 subscription count;
+- fault, active-body, collision과 frame-spike counter.
+
+Reset은 harness에서도 exclusive lifecycle barrier다. repeated delivery
+가능 boundary는 idempotency와 duplicate suppression을 검증한다.
+
 ## Candidate Test Pyramid
 
 ### EditMode Candidate
@@ -50,7 +85,8 @@ G5는 위 다섯 검증 Layer와 별도로 실제 actor, asset, room과 feature
 - Cargo Strap의 승인된 논리 제약
 - upgrade 선택 규칙
 
-정확한 test framework, API와 fixture는 G3 Draft다.
+Unity Test Framework `1.6.0`은 exact documentation lock이다. 구체 API,
+fixture와 test implementation은 Draft다.
 
 ### PlayMode Candidate
 
@@ -88,6 +124,7 @@ G5는 위 다섯 검증 Layer와 별도로 실제 actor, asset, room과 feature
 Owner가 승인한 활성 `MUST` 요구사항의 blocking test가 실패하면
 해당 Gate를 통과할 수 없다.
 
-Acceptance Tests의 기술 중립적 행동 의도만 G1 Owner-approved다.
-어떤 테스트도 실행 또는 통과되지 않았으며 G2 논리 계약, G3 구현,
-G4/G6 임계값과 배포 빌드 권한은 별도 Draft와 Gate에 남는다.
+Acceptance Tests의 기술 중립적 행동 의도는 G1 Owner-approved이고
+logical contract는 G2 Owner-approved이며 harness ownership은 G3
+Owner-approved다. 어떤 테스트도 구현·실행·통과되지 않았고 G4/G6
+임계값과 배포 빌드 권한은 별도 Draft와 Gate에 남는다.

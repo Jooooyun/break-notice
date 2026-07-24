@@ -1,40 +1,74 @@
 # Performance Budget
 
-## Target
+> **OWNER-APPROVED G3 MEASUREMENT OWNERSHIP — EXACT CEILINGS REMAIN DRAFT**
+>
+> Authority: `docs/04_technical/G3_TECHNICAL_BASELINE.md` —
+> `## Performance and Destruction-Budget Ownership`
 
-- 1920×1080
-- 60 FPS 목표
-- Windows PC
-- 정확한 최소/권장 사양은 Vertical Slice 프로파일링 후 확정
+## Platform Boundary
 
-## Runtime Budget Baseline
+Windows PC가 baseline platform이다. hardware, resolution, FPS와
+pass/fail threshold는 G3 Final Audit 이후 proposal 및 G4/G6 evidence가
+소유한다.
 
-| 항목 | 일반 목표 | 순간 최대 |
+## Prototype Measurement Profile
+
+대표 scenario는 actor 네 명(플레이어, fixed ally 한 명, Compliance
+Runner 두 명), object instance 일곱 개, one room, required breakable
+0개와 동시에 active한 player interaction chain 한 개다. approved depth
+안의 causal branch는 허용한다.
+
+| Category | Measurement owner |
+|---|---|
+| frame time | profiler capture and frame-spike log |
+| fixed-step load | physics instrumentation |
+| awake dynamic bodies | physical lifecycle counter |
+| collision callbacks | physics callback counter |
+| normalized impact facts | impact-normalization counter |
+| active Origins/carriers | causal observability |
+| Reset duration/diff | Reset harness |
+| physics faults | fault-recovery counter |
+| camera/presentation cost | presentation instrumentation |
+| memory/allocation spikes | profiler capture |
+
+이 표는 측정 범주이며 승인된 ceiling이 아니다.
+
+## Later Slice Measurement Profile
+
+다음은 Prototype과 별도 profile을 가진다.
+
+- Momentum/Pip;
+- HeavyAction;
+- Relay Position;
+- Policy lifecycle;
+- conditional Suppressed;
+- conditional breakable/Structural;
+- additional actors, objects와 rooms.
+
+## Superseded Draft Candidate Values
+
+아래 과거 값은 historical tuning candidate일 뿐 Prototype baseline,
+pass criterion 또는 제작 범위가 아니다.
+
+| Item | Former ordinary target | Former burst candidate |
 |---|---:|---:|
-| 활성 적 | 3~5 | 6 |
-| 활성 동료 | 1 | 특수 연출 2 |
-| Awake Dynamic Rigidbody | 20~30 | 40 |
-| 실제 큰 파편 | 8~15/사건 | 25/방 |
-| Structural Feature | 1/방 | 2 |
-| 동시 Chain 추적 | 8 | 16 |
-| 실제 물리 종이·작은 유리 | 0 | 0 |
+| active enemies | 3–5 | 6 |
+| active allies | 1 | special presentation 2 |
+| awake Dynamic Rigidbody | 20–30 | 40 |
+| physical large fragments | 8–15/event | 25/room |
+| Structural Feature | 1/room | 2 |
+| concurrent Chain tracking | 8 | 16 |
+| physical paper/small glass | 0 | 0 |
 
-## CPU 위험
+## Risk Categories
 
-- Collision callback 폭주
-- 복잡한 Convex MeshCollider
-- 동료 자유 경로 탐색
-- 다중 ragdoll
-- 한 프레임 파편 대량 활성화
-
-## GPU 위험
-
-- 투명 유리 중첩
-- 실시간 반사
-- 과도한 먼지·종이 overdraw
-- 다수 동적 그림자
-- 영화급 머리카락·피부 셰이더
+- callback storm, complex collider와 uncontrolled dynamic activation;
+- free navigation, multiple ragdoll과 bulk fragment activation;
+- transparent overdraw, dynamic shadow와 expensive material;
+- allocation spike, Reset leak와 duplicate subscription.
 
 ## Gate
 
-예산을 초과하는 기능은 최적화 약속만으로 승인하지 않는다. 재현 가능한 프로파일링 결과와 대안이 필요하다.
+exact ceiling은 재현 가능한 scenario, capture method와 evidence를 함께
+제시해야 한다. 최적화 약속이나 과거 candidate만으로 Gate를 통과하지
+않는다.

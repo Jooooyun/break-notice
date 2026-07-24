@@ -19,6 +19,10 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G1 Requirements: `PASSED`
 - G2 Design: `PASSED / OWNER-APPROVED BASELINE`
 - G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
+- G3 Technical Decisions:
+  `OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING`
+- G3 Technical Checklist: `6 / 6`
+- Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -131,7 +135,8 @@ PR-F-019 Behavior Tags와 PR-F-024 Structural Feature는 각각
 activation과 production content가 미승인인 동안 RTM Trace Status는
 `PARTIAL`이다. NFR-U-001~005의 Visual Spec과 Art Direction은
 readability의 Design/Canon evidence이며 technical implementation
-source가 아니다. 관련 technical source는 G3에서 별도로 승인해야 한다.
+source가 아니다. 관련 technical owner는 Owner-approved
+`docs/04_technical/G3_TECHNICAL_BASELINE.md`에 매핑된다.
 
 여덟 G2 계약과 교정된 authority/trace 기준선은
 `G2 Design Baseline Re-Audit`의 `READY FOR G2 GATE DECISION` 판정과
@@ -139,10 +144,38 @@ Owner 승인에 따라 G2 Design Baseline으로 승인되었고 G2 Gate는
 `PASSED`다. 기존 `G2 Design Baseline Final Audit` 판정은 기준선
 `a0cf9b15d120b0842e2ddcfff1be697863581533`에 대한 역사적
 `REVISION REQUIRED`로 유지된다. Re-Audit은 G2 passage에 소비된
-권한 근거이며, 현재 작업은 G3 Technical Baseline의 프리프로덕션
-문서 감사와 결정 준비다. G2 passage는 구현 또는 테스트 완료를
+권한 근거다. Owner-approved G3 Technical Baseline은 별도 Final
+Audit을 기다린다. G2 passage는 구현 또는 테스트 완료를
 뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한 later-Gate deferral로
 유지된다. 어떠한 RTM 행도 `VERIFIED`로 승격되지 않았다.
+
+다음 G3 documentation-level technical baseline은 Owner-approved다.
+
+- Unity Editor `6000.3.20f1`
+- URP `17.3.0`
+- Input System `1.20.0`
+- Cinemachine `3.1.7`
+- Unity Test Framework `1.6.0`
+- AI Navigation은 Prototype package baseline에서 `DEFERRED`
+- explicit composition, single mutable-state owner와 one-way
+  Presentation dependency
+- definition/runtime/Origin/Result identity 분리
+- ordered Request→Validation→Ownership→Physical Fact→Domain
+  Fact→Result→Presentation flow와 exclusive Reset barrier
+- bounded Dynamic activation, selective CCD, normalized impact와
+  observable fault recovery
+- simplified Cargo Strap constraint와 explicit `StrapRelease`;
+  automatic Safety Release와 full rope simulation 금지
+- Prototype/later-Slice budget owner 분리
+- authored snapshot/restore primary와 audited Scene-reload fallback
+- EditMode/PlayMode/Manual harness ownership과 observability
+- G3 passage와 final pre-implementation review 뒤에만 가능한 bounded
+  10-wave sequence
+
+정확한 권위는 `docs/04_technical/G3_TECHNICAL_BASELINE.md`와
+`docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md`를 따른다. 이는
+실제 Unity project, package resolution, code, test, Scene, Prefab,
+build 또는 Graybox를 승인하지 않는다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -170,8 +203,8 @@ constraint와 구현은 계속 `DRAFT`다.
   constraint, animation, physics와 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값
 - 밸런스와 성능 수치
-- 기술 아키텍처
-- Unity 구현 계획
+- exact implementation class, payload, schema와 tuning
+- Unity Bootstrap 및 구현 ticket
 - Vertical Slice의 정확한 콘텐츠와 구현 범위
 
 Implementation Gate는 `CLOSED`다.
@@ -179,9 +212,13 @@ Implementation Gate는 `CLOSED`다.
 현재 Phase label은 Owner 승인에 따라
 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 변경되었다. G3 Technical은
 `NOT PASSED / CURRENT BASELINE WORK`이며 기술 책임·데이터·이벤트·
-검증·예산·Reset·test-harness 기준은 아직 승인되지 않았다.
-명시적인 사용자 승인과 후속 Design Readiness Gate 통과 전에는
-Graybox 또는 Unity 구현을 시작하지 않는다.
+검증·예산·Reset·test-harness 기준은 Owner-approved baseline으로
+적용되었지만 Final Audit은 아직 통과하지 않았다. Technical checklist는
+`6 / 6`, Design Freeze는 `28 / 32`다. 현재 `Game/**`에는 placeholder만
+있고 Unity project는 생성되지 않았다. 다음 작업은
+`TASK-0050 — G3 Technical Baseline Final Audit and Gate Readiness`다.
+G3 passage, remaining Design Freeze와 final pre-implementation review
+전에는 Graybox 또는 Unity 구현을 시작하지 않는다.
 
 ---
 
@@ -363,7 +400,7 @@ Codex는 스스로 결과물을 `APPROVED`, `FINAL`, `LOCKED`로 선언하지 �
 - 1인 개발
 - 폭포수 기반 개발
 - 명시적 단계별 승인 게이트
-- Unity 6 예정
+- Unity `6000.3.20f1` documentation lock; project 미생성
 - 3D Third-Person 예정
 - Grounded Corporate Action Realism
 - Grounded world, absurd physics

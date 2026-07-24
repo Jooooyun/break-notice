@@ -1,80 +1,99 @@
 # Software Architecture
 
+> **OWNER-APPROVED G3 DIRECTION — IMPLEMENTATION NAMES REMAIN PROVISIONAL**
+>
+> Authority: `docs/04_technical/G3_TECHNICAL_BASELINE.md` —
+> `## Architecture and Dependency Direction`
+
 ## Dependency Rule
 
-상위 표현 계층은 하위 게임·시뮬레이션 계층을 호출할 수 있지만, 시뮬레이션이 UI·카메라 구현을 직접 참조하지 않는다.
+Composition root가 dependency를 명시적으로 구성한다. Gameplay과
+Simulation은 UI, Camera, VFX 또는 Audio 구현을 참조하지 않는다.
+Presentation adapter는 domain fact를 소비할 뿐 gameplay state를
+변경하지 않는다.
 
-## Component Responsibilities
+금지:
 
-### PlayerMotor
+- generic service locator 또는 dependency-injection framework;
+- global mutable static registry;
+- primary global event bus;
+- raw collision callback의 cross-system mutation;
+- Presentation-to-Gameplay backflow;
+- optional system의 Prototype dependency graph 침투.
 
-이동, 회피, Vault, 현재 이동 제약. 물체 선택·투척 판정은 담당하지 않는다.
+## Responsibility Domains
 
-### PlayerInteractionController
+### Composition and Encounter Bootstrap
 
-Catch > Strap Anchor > Scoop 우선순위와 문맥 입력을 결정한다.
+encounter dependency, lifecycle root와 authored baseline을 조립한다.
+구체 class 이름은 미정이다.
 
-### CarryController
+### Logical Input Adapter
 
-물체 소유 상태, 손 Anchor, 무게별 이동 제약, 놓기.
+platform input을 G2 logical intent로 변환한다. arbitration이나 state
+mutation을 소유하지 않는다.
 
-### ThrowController
+### Player Locomotion and Camera Adapter
 
-Quick/Charged/Queued Throw와 투척 초기 조건을 생성한다.
+승인된 locomotion과 gameplay camera adapter만 소유한다. Evade와
+Vault는 active Prototype responsibility가 아니다.
 
-### CargoStrapController
+### Interaction and Ownership
 
-Attach, 장력, 거리, 허용 각도, Release, 안전 해제. 물체를 순간이동하지 않는다.
+G2 context/state contract에 따라 request를 검증하고 Carry/Throw의
+singular ownership을 commit한다. fixed Catch/Strap/Scoop priority와
+settled Quick/Charged mode를 가정하지 않는다.
 
-### AllyRelayController
+### Physical Object Lifecycle
 
-Relay Position, 재고, 패스 요청, 투척·굴림, Suppressed.
+activation, physical release, carrier transfer와 stable physical
+continuity를 소유한다.
 
-### ImpactResolver
+### Ally Supply and Reservation
 
-원시 Collision 데이터를 표준화하고 무게·재질·속도·각도에 따라 게임 결과를 계산한다.
+room-local physical pool, singular reservation, pre-release abort와
+physical release를 소유한다. generic ally inventory, first-wave Relay
+Position과 Suppressed를 소유하지 않는다.
 
-### CausalChainService
+### Cargo Strap
 
-Lineage 생성·전파·종료·중복 억제·디버그.
+valid Anchor/eligible Medium 검사, attach, bounded redirect와 explicit
+release를 소유한다. automatic Safety Release는 승인되지 않았다.
 
-### MomentumService
+### Impact Normalization
 
-보상 정책, 게이지, Pip, 소비.
+raw collision을 normalized domain fact로 바꾼다. Momentum, UI 또는
+unrelated state를 직접 변경하지 않는다.
 
-### BreakableObject
+### Causal Attribution and Room State
 
-임계값, 상태 교체, 큰 파편 활성화, Lineage 전달.
+Origin, carrier, Result uniqueness와 one-room state flag를 소유한다.
+Momentum은 later integration이다.
 
-### FeedbackDirector
+### Reset and Fault Recovery
 
-표준 게임 이벤트를 카메라·VFX·오디오로 변환한다.
+exclusive Reset barrier, authored baseline restore, fault quarantine와
+audited Scene-reload fallback을 소유한다.
 
-## Event Flow Example
+### Presentation Adapters
 
-```mermaid
-sequenceDiagram
-    participant Ally
-    participant Catch
-    participant Throw
-    participant Physics
-    participant Impact
-    participant Chain
-    participant Momentum
+domain fact를 camera/VFX/audio/UI로 변환한다. domain 결과를 만들지
+않는다.
 
-    Ally->>Catch: PassObjectReleased
-    Catch->>Throw: PerfectCatch + QueuedThrow
-    Throw->>Physics: ApplyThrowImpulse
-    Physics->>Impact: CollisionData
-    Impact->>Chain: NormalizedImpactEvent
-    Chain->>Momentum: ChainRewardEvent
-    Momentum-->>Impact: UpdatedGauge/Pip
-```
+### Test and Observability
 
-## Anti-Patterns
+EditMode/PlayMode/Manual owner mapping과 required trace/counter를
+소유한다. 테스트 구현이나 실행은 아직 없다.
 
-- Collision callback에서 UI, 오디오, Momentum을 모두 직접 호출
-- ScriptableObject에 현재 체력·현재 Momentum 저장
-- 전역 static 목록으로 모든 물체 검색
-- 동료 AI와 전투 판정을 하나의 거대 MonoBehaviour에 결합
-- 물리 프레임 순서에 의존한 암묵적 상태 변경
+## Single-Owner Rule
+
+Carry, Strap, Relay reservation, physical lifecycle, Causal Origin,
+room-state flag와 Reset state는 각각 하나의 authoritative owner만
+가진다. repeated delivery가 가능한 boundary는 idempotent handling과
+duplicate suppression을 명시한다.
+
+## Later Systems
+
+Perfect Catch, Momentum/Pip, HeavyAction, Relay Position과 Policy는
+later Vertical Slice owner가 있다. Breakable, Structural, Upgrade,
+Incident Report, LGT_01과 FIN_01은 first-wave architecture에서 제외한다.

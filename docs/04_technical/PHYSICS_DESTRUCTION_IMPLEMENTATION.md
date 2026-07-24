@@ -1,59 +1,62 @@
 # Physics and Destruction Implementation
 
-## Rigidbody Activation
+> **OWNER-APPROVED G3 POLICY — EXACT TUNING AND IMPLEMENTATION REMAIN DRAFT**
+>
+> Authority: `docs/04_technical/G3_TECHNICAL_BASELINE.md` —
+> `## Physics Activation, Collision, and Fault Recovery` and
+> `## Cargo Strap Technical Envelope`
 
-```text
-Static/Kinematic/Sleeping
-→ 플레이어 접근 또는 영향 예정
-→ Dynamic 활성화
-→ 일정 시간 저속 유지
-→ Sleep 또는 단순 상태로 복귀
-```
+## Bounded Rigidbody Activation
 
-## Collision Detection Baseline
+object는 authored safe state에서 시작하며 interaction 또는 measured
+trajectory risk가 있을 때만 bounded Dynamic window에 들어간다. ownership
+transition과 physical release는 명시적으로 기록한다. 모든 object를
+영구 Dynamic/CCD로 두지 않는다.
 
-| 물체 | 시작 모드 |
-|---|---|
-| 느린 Light | Discrete 또는 Continuous Speculative |
-| 빠른 Light | Continuous Dynamic |
-| 의자·모니터 | Continuous Speculative, 필요 시 Dynamic |
-| 복사기·캐비닛 | Discrete |
-| 정적 환경 | Static Collider |
+## Collision Detection Policy
 
-실제 값은 Prototype 프로파일링 후 고정한다.
+CCD는 실제 trajectory risk와 profiling 근거로 선택한다. primitive 또는
+simple compound collider가 기본이다. Discrete, Continuous Speculative,
+Continuous Dynamic의 구체 배정과 collider 수는 tuning candidate이며
+승인값이 아니다.
 
-## Collider Policy
+raw callback은 normalized collision fact만 만든다. Momentum, UI,
+audio 또는 unrelated system을 직접 변경하지 않는다.
 
-- 책상: 3~5 Box Collider
-- 의자: Seat, Back, Base
-- 복사기: 1~3 Box Collider
-- 파편: Box 또는 단순 Convex
-- 비정적 Non-Convex MeshCollider 금지
+## Physical Continuity
 
-## Breakable Flow
+released object는 hidden inventory, floating state 또는 teleport 없이
+연속된 실제 경로를 유지한다. safe velocity/angular-velocity policy는
+필수지만 정확한 cap은 later evidence다.
 
-1. `ImpactResolver`가 누적 또는 단발 임계값 판정
-2. 원본 렌더러·콜라이더 비활성화
-3. 풀에서 파손 프리팹 활성화
-4. 큰 조각에 원본 속도·impact 분배
-5. 작은 조각 VFX 실행
-6. Lineage와 Chain Depth 전달
-7. 열린 통로·NavMesh obstacle 상태 갱신
+## Fault Detection and Recovery
 
-## Strap Simulation
+- out-of-bounds, invalid ownership, non-finite state와 unrecoverable
+  penetration을 관찰 가능한 fault로 기록한다.
+- reason, affected runtime identity와 counter를 남긴다.
+- recovery는 quarantine 또는 authored baseline restore를 사용한다.
+- object를 기록 없이 숨기거나 정상 경로에서 teleport하지 않는다.
+- unsafe restore는 audited complete Scene reload fallback으로 넘긴다.
 
-완전한 Rope Simulation을 사용하지 않는다.
+## Prototype Destruction Boundary
 
-- 시각 스트랩: 단순 세그먼트/렌더러
-- 게임 판정: 최대 거리, 장력, 각도, 물체 속도
-- 플레이어 회전과 이동에서 보정 impulse 계산
-- 과도한 장력에서 자동 Release
+Prototype은 breakable, Structural Feature와 uncontrolled ragdoll을
+요구하지 않는다. 기존 파손-prefab, fragment, NavMesh 갱신과 ragdoll
+구상은 later conditional design이며 active Prototype implementation
+flow가 아니다. unrestricted destruction은 금지한다.
 
-목표는 물리적 설득력이지 범용 줄 시뮬레이션이 아니다.
+## Cargo Strap Envelope
 
-## Ragdoll
+- simplified segmented visual;
+- logical attachment constraint;
+- bounded redirect response;
+- load-bearing metal Anchor 검사;
+- eligible floor-supported Medium 검사;
+- active 중 interaction exclusion;
+- explicit player `StrapRelease`;
+- completed release 후 stored state.
 
-- 적 기본 제어는 애니메이션
-- 강한 충돌에서 제한적 physical animation 또는 짧은 ragdoll
-- 회복 가능한 상태와 전투 불능 상태 분리
-- 각속도, 관절, 바닥 관통 안전장치
+general-purpose rope, grapple, remote/Heavy towing, caster 또는 wheel-axis
+Anchor, plastic housing Anchor, necktie attachment와 automatic Safety
+Release는 승인되지 않았다. exact force equation, tension, distance,
+angle과 release threshold는 later tuning이다.

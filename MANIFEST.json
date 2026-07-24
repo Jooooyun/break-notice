@@ -50,7 +50,7 @@
   "g2_prototype_object_definition_count": 4,
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
-  "design_freeze_checklist_progress": "22/32",
+  "design_freeze_checklist_progress": "28/32",
   "g3_gate_status": "NOT PASSED",
   "g3_entry_status": "CURRENT BASELINE WORK / PREPRODUCTION DOCUMENTATION ONLY",
   "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
@@ -58,8 +58,18 @@
   "g3_technical_preflight_baseline_sha": "3bf04d7a86601f07ccbd65f635b1f9a05aaaa5df",
   "g3_technical_preflight_decision_count": 13,
   "g3_technical_preflight_next_task": "TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions",
-  "g3_technical_checklist_progress": "0/6",
-  "g3_current_next_task": "TASK-0049 — Apply Owner-Approved G3 Technical Baseline Decisions",
+  "g3_technical_baseline_status": "OWNER-APPROVED / FINAL AUDIT PENDING",
+  "g3_technical_baseline_path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
+  "g3_technical_baseline_adr": "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
+  "g3_unity_editor_lock": "6000.3.20f1",
+  "g3_urp_lock": "17.3.0",
+  "g3_input_system_lock": "1.20.0",
+  "g3_cinemachine_lock": "3.1.7",
+  "g3_test_framework_lock": "1.6.0",
+  "g3_ai_navigation_status": "DEFERRED / NOT IN PROTOTYPE PACKAGE BASELINE",
+  "g3_decision_status": "DEC-G3-001 THROUGH DEC-G3-013 OWNER-APPROVED",
+  "g3_technical_checklist_progress": "6/6",
+  "g3_current_next_task": "TASK-0050 — G3 Technical Baseline Final Audit and Gate Readiness",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -157,13 +167,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 25569,
-      "sha256": "97938e8df8bb40813efc20de734753eea0ef570bc23e9633b5b196aad0790ba9"
+      "bytes": 27394,
+      "sha256": "b19bb90f9f66f088f6125cd7d2afa6e5379c5dbe0fd6307ba6fd01988709587f"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 7864,
-      "sha256": "7963b39ed46baf993af3bebe805d854a3bdbb9988842f811c3c9695908a3b931"
+      "bytes": 8415,
+      "sha256": "c4aac79f1760d2207f98f5076c463b3a2fdc6a752161356b944f1e23bf0d2a56"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -302,8 +312,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6808,
-      "sha256": "fb55342231339b4b4e566efe38a9a7d6ce2c56afafaad4594162c3d18aeaa611"
+      "bytes": 7521,
+      "sha256": "c17537e0ad19cb09728cf8f4ddc5d25752dd5722b33b89477a1d1cfcc9f520d4"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -312,13 +322,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 6969,
-      "sha256": "f5056855b1c6ca55994acdd774d4bce1ae4f40f352aff017f195ae8bca19715d"
+      "bytes": 7287,
+      "sha256": "b2fffb3552bc0bbb6c5e1eb363d8ced5374e7ab5584fb2d137c1bedc0f93562c"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 7871,
-      "sha256": "5cf8b3d2710f078041796223af6a5a779735075587915ecb55e615a501c2be97"
+      "bytes": 8770,
+      "sha256": "6e181f12f3716e676dbc00e9d2489b8328c2f6e3a478f323d45efbe4cfddeaea"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -342,8 +352,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 31780,
-      "sha256": "343a3a04f352b090f0ae7e6ae3f958525eeeb2091b867f3378aa0e26cab9d628"
+      "bytes": 33659,
+      "sha256": "bf777f471b12c8a23bad2109c85935c0d2f24d4e2f891b56e74ea983a60c3423"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
@@ -497,38 +507,43 @@
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
-      "bytes": 1002,
-      "sha256": "33c30b02833fe9e56c1e5d5024f1ec81a3f61148e5abc0d4928db56ba8511538"
+      "bytes": 3075,
+      "sha256": "c4e29f0a87c4dd4b741eaf58a84870dec1fcce16249e0381ed99d5047df2483f"
+    },
+    {
+      "path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
+      "bytes": 16078,
+      "sha256": "413ad7a62f4b2c736c10584baac42a42ba95d0be1e2a8c17fecad6c7c5529805"
     },
     {
       "path": "docs/04_technical/PERFORMANCE_BUDGET.md",
-      "bytes": 994,
-      "sha256": "dc3e9a76b52b4f5d5680c496b3162136baca42097daaac0fed71ed40dbfa4c64"
+      "bytes": 2577,
+      "sha256": "7af869784d38aeb3709ee5643027982b782b83b4606fb9d328373cb99542cd7f"
     },
     {
       "path": "docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md",
-      "bytes": 1713,
-      "sha256": "644eaa4c02918a3cb45b16e9ff2b6130f47f369009e26991628fceefc9d57a89"
+      "bytes": 2620,
+      "sha256": "91d01fa2cb037c4c2c91bbe5a935b46e5b64181c88d2f82559332a63b64cbe84"
     },
     {
       "path": "docs/04_technical/SAVE_AND_VERSIONING.md",
-      "bytes": 617,
-      "sha256": "508538074ebdbc5e06e7919ca1d9ee83849fb9ccc23e270434bec7992d1778e0"
+      "bytes": 1681,
+      "sha256": "a20cf0c77e7f642b83b921d543977a6e00b9a3d4c976613f6bae7f8db702f6bd"
     },
     {
       "path": "docs/04_technical/SOFTWARE_ARCHITECTURE.md",
-      "bytes": 2168,
-      "sha256": "6e1f3bc6e6a9bd3ea2d143ead1c703c5e996a4bf71a5ba8155f5cfff13861462"
+      "bytes": 3263,
+      "sha256": "ee057360c5d84c795ef76c46777d93cffdafa2a86ce70be908f8d9fa9a569621"
     },
     {
       "path": "docs/04_technical/TECHNICAL_DESIGN.md",
-      "bytes": 2522,
-      "sha256": "5266e3e3ad1c495ffa273cfbc141cb71104bcdfc02a3f36b7fa8ccb50f26b4dc"
+      "bytes": 4302,
+      "sha256": "11f0cc3daa8f81afda3fd982379f361745fe1a0f27374faaa69b067d83ead8d1"
     },
     {
       "path": "docs/04_technical/UNITY_PROJECT_STANDARD.md",
-      "bytes": 1445,
-      "sha256": "1a1a5c194cb7e30381a4b356cc45849eb3e35e5634b64b664cbc0b75115f34d6"
+      "bytes": 2774,
+      "sha256": "0a2e996cf1f5ac0617b30766d9ffedec62eab4815ced3e86623aa16667949b29"
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
@@ -537,8 +552,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 2984,
-      "sha256": "310453823359cd6cab322dc4a3cef38f38ed3a2529b014e9522a84a554144fe2"
+      "bytes": 3293,
+      "sha256": "44320d31d234d4c38e43f82369a30a5280a59b75247beb3218eb8516369b86b1"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -557,8 +572,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 1917,
-      "sha256": "d599d44def3ef689befe58c325dbccc83970b4a8d85e0257d11d6aa4b1604d84"
+      "bytes": 2212,
+      "sha256": "416c26e244bc226cd371d00588c43518716ecf20fd835936ec5f18289c902bbd"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -572,8 +587,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 2737,
-      "sha256": "40052e95da86141488dd7d1ce8f16ffa482a25ec0c1fd267677f82b51e5d0e75"
+      "bytes": 3062,
+      "sha256": "88e6ddf1cfb51879c2d5a7ed990671f629d539109247e9f95cedfffe14274c2b"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -622,8 +637,8 @@
     },
     {
       "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 3427,
-      "sha256": "3f6c2d8d014e3a79531d296905e5a6524bc94d015bffc5123a1e4919f6f45857"
+      "bytes": 5462,
+      "sha256": "d2c1e103c34c722512bfe6084a13b02ee5b69cc577f4193e5be9a5688ca18e83"
     },
     {
       "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",
@@ -709,6 +724,11 @@
       "path": "docs/09_adrs/ADR-0014-FIN-01-PRODUCTION-VISUAL-LOCK.md",
       "bytes": 2451,
       "sha256": "4c163e09348db4c6bfe3426db976214d8eb6fed8bac74439cbdd96ab87dd446b"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
+      "bytes": 3953,
+      "sha256": "be53751df28fbc4a198c3752f6ddc39b0ac00df93aa2aeb33df3dcab3643cc26"
     },
     {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",

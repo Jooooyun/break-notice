@@ -35,6 +35,10 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
 | G2 Design | PASSED / OWNER-APPROVED BASELINE |
 | G3 Technical | NOT PASSED / CURRENT BASELINE WORK |
+| G3 Technical Baseline | OWNER-APPROVED / FINAL AUDIT PENDING |
+| G3 Technical checklist | 6 / 6 |
+| Design Freeze | 28 / 32 |
+| Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
 | Phase label review | COMPLETED / OWNER-APPROVED |
@@ -52,10 +56,14 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Conference Table Team Finisher `FIN_01 v003` | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT |
 | Graybox 재미 검증 | NOT STARTED |
 | Implementation Gate | CLOSED |
-| 본 제작 | BLOCKED BY G3+ GATES |
+| Unity project | NOT CREATED / PLACEHOLDERS ONLY |
+| 본 제작 | BLOCKED BY G3 FINAL AUDIT + REMAINING GATES |
 
-G3 진입은 프리프로덕션 기술 기준선 작업만 허용하며 Graybox 또는
-Unity 구현을 승인하지 않는다.
+G3 기술 책임과 exact documentation lock은 Owner-approved지만 G3는
+Final Audit 전까지 `NOT PASSED`다. AI Navigation은 Prototype에서
+Deferred이고 optional/later system은 first wave 밖이다. 현재
+Unity project, package file, code, Scene, Prefab 또는 test는 생성되지
+않았으며 Bootstrap, Graybox와 구현은 승인되지 않았다.
 
 ## 가장 먼저 읽을 문서
 
@@ -64,7 +72,7 @@ Unity 구현을 승인하지 않는다.
 3. [`docs/01_requirements/PRODUCT_REQUIREMENTS.md`](docs/01_requirements/PRODUCT_REQUIREMENTS.md)
 4. [`docs/02_design/MASTER_GDD.md`](docs/02_design/MASTER_GDD.md)
 5. [`docs/03_art/ART_DIRECTION.md`](docs/03_art/ART_DIRECTION.md)
-6. [`docs/04_technical/TECHNICAL_DESIGN.md`](docs/04_technical/TECHNICAL_DESIGN.md)
+6. [`docs/04_technical/G3_TECHNICAL_BASELINE.md`](docs/04_technical/G3_TECHNICAL_BASELINE.md)
 7. [`docs/05_production/WATERFALL_PLAN.md`](docs/05_production/WATERFALL_PLAN.md)
 8. [`docs/06_codex/CODEX_EXECUTION_PROTOCOL.md`](docs/06_codex/CODEX_EXECUTION_PROTOCOL.md)
 9. [`docs/07_quality/ACCEPTANCE_TESTS.md`](docs/07_quality/ACCEPTANCE_TESTS.md)
@@ -102,7 +110,10 @@ break-notice/
 ## 절대 고정 사항
 
 - 게임은 **3D TPS**다.
-- 엔진은 **Unity 6**, 렌더링은 **URP**, 물리는 **GameObject 기반 PhysX**다.
+- documentation lock은 **Unity 6000.3.20f1**, **URP 17.3.0**,
+  **Input System 1.20.0**, **Cinemachine 3.1.7**,
+  **Unity Test Framework 1.6.0**이고 물리는 **GameObject 기반
+  PhysX** 방향이다.
 - 원거리 염력이나 마법 Grab은 없다.
 - 붉은 넥타이는 복장과 시각적 상징일 뿐 물체 연결 도구가 아니다.
 - 물체 연결은 허리 릴에서 나오는 **검정·황색 산업용 화물 스트랩, 금속 카라비너, 교체식 클램프**로 하중 지지 금속 Anchor에 수행한다.

@@ -1,104 +1,123 @@
 # Technical Design
 
-## 1. 기술 기준
+> **MIXED AUTHORITY — ALIGNED TO OWNER-APPROVED G3 TECHNICAL BASELINE**
+>
+> `docs/04_technical/G3_TECHNICAL_BASELINE.md`와 `ADR-0015`가 G3
+> 기술 정책의 권위다. 이 문서의 class 이름과 구현 세부는
+> provisional이며 Unity Bootstrap이나 구현을 승인하지 않는다.
 
-- Engine: Unity 6
-- Rendering: URP
-- Physics: Built-in 3D PhysX / GameObject
-- Language: C#
-- Input: Unity Input System
-- Camera: Cinemachine
-- AI Navigation: Unity AI Navigation/NavMesh, 제한된 Relay Position 이동
-- Data: ScriptableObject definitions + 런타임 인스턴스 상태
-- Testing: Unity Test Framework, EditMode/PlayMode
-- Target: Windows PC, 1080p/60 FPS
+## 1. Exact Technical Documentation Lock
 
-정확한 Unity Editor 패치 버전과 패키지 버전은 Unity 프로젝트 Bootstrap 시 ADR로 잠근다.
+| Item | Exact lock |
+|---|---|
+| Unity Editor | `6000.3.20f1` |
+| URP | `17.3.0` |
+| Input System | `1.20.0` |
+| Cinemachine | `3.1.7` |
+| Unity Test Framework | `1.6.0` |
 
-## 2. Architecture Layers
+- Physics direction: built-in 3D PhysX / GameObject.
+- Baseline platform: Windows PC.
+- AI Navigation: Prototype에서 제외, Relay Position wave까지 Deferred.
+- hardware, resolution, FPS와 physics tuning은 later evidence다.
 
-```text
-Presentation
-- Camera, Animation, VFX, Audio, UI
+## 2. Prototype-Only First Wave
 
-Gameplay
-- Player Interaction, Throw, Strap, Ally Relay, Enemy Stability
+first wave는 one-room Prototype의 logical input, locomotion/camera,
+interaction ownership, Scoop/Carry/Throw/Queued Throw, fixed Ally의
+physical Light·floor-supported Medium supply, explicit Cargo Strap,
+normalized impact, depth-limited causal attribution, room-state change,
+Reset와 observability만 소유한다.
 
-Simulation
-- Physics Objects, Impacts, Breakables, Causal Chain
+Perfect Catch, Momentum/Pip, HeavyAction, Relay Position과 Policy는
+later Vertical Slice owner를 가진다. Suppressed, Behavior Tags,
+Structural, breakables, LGT_01, FIN_01, Incident Report와 persistent
+save는 first wave 밖이다.
 
-Progression
-- Momentum, Upgrades, Encounter Flow, Run State
+## 3. Architecture Responsibility Domains
 
-Infrastructure
-- Input, Save, Pooling, Logging, Debug Tools
-```
+- Composition and Encounter Bootstrap
+- Logical Input Adapter
+- Player Locomotion and Camera Adapter
+- Interaction and Ownership
+- Physical Object Lifecycle
+- Ally Supply and Reservation
+- Cargo Strap
+- Impact Normalization
+- Causal Attribution and Room State
+- Reset and Fault Recovery
+- Presentation Adapters
+- Test and Observability
 
-## 3. 핵심 시스템
+각 mutable state는 owner 하나만 가진다. explicit construction과
+one-way Presentation adapter를 사용한다. service locator, global
+mutable registry와 primary global event bus는 사용하지 않는다.
 
-- `GameFlowController`
-- `EncounterDirector`
-- `PlayerMotor`
-- `PlayerInteractionController`
-- `CarryController`
-- `ThrowController`
-- `CargoStrapController`
-- `AllyRelayController`
-- `CatchController`
-- `PhysicsObject`
-- `ImpactResolver`
-- `StabilityController`
-- `BreakableObject`
-- `CausalChainService`
-- `MomentumService`
-- `FeedbackDirector`
-- `ObjectPoolService`
+## 4. Provisional Implementation Names
 
-각 클래스명은 구현 전 상세 설계에서 조정 가능하지만 책임 분리는 유지한다.
+다음은 책임을 설명하기 위한 후보 이름이며 Canon이 아니다.
 
-## 4. 물리 원칙
+- Encounter composition root
+- Logical input adapter
+- Locomotion adapter
+- Interaction/Carry/Throw owner
+- Physical object lifecycle owner
+- Ally supply/reservation owner
+- Cargo Strap owner
+- Impact normalizer
+- Causal/room-state owner
+- Reset/fault owner
+- Presentation adapter
+- Harness/observability adapter
 
-- 모든 물체를 상시 Dynamic으로 두지 않음
-- 빠른 투척물에만 CCD 선택 적용
-- 복잡한 MeshCollider 대신 Compound primitive collider
-- 물리 이벤트에서 직접 모든 게임 시스템을 호출하지 않고 `ImpactEvent`로 정규화
-- 파괴는 사전 제작 프리팹 교체
-- 작은 파편은 VFX
-- 속도·각속도 안전 상한
+Evade, Vault, fixed Catch/Strap/Scoop priority, settled Quick/Charged
+mode, generic ally inventory, automatic Strap release와 first-wave
+Momentum/Breakable/Upgrade/Incident system은 active assumption이 아니다.
+
+## 4A. Physics Policy
+
+- bounded Dynamic activation;
+- measured trajectory risk에 따른 selective CCD;
+- primitive/simple compound collider;
+- raw collision을 normalized domain fact로 변환;
+- released object의 physical continuity;
+- observable quarantine 또는 baseline restore;
+- 정확한 안전 상한은 later tuning.
+
+Prototype breakable, Structural Feature와 uncontrolled ragdoll은 비활성이다.
 
 ## 5. 데이터 원칙
 
-ScriptableObject 정의 예:
-
-- ObjectDefinition
-- EnemyDefinition
-- AllyDefinition
-- UpgradeDefinition
-- ImpactProfile
-- BreakableDefinition
-- EncounterDefinition
-
-런타임 상태는 MonoBehaviour/POCO 인스턴스가 관리한다.
+stable content reference, transient runtime entity, encounter generation,
+Causal Origin과 Result uniqueness identity를 분리한다. shared definition에
+runtime state를 저장하지 않는다. Carry, Strap, Relay reservation과
+encounter state에는 각각 single owner가 있다.
 
 ## 6. 디버깅
 
-- 현재 Target과 Interaction Priority 표시
-- Rigidbody sleep/awake 시각화
-- Chain ID/depth/TTL 표시
-- Momentum 보상 로그
-- Relay Position과 패스 궤적 표시
-- 파괴 예산 카운터
-- Reset 누수 검사
+- active intent/context와 interaction state;
+- object ownership과 physical state;
+- Strap state/Anchor validity;
+- Ally state/reservation/relay phase;
+- Origin/parent/carrier/depth/Result family;
+- duplicate/cycle rejection reason;
+- room-state flag와 Reset diff;
+- subscription/fault/active-body/collision/frame-spike counter.
 
-## 7. 구현 순서
+## 7. Bounded Post-G3 Sequence
 
-1. 물리 오브젝트와 기본 투척
-2. Stability와 ImpactResolver
-3. Causal Chain
-4. Momentum
-5. 동료 Relay와 Catch
-6. Cargo Strap Redirect
-7. Breakable/Structural
-8. 피드백과 카메라
-9. 업그레이드
-10. Incident Report
+G3 passage와 final pre-implementation review 이후에만 다음 순서를
+ticket으로 분해한다.
+
+1. Unity and repository Bootstrap
+2. definition/runtime identity and state foundation
+3. locomotion, camera and logical input adapter
+4. interaction arbitration and ownership
+5. acquisition, Carry, Throw and Queued Throw
+6. Reset, diff and fallback
+7. fixed Ally supply and Catch
+8. Cargo Strap attach, redirect and release
+9. impact, causal attribution and room-state change
+10. feedback, observability, fault recovery and regression
+
+이 순서는 현재 실행 권한이 아니다.

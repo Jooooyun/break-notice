@@ -1,28 +1,51 @@
 # Save and Versioning
 
-## Prototype
+> **OWNER-APPROVED G3 RESET BOUNDARY — PERSISTENT SAVE DEFERRED**
+>
+> Authority: `docs/04_technical/G3_TECHNICAL_BASELINE.md` —
+> `## Reset, Save, and Versioning`
 
-- 저장 없음
-- Reset은 초기 스냅샷 또는 재생성으로 수행
-- 옵션 설정은 로컬 기본값 사용 가능
+## Prototype Reset
+
+authored baseline snapshot/restore가 primary Reset path다. complete Scene
+reload는 restore 누락이나 unsafe state를 위한 audited fallback이다.
+
+반복 Reset마다 다음을 확인한다.
+
+- authored baseline과의 state diff;
+- subscription count와 duplicate handler;
+- active ownership/reservation;
+- fault와 quarantine residue;
+- later resource가 활성화된 경우 encounter-entry baseline.
+
+## Reset Ownership Inventory
+
+- CHR_00, CHR_01과 Compliance Runner 두 명;
+- exact object pools;
+- transform과 physical state;
+- Carry와 Strap;
+- Relay reservation/phase와 Ally state;
+- Causal Origin/Result state;
+- room-state flag;
+- fault/quarantine state;
+- subscription과 duplicate-handler state.
 
 ## Vertical Slice
 
-저장 후보:
+### Persistent Save Boundary
 
-- 입력/오디오/카메라 접근성 설정
-- 현재 Run Seed와 방 인덱스(필요 시)
-- 선택한 업그레이드 ID
-- 빌드 버전과 Save Schema Version
+Prototype에는 persistent gameplay save가 없고 full Rigidbody-world
+persistence를 사용하지 않는다. local option default는 later 별도
+승인할 수 있지만 gameplay Reset owner와 혼합하지 않는다.
 
-## 금지
-
-- 모든 Rigidbody 위치·속도 저장
-- 임의 객체 참조 직렬화
-- 버전 필드 없는 저장
+Vertical Slice의 Run Seed, room index, upgrade ID 또는 accessibility
+setting save는 후보일 뿐 승인되지 않았다.
 
 ## Versioning
 
-- 문서 기준: SemVer-like `0.x.y`
-- 저장 스키마는 독립 정수 버전
-- Canon 변경은 CHANGELOG와 ADR에 기록
+- repository/design version은 Gate status가 아니다.
+- persistent save가 later 승인될 때만 independent save-schema version을
+  정의한다.
+- final serialization format, arbitrary object reference 저장과
+  versionless save는 승인되지 않았다.
+- Canon change는 Change Control, CHANGELOG와 필요한 ADR을 따른다.
