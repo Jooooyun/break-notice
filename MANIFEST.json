@@ -68,6 +68,12 @@
     "BREAK_STATE_CHANGE",
     "ROOM_STATE_CHANGE"
   ],
+  "g3_technical_final_audit_status": "REVISION REQUIRED",
+  "g3_technical_final_audit_path": "docs/05_production/G3_TECHNICAL_BASELINE_FINAL_AUDIT.md",
+  "g3_technical_final_audit_baseline_sha": "920f81f51f4a048ab223c03b9a3732aee486bfd0",
+  "g3_technical_final_audit_result_family_alignment": "VERIFIED AGAINST G2",
+  "g3_technical_final_audit_exit_check_count": 35,
+  "g3_technical_final_audit_next_task": "TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift",
   "g3_unity_editor_lock": "6000.3.20f1",
   "g3_urp_lock": "17.3.0",
   "g3_input_system_lock": "1.20.0",
@@ -76,7 +82,7 @@
   "g3_ai_navigation_status": "DEFERRED / NOT IN PROTOTYPE PACKAGE BASELINE",
   "g3_decision_status": "DEC-G3-001 THROUGH DEC-G3-013 OWNER-APPROVED",
   "g3_technical_checklist_progress": "6/6",
-  "g3_current_next_task": "TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness",
+  "g3_current_next_task": "TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -179,8 +185,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 8776,
-      "sha256": "e556a56e1a3b6aa83e6fd71b75686ad7712b49edff89c72258e7e8dfa989781d"
+      "bytes": 9181,
+      "sha256": "b0b74f9d386c64ef894042c071aa2e5c5d380d511ea01dfa1f9fd7139a815a42"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -334,8 +340,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 9152,
-      "sha256": "3ff9442f232e706fe0955860d788ffcc84804faf8483de6f958f705282af540f"
+      "bytes": 9448,
+      "sha256": "6c86208bdacc70da462152da7deb118dc148fc7db18765aeebd68840c4c1d9e9"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -571,6 +577,11 @@
       "path": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
       "bytes": 27761,
       "sha256": "9fe9f52d3868d0ac65b15b6be2265ad62569429d27b6427c73aa8a1133c91534"
+    },
+    {
+      "path": "docs/05_production/G3_TECHNICAL_BASELINE_FINAL_AUDIT.md",
+      "bytes": 29110,
+      "sha256": "c1433536450a1ed3fb204fa2b477e28f6ec34c33691552e0b8c74274b145373a"
     },
     {
       "path": "docs/05_production/G3_TECHNICAL_BASELINE_PREFLIGHT_AUDIT.md",

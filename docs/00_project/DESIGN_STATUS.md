@@ -46,8 +46,9 @@ Implementation Gate: `CLOSED`
 | Policy Violation Selection and Run-Application Contract | OWNER-APPROVED / G2 PARTIAL | G3 기술 매핑에서 유지 | G2 PASSED |
 | G2 Design Baseline Re-Audit | READY FOR G2 GATE DECISION — CONSUMED BY G2 PASSAGE | G3 Technical Baseline Preflight Audit | G2 PASSED |
 | G3 Technical Baseline Preflight Audit | READY FOR OWNER G3 TECHNICAL DECISIONS / CONSUMED BY OWNER DECISION | G3 Technical Baseline | G3 |
-| G3 Technical Baseline Decisions | OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING | TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness | G3 NOT PASSED |
-| G3 Causal Result-Family Alignment | OWNER-APPROVED / CORRECTED | TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness | G3 NOT PASSED |
+| G3 Technical Baseline Decisions | OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING | TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift | G3 NOT PASSED |
+| G3 Causal Result-Family Alignment | OWNER-APPROVED / CORRECTED | TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift | G3 NOT PASSED |
+| G3 Technical Baseline Final Audit | REVISION REQUIRED | TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift | G3 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -58,7 +59,7 @@ Implementation Gate: `CLOSED`
 | FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
 | 파괴 예산 | HIGH-LEVEL BASELINE | 정확한 파편·Particle·VFX·성능 예산 | G2 |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
-| G3 Technical Baseline | OWNER-APPROVED / FINAL AUDIT PENDING | TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness | G3 NOT PASSED |
+| G3 Technical Baseline | OWNER-APPROVED / FINAL AUDIT PENDING | TASK-0052 — Correct Residual G3 Active Status and Package-Authority Drift | G3 NOT PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Final Audit에서 책임·데이터·이벤트·검증·예산·Reset·harness 정합성 검증 | G3 |
 | Graybox | NOT STARTED | Design Readiness Gate 통과 후 | G4 |
 | 본 제작 | PENDING | Implementation Gate 개방 후 | G5 |
@@ -132,7 +133,10 @@ AI Navigation은 Prototype에서 Deferred다. Technical checklist는
 file은 생성되지 않았고 exact tuning, implementation class와
 pass threshold는 Draft다. G3 Causal Result Family는 Owner-approved
 G2 계약의 정확한 네 family로 교정되었으며 Structural Feature는 별도
-optional design role로 유지된다. 다음 단일 산출물은
-`TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness`다.
+optional design role로 유지된다. Final Audit은 active Phase와
+AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
+판정했다. 다음 단일 산출물은
+`TASK-0052 — Correct Residual G3 Active Status and Package-Authority
+Drift`다.
 Final Audit 전에는 G3를 통과시키지 않으며 Bootstrap, Graybox와
 구현 권한은 없다.
