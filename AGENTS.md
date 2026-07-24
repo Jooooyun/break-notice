@@ -50,6 +50,17 @@ Owner-approved다.
 - ordinary-damage resource loss 없음
 - HeavyAction-origin self-funding 없음
 
+다음 G2 Causal Chain logical contract도 Owner-approved다.
+
+- eligible player-owned Origin과 non-rewarding HeavyAction Origin 경계
+- Direct Result는 Depth `0`, Downstream Result는 Depth `1`~`4`
+- 최대 propagation depth `4`
+- 물리적 Transfer, Branch 허용과 Origin·Branch merge 금지
+- 네 가지 Meaningful Result family와 Origin별 result uniqueness
+- duplicate suppression, cycle prevention과 multiple-origin 비병합
+- hard·natural termination, post-termination 비재개와 Reset 우선순위
+- PGT_03의 정확한 순서가 아닌 sequence-agnostic causal attribution
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -58,11 +69,11 @@ constraint와 구현은 계속 `DRAFT`다.
 - 상세 게임플레이 설계
 - Light/Medium/Heavy의 exact physical mass·dimension·speed·force·
   damage와 object-specific assignment
-- Chain propagation·termination, exact result uniqueness와 runtime
-  lineage
+- Chain runtime lineage field·ID·event·storage, exact natural-termination
+  threshold와 simultaneous-origin settlement algorithm
 - Perfect Catch timing, Contact Freeze, Behavior Tag details, final
   Momentum/Pip balance와 break value
-- Momentum/Pip HUD, animation, physics와 implementation
+- Chain·Momentum/Pip HUD, VFX, audio, animation, physics와 implementation
 - exact Prototype object list
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현

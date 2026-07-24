@@ -1,13 +1,16 @@
 # Momentum and Causal Chain
 
-> **MIXED AUTHORITY — G2 MOMENTUM/PIP PROFILE APPROVED; CHAIN DESIGN DRAFT**
+> **MIXED AUTHORITY — G2 MOMENTUM/PIP PROFILE AND CAUSAL CHAIN LOGICAL
+> CONTRACT APPROVED; TECHNICAL AND PRESENTATION DESIGN DRAFT**
 >
 > Momentum/Pip의 current authority는
 > [`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
-> 따른다. 이 문서의 Chain sections는 후속 Owner 결정 전까지
-> `DRAFT`이며 G3 runtime structure나 Unity 구현을 승인하지 않는다.
+> 따르고, Causal Chain의 logical authority는
+> [`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)를
+> 따른다. 이 문서는 두 계약의 축약본이며 runtime structure,
+> presentation 또는 Unity 구현을 승인하지 않는다.
 
-### Owner-Approved Through TASK-0039
+### Owner-Approved Through TASK-0040
 
 - Momentum/Pip resource model;
 - starting reward table and precedence;
@@ -16,14 +19,19 @@
 - resource persistence and Reset behavior;
 - no passive decay and no ordinary-damage resource loss;
 - `100 Momentum` per-origin reward cap;
-- Heavy/Structural anti-self-funding boundary.
+- Heavy/Structural anti-self-funding boundary;
+- eligible Causal Origin and fixed provenance;
+- Direct Depth `0`, Downstream Depth `1` through `4`;
+- maximum propagation depth `4`;
+- physical Transfer, Branch, result uniqueness, duplicate and cycle
+  prevention;
+- multiple-origin non-merge, termination and Reset boundaries.
 
 ### Still Draft
 
-- Chain creation, propagation and termination;
-- depth, hop count and TTL;
-- duplicate suppression and exact result uniqueness;
-- runtime lineage fields and data structures;
+- runtime lineage fields, IDs, events and data structures;
+- exact natural-termination threshold, grace window and settlement order;
+- simultaneous-origin ownership algorithm;
 - UI, VFX and audio;
 - animation, physics and implementation.
 
@@ -54,11 +62,42 @@ Structural Feature `3 Pip`, damage-based gauge loss와 “구조는 고정”이
 Structural Feature cost는 승인되지 않았고 HeavyAction-origin result는
 Momentum을 만들지 않는다.
 
-## 3. Throw Lineage Data
+## 3. Causal Origin and Result Classification
 
-> `DRAFT — NOT APPROVED BY TASK-0039`
+Owner-approved 전체 기준은 다음 계약 heading을 따른다.
 
-각 원인에는 최소 다음 런타임 정보가 있다.
+- [`## Eligible Origin Creation`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#eligible-origin-creation)
+- [`## Origin Provenance`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#origin-provenance)
+- [`## Direct and Downstream Classification`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#direct-and-downstream-classification)
+- [`## Meaningful Result Families`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#meaningful-result-families)
+- [`## Result Uniqueness and Duplicate Suppression`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#result-uniqueness-and-duplicate-suppression)
+
+Direct Result는 Initiating Carrier가 만드는 Depth `0` 결과이고,
+Downstream Result는 Transfer를 받은 Attributed Carrier가 만드는
+Depth `1`~`4` 결과다. 같은 Origin의 같은 target/result-family
+조합은 한 번만 인정한다.
+
+## 4. Propagation and Termination
+
+Owner-approved 전체 기준은 다음 계약 heading을 따른다.
+
+- [`## Propagation Depth`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#propagation-depth)
+- [`## Propagation Eligibility`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#propagation-eligibility)
+- [`## Carrier Assignment and Cycle Prevention`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#carrier-assignment-and-cycle-prevention)
+- [`## Multiple-Origin Conflict`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#multiple-origin-conflict)
+- [`## Branch Behavior`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#branch-behavior)
+- [`## Termination Conditions`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#termination-conditions)
+- [`## Reset Boundary`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#reset-boundary)
+
+최대 전파 깊이는 `4`다. Branch는 같은 Origin의 cap, modifier,
+duplicate와 termination을 공유하며 서로 merge하지 않는다. completed
+Reset은 모든 활성 Origin을 종료하고, 종료된 Origin은 다시 열리지
+않는다.
+
+### SUPERSEDED TECHNICAL DRAFT CANDIDATES
+
+다음 역사적 runtime field 후보는 Owner-approved logical contract가
+아니며 G3에서 재검토하기 전 구현 근거로 사용하지 않는다.
 
 - Chain ID
 - Source Actor
@@ -69,16 +108,8 @@ Momentum을 만들지 않는다.
 - Participating Entity IDs
 - Tags: AllyPass, PerfectCatch, Redirect, Heavy, Structural
 
-## 4. 전파 규칙
-
-> `DRAFT — NOT APPROVED BY TASK-0039`
-
-1. 플레이어 투척·리디렉션에서 Chain 생성
-2. 물체가 적을 이동시키면 적에게 계보 전달
-3. 적이 가구를 움직이면 가구에 전달
-4. 가구가 다른 적·설비를 건드리면 깊이 증가
-5. 일정 시간 충돌이 없으면 Chain 종료
-6. 같은 대상의 빠른 반복 충돌은 중복 억제
+TTL, collision callback, timeout, event ordering, duplicate key와
+lineage storage도 계속 Draft다.
 
 ## 5. UI 피드백
 

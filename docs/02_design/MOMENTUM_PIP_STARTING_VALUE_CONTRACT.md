@@ -17,8 +17,10 @@
   Trace Status와 Acceptance Test를 변경하지 않는다.
 - 기존 9개 logical action, interaction state 이름, Weight-Class
   envelope과 Visual Canon을 변경하지 않는다.
-- Chain의 생성·전파·종료·깊이·TTL·중복 억제·runtime lineage는
-  이 계약의 승인 범위가 아니다.
+- Chain의 logical 생성·전파·종료·깊이·중복 억제는
+  [`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)가
+  소유한다. 이 Momentum/Pip 계약은 Chain runtime lineage, TTL,
+  event 또는 구현을 승인하지 않는다.
 - 정확한 Perfect Catch timing, Contact Freeze, damage, force,
   animation, physics, HUD, VFX, audio, data schema와 Unity 구현은
   승인하지 않는다.
@@ -108,8 +110,11 @@ direct Light 5`
 - 여러 category에 해당하면 가장 높은 category 하나만 적용한다.
 - 동일 origin에서 나중에 발생한 별도의 distinct meaningful result는
   별도 base reward 후보가 될 수 있다.
-- distinct result 판정, causal attribution과 duplicate suppression의
-  정확한 규칙은 후속 Chain contract가 소유한다.
+- distinct result 판정, causal attribution과 duplicate suppression은
+  Causal Chain Contract의
+  [`## Direct and Downstream Classification`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#direct-and-downstream-classification)과
+  [`## Result Uniqueness and Duplicate Suppression`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#result-uniqueness-and-duplicate-suppression)을
+  따른다.
 
 ## Ally Relay Modifier
 
@@ -143,8 +148,11 @@ direct Light 5`
   `100 Momentum`이다.
 - cap에 도달한 뒤에도 world result는 계속 발생할 수 있지만 같은
   origin에서 추가 Momentum 또는 Pip을 얻지 않는다.
-- causal origin identity, lineage 전파, 종료와 duplicate suppression은
-  후속 Chain contract가 정의한다.
+- causal origin, propagation depth, branch와 종료는 Causal Chain
+  Contract의 [`## Propagation Depth`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#propagation-depth),
+  [`## Branch Behavior`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#branch-behavior)와
+  [`## Termination Conditions`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md#termination-conditions)을
+  따른다. reward cap은 물리적 attribution을 종료하지 않는다.
 
 ## HeavyAction Cost and Spend
 
@@ -234,13 +242,18 @@ lock하지 않는다.
 이 계약은 HUD layout, color, icon, animation, sound, VFX, screen
 position 또는 controller feedback을 승인하지 않는다.
 
-## Deferred Chain, Technical, and Final-Tuning Decisions
+## Chain Contract Boundary, Technical, and Final-Tuning Decisions
+
+Causal Origin, Direct/Downstream, Depth `0`~`4`, Branch, result
+uniqueness, duplicate·cycle prevention과 termination의 logical rule은
+[`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)를
+따른다.
 
 다음은 계속 `DRAFT`다.
 
-- Chain 생성, 전파, 종료, depth와 hop;
-- TTL과 duplicate-suppression algorithm;
-- causal origin identity, exact result uniqueness와 runtime lineage fields;
+- runtime lineage field, ID, event, parent storage와 technical data schema;
+- TTL, natural-termination grace와 duplicate-suppression algorithm;
+- simultaneous-origin ordering과 settlement implementation;
 - Perfect Catch timing과 Contact Freeze;
 - damage, force, physics와 animation;
 - HUD, VFX, audio와 feedback implementation;

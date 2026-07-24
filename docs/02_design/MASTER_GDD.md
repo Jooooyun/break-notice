@@ -231,22 +231,33 @@ Owner-approved G2 시작 profile은
 
 이 문서의 다른 Momentum·Chain·Heavy·Structural 수치 또는 보상 예시는
 위 계약과 별도로 Owner-approved되지 않은 역사적 Draft다. Chain의
-생성·전파·종료와 final balance도 계속 Draft다.
+logical 생성·전파·종료는
+[`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)를
+따르며 runtime lineage, exact termination threshold, presentation과
+final balance는 계속 Draft다.
 
 ## 18. Causal Chain
 
-추적 대상:
+Owner-approved logical rule은
+[`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)를
+따른다.
 
-- 최초 투척·리디렉션
-- 직접 충돌
-- 적 이동
-- 적-가구 충돌
-- 가구 이동·파손
-- 다른 적 피격
-- 설비 작동·파손
-- 통로 변화
+- eligible player-owned 행동이 Causal Origin과 Initiating Carrier를
+  Depth `0`에서 만든다.
+- Initiating Carrier의 결과는 Direct, 물리적 Transfer를 받은
+  Attributed Carrier의 결과는 Depth `1`~`4` Downstream이다.
+- 최대 전파 깊이는 `4`이며 Depth `4` 뒤의 물리 simulation은 계속될 수
+  있지만 Depth `5` 귀속 또는 reward를 만들지 않는다.
+- Branch는 허용하지만 Branch와 Origin은 서로 merge하지 않는다.
+- 같은 Origin의 같은 target/result-family 반복, resting contact,
+  jitter와 cycle은 새 Result나 reward를 만들지 않는다.
+- completed Reset과 lifecycle 종료는 Origin을 종료하며, 종료된 Origin은
+  다시 열리지 않는다.
+- Chain은 sequence-agnostic이다. PGT_03의 정확한 의자·적·유리·카트·
+  복사기 순서는 gameplay rule이 아니다.
 
-플레이어에게는 로그가 아니라 짧은 음정 상승, Momentum, 제한된 Chain Link, 액션 문구로 피드백한다.
+player-facing Chain Link, 문구, HUD, VFX, audio, exact natural-termination
+threshold, runtime lineage와 Unity 구현은 Draft다.
 
 ## 19. 타격감
 

@@ -64,8 +64,36 @@ Owner-approved G2 시작 profile은
 - Perfect Catch는 Catch 자체가 아니라 이후 player-owned action이
   유효한 physical result를 만들 때 origin당 한 번 `+5 Momentum`
   modifier를 적용할 수 있다.
-- exact Chain classification·propagation·termination, Perfect Catch
-  timing, HUD, feedback와 implementation은 계속 Draft다.
+- exact Chain runtime field·natural-termination threshold,
+  simultaneous-origin settlement, Perfect Catch timing, HUD, feedback와
+  implementation은 계속 Draft다.
+
+### Causal Chain Contract
+
+Owner-approved logical Chain rule은
+[`CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md`](CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md)를
+따른다.
+
+- eligible Origin은 carried Light/valid Medium Direct Throw, valid
+  Catch-oriented Light relay 뒤의 Queued Throw와 eligible Medium
+  GEAR_01 Redirect다.
+- `HeavyAction`은 non-rewarding tracked Origin이 될 수 있지만 그
+  downstream result도 Momentum을 만들지 않는다.
+- Direct Result는 Initiating Carrier의 Depth `0` 결과이고,
+  Downstream Result는 물리적 Transfer를 받은 Carrier의 Depth `1`~`4`
+  결과다.
+- 최대 Depth는 `4`이며 Branch와 Origin은 merge하지 않는다.
+- 같은 Origin의 같은 target/result-family 조합은 한 번만 인정하고,
+  반복 접촉·jitter·cycle은 새 Result나 reward를 만들지 않는다.
+- completed Reset과 lifecycle 종료는 Origin을 종료하며 종료된 Origin은
+  다시 열리지 않는다.
+- Momentum은 Vertical Slice에서만 평가하며 base starting reward는
+  direct Light `5`, direct Medium `10`, unique downstream `15`,
+  meaningful local room-state change `25`다. modifier, cap, conversion과
+  lifecycle은 Momentum/Pip Contract를 따른다.
+
+runtime lineage, simultaneous-origin settlement, exact natural-termination
+threshold, UI와 implementation은 Draft다.
 
 ### Deferred Candidates
 
