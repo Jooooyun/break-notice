@@ -185,33 +185,56 @@ physics와 Unity 구현은 Draft다.
 
 ## 14. 적
 
-### Compliance Runner
+Prototype exact content authority는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)를 따른다.
 
-빠른 근접 기본 적. 낮은 Stability, 연쇄 충돌 재료로 읽히지만 공격 압박은 명확하다.
+### ENY-P-001 — Compliance Runner
 
-### Partition Guard
+- Prototype의 유일한 enemy archetype이며 정확히 두 instance다.
+- ordinary corporate compliance/security pressure로 읽힌다.
+- 물리적으로 이동 가능한 causal target이다.
+- 읽을 수 있는 close-range pressure pattern 한 가지만 가진다.
+- nonlethal presentation을 유지한다.
 
-파티션·화이트보드 방패 사용. 정면 투척을 막고 측면, Rolling, 환경 충돌을 유도한다.
+정확한 identity, Stability, stats, timing, AI, navigation, reaction과
+Unity 구현은 `DRAFT`다.
 
-### Asset Mover / Interceptor
+### Vertical Slice Enemy — Draft Candidates
 
-버티컬 슬라이스 확장 후보. 물체 이동 또는 패스 방해 역할. 첫 프로토타입에는 제외 가능하다.
+Partition Guard, Asset Mover, Interceptor, Elite와 다른 enemy
+archetype은 Vertical Slice/later `DRAFT` 후보다. Prototype에는 포함하지
+않고, final 이름·identity·수량·기능을 승인하지 않는다.
 
 ## 15. 물체 무게
 
+Prototype은 정확히 네 object definition과 일곱 instance를 사용한다.
+상세 boundary는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)를 따른다.
+
 ### Light — Setup and Precision
 
-파일철, 스테이플러, 키보드, 머그컵. 공격 차단, 약점, 손·장비 타격.
+`OBJ-P-L-001` File Binder 세 개다. 한 개는 direct-acquisition pool,
+두 개는 ally supply pool에 있으며 direct/relay throw와 causal
+initiator 역할을 맡는다.
 
 ### Medium — Chain Maker
 
-사무용 의자, 모니터, 이동식 서랍장, 화이트보드. 적·가구 위치 이동과 Chain 생성.
+- `OBJ-P-M-001` Wheeled Office Chair 두 개: direct handling과
+  floor-supported GEAR_01 redirect;
+- `OBJ-P-M-002` Rolling Drawer Cabinet 한 개: attributed collision과
+  side-lane clearance만 사용.
 
 ### Heavy — Space Breaker
 
-복사기, 철제 캐비닛, 회의실 테이블. Momentum 소비, 공간 파괴, 다중 자세 붕괴.
+`OBJ-P-H-001` Copier-Class Asset 한 개는 static, floor-supported
+recognition-only landmark다. Prototype에서 HeavyAction, Momentum,
+movement, breakage 또는 room-state result를 사용하지 않는다.
 
 ## 16. 행동 태그
+
+Prototype content는 Behavior Tag를 요구하지 않는다. 다음 역사적 tag
+목록은 Vertical Slice/later object differentiation을 위한 `DRAFT`
+candidate이며 Prototype 기능이나 구현을 승인하지 않는다.
 
 - Rolling
 - Slab
@@ -222,7 +245,8 @@ physics와 Unity 구현은 Draft다.
 - Crush
 - Tethered
 
-프로토타입에서는 `Rolling`, `Fragile`, `Slab`만 사용한다.
+exact tag type, object assignment, physical result, data structure와
+Unity 구현은 별도 후속 결정 전까지 `DRAFT`다.
 
 ## 17. Momentum
 
@@ -327,6 +351,11 @@ Scoop, Light/Medium, 기본 패스, 첫 Chain.
 좁은 통로, 이동식 선반, 야간 조명 변주, Elite 전투.
 
 ## 23. 프로토타입 최소 범위
+
+현재 exact enemy·room·object content는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)가 우선한다.
+아래 역사적 수량·기능 목록 중 이 잠금과 충돌하는 항목은
+`SUPERSEDED PROTOTYPE DRAFT`다.
 
 - Graybox 방 1개
 - 플레이어 1명

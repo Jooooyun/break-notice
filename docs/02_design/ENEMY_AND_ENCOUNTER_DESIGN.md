@@ -1,5 +1,12 @@
 # Enemy and Encounter Design
 
+> **MIXED AUTHORITY**
+>
+> `PRT-RM-001`과 `ENY-P-001`의 Prototype 적용은
+> [`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)의
+> `OWNER-APPROVED G2 PROTOTYPE CONTENT LOCK`을 따른다. Vertical Slice
+> enemy, room과 encounter 확장안은 계속 `DRAFT`다.
+
 ## 1. 적 설계 원칙
 
 - 적은 HP 자루가 아니라 물리 위치와 패스 경로를 바꾸는 존재다.
@@ -9,17 +16,39 @@
 
 ## 2. Prototype Enemy
 
-### Compliance Runner
+### ENY-P-001 — Compliance Runner
 
-- 근접 접근
-- 낮은 Stability
-- 명확한 한두 가지 공격
-- Medium에 잘 이동
-- 다른 적·가구와 충돌하기 좋은 체형
+- Prototype functional archetype은 정확히 한 종류다.
+- instance는 정확히 두 명이며 둘 다 같은 archetype을 사용한다.
+- 평범한 corporate compliance/security pressure로 읽힌다.
+- 물리적으로 이동 가능한 causal target이다.
+- 읽을 수 있는 close-range pressure pattern 한 가지만 사용한다.
+- nonlethal presentation을 유지한다.
+- Suppressed 기능은 비활성이다.
 
-Prototype: 3명.
+정확한 얼굴, uniform, final identity, Stability, stats, attack timing,
+reaction, ragdoll, AI, navigation과 Unity 구현은 `DRAFT`다.
+
+역사적 문구 `Prototype: 3명`은
+`SUPERSEDED PROTOTYPE DRAFT`다. 현재 수량은 두 명이다.
+
+Prototype에는 Guard, Asset Mover, Interceptor, Elite, boss, ranged
+enemy, firearm, shield, suppression specialist 또는 두 번째 enemy
+archetype을 넣지 않는다.
+
+### Prototype Room Boundary
+
+- `PRT-RM-001 — Open Operations Prototype Room` 정확히 한 개;
+- CHR_00 한 명, CHR_01 한 명, Compliance Runner 두 명;
+- 총 인간 actor 네 명;
+- multiple room, room transition과 procedural layout 없음.
+
+상세 content는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)를 따른다.
 
 ## 3. Vertical Slice Enemy
+
+이 절 전체는 `DRAFT CANDIDATES`다.
 
 ### Partition Guard
 
@@ -34,9 +63,13 @@ Prototype: 3명.
 - Asset Mover: 플레이어 탄약 위치를 바꿈
 - Interceptor: 동료 Light 패스를 가로막음
 
-## 4. Encounter Rules
+위 이름, identity, 수량과 포함 여부는 `DRAFT`이며 Prototype content에
+포함되지 않는다.
 
-모든 전투방은 최소 포함:
+## 4. Encounter Rules — Vertical Slice Draft
+
+다음 역사적 목록은 Vertical Slice room design candidate이며
+`PRT-RM-001`의 필수 구성으로 사용하지 않는다.
 
 - 즉시 사용 가능한 Light 2개 이상
 - 주력 Medium 2개 이상
@@ -47,7 +80,7 @@ Prototype: 3명.
 - 방해받을 수 있는 패스 경로
 - 전투 후 열리는 경로 또는 시야
 
-## 5. Vertical Slice Rooms
+## 5. Vertical Slice Rooms — Draft Candidates
 
 ### Room 1 — Open Operations Office
 
@@ -68,10 +101,18 @@ Prototype: 3명.
 - 이동식 기록 선반·카트·캐비닛
 - 목표: 좁은 통로, Momentum 관리, 야간 조명 변주
 
-## 6. 방 클리어 후 검증
+위 세 방, actor 수, object 구성과 목표는 승인된 Prototype room과
+분리된 `DRAFT` 후보다. `PRT-RM-001`은 이 중 어느 방의 final 또는
+Vertical Slice version도 아니다.
+
+## 6. 방 클리어 후 검증 — Later Draft
 
 - 시작과 다른 오브젝트 배치
 - 열린 길 또는 사라진 엄폐
 - 사용된 동료 재고
 - 남은 재사용 탄약
 - 최소 한 번의 2-hop 이상 Chain 기회
+
+Prototype에서는 drawer의 side-lane clearance와 Reset까지 유지되는
+국소 room-state change만 content-level 필수 결과로 승인한다. 정확한
+검증 수치와 final encounter-clear 조건은 계속 `DRAFT`다.

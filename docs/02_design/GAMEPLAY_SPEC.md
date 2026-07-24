@@ -122,6 +122,39 @@ threshold·duration, feedback, AI, animation, physics와 구현은 Draft다.
 Momentum/Pip 값, Chain 규칙, Catch flow 또는 physical tuning을
 변경하지 않는다.
 
+### Prototype Content Lock
+
+Owner-approved Prototype content는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)를 따른다.
+
+- room: `PRT-RM-001 — Open Operations Prototype Room` 한 개;
+- actor: CHR_00 한 명, CHR_01 한 명, 동일한 `ENY-P-001`
+  Compliance Runner 두 명, 총 네 명;
+- ally position: `PRT-RP-001 — Fixed Ally Support Position` 한 개;
+- object: 네 definition, 일곱 instance;
+  - File Binder 세 개;
+  - Wheeled Office Chair 두 개;
+  - Rolling Drawer Cabinet 한 개;
+  - recognition-only Copier-Class Heavy 한 개;
+- ally supply pool: Binder 두 개와 Chair 한 개;
+- direct-acquisition pool: Binder 한 개와 Chair 한 개.
+
+room은 고정 순서 없이 다음 일곱 affordance를 제공한다.
+
+1. direct Binder Scoop/Throw/result;
+2. ally Binder supply/Normal Catch/Queued Throw/player-owned result;
+3. direct Chair Scoop/Carry/Throw/launch;
+4. ally Chair grounded feed/GEAR_01 Strap redirect/floor support;
+5. Runner 또는 Drawer를 통한 최소 Depth `1` causal opportunity;
+6. Drawer displacement로 Reset까지 유지되는 side-lane clearance;
+7. actor, object, pool, lane과 causal baseline의 Reset.
+
+Perfect Catch, Momentum/Pip, HeavyAction, Structural Feature, breakage,
+Policy Violation, Incident Report, LGT_01, FIN_01, Relay Position
+transition, Suppressed, Behavior Tag requirement와 두 번째 ally는
+Prototype에서 비활성 또는 제외다. 정확한 geometry, stats, timing,
+AI, animation, physics, final art와 Unity 구현은 `DRAFT`다.
+
 ### Deferred Candidates
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 모두

@@ -4,28 +4,37 @@
 >
 > Light/Medium/Heavy의 기능 envelope와 class-based eligibility는
 > [`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)에서
-> Owner-approved다. 아래 object ID, object count, Behavior Tag, exact
-> milestone inclusion, mass, throw speed, break value와 technical field는
-> 계속 `DRAFT`다.
+> Owner-approved다. Prototype의 exact object ID, count, eligibility와
+> content role은
+> [`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)의
+> `OWNER-APPROVED G2 PROTOTYPE CONTENT LOCK`을 따른다. exact physical
+> value, Behavior Tag, final art와 technical field는 계속 `DRAFT`다.
 
 ## Prototype Object Set — Draft Content Candidate
 
-이 표는 별도 Prototype content lock 전의 illustrative candidate다.
-정확한 물체 목록·수·태그·파손 상태 또는 milestone inclusion을
-승인하지 않는다.
+이 역사적 heading은 RTM heading compatibility를 위해 유지한다.
+아래 현재 Prototype 표 자체는 Owner-approved Content Lock이며 정확히
+네 개의 definition과 일곱 개의 instance를 가진다. ID는 문서상 참조
+식별자일 뿐 runtime ID, prefab, enum, ScriptableObject, 파일명 또는
+database key가 아니다.
 
-| ID | 물체 | 무게 | 태그 | 전달 | 파손 |
-|---|---|---|---|---|---|
-| OBJ-L-001 | 파일철 | Light | Rebound | 동료 투척/직접 집기 | 선택적 |
-| OBJ-L-002 | 키보드 | Light | Fragile | 동료 투척/직접 집기 | 키캡 VFX |
-| OBJ-M-001 | 사무용 의자 | Medium | Rolling | 동료 굴림/직접 집기/스트랩 | 큰 부품 제한 |
-| OBJ-M-002 | 모니터 | Medium | Fragile | 직접 집기 | 화면·스탠드 분리 |
-| OBJ-H-001 | 복사기 | Heavy | Powered, Crush | Momentum 사용 | 용지함·덮개·토너 |
-| STR-001 | 유리 파티션 | Structural | Fragile | 충돌 결과 | 프레임 큰 조각 + 유리 VFX |
+| ID | 물체 | Weight | 수량 | Direct | Ally | Catch | Strap | Content role |
+|---|---|---|---:|---|---|---|---|---|
+| `OBJ-P-L-001` | File Binder | `LIGHT` | 3 | 1 | 2 airborne | YES | NO | direct/relay throw와 causal initiator |
+| `OBJ-P-M-001` | Wheeled Office Chair | `MEDIUM` | 2 | 1 | 1 grounded | NO | YES — valid metal Anchor | direct handling과 redirect |
+| `OBJ-P-M-002` | Rolling Drawer Cabinet | `MEDIUM` | 1 | NO | NO | NO | NO | attributed displacement와 side-lane clearance |
+| `OBJ-P-H-001` | Copier-Class Asset | `HEAVY` | 1 | NO | NO | NO | NO | recognition-only landmark |
 
-위 Heavy 행의 `Momentum 사용`과 Structural 행의 exact relationship은
-Owner-approved rule이 아닌 역사적 Draft다. Structural Feature는
-Weight Class가 아니며 어떤 Heavy도 자동으로 Structural이 되지 않는다.
+Binder, Chair와 Drawer의 세 definition만 gameplay-interactive다.
+Copier는 static, floor-supported Heavy recognition evidence이며
+Prototype active interaction에 참여하지 않는다. 추가 interactive
+object 또는 object type을 넣지 않는다. decorative clutter는
+non-interactive이며 gameplay physics나 causal role을 갖지 않는다.
+
+Prototype에는 required Behavior Tag, breakage, glass, debris, Structural
+Feature 또는 Momentum/HeavyAction use가 없다. 역사적 keyboard, monitor,
+glass partition과 Heavy `Momentum 사용` 행은
+`SUPERSEDED PROTOTYPE DRAFT`이며 현재 Prototype content가 아니다.
 
 ## Vertical Slice Expansion — Draft Candidates
 
@@ -52,8 +61,9 @@ FIN_01 conference table은 이 예시로 제품 또는 Vertical Slice 범위에
 - First-Order Impact Role
 - Local Room-State Role
 
-현재 exact ID 목록과 content count는 별도 Prototype content lock
-전까지 Draft다.
+위 design dimension 중 Prototype object-specific assignment는
+`PROTOTYPE_CONTENT_LOCK.md`가 고정한다. Vertical Slice object ID,
+content count와 milestone inclusion은 계속 `DRAFT`다.
 
 ## Later Draft Fields
 

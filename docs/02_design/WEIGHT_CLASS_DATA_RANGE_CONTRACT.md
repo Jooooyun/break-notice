@@ -94,6 +94,23 @@ serialized asset 또는 Unity component를 승인하지 않는다.
 mobility, 유효한 load-bearing metal Anchor와 읽을 수 있는 redirect
 path가 모두 필요하다.
 
+## Prototype Content Assignments
+
+Prototype의 exact assignment는
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)를 따른다.
+
+| Prototype ID | Class | Approved Prototype eligibility |
+|---|---|---|
+| `OBJ-P-L-001` File Binder | `LIGHT` | direct Scoop/Carry/Throw, airborne ally supply, Normal Catch, Queued Throw; Strap/HeavyAction 불가 |
+| `OBJ-P-M-001` Wheeled Office Chair | `MEDIUM` | conditional direct Scoop, Carry, Direct Throw, grounded ally feed, valid metal Anchor를 통한 Strap; Catch/Queued Throw/HeavyAction 불가 |
+| `OBJ-P-M-002` Rolling Drawer Cabinet | `MEDIUM` | direct/relay acquisition, Carry, Throw, Catch, Strap과 HeavyAction 불가; attributed collision과 room-state role만 사용 |
+| `OBJ-P-H-001` Copier-Class Asset | `HEAVY` | recognition-only; Prototype active interaction 전부 불가 |
+
+이 assignment는 기존 Light/Medium/Heavy envelope를 변경하지 않으며
+Catch와 Strap에 동시에 eligible인 object를 만들지 않는다. 정확한
+mass, dimension, speed, force, friction, timing과 physical value는
+`DRAFT`다.
+
 ## LIGHT Functional Envelope
 
 ### Applicability and Handling
@@ -288,12 +305,15 @@ Tag는 physical character를 바꿀 수 있지만 class boundary를 조용히
 6. break 후 independently interactive fragment는 자체 candidate object
    ID와 Weight Class가 필요하다.
 7. parent object는 breakage만으로 Weight Class가 자동 변경되지 않는다.
-8. exact object ID, content count와 milestone inclusion은 별도 Prototype
-   Enemy, Room, Object Content Lock 작업 전까지 Draft다.
+8. Prototype object ID, count와 eligibility는
+   `PROTOTYPE_CONTENT_LOCK.md`에서 고정한다. Vertical Slice object ID,
+   content count와 milestone inclusion은 계속 Draft다.
 
 ## Illustrative Non-Binding Examples
 
-다음은 기능 envelope를 설명하는 non-binding candidate 예시다.
+다음은 Vertical Slice와 later content의 기능 envelope를 설명하는
+non-binding candidate 예시다. Prototype exact assignment는 위 잠금 표를
+따른다.
 
 - Light: file binder, keyboard, compact office object;
 - Medium: wheeled office chair, monitor, rolling records cart;

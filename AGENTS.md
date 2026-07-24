@@ -80,6 +80,28 @@ Owner-approved다.
 - Ally Relay modifier는 release와 player ownership 이후의 유효한
   Meaningful Result에만 origin당 `+5`
 
+다음 G2 Prototype Enemy, Room, and Object Content Lock도
+Owner-approved다.
+
+- `PRT-RM-001 — Open Operations Prototype Room` 정확히 한 개
+- CHR_00 한 명, CHR_01 한 명, 동일한 `ENY-P-001 — Compliance Runner`
+  두 명으로 총 네 actor
+- `PRT-RP-001 — Fixed Ally Support Position` 한 개
+- 네 object definition과 일곱 instance:
+  - `OBJ-P-L-001` File Binder 세 개
+  - `OBJ-P-M-001` Wheeled Office Chair 두 개
+  - `OBJ-P-M-002` Rolling Drawer Cabinet 한 개
+  - `OBJ-P-H-001` Copier-Class Asset 한 개
+- ally supply pool은 Binder 두 개와 Chair 한 개
+- direct-acquisition pool은 Binder 한 개와 Chair 한 개
+- Drawer는 attributed collision으로 side lane을 열고 Reset까지
+  room-state change를 유지
+- Copier는 Heavy recognition-only이며 Prototype active use 없음
+- Perfect Catch, Momentum/Pip, HeavyAction, Structural, breakage,
+  Suppressed, LGT_01과 FIN_01은 Prototype에서 비활성 또는 제외
+- exact content authority는
+  `docs/02_design/PROTOTYPE_CONTENT_LOCK.md`를 따름
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -94,10 +116,11 @@ constraint와 구현은 계속 `DRAFT`다.
 - Perfect Catch timing, Contact Freeze, Behavior Tag details, final
   Momentum/Pip balance와 break value
 - Chain·Momentum/Pip HUD, VFX, audio, animation, physics와 implementation
-- exact Prototype object list
-- exact Relay Position count·placement·support zone·route, ally supply
-  ranking·inventory·trajectory·timing, Suppressed threshold·duration·
-  recovery, feedback, AI와 navigation
+- exact Prototype room geometry, actor·object position, final enemy·
+  object·environment art와 physical values
+- Vertical Slice Relay Position count, 모든 exact position·support zone·
+  route, ally supply ranking·trajectory·timing, Suppressed threshold·
+  duration·recovery, feedback, AI와 navigation
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값

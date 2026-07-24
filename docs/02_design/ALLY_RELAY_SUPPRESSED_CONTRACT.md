@@ -36,6 +36,29 @@ Suppressed는 Vertical Slice의 `SHOULD`이며 Prototype Core의 완료 조건�
 아니다. 이 계약은 Suppressed의 최종 Vertical Slice 콘텐츠 편입을
 보장하지 않는다.
 
+## Prototype Content Application
+
+Prototype 적용은
+[`PROTOTYPE_CONTENT_LOCK.md`](PROTOTYPE_CONTENT_LOCK.md)를 따른다.
+
+- authored support position은 정확히
+  `PRT-RP-001 — Fixed Ally Support Position` 한 개다.
+- CHR_01은 encounter entry와 Reset에서 `PRT-RP-001`의 `READY`다.
+- ally supply pool은 `OBJ-P-L-001` File Binder 두 개와
+  `OBJ-P-M-001` Wheeled Office Chair 한 개, 총 세 instance다.
+- Binder는 airborne Catch-oriented supply, Chair는 floor-supported
+  Strap-oriented grounded feed다.
+- `OBJ-P-M-002` Rolling Drawer Cabinet과 `OBJ-P-H-001`
+  Copier-Class Asset은 supply candidate가 아니다.
+- replenishment, retrieval, hidden inventory, spawn, duplicate 또는
+  destroyed-object replacement는 없다.
+- Reset은 encounter-entry pool assignment를 복원한다.
+- position transition, `RELOCATING`과 active `SUPPRESSED`는 없다.
+
+이 content application은 exact coordinate, support-zone geometry,
+candidate ranking, trajectory, timing, AI, navigation, animation,
+physics 또는 Unity 구현을 승인하지 않는다.
+
 ## Active-Ally Boundary
 
 - 일반 전투에는 정확히 한 명의 active support ally만 존재한다.
@@ -378,11 +401,13 @@ feedback은 승인하지 않는다. 색상만으로 상태를 구분해서는 �
 
 다음은 명시적으로 `DRAFT`다.
 
-- exact Relay Position count, coordinates, zones와 placement;
+- Vertical Slice Relay Position count, 모든 exact coordinates, zones와
+  placement. Prototype의 position 수와 ID는 Content Lock에서 고정;
 - supply range, reach, path test, candidate ranking와 tie-break;
 - highlight, UI, text, icon, audio, VFX와 accessibility treatment;
 - Light/Medium trajectory, speed, force, wind-up, cooldown과 timing;
-- exact inventory, object list, reuse, fragments와 room content;
+- Vertical Slice inventory, object list, reuse, fragments와 room content.
+  Prototype의 exact supply pool은 Content Lock에서 고정;
 - abort handoff, drop, recovery와 animation;
 - transition destination, route, pathfinding, NavMesh와 traversal;
 - suppression threat geometry, threshold, duration, recovery와 enemy action;

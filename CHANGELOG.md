@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G2 Prototype Content Lock을 승인 상태로 등록해 `PRT-RM-001` 한 room, CHR_00·CHR_01·Compliance Runner 두 명, `PRT-RP-001`, 네 object definition·일곱 instance와 두 physical pool·일곱 validation affordance를 고정하고 final art·수치·AI·animation·physics·Unity 구현은 Draft로 유지
 - G2 Ally Relay, Relay Position과 Suppressed 계약을 승인 상태로 등록해 일반 전투 CHR_01 한 명, Prototype 고정 support position, 실제 Light/Medium 공급, reservation·release lifecycle, Vertical Slice position 전환과 조건부 SHOULD Suppressed를 정의하고 exact content·position·ranking·timing·AI·navigation·animation·physics·Unity 구현은 Draft로 유지
 - G2 Causal Chain의 Origin 생성, Direct/Downstream 분류, 최대 Depth `4`, Branch·중복·순환·다중 Origin 경계와 종료·Reset 규칙을 승인 상태로 등록하고 runtime lineage·settlement threshold·표현·Unity 구현은 Draft로 유지
 - G2 Momentum/Pip 시작 profile의 reward table·modifier·origin cap·resource lifecycle·HeavyAction 비용을 승인 상태로 등록하고, Chain propagation·final tuning·UI·physics·구현은 Draft로 유지
