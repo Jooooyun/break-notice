@@ -26,3 +26,4 @@
 | DL-022 | 2026-07-24 | Owner-approved G2 Logical Input Action Contract | OWNER-APPROVED | 9개 logical action의 이름과 intent 의미만 승인; physical binding, timing, arbitration, state conflict와 구현은 Draft 유지 |
 | DL-023 | 2026-07-24 | Owner-approved G2 Interaction State, Arbitration, and Conflict Contract | OWNER-APPROVED | Scoop/Catch/Throw/CallAlly/Cargo Strap/Reset conflict 승인; exact timing·target ranking·weight eligibility·animation·physics·구현은 Draft 유지 |
 | DL-024 | 2026-07-24 | Owner-approved G2 Weight-Class Functional Data Range Contract | OWNER-APPROVED | Light/Medium/Heavy functional envelope과 eligibility 승인; kilogram·force·speed·damage·timing·Momentum/Pip·animation·physics·구현은 Draft 유지 |
+| DL-025 | 2026-07-24 | Owner-approved G2 Momentum/Pip Starting-Value and Resource Lifecycle Contract | OWNER-APPROVED | threshold·capacity·reward table·modifiers·cap·persistence와 HeavyAction 시작 비용 승인; Chain propagation·final tuning·animation·physics·구현은 Draft 유지 |

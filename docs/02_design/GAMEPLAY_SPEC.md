@@ -52,6 +52,21 @@ class-based interaction envelope는
 exact object assignment, mass, size, timing, range, Quick/Charged
 threshold, force, movement restriction, animation과 physics는 Draft다.
 
+### Momentum/Pip Starting Profile
+
+Owner-approved G2 시작 profile은
+[`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+따른다.
+
+- Momentum/Pip은 Prototype Core에서 비활성이며 Vertical Slice에서
+  활성화한다.
+- `HeavyAction`의 승인된 시작 비용은 `2 Banked Pips`다.
+- Perfect Catch는 Catch 자체가 아니라 이후 player-owned action이
+  유효한 physical result를 만들 때 origin당 한 번 `+5 Momentum`
+  modifier를 적용할 수 있다.
+- exact Chain classification·propagation·termination, Perfect Catch
+  timing, HUD, feedback와 implementation은 계속 Draft다.
+
 ### Deferred Candidates
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 모두
@@ -174,8 +189,9 @@ eligible Medium에만 적용한다. Light와 Heavy는 Strap eligible이
   승인된 rule이 아닌 역사적 `DRAFT` 후보다.
 
 Heavy의 유일하게 승인된 player-action entry point는 Vertical Slice의
-`HeavyAction`이다. exact resource condition, Momentum/Pip cost와
-execution은 Draft다.
+`HeavyAction`이다. 시작 비용은 `2 Banked Pips`이며 resource lifecycle은
+Momentum/Pip Contract를 따른다. final cost tuning과 execution은
+Draft다.
 
 ## 7. Shove
 

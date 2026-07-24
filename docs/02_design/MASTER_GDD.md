@@ -213,12 +213,25 @@ REARM     파괴된 가구와 남은 물체로 다음 행동 준비
 
 ## 17. Momentum
 
-- 현재 게이지 + 최대 3개의 Banked Pip
-- 직접 타격·차단은 소량
-- 2-hop 이상 Chain과 팀 릴레이는 대량
-- 일반 Heavy: 2 Pip
-- Structural Feature: 3 Pip
-- 피해를 받아도 Banked Pip은 유지하고 현재 게이지만 일부 손실
+Owner-approved G2 시작 profile은
+[`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+따른다.
+
+- Momentum/Pip은 `VERTICAL SLICE ONLY`이며 Prototype Core에서는
+  비활성이다.
+- run은 Current Momentum `0`, Banked Pip `0`으로 시작한다.
+- threshold `100 Momentum`에서 Pip으로 변환하며 최대
+  `3 Banked Pips`를 저장한다.
+- `HeavyAction` 시작 비용은 `2 Banked Pips`다.
+- passive decay와 ordinary-damage resource loss는 없다.
+- HeavyAction-origin result는 Momentum을 만들지 않는다.
+- Structural Feature의 Pip cost는 승인되지 않았다.
+- reward table, modifier, cap과 lifecycle의 정확한 시작값은 위
+  계약에 있으며 G4/G6 evidence-based tuning 대상이다.
+
+이 문서의 다른 Momentum·Chain·Heavy·Structural 수치 또는 보상 예시는
+위 계약과 별도로 Owner-approved되지 않은 역사적 Draft다. Chain의
+생성·전파·종료와 final balance도 계속 Draft다.
 
 ## 18. Causal Chain
 

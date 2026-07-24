@@ -12,8 +12,10 @@
   "g2_interaction_state_conflict_contract_path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
   "g2_weight_class_data_range_contract_status": "OWNER-APPROVED",
   "g2_weight_class_data_range_contract_path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
-  "g2_gameplay_checklist_progress": "3/7",
-  "design_freeze_checklist_progress": "18/32",
+  "g2_momentum_pip_starting_profile_status": "OWNER-APPROVED / G4-G6 TUNING REMAINS DRAFT",
+  "g2_momentum_pip_starting_profile_path": "docs/02_design/MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md",
+  "g2_gameplay_checklist_progress": "4/7",
+  "design_freeze_checklist_progress": "19/32",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -111,13 +113,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 19226,
-      "sha256": "b3e9f270056be3fbf6093cc30a1e863e10294bf1fc35cd26ca7a269a73bf7f9e"
+      "bytes": 19994,
+      "sha256": "01775d2acbd92af014dda9ca176563e298d4afa1fc03835dca24a55eaa828b1e"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 4611,
-      "sha256": "d47cf847630f54d33566468b8c86f62772203e87a27cc498d74aec9aeabc39e0"
+      "bytes": 4828,
+      "sha256": "825db2383afe47dce59b9780c2d5b9019fc9b2399d849835e58edcdc1c4b2b90"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -266,13 +268,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 4435,
-      "sha256": "9b8555967cf231136faf2f2784ff4593db3aa9cd98d6809b79178e66f1b6125f"
+      "bytes": 4734,
+      "sha256": "8aa7ae0212177b4f17a0859a8e28566c1b0894c49201a7308819ce451c8c7e74"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 3994,
-      "sha256": "d9d7008d5eabc3dc0e3884222724f9b547cd8f7c5bdee51a3022b51981a687b3"
+      "bytes": 4323,
+      "sha256": "520c9e05ca907d31eba7e786c6eb515e57d0008a26eefe5a969036edc2af7fb4"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -296,8 +298,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 26484,
-      "sha256": "706d2382d91470cfba3e1ec70ba4247d37d359648ec85559e60896591288c85f"
+      "bytes": 27032,
+      "sha256": "83d6b968f62c647a58566c08cc844e80b5955b30ed2e2acc5a508c08a5f454a7"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
@@ -316,28 +318,33 @@
     },
     {
       "path": "docs/02_design/GAMEPLAY_SPEC.md",
-      "bytes": 8209,
-      "sha256": "8d55bd1afbb4011073a0effadfd6184d17af759c92c80ea14fbefe9fd330cefe"
+      "bytes": 8930,
+      "sha256": "e36c7c5410d8b183944704fe571f573e5d86ec1057794b005bf4ca8933ea2f11"
     },
     {
       "path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-      "bytes": 15283,
-      "sha256": "c67a45bd23331b270e4c8a9a61aba8bc12505264b739bffdcfc263341ef6c9c0"
+      "bytes": 16021,
+      "sha256": "27a06d3f3e2062c1bda3193e135e9ca236c410203fc4e59134a27fd9c05f23f4"
     },
     {
       "path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
-      "bytes": 12277,
-      "sha256": "b498a43eae33203e68ee7891e2491a12d290c690e8b8eb1ee2bf7b683ba5eea6"
+      "bytes": 13070,
+      "sha256": "20496e1f3c0f0dcdcae27a093dda095536b056c3b0bf08d9f97f96f1aa64c15e"
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
-      "bytes": 9440,
-      "sha256": "327307fb4c4389c74867d786d66c6abb99f1c828837b3755b6ae165d4f325c8e"
+      "bytes": 10170,
+      "sha256": "f3bb3ad4a45c527524401b4358398dc69a4fc7fedf176c8abb87e570a1b72031"
     },
     {
       "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
-      "bytes": 1903,
-      "sha256": "eb48d2883fce3a3c1e688a3a08e17ff74f1c08160714b9c0674b013e0f6c449d"
+      "bytes": 3996,
+      "sha256": "932714993a40e9a2da27eef8d8ecd3bdb9f7213cdb5f369097b40aaaa9e38dc6"
+    },
+    {
+      "path": "docs/02_design/MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md",
+      "bytes": 10665,
+      "sha256": "e43b5ee3bee1da71834507291e63fdb5f9fec709cb7b244311a4a9505f1f29f4"
     },
     {
       "path": "docs/02_design/OBJECT_TAXONOMY.md",
@@ -351,8 +358,8 @@
     },
     {
       "path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
-      "bytes": 13831,
-      "sha256": "01e6a5bdae3130af1af08e341b8396e3d9caabdc0be774dca97dac617812ba4b"
+      "bytes": 14226,
+      "sha256": "c34519eb963210a4431801c585a0cd22d9447aab05ad70184f3997121a058850"
     },
     {
       "path": "docs/03_art/ALLY_VISUAL_SPEC.md",
@@ -466,8 +473,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 1797,
-      "sha256": "a02bac94ed4f6162b5c3386321896246ae2d9646856467fd5ab71d05a495c6e2"
+      "bytes": 1936,
+      "sha256": "d90189d6e905c676684e89c4c96842ab30f38b190ec11c9e43081ef3f7b7a81e"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

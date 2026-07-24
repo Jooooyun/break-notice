@@ -22,6 +22,10 @@
   eligibility와 delivery envelope는
   [`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)를
   따른다.
+- Momentum threshold, Pip capacity, resource lifecycle과
+  `HeavyAction` 시작 비용은
+  [`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+  따른다.
 - exact tap/hold/release 해석, 접근성 remapping과 물리적 binding은
   별도 G2/G3 결정 전까지 Draft다.
 - G1 Requirement 문구, Priority, Applicability와 Authority는
@@ -55,7 +59,7 @@ console과 accessibility-remapping command는 이 gameplay 논리 입력
 | `CallAlly` | `PROTOTYPE CORE` | discrete request intent | 한 명의 활성 동료에게 실제 물체 공급을 요청한다. | 승인된 active ally의 physical object supply 요청 | multiple allies, ally selection, inventory, pathfinding, exact timing, animation | PR-F-003, PR-F-013, PR-F-014; ADR-0004 | `OWNER-APPROVED` |
 | `StrapRelease` | `PROTOTYPE CORE` | discrete release intent | 활성 GEAR_01 연결 종료를 명시적으로 요청한다. | 플레이어가 시작하는 explicit connection release intent | automatic Safety Release rule, priority, threshold, timing, implementation | PR-F-006; GEAR_01 Visual Canon | `OWNER-APPROVED` |
 | `ResetEncounter` | `PROTOTYPE CORE` | deliberate reset command | 현재 validation encounter의 기준 상태 복원을 요청한다. | 같은 검증 상황을 재실행하기 위한 reset 요청 | exact binding, confirmation, hold duration, reset time, snapshot implementation, save system | PR-F-017; AT-FLOW-001 | `OWNER-APPROVED` |
-| `HeavyAction` | `VERTICAL SLICE` | discrete Heavy-use intent | 후속 승인 조건이 충족될 때 Heavy 접근 또는 사용을 요청한다. | Vertical Slice의 Heavy-object access/use 요청 | Prototype activation, cost, Pip count, Structural behavior, animation, physics, implementation | PR-F-011 | `OWNER-APPROVED` |
+| `HeavyAction` | `VERTICAL SLICE` | discrete Heavy-use intent | 후속 승인 조건이 충족될 때 Heavy 접근 또는 사용을 요청한다. | Vertical Slice의 Heavy-object access/use 요청; 시작 비용 `2 Banked Pips` | Prototype activation, Structural behavior, final balance, animation, physics, implementation | PR-F-011; Momentum/Pip Contract | `OWNER-APPROVED` |
 
 ## Active Action Responsibilities
 
@@ -108,7 +112,10 @@ Release, state priority, threshold와 exact timing은 이 계약에서
 ### HeavyAction
 
 Vertical Slice에서만 Heavy-object access 또는 use를 요청한다.
-Prototype Core 활성화, Momentum/Pip 비용, Structural Feature,
+Owner-approved 시작 비용은 `2 Banked Pips`이며 자세한 spend와
+lifecycle 규칙은
+[`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+따른다. Prototype Core 활성화, Structural Feature, final balance,
 animation과 physics는 이 계약에서 결정하지 않는다.
 
 ## Context and Mode Mapping
@@ -149,8 +156,8 @@ Owner-approved되었으며 이 계약의 9개 logical action ID를 변경하지
   point이며 `VERTICAL SLICE ONLY`다.
 
 exact object assignment, mass, size, speed, force, timing, movement
-restriction, target ranking, Momentum/Pip, animation, physics와
-implementation은 Draft다.
+restriction, target ranking, final Momentum/Pip tuning, animation,
+physics와 implementation은 Draft다.
 
 ## Deferred Logical-Action Candidates
 
@@ -209,6 +216,14 @@ Owner-approved되었다.
 - class-based Carry, Throw와 Relay eligibility;
 - Heavy의 `VERTICAL SLICE ONLY` / `HeavyAction` boundary.
 
+TASK-0039에서 다음 G2 항목은
+[`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)로
+Owner-approved되었다.
+
+- Momentum threshold `100`과 최대 `3` Banked Pips;
+- `HeavyAction` 시작 비용 `2 Banked Pips`;
+- reward starting profile과 resource lifecycle.
+
 다음 항목은 계속 `DRAFT`다.
 
 - same-context target ranking;
@@ -218,11 +233,12 @@ Owner-approved되었다.
 - Carry/Strap/Throw/Heavy 중 movement restriction;
 - exact physical mass와 object-specific assignment;
 - exact size, speed와 force;
-- Momentum/Pip와 Heavy cost;
+- Heavy selection과 physical execution;
+- final Momentum/Pip balance;
 - accessibility remapping;
 - exact feedback, animation과 physics behavior;
 - Unity Input System 구성;
 - implementation class, component와 data contract.
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 계속 비활성 Draft candidate다.
-다음 G2 설계 산출물은 Momentum/Pip starting-value contract다.
+다음 G2 설계 산출물은 Chain propagation and termination contract다.

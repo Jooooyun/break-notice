@@ -6,8 +6,8 @@
 >
 > 이 문서는 `LIGHT`, `MEDIUM`, `HEAVY`의 player-facing 기능 범위와
 > class-based interaction eligibility만 승인한다. 정확한 질량·크기·
-> 속도·힘·피해·timing·Momentum/Pip·animation·physics·기술 데이터
-> 구조와 Unity 구현은 승인하지 않는다.
+> 속도·힘·피해·timing·final Momentum/Pip tuning·animation·physics·
+> 기술 데이터 구조와 Unity 구현은 승인하지 않는다.
 
 ## Authority and Scope Boundary
 
@@ -189,7 +189,13 @@ path가 모두 필요하다.
   필요하다.
 - `HeavyAction`이 유일하게 승인된 player-action entry point이며
   `VERTICAL SLICE ONLY`다.
-- resource condition, Momentum/Pip cost와 execution은 Draft다.
+- Owner-approved 시작 비용은 `2 Banked Pips`이며 정확한 spend와
+  lifecycle은
+  [`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+  따른다.
+- HeavyAction origin과 그 downstream result는 Momentum을 만들지
+  않는다.
+- final cost tuning과 execution은 G4/G6 evidence 전까지 Draft다.
 - first-order role은 strong posture collapse, major object
   displacement, high-commitment payoff와 강한 국소 space-breaking
   결과다.
@@ -240,7 +246,9 @@ G2 결정이 필요하다.
 - PR-F-024가 관리하는 별도 room-design role이다.
 - Heavy object는 자동으로 Structural Feature가 아니다.
 - Structural Feature는 자동으로 `HeavyAction` usable 대상이 아니다.
-- Heavy와 Structural Feature의 관계는 별도 후속 G2 결정이 필요하다.
+- Structural Feature의 Pip cost는 승인되지 않았다.
+- Heavy와 Structural Feature의 다른 관계는 별도 후속 G2 결정이
+  필요하다.
 - 이 계약은 room-wide collapse, 모든 벽 파괴 또는 unrestricted
   destruction을 승인하지 않는다.
 
@@ -299,7 +307,7 @@ Prototype object로 승격되지 않는다.
 - Contact Freeze;
 - break threshold와 debris count;
 - Chain multiplier;
-- Momentum value와 Pip value/cost;
+- final Momentum reward, Pip capacity와 HeavyAction cost tuning;
 - movement penalty와 rotation restriction;
 - exact target ranking과 interaction timing;
 - animation과 IK;

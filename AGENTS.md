@@ -33,16 +33,36 @@ state ownership, action availability, cross-context arbitration,
 safe rejection, Reset priority, Light/Medium/Heavy functional envelope과
 class-based Catch·Strap·Carry·Throw·Relay eligibility는
 Owner-approved다. Heavy active use는 Vertical Slice의
-`HeavyAction`으로만 승인된다. exact timing, range, buffer, target
-ranking, physical binding, movement constraint와 구현은 계속
-`DRAFT`다.
+`HeavyAction`으로만 승인된다.
+
+Momentum/Pip은 Vertical Slice에서만 활성화하며 다음 G2 시작 profile은
+Owner-approved다.
+
+- threshold `100 Momentum`
+- 최대 `3 Banked Pips`
+- direct Light `5`, direct Medium `10`, unique downstream result `15`,
+  meaningful local room-state change `25`
+- Ally Relay modifier `+5`와 Perfect Catch modifier `+5`
+- origin당 reward cap `100 Momentum`
+- `HeavyAction` 시작 비용 `2 Banked Pips`
+- 같은 run의 room transition persistence와 encounter-entry Reset baseline
+- passive decay 없음
+- ordinary-damage resource loss 없음
+- HeavyAction-origin self-funding 없음
+
+exact timing, range, buffer, target ranking, physical binding, movement
+constraint와 구현은 계속 `DRAFT`다.
 
 다음 항목은 아직 `DRAFT`다.
 
 - 상세 게임플레이 설계
 - Light/Medium/Heavy의 exact physical mass·dimension·speed·force·
   damage와 object-specific assignment
-- Contact Freeze, Behavior Tag details, Momentum/Pip와 break value
+- Chain propagation·termination, exact result uniqueness와 runtime
+  lineage
+- Perfect Catch timing, Contact Freeze, Behavior Tag details, final
+  Momentum/Pip balance와 break value
+- Momentum/Pip HUD, animation, physics와 implementation
 - exact Prototype object list
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현

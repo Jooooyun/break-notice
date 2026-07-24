@@ -21,6 +21,9 @@
   승인하지 않는다.
 - `HeavyAction`은 `VERTICAL SLICE ONLY`이며 Prototype Core에
   활성화하지 않는다.
+- `HeavyAction`의 시작 비용과 Momentum/Pip lifecycle은
+  [`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
+  따른다.
 - G2 Design은 계속 `NOT PASSED / CURRENT BASELINE WORK`이고
   Implementation Gate는 `CLOSED`다.
 
@@ -240,13 +243,19 @@ inventory로 바꾸는 결과는 허용하지 않는다.
 
 `HeavyAction`은 `VERTICAL SLICE ONLY`다. `PLAYABLE`, Hand Ownership
 `FREE`, Relay `NONE`, Cargo Strap `STORED`, Queued Throw `CLEAR`이고
-Throw/Heavy non-committed인 neutral state에서만 시작할 수 있다.
+Throw/Heavy non-committed인 neutral state에서만 시작할 수 있으며
+Banked Pip이 최소 `2`여야 한다.
 
-시작 후 `HEAVY_COMMITTED`가 결과 해소 전 상호작용 소유권을
-독점한다. Heavy의 유일하게 승인된 player-action entry point는
-`HeavyAction`이다. Momentum/Pip cost, exact 대상, Structural
-interaction, physical mass, force, locomotion, animation, physics와
-구현은 Draft다.
+state conflict 또는 자원 부족으로 차단된 요청은 `0` Pip을 소비한다.
+유효한 요청이 `HEAVY_COMMITTED`에 진입할 때 `2 Banked Pips`를
+소비하며, ordinary post-commit interruption은 자동 refund를 만들지
+않는다. 시작 후 `HEAVY_COMMITTED`가 결과 해소 전 상호작용 소유권을
+독점한다.
+
+Heavy의 유일하게 승인된 player-action entry point는 `HeavyAction`이다.
+HeavyAction origin과 그 downstream result는 Momentum을 만들지 않는다.
+exact 대상, Structural interaction, physical mass, force, locomotion,
+animation, physics, final cost tuning과 구현은 Draft다.
 
 ## ResetEncounter Priority
 
@@ -256,7 +265,9 @@ interaction, physical mass, force, locomotion, animation, physics와
 
 Reset 완료는 Relay를 `NONE`, Queued Throw를 `CLEAR`, Hand
 Ownership을 `FREE`, Cargo Strap을 `STORED`로 복원하고 Carry,
-Throw와 Heavy ownership을 해소한다.
+Throw와 Heavy ownership을 해소한다. 또한 completed Reset은 encounter
+진입 시점의 `encounter-entry Momentum/Pip resource baseline`으로
+복원한다.
 
 정확한 binding, hold/confirmation, UI, reset time, snapshot/save,
 event와 구현은 Draft다.
@@ -290,7 +301,8 @@ event와 구현은 Draft다.
 - Carry/Strap/Throw/Heavy 중 locomotion constraint;
 - automatic Safety Release;
 - object-specific eligibility exception과 exact object assignment;
-- Momentum/Pip와 Heavy cost;
+- final Momentum/Pip balance와 Heavy cost tuning;
+- resource snapshot, persistence와 spend implementation;
 - ally supply selection, inventory, path와 exact timing;
 - Relay Position과 Suppressed;
 - 외부 Knockback, incapacity와 recovery interaction;
