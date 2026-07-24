@@ -64,19 +64,32 @@ Light, Medium, Heavy는 피해 숫자가 아니라 전투 역할과 움직임이
 
 ## 7. 플레이 세션 구조
 
+Policy Violation의 현재 Owner-approved G2 authority는
+[`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md)를
+따른다.
+
 ```text
 Run 시작
 → 방 선택
 → 전투방 진입
 → 물체·동료·적·환경 기회 확인
 → 패스와 연쇄 충돌로 방 클리어
-→ Policy Violation 3개 중 1개 선택
-→ 다음 방
-→ Elite/피니셔
-→ Run 종료 또는 다음 층
+→ 다른 전투방이 남아 있으면 run당 한 번의 Policy Violation 기회
+→ 서로 다른 eligible Candidate 2개 중 정확히 1개 선택
+→ 선택 결과는 다음 전투방 진입부터 적용
+→ 같은 run의 후속 방에서 한 Active Policy 유지
+→ Run 종료 시 Policy clear
 ```
 
-버티컬 슬라이스는 10~15분, 3개 전투방을 목표로 한다.
+Policy Violation은 Prototype Core에서 비활성이고 Vertical Slice에서만
+활성이다. Selection Opportunity는 run당 정확히 한 번이며, 한 eligible
+encounter 완료 뒤 다른 combat encounter가 남아 있을 때 다음 encounter
+진입 전에 발생한다. exact room index와 final room count는 G5 Draft다.
+
+역사적 `10~15분`, `3개 전투방`, exact Elite와 finisher sequence는
+`NON-AUTHORITATIVE G5/G6 DRAFT PRODUCTION CANDIDATES`다. FIN_01은
+계속 `OUT / COULD`이며 이 session flow로 Vertical Slice에 편입되지
+않는다.
 
 ## 8. 전투 루프
 
@@ -325,16 +338,16 @@ threshold, runtime lineage와 Unity 구현은 Draft다.
 
 ## 21. Roguelite 보상
 
-업그레이드는 숫자보다 행동을 바꾼다.
+Policy Violation의 선택·current-run 적용 authority는
+[`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md)를
+따른다. 현재 승인 범위는 run당 한 번의 기회, 두 Candidate, 단일 선택,
+다음 encounter 적용, one Active Policy, Reset 보존과 run-end clear다.
 
-예:
-
-- `Delegated Authority`: 동료 패스 첫 충돌 강화
-- `Flexible Working`: 회피 중 패스 캐치
-- `Team Building Exercise`: Medium 적중 후 Light 추가 패스
-- `Redirection Policy`: 스트랩 리디렉션 각도 확대
-- `Rolling Forecast`: Medium 수평 속도 유지
-- `Capital Expense`: Heavy 구조 파괴 시 Momentum 일부 환급
+기존 Candidate 이름과 효과 예시는
+[`ROGUELITE_PROGRESSION.md`](ROGUELITE_PROGRESSION.md)의
+`SUPERSEDED / HISTORICAL DRAFT CANDIDATES`이며 active G2 또는
+production authority가 아니다. final Candidate pool, exact effects,
+UI, save와 구현은 Draft 또는 Deferred다.
 
 ## 22. 버티컬 슬라이스 방
 

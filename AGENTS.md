@@ -102,6 +102,23 @@ Owner-approved다.
 - exact content authority는
   `docs/02_design/PROTOTYPE_CONTENT_LOCK.md`를 따름
 
+다음 G2 Policy Violation Selection and Run-Application logical
+contract도 Owner-approved다.
+
+- Policy Violation은 `VERTICAL SLICE ONLY`이며 Prototype에서 비활성
+- run당 정확히 한 Selection Opportunity
+- 정확히 두 개의 distinct eligible Candidate를 Offer
+- 정확히 한 Candidate만 선택
+- run당 정확히 한 Active Policy
+- stacking, replacement, skip과 reroll 없음
+- 선택 결과는 다음 combat encounter 진입부터 적용
+- 같은 run의 room transition과 `ResetEncounter`에서 Active Policy 보존
+- run 종료에서 clear하고 새 run은 Policy 없이 시작
+- actual Candidate effect와 final pool은 G5 Draft
+- exact authority는
+  `docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`를
+  따름
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -121,6 +138,9 @@ constraint와 구현은 계속 `DRAFT`다.
 - Vertical Slice Relay Position count, 모든 exact position·support zone·
   route, ally supply ranking·trajectory·timing, Suppressed threshold·
   duration·recovery, feedback, AI와 navigation
+- Policy Violation의 actual Candidate names·effects, final pool,
+  rarity·weighting·randomization, final room index, UI·presentation,
+  save·telemetry와 technical implementation
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값

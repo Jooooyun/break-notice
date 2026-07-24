@@ -155,6 +155,28 @@ transition, Suppressed, Behavior Tag requirement와 두 번째 ally는
 Prototype에서 비활성 또는 제외다. 정확한 geometry, stats, timing,
 AI, animation, physics, final art와 Unity 구현은 `DRAFT`다.
 
+### Policy Violation Selection and Run-Application Contract
+
+Owner-approved Policy Violation lifecycle은
+[`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md)를
+따른다.
+
+- `VERTICAL SLICE ONLY`; Prototype Core에서는 비활성;
+- run당 정확히 한 Selection Opportunity;
+- Offer는 정확히 두 개의 distinct eligible Candidate;
+- 플레이어는 정확히 하나를 선택;
+- 선택한 Policy는 다음 combat encounter 진입부터 적용;
+- run당 Active Policy는 정확히 하나;
+- active Policy는 room transition과 `ResetEncounter`에서 보존;
+- run 종료에서 clear되고 새 run은 Policy 없이 시작;
+- actual Candidate content와 final pool은 G5 Draft.
+
+stacking, replacement, skip과 reroll은 없다. exact room index, UI, save,
+randomization, candidate effect, data architecture와 implementation은
+Draft 또는 Deferred다. 이 절은 logical input ID, interaction state,
+Weight-Class rule, Momentum value, Chain depth, Ally rule 또는 Prototype
+content를 변경하지 않는다.
+
 ### Deferred Candidates
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 모두

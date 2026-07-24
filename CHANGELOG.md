@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G2 Policy Violation Selection and Run-Application Contract를 승인 상태로 등록해 run당 한 선택 기회, 두 Candidate, 단일 current-run Active Policy와 next-encounter·Reset·run-end lifecycle을 정의하고, 역사적 12-Candidate/3-choice 목록은 superseded Draft로 격하하되 final Candidate content·UI·save·implementation은 Draft로 유지하며 G2는 통과시키지 않음
 - 기준선 `a0cf9b15d120b0842e2ddcfff1be697863581533`의 G2 Design Baseline Final Audit을 기록하고, PR-F-018 G2 계약 부재·stale Draft authority leak·RTM source/trace 과대 분류로 `REVISION REQUIRED`를 판정하되 G2 미통과와 Implementation Gate `CLOSED`를 유지
 - G2 Prototype Content Lock을 승인 상태로 등록해 `PRT-RM-001` 한 room, CHR_00·CHR_01·Compliance Runner 두 명, `PRT-RP-001`, 네 object definition·일곱 instance와 두 physical pool·일곱 validation affordance를 고정하고 final art·수치·AI·animation·physics·Unity 구현은 Draft로 유지
 - G2 Ally Relay, Relay Position과 Suppressed 계약을 승인 상태로 등록해 일반 전투 CHR_01 한 명, Prototype 고정 support position, 실제 Light/Medium 공급, reservation·release lifecycle, Vertical Slice position 전환과 조건부 SHOULD Suppressed를 정의하고 exact content·position·ranking·timing·AI·navigation·animation·physics·Unity 구현은 Draft로 유지

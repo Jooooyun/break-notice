@@ -21,10 +21,17 @@
   "g2_ally_relay_suppressed_contract_path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
   "g2_prototype_content_lock_status": "OWNER-APPROVED",
   "g2_prototype_content_lock_path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
+  "g2_policy_violation_contract_status": "OWNER-APPROVED / CANDIDATE CONTENT REMAINS G5 DRAFT",
+  "g2_policy_violation_contract_path": "docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md",
+  "g2_policy_violation_selection_opportunities_per_run": 1,
+  "g2_policy_violation_offer_count": 2,
+  "g2_policy_violation_active_policy_limit": 1,
   "g2_design_baseline_final_audit_status": "REVISION REQUIRED",
   "g2_design_baseline_final_audit_path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
   "g2_design_baseline_final_audit_baseline_sha": "a0cf9b15d120b0842e2ddcfff1be697863581533",
   "g2_design_baseline_final_audit_next_task": "TASK-0044 — Define and Align the G2 Policy Violation Selection and Run-Application Contract",
+  "g2_design_baseline_remediation_status": "IN PROGRESS",
+  "g2_design_baseline_remediation_next_output": "G2 Stale Authority and RTM Source/Trace Honesty Correction",
   "g2_prototype_room_count": 1,
   "g2_prototype_enemy_archetype_count": 1,
   "g2_prototype_enemy_instance_count": 2,
@@ -129,13 +136,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 23001,
-      "sha256": "d34da27e6bcbb1be72aedd882361009d5feac54c91b284a16bd717f1322d1cc9"
+      "bytes": 23949,
+      "sha256": "4b3316ffe5a1a30b2ab266c44918a7963ea6c0567251fab3655f560b48f3f6e8"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 6090,
-      "sha256": "49e9472f8e309ef28bda0cfe0f83a2de4c4525deaa6289c1f99da293b92a138f"
+      "bytes": 6495,
+      "sha256": "ed48b114c049f5f8f43ae47b9d8e08d66e0f3e82d7c656ca34f1a1f085f5ca02"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -284,13 +291,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 5878,
-      "sha256": "9d409671b293fbe438219ef5b061c5aeef532954493f6bb0436e8596ba2bb6d7"
+      "bytes": 6261,
+      "sha256": "94f1c59ba32213de5e1684d6bd1c6576b06f2fe404fa048f87ae3f3a798b6cde"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 5792,
-      "sha256": "b358b805978d01f0ea47bf7c5997cdbce52b9520a45242b9ae7f42877476d01c"
+      "bytes": 6407,
+      "sha256": "e96dbbde45bc8450c7e4470d3fd11f9f61da5ac85f2edddd1ae78d1748cd6fde"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -314,8 +321,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 30723,
-      "sha256": "d6a3971bc54a03386a16b3e9af7f018355a2005568fdc9742c8d00c7f06167e3"
+      "bytes": 31593,
+      "sha256": "8d02838b736420cf1a3988fc73b4eac767e8497906191977fccd03d02e870517"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
@@ -344,8 +351,8 @@
     },
     {
       "path": "docs/02_design/GAMEPLAY_SPEC.md",
-      "bytes": 13223,
-      "sha256": "744d9452d805ad7c4f82afb1ec48d928d0bab7843b3bc6b246ecbd27b27a0815"
+      "bytes": 14305,
+      "sha256": "e014ed98f45a98a1e78cb1c9b5f6ef048ebbbff0b2c84d6239e2560bab8f1ed5"
     },
     {
       "path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
@@ -359,8 +366,8 @@
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
-      "bytes": 13495,
-      "sha256": "5e966d0e445aa2e3559c43b35e6b5752bd65c10514df25ba0ba2d2545a62ab82"
+      "bytes": 14592,
+      "sha256": "9cc53328e93723a22a73caae5fce254393bc31cf636904cfda7fb7348e907d95"
     },
     {
       "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
@@ -378,14 +385,19 @@
       "sha256": "72510a99d1d8d978eddd5130523e61a93e6c40ca7a82f726d145fd4bd95ec16c"
     },
     {
+      "path": "docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md",
+      "bytes": 14089,
+      "sha256": "d2171f472643c92b9df789c10462798e36050157dcc1e9e7a2915f03e9642f02"
+    },
+    {
       "path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
       "bytes": 11773,
       "sha256": "f089c32b163a2f1bf262a8feba32b6802ca160d7cbedaccc5624e2fa580288ca"
     },
     {
       "path": "docs/02_design/ROGUELITE_PROGRESSION.md",
-      "bytes": 1533,
-      "sha256": "eab424dfb4e7d105d08db0bd6e822e669d0697f54393e7351ceb593b8e445339"
+      "bytes": 4139,
+      "sha256": "53bb2fa1ed463f6f607efac0b1b81391be36181a72d7e1dad38c1da58519ef83"
     },
     {
       "path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",

@@ -28,7 +28,8 @@ Implementation Gate: `CLOSED`
 | 핵심 전투 동사 | REQUIREMENTS OWNER-APPROVED / DESIGN DRAFT | 상세 게임플레이 설계 | G2 |
 | Ally Relay and Suppressed Contract | OWNER-APPROVED / G2 PARTIAL | Prototype Content Lock와 함께 유지 | G2 |
 | Prototype Enemy, Room, and Object Content Lock | OWNER-APPROVED / G2 GAMEPLAY SET COMPLETE | Final Audit에서 검증 완료 / 현 Lock 유지 | G2 |
-| G2 Design Baseline Final Audit | REVISION REQUIRED | G2 Policy Violation Selection and Run-Application Contract | G2 |
+| G2 Design Baseline Final Audit | REVISION REQUIRED | 차단 수정 후 재감사 필요 | G2 |
+| Policy Violation Selection and Run-Application Contract | OWNER-APPROVED / G2 PARTIAL | G2 Stale Authority and RTM Source/Trace Honesty Correction | G2 |
 | 화물 스트랩 | VISUAL LOCKED / FUNCTIONAL DRAFT | 상세 게임플레이 설계 | G2 |
 | CHR_00 Player Identity | LOCKED | 없음 | G2 |
 | CHR_01 First Ally Identity | LOCKED | 없음 | G2 |
@@ -75,9 +76,15 @@ Owner-approved G2 logical design이다. `PRT-RM-001` 한 room, CHR_00·
 CHR_01·Compliance Runner 두 명, `PRT-RP-001`, 네 object definition·
 일곱 instance와 검증 affordance도 Owner-approved다. G2 Gameplay
 checklist는 `7 / 7`이지만 G2 Design은 아직 통과하지 않았다.
-`G2 Design Baseline Final Audit` 결과는 `REVISION REQUIRED`이며,
-다음 산출물은 `G2 Policy Violation Selection and Run-Application
-Contract`다. exact
+PR-F-018의 run당 한 Selection Opportunity, 두 Candidate, 단일 선택,
+다음 encounter 적용, one Active Policy, room transition·Reset 보존과
+run-end clearing의 logical G2 blocker는 Owner-approved
+`Policy Violation Selection and Run-Application Contract`로 해소되었다.
+실제 Candidate effect와 final pool은 G5 Draft다.
+`G2 Design Baseline Final Audit` 판정은 계속 `REVISION REQUIRED`이며,
+stale non-progression Master GDD authority prose, PR-F-019·PR-F-024
+Trace Status와 NFR-U-001~005 Source role은 미해결이다. 다음 산출물은
+`G2 Stale Authority and RTM Source/Trace Honesty Correction`이다. exact
 mass·size·speed·force·damage·Contact Freeze, Behavior Tag details,
 final Momentum/Pip balance, Chain runtime lineage·threshold·presentation,
 break value, final enemy identity·room geometry·object art, Relay Position
