@@ -21,6 +21,8 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
 - G3 Technical Decisions:
   `OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING`
+- G3 Causal Result-Family Alignment:
+  `OWNER-APPROVED / CORRECTED`
 - G3 Technical Checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -172,6 +174,11 @@ Audit을 기다린다. G2 passage는 구현 또는 테스트 완료를
 - G3 passage와 final pre-implementation review 뒤에만 가능한 bounded
   10-wave sequence
 
+G3 Causal Result Family는 Owner-approved G2 계약의 정확한 네 family인
+`ACTOR_STATE_CHANGE`, `OBJECT_STATE_CHANGE`, `BREAK_STATE_CHANGE`,
+`ROOM_STATE_CHANGE`로 교정되었다. Structural Feature는 별도의 optional
+design role이며 Result Family가 아니다.
+
 정확한 권위는 `docs/04_technical/G3_TECHNICAL_BASELINE.md`와
 `docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md`를 따른다. 이는
 실제 Unity project, package resolution, code, test, Scene, Prefab,
@@ -216,7 +223,7 @@ Implementation Gate는 `CLOSED`다.
 적용되었지만 Final Audit은 아직 통과하지 않았다. Technical checklist는
 `6 / 6`, Design Freeze는 `28 / 32`다. 현재 `Game/**`에는 placeholder만
 있고 Unity project는 생성되지 않았다. 다음 작업은
-`TASK-0050 — G3 Technical Baseline Final Audit and Gate Readiness`다.
+`TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness`다.
 G3 passage, remaining Design Freeze와 final pre-implementation review
 전에는 Graybox 또는 Unity 구현을 시작하지 않는다.
 

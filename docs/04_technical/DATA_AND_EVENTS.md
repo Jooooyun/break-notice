@@ -76,11 +76,18 @@ repeated delivery 가능성이 있으면 idempotency와 duplicate suppression을
 ## Causal Result Contract
 
 Origin은 initiating carrier, attributed carrier, parent 하나, depth와
-provenance를 가진다. Result family는 `TARGET`, `OBJECT`, `ROOM_STATE`,
-`STRUCTURAL`이며 같은 Origin의 compound target/result-family가
-unique하다. branch는 Origin을 공유할 수 있지만 merge하지 않는다.
-ambiguous multi-Origin result는 reward가 없고 terminated Origin은
-reopen되지 않는다.
+provenance를 가진다. Result family는 정확히 다음 네 종류다.
+
+- `ACTOR_STATE_CHANGE`
+- `OBJECT_STATE_CHANGE`
+- `BREAK_STATE_CHANGE`
+- `ROOM_STATE_CHANGE`
+
+같은 Origin의 compound target/result-family가 unique하다. branch는
+Origin을 공유할 수 있지만 merge하지 않는다. ambiguous multi-Origin
+result는 reward가 없고 terminated Origin은 reopen되지 않는다.
+Structural Feature는 별도의 optional design role이며 Result family가
+아니다.
 
 구체 event name, payload field, collection type와 transport는 미정이다.
 

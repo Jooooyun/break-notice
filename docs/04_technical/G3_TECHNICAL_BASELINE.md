@@ -191,13 +191,18 @@ collision의 cross-system mutation은 금지한다.
 
 - Origin은 initiating carrier와 current attributed carrier를 구분한다.
 - Origin은 parent 하나, depth와 provenance를 가진다.
-- Result family는 `TARGET`, `OBJECT`, `ROOM_STATE`, `STRUCTURAL` 네
-  종류를 사용한다.
+- Result family는 정확히 다음 네 종류를 사용한다.
+  - `ACTOR_STATE_CHANGE`
+  - `OBJECT_STATE_CHANGE`
+  - `BREAK_STATE_CHANGE`
+  - `ROOM_STATE_CHANGE`
 - 동일 Origin의 uniqueness는 compound target/result-family로 판정한다.
 - branch는 같은 Origin을 공유할 수 있지만 Origin merge는 금지한다.
 - ambiguous multi-Origin result는 reward를 받지 않는다.
 - terminated Origin은 다시 열리지 않는다.
 - Reset은 모든 active attribution을 지운다.
+- Structural Feature는 별도의 optional design role이며 Result family가
+  아니다.
 
 구체 collection type과 payload 구조는 승인하지 않는다.
 

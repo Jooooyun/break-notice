@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G3 Causal Result Family taxonomy를 Owner-approved G2 Chain 계약의 `ACTOR_STATE_CHANGE`, `OBJECT_STATE_CHANGE`, `BREAK_STATE_CHANGE`, `ROOM_STATE_CHANGE`로 교정해 `BREAK_STATE_CHANGE`를 복구하고 무단 `STRUCTURAL` Result Family를 제거하되 설계·보상·범위·Gate·구현 상태는 변경하지 않으며 G3 Final Audit을 계속 대기
 - Owner-approved `DEC-G3-001`~`DEC-G3-013`을 G3 Technical Baseline과 ADR-0015로 적용하고 Unity `6000.3.20f1`, URP `17.3.0`, Input System `1.20.0`, Cinemachine `3.1.7`, Test Framework `1.6.0` documentation lock, Prototype/later scope, architecture·state·event·causal·physics·Strap·budget·Reset·harness 책임을 동기화해 Technical checklist를 `6/6`, Design Freeze를 `28/32`로 갱신하되 G3는 `NOT PASSED`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`로 유지하고 Unity 또는 구현 파일은 만들지 않음
 - G3 Technical Draft 여섯 개와 빈 Unity 예정 구조를 Owner-approved G1/G2 기준선에 대조해 `READY FOR OWNER G3 TECHNICAL DECISIONS`로 기록하고 13개 bounded 기술 결정을 준비하되, 기술 선택·G3 passage·Unity·Graybox·구현 권한은 만들지 않음
 - 성공한 G2 Re-Audit과 위임된 Owner 승인을 근거로 교정 기준선을 Owner-approved G2 Design Baseline으로 승격하고 G2 Gate를 `PASSED`로 기록한 뒤 현재 Phase를 `PRE-PRODUCTION / G3 TECHNICAL BASELINE`으로 전환하되, G3는 `NOT PASSED / CURRENT BASELINE WORK`, Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`로 유지하며 Unity 또는 구현 권한을 만들지 않음

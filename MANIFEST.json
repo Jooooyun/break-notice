@@ -61,6 +61,13 @@
   "g3_technical_baseline_status": "OWNER-APPROVED / FINAL AUDIT PENDING",
   "g3_technical_baseline_path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
   "g3_technical_baseline_adr": "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
+  "g3_causal_result_family_alignment_status": "OWNER-APPROVED / CORRECTED",
+  "g3_causal_result_families": [
+    "ACTOR_STATE_CHANGE",
+    "OBJECT_STATE_CHANGE",
+    "BREAK_STATE_CHANGE",
+    "ROOM_STATE_CHANGE"
+  ],
   "g3_unity_editor_lock": "6000.3.20f1",
   "g3_urp_lock": "17.3.0",
   "g3_input_system_lock": "1.20.0",
@@ -69,7 +76,7 @@
   "g3_ai_navigation_status": "DEFERRED / NOT IN PROTOTYPE PACKAGE BASELINE",
   "g3_decision_status": "DEC-G3-001 THROUGH DEC-G3-013 OWNER-APPROVED",
   "g3_technical_checklist_progress": "6/6",
-  "g3_current_next_task": "TASK-0050 — G3 Technical Baseline Final Audit and Gate Readiness",
+  "g3_current_next_task": "TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -167,13 +174,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 27394,
-      "sha256": "b19bb90f9f66f088f6125cd7d2afa6e5379c5dbe0fd6307ba6fd01988709587f"
+      "bytes": 27736,
+      "sha256": "800ab786cabd528b83bceb6a967f960fec652e87639201e1f74a264e34ec8bbb"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 8415,
-      "sha256": "c4aac79f1760d2207f98f5076c463b3a2fdc6a752161356b944f1e23bf0d2a56"
+      "bytes": 8776,
+      "sha256": "e556a56e1a3b6aa83e6fd71b75686ad7712b49edff89c72258e7e8dfa989781d"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -322,13 +329,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 7287,
-      "sha256": "b2fffb3552bc0bbb6c5e1eb363d8ced5374e7ab5584fb2d137c1bedc0f93562c"
+      "bytes": 7567,
+      "sha256": "2d561aba70fa68bfb51148ad59b1b50cc81616c71a316ba47d20995941a7f3f6"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 8770,
-      "sha256": "6e181f12f3716e676dbc00e9d2489b8328c2f6e3a478f323d45efbe4cfddeaea"
+      "bytes": 9152,
+      "sha256": "3ff9442f232e706fe0955860d788ffcc84804faf8483de6f958f705282af540f"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -507,13 +514,13 @@
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
-      "bytes": 3075,
-      "sha256": "c4e29f0a87c4dd4b741eaf58a84870dec1fcce16249e0381ed99d5047df2483f"
+      "bytes": 3235,
+      "sha256": "042cba3ea908ff00ca5bef5066e1c45774cee79a032d1cf1e0231ea238dad25b"
     },
     {
       "path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
-      "bytes": 16078,
-      "sha256": "413ad7a62f4b2c736c10584baac42a42ba95d0be1e2a8c17fecad6c7c5529805"
+      "bytes": 16237,
+      "sha256": "f10c86d452f58a867e1570052823224971d4c981dbb9d21ddca31823e1d4a3bf"
     },
     {
       "path": "docs/04_technical/PERFORMANCE_BUDGET.md",
@@ -552,8 +559,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 3293,
-      "sha256": "44320d31d234d4c38e43f82369a30a5280a59b75247beb3218eb8516369b86b1"
+      "bytes": 3363,
+      "sha256": "86661aafb3a74c5c25065e019ad223c8ddc3af6016fbf288f1200ca7ff215323"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -572,8 +579,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 2212,
-      "sha256": "416c26e244bc226cd371d00588c43518716ecf20fd835936ec5f18289c902bbd"
+      "bytes": 2280,
+      "sha256": "a3ff6a5bcdcc982b2cbd69c14dee66a30ce7c4a4378661848de46ea4b16649d1"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -587,8 +594,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 3062,
-      "sha256": "88e6ddf1cfb51879c2d5a7ed990671f629d539109247e9f95cedfffe14274c2b"
+      "bytes": 3228,
+      "sha256": "eb7e3e57c3834140864c78c84f552d824262f0903a1c2fd197c6147b28db4720"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",

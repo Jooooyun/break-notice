@@ -9,6 +9,8 @@
 - G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
 - G3 Technical Decisions:
   `OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING`
+- G3 Causal Result-Family Alignment:
+  `OWNER-APPROVED / CORRECTED`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -51,9 +53,10 @@ Status: NOT PASSED / OWNER-APPROVED BASELINE / FINAL AUDIT PENDING
 
 책임, 데이터, 이벤트, 검증, 성능 예산, Reset과 test-harness 방향,
 exact Editor/package documentation lock은 적용되었고 Technical
-checklist는 `6 / 6`다. 다음 단계는 `TASK-0050 — G3 Technical
-Baseline Final Audit and Gate Readiness`이며 G3는 아직 통과하지
-않았다. G4, Graybox와 Unity 구현 권한은 없다.
+checklist는 `6 / 6`다. Causal Result Family taxonomy는 Owner-approved
+G2 계약과 정렬된 상태로 교정되었다. 다음 단계는
+`TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness`이며
+G3는 아직 통과하지 않았다. G4, Graybox와 Unity 구현 권한은 없다.
 
 ## Phase 4 — Graybox Validation
 

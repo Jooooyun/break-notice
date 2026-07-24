@@ -75,8 +75,9 @@ technical scope는 미해결이다. Chain runtime lineage와 exact settlement
 threshold도 G3/G4 Draft다. Gameplay `7 / 7`과 교정 기준선 Re-Audit의
 성공, Owner 승인을 근거로 G2 Design Gate는 `PASSED`다. G3 기술
 책임·데이터·이벤트·검증·예산·Reset·test-harness 방향과 exact
-Editor/package documentation lock은 Owner-approved다. 다음 작업은
-`TASK-0050 — G3 Technical Baseline Final Audit and Gate Readiness`이며
+Editor/package documentation lock은 Owner-approved다. G3 Causal Result
+Family alignment는 `OWNER-APPROVED / CORRECTED`다. 다음 작업은
+`TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness`이며
 G3 Technical은 `NOT PASSED / CURRENT BASELINE WORK`, Full Design
 Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는
 `CLOSED`다.

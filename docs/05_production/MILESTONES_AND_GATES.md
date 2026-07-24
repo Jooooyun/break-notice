@@ -18,6 +18,8 @@
 - G3 Technical: `NOT PASSED / CURRENT BASELINE WORK`
 - G3 Technical Decisions:
   `OWNER-APPROVED / BASELINE APPLIED / FINAL AUDIT PENDING`
+- G3 Causal Result-Family Alignment:
+  `OWNER-APPROVED / CORRECTED`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `28 / 32`
 - Production Visual Lock sequence: `COMPLETE`
@@ -33,7 +35,7 @@ Gate는 `PASSED`다. G3의 책임·데이터·이벤트·검증·예산·Reset·
 test-harness 방향과 exact Editor/package documentation lock은
 Owner-approved 기준선으로 적용되었고 Technical checklist는 `6 / 6`다.
 현재 다음 Gate 작업은
-`TASK-0050 — G3 Technical Baseline Final Audit and Gate Readiness`다.
+`TASK-0051 — G3 Technical Baseline Final Audit and Gate Readiness`다.
 Final Audit 전까지 G3는 `NOT PASSED`이며 G4, Graybox와 구현 권한이
 없다. 승인된 여덟 Production Visual의
 Canon은 유지되지만 Full Design Lock은 미완료다. FIN_01은 PR-F-022
