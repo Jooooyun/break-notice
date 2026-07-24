@@ -45,11 +45,11 @@
 - [x] AGENTS.md
 - [x] Execution Protocol
 - [x] Task Template
-- [ ] 첫 구현 티켓 세분화
+- [x] 첫 구현 티켓 세분화
 
 ## Approval
 
-현재 체크 상태: `30 / 32`
+현재 체크 상태: `31 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay의
 일곱 항목은 Owner-approved G2 Design Baseline으로 완료되었다.
@@ -70,10 +70,13 @@ exact `8` Later-Slice extension candidate, interaction·variant·reuse·
 Prototype zero-destruction boundary의 asset-family list가
 Owner-approved/LOCKED되었음을 뜻한다. 3D model, texture, material 또는
 Unity asset은 생성되지 않았고 G5는 `NOT PASSED`이며 Unity 또는 Graybox
-권한이 없다. 체크되지 않은 항목은
-`주인공 Turnaround`과 `첫 구현 티켓 세분화`의
-정확히 두 개다. Design Freeze는 `30 / 32`, Full Design Lock은
-`INCOMPLETE`다.
+권한이 없다. 첫 구현 티켓은
+`docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐고
+상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`다.
+concrete execution SHA와 Unity project는 없으며 Final
+Pre-Implementation Review는 시작되지 않았다. 체크되지 않은 항목은
+`주인공 Turnaround` 하나다. Design Freeze는 `31 / 32`, Full Design
+Lock은 `INCOMPLETE`다.
 
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`의 제작 구성과
 binary review contract는 `OWNER-APPROVED / READY`지만 Turnaround
@@ -109,7 +112,7 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
 새 numbered task는 승인되지 않았다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
-`6 / 6`, Design Freeze는 `30 / 32`, G4와 G5는 `NOT PASSED`, Full
+`6 / 6`, Design Freeze는 `31 / 32`, G4와 G5는 `NOT PASSED`, Full
 Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation
 Gate는 `CLOSED`다.
 

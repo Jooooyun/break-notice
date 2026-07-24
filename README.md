@@ -45,11 +45,12 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G5 Freeze | NOT PASSED |
 | Current Next Task | OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND |
 | G3 Technical checklist | 6 / 6 |
-| Design Freeze | 30 / 32 |
+| Design Freeze | 31 / 32 |
 | Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
 | CHR_00 Player Turnaround Brief | OWNER-APPROVED / READY |
 | CHR_00 Player Turnaround Image | NOT CREATED / IMAGE GENERATION NOT AUTHORIZED |
+| First Implementation Ticket | IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
@@ -102,9 +103,14 @@ CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 `NOT AUTHORIZED`다. Brief 승인은 이미지 생성·후보 승인·checklist
 완료를 뜻하지 않는다.
 
-Design Freeze는 `30 / 32`이며 남은 항목은 `CHR_00 Player
-Turnaround`과 `첫 구현 티켓 세분화`의 정확히 두 개다. 다음 단일
-허가 경계는
+첫 구현 티켓은
+[`IMP-0001`](docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md)로
+세분화됐고 상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION
+BLOCKED`다. concrete execution baseline SHA는 없으며 이는 Unity,
+Package, code 또는 Git 쓰기 권한이 아니다.
+
+Design Freeze는 `31 / 32`이며 남은 항목은 `CHR_00 Player
+Turnaround` 하나다. 다음 단일 허가 경계는
 `OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이고
 G4와 G5는 `NOT PASSED`다. 새 numbered task는 승인되지 않았다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은

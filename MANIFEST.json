@@ -50,8 +50,8 @@
   "g2_prototype_object_definition_count": 4,
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
-  "design_freeze_checklist_progress": "30/32",
-  "design_freeze_completion_status": "IN PROGRESS / 30/32",
+  "design_freeze_checklist_progress": "31/32",
+  "design_freeze_completion_status": "IN PROGRESS / 31/32",
   "g3_gate_status": "PASSED",
   "g3_entry_status": "PASSED / OWNER-APPROVED BASELINE",
   "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
@@ -136,6 +136,14 @@
   "player_turnaround_main_view_count": 5,
   "player_turnaround_authorized_detail_callout_cap": 3,
   "player_turnaround_checklist_status": "UNCHECKED",
+  "first_implementation_ticket_id": "IMP-0001",
+  "first_implementation_ticket_title": "Unity Repository Bootstrap and Exact Package-Lock Materialization",
+  "first_implementation_ticket_status": "OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED",
+  "first_implementation_ticket_path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
+  "first_implementation_ticket_execution_baseline_status": "ABSENT / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
+  "first_implementation_ticket_execution_status": "NOT AUTHORIZED",
+  "first_implementation_ticket_implementation_gate_requirement": "MUST BE EXPLICITLY OPEN",
+  "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "g4_gate_status": "NOT PASSED",
   "g5_gate_status": "NOT PASSED",
   "design_freeze_current_next_task": "OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND",
@@ -237,13 +245,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 33810,
-      "sha256": "19401c8f39ca0e7ec91d01cbb9a2cb60d396f97791e1292bb843479864edb5dc"
+      "bytes": 34434,
+      "sha256": "9baa6eec04799cfb46754dc0bf6423b1116b63d9909cf5e45b3af29761dbdb6c"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 13056,
-      "sha256": "31d3310835caa73bc7e4a7a3a3e870bf2d4f0c23a32c6a74f8915725c86fffa4"
+      "bytes": 13748,
+      "sha256": "af8004b513f448318a288939f498471e4fb2bd3a02e9626c3d2322e0663e7784"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -382,8 +390,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 10744,
-      "sha256": "500cd445a972359a1cf0a5720869e0f72429bf4310963200354720f153199394"
+      "bytes": 11083,
+      "sha256": "963513de44a24493f5d673451b884e38f50258bcef44e701629defdd38987a39"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -392,13 +400,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 9314,
-      "sha256": "986099e331dbe5aedd835f6dffc22be3d6e5e3fd8358159120068726cfa5aed1"
+      "bytes": 9673,
+      "sha256": "99f972c39ed2bc33da51b73fb72728f0141cd204e4a90dbceab0c11c2b626448"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 12867,
-      "sha256": "c3b4442a8c944143bcad3d6d366b73a87e44c3201bb969ceb412f423e5fced80"
+      "bytes": 13223,
+      "sha256": "9993a1cd9af7d7a1d2d4c8a11dc587c884740e9b5f8a2986e471c3a75702766c"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -632,8 +640,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 5376,
-      "sha256": "658914f8980333d6f5e05e69cf8ac0aaf4c8bdc21b1c7d7bbb311beb3a5a0ce5"
+      "bytes": 5608,
+      "sha256": "8a253e574c7ef8c1d883d3ae6793aeaa41a4c3bd9cdb7ed4c957f9ec927c9e5e"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -662,8 +670,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 4587,
-      "sha256": "ced6a1cf60a39df1eb4c2421b3951bea57faa6313114a86a3b763c5969708e21"
+      "bytes": 4806,
+      "sha256": "7fd49608e0b91458053dcb91f856d42d09dbfcd7f45eedc58dea335fafab083d"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -677,8 +685,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 5830,
-      "sha256": "c11a87b4620413ecf349bd0cae9c865fdd57715def254f12328ef34ad5ac7157"
+      "bytes": 6129,
+      "sha256": "bf12c81703b1888eb033f601203505bed514df0e5258f83e25322856f35bcbb1"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -694,6 +702,11 @@
       "path": "docs/06_codex/DEFINITION_OF_DONE.md",
       "bytes": 896,
       "sha256": "dd0ab8b9cae867ac175fbf0a62a9935c9e6e57090e2a5aeb28d324cfa1b8d4d0"
+    },
+    {
+      "path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
+      "bytes": 12056,
+      "sha256": "6f3effe03960c1bb0a30e41f852d8b5936a90ede9e2d0d0b7ba01a1384a11a79"
     },
     {
       "path": "docs/06_codex/PROMPT_LIBRARY.md",

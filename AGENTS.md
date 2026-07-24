@@ -38,7 +38,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 - G5 Freeze: `NOT PASSED`
 - G3 Technical Checklist: `6 / 6`
-- Design Freeze: `30 / 32`
+- Design Freeze: `31 / 32`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -47,6 +47,8 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
   `OWNER-APPROVED / READY`
 - CHR_00 Player Turnaround Image:
   `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
+- First Implementation Ticket:
+  `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -287,6 +289,15 @@ CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 후속 경계는
 `OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
 
+첫 구현 티켓은
+`docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`에
+`OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`로
+세분화되었다. 이는 미래 Unity repository Bootstrap과 exact
+Package-lock materialization의 문서 계약일 뿐이다. concrete execution
+baseline SHA는 없고, Final Pre-Implementation Review, Design Freeze
+`32 / 32`, 별도 실행 승인과 Implementation Gate `OPEN` 전에는
+IMP-0001을 실행하지 않는다.
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -315,7 +326,7 @@ constraint와 구현은 계속 `DRAFT`다.
 - 파괴 hard cap을 제외한 밸런스·성능 tuning과 FPS·hardware·
   frame-time 기준
 - exact implementation class, payload, schema와 tuning
-- Unity Bootstrap 및 구현 ticket
+- IMP-0001 concrete execution baseline과 Unity Bootstrap 실행
 - Vertical Slice의 정확한 콘텐츠와 구현 범위
 
 Implementation Gate는 `CLOSED`다.
@@ -330,14 +341,14 @@ BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었지만
 Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
-`6 / 6`, Design Freeze는 `30 / 32`다. 파괴 예산과 구현 규칙 및
+`6 / 6`, Design Freeze는 `31 / 32`다. 파괴 예산과 구현 규칙 및
 Office Core Kit asset-family/reuse policy는
 `OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
 Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며 다음
 허가 경계는
 `OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
-남은 Design Freeze 항목은 `CHR_00 Player Turnaround`과
-`첫 구현 티켓 세분화`의 정확히 두 개다.
+첫 구현 티켓 세분화는 완료됐지만 실행은 차단되어 있다. 남은 Design
+Freeze 항목은 `CHR_00 Player Turnaround` 하나다.
 새 numbered task는 승인되지 않았다. Turnaround Image는
 `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`다. remaining Design Freeze와
 final pre-implementation review 전에는 Graybox 또는 Unity 구현을

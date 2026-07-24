@@ -26,7 +26,7 @@
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 - G5 Freeze: `NOT PASSED`
 - G3 Technical checklist: `6 / 6`
-- Design Freeze: `30 / 32`
+- Design Freeze: `31 / 32`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -35,6 +35,8 @@
   `OWNER-APPROVED / READY`
 - CHR_00 Player Turnaround Image:
   `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
+- First Implementation Ticket:
+  `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
 - Production Visual Lock sequence: `COMPLETE`
 - Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
@@ -95,7 +97,10 @@ Turnaround Production Brief와 binary review contract는
 `OWNER-APPROVED / READY`지만 미래 후보는 `NOT CREATED`, 이미지 생성은
 `NOT AUTHORIZED`이고 checklist는 `UNCHECKED`다. 다음 허가 경계는
 `OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이며
-새 numbered task는 승인되지 않았다.
+첫 구현 티켓은
+`docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
+concrete execution baseline SHA가 없고 실행은 차단되어 있다. 새
+numbered task는 승인되지 않았다.
 G4와 G5는 아직 통과하지 않았고 Graybox와 Unity 구현 권한은 없다.
 
 ## Phase 4 — Graybox Validation
@@ -112,12 +117,12 @@ Gate G4: 5분 재미와 재플레이 행동 통과.
 
 ## Phase 5 — Design Freeze
 
-Status: `NOT PASSED / CURRENT DESIGN FREEZE COMPLETION WORK — 30 / 32`
+Status: `NOT PASSED / CURRENT DESIGN FREEZE COMPLETION WORK — 31 / 32`
 
 Graybox 결과를 반영해 문서 최종 동결.
 
-남은 항목은 `CHR_00 Player Turnaround`과
-`첫 구현 티켓 세분화`의 정확히 두 개다.
+`첫 구현 티켓 세분화`는 완료됐지만 실행은 차단되어 있다. 남은 항목은
+`CHR_00 Player Turnaround` 하나다.
 
 Turnaround Brief 승인만으로 checklist를 완료하지 않는다. 이미지
 생성은 명시적 Owner 요청이 있어야 하며, 생성된 `REVIEW` 후보가
