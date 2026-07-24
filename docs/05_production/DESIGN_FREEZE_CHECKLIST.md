@@ -75,6 +75,13 @@ Unity asset은 생성되지 않았고 G5는 `NOT PASSED`이며 Unity 또는 Gray
 정확히 두 개다. Design Freeze는 `30 / 32`, Full Design Lock은
 `INCOMPLETE`다.
 
+`docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`의 제작 구성과
+binary review contract는 `OWNER-APPROVED / READY`지만 Turnaround
+이미지는 `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`다. Brief
+승인은 `주인공 Turnaround` 완료가 아니므로 checkbox는 변경하지 않는다.
+향후 생성된 `REVIEW` 후보가 계약을 통과하고 Owner가 명시적으로
+승인·등록한 뒤에만 체크할 수 있다.
+
 Logical Input Action Contract, Interaction State, Arbitration, and
 Conflict Contract와 Weight-Class Functional Data Range Contract는
 Owner-approved다. Momentum/Pip profile도 시작값으로 승인되었지만
@@ -98,9 +105,9 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었고 문서
 자체는 변경하지 않는다. 현재 Phase는
-`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 작업은
-`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`다. 새 numbered
-task는 승인되지 않았다.
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 허가 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
+새 numbered task는 승인되지 않았다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
 `6 / 6`, Design Freeze는 `30 / 32`, G4와 G5는 `NOT PASSED`, Full
 Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation

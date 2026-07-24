@@ -128,10 +128,18 @@
   "office_core_kit_prototype_fixed_or_decorative_family_count": 12,
   "office_core_kit_later_slice_candidate_family_count": 8,
   "office_core_kit_actual_asset_creation_status": "NOT STARTED / NOT AUTHORIZED",
+  "player_turnaround_brief_status": "OWNER-APPROVED / READY",
+  "player_turnaround_brief_path": "docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md",
+  "player_turnaround_future_candidate_path": "references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png",
+  "player_turnaround_future_candidate_status": "NOT CREATED",
+  "player_turnaround_image_generation_status": "NOT AUTHORIZED / EXPLICIT OWNER REQUEST REQUIRED",
+  "player_turnaround_main_view_count": 5,
+  "player_turnaround_authorized_detail_callout_cap": 3,
+  "player_turnaround_checklist_status": "UNCHECKED",
   "g4_gate_status": "NOT PASSED",
   "g5_gate_status": "NOT PASSED",
-  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056",
-  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056",
+  "design_freeze_current_next_task": "OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND",
+  "current_next_task": "OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -229,13 +237,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 32876,
-      "sha256": "6b15ca6571970926416138180c160fd5c746e2f9f59575f0af3b8217a739d3b1"
+      "bytes": 33810,
+      "sha256": "19401c8f39ca0e7ec91d01cbb9a2cb60d396f97791e1292bb843479864edb5dc"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 12364,
-      "sha256": "734050b08fdb0694d1a8250cdbc013268c8db112d5fb7b2e96530a4a5c9d4280"
+      "bytes": 13056,
+      "sha256": "31d3310835caa73bc7e4a7a3a3e870bf2d4f0c23a32c6a74f8915725c86fffa4"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -374,8 +382,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 10046,
-      "sha256": "2dd1a28557bc33c9f10c52b42067f34a4eed29bc17fc18a88c329120f2684a3d"
+      "bytes": 10744,
+      "sha256": "500cd445a972359a1cf0a5720869e0f72429bf4310963200354720f153199394"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -384,13 +392,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 8972,
-      "sha256": "fdbc6179c23cebc7893e161c42296f176eaec4006448c828393815f92034ddfa"
+      "bytes": 9314,
+      "sha256": "986099e331dbe5aedd835f6dffc22be3d6e5e3fd8358159120068726cfa5aed1"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 12039,
-      "sha256": "1dc74579883a9354d6b7126cd5b4603680d65d640320bc58ab9851f6d0a376bf"
+      "bytes": 12867,
+      "sha256": "c3b4442a8c944143bcad3d6d366b73a87e44c3201bb969ceb412f423e5fced80"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -543,6 +551,11 @@
       "sha256": "4027eddc35559ca628d057607451bb2421285f0694e8cc6c2a1286c180ae0a82"
     },
     {
+      "path": "docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md",
+      "bytes": 9112,
+      "sha256": "57454759696ce770ef8e66a3f54c379dffc5a5d2df50d908a9cd39fac5955802"
+    },
+    {
       "path": "docs/03_art/PLAYER_VISUAL_SPEC.md",
       "bytes": 1849,
       "sha256": "19ed178e32bb6f4772d08174027a53d739fbf86789d5034fb0dddf0e1369ae07"
@@ -614,13 +627,13 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 6546,
-      "sha256": "aa3183961872bed284cd2d4d7fd54c52f89f7d200e182d3e902e756de2ca1826"
+      "bytes": 7114,
+      "sha256": "d3044f2b4191fa6e5250cd70dcf344cee5084f2f3ef877c6d1329332b925ee9c"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 4901,
-      "sha256": "48490498fe34d49182072bd882e153e68b688c8bb0639f5aebdb20460d8f7c2e"
+      "bytes": 5376,
+      "sha256": "658914f8980333d6f5e05e69cf8ac0aaf4c8bdc21b1c7d7bbb311beb3a5a0ce5"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -649,8 +662,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 4224,
-      "sha256": "f0c45438f56f01e07280625a2daecc6b9b53100581aa4ff360c80775ff1f462e"
+      "bytes": 4587,
+      "sha256": "ced6a1cf60a39df1eb4c2421b3951bea57faa6313114a86a3b763c5969708e21"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -664,8 +677,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 5203,
-      "sha256": "a06bb7f71d9d4a2b4dc62ddfa09631810696e183f1fe141ebcc8ed824b269cbf"
+      "bytes": 5830,
+      "sha256": "c11a87b4620413ecf349bd0cae9c865fdd57715def254f12328ef34ad5ac7157"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",

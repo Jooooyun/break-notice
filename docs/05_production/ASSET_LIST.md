@@ -137,9 +137,19 @@ shelving 또는 archive candidate로 자동 활성화되지 않는다. FIN_01은
 
 ## Remaining Production-Support Boundary
 
-`CHR_00 Player Turnaround`은 계속 `PENDING`이다. Office Core Kit Lock은
+`CHR_00 Player Turnaround Production Brief`는
+`OWNER-APPROVED / READY`다. 정확한 권위는
+`docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`다.
+
+미래 후보 경로
+`references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`는
+예약만 되었고 현재 후보는 `NOT CREATED`, 이미지 생성은
+`NOT AUTHORIZED / EXPLICIT OWNER REQUEST REQUIRED`, checklist는
+`UNCHECKED`다. Brief 승인은 이미지·모델·texture·material·Unity asset
+생성 또는 Visual Candidate 승인이 아니다. Office Core Kit Lock은
 character, gameplay feature 또는 Visual Canon authority를 변경하지
-않는다.
+않는다. 다음 허가 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
 
 ## VFX
 

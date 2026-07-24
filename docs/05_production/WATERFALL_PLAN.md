@@ -31,6 +31,10 @@
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
   `OWNER-APPROVED / LOCKED`
+- CHR_00 Player Turnaround Brief:
+  `OWNER-APPROVED / READY`
+- CHR_00 Player Turnaround Image:
+  `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
 - Production Visual Lock sequence: `COMPLETE`
 - Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
@@ -86,10 +90,12 @@ Prototype-required family `16`, Later-Slice extension candidate `8`,
 interaction·variant·reuse와 Prototype destruction `0` 경계로
 `OWNER-APPROVED / LOCKED`되었지만 실제 asset creation은
 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records Archive-local
-`COULD`, FIN_01은 `OUT / COULD`를 유지하고 G5 passage는 없다. 다음
-단일 산출물은
-`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`이며 새 numbered
-task는 승인되지 않았다.
+`COULD`, FIN_01은 `OUT / COULD`를 유지하고 G5 passage는 없다.
+Turnaround Production Brief와 binary review contract는
+`OWNER-APPROVED / READY`지만 미래 후보는 `NOT CREATED`, 이미지 생성은
+`NOT AUTHORIZED`이고 checklist는 `UNCHECKED`다. 다음 허가 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이며
+새 numbered task는 승인되지 않았다.
 G4와 G5는 아직 통과하지 않았고 Graybox와 Unity 구현 권한은 없다.
 
 ## Phase 4 — Graybox Validation
@@ -112,6 +118,10 @@ Graybox 결과를 반영해 문서 최종 동결.
 
 남은 항목은 `CHR_00 Player Turnaround`과
 `첫 구현 티켓 세분화`의 정확히 두 개다.
+
+Turnaround Brief 승인만으로 checklist를 완료하지 않는다. 이미지
+생성은 명시적 Owner 요청이 있어야 하며, 생성된 `REVIEW` 후보가
+계약을 통과하고 Owner가 승인·등록한 뒤에만 해당 항목을 체크할 수 있다.
 
 Gate G5: 본 제작 범위, 에셋 목록, 일정, 리스크 승인.
 

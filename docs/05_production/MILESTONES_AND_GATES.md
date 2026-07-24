@@ -40,6 +40,10 @@
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
   `OWNER-APPROVED / LOCKED`
+- CHR_00 Player Turnaround Brief:
+  `OWNER-APPROVED / READY`
+- CHR_00 Player Turnaround Image:
+  `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -67,9 +71,12 @@ layout과 Unity asset creation은 `NOT STARTED / NOT AUTHORIZED`이며
 LGT_01은 Records Archive-local `COULD`, FIN_01은 `OUT / COULD`를
 유지한다. 이 Lock은 G5를 통과시키지 않는다. Design Freeze는
 `30 / 32`이며 남은 항목은 `CHR_00 Player Turnaround`과 `첫 구현
-티켓 세분화`의 정확히 두 개다. 현재 다음 단일 산출물은
-`PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`이며 새 numbered
-task는 승인되지 않았다.
+티켓 세분화`의 정확히 두 개다. Turnaround Production Brief와 binary
+review contract는 `OWNER-APPROVED / READY`지만 미래 후보는
+`NOT CREATED`, 이미지 생성은 `NOT AUTHORIZED`이고 checkbox는
+`UNCHECKED`다. 현재 다음 허가 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이며
+새 numbered task는 승인되지 않았다.
 G4와 G5는 `NOT PASSED`, Graybox는 `NOT STARTED`이고 구현 권한이 없다.
 승인된 여덟 Production Visual의
 Canon은 유지되지만 Full Design Lock은 미완료다. FIN_01은 PR-F-022

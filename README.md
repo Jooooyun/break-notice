@@ -43,11 +43,13 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
 | G5 Freeze | NOT PASSED |
-| Current Next Task | PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056 |
+| Current Next Task | OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND |
 | G3 Technical checklist | 6 / 6 |
 | Design Freeze | 30 / 32 |
 | Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
+| CHR_00 Player Turnaround Brief | OWNER-APPROVED / READY |
+| CHR_00 Player Turnaround Image | NOT CREATED / IMAGE GENERATION NOT AUTHORIZED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Full Design Lock | INCOMPLETE |
@@ -92,10 +94,19 @@ texture, material, layout과 Unity asset creation은
 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records Archive-local
 `COULD`, FIN_01은 `OUT / COULD`를 유지한다.
 
+CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
+[`PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`](docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md)에
+`OWNER-APPROVED / READY`로 기록되었다. 미래 후보 경로는
+`references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`로
+예약되었지만 현재 후보는 `NOT CREATED`이고 이미지 생성은
+`NOT AUTHORIZED`다. Brief 승인은 이미지 생성·후보 승인·checklist
+완료를 뜻하지 않는다.
+
 Design Freeze는 `30 / 32`이며 남은 항목은 `CHR_00 Player
 Turnaround`과 `첫 구현 티켓 세분화`의 정확히 두 개다. 다음 단일
-산출물은 `PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`이고 G4와
-G5는 `NOT PASSED`다. 새 numbered task는 승인되지 않았다.
+허가 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이고
+G4와 G5는 `NOT PASSED`다. 새 numbered task는 승인되지 않았다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지

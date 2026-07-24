@@ -43,6 +43,10 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
   `OWNER-APPROVED / LOCKED`
+- CHR_00 Player Turnaround Brief:
+  `OWNER-APPROVED / READY`
+- CHR_00 Player Turnaround Image:
+  `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
 - Production Visual Lock sequence: `COMPLETE`
 - Full Design Lock: `INCOMPLETE`
 - Graybox: `NOT STARTED`
@@ -272,6 +276,17 @@ Design Freeze baseline이다.
 identity, Unity asset과 구현은 승인되지 않았고 actual asset creation은
 `NOT STARTED / NOT AUTHORIZED`다. G5는 계속 `NOT PASSED`다.
 
+CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
+`docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`에서
+`OWNER-APPROVED / READY`다. 유일한 Identity 권위는 승인된 CHR_00
+이미지, `PLAYER_VISUAL_SPEC.md`와 ADR-0007이며, 미래 후보 경로는
+`references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`로
+예약되어 있다. 현재 후보는 `NOT CREATED`, 이미지 생성은
+`NOT AUTHORIZED`다. Brief 승인만으로 Turnaround checklist를 완료하거나
+후보를 `REVIEW`, `APPROVED`, `FINAL` 또는 `LOCKED`로 만들지 않는다.
+후속 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
+
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
 
@@ -319,10 +334,12 @@ Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
 Office Core Kit asset-family/reuse policy는
 `OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
 Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며 다음
-단일 작업은 `PENDING DESIGN AUTHORITY REVIEW AFTER TASK-0056`다.
+허가 경계는
+`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
 남은 Design Freeze 항목은 `CHR_00 Player Turnaround`과
 `첫 구현 티켓 세분화`의 정확히 두 개다.
-새 numbered task는 승인되지 않았다. remaining Design Freeze와
+새 numbered task는 승인되지 않았다. Turnaround Image는
+`NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`다. remaining Design Freeze와
 final pre-implementation review 전에는 Graybox 또는 Unity 구현을
 시작하지 않으며 Implementation Gate는 `CLOSED`다.
 
