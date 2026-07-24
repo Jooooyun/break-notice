@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
-      "bytes": 4652,
-      "sha256": "40d077222e36cf8ba7b1db64590342cca9e148161dbbc935981ca59d41daa4a5"
+      "bytes": 5048,
+      "sha256": "ec52f30eb391e222c93d77baaf3fa47642405e5d8bfa9772e7b0173005269e24"
     },
     {
       "path": "docs/00_project/PROJECT_CHARTER.md",
@@ -278,13 +278,13 @@
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 10998,
-      "sha256": "8032418088430efa57e2a237771f442b314f032611d321cfc14b3de935aeb0c7"
+      "bytes": 11963,
+      "sha256": "1fd3fdd0d930b76db4688a3bd230822f45f13babd6d94973414e5132db0ac874"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 21249,
-      "sha256": "a6f4ffcfe4dd67f6f8338de834f102df1c2c81b046c8890a24dba92e39ee8429"
+      "bytes": 23419,
+      "sha256": "a41689e3ccb1a6ebc7f9c1b8ab8b152baddadbd4cc7d86152efa88238cb8c979"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
