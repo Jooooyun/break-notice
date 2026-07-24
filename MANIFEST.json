@@ -10,8 +10,10 @@
   "g2_logical_input_contract_path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
   "g2_interaction_state_conflict_contract_status": "OWNER-APPROVED",
   "g2_interaction_state_conflict_contract_path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-  "g2_gameplay_checklist_progress": "2/7",
-  "design_freeze_checklist_progress": "17/32",
+  "g2_weight_class_data_range_contract_status": "OWNER-APPROVED",
+  "g2_weight_class_data_range_contract_path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
+  "g2_gameplay_checklist_progress": "3/7",
+  "design_freeze_checklist_progress": "18/32",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -109,13 +111,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 18908,
-      "sha256": "abad0b7461771303b1476bd3151fb02630300b9ffff8f085b1d387a6240601eb"
+      "bytes": 19226,
+      "sha256": "b3e9f270056be3fbf6093cc30a1e863e10294bf1fc35cd26ca7a269a73bf7f9e"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 4383,
-      "sha256": "e6703778b55613e94ccaf8bcc852616c73843f52bdc9ed1654ab0ea2556fd115"
+      "bytes": 4611,
+      "sha256": "d47cf847630f54d33566468b8c86f62772203e87a27cc498d74aec9aeabc39e0"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -264,13 +266,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 4169,
-      "sha256": "8a0b44f28d9f0beb7d6df702970d57d771afcc3e1b2b3fca4fba9b2b10581f8c"
+      "bytes": 4435,
+      "sha256": "9b8555967cf231136faf2f2784ff4593db3aa9cd98d6809b79178e66f1b6125f"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 3693,
-      "sha256": "e28f6e5b823fe3fe4f77aa555d94acccad51e0f2ec85ed3f6a81258ff329e55b"
+      "bytes": 3994,
+      "sha256": "d9d7008d5eabc3dc0e3884222724f9b547cd8f7c5bdee51a3022b51981a687b3"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -294,8 +296,8 @@
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 25568,
-      "sha256": "05edea5a7fe1d14341a66d58fa82b3a39e340783cfcfc4e286b5ef9443b44948"
+      "bytes": 26484,
+      "sha256": "706d2382d91470cfba3e1ec70ba4247d37d359648ec85559e60896591288c85f"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
@@ -304,8 +306,8 @@
     },
     {
       "path": "docs/02_design/COMBAT_AND_PHYSICS.md",
-      "bytes": 2330,
-      "sha256": "99f674d69d0920aaba21bdc7b7b78ab1e5e15356d4f719af6a1631e222b43778"
+      "bytes": 3886,
+      "sha256": "0fe6a9708557ed88340d781dab84d8cc357c9d5ac7ec1a207bc593397da0ccaa"
     },
     {
       "path": "docs/02_design/ENEMY_AND_ENCOUNTER_DESIGN.md",
@@ -314,18 +316,18 @@
     },
     {
       "path": "docs/02_design/GAMEPLAY_SPEC.md",
-      "bytes": 6539,
-      "sha256": "66ae829aa0c4ddafaf6c499a7a69664f53454553b624a5c426ab67686207e226"
+      "bytes": 8209,
+      "sha256": "8d55bd1afbb4011073a0effadfd6184d17af759c92c80ea14fbefe9fd330cefe"
     },
     {
       "path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-      "bytes": 13865,
-      "sha256": "c7b8fb6ef42eca60d3f1ca5f5809a4d845958f15e478259eff173ffa4af18901"
+      "bytes": 15283,
+      "sha256": "c67a45bd23331b270e4c8a9a61aba8bc12505264b739bffdcfc263341ef6c9c0"
     },
     {
       "path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
-      "bytes": 10784,
-      "sha256": "6978bf391368a0c8b5bacceeadeab84b792076ea64876e54caab58d70c3a4d26"
+      "bytes": 12277,
+      "sha256": "b498a43eae33203e68ee7891e2491a12d290c690e8b8eb1ee2bf7b683ba5eea6"
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
@@ -339,13 +341,18 @@
     },
     {
       "path": "docs/02_design/OBJECT_TAXONOMY.md",
-      "bytes": 1217,
-      "sha256": "2deca0f6056556b8c62c9679abc92492c32d684d703dcd4537fc4420e6a41aa8"
+      "bytes": 2708,
+      "sha256": "038f078a50b7eabbe5c8c0f06b6221b8e9e70a870319dae5e421754779e0883e"
     },
     {
       "path": "docs/02_design/ROGUELITE_PROGRESSION.md",
       "bytes": 1533,
       "sha256": "eab424dfb4e7d105d08db0bd6e822e669d0697f54393e7351ceb593b8e445339"
+    },
+    {
+      "path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
+      "bytes": 13831,
+      "sha256": "01e6a5bdae3130af1af08e341b8396e3d9caabdc0be774dca97dac617812ba4b"
     },
     {
       "path": "docs/03_art/ALLY_VISUAL_SPEC.md",
@@ -459,8 +466,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 1741,
-      "sha256": "c5f355adc6e344a836d43f862081e990489010d6ef76ea6b015c0c23f3e36661"
+      "bytes": 1797,
+      "sha256": "a02bac94ed4f6162b5c3386321896246ae2d9646856467fd5ab71d05a495c6e2"
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",

@@ -11,7 +11,7 @@
 
 - [x] 모든 논리 입력 정의
 - [x] Scoop/Catch/Throw/Strap 상태 충돌 정의
-- [ ] Light/Medium/Heavy 데이터 범위 정의
+- [x] Light/Medium/Heavy 데이터 범위 정의
 - [ ] Momentum/Pip 수치 시작값 정의
 - [ ] Chain 전파와 종료 정의
 - [ ] Ally Relay와 Suppressed 정의
@@ -49,15 +49,16 @@
 
 ## Approval
 
-현재 체크 상태: `17 / 32`
+현재 체크 상태: `18 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay,
 Technical, Production Support와 첫 구현 티켓 항목은 미완료이며
 Full Design Lock은 `INCOMPLETE`다.
 
-Logical Input Action Contract와 Interaction State, Arbitration, and
-Conflict Contract는 Owner-approved다. G2 Gameplay checklist는
-`2 / 7`이며 Light/Medium/Heavy 데이터 범위는 미해결이다.
-G2 Design은 계속 `NOT PASSED`다.
+Logical Input Action Contract, Interaction State, Arbitration, and
+Conflict Contract와 Weight-Class Functional Data Range Contract는
+Owner-approved다. G2 Gameplay checklist는 `3 / 7`이다. exact physical
+tuning과 Prototype object list는 계속 미해결이며 G2 Design은
+`NOT PASSED`다.
 
 모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.

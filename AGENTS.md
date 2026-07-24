@@ -30,14 +30,20 @@ G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 
 G2 logical input action inventory와 각 action의 intent 의미, 상호작용
 state ownership, action availability, cross-context arbitration,
-safe rejection과 Reset priority는 Owner-approved다. exact timing,
-range, buffer, target ranking, physical binding, movement constraint와
-구현은 계속 `DRAFT`다.
+safe rejection, Reset priority, Light/Medium/Heavy functional envelope과
+class-based Catch·Strap·Carry·Throw·Relay eligibility는
+Owner-approved다. Heavy active use는 Vertical Slice의
+`HeavyAction`으로만 승인된다. exact timing, range, buffer, target
+ranking, physical binding, movement constraint와 구현은 계속
+`DRAFT`다.
 
 다음 항목은 아직 `DRAFT`다.
 
 - 상세 게임플레이 설계
-- Light/Medium/Heavy의 정확한 데이터·eligibility 범위
+- Light/Medium/Heavy의 exact physical mass·dimension·speed·force·
+  damage와 object-specific assignment
+- Contact Freeze, Behavior Tag details, Momentum/Pip와 break value
+- exact Prototype object list
 - 논리 입력의 timing·buffer, physical binding, exact movement
   constraint, animation, physics와 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값

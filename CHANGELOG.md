@@ -4,6 +4,7 @@
 
 ### Changed
 
+- G2 Light/Medium/Heavy functional envelope과 Catch/Strap/Carry/Throw/Relay eligibility를 승인 상태로 등록하고, Heavy는 Vertical Slice의 HeavyAction-only로 유지하며 수치·물리·구현값은 Draft로 보존
 - G2 Interaction State, Arbitration, and Conflict Contract를 승인 상태로 등록해 Scoop/Catch/Throw/CallAlly/Cargo Strap/Heavy/Reset의 소유권·가용성·충돌·안전 거부를 정의하고, exact timing·binding·weight assignment·ranking·physics·구현은 Draft로 유지
 - G2 Logical Input Action Contract를 승인 상태로 등록해 9개 active action과 4개 deferred candidate를 분리하고, state·binding·timing·implementation은 Draft로 유지
 - Post-G1 Phase label을 `PRE-PRODUCTION / G2 DESIGN BASELINE`으로 동기화하고 G2를 현재 baseline work로 표시하되, G2 미통과와 Implementation Gate `CLOSED`를 유지

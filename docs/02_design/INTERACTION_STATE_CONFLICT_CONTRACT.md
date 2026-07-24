@@ -48,9 +48,21 @@
 | Global | `PLAYABLE` | 논리 gameplay action을 받을 수 있는 상태 |
 | Global | `RESET_PENDING` | Reset이 모든 상호작용 소유권보다 우선하는 상태 |
 
-Incoming object는 `CATCH_ELIGIBLE`, `STRAP_ELIGIBLE`, 둘 다 또는 둘
-다 아님으로 평가될 수 있다. 어떤 물체·무게 등급이 각 eligibility를
-갖는지는 별도 G2 데이터 범위 결정 전까지 Draft다.
+Incoming object domain은 추상적으로 `CATCH_ELIGIBLE`,
+`STRAP_ELIGIBLE`, 둘 다 또는 둘 다 아님을 표현할 수 있다. 현재
+Owner-approved class assignment는
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)를
+따른다.
+
+- Light valid relay profile: `CATCH_ELIGIBLE`, not
+  `STRAP_ELIGIBLE`;
+- mobile, floor-supported Medium with a valid load-bearing Anchor:
+  `STRAP_ELIGIBLE`, not `CATCH_ELIGIBLE`;
+- Heavy: neither eligibility;
+- current baseline: no class is both eligible.
+
+Object-specific dual eligibility는 별도 Owner G2 결정 없이는 활성화하지
+않는다.
 
 ## Core Invariants
 
@@ -69,6 +81,11 @@ Incoming object는 `CATCH_ELIGIBLE`, `STRAP_ELIGIBLE`, 둘 다 또는 둘
 9. 놓친 relay object는 실제 공간에서 계속 이동·충돌하며 사라짐,
    teleport, 공중 정지 또는 원격 제어로 해소하지 않는다.
 10. `ResetEncounter`는 모든 interaction ownership보다 우선한다.
+11. Scoop, Carry와 Direct Throw의 class envelope는 유효 Light와
+    Medium에 한정하고, Queued Throw는 Catch-eligible Light relay에만
+    적용한다.
+12. normal Strap Redirect는 eligible Medium에만 적용하며 Heavy는
+    Vertical Slice의 `HeavyAction`만 사용한다.
 
 ## Action Availability Matrix
 
@@ -133,6 +150,7 @@ context switching으로 fallback하지 않는다.
 
 - Normal Catch와 Perfect Catch attempt는 모두 `InteractPrimary`를
   사용한다. Perfect 결과 timing은 별도 G2 Draft다.
+- 현재 Catch 결과는 `CATCH_ELIGIBLE` Light relay에만 적용한다.
 - 성공한 Catch는 `ACTIVE_RELAY`를 해소한다.
 - Queued Throw가 `CLEAR`이면 성공한 Catch는 `CARRYING`으로
   전환한다.
@@ -143,10 +161,12 @@ context switching으로 fallback하지 않는다.
 
 ## Throw and Queued Throw Rules
 
-- `CARRYING` 중 `Throw`는 `THROW_COMMITTED`로 전환한다.
+- 유효 Light 또는 Medium을 `CARRYING` 중인 `Throw`는
+  `THROW_COMMITTED`로 전환한다.
   Quick/Charged 구분, force와 timing은 Draft다.
 - `FREE`, Cargo Strap `STORED`, `ACTIVE_RELAY`이고 incoming object가
-  `CATCH_ELIGIBLE`일 때 `Throw`는 Queued Throw를 `ARMED`할 수 있다.
+  `CATCH_ELIGIBLE`인 Light일 때 `Throw`는 Queued Throw를 `ARMED`할
+  수 있다.
 - Queued Throw는 하나만 존재하며 중첩 또는 교체하지 않는다.
 - relay가 성공 Catch 없이 해소되거나, Strap Attach가 성공하거나,
   Reset이 시작되거나, relay가 무효화되면 Queued Throw를 `CLEAR`한다.
@@ -167,6 +187,15 @@ Strap 자동 해제 또는 두 번째 relay를 만들지 않는다. 정확한 al
 Reset으로 해소한다. 물체가 Catch나 Attach에 실패하면 물리 경로를
 계속 따른다.
 
+class delivery profile은 다음과 같다.
+
+- Light: airborne physical throw and Catch-oriented relay;
+- mobile Medium: floor-supported roll, push 또는 grounded feed and
+  Strap-oriented relay;
+- Heavy: normal `CallAlly` relay 없음.
+
+static 또는 부적합한 Medium은 direct-acquisition-only일 수 있다.
+
 ## Cargo Strap State Rules
 
 Strap Attach는 다음 조건을 모두 요구한다.
@@ -175,7 +204,7 @@ Strap Attach는 다음 조건을 모두 요구한다.
 - Hand Ownership `FREE`;
 - Cargo Strap `STORED`;
 - 명시적 `Aim`;
-- 바닥 지지를 유지하는 `STRAP_ELIGIBLE` object;
+- 바닥 지지를 유지하고 실제로 이동 가능한 `STRAP_ELIGIBLE` Medium;
 - 유효한 하중 지지 금속 Anchor.
 
 물리 연결은
@@ -200,11 +229,11 @@ mechanism, 자동 Safety Release rule, retraction과 구현은 Draft다.
 
 Scoop은 `PLAYABLE`, Hand Ownership `FREE`, Cargo Strap `STORED`,
 Relay `NONE`, Throw/Heavy non-committed, 명시적 Strap context 없음,
-유효한 Scoop candidate를 모두 요구한다. 성공하면 `CARRYING`으로
-전환한다.
+유효한 Light 또는 Medium Scoop candidate를 모두 요구한다. 성공하면
+`CARRYING`으로 전환한다. Heavy는 normal Scoop candidate가 아니다.
 
 정확한 range, same-context ranking, 사용 손, alignment, animation,
-weight eligibility는 Draft다. 물체를 순간이동하거나 hidden
+개별 object eligibility는 Draft다. 물체를 순간이동하거나 hidden
 inventory로 바꾸는 결과는 허용하지 않는다.
 
 ## HeavyAction Exclusivity
@@ -214,8 +243,10 @@ inventory로 바꾸는 결과는 허용하지 않는다.
 Throw/Heavy non-committed인 neutral state에서만 시작할 수 있다.
 
 시작 후 `HEAVY_COMMITTED`가 결과 해소 전 상호작용 소유권을
-독점한다. Momentum/Pip cost, 대상, Structural interaction, 무게
-데이터, force, locomotion, animation, physics와 구현은 Draft다.
+독점한다. Heavy의 유일하게 승인된 player-action entry point는
+`HeavyAction`이다. Momentum/Pip cost, exact 대상, Structural
+interaction, physical mass, force, locomotion, animation, physics와
+구현은 Draft다.
 
 ## ResetEncounter Priority
 
@@ -258,7 +289,7 @@ event와 구현은 Draft다.
 - Quick/Charged 해석;
 - Carry/Strap/Throw/Heavy 중 locomotion constraint;
 - automatic Safety Release;
-- eligibility와 Light/Medium/Heavy의 정확한 데이터 범위;
+- object-specific eligibility exception과 exact object assignment;
 - Momentum/Pip와 Heavy cost;
 - ally supply selection, inventory, path와 exact timing;
 - Relay Position과 Suppressed;
@@ -268,5 +299,7 @@ event와 구현은 Draft다.
 - Unity Input System과 Unity implementation.
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 계속 비활성 Draft candidate다.
-다음 G2 설계 산출물은 Light/Medium/Heavy data range contract이며
-이 계약은 그 수치·eligibility 또는 구현을 선행 승인하지 않는다.
+Light/Medium/Heavy functional envelope과 class-based eligibility는
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)에서
+Owner-approved다. exact mass·size·speed·force·damage·timing·Momentum/
+Pip·break value와 구현은 계속 Draft다.

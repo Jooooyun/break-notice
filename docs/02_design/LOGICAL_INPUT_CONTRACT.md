@@ -18,6 +18,10 @@
   직접 결정하지 않는다. 해당 Owner-approved 기준은
   [`INTERACTION_STATE_CONFLICT_CONTRACT.md`](INTERACTION_STATE_CONFLICT_CONTRACT.md)를
   따른다.
+- `InteractPrimary`, `Throw`, `CallAlly`, `HeavyAction`의 class-based
+  eligibility와 delivery envelope는
+  [`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)를
+  따른다.
 - exact tap/hold/release 해석, 접근성 remapping과 물리적 binding은
   별도 G2/G3 결정 전까지 Draft다.
 - G1 Requirement 문구, Priority, Applicability와 Authority는
@@ -127,6 +131,27 @@ priority, target ranking, input buffer 또는 cancel rule을 결정하지
 않는다. `Quick Throw`, `Charged Throw`와 `Queued Throw`는 별도 logical
 input ID가 아니라 단일 `Throw` intent의 후보 해석이다.
 
+## Weight-Class Functional Authority
+
+다음 class boundary는
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)에서
+Owner-approved되었으며 이 계약의 9개 logical action ID를 변경하지
+않는다.
+
+- `InteractPrimary`: Scoop은 유효 Light/Medium, Catch는
+  Catch-eligible Light, Strap Attach는 eligible floor-supported
+  Medium에만 적용한다.
+- `Throw`: Direct Throw는 carried Light/Medium, Queued Throw는
+  Catch-eligible Light relay에만 적용한다.
+- `CallAlly`: Light는 airborne physical throw, mobile Medium은
+  floor-supported roll/push/grounded feed, Heavy는 normal relay 없음.
+- `HeavyAction`: Heavy의 유일하게 승인된 player-action entry
+  point이며 `VERTICAL SLICE ONLY`다.
+
+exact object assignment, mass, size, speed, force, timing, movement
+restriction, target ranking, Momentum/Pip, animation, physics와
+implementation은 Draft다.
+
 ## Deferred Logical-Action Candidates
 
 아래 네 동사는 모두
@@ -175,6 +200,15 @@ Owner-approved되었다.
 - `ResetEncounter` 우선순위;
 - `HeavyAction` exclusivity.
 
+TASK-0038에서 다음 G2 항목은
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)로
+Owner-approved되었다.
+
+- Light/Medium/Heavy functional class envelope;
+- class-based Catch와 Strap assignment;
+- class-based Carry, Throw와 Relay eligibility;
+- Heavy의 `VERTICAL SLICE ONLY` / `HeavyAction` boundary.
+
 다음 항목은 계속 `DRAFT`다.
 
 - same-context target ranking;
@@ -182,11 +216,13 @@ Owner-approved되었다.
 - input buffering과 cancellation windows;
 - tap, hold, release threshold와 physical bindings;
 - Carry/Strap/Throw/Heavy 중 movement restriction;
-- weight/object eligibility와 정확한 Light/Medium/Heavy 데이터 범위;
+- exact physical mass와 object-specific assignment;
+- exact size, speed와 force;
+- Momentum/Pip와 Heavy cost;
 - accessibility remapping;
 - exact feedback, animation과 physics behavior;
 - Unity Input System 구성;
 - implementation class, component와 data contract.
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 계속 비활성 Draft candidate다.
-다음 G2 설계 산출물은 Light/Medium/Heavy data range contract다.
+다음 G2 설계 산출물은 Momentum/Pip starting-value contract다.

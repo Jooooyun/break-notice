@@ -35,6 +35,23 @@ state availability, cross-context arbitration와 conflict는
 따른다. 동일 context의 target ranking, buffer, cancel과 timing은
 계속 Draft다.
 
+### Weight-Class Functional Boundary
+
+class-based interaction envelope는
+[`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)를
+따른다.
+
+- Scoop: valid Light/Medium only; not Heavy.
+- Catch: `CATCH_ELIGIBLE` Light relay only.
+- Direct Throw: carried Light/valid Medium.
+- Queued Throw: Catch-eligible Light relay only.
+- Cargo Strap Redirect: mobile, floor-supported, valid-anchor Medium only.
+- Heavy: `HeavyAction` and `VERTICAL SLICE ONLY`; no normal
+  Scoop/Carry/Throw/Relay/Strap.
+
+exact object assignment, mass, size, timing, range, Quick/Charged
+threshold, force, movement restriction, animation과 physics는 Draft다.
+
 ### Deferred Candidates
 
 `Sprint`, `Evade`, `Vault`, `Shove`는 모두
@@ -69,6 +86,10 @@ Owner-approved cross-context arbitration은
 
 ## 3. Scoop Flow
 
+Owner-approved class envelope은 valid Light와 Medium의 Scoop만 허용하며
+Heavy는 normal Scoop을 사용하지 않는다. 유효한 개별 object와
+interaction range는 Draft다.
+
 ```text
 Idle/Move
 → 유효 물체 감지
@@ -100,9 +121,17 @@ Pass Requested
 - Normal Catch는 넓고 안정적이다.
 - Perfect Catch는 짧고 선택적 보너스다.
 - 놓친 Light는 바닥 물체가 되어 계속 사용 가능하다.
-- 놓친 Medium은 바닥을 구르며 환경과 충돌할 수 있다.
+- Catch는 `CATCH_ELIGIBLE` Light relay에만 적용한다. Medium의 바닥
+  roll/push는 Catch가 아닌 Strap-oriented physical relay다.
+
+Normal/Perfect window, 보조 판정, Contact Freeze와 feedback은 Draft다.
 
 ## 5. Throw
+
+Direct Throw는 carried Light와 valid Medium에 적용한다. Queued Throw는
+Catch-eligible Light relay에만 적용한다. 아래 Quick/Charged 해석,
+impulse, timing, 자세와 movement restriction은 역사적 `DRAFT`
+후보다.
 
 ### Quick Throw
 
@@ -125,18 +154,28 @@ Pass Requested
 
 ## 6. Cargo Strap Redirect
 
+Owner-approved class envelope에서 normal Cargo Strap Redirect는
+mobile, floor-supported, valid load-bearing metal Anchor를 가진
+eligible Medium에만 적용한다. Light와 Heavy는 Strap eligible이
+아니다.
+
 ```text
 유효 Anchor 조준
 → Attach
 → 물체 운동 상태 유지
 → 플레이어 이동·회전에 따라 장력 계산
 → 허용 각도 내 진행 방향 보정
-→ Release 또는 자동 안전 해제
+→ Explicit Release
 ```
 
 - 물체가 정지한 상태에서 먼 거리로 끌어오는 기능이 아니다.
-- Heavy는 Anchor 해제·보조 용도 외 리디렉션 불가.
-- 과도한 장력, 장애물, 최대 거리에서 자동 해제한다.
+- Heavy에는 normal Strap Redirect를 사용하지 않는다.
+- 과도한 장력, 장애물 또는 거리 조건에 따른 자동 Safety Release는
+  승인된 rule이 아닌 역사적 `DRAFT` 후보다.
+
+Heavy의 유일하게 승인된 player-action entry point는 Vertical Slice의
+`HeavyAction`이다. exact resource condition, Momentum/Pip cost와
+execution은 Draft다.
 
 ## 7. Shove
 

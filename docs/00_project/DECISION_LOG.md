@@ -25,3 +25,4 @@
 | DL-021 | 2026-07-24 | Phase label을 `PRE-PRODUCTION / PRODUCTION VISUAL LOCK`에서 `PRE-PRODUCTION / G2 DESIGN BASELINE`으로 변경 | OWNER-APPROVED | G1 PASSED 유지; G2 미통과, Full Design Lock 미완료, Graybox 미시작, Implementation Gate CLOSED |
 | DL-022 | 2026-07-24 | Owner-approved G2 Logical Input Action Contract | OWNER-APPROVED | 9개 logical action의 이름과 intent 의미만 승인; physical binding, timing, arbitration, state conflict와 구현은 Draft 유지 |
 | DL-023 | 2026-07-24 | Owner-approved G2 Interaction State, Arbitration, and Conflict Contract | OWNER-APPROVED | Scoop/Catch/Throw/CallAlly/Cargo Strap/Reset conflict 승인; exact timing·target ranking·weight eligibility·animation·physics·구현은 Draft 유지 |
+| DL-024 | 2026-07-24 | Owner-approved G2 Weight-Class Functional Data Range Contract | OWNER-APPROVED | Light/Medium/Heavy functional envelope과 eligibility 승인; kilogram·force·speed·damage·timing·Momentum/Pip·animation·physics·구현은 Draft 유지 |

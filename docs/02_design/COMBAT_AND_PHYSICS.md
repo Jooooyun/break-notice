@@ -1,14 +1,39 @@
 # Combat and Physics Design
 
+> **G2 FUNCTIONAL HIERARCHY / LATER TUNING DRAFT**
+>
+> Light/Medium/Heavy의 functional result hierarchy는
+> [`WEIGHT_CLASS_DATA_RANGE_CONTRACT.md`](WEIGHT_CLASS_DATA_RANGE_CONTRACT.md)를
+> 따른다. 이 문서의 milliseconds, meters, force, damage, Stability,
+> movement, destruction, animation과 physics 값은 later G2/G3/G4
+> `DRAFT CANDIDATE`다.
+
 ## 1. 적 상태
 
 - `Health`: 전투 지속력
 - `Stability`: 균형과 자세
 - `Guard`: 방패·장비 방어 상태(해당 적만)
 
-Light는 공격·Guard·Stability를 끊고, Medium은 위치와 Stability를 크게 바꾸며, Heavy는 강제 자세 붕괴와 공간 변화를 만든다.
+Light는 setup과 interruption, Medium은 displacement와 chain,
+Heavy는 high-commitment local space-breaking payoff를 담당한다.
+정확한 Guard·Stability·damage 결과는 Draft다.
 
 ## 2. 무게별 결과
+
+### Owner-Approved Functional Hierarchy
+
+| 등급 | 기능적 결과 envelope |
+|---|---|
+| Light | setup, interruption, small physical reaction, downstream chain initiation |
+| Medium | meaningful displacement, secondary collision, chain creation, local room-state consequence |
+| Heavy | high-commitment major displacement와 강한 국소 space-breaking payoff |
+
+비슷한 setup의 first-order physical response는
+`LIGHT < MEDIUM < HEAVY`를 유지한다. 큰 downstream chain은 origin
+object의 Weight Class를 바꾸지 않는다. Heavy는 자동으로 Structural
+Feature가 아니다.
+
+### Draft Tuning Candidates
 
 | 등급 | 접촉 정지 시작값 | 기대 결과 |
 |---|---:|---|
@@ -16,9 +41,16 @@ Light는 공격·Guard·Stability를 끊고, Medium은 위치와 Stability를 �
 | Medium | 55~80ms | 2~5m 이동, 벽·가구 후속 충돌 |
 | Heavy | 90~130ms | 다중 자세 붕괴, 구조 파괴, 통로 변화 |
 
-값은 Graybox에서 튜닝하지만 상대적 계층은 고정한다.
+위 milliseconds, meters, Stability·damage·movement·destruction
+해석은 later G2/G3/G4 Draft다. 정확한 값이나 Heavy와 Structural의
+자동 관계를 승인하지 않는다.
 
 ## 3. 물체 행동 태그
+
+Behavior Tag는 Weight Class와 직교한다. Tag는 physical character를
+바꿀 수 있지만 Catch, Strap, Carry, Throw, Relay 또는 HeavyAction
+class boundary를 자동으로 override하지 않는다. 아래 기능과 예시는
+후속 설계 Draft다.
 
 | 태그 | 기능 | 예시 |
 |---|---|---|
@@ -50,7 +82,9 @@ Light는 공격·Guard·Stability를 끊고, Medium은 위치와 Stability를 �
 
 ### Structural Feature
 
-방별 1~2개. 파괴 시 통로·시야·전투 위치가 바뀐다.
+별도 PR-F-024 room-design role이다. Weight Class가 아니며 Heavy와의
+관계, 정확한 수와 파괴 방식은 Draft다. 기존 방별 `1~2개` 후보와
+통로·시야·전투 위치 결과는 later G2/G3/G5 Draft candidate다.
 
 ## 6. 타격감 순서
 
