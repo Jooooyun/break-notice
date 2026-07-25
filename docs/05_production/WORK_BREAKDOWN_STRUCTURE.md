@@ -1,5 +1,15 @@
 # Work Breakdown Structure
 
+> **MIXED-AUTHORITY PLANNING INDEX — NOT A PRODUCTION COMMITMENT**
+>
+> 이 문서는 작업 분해 후보를 보존하는 planning index다. 각 항목의
+> 실제 범위와 실행 권한은 Owner-approved Requirement, G2/G3 계약,
+> 현재 Gate와 별도 bounded task가 소유한다. 특히 8절의 정확한 방,
+> 적 archetype과 upgrade 수는
+> `NON-AUTHORITATIVE G5/G6 DRAFT PRODUCTION CANDIDATES`이며 승인된
+> Vertical Slice scope가 아니다. 이 문서는 Pre-G4 Full Design Lock,
+> G4/G5 passage 또는 구현 권한을 변경하지 않는다.
+
 ## 1. Design Completion
 
 - Canon 문서 검토
@@ -59,13 +69,13 @@
 - Pooling
 - Material VFX/audio
 
-## 8. Vertical Slice Content
+## 8. Vertical Slice Content — Non-Authoritative Candidates
 
-- 3 rooms
-- 2~3 enemy archetypes
-- 12 upgrades
-- UI/audio/VFX
-- Tutorialization
+- `3 rooms` — `NON-AUTHORITATIVE G5/G6 CANDIDATE`
+- `2~3 enemy archetypes` — `NON-AUTHORITATIVE G5/G6 CANDIDATE`
+- `12 upgrades` — `SUPERSEDED OR G5 CONTENT CANDIDATE / NOT APPROVED`
+- UI/audio/VFX — `G5/G6 DRAFT`
+- Tutorialization — `G5/G6 DRAFT`
 
 ## 9. Verification
 

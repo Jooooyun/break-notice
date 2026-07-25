@@ -84,6 +84,14 @@ Light, Medium, Heavy는 피해 숫자가 아니라 전투 역할과 움직임이
 
 ## 6. 배경
 
+Status: `DRAFT / MISSING DECISION — NOT STORY CANON`
+
+아래 서술은 별도 Owner-approved Decision Source가 없는 Story
+Candidate다. `Business Continuity Lockdown`, “미승인 자산”, 최상층
+통제실, 여러 부서 직원의 이동은 승인된 World premise, Campaign,
+Map 또는 Level Canon이 아니다. 폐기 또는 승인도 추론하지 않으며
+후속 Owner 결정 전까지 이 상태를 유지한다.
+
 대형 기업이 구조조정 당일 `Business Continuity Lockdown`을 발동한다. 자동 보안 시스템은 해고 대상 직원을 “미승인 자산”으로 분류하고 건물을 봉쇄한다. 주인공과 여러 부서 직원은 최상층 통제실로 올라가 봉쇄와 해고 처리를 직접 끝내려 한다.
 
 ## 7. 플레이 세션 구조

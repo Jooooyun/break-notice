@@ -1,5 +1,13 @@
 # Trailer Beats
 
+> **DRAFT TRAILER CONCEPT — CONTENT AVAILABILITY NOT APPROVED**
+>
+> 아래 순서와 exact glass/copier/Heavy beat는 illustrative marketing
+> candidate다. 구현된 gameplay, 승인된 Vertical Slice content,
+> production Level choreography 또는 G6 trailer capture plan이 아니다.
+> Prototype destruction은 계속 `0`이며 Story와 회사 설정은 별도
+> Owner 결정 전까지 `DRAFT / MISSING DECISION`이다.
+
 ## 첫 10초
 
 1. 정돈된 사무실

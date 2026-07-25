@@ -1,5 +1,14 @@
 # Product Positioning
 
+> **DRAFT MARKETING CANDIDATE — NOT A FEATURE OR CONTENT COMMITMENT**
+>
+> 아래 hook, GIF와 exact cascade는 마케팅 방향 후보다. Prototype의
+> 파괴 cap은 계속 `0`이며 glass, copier cascade, route opening,
+> room·enemy·object 구성은 G5 production scope와 G6 evidence 전까지
+> 승인된 Prototype, Vertical Slice, Level, Encounter 또는 Trailer
+> promise가 아니다. 승인된 Game Direction과 Visual Canon의 incidental
+> detail을 content authority로 확장하지 않는다.
+
 ## 한 문장 훅
 
 동료가 굴려준 의자를 산업용 스트랩으로 꺾어 보안요원을 유리벽과 복사기에 연쇄 충돌시키는 3인칭 사무실 물리 액션 Roguelite.
