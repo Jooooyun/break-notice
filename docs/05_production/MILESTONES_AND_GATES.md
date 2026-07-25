@@ -54,10 +54,26 @@
   `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md`
 - Frozen Design-Source Baseline SHA:
   `f638be24c6895a6969083626fa3f94228b533ec6`
+- Intended Unity Toolchain:
+  `OWNER-APPROVED / LOCKED INTENT`
+- Unity Toolchain Status Record:
+  `docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md`
+- Unity Toolchain Provisioning:
+  `OWNER-DEFERRED`
+- Unity Editor Installation:
+  `NOT VERIFIED / OWNER-DEFERRED`
+- Package Materialization:
+  `NOT STARTED / NOT AUTHORIZED`
+- Package Resolution:
+  `NOT VERIFIED`
+- Historical TASK-0064 Result:
+  `STOP CONDITION / NO CHANGE`
 - Limited Implementation Gate Semantics:
   `OWNER-APPROVED / DEFINED`
-- IMP-0001 Execution Relay Issuance:
-  `OWNER-AUTHORIZED / RELAY NOT ISSUED`
+- EAR-IMP-0001-001:
+  `EXPIRED / UNUSED`
+- Active Execution Authorization Relay:
+  `ABSENT / NEW RELAY NOT AUTHORIZED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -67,7 +83,7 @@
 - CHR_00 Player Turnaround Production Support:
   `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
-  `IMP-0001 / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EXECUTION RELAY ISSUANCE AUTHORIZED`
+  `IMP-0001 / EXECUTION BLOCKED / 6 OF 10 / TOOLCHAIN PROVISIONING OWNER-DEFERRED`
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
@@ -77,9 +93,9 @@
 - Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION` — Owner-approved transition
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Implementation Gate:
-  `CLOSED / RELAY ISSUANCE OWNER-AUTHORIZED / RELAY NOT ISSUED`
-- Current Next Task:
-  `TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap`
+  `CLOSED / NEW RELAY NOT AUTHORIZED`
+- Current Next Authorization Boundary:
+  `OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`
 
 G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계, 여덟 G2
 계약과 교정된 authority/trace 기준선은 Owner-approved이며 G1과 G2
@@ -112,9 +128,13 @@ TASK-0061 correction은 TASK-0062 Re-Audit에서 `48 / 48 PASS`와
 `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
 검증됐다. TASK-0063은 설계 소스 기준선
 `f638be24c6895a6969083626fa3f94228b533ec6`을
-`OWNER-APPROVED / LOCKED` Pre-G4 Full Design Lock으로 최종화하고
-future Relay issuance를 승인했다. 현재 다음 단일 작업은
-`TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap`이다. G4는
+`OWNER-APPROVED / LOCKED` Pre-G4 Full Design Lock으로 최종화했다.
+역사적 TASK-0064는 exact Editor 부재 Stop Condition으로 repository
+change, commit과 push 없이 종료됐고 `EAR-IMP-0001-001`은
+`EXPIRED / UNUSED`가 됐다. 현재 active Relay와 concrete execution
+SHA는 없으며 toolchain provisioning은 Human Owner가
+`OWNER-DEFERRED`로 지시했다. 다음 권한 경계는
+`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`다. G4는
 `NOT PASSED / NOT STARTED / NOT
 AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`, Graybox는
 `NOT STARTED`이고 구현 권한이 없다.
@@ -133,7 +153,7 @@ Implementation Gate는 `CLOSED`다.
 | Pre-G4 Full Design Lock | frozen documentation baseline after successful Re-Audit; no G4/G5/performance claim | OWNER-APPROVED / LOCKED |
 | G4 Graybox | separately authorized physical gameplay validation after infrastructure preparation | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
 | G5 Production Freeze | post-G4 production scope, asset, schedule and risk approval | NOT PASSED / REQUIRES G4 EVIDENCE |
-| Limited Implementation Gate | ticket-, baseline- and scope-specific one-shot authority for IMP-0001 empty Bootstrap only | CLOSED / RELAY ISSUANCE OWNER-AUTHORIZED / RELAY NOT ISSUED |
+| Limited Implementation Gate | ticket-, baseline- and scope-specific one-shot authority for IMP-0001 empty Bootstrap only | CLOSED / EAR-IMP-0001-001 EXPIRED / ACTIVE RELAY ABSENT |
 
 정확한 순서는 Pre-G4 documentary baseline과 Full Design Lock,
 narrowly authorized infrastructure preparation, separately authorized
@@ -152,6 +172,7 @@ IMP-0001 concrete SHA는 티켓에 저장하지 않는다. 별도 Owner-approved
 Execution Authorization Relay가 이미 push된 완전한 immutable SHA,
 `main`, clean local/origin equality, exact Gate state, 범위, operations,
 validations, commit/push 권한과 one-shot expiration을 제공해야 한다.
-future Relay issuance는 `OWNER-AUTHORIZED`지만 현재 Gate는 `CLOSED`이고
-Relay와 concrete SHA는 없다. TASK-0064만 TASK-0063 최종 pushed SHA를
-execution baseline으로 사용해 Relay를 발급할 수 있다.
+역사적 TASK-0064 Relay는 exact Editor 부재 Stop Condition 뒤
+`EXPIRED / UNUSED`가 됐다. 현재 Gate는 `CLOSED`, active Relay와
+concrete SHA는 `ABSENT`이며, 새 Relay와 provisioning은 Human Owner의
+새 직접 지시 전까지 승인되지 않는다.

@@ -146,12 +146,32 @@
   "approved_primary_production_visual_count": 8,
   "approved_production_support_count": 1,
   "owner_gpt_pro_relay_delegation_status": "ACTIVE / OWNER-DELEGATED / NO GATE BYPASS",
+  "unity_toolchain_intent_status": "OWNER-APPROVED / LOCKED INTENT",
+  "unity_toolchain_status_path": "docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md",
+  "intended_unity_editor_version": "6000.3.20f1",
+  "intended_unity_editor_changeset": "c9ba695d4f07",
+  "intended_urp_version": "17.3.0",
+  "intended_input_system_version": "1.20.0",
+  "intended_cinemachine_version": "3.1.7",
+  "intended_unity_test_framework_version": "1.6.0",
+  "prototype_ai_navigation_status": "DEFERRED / NOT IN DIRECT PACKAGE BASELINE",
+  "unity_toolchain_provisioning_status": "OWNER-DEFERRED",
+  "unity_editor_installation_status": "NOT VERIFIED / OWNER-DEFERRED",
+  "unity_hub_modification_status": "NOT AUTHORIZED",
+  "unity_license_verification_status": "NOT VERIFIED / NOT AUTHORIZED",
+  "unity_batchmode_verification_status": "NOT RUN / NOT AUTHORIZED",
+  "unity_disposable_project_status": "NOT CREATED / NOT AUTHORIZED",
+  "unity_package_materialization_status": "NOT STARTED / NOT AUTHORIZED",
+  "unity_package_resolution_status": "NOT VERIFIED",
+  "unity_implementation_readiness_status": "NOT READY / EXPLICIT OWNER INSTRUCTION REQUIRED",
+  "task0064_result": "STOP CONDITION / NO REPOSITORY CHANGE",
+  "ear_imp0001_001_status": "EXPIRED / UNUSED",
   "first_implementation_ticket_id": "IMP-0001",
   "first_implementation_ticket_title": "Unity Repository Bootstrap and Exact Package-Lock Materialization",
-  "first_implementation_ticket_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EXECUTION RELAY ISSUANCE AUTHORIZED",
+  "first_implementation_ticket_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / TOOLCHAIN PROVISIONING OWNER-DEFERRED",
   "first_implementation_ticket_path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-  "first_implementation_ticket_execution_baseline_status": "ABSENT / FUTURE RELAY REQUIRED",
-  "first_implementation_ticket_execution_status": "EXECUTION BLOCKED / LIMITED GATE, RELAY, SHA AND EDITOR EVIDENCE REQUIRED",
+  "first_implementation_ticket_execution_baseline_status": "ABSENT / FUTURE OWNER-AUTHORIZED RELAY REQUIRED",
+  "first_implementation_ticket_execution_status": "EXECUTION BLOCKED / TOOLCHAIN PROVISIONING OWNER-DEFERRED",
   "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
@@ -167,13 +187,15 @@
   "limited_implementation_gate_allowed_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "limited_implementation_gate_current_state": "CLOSED",
   "limited_implementation_gate_one_shot": true,
-  "imp0001_execution_relay_issuance_status": "OWNER-AUTHORIZED / RELAY NOT ISSUED",
-  "imp0001_execution_relay_status": "ABSENT",
+  "imp0001_execution_relay_issuance_status": "NEW RELAY NOT AUTHORIZED",
+  "imp0001_execution_relay_status": "ABSENT / NEW RELAY NOT AUTHORIZED",
+  "imp0001_precondition_progress": "6/10",
   "imp0001_mandatory_precondition_progress": "6/10",
   "imp0001_execution_baseline_binding": "SEPARATE EXECUTION AUTHORIZATION RELAY / NON-SELF-REFERENTIAL",
   "imp0001_execution_baseline_storage": "NOT STORED IN TICKET",
-  "imp0001_execution_baseline_status": "ABSENT / FUTURE RELAY REQUIRED",
-  "imp0001_review_readiness": "FINAL PRE-IMPLEMENTATION RE-AUDIT PASSED / PRE-G4 FULL DESIGN LOCK OWNER-APPROVED / EXECUTION RELAY NOT ISSUED",
+  "imp0001_execution_baseline_status": "ABSENT / FUTURE OWNER-AUTHORIZED RELAY REQUIRED",
+  "imp0001_execution_status": "EXECUTION BLOCKED / TOOLCHAIN PROVISIONING OWNER-DEFERRED",
+  "imp0001_review_readiness": "FINAL PRE-IMPLEMENTATION RE-AUDIT PASSED / PRE-G4 FULL DESIGN LOCK OWNER-APPROVED / TOOLCHAIN PROVISIONING DEFERRED / NEW EXECUTION RELAY NOT AUTHORIZED",
   "final_preimplementation_review_status": "REVISION REQUIRED",
   "final_preimplementation_review_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
   "final_preimplementation_review_baseline_sha": "a6398513bdc017529c600c8aa5bb5d7ea6e3e5cb",
@@ -197,8 +219,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED",
   "g5_gate_status": "NOT PASSED",
-  "design_freeze_current_next_task": "TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap",
-  "current_next_task": "TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap",
+  "design_freeze_current_next_task": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
+  "current_next_task": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -302,13 +324,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 42373,
-      "sha256": "2466818c279d596c4044b9a5d0071b6cc95c342f7e82718fcb8a3dd51c86eb4c"
+      "bytes": 42963,
+      "sha256": "1b2928ea3ace7a3adc08f21fd358c457f659bab2d1a93d48daf8aa531f47689e"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 18093,
-      "sha256": "e865c6cf808473b5601aa8d4b2db3b5b10ee294bf94c3548c532888d0ac5dfe2"
+      "bytes": 18959,
+      "sha256": "22cb647f7848bc26c1e4b9dfea580ded3c239561a9425826a4bcba5912508cfe"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -447,8 +469,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 14312,
-      "sha256": "45465346e826cbdecad1a820abf93c448720103e7dc43bca1f0c5f9d35d954c5"
+      "bytes": 14745,
+      "sha256": "533419bff7bcc97dc8561bff7750a8a3e5163f8d62c07ecf27525d1fdb1dc61d"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -457,13 +479,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 11054,
-      "sha256": "35c17f72990c841b2ab36fd98d5163b40f725922f25bb84f524c765c6edb2a80"
+      "bytes": 11470,
+      "sha256": "e3bdfa417a8d2c7ab0146d961e73d17096f75a200a0f67e6c7fc5ce5a58e2eb5"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 18036,
-      "sha256": "1f2634ce4a6fe7933b5a5c73bb223df9023cd7d0a3ee7ef9ac19a678678da0eb"
+      "bytes": 18478,
+      "sha256": "eb7f5ff4578723f4d301a08b9b889c3a06c3234e24e656f767fb245a737ef8a9"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -737,8 +759,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 8821,
-      "sha256": "19a44ad55053c11192ea153f8bdb10507576a292012b800609b49c9a93bc3877"
+      "bytes": 9441,
+      "sha256": "8f9802ebdf5a78e74b28ccdbdcc84157f553b193118c0f61bbfc18a821e48505"
     },
     {
       "path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
@@ -751,14 +773,19 @@
       "sha256": "52884087ef863026d37f0a2c449d040f8af4de57b772a4cb4251f4c0a526b8bb"
     },
     {
+      "path": "docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md",
+      "bytes": 6261,
+      "sha256": "e2e2fccd757e0d5588cc61a2806f143531e68fafde5711fa9070c04dee5b9bdb"
+    },
+    {
       "path": "docs/05_production/VERTICAL_SLICE_SCOPE.md",
       "bytes": 7056,
       "sha256": "5cad99e305b8c3a3a7b0cc72caf6d0b98b662fe7f1c806f85f224958d41f8057"
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 10013,
-      "sha256": "dd0967a20b6eba7b1d81b7bbe91674e46b681e1420e7762ce518733d6e6e53b5"
+      "bytes": 10670,
+      "sha256": "607dc31826c524a62bb580bad18daf21c5b542a72670149e5ddb5c5bc79e60d6"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -777,8 +804,8 @@
     },
     {
       "path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-      "bytes": 17453,
-      "sha256": "78f7fc1d5908b91dec5abed6a7cb3b8ce7645c72a8587aa1d8a0297d35c65f8d"
+      "bytes": 18184,
+      "sha256": "83e4aa4b5dd62bc0bcf656346c49c461e0275aa292c33516905c9acc4c909ff7"
     },
     {
       "path": "docs/06_codex/PROMPT_LIBRARY.md",
