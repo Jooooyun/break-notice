@@ -74,15 +74,17 @@ Unity asset은 생성되지 않았고 G5는
 없다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐고
 상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED /
-AUTHORITY CORRECTION APPLIED / RE-AUDIT PASSED`다. concrete execution
-SHA와 Unity project는 없다. Final Pre-Implementation Review는
+PRE-G4 FULL DESIGN LOCK SATISFIED / EXECUTION RELAY ISSUANCE
+AUTHORIZED`다. mandatory precondition은 `6 / 10`이고 concrete
+execution SHA와 Unity project는 없다. Final Pre-Implementation Review는
 역사적으로 `REVISION REQUIRED`이고 TASK-0061 correction은 TASK-0062
 Re-Audit에서 `48 / 48 PASS`와
 `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
 검증됐다. 체크되지 않은 항목은 `0`개다. Design Freeze
 `32 / 32`는 documentary evidence prerequisite이며 Full Design Lock,
 G4, G5 또는 구현을 승인하지 않는다. Full Design Lock은
-`INCOMPLETE / READY FOR OWNER DECISION`이다.
+TASK-0063의 별도 Owner-delegated 결정으로
+`OWNER-APPROVED / LOCKED`다.
 
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`의 제작 구성과
 binary review contract는 `OWNER-APPROVED / CONSUMED BY APPROVED
@@ -122,12 +124,12 @@ Pre-Implementation Review 기록은
 Re-Audit 기록은
 `docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md`이고 결과는
 `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`다.
-다음 단일 작업은 `TASK-0063 — Finalize Pre-G4 Full Design Lock and
-Authorize IMP-0001 Execution Relay Issuance`다.
+다음 단일 작업은
+`TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap`이다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
 `6 / 6`, Design Freeze는 `32 / 32`, G4는 `NOT PASSED / NOT STARTED /
 NOT AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`, Full Design
-Lock은 `INCOMPLETE / READY FOR OWNER DECISION`, Graybox는 `NOT STARTED`,
+Lock은 `OWNER-APPROVED / LOCKED`, Graybox는 `NOT STARTED`,
 Implementation Gate는 `CLOSED`다. IMP-0001 실행은 계속 차단된다.
 
 Pre-G4 Full Design Lock semantics와 limited Implementation Gate
@@ -139,6 +141,8 @@ state `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 one-shot empty
 Bootstrap만 허용하며 G4/G5 passage가 아니다. execution SHA는 티켓이
 아닌 별도 future Execution Authorization Relay만 공급한다.
 
-모든 필수 항목이 체크되고 Re-Audit이 성공했더라도 별도 Pre-G4 Full
-Design Lock 최종화, 정확한 제한 Gate 개방과 Execution Authorization
-Relay 전에는 Bootstrap 또는 본 제작을 시작하지 않는다.
+모든 필수 항목이 체크되고 Re-Audit이 성공했으며 Pre-G4 Full Design
+Lock이 최종화됐더라도, 정확한 제한 Gate 개방과 Execution
+Authorization Relay 전에는 Bootstrap 또는 본 제작을 시작하지 않는다.
+future Relay issuance는 `OWNER-AUTHORIZED`지만 Relay는 발급되지 않았고
+concrete execution SHA도 없다.

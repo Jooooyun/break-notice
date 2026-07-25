@@ -148,23 +148,32 @@
   "owner_gpt_pro_relay_delegation_status": "ACTIVE / OWNER-DELEGATED / NO GATE BYPASS",
   "first_implementation_ticket_id": "IMP-0001",
   "first_implementation_ticket_title": "Unity Repository Bootstrap and Exact Package-Lock Materialization",
-  "first_implementation_ticket_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / AUTHORITY CORRECTION APPLIED / RE-AUDIT PASSED",
+  "first_implementation_ticket_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EXECUTION RELAY ISSUANCE AUTHORIZED",
   "first_implementation_ticket_path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
   "first_implementation_ticket_execution_baseline_status": "ABSENT / FUTURE RELAY REQUIRED",
-  "first_implementation_ticket_execution_status": "EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK, LIMITED GATE, RELAY, SHA AND EDITOR EVIDENCE REQUIRED",
+  "first_implementation_ticket_execution_status": "EXECUTION BLOCKED / LIMITED GATE, RELAY, SHA AND EDITOR EVIDENCE REQUIRED",
   "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
-  "pre_g4_full_design_lock_status": "INCOMPLETE / READY FOR OWNER DECISION",
+  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED",
+  "pre_g4_full_design_lock_path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
+  "pre_g4_full_design_lock_adr": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
+  "pre_g4_full_design_lock_source_baseline_sha": "f638be24c6895a6969083626fa3f94228b533ec6",
+  "pre_g4_full_design_lock_reaudit_evidence_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md",
+  "pre_g4_full_design_lock_reaudit_result": "48/48 PASS / READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY",
+  "pre_g4_full_design_lock_reaudit_disposition": "CONSUMED BY OWNER-APPROVED PRE-G4 FULL DESIGN LOCK",
   "g5_production_freeze_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
   "limited_implementation_gate_semantics_status": "OWNER-APPROVED / DEFINED",
   "limited_implementation_gate_allowed_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "limited_implementation_gate_current_state": "CLOSED",
   "limited_implementation_gate_one_shot": true,
+  "imp0001_execution_relay_issuance_status": "OWNER-AUTHORIZED / RELAY NOT ISSUED",
+  "imp0001_execution_relay_status": "ABSENT",
+  "imp0001_mandatory_precondition_progress": "6/10",
   "imp0001_execution_baseline_binding": "SEPARATE EXECUTION AUTHORIZATION RELAY / NON-SELF-REFERENTIAL",
   "imp0001_execution_baseline_storage": "NOT STORED IN TICKET",
   "imp0001_execution_baseline_status": "ABSENT / FUTURE RELAY REQUIRED",
-  "imp0001_review_readiness": "FINAL PRE-IMPLEMENTATION RE-AUDIT READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY / FULL DESIGN LOCK AND RELAY REQUIRED",
+  "imp0001_review_readiness": "FINAL PRE-IMPLEMENTATION RE-AUDIT PASSED / PRE-G4 FULL DESIGN LOCK OWNER-APPROVED / EXECUTION RELAY NOT ISSUED",
   "final_preimplementation_review_status": "REVISION REQUIRED",
   "final_preimplementation_review_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
   "final_preimplementation_review_baseline_sha": "a6398513bdc017529c600c8aa5bb5d7ea6e3e5cb",
@@ -188,8 +197,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED",
   "g5_gate_status": "NOT PASSED",
-  "design_freeze_current_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
-  "current_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
+  "design_freeze_current_next_task": "TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap",
+  "current_next_task": "TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -231,8 +240,8 @@
   ],
   "production_visual_lock_sequence_status": "COMPLETE",
   "next_production_visual_target": null,
-  "full_design_lock": "INCOMPLETE / READY FOR OWNER DECISION",
-  "full_design_lock_status": "INCOMPLETE / READY FOR OWNER DECISION",
+  "full_design_lock": "OWNER-APPROVED / LOCKED",
+  "full_design_lock_status": "OWNER-APPROVED / LOCKED",
   "production_visual_lock_sequence": [
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
@@ -293,13 +302,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 41305,
-      "sha256": "d9ea4b457aa3b1cc299ad9ca699cda186311b619fcffcc89ac373140197d58aa"
+      "bytes": 42373,
+      "sha256": "2466818c279d596c4044b9a5d0071b6cc95c342f7e82718fcb8a3dd51c86eb4c"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 17212,
-      "sha256": "0ccc47b6ac5afcefd0b97bf19a2420bf1e3fe04250906751e0827227facf5245"
+      "bytes": 18093,
+      "sha256": "e865c6cf808473b5601aa8d4b2db3b5b10ee294bf94c3548c532888d0ac5dfe2"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -438,8 +447,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 13363,
-      "sha256": "87fed7b6cb5b1112eb1e1206bcc7d59570a97a9337e36c2b9f4738ddbc85004a"
+      "bytes": 14312,
+      "sha256": "45465346e826cbdecad1a820abf93c448720103e7dc43bca1f0c5f9d35d954c5"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -448,13 +457,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 10621,
-      "sha256": "e26b4efd1044bd2d48852a8b57329dc35dfc19f8b7f47a651b071b8897213647"
+      "bytes": 11054,
+      "sha256": "35c17f72990c841b2ab36fd98d5163b40f725922f25bb84f524c765c6edb2a80"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 17153,
-      "sha256": "7b9783bbc5dc17ebffaec897f00ce2eb1fc973e8a2626ed07ffb356a63e62a91"
+      "bytes": 18036,
+      "sha256": "1f2634ce4a6fe7933b5a5c73bb223df9023cd7d0a3ee7ef9ac19a678678da0eb"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -688,8 +697,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 7191,
-      "sha256": "a7c339c49b2c16694ae8c5930e6ada729b9a395af1fe3341a367f38faf79cb13"
+      "bytes": 7434,
+      "sha256": "799abe8d85e1f3c233e24f816578495893ad5971977f5d213187dae8d9aabbb9"
     },
     {
       "path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
@@ -728,8 +737,13 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 8086,
-      "sha256": "b0357e63cb3993dcd3cfe27b58b6458eb6d36ad832fd86b7dbbe01b4eee9f3b9"
+      "bytes": 8821,
+      "sha256": "19a44ad55053c11192ea153f8bdb10507576a292012b800609b49c9a93bc3877"
+    },
+    {
+      "path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
+      "bytes": 9247,
+      "sha256": "5c5ff5bb2ad6687c5d1cc9426f8162fcbebd4bb933c43476af8ea212af8736b2"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -743,8 +757,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 9118,
-      "sha256": "728c690436471ad719dba6a19d4f6ead12fb016b14a87aff0db040400243a0ef"
+      "bytes": 10013,
+      "sha256": "dd0967a20b6eba7b1d81b7bbe91674e46b681e1420e7762ce518733d6e6e53b5"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -763,8 +777,8 @@
     },
     {
       "path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-      "bytes": 15748,
-      "sha256": "1cfd52edd533e2a519e4afd72186c63e8794f9d07da14561d7d9c3819290b16b"
+      "bytes": 17453,
+      "sha256": "78f7fc1d5908b91dec5abed6a7cb3b8ce7645c72a8587aa1d8a0297d35c65f8d"
     },
     {
       "path": "docs/06_codex/PROMPT_LIBRARY.md",
@@ -910,6 +924,11 @@
       "path": "docs/09_adrs/ADR-0019-PRE-G4-FULL-DESIGN-LOCK-AND-LIMITED-BOOTSTRAP-GATE.md",
       "bytes": 6855,
       "sha256": "fee9dadc54e6746e9756c3b601f24c1a007306f5c2f4d959dad6c2f4e546e61b"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
+      "bytes": 3167,
+      "sha256": "bff1be9109ebea0c108538fbfd478bdab1517528e27415b835ee73190002e593"
     },
     {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",

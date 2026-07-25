@@ -12,7 +12,9 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 
-현재 프로젝트는 전체 Design Lock 상태가 아니다.
+현재 프로젝트의 Pre-G4 Full Design Lock은
+`OWNER-APPROVED / LOCKED`다. 이는 G4 evidence를 반영하는 G5
+Production Freeze 또는 최종 production scope passage가 아니다.
 
 현재 Gate 상태:
 
@@ -51,8 +53,18 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
   docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md`
 - Pre-G4 Full Design Lock Semantics:
   `OWNER-APPROVED / DEFINED`
+- Pre-G4 Full Design Lock:
+  `OWNER-APPROVED / LOCKED`
+- Pre-G4 Full Design Lock Record:
+  `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md`
+- Pre-G4 Full Design Lock ADR:
+  `docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md`
+- Frozen Design-Source Baseline SHA:
+  `f638be24c6895a6969083626fa3f94228b533ec6`
 - Limited Implementation Gate Semantics:
   `OWNER-APPROVED / DEFINED`
+- IMP-0001 Execution Relay Issuance:
+  `OWNER-AUTHORIZED / RELAY NOT ISSUED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -62,19 +74,19 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - CHR_00 Player Turnaround Production Support:
   `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
-  `IMP-0001 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / AUTHORITY CORRECTION APPLIED / RE-AUDIT PASSED`
+  `IMP-0001 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EXECUTION RELAY ISSUANCE AUTHORIZED`
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
 - Full Design Lock:
-  `INCOMPLETE / READY FOR OWNER DECISION`
+  `OWNER-APPROVED / LOCKED`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Limited Implementation Gate Readiness:
-  `READY FOR OWNER DECISION — IMP-0001 ONLY`
+  `OWNER-AUTHORIZED FOR FUTURE RELAY ISSUANCE / RELAY NOT ISSUED`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Current Next Task:
-  `TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance`
+  `TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap`
 
 ## Pre-G4 Full Design Lock and Limited Implementation Gate
 
@@ -86,8 +98,10 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 2. Pre-G4 Full Design Lock은 G1/G2/G3 passage, `32 / 32`, Visual
    Canon·Production Support, 파괴·Office Core Kit Lock, 승인 IMP
    decomposition과 성공한 Final Re-Audit을 고정하는
-   Owner-approved frozen documentation baseline이다. 별도 Owner task가
-   최종화하기 전까지 `INCOMPLETE / READY FOR OWNER DECISION`이다.
+   Owner-approved frozen documentation baseline이다. TASK-0063과
+   ADR-0020이 설계 소스 기준선
+   `f638be24c6895a6969083626fa3f94228b533ec6`을
+   `OWNER-APPROVED / LOCKED`로 최종화했다.
 3. G5 Production Freeze는 G4 evidence를 반영해 실제 제작 범위,
    asset list, 일정과 risk를 승인하는 post-G4 Gate다. G4보다 먼저
    통과할 수 없고 Pre-G4 Full Design Lock과 동일하지 않다.
@@ -117,9 +131,10 @@ Owner-approved Execution Authorization Relay가 정확한 ticket ID,
 이미 push된 완전한 immutable SHA, `main`, clean equality, 정확한
 limited Gate state, allowed/forbidden files, operations, validations,
 commit/push 권한과 one-shot expiration을 제공해야 한다. TASK-0061
-push와 성공한 Re-Audit은 완료됐다. Relay는 별도 Pre-G4 Full Design
-Lock 최종화와 별도 발급 승인 뒤에만 유효하다. 현재 Relay와 concrete
-SHA는 없다.
+push, 성공한 Re-Audit, Pre-G4 Full Design Lock 최종화와 future Relay
+발급 승인은 완료됐다. Relay 자체는 아직 발급되지 않았고 concrete
+SHA도 없다. 다음 TASK-0064 Relay만 TASK-0063의 최종 pushed SHA를
+execution baseline으로 공급할 수 있다.
 
 G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
@@ -370,7 +385,9 @@ Execution Authorization Relay만 이미 push된 완전한 immutable SHA를
 Full Design Lock·IMP-0001-only limited Gate 의미를 교정했고 TASK-0062
 Re-Audit은 `48 / 48 PASS`와
 `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`를
-기록했다. 별도 Lock 최종화, Gate 개방과 Relay 발급은 아직 없다.
+기록했다. TASK-0063은 Pre-G4 Full Design Lock을
+`OWNER-APPROVED / LOCKED`로 최종화하고 future Relay issuance를
+승인했지만 Gate 개방, Relay 발급과 concrete SHA 공급은 아직 없다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -426,15 +443,17 @@ documentary prerequisite이며 Full Design Lock이나 Gate passage가
 교정은 TASK-0062 Re-Audit에서 `48 / 48 PASS`와
 `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
 검증됐다. Pre-G4 Full Design Lock과 limited Gate semantics는
-`OWNER-APPROVED / DEFINED`이고 Lock 자체는
-`INCOMPLETE / READY FOR OWNER DECISION`이다. G4는 `NOT PASSED / NOT STARTED /
-NOT AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`다. 첫 구현
-티켓은 `EXECUTION BLOCKED`다.
-다음 단일 작업은 `TASK-0063 — Finalize Pre-G4 Full Design Lock and
-Authorize IMP-0001 Execution Relay Issuance`이며 별도 Lock 최종화,
-명시적 제한 Gate 개방과 Execution Authorization Relay 전에는
-Graybox 또는 Unity 구현을 시작하지 않는다. Implementation Gate는
-`CLOSED`다.
+`OWNER-APPROVED / DEFINED`이고 Lock은 TASK-0063에서
+`OWNER-APPROVED / LOCKED`로 최종화됐다. frozen design-source baseline은
+`f638be24c6895a6969083626fa3f94228b533ec6`이다. G4는
+`NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
+`NOT PASSED / REQUIRES G4 EVIDENCE`다. 첫 구현 티켓은 열 가지
+precondition 중 `6 / 10`만 충족해 `EXECUTION BLOCKED`다.
+다음 단일 작업은
+`TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap`이다.
+TASK-0064의 명시적 제한 Gate 개방과 Execution Authorization Relay
+전에는 Graybox 또는 Unity 구현을 시작하지 않는다. 현재 Relay와
+concrete execution SHA는 없고 Implementation Gate는 `CLOSED`다.
 
 ---
 

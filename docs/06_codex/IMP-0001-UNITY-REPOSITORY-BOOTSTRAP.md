@@ -1,9 +1,9 @@
 # IMP-0001 — Unity Repository Bootstrap and Exact Package-Lock Materialization
 
-Status: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / AUTHORITY CORRECTION APPLIED / RE-AUDIT REQUIRED`
+Status: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EXECUTION RELAY ISSUANCE AUTHORIZED`
 
 Review Readiness:
-`FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED / TASK-0061 CORRECTION APPLIED / RE-AUDIT REQUIRED`
+`FINAL PRE-IMPLEMENTATION RE-AUDIT PASSED / PRE-G4 FULL DESIGN LOCK OWNER-APPROVED / EXECUTION RELAY NOT ISSUED`
 
 `REQUIRED EXECUTION BASELINE SHA: SUPPLIED BY A SEPARATE OWNER-APPROVED EXECUTION AUTHORIZATION RELAY — NOT STORED IN THIS TICKET`
 
@@ -82,6 +82,28 @@ Relay가 필요하다.
    HEAD/`origin/main`/`main` 일치를 요구한다.
 10. Unity Editor `6000.3.20f1`이 설치됐고 독립적으로 검증됐다.
 
+### Current Precondition Evidence
+
+| # | Mandatory precondition | Current evidence |
+|---:|---|---|
+| 1 | Owner-authorized Turnaround generation | SATISFIED |
+| 2 | Binary Review Contract PASS | SATISFIED |
+| 3 | Owner approval and registration | SATISFIED |
+| 4 | Design Freeze `32 / 32` | SATISFIED |
+| 5 | Pre-G4 Full Design Lock `OWNER-APPROVED / LOCKED` | SATISFIED |
+| 6 | Re-Audit exact limited-Gate readiness result | SATISFIED |
+| 7 | Separate Owner-approved Execution Authorization Relay | NOT SATISFIED / ISSUANCE AUTHORIZED BUT RELAY NOT ISSUED |
+| 8 | Gate `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP` | NOT SATISFIED / CURRENTLY CLOSED |
+| 9 | Relay-supplied immutable SHA and clean equality | NOT SATISFIED / NO CONCRETE SHA |
+| 10 | Installed and independently verified Editor `6000.3.20f1` | NOT SATISFIED / NO EDITOR EVIDENCE |
+
+Current progress: `6 / 10`.
+
+Pre-G4 Full Design Lock과 future Relay issuance authorization은 조건
+1~6을 충족하지만 7~10을 암시하지 않는다. concrete execution SHA는
+이 티켓에 없으며 future Relay만 공급할 수 있다. 따라서 실행은 계속
+차단된다.
+
 ## Execution Authorization Relay
 
 Execution Authorization Relay는 이 티켓과 별개의 bounded
@@ -102,11 +124,13 @@ Owner-approved instruction이다. Relay는 다음을 모두 포함해야 한다.
 권위 commit 전에 티켓에 삽입한 SHA, 또는 권위 commit이 push되기 전에
 공급된 SHA는 무효다. 기준선 선택을 위해 이 티켓을 수정하지 않는다.
 
-Relay는 TASK-0061 교정 commit이 push되고, Final Pre-Implementation
-Re-Audit 결과가 정확히
-`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`이고,
-별도 task가 Pre-G4 Full Design Lock을 최종화하고, 그 task가 실행
-Relay 발급을 명시적으로 승인한 뒤에만 발급할 수 있다.
+TASK-0061 교정 commit push, Final Pre-Implementation Re-Audit의 정확한
+`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`,
+TASK-0063 Pre-G4 Full Design Lock 최종화와 future Relay issuance
+authorization은 완료됐다. Relay 자체는 아직 발급되지 않았다. 별도
+TASK-0064만 TASK-0063 최종 pushed SHA를 이미 `origin/main`에 존재하는
+immutable execution baseline으로 명시하고 위 모든 Relay 필드를
+제공해 발급할 수 있다.
 
 ## Limited Implementation Gate Boundary
 
@@ -334,7 +358,7 @@ Future commit message:
 
 `chore: materialize Unity project and exact package lock`
 
-TASK-0061은 위 Git 쓰기 권한을 활성화하지 않는다.
+TASK-0061과 TASK-0063은 위 Git 쓰기 권한을 활성화하지 않는다.
 
 ## Future Stop Conditions
 
@@ -405,8 +429,13 @@ TASK-0061은 위 Git 쓰기 권한을 활성화하지 않는다.
 IMP-0001 세분화는 완료됐지만 실행은 차단되어 있다. concrete execution
 SHA는 이 티켓에 없고 미래의 별도 Execution Authorization Relay만
 공급할 수 있다. Final Pre-Implementation Review는
-`REVISION REQUIRED`로 완료됐고 TASK-0061 authority correction은
-적용됐지만 Re-Audit이 필요하다. Pre-G4 Full Design Lock은
-`INCOMPLETE / RE-AUDIT REQUIRED`, G4는 `NOT PASSED / NOT STARTED /
-NOT AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`, Graybox는
-`NOT STARTED`, Implementation Gate는 `CLOSED`다. Unity project는 없다.
+`REVISION REQUIRED`로 역사 보존되고 TASK-0061 authority correction은
+TASK-0062 Re-Audit의 `48 / 48 PASS`로 검증됐다. TASK-0063은
+Pre-G4 Full Design Lock을 `OWNER-APPROVED / LOCKED`로 최종화하고 future
+Relay issuance를 승인했다. 현재 mandatory precondition은 `6 / 10`이고
+Relay는 발급되지 않았으며 concrete execution SHA와 Editor evidence는
+없다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
+`NOT PASSED / REQUIRES G4 EVIDENCE`, Graybox는 `NOT STARTED`,
+Implementation Gate는 `CLOSED`다. Unity project는 없다. 다음 단일
+작업은
+`TASK-0064 — IMP-0001 Execution Authorization Relay — Open the One-Shot Limited Gate and Materialize the Empty Unity Bootstrap`이다.
