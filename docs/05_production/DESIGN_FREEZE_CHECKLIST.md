@@ -20,7 +20,7 @@
 ## Art
 
 - [x] 주인공 Identity Lock
-- [ ] 주인공 Turnaround
+- [x] 주인공 Turnaround
 - [x] Cargo Strap 작동 시트
 - [x] 첫 동료 Identity Lock
 - [x] PGT_01 Camera Lock
@@ -49,7 +49,7 @@
 
 ## Approval
 
-현재 체크 상태: `31 / 32`
+현재 체크 상태: `32 / 32`
 
 Product의 네 항목은 G1 Owner 승인으로 완료되었다. Gameplay의
 일곱 항목은 Owner-approved G2 Design Baseline으로 완료되었다.
@@ -69,21 +69,24 @@ Office Core Kit checkbox는 exact `16` Prototype-required family와
 exact `8` Later-Slice extension candidate, interaction·variant·reuse·
 Prototype zero-destruction boundary의 asset-family list가
 Owner-approved/LOCKED되었음을 뜻한다. 3D model, texture, material 또는
-Unity asset은 생성되지 않았고 G5는 `NOT PASSED`이며 Unity 또는 Graybox
-권한이 없다. 첫 구현 티켓은
+Unity asset은 생성되지 않았고 G5는 `NOT PASSED / FINAL
+PRE-IMPLEMENTATION REVIEW REQUIRED`이며 Unity 또는 Graybox 권한이
+없다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐고
 상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`다.
 concrete execution SHA와 Unity project는 없으며 Final
 Pre-Implementation Review는 시작되지 않았다. 체크되지 않은 항목은
-`주인공 Turnaround` 하나다. Design Freeze는 `31 / 32`, Full Design
-Lock은 `INCOMPLETE`다.
+`0`개다. Design Freeze는 `32 / 32`와 `COMPLETE / FINAL
+PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design Lock은 `INCOMPLETE /
+FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
 
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`의 제작 구성과
-binary review contract는 `OWNER-APPROVED / READY`지만 Turnaround
-이미지는 `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`다. Brief
-승인은 `주인공 Turnaround` 완료가 아니므로 checkbox는 변경하지 않는다.
-향후 생성된 `REVIEW` 후보가 계약을 통과하고 Owner가 명시적으로
-승인·등록한 뒤에만 체크할 수 있다.
+binary review contract는 `OWNER-APPROVED / CONSUMED BY APPROVED
+TURNAROUND`다. `CHR_00_Player_Turnaround_v001_REVIEW.png`는 계약을
+`PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical 승인본과
+ADR-0018이 등록되었다. 따라서 `주인공 Turnaround` checkbox는
+`CHECKED`다. 이 등록은 기존 CHR_00 Identity 권위를 대체하거나 3D,
+Unity, Graybox 또는 구현 권한을 만들지 않는다.
 
 Logical Input Action Contract, Interaction State, Arbitration, and
 Conflict Contract와 Weight-Class Functional Data Range Contract는
@@ -108,12 +111,15 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었고 문서
 자체는 변경하지 않는다. 현재 Phase는
-`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
-새 numbered task는 승인되지 않았다.
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 단일 작업은
+`FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
-`6 / 6`, Design Freeze는 `31 / 32`, G4와 G5는 `NOT PASSED`, Full
-Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation
-Gate는 `CLOSED`다.
+`6 / 6`, Design Freeze는 `32 / 32`, G4는 `NOT PASSED / NOT STARTED /
+NOT AUTHORIZED`, G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW
+REQUIRED`, Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION
+REVIEW REQUIRED`, Graybox는 `NOT STARTED`, Implementation Gate는
+`CLOSED`다. IMP-0001 실행은 계속 차단된다.
 
-모든 필수 항목이 체크되기 전 본 제작을 시작하지 않는다.
+모든 필수 항목이 체크되었더라도 Final Pre-Implementation Review,
+필요한 Gate passage와 명시적 Implementation Gate `OPEN` 전에는 본
+제작을 시작하지 않는다.

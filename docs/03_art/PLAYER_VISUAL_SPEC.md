@@ -6,6 +6,28 @@
 
 `CHR_00_Player_Identity_Lock_v002_FINAL`을 공식 비주얼 기준으로 승인한다.
 
+## Approved Turnaround Production Support
+
+![CHR_00 Player Turnaround](../../references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png)
+
+`CHR_00_Player_Turnaround_v001_FINAL`은 Human Owner가 승인하고
+ADR-0018로 등록한 `LOCKED PRODUCTION SUPPORT`다. 정확한 다섯 전신 뷰,
+중립 modeling pose, 의복·하네스·브레이스·허리 릴·보관 스트랩·
+카라비너 continuity와 후면·측면 제작 가독성을 보조한다.
+
+- Approved path:
+  `references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`
+- SHA-256:
+  `8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214`
+- Role: orthographic and modeling continuity only
+
+CHR_00 Identity의 주 권위는
+`CHR_00_Player_Identity_Lock_v002_FINAL`, 이 문서의 Canonical Elements와
+ADR-0007이다. Turnaround는 그 권위에 종속되며 새로운 Identity,
+gameplay, 장비 기능, sequence, 3D topology·rig·material, Unity asset,
+Graybox 또는 구현 권한을 만들지 않는다. 정확한 모공·주름·오염·볼트·
+라벨·미세 비대칭·조명과 spacing은 Non-Canon이다.
+
 ## Canonical Elements
 
 - 현실적인 성인 남성 비율

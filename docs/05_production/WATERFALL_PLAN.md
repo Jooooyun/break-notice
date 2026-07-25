@@ -24,25 +24,30 @@
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED`
+- G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - G3 Technical checklist: `6 / 6`
-- Design Freeze: `31 / 32`
+- Design Freeze: `32 / 32`
+- Design Freeze Completion:
+  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
   `OWNER-APPROVED / LOCKED`
 - CHR_00 Player Turnaround Brief:
-  `OWNER-APPROVED / READY`
-- CHR_00 Player Turnaround Image:
-  `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
+  `OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`
+- CHR_00 Player Turnaround Production Support:
+  `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
   `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
 - Production Visual Lock sequence: `COMPLETE`
+- Primary Production Visual Count: `8`
+- Approved Production Support Count: `1`
 - Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
-- Full Design Lock: `INCOMPLETE`
+- Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
+- Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 ## Phase 0 — Charter
 
@@ -93,15 +98,17 @@ interaction·variant·reuse와 Prototype destruction `0` 경계로
 `OWNER-APPROVED / LOCKED`되었지만 실제 asset creation은
 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records Archive-local
 `COULD`, FIN_01은 `OUT / COULD`를 유지하고 G5 passage는 없다.
-Turnaround Production Brief와 binary review contract는
-`OWNER-APPROVED / READY`지만 미래 후보는 `NOT CREATED`, 이미지 생성은
-`NOT AUTHORIZED`이고 checklist는 `UNCHECKED`다. 다음 허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이며
-첫 구현 티켓은
+Turnaround Production Brief의 binary review contract는 후보가
+`PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical 승인본과
+ADR-0018이 `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`로
+등록되었다. checklist는 `CHECKED`다. 다음 단일 작업은
+`FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이며 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
 concrete execution baseline SHA가 없고 실행은 차단되어 있다. 새
 numbered task는 승인되지 않았다.
-G4와 G5는 아직 통과하지 않았고 Graybox와 Unity 구현 권한은 없다.
+G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
+FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이고 Graybox와 Unity 구현
+권한은 없다.
 
 ## Phase 4 — Graybox Validation
 
@@ -117,16 +124,18 @@ Gate G4: 5분 재미와 재플레이 행동 통과.
 
 ## Phase 5 — Design Freeze
 
-Status: `NOT PASSED / CURRENT DESIGN FREEZE COMPLETION WORK — 31 / 32`
+Status: `NOT PASSED / DESIGN FREEZE CHECKLIST COMPLETE 32 / 32 / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 Graybox 결과를 반영해 문서 최종 동결.
 
-`첫 구현 티켓 세분화`는 완료됐지만 실행은 차단되어 있다. 남은 항목은
-`CHR_00 Player Turnaround` 하나다.
+`첫 구현 티켓 세분화`와 `CHR_00 Player Turnaround` 등록은 완료됐지만
+IMP-0001 실행은 차단되어 있다. Design Freeze checklist의 미완료
+항목은 `0`개다.
 
-Turnaround Brief 승인만으로 checklist를 완료하지 않는다. 이미지
-생성은 명시적 Owner 요청이 있어야 하며, 생성된 `REVIEW` 후보가
-계약을 통과하고 Owner가 승인·등록한 뒤에만 해당 항목을 체크할 수 있다.
+Turnaround Brief 승인만으로 checklist를 완료하지 않았다. 실제
+`REVIEW` 후보가 계약을 통과하고 Human Owner가 승인했으며 승인본과
+ADR-0018이 등록된 뒤에만 해당 항목을 체크했다. 이 완료는 G5 passage,
+Full Design Lock, Graybox, Unity 또는 구현 권한이 아니다.
 
 Gate G5: 본 제작 범위, 에셋 목록, 일정, 리스크 승인.
 

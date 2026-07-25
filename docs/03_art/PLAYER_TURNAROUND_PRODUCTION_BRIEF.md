@@ -1,16 +1,20 @@
 # CHR_00 Player Turnaround Production Brief
 
-`OWNER-APPROVED PRODUCTION BRIEF / TURNAROUND IMAGE NOT CREATED OR AUTHORIZED`
+`OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`
 
-Decision Source: `TASK-0057 delegated Design Authority decision`
+Decision Source: `TASK-0057 delegated Design Authority decision`; registration
+source: `TASK-0059` after GPT Pro `PASS` and Human Owner `APPROVE`
 
 ## Authority and Gate Boundary
 
-이 문서는 향후 CHR_00 Player Turnaround 이미지 한 장의 제작 구성과
-이진 검토 기준만 승인한다. Turnaround 이미지, 3D 모델, 리깅, Unity
-asset, Graybox 또는 구현을 생성하거나 승인하지 않는다. G4와 G5는
-`NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`,
-Implementation Gate는 `CLOSED`다.
+이 문서는 CHR_00 Player Turnaround 이미지 한 장의 제작 구성과 이진
+검토 기준, 그 기준을 통과한 승인본의 등록 증거를 보존한다. 등록된
+Turnaround는 `LOCKED PRODUCTION SUPPORT`이며 3D 모델, 리깅, texture,
+material, Unity asset, Graybox 또는 구현을 생성하거나 승인하지 않는다.
+G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
+FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design Lock은
+`INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Graybox는
+`NOT STARTED`, Implementation Gate는 `CLOSED`다.
 
 ## Sole Identity Reference
 
@@ -24,18 +28,24 @@ CHR_00의 유일한 Identity 권위는 다음 세 항목이다.
 수 있으며 위 세 권위를 덮어쓰지 않는다. 탐색 이미지, 역사적 prompt,
 incidental detail과 미승인 생성 결과는 Identity 권위가 아니다.
 
-## Future Candidate Path and Status
+## Approved Registration Evidence
 
-향후 후보 경로만 다음과 같이 예약한다.
+- 검토 소스:
+  `references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`
+- 승인 등록본:
+  `references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`
+- 검토 결과: `PASS — REVIEW CONTRACT SATISFIED`
+- Human Owner disposition: `APPROVE`
+- 등록 상태:
+  `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
+- SHA-256:
+  `8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214`
+- 픽셀 크기: `1774 × 887`
+- 파일 크기: `2,096,375 bytes`
 
-`references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`
-
-- 현재 후보 상태: `NOT CREATED`
-- 현재 이미지 생성 상태: `NOT AUTHORIZED`
-- 향후 실제로 생성되는 최초 후보의 상태: `REVIEW`
-
-이 문서는 파일을 생성하거나 후보를 등록하지 않는다. 향후 후보는
-명시적 Owner 승인 전에는 `APPROVED`, `FINAL` 또는 `LOCKED`가 아니다.
+승인 등록본은 검토 소스의 byte-identical copy다. 검토 소스는 기존
+untracked `REVIEW` 증거로 보존되며 승인 등록본만 tracked Production
+Support다.
 
 ## Exact Five-View Layout
 
@@ -158,9 +168,9 @@ readability와 이진 검토 항목만 제작 계약이다. 다음은 Non-Canon�
 - 생성 과정의 미세 비대칭
 - typography와 spacing
 
-## Binary Review Contract
+## Binary Review Contract and Result
 
-향후 후보는 아래 항목을 모두 만족할 때만 `PASS`다. 하나라도
+후보는 아래 항목을 모두 만족할 때만 `PASS`다. 하나라도
 불충족이면 `REVISION REQUIRED`이며, 단순히 매력적이거나 렌더링
 품질이 높은 것만으로는 통과할 수 없다.
 
@@ -180,20 +190,22 @@ readability와 이진 검토 항목만 제작 계약이다. 다음은 Non-Canon�
 - 생성된 후보가 계속 `REVIEW`임을 명시
 - 명시적 Owner 승인·등록 전 Design Freeze의 Turnaround 항목 미완료 유지
 
-## Image-Generation Authorization Boundary
+`CHR_00_Player_Turnaround_v001_REVIEW.png`는 위 계약을
+`PASS — REVIEW CONTRACT SATISFIED`했고 Human Owner가 `APPROVE`했다.
+승인 전 REVIEW 상태 유지와 등록 전 checklist 미완료 조건도 준수했다.
 
-현재 이미지 생성은 승인되지 않았다. 다음 허가 경계는 정확히 다음과
-같다.
+## Image-Generation Authorization Result
 
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`
-
-이 경계를 충족하는 후속 Owner 요청 없이는 prompt 실행, 이미지 생성,
-파일 저장, 후보 등록 또는 검토 판정을 수행하지 않는다.
+Human Owner의 명시적 이미지 생성 요청은 승인 후보 한 장의 생성과
+검토에 사용되어 소비되었다. 해당 후보는 이후 명시적 Human Owner
+`APPROVE`로 등록되었다. 이 이력은 추가 이미지 생성, 변형, 재생성,
+3D 제작 또는 구현 권한으로 확장되지 않는다.
 
 ## Design Freeze Boundary
 
-Production Brief 승인만으로 `주인공 Turnaround` checklist를 완료하지
-않는다. 해당 checkbox는 향후 생성된 `REVIEW` 후보가 이 계약을
-통과하고 Owner가 명시적으로 승인·등록한 뒤에만 체크할 수 있다.
-현재 Design Freeze는 `30 / 32`이고 남은 항목은 `CHR_00 Player
-Turnaround`과 `첫 구현 티켓 세분화`의 정확히 두 개다.
+Production Brief 승인만으로는 `주인공 Turnaround` checklist를
+완료하지 않는다. 실제 `REVIEW` 후보가 이 계약을 통과하고 Human
+Owner가 명시적으로 승인했으며 승인본과 ADR-0018이 등록되었으므로
+해당 checkbox를 체크한다. Design Freeze는 `32 / 32`와 `COMPLETE /
+FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다. 이는 G5 passage, Full
+Design Lock 완료, Graybox, 3D 제작, Unity 또는 구현 권한이 아니다.

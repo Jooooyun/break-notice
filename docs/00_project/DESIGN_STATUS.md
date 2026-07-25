@@ -35,11 +35,14 @@ G3 Gate Passage Source:
 
 G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 
-G5 Freeze: `NOT PASSED`
+G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 G3 Technical Checklist: `6 / 6`
 
-Design Freeze: `31 / 32`
+Design Freeze: `32 / 32`
+
+Design Freeze Completion:
+`COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 Destruction Budget and Implementation Rules:
 `OWNER-APPROVED / LOCKED`
@@ -48,23 +51,29 @@ Office Core Kit:
 `OWNER-APPROVED / LOCKED`
 
 CHR_00 Player Turnaround Brief:
-`OWNER-APPROVED / READY`
+`OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`
 
-CHR_00 Player Turnaround Image:
-`NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
+CHR_00 Player Turnaround Production Support:
+`OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 
 First Implementation Ticket:
 `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
 
 Production Visual Lock sequence: `COMPLETE`
 
-Full Design Lock: `INCOMPLETE`
+Primary Production Visual Count: `8`
+
+Approved Production Support Count: `1`
+
+Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 Graybox: `NOT STARTED`
 
 Phase label review: `COMPLETED / OWNER-APPROVED`
 
 Implementation Gate: `CLOSED`
+
+Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 | 영역 | 상태 | 다음 산출물 | Gate |
 |---|---|---|---|
@@ -99,8 +108,8 @@ Implementation Gate: `CLOSED`
 | FIN_01 Conference Table Team Finisher | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT | 제품 범위 결정 전 구현 금지 | G2 |
 | 파괴 예산과 구현 규칙 | OWNER-APPROVED / LOCKED | 현 Lock 유지 | DESIGN FREEZE |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED | 현 Lock 유지 | DESIGN FREEZE |
-| CHR_00 Player Turnaround Production Brief | OWNER-APPROVED / READY | OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND | DESIGN FREEZE |
-| CHR_00 Player Turnaround Image | NOT CREATED / IMAGE GENERATION NOT AUTHORIZED | 명시적 Owner 요청 전 생성 금지 | DESIGN FREEZE / UNCHECKED |
+| CHR_00 Player Turnaround Production Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND | 승인 계약 유지 | DESIGN FREEZE / CHECKED |
+| CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT | FINAL PRE-IMPLEMENTATION REVIEW REQUIRED | DESIGN FREEZE / CHECKED |
 | First Implementation Ticket | IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED | Final Pre-Implementation Review와 OPEN Gate 전 실행 금지 | DESIGN FREEZE / CHECKED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
@@ -120,15 +129,17 @@ Implementation Gate: `CLOSED`
 
 현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았다.
 
-FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이며 승인된 Vertical Slice 또는 최종 제품 범위에 포함되지 않는다. Full Design Lock은 여전히 미완료이고 Implementation Gate는 `CLOSED`다.
+FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이며 승인된 Vertical Slice 또는 최종 제품 범위에 포함되지 않는다. Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이고 Implementation Gate는 `CLOSED`다.
 
 `CHR_00 Player Turnaround`의 Production Brief와 binary review contract는
-`OWNER-APPROVED / READY`다. 유일한 Identity 권위와 정확한 다섯 뷰,
-continuity, 최대 세 callout 및 검토 기준은
-`docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`를 따른다. 미래 후보
-경로는 `references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`로
-예약되었지만 현재 이미지는 `NOT CREATED / IMAGE GENERATION NOT
-AUTHORIZED`이고 checklist는 미완료다.
+`OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`다. 유일한 Identity
+권위와 정확한 다섯 뷰, continuity, 최대 세 callout 및 검토 기준은
+`docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`를 따른다. 검토 소스
+`references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`는
+계약을 `PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical 승인본
+`references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`가
+`LOCKED PRODUCTION SUPPORT`로 등록되었다. 주 Identity 권위는 변경되지
+않고 3D, Unity, Graybox 또는 구현 권한은 없다.
 
 G1 요구사항·NFR의 정확한 문구와 disposition, 기술 중립적 검증
 의도와 Applicability/Priority 경계는 Owner-approved이며 G1
@@ -197,8 +208,10 @@ family `12`의 asset-family 및 reuse policy로
 `0`은 유지되고, 실제 model·texture·material·layout·Unity asset
 creation은 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records
 Archive-local `COULD`, FIN_01은 `OUT / COULD`를 유지한다. Technical
-checklist는 `6 / 6`, Design Freeze는 `31 / 32`다. 실제 Unity project와 package file은 생성되지
-않았고 exact tuning, implementation class와 pass threshold는 Draft다.
+checklist는 `6 / 6`, Design Freeze는 `32 / 32`와 `COMPLETE / FINAL
+PRE-IMPLEMENTATION REVIEW REQUIRED`다. 실제 Unity project와 package
+file은 생성되지 않았고 exact tuning, implementation class와 pass
+threshold는 Draft다.
 G3 Causal Result Family는 Owner-approved
 G2 계약의 정확한 네 family로 교정되었으며 Structural Feature는 별도
 optional design role로 유지된다. Final Audit은 active Phase와
@@ -209,12 +222,12 @@ AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
 `READY FOR G3 GATE DECISION` 판정은 기준선
 `9e1487e85be5a54ba0824c209deabcf738e1abf0`에서 Owner-approved G3
 passage의 근거로 소비되었고 Re-Audit 문서 자체는 변경하지 않는다.
-G4와 G5는 `NOT PASSED`, Full Design Lock은 `INCOMPLETE`, Graybox는
+G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
+FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design Lock은
+`INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Graybox는
 `NOT STARTED`, Implementation Gate는 `CLOSED`다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로
 세분화됐지만 concrete execution baseline SHA가 없고 실행은 승인되지
-않았다. 다음 허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
-남은 Design Freeze 항목은 `CHR_00 Player Turnaround` 하나이며 새
-numbered task는 승인되지 않았다. Bootstrap, Graybox와 구현 권한은
-없다.
+않았다. 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+남은 Design Freeze 항목은 `0`개다. Bootstrap, Graybox와 구현 권한은
+없고 IMP-0001 실행은 계속 차단된다.

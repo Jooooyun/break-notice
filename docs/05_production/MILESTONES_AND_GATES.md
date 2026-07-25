@@ -33,25 +33,30 @@
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED`
+- G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - G3 Technical checklist: `6 / 6`
-- Design Freeze: `31 / 32`
+- Design Freeze: `32 / 32`
+- Design Freeze Completion:
+  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
   `OWNER-APPROVED / LOCKED`
 - CHR_00 Player Turnaround Brief:
-  `OWNER-APPROVED / READY`
-- CHR_00 Player Turnaround Image:
-  `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
+  `OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`
+- CHR_00 Player Turnaround Production Support:
+  `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
   `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
 - Production Visual Lock sequence: `COMPLETE`
-- Full Design Lock: `INCOMPLETE`
+- Primary Production Visual Count: `8`
+- Approved Production Support Count: `1`
+- Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - Graybox: `NOT STARTED`
 - Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION` — Owner-approved transition
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Implementation Gate: `CLOSED`
+- Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계, 여덟 G2
 계약과 교정된 authority/trace 기준선은 Owner-approved이며 G1과 G2
@@ -74,16 +79,18 @@ LGT_01은 Records Archive-local `COULD`, FIN_01은 `OUT / COULD`를
 유지한다. 이 Lock은 G5를 통과시키지 않는다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
 concrete execution baseline SHA가 없고 실행은 차단되어 있다. Design
-Freeze는 `31 / 32`이며 남은 항목은 `CHR_00 Player Turnaround`
-하나다. Turnaround Production Brief와 binary
-review contract는 `OWNER-APPROVED / READY`지만 미래 후보는
-`NOT CREATED`, 이미지 생성은 `NOT AUTHORIZED`이고 checkbox는
-`UNCHECKED`다. 현재 다음 허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이며
-새 numbered task는 승인되지 않았다.
-G4와 G5는 `NOT PASSED`, Graybox는 `NOT STARTED`이고 구현 권한이 없다.
+Freeze는 `32 / 32`와 `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW
+REQUIRED`다. Turnaround Production Brief의 binary review contract를
+후보가 `PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical
+승인본과 ADR-0018이 `LOCKED PRODUCTION SUPPORT`로 등록되었다.
+Production Visual은 계속 여덟 개이고 Production Support는 한 개다.
+현재 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
+FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Graybox는 `NOT STARTED`이고
+구현 권한이 없다.
 승인된 여덟 Production Visual의
-Canon은 유지되지만 Full Design Lock은 미완료다. FIN_01은 PR-F-022
+Canon은 유지되지만 Full Design Lock은 `INCOMPLETE / FINAL
+PRE-IMPLEMENTATION REVIEW REQUIRED`다. FIN_01은 PR-F-022
 `OUT / COULD`이며 승인된 Vertical Slice와 최종 제품 범위 밖이다.
 정확한 조명·피니셔 기능, destruction hard cap을 제외한 tuning,
 implementation class와 pass threshold는 Draft 또는 미승인 상태이며

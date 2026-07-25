@@ -27,6 +27,12 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 
 ![승인된 FIN_01 Conference Table Team Finisher](references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png)
 
+승인된 여덟 Production Visual과 별도로 다음 CHR_00 제작 지원 자료가
+`LOCKED PRODUCTION SUPPORT`로 등록되어 있다. 이는 CHR_00 Identity
+권위를 대체하거나 Production Visual 수를 늘리지 않는다.
+
+![승인된 CHR_00 Player Turnaround Production Support](references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png)
+
 ## 현재 상태
 
 | 항목 | 상태 |
@@ -42,18 +48,21 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE |
 | G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
-| G5 Freeze | NOT PASSED |
-| Current Next Task | OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND |
+| G5 Freeze | NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
+| Current Next Task | FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
 | G3 Technical checklist | 6 / 6 |
-| Design Freeze | 31 / 32 |
+| Design Freeze | 32 / 32 |
+| Design Freeze Completion | COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
 | Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
-| CHR_00 Player Turnaround Brief | OWNER-APPROVED / READY |
-| CHR_00 Player Turnaround Image | NOT CREATED / IMAGE GENERATION NOT AUTHORIZED |
+| CHR_00 Player Turnaround Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND |
+| CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT |
 | First Implementation Ticket | IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
-| Full Design Lock | INCOMPLETE |
+| Primary Production Visual count | 8 |
+| Approved Production Support count | 1 |
+| Full Design Lock | INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
 | Phase label review | COMPLETED / OWNER-APPROVED |
 | 게임 정체성 | LOCKED |
 | 3D TPS / Unity 6 / URP | LOCKED |
@@ -97,11 +106,12 @@ texture, material, layout과 Unity asset creation은
 
 CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 [`PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`](docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md)에
-`OWNER-APPROVED / READY`로 기록되었다. 미래 후보 경로는
-`references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`로
-예약되었지만 현재 후보는 `NOT CREATED`이고 이미지 생성은
-`NOT AUTHORIZED`다. Brief 승인은 이미지 생성·후보 승인·checklist
-완료를 뜻하지 않는다.
+기록되어 있고, 검토 계약 `PASS` 뒤 Human Owner가 후보를
+`APPROVE`했다. byte-identical 승인본
+`references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`는
+`OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`다. 주 Identity
+권위는 기존 CHR_00 Identity 이미지, Player Visual Spec과 ADR-0007에
+남으며 Turnaround는 3D modeling·rigging·Unity asset·구현 권한이 아니다.
 
 첫 구현 티켓은
 [`IMP-0001`](docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md)로
@@ -109,10 +119,11 @@ CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 BLOCKED`다. concrete execution baseline SHA는 없으며 이는 Unity,
 Package, code 또는 Git 쓰기 권한이 아니다.
 
-Design Freeze는 `31 / 32`이며 남은 항목은 `CHR_00 Player
-Turnaround` 하나다. 다음 단일 허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`이고
-G4와 G5는 `NOT PASSED`다. 새 numbered task는 승인되지 않았다.
+Design Freeze는 `32 / 32`이고 `COMPLETE / FINAL PRE-IMPLEMENTATION
+REVIEW REQUIRED`다. 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW
+REQUIRED`다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
+`NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design
+Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지

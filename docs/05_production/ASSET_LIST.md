@@ -4,7 +4,7 @@
 
 | ID | Asset | Status |
 |---|---|---|
-| CHR-00 | Player | Visual locked, 3D pending |
+| CHR-00 | Player | Identity locked; Turnaround owner-approved/registered as locked production support; 3D pending/not authorized |
 | CHR-01 | First Ally — facilities/logistics employee | Visual locked, 3D and gameplay pending |
 | ENY-01 | Compliance Runner | Design pending |
 | ENY-02 | Partition Guard | Design pending |
@@ -135,21 +135,25 @@ shelving 또는 archive candidate로 자동 활성화되지 않는다. FIN_01은
 계속 `OUT / COULD`이며 Conference Table candidate로 자동 활성화되지
 않는다.
 
-## Remaining Production-Support Boundary
+## Approved Production-Support Boundary
 
 `CHR_00 Player Turnaround Production Brief`는
-`OWNER-APPROVED / READY`다. 정확한 권위는
+`OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`다. 정확한 권위는
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`다.
 
-미래 후보 경로
+검토 소스
 `references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`는
-예약만 되었고 현재 후보는 `NOT CREATED`, 이미지 생성은
-`NOT AUTHORIZED / EXPLICIT OWNER REQUEST REQUIRED`, checklist는
-`UNCHECKED`다. Brief 승인은 이미지·모델·texture·material·Unity asset
-생성 또는 Visual Candidate 승인이 아니다. Office Core Kit Lock은
-character, gameplay feature 또는 Visual Canon authority를 변경하지
-않는다. 다음 허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
+binary contract `PASS`와 Human Owner `APPROVE`를 받았고 byte-identical
+승인본
+`references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`가
+`OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`로 등록되었다.
+checklist는 `CHECKED`다.
+
+CHR_00 Identity의 주 권위는 기존 Identity 이미지, Player Visual Spec과
+ADR-0007에 남는다. Turnaround 등록은 새 gameplay feature, 3D model,
+rig, texture, material, Prefab 또는 Unity asset 제작 권한이 아니다.
+실제 CHR-00 3D asset은 `PENDING / NOT AUTHORIZED`다. 다음 단일 작업은
+`FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
 
 ## VFX
 

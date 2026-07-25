@@ -38,9 +38,16 @@ CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identi
 
 Sequence 완료는 Full Design Lock 완료, PR-F-022 우선순위 변경, FIN_01의 Vertical Slice 편입 또는 Implementation Gate 개방을 의미하지 않는다.
 
-## Deferred Production Support
+## Approved Production Support
 
-`CHR_00 Player Turnaround`은 향후 3D 모델링을 위한 `PENDING` Production Support 산출물이다. 기존 프롬프트와 역사적 참조는 유지하되 현재 비주얼 방향 및 게임플레이 명세 진행을 차단하지 않는다.
+`references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`는
+Human Owner가 승인하고 ADR-0018로 등록한 `LOCKED PRODUCTION SUPPORT`다.
+CHR_00 Identity의 주 권위에 종속되며 정확한 다섯 뷰와 제작 가독성을
+보조한다. 현재 Production Visual Lock sequence와 승인된 Production
+Visual 수 `8`은 변경하지 않는다.
+
+이 등록은 3D 모델링, 리깅, texture, material, Unity asset, gameplay,
+Graybox 또는 구현 권한이 아니다.
 
 ## 승인 원칙
 

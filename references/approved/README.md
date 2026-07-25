@@ -14,3 +14,12 @@
 현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았다.
 
 FIN_01은 Visual-only conditional direction이며 PR-F-022 `COULD`와 Vertical Slice 미편입 상태를 유지한다.
+
+## Approved Production Support
+
+- `characters/CHR_00_Player_Turnaround_v001_FINAL.png` —
+  `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
+
+이 지원 이미지는 위 여덟 Production Visual의 수와 Lock sequence를
+변경하지 않는다. CHR_00 Identity의 주 권위에 종속되며 3D, Unity,
+Graybox 또는 구현 권한이 아니다.

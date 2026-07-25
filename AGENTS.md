@@ -36,24 +36,29 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED`
+- G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - G3 Technical Checklist: `6 / 6`
-- Design Freeze: `31 / 32`
+- Design Freeze: `32 / 32`
+- Design Freeze Completion:
+  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
   `OWNER-APPROVED / LOCKED`
 - CHR_00 Player Turnaround Brief:
-  `OWNER-APPROVED / READY`
-- CHR_00 Player Turnaround Image:
-  `NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`
+  `OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`
+- CHR_00 Player Turnaround Production Support:
+  `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
   `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
 - Production Visual Lock sequence: `COMPLETE`
-- Full Design Lock: `INCOMPLETE`
+- Primary Production Visual Count: `8`
+- Approved Production Support Count: `1`
+- Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
+- Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
@@ -276,18 +281,20 @@ Design Freeze baseline이다.
 `OCK-*` ID는 문서 참조 ID일 뿐 file, Prefab 또는 runtime identity가
 아니다. 실제 model, texture, material, layout, Breakable/Structural
 identity, Unity asset과 구현은 승인되지 않았고 actual asset creation은
-`NOT STARTED / NOT AUTHORIZED`다. G5는 계속 `NOT PASSED`다.
+`NOT STARTED / NOT AUTHORIZED`다. G5는 계속 `NOT PASSED / FINAL
+PRE-IMPLEMENTATION REVIEW REQUIRED`다.
 
 CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`에서
-`OWNER-APPROVED / READY`다. 유일한 Identity 권위는 승인된 CHR_00
-이미지, `PLAYER_VISUAL_SPEC.md`와 ADR-0007이며, 미래 후보 경로는
+`OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`다. 유일한 Identity
+권위는 승인된 CHR_00 이미지, `PLAYER_VISUAL_SPEC.md`와 ADR-0007이다.
+검토 소스
 `references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png`로
-예약되어 있다. 현재 후보는 `NOT CREATED`, 이미지 생성은
-`NOT AUTHORIZED`다. Brief 승인만으로 Turnaround checklist를 완료하거나
-후보를 `REVIEW`, `APPROVED`, `FINAL` 또는 `LOCKED`로 만들지 않는다.
-후속 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
+계약 `PASS`와 Human Owner `APPROVE`를 거쳤고 byte-identical 승인본
+`references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`가
+`LOCKED PRODUCTION SUPPORT`로 등록되었다. Turnaround checklist는
+`CHECKED`다. 이 등록은 주 Identity 권위, Production Visual 수와
+sequence를 변경하거나 3D·Unity·Graybox·구현 권한을 만들지 않는다.
 
 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`에
@@ -295,8 +302,9 @@ CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 세분화되었다. 이는 미래 Unity repository Bootstrap과 exact
 Package-lock materialization의 문서 계약일 뿐이다. concrete execution
 baseline SHA는 없고, Final Pre-Implementation Review, Design Freeze
-`32 / 32`, 별도 실행 승인과 Implementation Gate `OPEN` 전에는
-IMP-0001을 실행하지 않는다.
+`32 / 32`, 별도 실행 승인과 Implementation Gate `OPEN`이 모두
+필요하다. Design Freeze `32 / 32`만 충족된 현재에는 IMP-0001을
+실행하지 않는다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -341,18 +349,19 @@ BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었지만
 Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
-`6 / 6`, Design Freeze는 `31 / 32`다. 파괴 예산과 구현 규칙 및
+`6 / 6`, Design Freeze는 `32 / 32`다. 파괴 예산과 구현 규칙 및
 Office Core Kit asset-family/reuse policy는
 `OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
-Unity project는 생성되지 않았다. G4와 G5는 `NOT PASSED`이며 다음
-허가 경계는
-`OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND`다.
-첫 구현 티켓 세분화는 완료됐지만 실행은 차단되어 있다. 남은 Design
-Freeze 항목은 `CHR_00 Player Turnaround` 하나다.
-새 numbered task는 승인되지 않았다. Turnaround Image는
-`NOT CREATED / IMAGE GENERATION NOT AUTHORIZED`다. remaining Design Freeze와
-final pre-implementation review 전에는 Graybox 또는 Unity 구현을
-시작하지 않으며 Implementation Gate는 `CLOSED`다.
+Unity project는 생성되지 않았다. CHR_00 Player Turnaround는
+Owner 승인과 등록을 완료한 `LOCKED PRODUCTION SUPPORT`이며 주 Identity
+권위를 대체하지 않는다. Design Freeze는 `COMPLETE / FINAL
+PRE-IMPLEMENTATION REVIEW REQUIRED`다. G4는 `NOT PASSED / NOT STARTED /
+NOT AUTHORIZED`, G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW
+REQUIRED`, Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION
+REVIEW REQUIRED`다. 첫 구현 티켓 세분화는 완료됐지만 실행은 차단되어
+있다. 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이며
+그 검토와 명시적 Gate 개방 전에는 Graybox 또는 Unity 구현을 시작하지
+않는다. Implementation Gate는 `CLOSED`다.
 
 ---
 
@@ -368,6 +377,15 @@ final pre-implementation review 전에는 Graybox 또는 Unity 구현을
 - `references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png`
 - `references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png`
 - `references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png`
+
+별도 승인된 Production Support는 다음 한 개다.
+
+- `references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`
+
+CHR_00 Player Turnaround는 `LOCKED PRODUCTION SUPPORT`이며 위 여덟
+Production Visual의 수를 늘리지 않는다. CHR_00 Identity의 주 권위는
+`CHR_00_Player_Identity_Lock_v002_FINAL`, `PLAYER_VISUAL_SPEC.md`와
+`ADR-0007`이고, Turnaround는 제작 가독성을 보조하는 종속 자료다.
 
 관련 승인 문서:
 
@@ -521,6 +539,11 @@ FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이다. �
 
 이는 Full Design Lock 완료, FIN_01의 제품 범위 편입 또는 Implementation Gate 개방을 뜻하지 않는다.
 
+`CHR_00_Player_Turnaround_v001_FINAL.png`는 Owner-approved
+`LOCKED PRODUCTION SUPPORT`다. 이 등록은 Production Visual Lock
+sequence를 변경하거나 아홉 번째 Production Visual, 3D 모델링, 리깅,
+Unity asset, Graybox 또는 구현 권한을 만들지 않는다.
+
 각 결과물은 사용자에게 명시적으로 승인받기 전까지 `REVIEW` 상태다.
 
 Codex는 스스로 결과물을 `APPROVED`, `FINAL`, `LOCKED`로 선언하지 않는다.
@@ -572,6 +595,35 @@ Codex는 스스로 결과물을 `APPROVED`, `FINAL`, `LOCKED`로 선언하지 �
 탐색 이미지의 우연한 디테일은 게임 요구사항이 아니다.
 
 승인 이미지도 해당 Visual Lock 문서에 기록된 Canonical Element만 권한을 가진다.
+
+---
+
+# 5.1. Standing Owner Delegation
+
+Owner는 고정 GPT Pro 대화가 정확히 한 개의 자기완결적 bounded relay
+task 또는 그 completion에 명시적으로 `PASS`, `APPROVE` 또는
+`APPROVE WITH NON-BLOCKING NOTES`를 내린 경우, 이를 별도 반복 질문이
+필요 없는 Owner-delegated approval로 승인했다.
+
+`REVISION REQUIRED`와 `REJECT`는 승인이 아니다. 모호한 표현, 암시,
+침묵 또는 단순한 다음 단계 제안에서도 승인을 추론하지 않는다.
+
+각 relay cycle은 정확히 한 작업만 수행한다. 실행 지시는 concrete
+baseline SHA, 목표, 허용·금지 파일, 검증, 완료 형식과 commit/push
+권한을 모두 포함해야 한다. 누락·모순·범위 확대가 있으면 수정하지
+않고 정정 요청 또는 안전 중단한다.
+
+이 위임은 어떤 Gate도 우회하거나 자동 개방하지 않는다. G4, G5,
+Full Design Lock과 Implementation Gate는 실제 선행조건과 명시적
+판정 없이는 통과·완료·개방으로 추론하지 않는다. 코드, Unity,
+Graybox, `Game/**`, package, test, Scene, Prefab 또는 Build 실행은
+관련 Gate, concrete baseline, 정확한 범위와 명시적 실행 승인이 모두
+충족된 별도 bounded task가 아니면 금지한다.
+
+허용된 relay task에서도 브랜치 생성·전환, Pull Request, merge,
+rebase, force-push, 저장소 밖 변경과 삭제는 금지한다. 명시적으로
+허용된 경우에만 현재 `main`의 의도된 파일을 단일 commit으로 만들고
+`origin/main`에 일반 push한다.
 
 ---
 
@@ -678,13 +730,14 @@ Codex는 별도 정리 작업 없이 다음 행동을 하지 않는다.
 
 새로 생성된 시안의 기본 상태는 `REVIEW`다.
 
-사용자만 다음 판정을 내릴 수 있다.
+사용자 또는 위 `Standing Owner Delegation`의 유효한 승인 절차만 다음
+판정을 내릴 수 있다.
 
 - `APPROVE`
 - `REVISION REQUIRED`
 - `REJECT`
 
-사용자가 명시적으로 `APPROVE`하기 전에는:
+사용자의 직접 `APPROVE` 또는 유효한 Owner-delegated approval 전에는:
 
 - FINAL 파일명 사용 금지
 - LOCK 문서 등록 금지

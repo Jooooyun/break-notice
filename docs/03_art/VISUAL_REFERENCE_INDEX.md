@@ -3,9 +3,10 @@
 ## Canon Hierarchy
 
 1. 승인된 CHR_00 Player Identity, GEAR_01 Cargo Strapping System, CHR_01 First Ally Identity, PGT_01 Gameplay Camera, PGT_02 Chair Redirect Core Loop, PGT_03 Chain Reaction Aftermath, LGT_01 Night Archive Lighting, FIN_01 Conference Table Team Finisher 이미지
-2. Primary exploration references
-3. Secondary scenario references
-4. Non-canonical exploration
+2. CHR_00 주 Identity 권위에 종속된 승인 Turnaround Production Support
+3. Primary exploration references
+4. Secondary scenario references
+5. Non-canonical exploration
 
 ## Approved
 
@@ -44,9 +45,17 @@ FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이다. �
 
 현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았으며 Full Design Lock과 Implementation Gate 상태는 별도 승인 대상이다.
 
-## Deferred Production Support
+## Approved Production Support
 
-`CHR_00 Player Turnaround`은 향후 3D 모델링을 위한 `PENDING` Production Support 산출물이며 현재 Production Visual Lock 순서의 차단 항목이 아니다. 기존 프롬프트와 역사적 참조는 유지한다.
+| ID | 파일 | 상태 | 역할 |
+|---|---|---|---|
+| CHR-00-TURN-v001 | `references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png` | OWNER-APPROVED / LOCKED PRODUCTION SUPPORT | 정확한 다섯 뷰와 후면·측면 제작 가독성 지원 |
+
+이 한 개의 Production Support는 승인된 Production Visual 여덟 개의
+수를 늘리거나 Lock sequence를 변경하지 않는다. CHR_00 Identity의 주
+권위는 CHR-00-v002, `PLAYER_VISUAL_SPEC.md`와 ADR-0007이며 Turnaround는
+그 권위에 종속된다. 3D 모델, rig, texture, material, gameplay,
+Unity asset, Graybox 또는 구현 권한은 없다.
 
 ## User-Selected Primary/Secondary References
 

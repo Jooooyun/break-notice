@@ -50,8 +50,8 @@
   "g2_prototype_object_definition_count": 4,
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
-  "design_freeze_checklist_progress": "31/32",
-  "design_freeze_completion_status": "IN PROGRESS / 31/32",
+  "design_freeze_checklist_progress": "32/32",
+  "design_freeze_completion_status": "COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
   "g3_gate_status": "PASSED",
   "g3_entry_status": "PASSED / OWNER-APPROVED BASELINE",
   "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
@@ -128,14 +128,24 @@
   "office_core_kit_prototype_fixed_or_decorative_family_count": 12,
   "office_core_kit_later_slice_candidate_family_count": 8,
   "office_core_kit_actual_asset_creation_status": "NOT STARTED / NOT AUTHORIZED",
-  "player_turnaround_brief_status": "OWNER-APPROVED / READY",
+  "player_turnaround_brief_status": "OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND",
   "player_turnaround_brief_path": "docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md",
-  "player_turnaround_future_candidate_path": "references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png",
-  "player_turnaround_future_candidate_status": "NOT CREATED",
-  "player_turnaround_image_generation_status": "NOT AUTHORIZED / EXPLICIT OWNER REQUEST REQUIRED",
+  "player_turnaround_review_source_path": "references/exploration/CHR_00_Player_Turnaround_v001_REVIEW.png",
+  "player_turnaround_review_source_sha256": "8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214",
+  "player_turnaround_review_result": "PASS — REVIEW CONTRACT SATISFIED",
+  "player_turnaround_owner_disposition": "APPROVE",
+  "player_turnaround_approved_status": "OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT",
+  "player_turnaround_approved_path": "references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png",
+  "player_turnaround_approved_sha256": "8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214",
+  "player_turnaround_dimensions": "1774x887",
+  "player_turnaround_bytes": 2096375,
+  "player_turnaround_approved_adr": "docs/09_adrs/ADR-0018-CHR-00-PLAYER-TURNAROUND-APPROVAL.md",
   "player_turnaround_main_view_count": 5,
   "player_turnaround_authorized_detail_callout_cap": 3,
-  "player_turnaround_checklist_status": "UNCHECKED",
+  "player_turnaround_checklist_status": "CHECKED",
+  "approved_primary_production_visual_count": 8,
+  "approved_production_support_count": 1,
+  "owner_gpt_pro_relay_delegation_status": "ACTIVE / OWNER-DELEGATED / NO GATE BYPASS",
   "first_implementation_ticket_id": "IMP-0001",
   "first_implementation_ticket_title": "Unity Repository Bootstrap and Exact Package-Lock Materialization",
   "first_implementation_ticket_status": "OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED",
@@ -145,9 +155,9 @@
   "first_implementation_ticket_implementation_gate_requirement": "MUST BE EXPLICITLY OPEN",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "g4_gate_status": "NOT PASSED",
-  "g5_gate_status": "NOT PASSED",
-  "design_freeze_current_next_task": "OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND",
-  "current_next_task": "OWNER EXPLICIT IMAGE-GENERATION REQUEST REQUIRED — CHR_00 PLAYER TURNAROUND",
+  "g5_gate_status": "NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
+  "design_freeze_current_next_task": "FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
+  "current_next_task": "FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -189,7 +199,8 @@
   ],
   "production_visual_lock_sequence_status": "COMPLETE",
   "next_production_visual_target": null,
-  "full_design_lock": "INCOMPLETE",
+  "full_design_lock": "INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
+  "full_design_lock_status": "INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED",
   "production_visual_lock_sequence": [
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
@@ -199,8 +210,13 @@
     "LGT_01 — Night Archive Lighting",
     "FIN_01 — Conference Table Team Finisher"
   ],
-  "deferred_production_support": [
-    "CHR_00 Player Turnaround"
+  "approved_production_support": [
+    {
+      "id": "CHR_00 Player Turnaround v001",
+      "status": "OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT",
+      "path": "references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png",
+      "identity_authority": "SUBORDINATE TO CHR_00 IDENTITY LOCK"
+    }
   ],
   "approved_high_level_constraints": [
     "3D TPS",
@@ -245,13 +261,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 34434,
-      "sha256": "9baa6eec04799cfb46754dc0bf6423b1116b63d9909cf5e45b3af29761dbdb6c"
+      "bytes": 37487,
+      "sha256": "be4d80d7ee348c30b9ede070ede53a8a10bdd529d75f438e13ecc57fcd177a3d"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 13748,
-      "sha256": "af8004b513f448318a288939f498471e4fb2bd3a02e9626c3d2322e0663e7784"
+      "bytes": 14533,
+      "sha256": "83e5360de2e69044f8812380ff3c0bf7b4fd89c0dcd8e6ed14f97f21e36465e0"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -390,8 +406,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 11083,
-      "sha256": "963513de44a24493f5d673451b884e38f50258bcef44e701629defdd38987a39"
+      "bytes": 11891,
+      "sha256": "9fc8560b871616ee013a6ae812a331e68c5bf72759885086f954ee139cf5d7db"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -400,13 +416,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 9673,
-      "sha256": "99f972c39ed2bc33da51b73fb72728f0141cd204e4a90dbceab0c11c2b626448"
+      "bytes": 10232,
+      "sha256": "9f271e091dedb967dfa1e4098d177a7b2aa52a95edd8fd819a625d93ee7fa573"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 13223,
-      "sha256": "9993a1cd9af7d7a1d2d4c8a11dc587c884740e9b5f8a2986e471c3a75702766c"
+      "bytes": 13928,
+      "sha256": "e146a2b7919888bcd786a7e6838938d1120bc5adeeee04193444b9c5bc7e4d12"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -560,13 +576,13 @@
     },
     {
       "path": "docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md",
-      "bytes": 9112,
-      "sha256": "57454759696ce770ef8e66a3f54c379dffc5a5d2df50d908a9cd39fac5955802"
+      "bytes": 9889,
+      "sha256": "18a99dbc99b46a0a98bc67b548e7ea47aa2ffc8822ec89f9f6a5890ba5cff3a7"
     },
     {
       "path": "docs/03_art/PLAYER_VISUAL_SPEC.md",
-      "bytes": 1849,
-      "sha256": "19ed178e32bb6f4772d08174027a53d739fbf86789d5034fb0dddf0e1369ae07"
+      "bytes": 2962,
+      "sha256": "a46db3b3ee57123ca041b11ccc24a61f74300ce4c12e0ed0b4a91bc294cc28ec"
     },
     {
       "path": "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
@@ -575,8 +591,8 @@
     },
     {
       "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
-      "bytes": 2808,
-      "sha256": "cc07077e6b853f239bef07469ed7ea16c3d610541de4b09cf09e0de07cde9069"
+      "bytes": 3050,
+      "sha256": "14080c0df63feafd93f235286021f6b1827b95cef970524f3d54904c93152105"
     },
     {
       "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
@@ -585,8 +601,8 @@
     },
     {
       "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
-      "bytes": 5515,
-      "sha256": "e68c512bdfc0c04a1e72f683dd774c612c23f9cf971b185aff270741d6bd0050"
+      "bytes": 5992,
+      "sha256": "50b8a70b8fef622dbbc819b4cb8c82376c59b76d7703caf674b3cbd63cd3b75a"
     },
     {
       "path": "docs/04_technical/DATA_AND_EVENTS.md",
@@ -635,13 +651,13 @@
     },
     {
       "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 7114,
-      "sha256": "d3044f2b4191fa6e5250cd70dcf344cee5084f2f3ef877c6d1329332b925ee9c"
+      "bytes": 7360,
+      "sha256": "215b3817002ef819590e760feda2d1658a19d03eb24f53b93858812da0371ff0"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 5608,
-      "sha256": "8a253e574c7ef8c1d883d3ae6793aeaa41a4c3bd9cdb7ed4c957f9ec927c9e5e"
+      "bytes": 5990,
+      "sha256": "1a7be691efcf5bde75abc18aa67f1f8b5967af84b773c5f59c391d5a53adff7d"
     },
     {
       "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
@@ -670,8 +686,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 4806,
-      "sha256": "7fd49608e0b91458053dcb91f856d42d09dbfcd7f45eedc58dea335fafab083d"
+      "bytes": 5309,
+      "sha256": "762bc71016607ac0e8a253e1471cc23402479a156134b7da0f1fc0243121af4e"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -685,8 +701,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 6129,
-      "sha256": "bf12c81703b1888eb033f601203505bed514df0e5258f83e25322856f35bcbb1"
+      "bytes": 6740,
+      "sha256": "e7c91fae640283990681685948b9ff24c435117a1844db052352a7bab6543336"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -844,6 +860,11 @@
       "sha256": "aa6663323ee913dd15ee9f1752ea9e03b8c14a31ac9d6cde7904babc6a1a1839"
     },
     {
+      "path": "docs/09_adrs/ADR-0018-CHR-00-PLAYER-TURNAROUND-APPROVAL.md",
+      "bytes": 4641,
+      "sha256": "cf31d48e4bf1b40c06ff5fc19894e352b999aedce75e96347e746d0ed672221a"
+    },
+    {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
       "bytes": 35663,
       "sha256": "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
@@ -865,13 +886,18 @@
     },
     {
       "path": "references/approved/README.md",
-      "bytes": 745,
-      "sha256": "f633a70c7f3a026c944077915162b36ef4edbe21fb41421bad3597186c357a1a"
+      "bytes": 1102,
+      "sha256": "a175287a711df09e3d744ad0cf892295b0b129a0f52f375c3e50b8c2171c4f02"
     },
     {
       "path": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
       "bytes": 2949592,
       "sha256": "0004044cde346ec3eb9b379230cade2dda57e54725d61a606c1c8d6014bbd6b9"
+    },
+    {
+      "path": "references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png",
+      "bytes": 2096375,
+      "sha256": "8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214"
     },
     {
       "path": "references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png",
