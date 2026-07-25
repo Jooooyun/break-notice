@@ -24,11 +24,14 @@
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+- G5 Freeze:
+  `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `32 / 32`
 - Design Freeze Completion:
-  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`
+- Final Pre-Implementation Review:
+  `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -44,10 +47,12 @@
 - Approved Production Support Count: `1`
 - Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
-- Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+- Full Design Lock:
+  `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
-- Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+- Current Next Task:
+  `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing`
 
 ## Phase 0 — Charter
 
@@ -101,13 +106,15 @@ interaction·variant·reuse와 Prototype destruction `0` 경계로
 Turnaround Production Brief의 binary review contract는 후보가
 `PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical 승인본과
 ADR-0018이 `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`로
-등록되었다. checklist는 `CHECKED`다. 다음 단일 작업은
-`FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이며 첫 구현 티켓은
+등록되었다. checklist는 `CHECKED`다. Final Pre-Implementation Review는
+`REVISION REQUIRED`로 완료되었고 IMP-0001 baseline binding과 pre-G4
+Full Design Lock·limited Gate 의미를 blocker로 기록했다. 다음 단일
+작업은 `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited
+Bootstrap Gate Sequencing`이며 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
-concrete execution baseline SHA가 없고 실행은 차단되어 있다. 새
-numbered task는 승인되지 않았다.
+concrete execution baseline SHA가 없고 실행은 차단되어 있다.
 G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
-FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이고 Graybox와 Unity 구현
+FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`이고 Graybox와 Unity 구현
 권한은 없다.
 
 ## Phase 4 — Graybox Validation
@@ -124,7 +131,7 @@ Gate G4: 5분 재미와 재플레이 행동 통과.
 
 ## Phase 5 — Design Freeze
 
-Status: `NOT PASSED / DESIGN FREEZE CHECKLIST COMPLETE 32 / 32 / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+Status: `NOT PASSED / DESIGN FREEZE CHECKLIST COMPLETE 32 / 32 / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 
 Graybox 결과를 반영해 문서 최종 동결.
 
@@ -138,6 +145,9 @@ ADR-0018이 등록된 뒤에만 해당 항목을 체크했다. 이 완료는 G5 
 Full Design Lock, Graybox, Unity 또는 구현 권한이 아니다.
 
 Gate G5: 본 제작 범위, 에셋 목록, 일정, 리스크 승인.
+
+Final Pre-Implementation Review는 G4를 통과시키거나 Phase 4에 진입하지
+않았다. G5도 통과하지 않았고 Implementation Gate는 계속 `CLOSED`다.
 
 ## Phase 6 — Vertical Slice Production
 

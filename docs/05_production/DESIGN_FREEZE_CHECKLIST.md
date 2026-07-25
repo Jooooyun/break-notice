@@ -70,15 +70,16 @@ exact `8` Later-Slice extension candidate, interaction·variant·reuse·
 Prototype zero-destruction boundary의 asset-family list가
 Owner-approved/LOCKED되었음을 뜻한다. 3D model, texture, material 또는
 Unity asset은 생성되지 않았고 G5는 `NOT PASSED / FINAL
-PRE-IMPLEMENTATION REVIEW REQUIRED`이며 Unity 또는 Graybox 권한이
+PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`이며 Unity 또는 Graybox 권한이
 없다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐고
 상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`다.
-concrete execution SHA와 Unity project는 없으며 Final
-Pre-Implementation Review는 시작되지 않았다. 체크되지 않은 항목은
-`0`개다. Design Freeze는 `32 / 32`와 `COMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design Lock은 `INCOMPLETE /
-FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+concrete execution SHA와 Unity project는 없다. Final
+Pre-Implementation Review는 `REVISION REQUIRED`로 완료되었고 체크되지
+않은 항목은 `0`개다. Design Freeze는 `32 / 32`와 `COMPLETE / FINAL
+PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`, Full Design
+Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION
+REQUIRED`다.
 
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`의 제작 구성과
 binary review contract는 `OWNER-APPROVED / CONSUMED BY APPROVED
@@ -111,15 +112,18 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 `COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었고 문서
 자체는 변경하지 않는다. 현재 Phase는
-`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이며 다음 단일 작업은
-`FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. Final
+Pre-Implementation Review 기록은
+`docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`이고 다음 단일
+작업은 `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited
+Bootstrap Gate Sequencing`이다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
 `6 / 6`, Design Freeze는 `32 / 32`, G4는 `NOT PASSED / NOT STARTED /
 NOT AUTHORIZED`, G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW
-REQUIRED`, Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION
-REVIEW REQUIRED`, Graybox는 `NOT STARTED`, Implementation Gate는
-`CLOSED`다. IMP-0001 실행은 계속 차단된다.
+REVISION REQUIRED`, Full Design Lock은 `INCOMPLETE / FINAL
+PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`, Graybox는 `NOT STARTED`,
+Implementation Gate는 `CLOSED`다. IMP-0001 실행은 계속 차단된다.
 
-모든 필수 항목이 체크되었더라도 Final Pre-Implementation Review,
-필요한 Gate passage와 명시적 Implementation Gate `OPEN` 전에는 본
-제작을 시작하지 않는다.
+모든 필수 항목이 체크되었더라도 Final Pre-Implementation Review
+blocker 교정, 필요한 Gate passage와 명시적 Implementation Gate `OPEN`
+전에는 본 제작을 시작하지 않는다.

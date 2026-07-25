@@ -48,11 +48,12 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE |
 | G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
-| G5 Freeze | NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
-| Current Next Task | FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
+| G5 Freeze | NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED |
+| Final Pre-Implementation Review | REVISION REQUIRED — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md` |
+| Current Next Task | TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing |
 | G3 Technical checklist | 6 / 6 |
 | Design Freeze | 32 / 32 |
-| Design Freeze Completion | COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
+| Design Freeze Completion | COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED |
 | Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
 | CHR_00 Player Turnaround Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND |
@@ -62,7 +63,7 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Production Visual Lock sequence | COMPLETE |
 | Primary Production Visual count | 8 |
 | Approved Production Support count | 1 |
-| Full Design Lock | INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED |
+| Full Design Lock | INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED |
 | Phase label review | COMPLETED / OWNER-APPROVED |
 | 게임 정체성 | LOCKED |
 | 3D TPS / Unity 6 / URP | LOCKED |
@@ -120,10 +121,14 @@ BLOCKED`다. concrete execution baseline SHA는 없으며 이는 Unity,
 Package, code 또는 Git 쓰기 권한이 아니다.
 
 Design Freeze는 `32 / 32`이고 `COMPLETE / FINAL PRE-IMPLEMENTATION
-REVIEW REQUIRED`다. 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW
-REQUIRED`다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
-`NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design
-Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+REVIEW COMPLETE — REVISION REQUIRED`다. Final Review는 Design Freeze
+증거를 확인했지만 IMP-0001 baseline binding과 pre-G4 Full Design
+Lock·limited Gate 의미를 blocker로 판정했다. 다음 단일 작업은
+`TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate
+Sequencing`이다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`,
+G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`,
+Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW
+REVISION REQUIRED`다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지

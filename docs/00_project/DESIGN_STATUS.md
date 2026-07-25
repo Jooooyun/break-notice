@@ -35,14 +35,18 @@ G3 Gate Passage Source:
 
 G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
 
-G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+G5 Freeze:
+`NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 
 G3 Technical Checklist: `6 / 6`
 
 Design Freeze: `32 / 32`
 
 Design Freeze Completion:
-`COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+`COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`
+
+Final Pre-Implementation Review:
+`REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
 
 Destruction Budget and Implementation Rules:
 `OWNER-APPROVED / LOCKED`
@@ -65,7 +69,8 @@ Primary Production Visual Count: `8`
 
 Approved Production Support Count: `1`
 
-Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+Full Design Lock:
+`INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 
 Graybox: `NOT STARTED`
 
@@ -73,7 +78,8 @@ Phase label review: `COMPLETED / OWNER-APPROVED`
 
 Implementation Gate: `CLOSED`
 
-Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+Current Next Task:
+`TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing`
 
 | 영역 | 상태 | 다음 산출물 | Gate |
 |---|---|---|---|
@@ -109,8 +115,9 @@ Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 | 파괴 예산과 구현 규칙 | OWNER-APPROVED / LOCKED | 현 Lock 유지 | DESIGN FREEZE |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED | 현 Lock 유지 | DESIGN FREEZE |
 | CHR_00 Player Turnaround Production Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND | 승인 계약 유지 | DESIGN FREEZE / CHECKED |
-| CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT | FINAL PRE-IMPLEMENTATION REVIEW REQUIRED | DESIGN FREEZE / CHECKED |
+| CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT | 현 Production Support 권위 유지 | DESIGN FREEZE / CHECKED |
 | First Implementation Ticket | IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED | Final Pre-Implementation Review와 OPEN Gate 전 실행 금지 | DESIGN FREEZE / CHECKED |
+| Final Pre-Implementation Review | REVISION REQUIRED — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md` | TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing | PRE-IMPLEMENTATION / IMPLEMENTATION GATE STILL CLOSED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
@@ -129,7 +136,7 @@ Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
 
 현재 Production Visual Lock sequence는 완료되었다. 다음 Production Visual 대상은 승인되지 않았다.
 
-FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이며 승인된 Vertical Slice 또는 최종 제품 범위에 포함되지 않는다. Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`이고 Implementation Gate는 `CLOSED`다.
+FIN_01은 PR-F-022 `COULD` 기능의 Visual-only conditional direction이며 승인된 Vertical Slice 또는 최종 제품 범위에 포함되지 않는다. Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`이고 Implementation Gate는 `CLOSED`다.
 
 `CHR_00 Player Turnaround`의 Production Brief와 binary review contract는
 `OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`다. 유일한 Identity
@@ -223,11 +230,15 @@ AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
 `9e1487e85be5a54ba0824c209deabcf738e1abf0`에서 Owner-approved G3
 passage의 근거로 소비되었고 Re-Audit 문서 자체는 변경하지 않는다.
 G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
-FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design Lock은
-`INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Graybox는
-`NOT STARTED`, Implementation Gate는 `CLOSED`다. 첫 구현 티켓은
+FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`, Full Design Lock은
+`INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`, Graybox는
+`NOT STARTED`, Implementation Gate는 `CLOSED`다. Final Review는
+`REVISION REQUIRED`로 완료되었고 IMP-0001 baseline binding과 limited
+Gate sequencing을 blocker로 기록했다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로
 세분화됐지만 concrete execution baseline SHA가 없고 실행은 승인되지
-않았다. 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+않았다. 다음 단일 작업은
+`TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate
+Sequencing`이다.
 남은 Design Freeze 항목은 `0`개다. Bootstrap, Graybox와 구현 권한은
 없고 IMP-0001 실행은 계속 차단된다.

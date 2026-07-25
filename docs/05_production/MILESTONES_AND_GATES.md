@@ -33,11 +33,14 @@
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+- G5 Freeze:
+  `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `32 / 32`
 - Design Freeze Completion:
-  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`
+- Final Pre-Implementation Review:
+  `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -51,12 +54,14 @@
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
-- Full Design Lock: `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+- Full Design Lock:
+  `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
 - Graybox: `NOT STARTED`
 - Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION` — Owner-approved transition
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Implementation Gate: `CLOSED`
-- Current Next Task: `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`
+- Current Next Task:
+  `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing`
 
 G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계, 여덟 G2
 계약과 교정된 authority/trace 기준선은 Owner-approved이며 G1과 G2
@@ -80,17 +85,20 @@ LGT_01은 Records Archive-local `COULD`, FIN_01은 `OUT / COULD`를
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
 concrete execution baseline SHA가 없고 실행은 차단되어 있다. Design
 Freeze는 `32 / 32`와 `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW
-REQUIRED`다. Turnaround Production Brief의 binary review contract를
+COMPLETE — REVISION REQUIRED`다. Turnaround Production Brief의 binary review contract를
 후보가 `PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical
 승인본과 ADR-0018이 `LOCKED PRODUCTION SUPPORT`로 등록되었다.
 Production Visual은 계속 여덟 개이고 Production Support는 한 개다.
-현재 다음 단일 작업은 `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`다.
-G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
-FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Graybox는 `NOT STARTED`이고
-구현 권한이 없다.
+Final Pre-Implementation Review는 `REVISION REQUIRED`로 완료되었고
+IMP-0001 baseline binding과 pre-G4 Full Design Lock·limited Gate
+sequencing을 blocker로 기록했다. 현재 다음 단일 작업은
+`TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate
+Sequencing`이다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`,
+G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`,
+Graybox는 `NOT STARTED`이고 구현 권한이 없다.
 승인된 여덟 Production Visual의
 Canon은 유지되지만 Full Design Lock은 `INCOMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW REQUIRED`다. FIN_01은 PR-F-022
+PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`다. FIN_01은 PR-F-022
 `OUT / COULD`이며 승인된 Vertical Slice와 최종 제품 범위 밖이다.
 정확한 조명·피니셔 기능, destruction hard cap을 제외한 tuning,
 implementation class와 pass threshold는 Draft 또는 미승인 상태이며
