@@ -50,8 +50,9 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
 | G5 Production Freeze | NOT PASSED / REQUIRES G4 EVIDENCE |
 | Final Pre-Implementation Review | REVISION REQUIRED — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md` |
-| Final Review Remediation | TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED |
-| Current Next Task | TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections |
+| Final Review Remediation | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT |
+| Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md` |
+| Current Next Task | TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance |
 | G3 Technical checklist | 6 / 6 |
 | Design Freeze | 32 / 32 |
 | Design Freeze Completion | COMPLETE / DOCUMENTARY PREREQUISITE ONLY |
@@ -61,12 +62,12 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
 | CHR_00 Player Turnaround Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND |
 | CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT |
-| First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED |
+| First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT PASSED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Primary Production Visual count | 8 |
 | Approved Production Support count | 1 |
-| Full Design Lock | INCOMPLETE / RE-AUDIT REQUIRED |
+| Full Design Lock | INCOMPLETE / READY FOR OWNER DECISION |
 | Phase label review | COMPLETED / OWNER-APPROVED |
 | 게임 정체성 | LOCKED |
 | 3D TPS / Unity 6 / URP | LOCKED |
@@ -83,7 +84,7 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | Graybox 재미 검증 | NOT STARTED |
 | Implementation Gate | CLOSED |
 | Unity project | NOT CREATED / PLACEHOLDERS ONLY |
-| 본 제작 | BLOCKED BY REMAINING DESIGN FREEZE + G4/G5 + FINAL PRE-IMPLEMENTATION REVIEW |
+| 본 제작 | BLOCKED BY PRE-G4 FULL DESIGN LOCK + LIMITED GATE/RELAY + G4/G5 |
 
 G3 기술 책임과 exact documentation lock은 성공한 Re-Audit과 Owner
 승인에 따라 `OWNER-APPROVED / PASSED`로 승격되었다. 역사적 Final
@@ -125,12 +126,14 @@ Package, code 또는 Git 쓰기 권한이 아니다.
 
 Design Freeze는 `32 / 32 / COMPLETE`인 documentary prerequisite이며
 그 자체로 Full Design Lock 또는 Gate passage가 아니다. 역사적 Final
-Review는 `REVISION REQUIRED`를 유지하고 TASK-0061 correction은
-적용됐지만 Re-Audit이 필요하다. Pre-G4 Full Design Lock과
-IMP-0001-only limited Gate semantics는 `OWNER-APPROVED / DEFINED`이고
-Lock 자체는 `INCOMPLETE / RE-AUDIT REQUIRED`, Gate는 `CLOSED`다.
-다음 단일 작업은 `TASK-0062 — Re-Audit Final Pre-Implementation
-Readiness after Gate and Baseline Corrections`다. G4는 `NOT PASSED /
+Review는 `REVISION REQUIRED`를 유지한다. TASK-0061 correction은
+TASK-0062 Re-Audit에서 `48 / 48 PASS`와
+`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
+검증됐다. Pre-G4 Full Design Lock과 IMP-0001-only limited Gate
+semantics는 `OWNER-APPROVED / DEFINED`이고 Lock 자체는
+`INCOMPLETE / READY FOR OWNER DECISION`, Gate는 `CLOSED`다. 다음 단일
+작업은 `TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize
+IMP-0001 Execution Relay Issuance`다. G4는 `NOT PASSED /
 NOT STARTED / NOT AUTHORIZED`, G5 Production Freeze는
 `NOT PASSED / REQUIRES G4 EVIDENCE`다.
 

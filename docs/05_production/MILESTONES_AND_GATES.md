@@ -42,7 +42,10 @@
 - Final Pre-Implementation Review:
   `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
 - Final Pre-Implementation Review Remediation:
-  `TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
+  `TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+- Final Pre-Implementation Re-Audit:
+  `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY /
+  docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md`
 - Pre-G4 Full Design Lock Semantics:
   `OWNER-APPROVED / DEFINED`
 - Limited Implementation Gate Semantics:
@@ -56,18 +59,19 @@
 - CHR_00 Player Turnaround Production Support:
   `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
-  `IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED`
+  `IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT PASSED`
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
 - Full Design Lock:
-  `INCOMPLETE / MEANING DEFINED / RE-AUDIT REQUIRED`
+  `INCOMPLETE / READY FOR OWNER DECISION`
 - Graybox: `NOT STARTED`
 - Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION` — Owner-approved transition
 - Phase label review: `COMPLETED / OWNER-APPROVED`
-- Implementation Gate: `CLOSED / IMP-0001-ONLY STATE DEFINED`
+- Implementation Gate:
+  `CLOSED / READY FOR OWNER DECISION — IMP-0001 ONLY`
 - Current Next Task:
-  `TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections`
+  `TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance`
 
 G1의 정확한 요구사항·NFR·행동 검증 의도와 범위 경계, 여덟 G2
 계약과 교정된 authority/trace 기준선은 Owner-approved이며 G1과 G2
@@ -96,14 +100,16 @@ Turnaround Production Brief의 binary review contract를
 승인본과 ADR-0018이 `LOCKED PRODUCTION SUPPORT`로 등록되었다.
 Production Visual은 계속 여덟 개이고 Production Support는 한 개다.
 Final Pre-Implementation Review는 역사적으로 `REVISION REQUIRED`이고
-TASK-0061 correction은 적용됐지만 Re-Audit이 필요하다. 현재 다음 단일
-작업은 `TASK-0062 — Re-Audit Final Pre-Implementation Readiness after
-Gate and Baseline Corrections`다. G4는 `NOT PASSED / NOT STARTED / NOT
+TASK-0061 correction은 TASK-0062 Re-Audit에서 `48 / 48 PASS`와
+`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
+검증됐다. 현재 다음 단일 작업은 `TASK-0063 — Finalize Pre-G4 Full
+Design Lock and Authorize IMP-0001 Execution Relay Issuance`다. G4는
+`NOT PASSED / NOT STARTED / NOT
 AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`, Graybox는
 `NOT STARTED`이고 구현 권한이 없다.
 승인된 여덟 Production Visual의
-Canon은 유지되지만 Full Design Lock은 `INCOMPLETE / RE-AUDIT
-REQUIRED`다. FIN_01은 PR-F-022
+Canon은 유지되지만 Full Design Lock은 `INCOMPLETE / READY FOR OWNER
+DECISION`이다. FIN_01은 PR-F-022
 `OUT / COULD`이며 승인된 Vertical Slice와 최종 제품 범위 밖이다.
 정확한 조명·피니셔 기능, destruction hard cap을 제외한 tuning,
 implementation class와 pass threshold는 Draft 또는 미승인 상태이며
@@ -114,10 +120,10 @@ Implementation Gate는 `CLOSED`다.
 | Authority concept | Exact meaning | Current status |
 |---|---|---|
 | Design Freeze Checklist `32 / 32` | documentary evidence prerequisite only | COMPLETE |
-| Pre-G4 Full Design Lock | frozen documentation baseline after successful Re-Audit; no G4/G5/performance claim | INCOMPLETE / RE-AUDIT REQUIRED |
+| Pre-G4 Full Design Lock | frozen documentation baseline after successful Re-Audit; no G4/G5/performance claim | INCOMPLETE / READY FOR OWNER DECISION |
 | G4 Graybox | separately authorized physical gameplay validation after infrastructure preparation | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
 | G5 Production Freeze | post-G4 production scope, asset, schedule and risk approval | NOT PASSED / REQUIRES G4 EVIDENCE |
-| Limited Implementation Gate | ticket-, baseline- and scope-specific one-shot authority for IMP-0001 empty Bootstrap only | CLOSED / IMP-0001-ONLY STATE DEFINED |
+| Limited Implementation Gate | ticket-, baseline- and scope-specific one-shot authority for IMP-0001 empty Bootstrap only | CLOSED / READY FOR OWNER DECISION — IMP-0001 ONLY |
 
 정확한 순서는 Pre-G4 documentary baseline과 Full Design Lock,
 narrowly authorized infrastructure preparation, separately authorized

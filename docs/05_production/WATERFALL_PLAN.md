@@ -33,7 +33,10 @@
 - Final Pre-Implementation Review:
   `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
 - Final Pre-Implementation Review Remediation:
-  `TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
+  `TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
+- Final Pre-Implementation Re-Audit:
+  `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY /
+  docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md`
 - Pre-G4 Full Design Lock Semantics:
   `OWNER-APPROVED / DEFINED`
 - Limited Implementation Gate Semantics:
@@ -47,18 +50,18 @@
 - CHR_00 Player Turnaround Production Support:
   `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
-  `IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED`
+  `IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT PASSED`
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
 - Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Full Design Lock:
-  `INCOMPLETE / RE-AUDIT REQUIRED`
+  `INCOMPLETE / READY FOR OWNER DECISION`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Current Next Task:
-  `TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections`
+  `TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance`
 
 ## Phase 0 — Charter
 
@@ -114,9 +117,10 @@ Turnaround Production Brief의 binary review contract는 후보가
 ADR-0018이 `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`로
 등록되었다. checklist는 `CHECKED`다. Final Pre-Implementation Review는
 역사적으로 `REVISION REQUIRED`이고 TASK-0061 correction은
-적용됐지만 Re-Audit이 필요하다. 다음 단일 작업은 `TASK-0062 —
-Re-Audit Final Pre-Implementation Readiness after Gate and Baseline
-Corrections`이며 첫 구현 티켓은
+TASK-0062 Re-Audit에서 `48 / 48 PASS`와
+`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
+검증됐다. 다음 단일 작업은 `TASK-0063 — Finalize Pre-G4 Full Design
+Lock and Authorize IMP-0001 Execution Relay Issuance`이며 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
 concrete execution baseline SHA가 없고 실행은 차단되어 있다.
 G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
@@ -131,7 +135,7 @@ G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
    prerequisite다.
 2. Pre-G4 Full Design Lock은 성공한 Re-Audit 뒤 별도 Owner task가
    최종화할 frozen documentation baseline이다. 현재
-   `INCOMPLETE / RE-AUDIT REQUIRED`다.
+   `INCOMPLETE / READY FOR OWNER DECISION`이다.
 3. G5 Production Freeze는 G4 evidence를 반영하는 post-G4 scope,
    asset, schedule과 risk approval다.
 
