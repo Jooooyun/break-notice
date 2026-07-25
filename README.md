@@ -48,22 +48,25 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 | G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE |
 | G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
 | G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
-| G5 Freeze | NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED |
+| G5 Production Freeze | NOT PASSED / REQUIRES G4 EVIDENCE |
 | Final Pre-Implementation Review | REVISION REQUIRED — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md` |
-| Current Next Task | TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing |
+| Final Review Remediation | TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED |
+| Current Next Task | TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections |
 | G3 Technical checklist | 6 / 6 |
 | Design Freeze | 32 / 32 |
-| Design Freeze Completion | COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED |
+| Design Freeze Completion | COMPLETE / DOCUMENTARY PREREQUISITE ONLY |
+| Pre-G4 Full Design Lock Semantics | OWNER-APPROVED / DEFINED |
+| Limited Implementation Gate Semantics | OWNER-APPROVED / DEFINED |
 | Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
 | CHR_00 Player Turnaround Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND |
 | CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT |
-| First Implementation Ticket | IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED |
+| First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED |
 | Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
 | Production Visual Lock sequence | COMPLETE |
 | Primary Production Visual count | 8 |
 | Approved Production Support count | 1 |
-| Full Design Lock | INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED |
+| Full Design Lock | INCOMPLETE / RE-AUDIT REQUIRED |
 | Phase label review | COMPLETED / OWNER-APPROVED |
 | 게임 정체성 | LOCKED |
 | 3D TPS / Unity 6 / URP | LOCKED |
@@ -120,15 +123,26 @@ CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 BLOCKED`다. concrete execution baseline SHA는 없으며 이는 Unity,
 Package, code 또는 Git 쓰기 권한이 아니다.
 
-Design Freeze는 `32 / 32`이고 `COMPLETE / FINAL PRE-IMPLEMENTATION
-REVIEW COMPLETE — REVISION REQUIRED`다. Final Review는 Design Freeze
-증거를 확인했지만 IMP-0001 baseline binding과 pre-G4 Full Design
-Lock·limited Gate 의미를 blocker로 판정했다. 다음 단일 작업은
-`TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate
-Sequencing`이다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`,
-G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`,
-Full Design Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW
-REVISION REQUIRED`다.
+Design Freeze는 `32 / 32 / COMPLETE`인 documentary prerequisite이며
+그 자체로 Full Design Lock 또는 Gate passage가 아니다. 역사적 Final
+Review는 `REVISION REQUIRED`를 유지하고 TASK-0061 correction은
+적용됐지만 Re-Audit이 필요하다. Pre-G4 Full Design Lock과
+IMP-0001-only limited Gate semantics는 `OWNER-APPROVED / DEFINED`이고
+Lock 자체는 `INCOMPLETE / RE-AUDIT REQUIRED`, Gate는 `CLOSED`다.
+다음 단일 작업은 `TASK-0062 — Re-Audit Final Pre-Implementation
+Readiness after Gate and Baseline Corrections`다. G4는 `NOT PASSED /
+NOT STARTED / NOT AUTHORIZED`, G5 Production Freeze는
+`NOT PASSED / REQUIRES G4 EVIDENCE`다.
+
+권위 순서는 Pre-G4 documentary baseline과 Full Design Lock,
+narrowly authorized infrastructure preparation, 별도 G4 Graybox,
+G4 evidence/decision, G5 Production Freeze, later Vertical Slice
+production이다. 미래의
+`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 one-shot empty Bootstrap만
+허용하며 G4를 시작하거나 G4/G5를 통과시키지 않는다. IMP-0001의
+concrete execution SHA는 티켓이 아니라 별도 Owner-approved Execution
+Authorization Relay만 공급할 수 있다. 현재 Relay와 concrete SHA는
+없다.
 AI Navigation은 Prototype에서 Deferred이고 optional/later system은
 first wave 밖이다. 현재
 Unity project, package file, code, Scene, Prefab 또는 test는 생성되지

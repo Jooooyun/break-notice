@@ -69,17 +69,18 @@ Office Core Kit checkbox는 exact `16` Prototype-required family와
 exact `8` Later-Slice extension candidate, interaction·variant·reuse·
 Prototype zero-destruction boundary의 asset-family list가
 Owner-approved/LOCKED되었음을 뜻한다. 3D model, texture, material 또는
-Unity asset은 생성되지 않았고 G5는 `NOT PASSED / FINAL
-PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`이며 Unity 또는 Graybox 권한이
+Unity asset은 생성되지 않았고 G5는
+`NOT PASSED / REQUIRES G4 EVIDENCE`이며 Unity 또는 Graybox 권한이
 없다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐고
-상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`다.
-concrete execution SHA와 Unity project는 없다. Final
-Pre-Implementation Review는 `REVISION REQUIRED`로 완료되었고 체크되지
-않은 항목은 `0`개다. Design Freeze는 `32 / 32`와 `COMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`, Full Design
-Lock은 `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION
-REQUIRED`다.
+상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED /
+AUTHORITY CORRECTION APPLIED / RE-AUDIT REQUIRED`다. concrete execution
+SHA와 Unity project는 없다. Final Pre-Implementation Review는
+역사적으로 `REVISION REQUIRED`이고 TASK-0061 correction은 적용됐지만
+Re-Audit이 필요하다. 체크되지 않은 항목은 `0`개다. Design Freeze
+`32 / 32`는 documentary evidence prerequisite이며 Full Design Lock,
+G4, G5 또는 구현을 승인하지 않는다. Full Design Lock은
+`INCOMPLETE / RE-AUDIT REQUIRED`다.
 
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`의 제작 구성과
 binary review contract는 `OWNER-APPROVED / CONSUMED BY APPROVED
@@ -114,16 +115,25 @@ Family alignment는 `OWNER-APPROVED / CORRECTED`다. G3 Final Audit은
 자체는 변경하지 않는다. 현재 Phase는
 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. Final
 Pre-Implementation Review 기록은
-`docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`이고 다음 단일
-작업은 `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited
-Bootstrap Gate Sequencing`이다.
+`docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`이고 correction
+상태는 `TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED`다. 다음
+단일 작업은 `TASK-0062 — Re-Audit Final Pre-Implementation Readiness
+after Gate and Baseline Corrections`다.
 G3 Technical은 `PASSED / OWNER-APPROVED BASELINE`, Technical Checklist는
 `6 / 6`, Design Freeze는 `32 / 32`, G4는 `NOT PASSED / NOT STARTED /
-NOT AUTHORIZED`, G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW
-REVISION REQUIRED`, Full Design Lock은 `INCOMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`, Graybox는 `NOT STARTED`,
+NOT AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`, Full Design
+Lock은 `INCOMPLETE / RE-AUDIT REQUIRED`, Graybox는 `NOT STARTED`,
 Implementation Gate는 `CLOSED`다. IMP-0001 실행은 계속 차단된다.
 
-모든 필수 항목이 체크되었더라도 Final Pre-Implementation Review
-blocker 교정, 필요한 Gate passage와 명시적 Implementation Gate `OPEN`
-전에는 본 제작을 시작하지 않는다.
+Pre-G4 Full Design Lock semantics와 limited Implementation Gate
+semantics는 `OWNER-APPROVED / DEFINED`다. 정확한 순서는 Pre-G4
+documentary baseline과 Full Design Lock, narrowly authorized
+infrastructure preparation, 별도 G4 Graybox, G4 evidence/decision, G5
+Production Freeze, later Vertical Slice production이다. future open
+state `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 one-shot empty
+Bootstrap만 허용하며 G4/G5 passage가 아니다. execution SHA는 티켓이
+아닌 별도 future Execution Authorization Relay만 공급한다.
+
+모든 필수 항목이 체크되었더라도 성공한 Re-Audit, 별도 Pre-G4 Full
+Design Lock 최종화, 정확한 제한 Gate 개방과 Execution Authorization
+Relay 전에는 Bootstrap 또는 본 제작을 시작하지 않는다.

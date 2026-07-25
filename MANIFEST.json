@@ -51,7 +51,7 @@
   "g2_prototype_object_instance_count": 7,
   "g2_gameplay_checklist_progress": "7/7",
   "design_freeze_checklist_progress": "32/32",
-  "design_freeze_completion_status": "COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED",
+  "design_freeze_completion_status": "COMPLETE / DOCUMENTARY PREREQUISITE ONLY",
   "g3_gate_status": "PASSED",
   "g3_entry_status": "PASSED / OWNER-APPROVED BASELINE",
   "g3_technical_preflight_status": "READY FOR OWNER G3 TECHNICAL DECISIONS",
@@ -148,12 +148,23 @@
   "owner_gpt_pro_relay_delegation_status": "ACTIVE / OWNER-DELEGATED / NO GATE BYPASS",
   "first_implementation_ticket_id": "IMP-0001",
   "first_implementation_ticket_title": "Unity Repository Bootstrap and Exact Package-Lock Materialization",
-  "first_implementation_ticket_status": "OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED",
+  "first_implementation_ticket_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / AUTHORITY CORRECTION APPLIED / RE-AUDIT REQUIRED",
   "first_implementation_ticket_path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-  "first_implementation_ticket_execution_baseline_status": "ABSENT / REVISION REQUIRED",
-  "first_implementation_ticket_execution_status": "NOT AUTHORIZED",
-  "first_implementation_ticket_implementation_gate_requirement": "MUST BE EXPLICITLY OPEN",
+  "first_implementation_ticket_execution_baseline_status": "ABSENT / FUTURE RELAY REQUIRED",
+  "first_implementation_ticket_execution_status": "EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED",
+  "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
+  "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
+  "pre_g4_full_design_lock_status": "INCOMPLETE / RE-AUDIT REQUIRED",
+  "g5_production_freeze_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
+  "limited_implementation_gate_semantics_status": "OWNER-APPROVED / DEFINED",
+  "limited_implementation_gate_allowed_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
+  "limited_implementation_gate_current_state": "CLOSED",
+  "limited_implementation_gate_one_shot": true,
+  "imp0001_execution_baseline_binding": "SEPARATE EXECUTION AUTHORIZATION RELAY / NON-SELF-REFERENTIAL",
+  "imp0001_execution_baseline_storage": "NOT STORED IN TICKET",
+  "imp0001_execution_baseline_status": "ABSENT / FUTURE RELAY REQUIRED",
+  "imp0001_review_readiness": "FINAL REVIEW REVISION REQUIRED / CORRECTION APPLIED / RE-AUDIT REQUIRED",
   "final_preimplementation_review_status": "REVISION REQUIRED",
   "final_preimplementation_review_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
   "final_preimplementation_review_baseline_sha": "a6398513bdc017529c600c8aa5bb5d7ea6e3e5cb",
@@ -163,11 +174,12 @@
   "final_preimplementation_review_gate_sequence_disposition": "BLOCKED / LIMITED IMP-0001 GATE SEMANTICS UNDEFINED",
   "final_preimplementation_review_imp0001_readiness": "BLOCKED / AUTHORITY AND BASELINE CORRECTION REQUIRED",
   "final_preimplementation_review_imp0001_baseline_binding": "INVALID / SELF-REFERENTIAL IN-TICKET SHA REQUIREMENT",
-  "final_preimplementation_review_next_task": "TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing",
+  "final_preimplementation_review_remediation_status": "TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED",
+  "final_preimplementation_review_next_task": "TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections",
   "g4_gate_status": "NOT PASSED",
-  "g5_gate_status": "NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED",
-  "design_freeze_current_next_task": "TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing",
-  "current_next_task": "TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing",
+  "g5_gate_status": "NOT PASSED",
+  "design_freeze_current_next_task": "TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections",
+  "current_next_task": "TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -209,8 +221,8 @@
   ],
   "production_visual_lock_sequence_status": "COMPLETE",
   "next_production_visual_target": null,
-  "full_design_lock": "INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED",
-  "full_design_lock_status": "INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED",
+  "full_design_lock": "INCOMPLETE / RE-AUDIT REQUIRED",
+  "full_design_lock_status": "INCOMPLETE / RE-AUDIT REQUIRED",
   "production_visual_lock_sequence": [
     "GEAR_01 — Cargo Strapping System",
     "CHR_01 — First Ally Identity",
@@ -271,13 +283,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 38121,
-      "sha256": "56fefb7f2e775a1f9a0765b3a2d1a81a250e5483b881cc9ce228cfb3a8829b8c"
+      "bytes": 40849,
+      "sha256": "fa8e1957cf67a5b9029b89dee2ff5e3612efcfbf62134eb0ba0ee359a4ebb542"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 15443,
-      "sha256": "3189680f86cb87487c9d336fc496fcacc6cb3f14e13378ea4a7b796f17149b69"
+      "bytes": 16409,
+      "sha256": "4d29acbb866f95265b92fb6bc6fe7892c150fdc4a35cc18dbbf3d2d5cd0fe2e3"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -416,8 +428,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 12338,
-      "sha256": "57ef3e1645dd36cdb5f2f2f85bacf69d81086cc5b570c67da0e3dfd59ad8aef0"
+      "bytes": 13107,
+      "sha256": "c90aa8f1f63af847ff6116b46d7ad8889ccdf35550b5f0afdd9d4e7fe17e4b01"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -426,13 +438,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 10232,
-      "sha256": "9f271e091dedb967dfa1e4098d177a7b2aa52a95edd8fd819a625d93ee7fa573"
+      "bytes": 10621,
+      "sha256": "e26b4efd1044bd2d48852a8b57329dc35dfc19f8b7f47a651b071b8897213647"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 14590,
-      "sha256": "d5a7d05f3e4aa40de3b145607dbe010052658ce0d2383b85d9b13d99401093ef"
+      "bytes": 16706,
+      "sha256": "e90a2c5d0936459a5159bf4be95fc4ac7361a5d8bc8f59f4abc8f99508610fc4"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -666,8 +678,8 @@
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 6229,
-      "sha256": "3cec69dff2f3a494c56f7aef3aa5f0a6a992987f8ab497842c1d3bc404c310f6"
+      "bytes": 6922,
+      "sha256": "d8913c3c2c8a2dcb43dfdfd3062b95034a2f9c53f6dc0359ff6bab99d4fbb546"
     },
     {
       "path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
@@ -701,8 +713,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 5781,
-      "sha256": "2e1bd9c943e4022ef94a0fea2b8ccfbf7661e2ba4b66e8e479d8214069927d39"
+      "bytes": 7795,
+      "sha256": "adb2966ab19d977975298bfd37d815b645da5638e2c9c457e4d93dfbd6f49ca8"
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
@@ -716,8 +728,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 7306,
-      "sha256": "946a93722509edb60ea555b8a89e6236d2ad8b881999466718413514cf2274ae"
+      "bytes": 8848,
+      "sha256": "88de50a9e069d12030a5ab867e0d3edab67da84ac5e60a2bf2d0bd17d4d8af82"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -736,8 +748,8 @@
     },
     {
       "path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-      "bytes": 12056,
-      "sha256": "6f3effe03960c1bb0a30e41f852d8b5936a90ede9e2d0d0b7ba01a1384a11a79"
+      "bytes": 15748,
+      "sha256": "1cfd52edd533e2a519e4afd72186c63e8794f9d07da14561d7d9c3819290b16b"
     },
     {
       "path": "docs/06_codex/PROMPT_LIBRARY.md",
@@ -878,6 +890,11 @@
       "path": "docs/09_adrs/ADR-0018-CHR-00-PLAYER-TURNAROUND-APPROVAL.md",
       "bytes": 4641,
       "sha256": "cf31d48e4bf1b40c06ff5fc19894e352b999aedce75e96347e746d0ed672221a"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0019-PRE-G4-FULL-DESIGN-LOCK-AND-LIMITED-BOOTSTRAP-GATE.md",
+      "bytes": 6855,
+      "sha256": "fee9dadc54e6746e9756c3b601f24c1a007306f5c2f4d959dad6c2f4e546e61b"
     },
     {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",

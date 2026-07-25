@@ -24,14 +24,20 @@
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze:
-  `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
+- G5 Production Freeze:
+  `NOT PASSED / REQUIRES G4 EVIDENCE`
 - G3 Technical checklist: `6 / 6`
 - Design Freeze: `32 / 32`
 - Design Freeze Completion:
-  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`
+  `COMPLETE / DOCUMENTARY PREREQUISITE ONLY`
 - Final Pre-Implementation Review:
   `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
+- Final Pre-Implementation Review Remediation:
+  `TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
+- Pre-G4 Full Design Lock Semantics:
+  `OWNER-APPROVED / DEFINED`
+- Limited Implementation Gate Semantics:
+  `OWNER-APPROVED / DEFINED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -41,18 +47,18 @@
 - CHR_00 Player Turnaround Production Support:
   `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
-  `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
+  `IMP-0001 / EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED`
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
 - Current Phase label: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Full Design Lock:
-  `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
+  `INCOMPLETE / RE-AUDIT REQUIRED`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Current Next Task:
-  `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing`
+  `TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections`
 
 ## Phase 0 — Charter
 
@@ -107,15 +113,45 @@ Turnaround Production Brief의 binary review contract는 후보가
 `PASS`했고 Human Owner가 `APPROVE`했으며 byte-identical 승인본과
 ADR-0018이 `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`로
 등록되었다. checklist는 `CHECKED`다. Final Pre-Implementation Review는
-`REVISION REQUIRED`로 완료되었고 IMP-0001 baseline binding과 pre-G4
-Full Design Lock·limited Gate 의미를 blocker로 기록했다. 다음 단일
-작업은 `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited
-Bootstrap Gate Sequencing`이며 첫 구현 티켓은
+역사적으로 `REVISION REQUIRED`이고 TASK-0061 correction은
+적용됐지만 Re-Audit이 필요하다. 다음 단일 작업은 `TASK-0062 —
+Re-Audit Final Pre-Implementation Readiness after Gate and Baseline
+Corrections`이며 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로 세분화됐지만
 concrete execution baseline SHA가 없고 실행은 차단되어 있다.
-G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
-FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`이고 Graybox와 Unity 구현
-권한은 없다.
+G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
+`NOT PASSED / REQUIRES G4 EVIDENCE`이고 Graybox와 Unity 구현 권한은
+없다.
+
+## Pre-G4 Authority Sequence
+
+세 Freeze 개념을 구분한다.
+
+1. Design Freeze Checklist `32 / 32`는 documentary evidence
+   prerequisite다.
+2. Pre-G4 Full Design Lock은 성공한 Re-Audit 뒤 별도 Owner task가
+   최종화할 frozen documentation baseline이다. 현재
+   `INCOMPLETE / RE-AUDIT REQUIRED`다.
+3. G5 Production Freeze는 G4 evidence를 반영하는 post-G4 scope,
+   asset, schedule과 risk approval다.
+
+정확한 순서는 Pre-G4 documentary baseline과 Full Design Lock,
+narrowly authorized infrastructure preparation, separately authorized
+G4 Graybox, G4 evidence/decision, G5 Production Freeze, later Vertical
+Slice production이다. Empty Bootstrap은 성공한 Re-Audit, 별도
+Pre-G4 Full Design Lock 최종화와 명시적인 limited Execution
+Authorization Relay 뒤에만 가능한 Phase-3-to-G4 infrastructure
+preparation이다. Phase 4에 진입하거나 G4를 시작·통과하지 않고 G5도
+통과하지 않는다.
+
+future limited Gate state
+`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 ticket-, baseline-,
+scope-specific one-shot이다. gameplay, C#, Test, Scene, Prefab,
+Graybox, 다른 ticket, G4/G5 passage 또는 상속 가능한 권한을 만들지
+않고 완료·stop·baseline drift·dirty pre-state·다른 scope·unauthorized
+Package·scope expansion·revocation에서 자동 만료한다. execution SHA는
+티켓이 아닌 별도 Owner-approved Execution Authorization Relay만
+공급한다. 현재 Gate는 `CLOSED`이고 Relay는 없다.
 
 ## Phase 4 — Graybox Validation
 
@@ -131,7 +167,7 @@ Gate G4: 5분 재미와 재플레이 행동 통과.
 
 ## Phase 5 — Design Freeze
 
-Status: `NOT PASSED / DESIGN FREEZE CHECKLIST COMPLETE 32 / 32 / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
+Status: `NOT PASSED / REQUIRES G4 EVIDENCE`
 
 Graybox 결과를 반영해 문서 최종 동결.
 

@@ -1,11 +1,11 @@
 # IMP-0001 — Unity Repository Bootstrap and Exact Package-Lock Materialization
 
-Status: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`
+Status: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / AUTHORITY CORRECTION APPLIED / RE-AUDIT REQUIRED`
 
 Review Readiness:
-`READY FOR FINAL REVIEW / FINAL PRE-IMPLEMENTATION REVIEW NOT STARTED`
+`FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED / TASK-0061 CORRECTION APPLIED / RE-AUDIT REQUIRED`
 
-`REQUIRED EXECUTION BASELINE SHA: TO BE PROVIDED BY THE FINAL PRE-IMPLEMENTATION REVIEW`
+`REQUIRED EXECUTION BASELINE SHA: SUPPLIED BY A SEPARATE OWNER-APPROVED EXECUTION AUTHORIZATION RELAY — NOT STORED IN THIS TICKET`
 
 ## Authority and Execution Boundary
 
@@ -14,10 +14,13 @@ Review Readiness:
 Graybox, Implementation Gate 개방 또는 Git 쓰기 권한을 부여하지
 않는다.
 
-현재 TASK-0058 기준선은 미래 구현 기준선이 아니다. 위
-`REQUIRED EXECUTION BASELINE SHA`에 구체 SHA가 없으면 IMP-0001은
-즉시 중지해야 한다. 구체 SHA가 제공된 뒤에도 local HEAD 또는
-`origin/main`이 해당 SHA와 다르면 중지해야 한다.
+이 티켓은 구체 execution SHA를 저장하거나 실행 직전에 수정하지
+않는다. 미래 실행 기준선은 별도의 Owner-approved Execution
+Authorization Relay가 이미 `origin/main`에 push된 완전한 40자
+immutable SHA로 공급해야 한다. 실행 직전 local HEAD와 `origin/main`이
+모두 그 SHA와 같고 ahead/behind가 `0 / 0`, tracked/staged 상태가
+clean이어야 한다. 기준선 drift가 발생하면 기존 Relay는 무효이며 새
+Relay가 필요하다.
 
 이 티켓의 단일 결과는 다음과 같다.
 
@@ -67,13 +70,66 @@ Graybox, Implementation Gate 개방 또는 Git 쓰기 권한을 부여하지
 2. Turnaround가 binary Review Contract를 통과했다.
 3. Owner가 Turnaround를 명시적으로 승인하고 등록했다.
 4. Design Freeze가 정확히 `32 / 32`다.
-5. Full Design Lock이 별도로 검토됐다.
-6. Design Authority가
-   `FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`를 발행했다.
-7. Final Review 결과가 IMP-0001 실행을 명시적으로 승인했다.
-8. Implementation Gate가 `CLOSED`에서 `OPEN`으로 명시적으로 변경됐다.
-9. 구체적인 미래 execution baseline SHA가 이 티켓에 삽입됐다.
-10. 정확한 Unity Editor가 설치됐고 독립적으로 검증됐다.
+5. `PRE-G4 FULL DESIGN LOCK`이 명시적으로
+   `OWNER-APPROVED / LOCKED`다.
+6. Final Pre-Implementation Re-Audit 결과가 정확히
+   `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`다.
+7. 별도의 Owner-approved Execution Authorization Relay가 IMP-0001을
+   명시적으로 승인한다.
+8. Relay가 Gate를 정확히
+   `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`으로 설정한다.
+9. Relay가 구체 immutable SHA를 공급하고 clean local
+   HEAD/`origin/main`/`main` 일치를 요구한다.
+10. Unity Editor `6000.3.20f1`이 설치됐고 독립적으로 검증됐다.
+
+## Execution Authorization Relay
+
+Execution Authorization Relay는 이 티켓과 별개의 bounded
+Owner-approved instruction이다. Relay는 다음을 모두 포함해야 한다.
+
+- ticket ID `IMP-0001`;
+- 이미 `origin/main`에 push된 완전한 40자 immutable commit SHA;
+- branch `main`;
+- local HEAD와 `origin/main`의 SHA 일치, ahead/behind `0 / 0`,
+  clean tracked/staged 상태;
+- Gate 상태 `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`;
+- 정확한 allowed/forbidden files;
+- 정확한 operations와 validations;
+- commit/push 권한;
+- one-shot 및 expiration 조건.
+
+`current main`, `latest main`, short SHA, 과거 task에서 상속한 SHA,
+권위 commit 전에 티켓에 삽입한 SHA, 또는 권위 commit이 push되기 전에
+공급된 SHA는 무효다. 기준선 선택을 위해 이 티켓을 수정하지 않는다.
+
+Relay는 TASK-0061 교정 commit이 push되고, Final Pre-Implementation
+Re-Audit 결과가 정확히
+`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`이고,
+별도 task가 Pre-G4 Full Design Lock을 최종화하고, 그 task가 실행
+Relay 발급을 명시적으로 승인한 뒤에만 발급할 수 있다.
+
+## Limited Implementation Gate Boundary
+
+미래 Gate 상태는 정확히 다음 둘 중 하나다.
+
+- `CLOSED`: 어떤 implementation ticket도 실행할 수 없다.
+- `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`: 이 티켓의 아래 empty
+  Bootstrap 범위만 한 번 실행할 수 있다.
+
+제한 Gate는 gameplay, C#, Test, Scene, Prefab, Graybox, 다른 ticket,
+G4/G5 passage 또는 상속 가능한 구현 권한을 만들지 않는다. 다음 중
+하나가 발생하면 자동 만료된다.
+
+- IMP-0001 완료 또는 stop condition;
+- local HEAD 또는 `origin/main` drift;
+- 작업 전 tracked/staged 변경;
+- 다른 ticket·scope 시도;
+- 승인되지 않은 Package;
+- 범위 확대;
+- 권위 철회.
+
+만료·소비된 Gate와 Relay는 재사용할 수 없으며 새 실행에는 새 Relay가
+필요하다.
 
 ## Exact Future Editor and Package Lock
 
@@ -142,8 +198,8 @@ Sample Scene과 Template Sample Content는 commit 결과에 남아서는 안 된
 
 별도 승인된 미래 실행자는 다음을 정확히 수행한다.
 
-1. Final Review가 제공한 baseline SHA와 clean repository state를
-   검증한다.
+1. Execution Authorization Relay가 제공한 baseline SHA, 정확한 제한
+   Gate 상태와 clean repository state를 검증한다.
 2. Unity Editor `6000.3.20f1`을 검증한다.
 3. 다른 Editor revision으로 대체하지 않고 중지한다.
 4. Unity project root를 `Game/`에 materialize한다.
@@ -167,7 +223,7 @@ Sample Scene과 Template Sample Content는 commit 결과에 남아서는 안 된
 ### Exact Editor
 
 ```gherkin
-Given the final-review baseline and an installed Unity Editor 6000.3.20f1
+Given the Execution Authorization Relay baseline and an installed Unity Editor 6000.3.20f1
 When the Game project is materialized
 Then Game/ProjectSettings/ProjectVersion.txt identifies 6000.3.20f1
 And no substitute Editor revision is used
@@ -220,12 +276,14 @@ And no missing direct Package is reported
 각 항목을 정확히 `PASS` 또는 `FAIL`로 보고한다. 하나라도 FAIL이면
 IMP-0001을 중지한다.
 
-- concrete execution baseline present
+- separate Execution Authorization Relay present
+- Relay ticket ID equals `IMP-0001`
+- concrete full-length immutable execution baseline present in the Relay
 - local HEAD equals required future SHA
 - `origin/main` equals required future SHA
 - branch is `main`
 - tracked 및 staged state clean
-- Implementation Gate is `OPEN`
+- Implementation Gate is exactly `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`
 - exact Editor verified
 - project root is `Game/`
 - ProjectVersion exists
@@ -269,23 +327,33 @@ IMP-0001을 중지한다.
 | Merge | `FORBIDDEN` |
 | Rebase | `FORBIDDEN` |
 | Force push | `FORBIDDEN` |
-| Commit | `ALLOWED ONLY AFTER FINAL REVIEW, OPEN GATE AND ALL VALIDATIONS` |
+| Commit | `ALLOWED ONLY AFTER PRE-G4 FULL DESIGN LOCK, SUCCESSFUL RE-AUDIT, VALID EXECUTION RELAY, EXACT LIMITED GATE AND ALL VALIDATIONS` |
 | Push | `ALLOWED ONLY AFTER THE SAME CONDITIONS` |
 
 Future commit message:
 
 `chore: materialize Unity project and exact package lock`
 
-TASK-0058은 위 Git 쓰기 권한을 활성화하지 않는다.
+TASK-0061은 위 Git 쓰기 권한을 활성화하지 않는다.
 
 ## Future Stop Conditions
 
 다음 조건 중 하나라도 발생하면 즉시 중지하고 임의로 우회하지 않는다.
 
-- final baseline SHA가 없다.
-- Implementation Gate가 `OPEN`이 아니다.
+- 별도의 Execution Authorization Relay가 없다.
+- Relay ticket ID가 `IMP-0001`과 다르다.
+- Relay에 완전한 40자 immutable baseline SHA가 없다.
+- Relay SHA가 이미 `origin/main`에 push된 commit이 아니다.
+- Implementation Gate가 정확히
+  `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`이 아니다.
+- Relay 또는 제한 Gate가 만료·소비·철회됐다.
+- local HEAD 또는 `origin/main`이 Relay SHA에서 drift했다.
+- 다른 ticket 또는 scope가 함께 요청됐다.
 - Turnaround가 승인·등록되지 않았다.
 - Design Freeze가 `32 / 32`가 아니다.
+- Pre-G4 Full Design Lock이 `OWNER-APPROVED / LOCKED`가 아니다.
+- Final Pre-Implementation Re-Audit 결과가 정확한 limited-Gate
+  readiness 판정이 아니다.
 - 정확한 Editor를 사용할 수 없다.
 - 다른 Editor version이 필요하다.
 - direct Package version이 승인 lock과 충돌한다.
@@ -302,7 +370,7 @@ TASK-0058은 위 Git 쓰기 권한을 활성화하지 않는다.
 완료 보고에는 정확히 다음 section을 사용한다.
 
 1. Task Summary
-2. Final-Review Authorization Verification
+2. Execution Authorization Relay Verification
 3. Execution Baseline Verification
 4. Exact Editor Verification
 5. Files Read
@@ -335,6 +403,10 @@ TASK-0058은 위 Git 쓰기 권한을 활성화하지 않는다.
 ## Current Boundary Confirmation
 
 IMP-0001 세분화는 완료됐지만 실행은 차단되어 있다. concrete execution
-SHA는 없고 Unity project도 없다. Final Pre-Implementation Review는
-시작되지 않았으며 G4와 G5는 `NOT PASSED`, Graybox는 `NOT STARTED`,
-Implementation Gate는 `CLOSED`다.
+SHA는 이 티켓에 없고 미래의 별도 Execution Authorization Relay만
+공급할 수 있다. Final Pre-Implementation Review는
+`REVISION REQUIRED`로 완료됐고 TASK-0061 authority correction은
+적용됐지만 Re-Audit이 필요하다. Pre-G4 Full Design Lock은
+`INCOMPLETE / RE-AUDIT REQUIRED`, G4는 `NOT PASSED / NOT STARTED /
+NOT AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`, Graybox는
+`NOT STARTED`, Implementation Gate는 `CLOSED`다. Unity project는 없다.

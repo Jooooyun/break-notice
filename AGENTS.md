@@ -36,14 +36,20 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 - G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze:
-  `NOT PASSED / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
+- G5 Production Freeze:
+  `NOT PASSED / REQUIRES G4 EVIDENCE`
 - G3 Technical Checklist: `6 / 6`
 - Design Freeze: `32 / 32`
 - Design Freeze Completion:
-  `COMPLETE / FINAL PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`
+  `COMPLETE / DOCUMENTARY PREREQUISITE ONLY`
 - Final Pre-Implementation Review:
   `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
+- Final Pre-Implementation Review Remediation:
+  `TASK-0061 CORRECTIONS APPLIED / RE-AUDIT REQUIRED`
+- Pre-G4 Full Design Lock Semantics:
+  `OWNER-APPROVED / DEFINED`
+- Limited Implementation Gate Semantics:
+  `OWNER-APPROVED / DEFINED`
 - Destruction Budget and Implementation Rules:
   `OWNER-APPROVED / LOCKED`
 - Office Core Kit:
@@ -53,17 +59,62 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - CHR_00 Player Turnaround Production Support:
   `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 - First Implementation Ticket:
-  `IMP-0001 / OWNER-APPROVED DECOMPOSITION / EXECUTION BLOCKED`
+  `IMP-0001 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / AUTHORITY CORRECTION APPLIED / RE-AUDIT REQUIRED`
 - Production Visual Lock sequence: `COMPLETE`
 - Primary Production Visual Count: `8`
 - Approved Production Support Count: `1`
 - Full Design Lock:
-  `INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`
+  `INCOMPLETE / RE-AUDIT REQUIRED`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Phase label review: `COMPLETED / OWNER-APPROVED`
 - Current Next Task:
-  `TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate Sequencing`
+  `TASK-0062 — Re-Audit Final Pre-Implementation Readiness after Gate and Baseline Corrections`
+
+## Pre-G4 Full Design Lock and Limited Implementation Gate
+
+세 가지 Freeze 개념은 서로 대체하지 않는다.
+
+1. Design Freeze Checklist `32 / 32`는 documentary evidence가
+   완비됐다는 prerequisite다. Full Design Lock, G4, G5 또는 구현
+   권한이 아니다.
+2. Pre-G4 Full Design Lock은 G1/G2/G3 passage, `32 / 32`, Visual
+   Canon·Production Support, 파괴·Office Core Kit Lock, 승인 IMP
+   decomposition과 성공한 Final Re-Audit을 고정하는
+   Owner-approved frozen documentation baseline이다. 별도 Owner task가
+   최종화하기 전까지 `INCOMPLETE / RE-AUDIT REQUIRED`다.
+3. G5 Production Freeze는 G4 evidence를 반영해 실제 제작 범위,
+   asset list, 일정과 risk를 승인하는 post-G4 Gate다. G4보다 먼저
+   통과할 수 없고 Pre-G4 Full Design Lock과 동일하지 않다.
+
+정확한 순서는 `Pre-G4 documentary baseline and Full Design Lock`
+→ `narrowly authorized infrastructure preparation`
+→ `separately authorized G4 Graybox`
+→ `G4 evidence and decision`
+→ `G5 Production Freeze`
+→ `later Vertical Slice production`이다. Empty Bootstrap은 G4를
+시작하지 않고 제한 Gate는 G4/G5를 통과시키지 않는다.
+
+Implementation Gate 상태는 다음 둘만 사용한다.
+
+- `CLOSED`: 어떤 implementation ticket도 실행할 수 없다.
+- `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`: ticket, baseline과 scope가
+  고정된 IMP-0001 empty Bootstrap 한 번만 허용한다.
+
+제한 Gate는 gameplay, C#, Test, Scene, Prefab, Graybox, 다른 ticket,
+G4/G5 passage 또는 상속 가능한 권한을 만들지 않는다. IMP-0001 완료,
+stop condition, HEAD/`origin/main` drift, 작업 전 tracked/staged 변경,
+다른 ticket/scope, unauthorized Package, scope expansion 또는 권위
+철회 시 자동 만료한다.
+
+IMP-0001 실행 SHA는 티켓에 저장하지 않는다. 별도 bounded
+Owner-approved Execution Authorization Relay가 정확한 ticket ID,
+이미 push된 완전한 immutable SHA, `main`, clean equality, 정확한
+limited Gate state, allowed/forbidden files, operations, validations,
+commit/push 권한과 one-shot expiration을 제공해야 한다. Relay는
+TASK-0061 push, 성공한 Re-Audit, 별도 Pre-G4 Full Design Lock
+최종화와 별도 발급 승인 뒤에만 유효하다. 현재 Relay와 concrete SHA는
+없다.
 
 G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
@@ -306,12 +357,13 @@ sequence를 변경하거나 3D·Unity·Graybox·구현 권한을 만들지 않�
 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`로
 세분화되었다. 이는 미래 Unity repository Bootstrap과 exact
 Package-lock materialization의 문서 계약일 뿐이다. concrete execution
-baseline SHA는 없고, 통과 가능한 Final Pre-Implementation Review,
-Design Freeze `32 / 32`, 별도 실행 승인과 Implementation Gate `OPEN`이
-모두 필요하다. Final Review 결과는 `REVISION REQUIRED`이며
-`docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`에 기록되어 있다.
-현재 blocker는 IMP-0001의 self-referential baseline binding과 pre-G4
-Full Design Lock·IMP-0001-only limited Gate 의미의 부재다.
+baseline SHA는 이 티켓에 저장하지 않는다. 별도 Owner-approved
+Execution Authorization Relay만 이미 push된 완전한 immutable SHA를
+공급할 수 있다. Final Review 결과는 `REVISION REQUIRED`이며
+`docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`에 역사 증거로
+보존한다. TASK-0061은 self-referential baseline binding과 pre-G4
+Full Design Lock·IMP-0001-only limited Gate 의미를 교정했지만
+Re-Audit, 별도 Lock 최종화, Gate 개방과 Relay 발급은 아직 없다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -361,17 +413,19 @@ Office Core Kit asset-family/reuse policy는
 `OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
 Unity project는 생성되지 않았다. CHR_00 Player Turnaround는
 Owner 승인과 등록을 완료한 `LOCKED PRODUCTION SUPPORT`이며 주 Identity
-권위를 대체하지 않는다. Design Freeze는 `COMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW COMPLETE — REVISION REQUIRED`다. Final Review
-결과는 `REVISION REQUIRED`이며 Full Design Lock readiness와 limited
-Implementation Gate readiness는 `BLOCKED`다. G4는 `NOT PASSED / NOT
-STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED / FINAL PRE-IMPLEMENTATION
-REVIEW REVISION REQUIRED`, Full Design Lock은 `INCOMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW REVISION REQUIRED`다. 첫 구현 티켓 세분화는
-완료됐지만 실행은 차단되어 있다. 다음 단일 작업은
-`TASK-0061 — Correct IMP-0001 Baseline Binding and Limited Bootstrap Gate
-Sequencing`이며 blocker 교정과 별도 명시적 Gate 개방 전에는 Graybox
-또는 Unity 구현을 시작하지 않는다. Implementation Gate는 `CLOSED`다.
+권위를 대체하지 않는다. Design Freeze는 `32 / 32 / COMPLETE`인
+documentary prerequisite이며 Full Design Lock이나 Gate passage가
+아니다. 역사적 Final Review 결과는 `REVISION REQUIRED`이고 TASK-0061
+교정은 적용됐지만 Re-Audit이 필요하다. Pre-G4 Full Design Lock과
+limited Gate semantics는 `OWNER-APPROVED / DEFINED`이고 Lock 자체는
+`INCOMPLETE / RE-AUDIT REQUIRED`다. G4는 `NOT PASSED / NOT STARTED /
+NOT AUTHORIZED`, G5는 `NOT PASSED / REQUIRES G4 EVIDENCE`다. 첫 구현
+티켓은 `EXECUTION BLOCKED / CORRECTION APPLIED / RE-AUDIT REQUIRED`다.
+다음 단일 작업은 `TASK-0062 — Re-Audit Final Pre-Implementation
+Readiness after Gate and Baseline Corrections`이며 별도 Lock 최종화,
+명시적 제한 Gate 개방과 Execution Authorization Relay 전에는
+Graybox 또는 Unity 구현을 시작하지 않는다. Implementation Gate는
+`CLOSED`다.
 
 ---
 
