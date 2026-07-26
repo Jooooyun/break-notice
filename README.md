@@ -33,145 +33,18 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 
 ![승인된 CHR_00 Player Turnaround Production Support](references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png)
 
-## 현재 상태
+## NON-AUTHORITATIVE CURRENT-STATE SUMMARY — SEE DESIGN_STATUS
 
-| 항목 | 상태 |
-|---|---|
-| 현재 Phase label | PRE-PRODUCTION / DESIGN FREEZE COMPLETION |
-| G1 Requirements | PASSED / OWNER-APPROVED BASELINE |
-| G2 Design | PASSED / OWNER-APPROVED BASELINE |
-| G3 Technical | PASSED / OWNER-APPROVED BASELINE |
-| G3 Technical Baseline | OWNER-APPROVED / PASSED |
-| G3 Technical Final Audit | REVISION REQUIRED / HISTORICAL BASELINE AUDIT |
-| G3 Residual Active Status and Package-Authority Correction | OWNER-APPROVED / COMPLETE |
-| G3 Technical Final Audit Remediation | COMPLETE / VERIFIED BY RE-AUDIT |
-| G3 Technical Baseline Re-Audit | READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE |
-| G3 Gate Passage Source | `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at `9e1487e85be5a54ba0824c209deabcf738e1abf0` |
-| G4 Graybox | NOT PASSED / NOT STARTED / NOT AUTHORIZED |
-| G5 Production Freeze | NOT PASSED / REQUIRES G4 EVIDENCE |
-| Final Pre-Implementation Review | REVISION REQUIRED — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md` |
-| Final Review Remediation | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT |
-| Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY — `docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md` |
-| Current Next Authorization Boundary | OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED |
-| G3 Technical checklist | 6 / 6 |
-| Design Freeze | 32 / 32 |
-| Design Freeze Completion | COMPLETE / DOCUMENTARY PREREQUISITE ONLY |
-| Pre-G4 Full Design Lock Semantics | OWNER-APPROVED / DEFINED |
-| Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED |
-| Pre-G4 Full Design Lock Record | `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md` |
-| Frozen Design-Source Baseline SHA | `f638be24c6895a6969083626fa3f94228b533ec6` |
-| Intended Unity Toolchain | OWNER-APPROVED / LOCKED INTENT |
-| Unity Toolchain Status Record | `docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md` |
-| Unity Toolchain Provisioning | OWNER-DEFERRED |
-| Unity Editor Installation | NOT VERIFIED / OWNER-DEFERRED |
-| Package Materialization | NOT STARTED / NOT AUTHORIZED |
-| Package Resolution | NOT VERIFIED |
-| Historical TASK-0064 Result | STOP CONDITION / NO CHANGE |
-| Limited Implementation Gate Semantics | OWNER-APPROVED / DEFINED |
-| EAR-IMP-0001-001 | EXPIRED / UNUSED |
-| Active Execution Authorization Relay | ABSENT / NEW RELAY NOT AUTHORIZED |
-| Destruction Budget and Implementation Rules | OWNER-APPROVED / LOCKED |
-| Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED |
-| CHR_00 Player Turnaround Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND |
-| CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT |
-| First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / 6 OF 10 / TOOLCHAIN PROVISIONING OWNER-DEFERRED |
-| Exact Editor/package documentation lock | Unity `6000.3.20f1`; URP `17.3.0`; Input System `1.20.0`; Cinemachine `3.1.7`; Test Framework `1.6.0` |
-| Production Visual Lock sequence | COMPLETE |
-| Primary Production Visual count | 8 |
-| Approved Production Support count | 1 |
-| Full Design Lock | OWNER-APPROVED / LOCKED |
-| Phase label review | COMPLETED / OWNER-APPROVED |
-| 게임 정체성 | LOCKED |
-| 3D TPS / Unity 6 / URP | LOCKED |
-| 초능력 Grab 제거 | LOCKED |
-| 직접 집기 + 화물 스트랩 + 동료 패스 | LOCKED |
-| 주인공 비주얼 `CHR_00 v002` | LOCKED |
-| 실제 게임 카메라 `PGT_01 v002` | LOCKED |
-| 동료 1종 비주얼 `CHR_01 v001` | LOCKED |
-| 장비 작동 시트 `GEAR_01 v002` | LOCKED |
-| 의자 리디렉션 Core Loop `PGT_02 v010` | VISUAL LOCKED / FUNCTIONAL DRAFT |
-| Chain Reaction Aftermath `PGT_03 v003` | VISUAL LOCKED / FUNCTIONAL DRAFT |
-| Night Archive Lighting `LGT_01 v001` | VISUAL LOCKED / TECHNICAL DRAFT |
-| Conference Table Team Finisher `FIN_01 v003` | VISUAL LOCKED / FEATURE COULD / FUNCTIONAL DRAFT |
-| Graybox 재미 검증 | NOT STARTED |
-| Implementation Gate | CLOSED |
-| Unity project | NOT CREATED / PLACEHOLDERS ONLY |
-| 본 제작 | BLOCKED BY IMP-0001 LIMITED GATE/RELAY + G4/G5 |
+이 README의 요약은 탐색 편의를 위한 비권위 사본이다. Phase, Gate,
+Design Freeze, Pre-G4 Full Design Lock, Graybox, Implementation Gate,
+Execution Authorization Relay, provisioning, IMP-0001 readiness와 현재
+다음 권한 경계의 유일한 가변 권위는
+[`docs/00_project/DESIGN_STATUS.md`](docs/00_project/DESIGN_STATUS.md)다.
 
-G3 기술 책임과 exact documentation lock은 성공한 Re-Audit과 Owner
-승인에 따라 `OWNER-APPROVED / PASSED`로 승격되었다. 역사적 Final
-Audit은 `REVISION REQUIRED`로 변경 없이 유지하고, Re-Audit의
-`READY FOR G3 GATE DECISION` 판정은 G3 passage의 근거로 소비되었다.
-Prototype 파괴 profile은 모든 category cap `0`이며 Later-Slice의
-bounded destruction hard cap과 authored-state·pooling·atomic-admission
-규칙은 Owner-approved로 LOCK되었다. 정확한 권위는
-[`docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md`](docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md)와
-[`ADR-0016`](docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md)를
-따른다. 이는 G4/G5 passage, Structural Feature 편입, 성능 합격값 또는
-구현 권한을 뜻하지 않는다.
-
-Office Core Kit은 정확한 Prototype-required family `16`개와
-Later-Slice extension candidate `8`개, gameplay-interactive definition
-`3`, recognition-only definition `1`, fixed/decorative family `12`의
-asset-family 및 reuse policy로 Owner-approved/LOCKED되었다. 정확한
-권위는 [`OFFICE_CORE_KIT.md`](docs/03_art/OFFICE_CORE_KIT.md)와
-[`ADR-0017`](docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md)를
-따른다. 모든 Prototype Kit family의 destruction은 `0`이며 실제 model,
-texture, material, layout과 Unity asset creation은
-`NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records Archive-local
-`COULD`, FIN_01은 `OUT / COULD`를 유지한다.
-
-CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
-[`PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`](docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md)에
-기록되어 있고, 검토 계약 `PASS` 뒤 Human Owner가 후보를
-`APPROVE`했다. byte-identical 승인본
-`references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png`는
-`OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`다. 주 Identity
-권위는 기존 CHR_00 Identity 이미지, Player Visual Spec과 ADR-0007에
-남으며 Turnaround는 3D modeling·rigging·Unity asset·구현 권한이 아니다.
-
-첫 구현 티켓은
-[`IMP-0001`](docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md)로
-세분화됐고 상태는 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION
-BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / TOOLCHAIN PROVISIONING
-OWNER-DEFERRED`다. 열 가지 precondition 중 `6 / 10`만 충족됐고 concrete
-execution baseline SHA는 없으며 이는 Unity, Package, code 또는 Git
-쓰기 권한이 아니다.
-
-Design Freeze는 `32 / 32 / COMPLETE`인 documentary prerequisite이며
-그 자체로 Full Design Lock 또는 Gate passage가 아니다. 역사적 Final
-Review는 `REVISION REQUIRED`를 유지한다. TASK-0061 correction은
-TASK-0062 Re-Audit에서 `48 / 48 PASS`와
-`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
-검증됐다. Pre-G4 Full Design Lock과 IMP-0001-only limited Gate
-semantics는 `OWNER-APPROVED / DEFINED`이다. TASK-0063은
-[`PRE_G4_FULL_DESIGN_LOCK.md`](docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md)와
-[`ADR-0020`](docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md)으로
-설계 소스 기준선
-`f638be24c6895a6969083626fa3f94228b533ec6`을
-`OWNER-APPROVED / LOCKED`로 최종화했다. 역사적 TASK-0064는 exact
-Editor 부재에 Stop Condition을 올바르게 적용했고 repository change,
-commit과 push는 없었다. `EAR-IMP-0001-001`은
-`EXPIRED / UNUSED`, Gate는 `CLOSED / NEVER ACTIVATED`다. 현재
-provisioning은 Human Owner가 `OWNER-DEFERRED`로 지시했다.
-G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5 Production Freeze는
-`NOT PASSED / REQUIRES G4 EVIDENCE`다.
-
-권위 순서는 Pre-G4 documentary baseline과 Full Design Lock,
-narrowly authorized infrastructure preparation, 별도 G4 Graybox,
-G4 evidence/decision, G5 Production Freeze, later Vertical Slice
-production이다. 미래의
-`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 one-shot empty Bootstrap만
-허용하며 G4를 시작하거나 G4/G5를 통과시키지 않는다. IMP-0001의
-concrete execution SHA는 티켓이 아니라 별도 Owner-approved Execution
-Authorization Relay만 공급할 수 있다. 현재 active Relay와 concrete
-SHA는 없고 새 Relay는 승인되지 않았다. 다음 권한 경계는
-`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`다.
-AI Navigation은 Prototype에서 Deferred이고 optional/later system은
-first wave 밖이다. 현재
-Unity project, package file, code, Scene, Prefab 또는 test는 생성되지
-않았으며 Bootstrap, Graybox와 구현은 승인되지 않았다. Implementation
-Gate는 `CLOSED`다.
+- 승인된 Primary Production Visual: `8`
+- 승인된 Production Support: `1`
+- substantive gameplay·technical·Visual·scope 권위는 연결된 승인
+  contract, accepted ADR, Visual Spec과 Lock 문서에 남는다.
 
 ## 가장 먼저 읽을 문서
 

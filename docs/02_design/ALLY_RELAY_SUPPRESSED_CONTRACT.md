@@ -19,9 +19,11 @@ graph, physics component, event schema 또는 Unity 구현을 승인하지 않�
 아니다. FIN_01의 익명 Finisher-only 보조 직원은 이 계약의 active
 ally, CHR_02, 지속 Party Member 또는 일반 전투 기능이 아니다.
 
-G2 Design은 계속 `NOT PASSED / CURRENT BASELINE WORK`이며 Full Design
-Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`, Implementation Gate는
-`CLOSED`다.
+이 문서의 Owner-approved Ally Relay와 조건부 Suppressed 경계는
+runtime, Unity, Graybox 또는 Gate 권한을 만들지 않는다. 현재 전역
+Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따른다.
 
 ## Applicability
 

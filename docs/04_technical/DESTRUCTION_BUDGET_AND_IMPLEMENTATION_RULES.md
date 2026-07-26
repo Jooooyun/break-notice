@@ -12,15 +12,8 @@
 
 ## Authority and Gate Boundary
 
-- Current Phase: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
-- G1 Requirements: `PASSED`
-- G2 Design: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
-- G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED`
-- Full Design Lock: `INCOMPLETE`
-- Graybox: `NOT STARTED`
-- Implementation Gate: `CLOSED`
+- Document-local destruction authority:
+  `OWNER-APPROVED / LOCKED HARD SCOPE CAPS AND IMPLEMENTATION RULES`
 
 이 계약은 G1 Requirement wording, G2 logical contract, G3 baseline,
 승인된 Visual Canon 또는 Prototype content count를 변경하지 않는다.
@@ -35,6 +28,10 @@ Request와 Owner 승인이 필요하다.
 - Unity component, package, class, Scene, Prefab, test 또는 구현;
 - Graybox 시작, G4/G5 통과, Full Design Lock 또는 Implementation Gate
   개방.
+
+현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따른다.
 
 ## Definitions
 

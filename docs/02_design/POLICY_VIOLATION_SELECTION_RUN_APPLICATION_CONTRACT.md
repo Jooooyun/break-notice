@@ -21,10 +21,11 @@
 - 아래 term과 lifecycle state는 design description이며 runtime enum,
   class, component, field, event, serialized asset 또는 save schema를
   승인하지 않는다.
-- 이 계약은 하나의 제한된 G2 logical contract만 승인하며 G2 Design
-  Gate를 통과시키지 않는다.
-- Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`,
-  Implementation Gate는 `CLOSED`다.
+- 이 계약은 하나의 제한된 Owner-approved logical contract이며
+  구현 또는 Gate 권한을 만들지 않는다.
+- 현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+  [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+  따른다.
 
 ## Applicability
 

@@ -8,101 +8,72 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 # 1. Current Project Phase
 
-현재 단계:
+현재 단계: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 
-`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
+## Current-State Authority Role
 
-현재 프로젝트의 Pre-G4 Full Design Lock은
-`OWNER-APPROVED / LOCKED`다. 이는 G4 evidence를 반영하는 G5
-Production Freeze 또는 최종 production scope passage가 아니다.
+`AGENTS.md`는 `MINIMUM SAFETY-CRITICAL MIRROR`다. 다음 최소 guard만
+운영 편의를 위해 복제하며, 모든 가변 현재값의 유일한 권위는
+[`docs/00_project/DESIGN_STATUS.md`](docs/00_project/DESIGN_STATUS.md)다.
 
-현재 Gate 상태:
-
-- G1 Requirements: `PASSED`
-- G2 Design: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical Baseline: `OWNER-APPROVED / PASSED`
-- G3 Technical Decisions:
-  `OWNER-APPROVED / BASELINE APPLIED`
-- G3 Causal Result-Family Alignment:
-  `OWNER-APPROVED / CORRECTED`
-- G3 Technical Final Audit:
-  `REVISION REQUIRED / HISTORICAL BASELINE AUDIT`
-- G3 Residual Active Status and Package-Authority Correction:
-  `OWNER-APPROVED / COMPLETE`
-- G3 Technical Final Audit Remediation:
-  `COMPLETE / VERIFIED BY RE-AUDIT`
-- G3 Technical Baseline Re-Audit:
-  `READY FOR G3 GATE DECISION — CONSUMED BY G3 PASSAGE`
-- G3 Gate Passage Source:
-  `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
-  `9e1487e85be5a54ba0824c209deabcf738e1abf0`
-- G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Production Freeze:
-  `NOT PASSED / REQUIRES G4 EVIDENCE`
-- G3 Technical Checklist: `6 / 6`
-- Design Freeze: `32 / 32`
-- Design Freeze Completion:
-  `COMPLETE / DOCUMENTARY PREREQUISITE ONLY`
-- Final Pre-Implementation Review:
-  `REVISION REQUIRED / docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`
-- Final Pre-Implementation Review Remediation:
-  `TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT`
-- Final Pre-Implementation Re-Audit:
-  `READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY /
-  docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md`
-- Pre-G4 Full Design Lock Semantics:
-  `OWNER-APPROVED / DEFINED`
-- Pre-G4 Full Design Lock:
-  `OWNER-APPROVED / LOCKED`
-- Pre-G4 Full Design Lock Record:
-  `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md`
-- Pre-G4 Full Design Lock ADR:
-  `docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md`
-- Frozen Design-Source Baseline SHA:
-  `f638be24c6895a6969083626fa3f94228b533ec6`
-- Intended Unity Toolchain:
-  `OWNER-APPROVED / LOCKED INTENT`
-- Unity Toolchain Status Record:
-  `docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md`
-- Unity Toolchain Provisioning:
-  `OWNER-DEFERRED`
-- Unity Editor Installation:
-  `NOT VERIFIED / OWNER-DEFERRED`
-- Package Materialization:
-  `NOT STARTED / NOT AUTHORIZED`
-- Package Resolution:
-  `NOT VERIFIED`
-- Historical TASK-0064 Result:
-  `STOP CONDITION / NO CHANGE`
-- Limited Implementation Gate Semantics:
-  `OWNER-APPROVED / DEFINED`
-- EAR-IMP-0001-001:
-  `EXPIRED / UNUSED`
-- Active Execution Authorization Relay:
-  `ABSENT / NEW RELAY NOT AUTHORIZED`
-- Destruction Budget and Implementation Rules:
-  `OWNER-APPROVED / LOCKED`
-- Office Core Kit:
-  `OWNER-APPROVED / LOCKED`
-- CHR_00 Player Turnaround Brief:
-  `OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND`
-- CHR_00 Player Turnaround Production Support:
-  `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
-- First Implementation Ticket:
-  `IMP-0001 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / 6 OF 10 / TOOLCHAIN PROVISIONING OWNER-DEFERRED`
-- Production Visual Lock sequence: `COMPLETE`
-- Primary Production Visual Count: `8`
-- Approved Production Support Count: `1`
-- Full Design Lock:
-  `OWNER-APPROVED / LOCKED`
+- Current Phase: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
+- G4: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+- G5: `NOT PASSED / REQUIRES G4 EVIDENCE`
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
-- Limited Implementation Gate Readiness:
-  `CLOSED / NEW RELAY NOT AUTHORIZED`
-- Phase label review: `COMPLETED / OWNER-APPROVED`
-- Current Next Authorization Boundary:
-  `OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`
+- Active Execution Authorization Relay: `ABSENT`
+- Toolchain provisioning과 exact-version execution evidence:
+  `UNRESOLVED / SEE DESIGN_STATUS`
+
+G1/G2/G3 계약, Accepted ADR, 승인 Visual Spec, scope/Lock 문서가
+substantive authority를 계속 소유한다. MANIFEST는 derived mirror이고
+README는 non-authoritative summary다. Audit/Re-Audit은
+`IMMUTABLE POINT-IN-TIME EVIDENCE`, Accepted ADR은
+`IMMUTABLE DECISION EVIDENCE`, Pre-G4 Full Design Lock은
+`IMMUTABLE FROZEN DECISION RECORD`, Visual Spec의 부정적 Gate 문구는
+`ARTIFACT-LOCAL SAFETY BOUNDARY`다. 상세 live history와 다음 권한
+경계는 DESIGN_STATUS만 갱신한다.
+
+## G4 Evidence-First Documentation Brake
+
+첫 Human Owner-authorized G4 evidence report가 존재하고 Owner가
+명시적으로 brake를 해제하거나 수정하기 전까지
+`NEW SPECULATIVE DESIGN DOCUMENT CREATION IS FROZEN`이다.
+
+금지되는 신규 문서 범위:
+
+- World expansion
+- Narrative expansion
+- Campaign
+- Map
+- Level
+- Encounter content
+- exact Vertical Slice content
+- Boss
+- enemy roster expansion
+- Upgrade pool
+- Meta progression
+- additional Visual concept exploration
+- new system architecture not required by the next authorized
+  implementation or G4 evidence task
+
+허용되는 pre-G4 문서 작업은 다음에 한정한다.
+
+1. live-state or authority-drift correction
+2. document deletion, reduction or consolidation
+3. Risk Register maintenance
+4. Human Owner-approved Change Control
+5. one exact G4 Graybox Validation Brief
+6. G4 evidence capture and reporting
+7. bounded implementation tickets required by the locked Prototype
+8. defects blocking an already approved bounded ticket
+9. mandatory repository or toolchain evidence requested by the Human
+   Owner
+
+이 brake는 Unity, implementation, G4, Graybox, Gate opening 또는 새
+gameplay scope를 승인하지 않는다. R-007의 disposition과 closure
+condition은 DESIGN_STATUS와 `docs/05_production/RISK_REGISTER.md`를
+따른다.
 
 ## Pre-G4 Full Design Lock and Limited Implementation Gate
 
@@ -261,20 +232,11 @@ readability의 Design/Canon evidence이며 technical implementation
 source가 아니다. 관련 technical owner는 Owner-approved
 `docs/04_technical/G3_TECHNICAL_BASELINE.md`에 매핑된다.
 
-여덟 G2 계약과 교정된 authority/trace 기준선은
-`G2 Design Baseline Re-Audit`의 `READY FOR G2 GATE DECISION` 판정과
-Owner 승인에 따라 G2 Design Baseline으로 승인되었고 G2 Gate는
-`PASSED`다. 기존 `G2 Design Baseline Final Audit` 판정은 기준선
-`a0cf9b15d120b0842e2ddcfff1be697863581533`에 대한 역사적
-`REVISION REQUIRED`로 유지된다. Re-Audit은 G2 passage에 소비된
-권한 근거다. Owner-approved G3 Technical Baseline의 역사적 Final
-Audit은 `REVISION REQUIRED`이며, 두 활성 권한 오류의 교정은
-`OWNER-APPROVED / COMPLETE`다. 교정 기준선 Re-Audit의
-`READY FOR G3 GATE DECISION` 판정은 Owner-approved G3 passage의
-근거로 소비되었고 G3 Gate는 `PASSED`다. G3 passage는 구현 또는
-테스트 완료를 뜻하지 않으며 RTM의 `PARTIAL` 행은 정당한
-later-Gate deferral로 유지된다. 어떠한 RTM 행도 `VERIFIED`로
-승격되지 않았다.
+G2/G3 passage, 역사적 Final Audit, remediation과 Re-Audit의 consumed
+전환 이력은 DESIGN_STATUS와 해당 immutable audit record를 따른다.
+이 이력은 구현 또는 테스트 완료를 뜻하지 않는다. RTM의 `PARTIAL`
+행은 later-Gate deferral이며 어떠한 RTM 행도 `VERIFIED`로 승격되지
+않았다.
 
 다음 G3 documentation-level technical baseline은 Owner-approved다.
 
@@ -372,9 +334,7 @@ Design Freeze baseline이다.
 `docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md`를 따른다.
 `OCK-*` ID는 문서 참조 ID일 뿐 file, Prefab 또는 runtime identity가
 아니다. 실제 model, texture, material, layout, Breakable/Structural
-identity, Unity asset과 구현은 승인되지 않았고 actual asset creation은
-`NOT STARTED / NOT AUTHORIZED`다. G5는 계속 `NOT PASSED / FINAL
-PRE-IMPLEMENTATION REVIEW REQUIRED`다.
+identity, Unity asset과 구현은 이 Lock으로 승인되지 않는다.
 
 CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 `docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md`에서
@@ -390,22 +350,11 @@ sequence를 변경하거나 3D·Unity·Graybox·구현 권한을 만들지 않�
 
 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`에
-`OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`로
-세분화되었다. 이는 미래 Unity repository Bootstrap과 exact
-Package-lock materialization의 문서 계약일 뿐이다. concrete execution
-baseline SHA는 이 티켓에 저장하지 않는다. 별도 Owner-approved
-Execution Authorization Relay만 이미 push된 완전한 immutable SHA를
-공급할 수 있다. Final Review 결과는 `REVISION REQUIRED`이며
-`docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md`에 역사 증거로
-보존한다. TASK-0061은 self-referential baseline binding과 pre-G4
-Full Design Lock·IMP-0001-only limited Gate 의미를 교정했고 TASK-0062
-Re-Audit은 `48 / 48 PASS`와
-`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`를
-기록했다. TASK-0063은 Pre-G4 Full Design Lock을
-`OWNER-APPROVED / LOCKED`로 최종화했다. 당시의 future Relay issuance
-승인은 TASK-0064의 미사용 만료와 최신 Human Owner provisioning 연기
-지시 뒤 현재 실행 권한이 아니다. Gate는 `CLOSED`, active Relay와
-concrete SHA는 없다.
+Owner-approved static execution contract로 세분화되었다. 이는 미래
+Unity repository Bootstrap과 exact Package-lock materialization의
+문서 계약일 뿐이며 concrete execution baseline SHA나 live readiness를
+저장하지 않는다. 현재 readiness는 DESIGN_STATUS, 실제 실행 권한은
+별도 bounded Owner-approved Execution Authorization Relay만 소유한다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -438,42 +387,14 @@ constraint와 구현은 계속 `DRAFT`다.
 - IMP-0001 concrete execution baseline과 Unity Bootstrap 실행
 - Vertical Slice의 정확한 콘텐츠와 구현 범위
 
-Implementation Gate는 `CLOSED`다.
+## Detailed Current History
 
-현재 Phase label은 Owner 승인에 따라
-`PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. G3 Technical은
-`PASSED / OWNER-APPROVED BASELINE`이며 기술 책임·데이터·이벤트·
-검증·예산·Reset·test-harness 기준은 Owner-approved baseline으로
-승격되었다. 역사적 Final Audit은 `REVISION REQUIRED / HISTORICAL
-BASELINE AUDIT`, 잔여 활성 상태·패키지 권한 교정은
-`OWNER-APPROVED / COMPLETE`, remediation은
-`COMPLETE / VERIFIED BY RE-AUDIT`다. Re-Audit의
-`READY FOR G3 GATE DECISION` 판정은 G3 passage에 소비되었지만
-Re-Audit 문서 자체는 변경하지 않는다. Technical checklist는
-`6 / 6`, Design Freeze는 `32 / 32`다. 파괴 예산과 구현 규칙 및
-Office Core Kit asset-family/reuse policy는
-`OWNER-APPROVED / LOCKED`지만 현재 `Game/**`에는 placeholder만 있고
-Unity project는 생성되지 않았다. CHR_00 Player Turnaround는
-Owner 승인과 등록을 완료한 `LOCKED PRODUCTION SUPPORT`이며 주 Identity
-권위를 대체하지 않는다. Design Freeze는 `32 / 32 / COMPLETE`인
-documentary prerequisite이며 Full Design Lock이나 Gate passage가
-아니다. 역사적 Final Review 결과는 `REVISION REQUIRED`이고 TASK-0061
-교정은 TASK-0062 Re-Audit에서 `48 / 48 PASS`와
-`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`로
-검증됐다. Pre-G4 Full Design Lock과 limited Gate semantics는
-`OWNER-APPROVED / DEFINED`이고 Lock은 TASK-0063에서
-`OWNER-APPROVED / LOCKED`로 최종화됐다. frozen design-source baseline은
-`f638be24c6895a6969083626fa3f94228b533ec6`이다. G4는
-`NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
-`NOT PASSED / REQUIRES G4 EVIDENCE`다. 첫 구현 티켓은 열 가지
-precondition 중 `6 / 10`만 충족해 `EXECUTION BLOCKED`다. 승인된
-Editor·Package 값은 `OWNER-APPROVED / LOCKED INTENT`이고 설치,
-Unity Hub, 라이선스, batch mode, Package materialization·resolution과
-구현 준비는 검증되지 않았다. provisioning은 Human Owner가
-`OWNER-DEFERRED`로 지시했다. `EAR-IMP-0001-001`은
-`EXPIRED / UNUSED`, active Relay와 concrete execution SHA는 없고
-Implementation Gate는 `CLOSED`다. 현재 다음 권한 경계는
-`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`다.
+Gate passage, consumed audit, remediation, provisioning, Relay,
+precondition progress와 다음 권한 경계의 상세 최신값은
+[`docs/00_project/DESIGN_STATUS.md`](docs/00_project/DESIGN_STATUS.md)만
+유지한다. 기존 Audit/Re-Audit, Accepted ADR, frozen Lock과 Changelog
+기록은 작성 시점의 immutable 또는 historical evidence로 해석하며
+live state를 덮어쓰지 않는다.
 
 ---
 

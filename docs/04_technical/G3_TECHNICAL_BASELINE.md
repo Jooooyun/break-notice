@@ -10,19 +10,10 @@
 
 ## Authority and Gate Boundary
 
-- Current Phase: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
-- G1 Requirements: `PASSED`
-- G2 Design: `PASSED / OWNER-APPROVED BASELINE`
-- G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
+- Document-local G3 authority: `OWNER-APPROVED / PASSED`
 - G3 Gate Passage Source:
   `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
   `9e1487e85be5a54ba0824c209deabcf738e1abf0`
-- G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
-- G5 Freeze: `NOT PASSED`
-- Design Freeze: `28 / 32`
-- Full Design Lock: `INCOMPLETE`
-- Graybox: `NOT STARTED`
-- Implementation Gate: `CLOSED`
 
 이 기준선은 exact requirement, G2 contract와 Visual Canon을 변경하지
 않는다. 정확한 구현 class, tuning, 성능 ceiling, hardware, pass
@@ -30,7 +21,10 @@ threshold와 생성된 Unity/package 파일은 별도 권한과 검증 대상이
 역사적 Final Audit은 `REVISION REQUIRED`로 유지되며 Re-Audit의
 `READY FOR G3 GATE DECISION` 판정은 Owner-approved G3 passage의
 근거로 소비되었다. G3 passage는 구현 또는 테스트 완료를 뜻하지
-않는다.
+않는다. 현재 전역 Phase, 다른 Gate, Lock, Graybox, Relay,
+provisioning과 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따른다.
 
 ## Exact Editor and Package Lock
 

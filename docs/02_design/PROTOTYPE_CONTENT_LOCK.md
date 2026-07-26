@@ -17,9 +17,11 @@ geometry, 수치, AI, animation, physics, prefab, scene, package 또는 Unity
 식별자일 뿐 runtime ID, prefab 이름, enum, ScriptableObject, 파일명,
 database key 또는 serialized asset 이름이 아니다.
 
-G1 Requirements는 `PASSED`지만 G2 Design은 `NOT PASSED / CURRENT
-BASELINE WORK`다. Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT
-STARTED`, Implementation Gate는 `CLOSED`다.
+이 문서의 Owner-approved Prototype 콘텐츠 경계는 제품용 encounter,
+Unity, Graybox 또는 Gate 권한을 만들지 않는다. 현재 전역 Phase,
+Gate, Lock, Graybox, Relay와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따른다.
 
 ## Prototype Room
 

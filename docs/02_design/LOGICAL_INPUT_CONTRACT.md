@@ -30,8 +30,11 @@
   별도 G2/G3 결정 전까지 Draft다.
 - G1 Requirement 문구, Priority, Applicability와 Authority는
   변경하지 않는다.
-- G2 Design Gate는 여전히 `NOT PASSED`이고 Implementation Gate는
-  `CLOSED`다.
+- 이 문서의 Owner-approved action-intent 경계는 구현 또는 Gate
+  권한을 만들지 않는다.
+- 현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+  [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+  따른다.
 
 ## Input Inventory Classification
 

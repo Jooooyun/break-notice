@@ -1,6 +1,7 @@
-# Unity Toolchain Intent and Provisioning Status
+# Unity Toolchain Intent and Historical Provisioning Evidence
 
-> **OWNER-APPROVED INTENDED TOOLCHAIN / PROVISIONING DEFERRED**
+> **OWNER-APPROVED TOOLCHAIN INTENT AND HISTORICAL PROVISIONING EVIDENCE —
+> NOT THE LIVE PROJECT-STATE BOARD**
 >
 > Date: `2026-07-25`
 >
@@ -17,8 +18,9 @@ materialization, 테스트, 구현 또는 Gate 개방을 수행하거나 승인�
 
 Pre-G4 Full Design Lock의 frozen-source 내용은 변경하지 않는다.
 그 문서와 과거 감사 기록의 다음 작업 문구는 작성 당시의
-point-in-time evidence이며, 현재 운영 권위는 이 문서와 최신 Human
-Owner 직접 지시를 따른다.
+point-in-time evidence다. 현재 Phase, Gate, Relay, provisioning,
+execution readiness와 다음 권한 경계의 유일한 가변 권위는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)다.
 
 ## Exact Intended Future Toolchain
 
@@ -38,7 +40,9 @@ Package baseline 밖이며 계속 `DEFERRED`다.
 
 ## Intent versus Execution Evidence
 
-| Evidence category | Current status |
+**TASK-0065R SNAPSHOT / HISTORICAL — NOT LIVE STATUS**
+
+| Evidence category | TASK-0065R snapshot |
 |---|---|
 | Intended Editor version | LOCKED |
 | Intended Editor changeset | LOCKED |
@@ -85,11 +89,12 @@ implementation-ready 증거가 아니다. 이 문서는 어떤 실행 준비
 
 설치 파일 다운로드, Editor·Hub 설치나 변경, 라이선스 확인,
 batch mode, 임시 프로젝트, system-level provisioning과 IMP-0001
-실행은 수행되지 않았고 현재도 승인되지 않았다.
+실행은 해당 권위로 수행되지 않았다. 현재 승인 상태는 DESIGN_STATUS를
+따른다.
 
-## IMP-0001 Precondition Status
+## TASK-0065R HISTORICAL PRECONDITION SNAPSHOT
 
-| # | Mandatory precondition | Persistent status |
+| # | Mandatory precondition | TASK-0065R snapshot |
 |---:|---|---|
 | 1 | Turnaround generated | SATISFIED |
 | 2 | Binary Review PASS | SATISFIED |
@@ -102,10 +107,13 @@ batch mode, 임시 프로젝트, system-level provisioning과 IMP-0001
 | 9 | Active Relay-supplied execution SHA | NOT SATISFIED — `NO ACTIVE RELAY OR SHA` |
 | 10 | Exact Editor installed and verified | NOT SATISFIED — `OWNER-DEFERRED / NOT VERIFIED` |
 
-Persistent progress is `6 / 10`. 만료된 TASK-0064 Relay는 조건 7, 8
-또는 9를 지속적으로 충족하지 않는다.
+TASK-0065R가 기록한 point-in-time progress는 `6 / 10`이다. 이는
+현재 precondition 충족 상태를 독립적으로 주장하지 않는다.
 
-## Execution Relay and Gate Boundary
+## Historical Execution Relay and Gate Evidence
+
+다음은 TASK-0064 및 TASK-0065R 당시의 immutable point-in-time
+evidence이며 live authority가 아니다.
 
 - `EAR-IMP-0001-001`: `EXPIRED / UNUSED`
 - Active Execution Authorization Relay: `ABSENT`
@@ -121,6 +129,12 @@ Standing Owner Delegation, GPT Pro의 PASS/APPROVE, Pre-G4 Full Design
 Lock, 과거 Relay 또는 저장소 상태만으로 provisioning, 새 Relay,
 Gate 개방이나 구현 권한을 추론할 수 없다.
 
+현재 provisioning과 execution readiness는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)와
+미래의 명시적 bounded Execution Authorization Relay가 각각 정한
+범위에서만 판단한다. 미래 Relay는 모든 precondition을 독립적으로
+재계산해야 한다.
+
 ## Prohibited Current Claims
 
 현재 다음을 주장해서는 안 된다.
@@ -134,13 +148,6 @@ Gate 개방이나 구현 권한을 추론할 수 없다.
 - 테스트가 실행됐거나 구현 준비가 완료됐다는 주장;
 - 활성 Relay, concrete execution SHA 또는 열린 Gate가 있다는 주장.
 
-## Future Explicit Owner Authorization Required
-
-Unity 환경 provisioning은 향후 Human Owner가 직접 명시적으로
-지시하기 전까지 `OWNER-DEFERRED`다. 그 지시가 있더라도 실제 실행은
-새 bounded task, 현재 기준선, 정확한 범위, 검증, Git 권한과 필요한
-Gate·Relay 조건을 별도로 충족해야 한다.
-
 ## Change-Control Boundary
 
 정확한 intended Editor, changeset 또는 Package 버전을 바꾸거나 AI
@@ -149,6 +156,10 @@ Navigation을 Prototype direct Package baseline에 추가하려면
 승인이 먼저 필요하다. 실행 결과는 이 intent 기록에 소급해
 추론하지 않고 별도 증거로 기록한다.
 
-## Current Next Authorization Boundary
+## Current Status Source
 
-`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`
+현재 provisioning, Gate, Relay, IMP-0001 readiness와 다음 권한
+경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)만
+유지한다. 이 intent/historical evidence 문서는 독립적인 현재 상태나
+다음 작업을 지정하지 않는다.

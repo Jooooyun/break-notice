@@ -11,10 +11,10 @@ source: `TASK-0059` after GPT Pro `PASS` and Human Owner `APPROVE`
 검토 기준, 그 기준을 통과한 승인본의 등록 증거를 보존한다. 등록된
 Turnaround는 `LOCKED PRODUCTION SUPPORT`이며 3D 모델, 리깅, texture,
 material, Unity asset, Graybox 또는 구현을 생성하거나 승인하지 않는다.
-G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
-FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Full Design Lock은
-`INCOMPLETE / FINAL PRE-IMPLEMENTATION REVIEW REQUIRED`, Graybox는
-`NOT STARTED`, Implementation Gate는 `CLOSED`다.
+이 artifact-local 안전 경계는 Gate 권한을 만들지 않는다. 현재 전역
+Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따른다.
 
 ## Sole Identity Reference
 

@@ -116,20 +116,11 @@ Decision Source: `DEC-G1-016`
 Decision Source: `DEC-G1-019`
 
 - 이 문서는 Owner-approved G1 Requirements Baseline이다.
-- G1 Requirements Gate는 동기화와 검증을 통과하여 `PASSED`로
-  기록되었다.
-- G2 Design Gate는 `PASSED`다.
-- G3 Technical Baseline은 `OWNER-APPROVED / PASSED`이며 G3 Gate는
-  `PASSED`다.
-- G3 passage source는
-  `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md`와 기준선
-  `9e1487e85be5a54ba0824c209deabcf738e1abf0`이다.
-- G4 Graybox와 G5 Freeze는 `NOT PASSED`다.
-- 현재 Phase는 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다.
-- Full Design Lock은 `INCOMPLETE`다.
-- Graybox는 `NOT STARTED`다.
-- Implementation Gate는 `CLOSED`다.
-- G1 또는 G3 passage 자체는 구현을 승인하지 않는다.
+- G1 passage는 이 요구사항 문구와 disposition의 문서-local 승인
+  근거이며 구현, 검증 완료 또는 후속 Gate 권한을 만들지 않는다.
+- 현재 Phase, Gate, Lock, Graybox, Relay, provisioning과 다음 권한
+  경계의 유일한 가변 권위는
+  [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)다.
 
 ## Excluded Requirements
 

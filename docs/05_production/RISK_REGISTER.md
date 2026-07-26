@@ -14,3 +14,21 @@
 | R-010 | 초보가 Heavy 미사용 | 중 | 높음 | 직접 행동도 게이지 제공 | 첫 5분 Heavy 경험 실패 |
 | R-011 | 이미지가 요구사항 오염 | 높음 | 중 | Visual Index, Canon/Non-canon | 임의 총기·장비 구현 요청 |
 | R-012 | Scope creep | 높음 | 매우 높음 | Won't list, CR process | 신규 핵심 시스템 요청 |
+
+## Active Risk Dispositions
+
+### R-007 — 설계 과잉
+
+- Status: `ACTIVE / TRIGGERED`
+- Evidence: `Design Freeze and Pre-G4 Full Design Lock were completed
+  while Game remains a placeholder and G4 has not started`
+- Immediate response: `G4 EVIDENCE-FIRST DOCUMENTATION BRAKE`
+- Owner: `DESIGN AUTHORITY`
+- Owning Gate: `PRE-G4 / G4`
+- Closure condition: `Human Owner-authorized G4 evidence exists and the
+  Human Owner explicitly lifts or revises the brake`
+- Live-state authority:
+  `docs/00_project/DESIGN_STATUS.md`
+
+이 disposition은 새 설계, 구현, Unity, Graybox, Gate passage 또는
+Execution Authorization Relay를 승인하지 않는다.

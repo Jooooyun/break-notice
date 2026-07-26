@@ -30,8 +30,11 @@
   성공을 요구하지 않는다.
 - `STRUCTURAL FEATURE`는 네 번째 Weight Class가 아니라 별도
   room-design role이다.
-- G2 Design은 계속 `NOT PASSED / CURRENT BASELINE WORK`이며
-  Implementation Gate는 `CLOSED`다.
+- 이 문서의 Owner-approved Weight-Class 기능 경계는 구현 또는 Gate
+  권한을 만들지 않는다.
+- 현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+  [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+  따른다.
 
 ## Classification Principle
 

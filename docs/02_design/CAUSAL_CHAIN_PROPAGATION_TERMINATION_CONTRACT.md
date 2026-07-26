@@ -19,8 +19,11 @@
   계약 및 승인된 Visual Canon을 변경하지 않는다.
 - 이 계약은 damage, Stability, Knockback, ragdoll, break value,
   animation, physics, HUD, VFX, audio 또는 Unity 구현을 승인하지 않는다.
-- G2 Design은 `NOT PASSED / CURRENT BASELINE WORK`이며 Graybox는
-  `NOT STARTED`, Implementation Gate는 `CLOSED`다.
+- 이 문서의 Owner-approved causal 경계는 구현 또는 Gate 권한을
+  만들지 않는다.
+- 현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+  [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+  따른다.
 
 ## Applicability
 

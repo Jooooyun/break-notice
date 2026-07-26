@@ -24,8 +24,11 @@
 - `HeavyAction`의 시작 비용과 Momentum/Pip lifecycle은
   [`MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md`](MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md)를
   따른다.
-- G2 Design은 계속 `NOT PASSED / CURRENT BASELINE WORK`이고
-  Implementation Gate는 `CLOSED`다.
+- 이 문서의 Owner-approved 상태·중재 경계는 구현 또는 Gate 권한을
+  만들지 않는다.
+- 현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
+  [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+  따른다.
 
 ## Interaction State Domains
 

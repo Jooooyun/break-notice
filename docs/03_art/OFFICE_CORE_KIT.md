@@ -8,13 +8,13 @@
 
 ## Authority and Gate Boundary
 
-이 문서는 문서 수준의 Art/Production Support 범위 Lock이다. 현재
-Phase는 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이고 G1, G2와 G3는
-`PASSED`, G4와 G5는 `NOT PASSED`다. 이 Lock은 실제 모델, 텍스처,
-재질, 데칼 atlas, 조명 asset, Unity folder, Prefab, ScriptableObject,
-Scene, room layout, Graybox 또는 구현을 만들거나 승인하지 않는다.
-Full Design Lock은 `INCOMPLETE`, Graybox는 `NOT STARTED`,
-Implementation Gate는 `CLOSED`다.
+이 문서는 Owner-approved Art/Production Support 범위 Lock이다. 이
+Lock은 실제 모델, 텍스처, 재질, 데칼 atlas, 조명 asset, Unity folder,
+Prefab, ScriptableObject, Scene, room layout, Graybox 또는 구현을
+만들거나 승인하지 않는다. 현재 전역 Phase, Gate, Lock, Graybox,
+Relay와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따른다.
 
 ## Kit Definition
 

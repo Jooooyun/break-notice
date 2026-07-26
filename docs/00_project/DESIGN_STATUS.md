@@ -138,6 +138,91 @@ Implementation Gate: `CLOSED`
 Current Next Authorization Boundary:
 `OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`
 
+## Current-State Authority Policy
+
+이 문서는 BREAK NOTICE 저장소의 `SOLE MUTABLE LIVE-STATE AUTHORITY`다.
+현재 Phase, Gate, Lock, checklist progress, Graybox, provisioning,
+Package resolution, ticket readiness, Relay, execution authorization와
+Current Next Authorization Boundary의 변경 가능한 현재값은 이 문서에서만
+직접 관리한다.
+
+역할 분리는 다음과 같다.
+
+- `MANIFEST.json`: `DERIVED MACHINE-READABLE MIRROR / NOT INDEPENDENT
+  AUTHORITY`
+- `AGENTS.md`: `MINIMUM SAFETY-CRITICAL MIRROR`
+- `README.md`: `NON-AUTHORITATIVE SUMMARY`
+- 승인된 contract, specification, content lock과 budget 문서:
+  각 문서가 정의하는 substantive authority
+- Accepted ADR: `IMMUTABLE DECISION EVIDENCE`
+- Audit/Re-Audit: `IMMUTABLE POINT-IN-TIME EVIDENCE`
+- `PRE_G4_FULL_DESIGN_LOCK.md`: `IMMUTABLE FROZEN BASELINE RECORD`
+- 승인 Visual Spec의 Gate·비구현 문구:
+  `ARTIFACT-LOCAL SAFETY BOUNDARY`
+- `Game/README.md`: placeholder-local 설명
+- `CHANGELOG.md`: historical change record
+
+현재값이 서로 다르면 live-state에는 이 문서가 우선한다. mechanics,
+content, technical contract와 Visual Canon의 실질 내용은 해당 승인
+contract, specification, lock과 ADR이 우선한다. Human Owner의 최신
+직접 지시는 모든 저장소 문서보다 우선하며, 변경은 승인된 Change
+Control을 거쳐 이 보드와 파생 mirror에 동기화한다.
+
+## G4 Evidence-First Documentation Brake
+
+상태: `ACTIVE`
+
+Human Owner가 승인한 첫 G4 evidence report가 존재하고 Human Owner가
+명시적으로 이 brake를 해제하거나 수정하기 전까지
+`NEW SPECULATIVE DESIGN DOCUMENT CREATION IS FROZEN`이다.
+
+다음 신규 문서는 금지한다.
+
+- World expansion
+- Narrative expansion
+- Campaign
+- Map
+- Level
+- Encounter content
+- exact Vertical Slice content
+- Boss
+- enemy roster expansion
+- Upgrade pool
+- Meta progression
+- additional Visual concept exploration
+- new system architecture not required by the next authorized
+  implementation or G4 evidence task
+
+허용 예외는 다음 아홉 종류로 한정한다.
+
+1. live-state or authority-drift correction
+2. document deletion, reduction or consolidation
+3. Risk Register maintenance
+4. Human Owner-approved Change Control
+5. one exact G4 Graybox Validation Brief
+6. G4 evidence capture and reporting
+7. bounded implementation tickets required by the locked Prototype
+8. defects blocking an already approved bounded ticket
+9. mandatory repository or toolchain evidence requested by the Human
+   Owner
+
+이 brake는 Unity, implementation, G4, Graybox, Gate opening 또는 새
+gameplay scope를 승인하지 않는다. 종료 조건은
+`Human Owner-authorized G4 evidence exists and the Human Owner
+explicitly lifts or revises the brake`다.
+
+## Active Risk Disposition — R-007
+
+- Risk: `R-007 — 설계 과잉`
+- Status: `ACTIVE / TRIGGERED`
+- Evidence: `Design Freeze and Pre-G4 Full Design Lock were completed
+  while Game remains a placeholder and G4 has not started`
+- Immediate response: `G4 EVIDENCE-FIRST DOCUMENTATION BRAKE`
+- Owner: `DESIGN AUTHORITY`
+- Owning Gate: `PRE-G4 / G4`
+- Closure condition: `Human Owner-authorized G4 evidence exists and the
+  Human Owner explicitly lifts or revises the brake`
+
 ## Pre-G4 Authority and Sequencing Status
 
 | Concept | Meaning | Current state |
@@ -306,8 +391,8 @@ family `12`의 asset-family 및 reuse policy로
 `0`은 유지되고, 실제 model·texture·material·layout·Unity asset
 creation은 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records
 Archive-local `COULD`, FIN_01은 `OUT / COULD`를 유지한다. Technical
-checklist는 `6 / 6`, Design Freeze는 `32 / 32`와 `COMPLETE / FINAL
-PRE-IMPLEMENTATION REVIEW REQUIRED`다. 실제 Unity project와 package
+checklist는 `6 / 6`, Design Freeze는 `32 / 32`와
+`COMPLETE / DOCUMENTARY PREREQUISITE ONLY`다. 실제 Unity project와 package
 file은 생성되지 않았고 exact tuning, implementation class와 pass
 threshold는 Draft다.
 G3 Causal Result Family는 Owner-approved

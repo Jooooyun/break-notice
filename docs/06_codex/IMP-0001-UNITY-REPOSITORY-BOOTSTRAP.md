@@ -1,9 +1,10 @@
 # IMP-0001 — Unity Repository Bootstrap and Exact Package-Lock Materialization
 
-Status: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / TOOLCHAIN PROVISIONING OWNER-DEFERRED`
+Status: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION REQUIRES SEPARATE CURRENT AUTHORITY`
 
 Review Readiness:
-`FINAL PRE-IMPLEMENTATION RE-AUDIT PASSED / PRE-G4 FULL DESIGN LOCK OWNER-APPROVED / TOOLCHAIN PROVISIONING DEFERRED / NEW EXECUTION RELAY NOT AUTHORIZED`
+`STATIC EXECUTION CONTRACT OWNER-APPROVED / CURRENT EXECUTION READINESS
+MUST BE READ FROM DESIGN_STATUS AND A FUTURE EXPLICIT RELAY`
 
 `REQUIRED EXECUTION BASELINE SHA: SUPPLIED BY A SEPARATE OWNER-APPROVED EXECUTION AUTHORIZATION RELAY — NOT STORED IN THIS TICKET`
 
@@ -16,9 +17,10 @@ Graybox, Implementation Gate 개방 또는 Git 쓰기 권한을 부여하지
 
 현재 도구 의도와 provisioning 상태의 권위 기록은
 `docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md`다.
-정확한 Editor·Package 버전은 `LOCKED INTENT`지만 설치, Unity Hub,
-라이선스, batch mode, Package resolution과 구현 준비는 검증되지
-않았고 Human Owner가 provisioning을 연기했다.
+정확한 Editor·Package 버전은 `LOCKED INTENT`다. 현재 Phase, Gate,
+Relay, provisioning, execution readiness와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)만
+유지한다.
 
 이 티켓은 구체 execution SHA를 저장하거나 실행 직전에 수정하지
 않는다. 미래 실행 기준선은 별도의 Owner-approved Execution
@@ -88,9 +90,9 @@ Relay가 필요하다.
    HEAD/`origin/main`/`main` 일치를 요구한다.
 10. Unity Editor `6000.3.20f1`이 설치됐고 독립적으로 검증됐다.
 
-### Current Precondition Evidence
+### Historical Precondition Snapshot — TASK-0065R
 
-| # | Mandatory precondition | Current evidence |
+| # | Mandatory precondition | TASK-0065R snapshot |
 |---:|---|---|
 | 1 | Owner-authorized Turnaround generation | SATISFIED |
 | 2 | Binary Review Contract PASS | SATISFIED |
@@ -103,14 +105,13 @@ Relay가 필요하다.
 | 9 | Relay-supplied immutable SHA and clean equality | NOT SATISFIED / NO ACTIVE RELAY-SUPPLIED SHA |
 | 10 | Installed and independently verified Editor `6000.3.20f1` | NOT SATISFIED / OWNER-DEFERRED / INSTALLATION AND VERIFICATION NOT AUTHORIZED |
 
-Current progress: `6 / 10`.
+Historical TASK-0065R progress: `6 / 10`.
 
 Pre-G4 Full Design Lock은 조건 1~6을 충족하지만 7~10을 암시하지
-않는다. TASK-0064에서 발급됐던 `EAR-IMP-0001-001`은 exact Editor
-부재 Stop Condition 뒤 `EXPIRED / UNUSED`가 됐고 Gate는 열리지
-않았다. concrete execution SHA와 active Relay는 없으며 새 Relay와
-provisioning은 Human Owner의 새 직접 지시 전까지 승인되지 않는다.
-따라서 실행은 계속 차단된다.
+않는다. 위 표와 TASK-0064의 `EAR-IMP-0001-001 / EXPIRED / UNUSED`
+기록은 point-in-time evidence이며 현재 실행 준비 상태를 독립적으로
+결정하지 않는다. 미래 Relay는 아래 열 가지 precondition을 모두
+독립적으로 다시 계산해야 한다.
 
 ## Execution Authorization Relay
 
@@ -132,14 +133,12 @@ Owner-approved instruction이다. Relay는 다음을 모두 포함해야 한다.
 권위 commit 전에 티켓에 삽입한 SHA, 또는 권위 commit이 push되기 전에
 공급된 SHA는 무효다. 기준선 선택을 위해 이 티켓을 수정하지 않는다.
 
-TASK-0061 교정 commit push, Final Pre-Implementation Re-Audit의 정확한
-`READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY`와
-TASK-0063 Pre-G4 Full Design Lock 최종화는 완료됐다. 이후 TASK-0064의
-`EAR-IMP-0001-001`은 활성화 전에 Stop Condition을 만나
-`EXPIRED / UNUSED`가 됐다. 현재 active Relay와 Relay-supplied SHA는
-없으며 새 Relay는 승인되지 않았다. 향후 Human Owner가 provisioning을
-직접 다시 지시한 뒤에도 새 bounded Relay가 위 모든 필드를 다시
-제공해야 한다.
+TASK-0061 correction, Final Pre-Implementation Re-Audit, TASK-0063
+Pre-G4 Lock과 TASK-0064 `EAR-IMP-0001-001 / EXPIRED / UNUSED`는
+역사적 point-in-time evidence다. 현재 실행 readiness는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
+따르며, 미래 bounded Relay는 위 모든 필드와 열 가지 precondition을
+독립적으로 다시 제공·검증해야 한다.
 
 ## Limited Implementation Gate Boundary
 
@@ -435,18 +434,11 @@ TASK-0061과 TASK-0063은 위 Git 쓰기 권한을 활성화하지 않는다.
 
 ## Current Boundary Confirmation
 
-IMP-0001 세분화는 완료됐지만 실행은 차단되어 있다. concrete execution
-SHA는 이 티켓에 없다. Final Pre-Implementation Review는
-`REVISION REQUIRED`로 역사 보존되고 TASK-0061 authority correction은
-TASK-0062 Re-Audit의 `48 / 48 PASS`로 검증됐다. TASK-0063은 Pre-G4
-Full Design Lock을 `OWNER-APPROVED / LOCKED`로 최종화했다. 역사적
-TASK-0064는 exact Editor 부재에 Stop Condition을 올바르게 적용했고
-repository change, commit과 push는 없었다. `EAR-IMP-0001-001`은
-`EXPIRED / UNUSED`, active Relay와 concrete execution SHA는
-`ABSENT`다. 현재 mandatory precondition은 `6 / 10`이고 toolchain
-provisioning은 `OWNER-DEFERRED`다. G4는
-`NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는
-`NOT PASSED / REQUIRES G4 EVIDENCE`, Graybox는 `NOT STARTED`,
-Implementation Gate는 `CLOSED`다. Unity project는 없다. 현재 다음
-권한 경계는
-`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`다.
+IMP-0001은 Owner-approved static execution contract이며 concrete
+execution SHA나 live Gate·Relay·precondition 상태를 저장하지 않는다.
+TASK-0061~TASK-0065R 관련 결과는 작성 시점의 역사적 evidence다.
+현재 execution readiness와 다음 권한 경계는
+[`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)만
+유지한다. 미래 Relay는 이 티켓을 변경하지 않고 열 가지 precondition,
+exact Gate, immutable SHA, clean equality, 범위와 검증을 독립적으로
+재계산해야 한다.
