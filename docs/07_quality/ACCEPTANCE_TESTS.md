@@ -3,7 +3,7 @@
 > **OWNER-APPROVED BEHAVIORAL BASELINE / EXTENDED BY CR-0001**
 >
 > Document Decision Source: `DEC-G1-017`, `CR-0001`,
-> `ADR-0021`, `FGD-001`
+> `ADR-0021`, `FGD-001`, `TASK-0068 / DL-047`
 >
 > 기술 중립적 행동 결과는 G1 기준으로 Owner-approved다. G2 입력·상태
 > 계약, G3 구현 기술·예산, G4/G6 성공 임계값은 Draft이며 어떤
@@ -35,7 +35,7 @@ Decision Source: `DEC-G1-017`
 | AT-ALLY-002 | DEC-G1-007, DEC-G1-017 |
 | AT-ALLY-003 | DEC-G1-008, DEC-G1-017 |
 | AT-ROGUE-001 dormant replay-layer policy | DEC-G1-009, DEC-G1-017; CR-0001 / ADR-0021 / FGD-001 |
-| AT-FAIL-001 | CR-0001 / ADR-0021 / FGD-001 |
+| AT-FAIL-001 | CR-0001 / ADR-0021 / FGD-001; TASK-0068 / DL-047 |
 | AT-PROP-001 | DEC-G1-010, DEC-G1-017 |
 | PR-F-020 deferred test gap | DEC-G1-011, DEC-G1-017 |
 | AT-FIN-001 dormant policy | DEC-G1-013, DEC-G1-017 |
@@ -187,17 +187,21 @@ Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 ### AT-FAIL-001 — 비살상 Player Failure와 Encounter Restart
 
 Requirement: `PR-F-025`
-Status: `OWNER-APPROVED BEHAVIORAL INTENT / G4-A EVIDENCE PENDING`
+Status: `OWNER-APPROVED DIRECTION AND DECISION RULE / DETAILED G4-A EVIDENCE PROTOCOL PENDING / NOT EXECUTED`
 
 **Given** an active G4-A encounter.
-**When** nonlethal enemy pressure reaches the temporary failure condition.
-**Then** the player receives a restrained nonlethal-failure presentation.
-**And** the current encounter returns to its entry baseline.
-**And** completed story, rescue, map, and shortcut progress from before
-that encounter is not lost.
+**When** validated enemy pressure prevents the player from continuing play.
+**Then** the player is not killed and receives a nonlethal-failure presentation.
+**And** the current encounter returns to its authored entry baseline.
+**And** the same encounter can be retried repeatedly from a clean baseline
+without retained interaction ownership, causal state or duplicate subscription.
 
-Exact Stability numbers, animation, Bark duration, recovery timing,
-save schema와 Unity 구현은 `DRAFT`다.
+완료된 Story, rescue, As-Built/map과 shortcut 진행 보존은 FGD-001의
+승인된 full-game target이지만 이 active G4-A test의 PASS evidence가
+아니다. 이는 later requirement·technical decomposition과 별도 evidence
+대상이다. Exact damage, Stability, threshold, accumulation, animation,
+Bark duration, recovery timing, save schema와 Unity 구현은 `DRAFT`다.
+이 test는 아직 구현·실행·통과되지 않았다.
 
 ## Vertical Slice Behavioral Tests
 

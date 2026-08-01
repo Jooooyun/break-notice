@@ -49,3 +49,18 @@ Execution Authorization Relay가 이미 push된 완전한 immutable SHA,
 validations, commit/push 권한과 one-shot expiration을 제공해야 한다.
 과거 audit, Lock과 Relay 결과는 immutable point-in-time evidence이며
 현재 Gate·Relay 값은 DESIGN_STATUS에서만 확인한다.
+
+## G4-A C3 Readiness Classification
+
+- Player Failure Direction and Decision Rule: `OWNER-APPROVED`.
+- Detailed G4-A Evidence Protocol: `PENDING`.
+- G4-A Execution: `NOT STARTED / NOT AUTHORIZED`.
+- C3 Player-Failure Addendum:
+  `APPLIED / TARGETED RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION`.
+- Targeted Re-Audit:
+  `TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit`.
+
+후속 detailed protocol은 observer, session, explanation, variant order,
+`YES/NO` evidence와 result reporting을 정의해야 한다. 이 분류는 G4를
+시작·통과시키거나 Graybox, Unity, toolchain provisioning, Gate 또는
+Relay 권한을 만들지 않는다.

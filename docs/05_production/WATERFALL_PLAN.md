@@ -83,9 +83,24 @@ Package·scope expansion·revocation에서 자동 만료한다. execution SHA는
 evidence다. 현재 Gate, Relay, concrete SHA와 provisioning 값은
 DESIGN_STATUS를 따른다.
 
+CR-0001 full-game target과 TASK-0068 Player-Failure addendum 뒤에도
+historical G1/G2/G3 passage는 유지된다. 다만 G4-A의 Direction and
+Decision Rule만 `OWNER-APPROVED`이며 Detailed Evidence Protocol은
+`PENDING`, execution은 `NOT STARTED / NOT AUTHORIZED`다. G4-A
+implementation 전에 `TASK-0069 — Targeted C3 Full-Game and G4-A
+Authority Re-Audit`을 완료해야 한다. 이 targeted Re-Audit은 Story,
+Campaign, Map 또는 Level을 다시 설계하는 단계가 아니다.
+
 ## Phase 4 — Graybox Validation
 
 Current phase state: DESIGN_STATUS를 따른다.
+
+G4-A의 active Player Failure evidence는 비살상 presentation, current
+encounter의 authored entry restart와 반복 가능한 clean baseline에만
+한정한다. Campaign-level Story, rescue, As-Built/map, shortcut와 save
+persistence는 FGD-001의 later target이며 active G4-A PASS evidence가
+아니다. detailed observer/session/variant/reporting protocol은 targeted
+C3 Re-Audit 뒤에도 별도 승인 전까지 pending이다.
 
 `G4 DRAFT CONTENT CANDIDATE — NOT G1-APPROVED VALUES`
 

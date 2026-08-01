@@ -2,7 +2,7 @@
 
 > **OWNER-APPROVED G2 INTERACTION STATE AND CONFLICT CONTRACT**
 >
-> Decision Source: `TASK-0037 delegated Owner decision`
+> Decision Source: `TASK-0037 delegated Owner decision`; `TASK-0068 / DL-047`
 >
 > 이 문서는 논리 상호작용의 상태 소유권, action availability,
 > cross-context arbitration, 안전한 거부와 Reset 우선순위를 승인한다.
@@ -26,6 +26,9 @@
   따른다.
 - 이 문서의 Owner-approved 상태·중재 경계는 구현 또는 Gate 권한을
   만들지 않는다.
+- TASK-0068의 C3 addendum은 G4-A에 필요한 최소 비살상
+  failure/restart 논리만 추가하며 9개 active logical action, FGD-001,
+  Story, Campaign과 exact implementation 값을 변경하지 않는다.
 - 현재 전역 Phase, Gate, Lock, Graybox, Relay와 다음 권한 경계는
   [`docs/00_project/DESIGN_STATUS.md`](../00_project/DESIGN_STATUS.md)를
   따른다.
@@ -52,6 +55,7 @@
 | Queued Throw | `CLEAR` | 도착 후 투척 의도 없음 |
 | Queued Throw | `ARMED` | 하나의 Catch-eligible relay에 연결된 선행 Throw 의도 |
 | Global | `PLAYABLE` | 논리 gameplay action을 받을 수 있는 상태 |
+| Global | `FAILURE_PENDING` | 검증된 외부 failure 요청 뒤 비살상 presentation 경계를 해소하고 기존 Reset 장벽으로 넘기기 전까지 새 player interaction을 차단 |
 | Global | `RESET_PENDING` | Reset이 모든 상호작용 소유권보다 우선하는 상태 |
 
 Incoming object domain은 추상적으로 `CATCH_ELIGIBLE`,
@@ -92,6 +96,8 @@ Object-specific dual eligibility는 별도 Owner G2 결정 없이는 활성화�
     적용한다.
 12. normal Strap Redirect는 eligible Medium에만 적용하며 Heavy는
     Vertical Slice의 `HeavyAction`만 사용한다.
+13. 검증된 Player Failure가 pending인 동안 모든 새 player interaction
+    request는 차단되며 복원은 기존 exclusive Reset barrier만 수행한다.
 
 ## Action Availability Matrix
 
@@ -104,6 +110,7 @@ Object-specific dual eligibility는 별도 Owner G2 결정 없이는 활성화�
 | Cargo Strap Active — Release Requested | DRAFT RESTRICTION | AVAILABLE | AVAILABLE | BLOCKED | BLOCKED | BLOCKED | NO EFFECT | AVAILABLE | BLOCKED |
 | Throw Committed | DRAFT RESTRICTION | AVAILABLE | AVAILABLE | BLOCKED | NO EFFECT | BLOCKED | NO EFFECT | AVAILABLE | BLOCKED |
 | Heavy Committed | DRAFT RESTRICTION | AVAILABLE | AVAILABLE | BLOCKED | BLOCKED | BLOCKED | NO EFFECT | AVAILABLE | BLOCKED |
+| Failure Pending | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED |
 | Reset Pending | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | BLOCKED | NO EFFECT | BLOCKED |
 
 Controlled values:
@@ -119,9 +126,9 @@ Controlled values:
 - `DRAFT RESTRICTION`: 논리 intent는 유지되지만 실제 locomotion
   제약과 응답은 후속 G2/G3 Draft다.
 
-`Move`, `Look`, `Aim`은 `RESET_PENDING`이 아닌 상태에서 상호작용
-소유권을 갖지 않는다. Carry, active Strap, Throw 또는 Heavy 중의
-실제 이동·회전·조준 제약은 이 계약에서 결정하지 않는다.
+`Move`, `Look`, `Aim`은 Global `PLAYABLE` 상태에서 상호작용 소유권을
+갖지 않는다. Carry, active Strap, Throw 또는 Heavy 중의 실제
+이동·회전·조준 제약은 이 계약에서 결정하지 않는다.
 
 ## InteractPrimary Arbitration
 
@@ -286,11 +293,54 @@ HeavyAction origin과 그 downstream result는 Momentum을 만들지 않는다.
 exact 대상, Structural interaction, physical mass, force, locomotion,
 animation, physics, final cost tuning과 구현은 Draft다.
 
-## ResetEncounter Priority
+## Player Failure and Encounter-Restart Addendum
+
+이 addendum은 `PR-F-025`의 active G4-A 범위를 현재 encounter에
+한정한다. Player Failure는 logical input이 아니며 열 번째 action을
+추가하지 않는다. 요청은 active encounter-pressure owner가 외부
+pressure 조건을 검증한 뒤에만 제출할 수 있다.
+
+승인된 논리 순서는 정확히 다음과 같다.
+
+```text
+PLAYABLE
+→ validated external failure request
+→ FAILURE_PENDING
+→ nonlethal failure presentation boundary
+→ RESET_PENDING
+→ authored encounter-entry baseline
+→ PLAYABLE
+```
+
+- failure는 비살상이며 player를 죽이지 않는다. Health, Death, Life,
+  Continue 또는 Campaign Game Over system을 승인하지 않는다.
+- exact damage, Stability, threshold, accumulation, recovery와 pressure
+  판정은 `DRAFT`다.
+- pending 상태에서는 모든 새 player interaction request를 차단한다.
+- Queued Throw, active Relay, Carry, Cargo Strap, Throw와 Heavy ownership은
+  기존 Reset barrier를 통해서만 해소·복원한다.
+- failure는 자동 `StrapRelease`를 만들지 않는다.
+- failure request, pending 상태와 restart 자체는 Momentum/Pip, Causal
+  Origin 또는 Meaningful Result를 만들지 않는다.
+- manual `ResetEncounter`와 automatic failure restart는 서로 다른
+  initiating cause지만 같은 authored encounter-entry baseline과 같은
+  exclusive restoration barrier를 사용한다.
+- Fade, Bark, camera, animation, delay와 정확한 presentation timing은
+  `DRAFT`다.
+
+Campaign에서 완료된 Story, rescue, As-Built/map과 shortcut 진행을
+보존하는 목표는 FGD-001의 승인된 full-game target으로 유지하지만
+active G4-A behavioral pass나 이 addendum의 구현 범위가 아니다.
+
+## ResetEncounter Priority and Shared Restoration Barrier
 
 `ResetEncounter`는 Prototype validation의 최상위 action이다. 유효한
 요청은 `RESET_PENDING`으로 전환하고 모든 새 interaction을 차단한다.
 반복 Reset 요청은 중첩되지 않고 `NO EFFECT`다.
+
+automatic failure restart도 비살상 presentation 경계 뒤 동일한
+`RESET_PENDING` restoration barrier로 진입한다. 이는 새 logical input이
+아니며 manual Reset의 initiating cause와 구분된다.
 
 Reset 완료는 Relay를 `NONE`, Queued Throw를 `CLEAR`, Hand
 Ownership을 `FREE`, Cargo Strap을 `STORED`로 복원하고 Carry,
@@ -336,6 +386,9 @@ event와 구현은 Draft다.
 - exact Relay Position count·placement·route·navigation;
 - Suppressed threshold·duration·recovery·enemy pressure 판정;
 - 외부 Knockback, incapacity와 recovery interaction;
+- failure pressure owner의 exact damage·Stability·threshold·accumulation;
+- failure Fade·Bark·camera·animation·delay와 recovery timing;
+- Campaign progress persistence, save schema와 restart implementation;
 - animation과 physics;
 - implementation class, component와 technical data structure;
 - Unity Input System과 Unity implementation.

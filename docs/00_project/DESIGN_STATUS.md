@@ -15,6 +15,15 @@ G3 Technical Baseline:
 G3 Technical Decisions:
 `OWNER-APPROVED / BASELINE APPLIED`
 
+C3 Player-Failure Authority Alignment:
+`OWNER-APPROVED / ADDENDUM APPLIED`
+
+C3 Player-Failure Gate Effect:
+`C3 PLAYER-FAILURE ADDENDUM APPLIED / TARGETED RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION`
+
+Targeted C3 Re-Audit:
+`REQUIRED / NOT STARTED / TASK-0069`
+
 G3 Causal Result-Family Alignment:
 `OWNER-APPROVED / CORRECTED`
 
@@ -62,7 +71,7 @@ Pre-G4 Full Design Lock Semantics:
 `OWNER-APPROVED / DEFINED`
 
 Pre-G4 Full Design Lock:
-`OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 AND ADR-0021`
+`OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 / TARGETED C3 RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION`
 
 Pre-G4 Full Design Lock Record:
 `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md`
@@ -139,7 +148,7 @@ Phase label review: `COMPLETED / OWNER-APPROVED`
 Implementation Gate: `CLOSED`
 
 Current Next Authorization Boundary:
-`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`
+`TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit`
 
 ## Full-Game Direction — Active C3 Authority
 
@@ -165,9 +174,13 @@ Current Next Authorization Boundary:
 - Policy Violation:
   `EXISTING LOGICAL CONTRACT PRESERVED / PRIMARY-CAMPAIGN APPLICABILITY DEFERRED`
 - Player Failure / PR-F-025:
-  `OWNER-APPROVED MINIMUM G4-A DIRECTION`
-- G4-A Brief: `OWNER-APPROVED / NOT STARTED / NOT AUTHORIZED`
+  `OWNER-APPROVED MINIMUM ENCOUNTER-LOCAL G4-A DIRECTION / C3 ADDENDUM APPLIED`
+- G4-A Direction and Decision Rule: `OWNER-APPROVED`
+- G4-A Detailed Evidence Protocol: `PENDING / TARGETED C3 RE-AUDIT REQUIRED`
+- G4-A Execution: `NOT STARTED / NOT AUTHORIZED`
 - G4-A Role: `FIRST IMPLEMENTATION EVIDENCE GATE`
+- Campaign Progress Preservation:
+  `FGD-001 OWNER-APPROVED FULL-GAME TARGET / LATER REQUIREMENT AND TECHNICAL DECOMPOSITION / NOT ACTIVE G4-A PASS EVIDENCE`
 - Implementation Authority From C3 Registration: `NONE`
 
 FGD-001은 intended full game을 정의하지만 Unity, package, code, Scene,
@@ -302,7 +315,7 @@ Owner의 새 직접 지시 전까지 승인되지 않는다.
 | 제품 비전 | OWNER-APPROVED G1 BASELINE | 상세 설계 정렬 | G1 PASSED |
 | G2 Design Baseline Promotion | OWNER-APPROVED / PASSED | G3 Technical Baseline Preflight Audit | G2 PASSED |
 | Logical Input Action Contract | OWNER-APPROVED / G2 PARTIAL | Interaction State and Conflict Contract와 함께 유지 | G2 |
-| Interaction State and Conflict Contract | OWNER-APPROVED / G2 PARTIAL | Weight-Class Contract와 함께 유지 | G2 |
+| Interaction State and Conflict Contract | OWNER-APPROVED / G2 PARTIAL / C3 PLAYER-FAILURE ADDENDUM APPLIED | TASK-0069 targeted C3 Re-Audit | G2 PASSED / RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION |
 | Weight-Class Functional Data Range Contract | OWNER-APPROVED / G2 PARTIAL | Momentum/Pip Contract와 함께 유지 | G2 |
 | Momentum/Pip Starting Profile | OWNER-APPROVED / G2 STARTING VALUES | Causal Chain Contract와 함께 유지 | G2 |
 | Causal Chain Propagation and Termination Contract | OWNER-APPROVED / G2 PARTIAL | Ally Relay and Suppressed Contract와 함께 유지 | G2 |
@@ -334,7 +347,7 @@ Owner의 새 직접 지시 전까지 승인되지 않는다.
 | First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / 6 OF 10 / TOOLCHAIN PROVISIONING OWNER-DEFERRED | exact Gate, Relay, SHA와 Editor evidence 전 실행 금지 | DESIGN FREEZE / CHECKED |
 | Final Pre-Implementation Review | REVISION REQUIRED — historical decision preserved | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT | HISTORICAL |
 | Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY | consumed by TASK-0063 Pre-G4 Lock decision | PRE-G4 / GATE CLOSED |
-| Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6` | maintain Lock through Change Control | PRE-G4 |
+| Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6`; EXTENDED BY CR-0001; TARGETED C3 RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION | maintain Lock through Change Control; execute TASK-0069 only | PRE-G4 |
 | Limited Implementation Gate | SEMANTICS OWNER-APPROVED / DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | Human Owner의 새 provisioning 지시 전 대기 | CLOSED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
@@ -460,6 +473,6 @@ TASK-0062 Re-Audit에서 `48 / 48 PASS`로 검증됐다. 첫 구현 티켓은
 Relay와 concrete execution SHA는 없고 IMP-0001 precondition은
 `6 / 10`이다. toolchain provisioning은 `OWNER-DEFERRED`이며 다음
 권한 경계는
-`OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`다.
+`TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit`다.
 남은 Design Freeze 항목은 `0`개다. Bootstrap, Graybox와 구현 권한은
 아직 없고 IMP-0001 실행은 계속 차단된다.

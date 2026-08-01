@@ -2,7 +2,7 @@
 
 > **OWNER-APPROVED G1 VALIDATION POLICY**
 >
-> Document Decision Source: `DEC-G1-017`
+> Document Decision Source: `DEC-G1-017`; `TASK-0068 / DL-047`
 >
 > 다섯 검증 Layer와 활성화 정책은 G1 기준으로 Owner-approved다.
 > G3 harness 책임과 Unity Test Framework `1.6.0` 문서 lock은
@@ -53,7 +53,7 @@ Owner-approved다. Unity Test Framework의 documentation lock은
 | Activation group | Harness ownership | Acceptance-Test mapping |
 |---|---|---|
 | Prototype logical support | EditMode | state transition, arbitration, safe rejection, identity separation, causal depth/uniqueness/branch/termination, Reset-plan comparison |
-| Prototype physical/lifecycle | PlayMode | AT-SCOOP-001, AT-PHY-001, AT-ALLY-001, AT-CATCH-001, AT-THROW-003, AT-STRAP-001, AT-WEIGHT-001, AT-CHAIN-001, AT-IMPACT-001, AT-SCOPE-001, AT-ROOM-001, AT-FLOW-001 |
+| Prototype physical/lifecycle | PlayMode | AT-SCOOP-001, AT-PHY-001, AT-ALLY-001, AT-CATCH-001, AT-THROW-003, AT-STRAP-001, AT-WEIGHT-001, AT-CHAIN-001, AT-IMPACT-001, AT-SCOPE-001, AT-ROOM-001, AT-FLOW-001, AT-FAIL-001 |
 | Prototype readability | Manual / Playtest | AT-ART-001과 위 Prototype test의 physical readability, agency, camera/route readability, non-telekinetic interpretation |
 | Later Vertical Slice | Later EditMode / PlayMode / Manual | AT-CATCH-002, AT-MOM-001, AT-HEAVY-001, AT-ALLY-002, AT-ROGUE-001 |
 | Conditional SHOULD | Later only if promoted | AT-ALLY-003, AT-PROP-001, AT-STRUCT-001 |
@@ -70,10 +70,31 @@ Required observability:
 - duplicate/cycle rejection reason;
 - room-state flag;
 - Reset diff와 subscription count;
+- validated failure request, pending state와 manual/automatic initiating cause;
 - fault, active-body, collision과 frame-spike counter.
 
 Reset은 harness에서도 exclusive lifecycle barrier다. repeated delivery
 가능 boundary는 idempotency와 duplicate suppression을 검증한다.
+
+## G4-A Player-Failure Harness Ownership
+
+G4-A harness는 active encounter-pressure owner가 정확히 한 번의
+validated external failure request를 강제로 만들 수 있어야 한다.
+Interaction/global-state owner가 `FAILURE_PENDING`에 진입하고, Reset and
+Fault Recovery owner의 기존 exclusive barrier가 encounter-local actor,
+object, ownership, Relay, Strap, queue, causal과 room-state를 authored
+entry snapshot으로 복원한다.
+
+같은 encounter를 반복 restart해 baseline diff와 subscription count에
+잔류 state 또는 handler leak이 없는지 확인한다. failure presentation은
+비살상이어야 하며 failure request나 restart는 Momentum/Pip, Causal
+Origin 또는 Meaningful Result를 만들지 않는다. Campaign-level Story,
+rescue, As-Built/map, shortcut와 save persistence는 이 harness의 active
+G4-A PASS 범위가 아니다.
+
+observer, session, explanation, variant order, `YES/NO` evidence와 result
+reporting을 포함하는 detailed G4-A evidence protocol은 `PENDING`이다.
+이 ownership plan은 test, fixture, code 또는 실행 결과를 만들지 않는다.
 
 ## Candidate Test Pyramid
 
@@ -118,6 +139,8 @@ fixture와 test implementation은 Draft다.
 - 빠른 물체 충돌 누락
 - 파손 후 통로·collision 상태 불일치
 - Momentum 중복 지급
+- failure restart 뒤 interaction ownership, causal state 또는 subscription
+  누수
 
 ## Destruction-Budget Validation Plan
 

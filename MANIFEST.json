@@ -25,8 +25,14 @@
   "g2_gate_passage_source_sha": "439afeb3098277b8caa8856cfbc45e7020a5a3d2",
   "g2_logical_input_contract_status": "OWNER-APPROVED",
   "g2_logical_input_contract_path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
-  "g2_interaction_state_conflict_contract_status": "OWNER-APPROVED",
+  "g2_interaction_state_conflict_contract_status": "OWNER-APPROVED / C3 PLAYER-FAILURE ADDENDUM APPLIED",
   "g2_interaction_state_conflict_contract_path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
+  "c3_player_failure_alignment_status": "OWNER-APPROVED / ADDENDUM APPLIED",
+  "c3_player_failure_gate_effect": "C3 PLAYER-FAILURE ADDENDUM APPLIED / TARGETED RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION",
+  "c3_player_failure_targeted_reaudit_status": "REQUIRED / NOT STARTED",
+  "c3_player_failure_targeted_reaudit_next_task": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
+  "failure_pending_logical_state_status": "OWNER-APPROVED / GLOBAL LOGICAL STATE / NOT A LOGICAL INPUT",
+  "active_logical_action_count": 9,
   "g2_weight_class_data_range_contract_status": "OWNER-APPROVED",
   "g2_weight_class_data_range_contract_path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
   "g2_momentum_pip_starting_profile_status": "OWNER-APPROVED / G4-G6 TUNING REMAINS DRAFT",
@@ -189,7 +195,7 @@
   "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
-  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 AND ADR-0021",
+  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 / TARGETED C3 RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION",
   "pre_g4_full_design_lock_path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
   "pre_g4_full_design_lock_adr": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
   "pre_g4_full_design_lock_source_baseline_sha": "f638be24c6895a6969083626fa3f94228b533ec6",
@@ -233,8 +239,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
   "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "design_freeze_current_next_task": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
-  "current_next_task": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
+  "design_freeze_current_next_task": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
+  "current_next_task": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -327,12 +333,16 @@
   "insolvency_ending_status": "OWNER-APPROVED FULL-GAME TARGET",
   "roguelite_status": "DEFERRED REPLAY LAYER",
   "policy_violation_status": "OWNER-APPROVED LOGICAL CONTRACT / PRIMARY-CAMPAIGN APPLICABILITY DEFERRED",
-  "player_failure_requirement": "PR-F-025 / OWNER-APPROVED",
-  "g4a_validation_status": "OWNER-APPROVED BRIEF / NOT STARTED / NOT AUTHORIZED",
+  "player_failure_requirement": "PR-F-025 / OWNER-APPROVED / ACTIVE G4-A SCOPE ENCOUNTER-LOCAL",
+  "player_failure_campaign_persistence_status": "FGD-001 OWNER-APPROVED FULL-GAME TARGET / LATER DECOMPOSITION / NOT ACTIVE G4-A PASS EVIDENCE",
+  "g4a_direction_decision_rule_status": "OWNER-APPROVED",
+  "g4a_detailed_evidence_protocol_status": "PENDING / TARGETED C3 RE-AUDIT REQUIRED",
+  "g4a_execution_status": "NOT STARTED / NOT AUTHORIZED",
+  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / DETAILED EVIDENCE PROTOCOL PENDING / NOT STARTED / NOT AUTHORIZED",
   "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
   "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
   "active_execution_authorization_relay": "ABSENT",
-  "current_next_authorization_boundary": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
+  "current_next_authorization_boundary": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
   "files": [
     {
       "path": ".editorconfig",
@@ -371,8 +381,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 20518,
-      "sha256": "19bf3fbc7255466626cd9e07fe693237cc8518060ced8150ba8b37bf4dde4724"
+      "bytes": 21670,
+      "sha256": "6b6489a8193e637328fc695461abef16653d492bab2f2f1a311b6367b7c2bbb0"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -526,13 +536,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 12322,
-      "sha256": "a8a4a2b9e4b2c31180360742e02ad6b8a788f495c814a82cd914ec35d7a802b7"
+      "bytes": 12674,
+      "sha256": "3233eb34dc6b511e19ed5ff21faa20151c9c2e25d8ca993cec1444bbf8b09306"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 23748,
-      "sha256": "ead755cfed5bf216ef1ab48b52667ea41db531f941f0a5822588167b0b485b1b"
+      "bytes": 24552,
+      "sha256": "bf3a975f9c603a976db530a4507c89bd16f86a7bcb6811ec48c2ff37336ab02a"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -551,13 +561,13 @@
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 12763,
-      "sha256": "cbe518805cf3899e2ec35905083d2a77a3102c0e3d09e77de99e9267804ad996"
+      "bytes": 13323,
+      "sha256": "170576ae54558c89399ed73cdcb2bc9e5084f0a42373bb43e9f9683de3f3418b"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 35691,
-      "sha256": "06bdfc91650e2dfd17c535e9c2aca635b01c71945f4aac60fe7e91b18bba0991"
+      "bytes": 36153,
+      "sha256": "13b9f752c27f2083d4b35e97fe2f640d815b11c5b02ec5c67ab343a14d235db2"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
@@ -596,8 +606,8 @@
     },
     {
       "path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-      "bytes": 17849,
-      "sha256": "ad0b2630482ee1ee8b66c23824a670557d0783540b0ded100001ad857217de33"
+      "bytes": 20785,
+      "sha256": "1633230ef227fefac1a603f0636a0620ef0e8782dd1f55543d9aef79db1ce733"
     },
     {
       "path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
@@ -631,8 +641,8 @@
     },
     {
       "path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
-      "bytes": 14588,
-      "sha256": "c1958fd89ea50fabd5194cd762024b905081cf17a016d9e03f9539f951dc79fe"
+      "bytes": 15795,
+      "sha256": "5885b2d35cfd5395eec1c890d5e3cffe19d1b0f150d08810882047b1a64e7ef3"
     },
     {
       "path": "docs/02_design/ROGUELITE_PROGRESSION.md",
@@ -731,8 +741,8 @@
     },
     {
       "path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
-      "bytes": 16567,
-      "sha256": "2a615049e44732751481fb336ccc8ea61135da9cc5617c7f1cf1227b02da2588"
+      "bytes": 18808,
+      "sha256": "e9285a78c93d73bc174a6b9871e156383322ff60c0d389faf5cd74b1a309aba2"
     },
     {
       "path": "docs/04_technical/PERFORMANCE_BUDGET.md",
@@ -811,8 +821,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 2925,
-      "sha256": "b8ffe1ff329bcacaac3c656aff7062c6229e227977f80a3389342149c9ba12fb"
+      "bytes": 3586,
+      "sha256": "8e40b087a2ac75352ebfb3fb1f54efc254bd2c9cc5fc7e945d9388ecda528e8a"
     },
     {
       "path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
@@ -836,8 +846,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 5343,
-      "sha256": "78aa60724a86974f82210108a36dfa16c5ad769546fc13a1cc79cc2c729bcdb7"
+      "bytes": 6277,
+      "sha256": "57d70d292a0a5f7660c982ea41238e9a8dc77cc6888b06fc344d878a19d5a7be"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -876,8 +886,8 @@
     },
     {
       "path": "docs/07_quality/ACCEPTANCE_TESTS.md",
-      "bytes": 12777,
-      "sha256": "df0da357c7e191d9cc8da4a7ae22eaf514cab13fe013e5f00e40a02edb17810b"
+      "bytes": 13267,
+      "sha256": "448ea3e7fcb40bb5148cb7935a78401f3334cdd2dfe6ca357aebcc17d01b5657"
     },
     {
       "path": "docs/07_quality/BUG_SEVERITY.md",
@@ -891,8 +901,8 @@
     },
     {
       "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 7171,
-      "sha256": "9d9b9cbf6973bb02239d32677cca343699e006c037abb5147b0274df601c33ae"
+      "bytes": 8493,
+      "sha256": "a3fab2bb63942cdd81a1eb8513c96ddcfda6ca551717f971ccc02edc5b6e0ed0"
     },
     {
       "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",

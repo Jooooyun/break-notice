@@ -3,7 +3,7 @@
 > **OWNER-APPROVED REQUIREMENTS BASELINE / EXTENDED BY CR-0001**
 >
 > Document Decision Source: `DEC-G1-001` through `DEC-G1-019`,
-> `CR-0001`, `ADR-0021`, `FGD-001`
+> `CR-0001`, `ADR-0021`, `FGD-001`, `TASK-0068 / DL-047`
 >
 > 아래 정확한 요구사항 문구, disposition, Applicability와 Priority는
 > G1 기준으로 Owner-approved다. 이는 구현, 테스트 통과, G2 통과,
@@ -91,7 +91,13 @@ Prototype Core에 포함하지 않는다.
 | PR-F-022 | OUT | COULD | OWNER-APPROVED | 별도 제품 범위 승인이 있을 경우에만 희귀 scripted finisher에서 익명의 Finisher-only 보조 직원이 참여할 수 있다. 이는 CHR_02, 지속 Party 또는 일반 전투의 두 번째 Active Ally를 승인하지 않는다. | AT-FIN-001 — DORMANT / NON-BLOCKING | DEC-G1-003, DEC-G1-013 |
 | PR-F-023 | VERTICAL SLICE | MUST | OWNER-APPROVED | 플레이어는 Normal Catch와 구분되는 선택적 Perfect Catch 결과를 수행할 수 있어야 한다. 정확한 판정 창, Contact Freeze와 Momentum 값은 별도 Draft다. | AT-CATCH-002 | DEC-G1-003, DEC-G1-004 |
 | PR-F-024 | VERTICAL SLICE | SHOULD | OWNER-APPROVED | 승인된 조건을 충족하면 제한된 Structural Feature가 국소 시야, 통로 또는 공간 상태를 의미 있게 바꿀 수 있어야 한다. | AT-STRUCT-001 | DEC-G1-003, DEC-G1-006 |
-| PR-F-025 | PROTOTYPE CORE | MUST | OWNER-APPROVED | When enemy pressure prevents the player from continuing combat, the result must be presented as nonlethal restraint and a restart of the current encounter rather than death, while already completed higher-level progress remains preserved. | AT-FAIL-001 | CR-0001 / ADR-0021 / FGD-001 |
+| PR-F-025 | PROTOTYPE CORE | MUST | OWNER-APPROVED | When validated enemy pressure prevents the player from continuing play, the player must not be killed: the result is presented as nonlethal failure, the current encounter returns to its authored entry baseline, and the same encounter is retriable. | AT-FAIL-001 | CR-0001 / ADR-0021 / FGD-001; TASK-0068 / DL-047 |
+
+PR-F-025의 active G4-A behavioral scope는 current-encounter failure와
+repeatable restart에 한정한다. 완료된 Story, rescue, As-Built/map과
+shortcut 진행을 보존하는 목표는 FGD-001의 Owner-approved full-game
+target으로 유지하지만, active G4-A PASS evidence가 아니며 later
+requirement·technical decomposition 대상이다.
 
 ## Numerical and Implementation Boundary
 
@@ -112,6 +118,7 @@ Decision Source: `DEC-G1-016`
 | dynamic physics and debris budgets | G3 | Technical budget |
 | performance targets | G3/G6 | Technical budget followed by Slice criterion |
 | playtest targets | G4/G6 | Graybox or Slice success criterion |
+| failure damage, Stability, threshold, accumulation and presentation timing | G4+ Draft | active G4-A direction을 구현값으로 확장하지 않음 |
 
 모든 수치와 threshold는 위 Gate에서 별도 제안·승인될 때까지
 `DRAFT`다. 입력 매핑, animation, AI, physics, camera와 Unity 구현도

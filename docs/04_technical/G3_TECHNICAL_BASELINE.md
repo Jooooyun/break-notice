@@ -2,7 +2,8 @@
 
 > **OWNER-APPROVED G3 TECHNICAL BASELINE — G3 PASSED / IMPLEMENTATION NOT AUTHORIZED**
 >
-> Decision Source: `ADR-0015`, `DEC-G3-001` through `DEC-G3-013`
+> Decision Source: `ADR-0015`, `DEC-G3-001` through `DEC-G3-013`;
+> `TASK-0068 / DL-047`
 >
 > 이 문서는 기술 책임과 설계 정책의 Owner-approved 기준선이다.
 > 실제 Unity 프로젝트, package resolution, 구현, 테스트 실행, Graybox
@@ -77,6 +78,8 @@ Relay Position 구현 wave가 열릴 때까지 `DEFERRED`다.
 - explicit Cargo Strap attach, redirect와 release;
 - normalized impact와 depth-limited causal attribution;
 - 이해 가능한 room-state change 한 개;
+- validated encounter-pressure failure request, nonlethal failure boundary와
+  authored encounter-entry restart;
 - Reset, observability와 fault recovery.
 
 ### Later Vertical Slice
@@ -112,7 +115,8 @@ provisional이다.
 | Composition and Encounter Bootstrap | explicit construction, encounter dependencies와 lifecycle root |
 | Logical Input Adapter | approved logical intent를 platform input에서 분리 |
 | Player Locomotion and Camera Adapter | movement와 one-way camera presentation adapter |
-| Interaction and Ownership | arbitration, safe rejection, Carry/Throw ownership |
+| Interaction and Ownership | arbitration, safe rejection, Carry/Throw ownership와 Player Failure pending-state ownership |
+| Encounter Pressure | active encounter-local pressure에서 external failure request 검증 |
 | Physical Object Lifecycle | activation, physical continuity와 ownership transfer |
 | Ally Supply and Reservation | room-local pool, singular reservation와 physical release |
 | Cargo Strap | valid attach, active constraint, redirect와 explicit release |
@@ -183,6 +187,8 @@ Semantic event family:
 - meaningful Result record와 Origin termination;
 - room-state change;
 - fault detection/recovery;
+- validated external failure request, failure-pending entry와 nonlethal
+  presentation boundary;
 - Reset requested/started/completed;
 - later Policy와 Momentum lifecycle.
 
@@ -209,6 +215,32 @@ collision의 cross-system mutation은 금지한다.
   아니다.
 
 구체 collection type과 payload 구조는 승인하지 않는다.
+
+## C3 Player-Failure Ownership Addendum
+
+PR-F-025의 active G4-A 기술 소유권은 encounter-local minimum에
+한정한다.
+
+- Encounter Pressure owner가 active encounter pressure로 continued play가
+  불가능한지 검증하고 external failure request를 발행한다.
+- Interaction and Ownership의 global-state owner가 `FAILURE_PENDING`에
+  진입하고 모든 새 player interaction request를 차단한다.
+- nonlethal presentation boundary 뒤 Reset and Fault Recovery owner의
+  기존 exclusive restoration barrier만 복원을 수행한다.
+- encounter-local actor, object, Carry, Throw, Relay, reservation, Strap,
+  queue, Causal Origin/Result와 room state는 authored entry snapshot으로
+  돌아간다.
+- failure request, pending state와 restart는 Momentum/Pip, Causal Origin
+  또는 Meaningful Result를 만들지 않는다.
+- automatic failure restart는 manual `ResetEncounter`와 initiating cause가
+  다르지만 같은 restoration barrier와 authored baseline을 사용한다.
+- 자동 `StrapRelease`, Health, Death, Life 또는 Continue system을
+  도입하지 않는다.
+
+Campaign-level Story, rescue, As-Built/map, shortcut와 save persistence는
+FGD-001의 later full-game target이며 이 addendum에서 구현·승인하지
+않는다. exact class, schema, event payload, damage, Stability, threshold,
+accumulation, save, presentation timing과 Unity 구현은 `DRAFT`다.
 
 ## Physics Activation, Collision, and Fault Recovery
 
@@ -284,6 +316,10 @@ reload는 누락 또는 unsafe recovery를 위한 audited fallback이다.
 반복 Reset마다 baseline diff와 subscription count를 확인한다. later
 resource가 활성화되면 encounter-entry resource baseline으로 되돌린다.
 
+manual `ResetEncounter`와 automatic failure restart는 서로 다른 initiating
+cause를 기록하지만 같은 authored baseline, diff와 subscription 검사를
+사용한다.
+
 Reset inventory:
 
 - CHR_00, CHR_01과 Compliance Runner 두 명;
@@ -317,6 +353,7 @@ version을 정의한다. 최종 serialization format은 미정이다.
 - collision continuity와 depth-1 causal result;
 - room-state change;
 - repeated Reset와 fault recovery;
+- forced nonlethal failure 1회와 repeated clean encounter restart;
 - camera와 route instrumentation.
 
 ### Manual and Playtest
@@ -329,8 +366,9 @@ version을 정의한다. 최종 serialization format은 미정이다.
 관찰 필드는 active logical intent/context, interaction state, ownership,
 Strap state/Anchor validity, Ally state/reservation/relay phase, Origin,
 parent, carrier, depth, Result family, duplicate/cycle rejection reason,
-room-state flag, Reset diff, subscription count, fault counter, active-body,
-collision과 frame-spike counter다.
+room-state flag, validated failure request, pending state,
+manual/automatic initiating cause, Reset diff, subscription count, fault
+counter, active-body, collision과 frame-spike counter다.
 
 이 계획은 test, fixture, overlay 또는 CI를 생성하거나 실행하지 않는다.
 
@@ -367,6 +405,8 @@ TASK-0049는 이 순서의 실행이나 첫 구현 ticket 생성을 승인하지
 - Structural Feature와 breakable implementation;
 - exact frame budget, hardware, resolution, FPS와 acceptance threshold;
 - persistent save와 serialization format;
+- failure request class·schema·event, damage·Stability·threshold·accumulation,
+  Bark·Fade·animation·AI와 restart timing;
 - permanent implementation class names.
 
 ## G3 Exit and Pre-Implementation Boundary

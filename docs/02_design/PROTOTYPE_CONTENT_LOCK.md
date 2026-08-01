@@ -246,10 +246,21 @@ Prototype에서 다음은 비활성 또는 제외다.
 - Guard, Asset Mover, Interceptor, Elite, boss;
 - firearm, ranged pressure와 shield;
 - Behavior Tag requirement;
-- final reward, progression, defeat flow와 multi-room structure.
+- final reward와 progression system;
+- permanent player death;
+- Life 또는 Continue system;
+- full Campaign Game Over;
+- production checkpoint 또는 save implementation;
+- failure에서 파생되는 alternate ending;
+- multi-room structure.
 
 Meaningful result는 actor/object displacement, side-lane clearance와
 causal attribution으로 검증한다. 어떤 object도 파손될 필요가 없다.
+
+G4-A를 위한 minimum nonlethal encounter failure와 encounter-entry
+restart는 Prototype에 명시적으로 포함한다. 이는 위 permanent death,
+Campaign Game Over, production save 또는 alternate ending 제외와
+충돌하지 않는다.
 
 ## G4-A Core Room Evidence Boundary
 
@@ -268,11 +279,30 @@ Test-Harness placement variant다.
 - `Variant B`: Runner 1 begins on CHR_01’s supply lane. Runner 2 begins near the Drawer objective.
 - `Variant C`: Runner 1 begins between the player and the Direct Pool. Runner 2 begins between the player and the Strap Anchor lane.
 
-Minimum Player Failure direction은 enemy pressure가 플레이 지속을
-막을 때 죽음이 아니라 restrained nonlethal presentation 뒤 현재
-encounter entry baseline으로 restart하는 것이다. encounter 이전에
-완료된 higher-level Story·rescue·map·shortcut progress는 잃지 않는다.
-Exact Stability, animation, Bark와 recovery timing은 Draft다.
+Minimum Player Failure의 active G4-A 범위는 다음 다섯 결과만 소유한다.
+
+- validated enemy pressure가 continued play를 막을 수 있음;
+- 결과는 nonlethal임;
+- player가 killed되지 않음;
+- 현재 encounter가 authored entry baseline으로 돌아감;
+- 같은 encounter를 다시 시도할 수 있음.
+
+완료된 higher-level Story, rescue, As-Built/map과 shortcut 진행 보존은
+FGD-001의 승인된 full-game target으로 유지한다. 그러나 이는 G4-A
+behavioral PASS evidence가 아니며 later requirement·technical
+decomposition 대상이다. Exact damage, Stability, threshold,
+accumulation, animation, Bark, AI와 recovery timing은 `DRAFT`다.
+
+G4-A readiness 분류는 다음과 같다.
+
+- Direction and Decision Rule: `OWNER-APPROVED`;
+- Detailed Evidence Protocol: `PENDING`;
+- Execution: `NOT STARTED / NOT AUTHORIZED`;
+- Targeted C3 Re-Audit: `REQUIRED BEFORE G4-A IMPLEMENTATION`.
+
+후속 상세 protocol은 observer, session, explanation, variant order,
+`YES/NO` evidence와 result reporting을 정의해야 한다. 이 문서는 해당
+protocol을 생성하거나 G4-A 실행을 승인하지 않는다.
 
 Evidence questions는 FGD-001 §19.6의 `Q1`~`Q5`다.
 
