@@ -27,10 +27,22 @@
   "g2_logical_input_contract_path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
   "g2_interaction_state_conflict_contract_status": "OWNER-APPROVED / C3 PLAYER-FAILURE ADDENDUM APPLIED",
   "g2_interaction_state_conflict_contract_path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-  "c3_player_failure_alignment_status": "OWNER-APPROVED / ADDENDUM APPLIED",
-  "c3_player_failure_gate_effect": "C3 PLAYER-FAILURE ADDENDUM APPLIED / TARGETED RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION",
-  "c3_player_failure_targeted_reaudit_status": "REQUIRED / NOT STARTED",
-  "c3_player_failure_targeted_reaudit_next_task": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
+  "c3_player_failure_alignment_status": "OWNER-APPROVED / ADDENDUM APPLIED / VERIFIED BY TARGETED RE-AUDIT",
+  "c3_player_failure_gate_effect": "C3 PLAYER-FAILURE ADDENDUM VERIFIED / READY FOR G4-A DETAILED EVIDENCE PROTOCOL DECISION",
+  "c3_player_failure_targeted_reaudit_status": "READY FOR G4-A DETAILED EVIDENCE PROTOCOL DECISION / TASK-0069 COMPLETE",
+  "c3_player_failure_targeted_reaudit_next_task": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
+  "c3_full_game_g4a_targeted_reaudit_status": "READY FOR G4-A DETAILED EVIDENCE PROTOCOL DECISION",
+  "c3_full_game_g4a_targeted_reaudit_path": "docs/05_production/C3_FULL_GAME_G4A_AUTHORITY_REAUDIT.md",
+  "c3_full_game_g4a_targeted_reaudit_baseline_sha": "31f8990023b47bdf2a56679d00e8348a91035cc1",
+  "c3_full_game_g4a_targeted_reaudit_exit_check_count": 40,
+  "c3_full_game_g4a_targeted_reaudit_fgd_preservation": "PASS / SHA-256 9babd002278f4d823609e8ee51b534ce17b3c427b211212736cd9ddda6dddb59",
+  "c3_full_game_g4a_targeted_reaudit_failure_boundary": "ALIGNED / ENCOUNTER-LOCAL NONLETHAL RESTART",
+  "c3_full_game_g4a_targeted_reaudit_g2_ownership": "SUFFICIENT / VERIFIED BY TARGETED RE-AUDIT",
+  "c3_full_game_g4a_targeted_reaudit_g3_ownership": "SUFFICIENT / VERIFIED BY TARGETED RE-AUDIT",
+  "c3_full_game_g4a_targeted_reaudit_harness_ownership": "SUFFICIENT / NO TEST EXECUTION",
+  "c3_full_game_g4a_targeted_reaudit_rtm_disposition": "HONEST / PARTIAL",
+  "c3_full_game_g4a_targeted_reaudit_protocol_disposition": "HONESTLY PENDING / NEXT BOUNDED TASK",
+  "c3_full_game_g4a_targeted_reaudit_next_task": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
   "failure_pending_logical_state_status": "OWNER-APPROVED / GLOBAL LOGICAL STATE / NOT A LOGICAL INPUT",
   "active_logical_action_count": 9,
   "g2_weight_class_data_range_contract_status": "OWNER-APPROVED",
@@ -195,7 +207,7 @@
   "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
-  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 / TARGETED C3 RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION",
+  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED / C3 ADDENDUM VERIFIED",
   "pre_g4_full_design_lock_path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
   "pre_g4_full_design_lock_adr": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
   "pre_g4_full_design_lock_source_baseline_sha": "f638be24c6895a6969083626fa3f94228b533ec6",
@@ -239,8 +251,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
   "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "design_freeze_current_next_task": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
-  "current_next_task": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
+  "design_freeze_current_next_task": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
+  "current_next_task": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -336,13 +348,13 @@
   "player_failure_requirement": "PR-F-025 / OWNER-APPROVED / ACTIVE G4-A SCOPE ENCOUNTER-LOCAL",
   "player_failure_campaign_persistence_status": "FGD-001 OWNER-APPROVED FULL-GAME TARGET / LATER DECOMPOSITION / NOT ACTIVE G4-A PASS EVIDENCE",
   "g4a_direction_decision_rule_status": "OWNER-APPROVED",
-  "g4a_detailed_evidence_protocol_status": "PENDING / TARGETED C3 RE-AUDIT REQUIRED",
+  "g4a_detailed_evidence_protocol_status": "PENDING / NEXT BOUNDED TASK",
   "g4a_execution_status": "NOT STARTED / NOT AUTHORIZED",
-  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / DETAILED EVIDENCE PROTOCOL PENDING / NOT STARTED / NOT AUTHORIZED",
+  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / TARGETED C3 RE-AUDIT READY / DETAILED EVIDENCE PROTOCOL PENDING / NOT STARTED / NOT AUTHORIZED",
   "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
   "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
   "active_execution_authorization_relay": "ABSENT",
-  "current_next_authorization_boundary": "TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit",
+  "current_next_authorization_boundary": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
   "files": [
     {
       "path": ".editorconfig",
@@ -381,8 +393,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 21670,
-      "sha256": "6b6489a8193e637328fc695461abef16653d492bab2f2f1a311b6367b7c2bbb0"
+      "bytes": 22736,
+      "sha256": "468f7ca6af66cc49034b579694ff443815f8ed2ad7f01f275c3b45db60168be0"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -541,8 +553,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 24552,
-      "sha256": "bf3a975f9c603a976db530a4507c89bd16f86a7bcb6811ec48c2ff37336ab02a"
+      "bytes": 24680,
+      "sha256": "ebb3be57ca0ec621f0a8b813dcf78e182236bfa353b8689c48e5a1fb7f621511"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -778,6 +790,11 @@
       "path": "docs/05_production/ASSET_LIST.md",
       "bytes": 7360,
       "sha256": "215b3817002ef819590e760feda2d1658a19d03eb24f53b93858812da0371ff0"
+    },
+    {
+      "path": "docs/05_production/C3_FULL_GAME_G4A_AUTHORITY_REAUDIT.md",
+      "bytes": 17234,
+      "sha256": "4d76de03753d0319f0aa8baeb3d4ec0f8831fdf57e30d5ff6ebafd487a5fc807"
     },
     {
       "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
