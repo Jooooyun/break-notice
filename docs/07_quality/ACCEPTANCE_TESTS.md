@@ -1,8 +1,9 @@
 # Acceptance Tests
 
-> **OWNER-APPROVED G1 BEHAVIORAL BASELINE — G2/G3/G4/G6 DETAILS REMAIN DRAFT**
+> **OWNER-APPROVED BEHAVIORAL BASELINE / EXTENDED BY CR-0001**
 >
-> Document Decision Source: `DEC-G1-017`
+> Document Decision Source: `DEC-G1-017`, `CR-0001`,
+> `ADR-0021`, `FGD-001`
 >
 > 기술 중립적 행동 결과는 G1 기준으로 Owner-approved다. G2 입력·상태
 > 계약, G3 구현 기술·예산, G4/G6 성공 임계값은 Draft이며 어떤
@@ -33,7 +34,8 @@ Decision Source: `DEC-G1-017`
 | AT-HEAVY-001, AT-STRUCT-001 | DEC-G1-006, DEC-G1-017 |
 | AT-ALLY-002 | DEC-G1-007, DEC-G1-017 |
 | AT-ALLY-003 | DEC-G1-008, DEC-G1-017 |
-| AT-ROGUE-001 | DEC-G1-009, DEC-G1-017 |
+| AT-ROGUE-001 dormant replay-layer policy | DEC-G1-009, DEC-G1-017; CR-0001 / ADR-0021 / FGD-001 |
+| AT-FAIL-001 | CR-0001 / ADR-0021 / FGD-001 |
 | AT-PROP-001 | DEC-G1-010, DEC-G1-017 |
 | PR-F-020 deferred test gap | DEC-G1-011, DEC-G1-017 |
 | AT-FIN-001 dormant policy | DEC-G1-013, DEC-G1-017 |
@@ -182,6 +184,21 @@ Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
 
 복원 목록과 허용 시간은 G2/G4에서 정한다.
 
+### AT-FAIL-001 — 비살상 Player Failure와 Encounter Restart
+
+Requirement: `PR-F-025`
+Status: `OWNER-APPROVED BEHAVIORAL INTENT / G4-A EVIDENCE PENDING`
+
+**Given** an active G4-A encounter.
+**When** nonlethal enemy pressure reaches the temporary failure condition.
+**Then** the player receives a restrained nonlethal-failure presentation.
+**And** the current encounter returns to its entry baseline.
+**And** completed story, rescue, map, and shortcut progress from before
+that encounter is not lost.
+
+Exact Stability numbers, animation, Bark duration, recovery timing,
+save schema와 Unity 구현은 `DRAFT`다.
+
 ## Vertical Slice Behavioral Tests
 
 ### AT-CATCH-002 — Perfect Catch
@@ -244,17 +261,16 @@ Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / CONDITIONAL / G2+ DETAILS DRAFT`
 
 조건, timing과 AI는 G2/G3 Draft다.
 
-### AT-ROGUE-001 — 행동 변경 선택
+### AT-ROGUE-001 — DORMANT / DEFERRED REPLAY LAYER
 
 Requirement: `PR-F-018`
-Status: `OWNER-APPROVED G1 BEHAVIORAL INTENT / G2+ DETAILS DRAFT`
+Status: `DORMANT / DEFERRED REPLAY LAYER`
 
-**Given** 방 완료 보상 단계에 진입한다.
-**Then** 서로 다른 행동 변화를 주는 복수 후보가 제시된다.
-**When** 플레이어가 하나를 선택한다.
-**Then** 선택한 행동 변화만 현재 run에 적용된다.
+미래 별도 승인 replay context에서 활성화될 경우 기존
+Policy Violation logical contract의 selection/run lifecycle을 검증한다.
+Primary campaign, G4-A와 현재 Vertical Slice의 blocking test가 아니다.
 
-화면 제시 수와 전체 upgrade pool 수는 각각 G2 Draft와 G5 Scope다.
+Candidate content, UI, save, exact presentation과 활성 Gate는 Deferred다.
 
 ### AT-PROP-001 — 대표 행동 태그
 

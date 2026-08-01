@@ -21,7 +21,9 @@
 
 - Status: `ACTIVE / TRIGGERED`
 - Evidence: `Design Freeze and Pre-G4 Full Design Lock were completed
-  while Game remains a placeholder and G4 has not started`
+  while Game remains a placeholder and G4 has not started; FGD-001 was
+  registered through Owner-approved C3 Change Control without
+  implementation`
 - Immediate response: `G4 EVIDENCE-FIRST DOCUMENTATION BRAKE`
 - Owner: `DESIGN AUTHORITY`
 - Owning Gate: `PRE-G4 / G4`
@@ -29,6 +31,16 @@
   Human Owner explicitly lifts or revises the brake`
 - Live-state authority:
   `docs/00_project/DESIGN_STATUS.md`
+
+Current response evidence:
+
+- FGD-001 is registered as the single Owner-approved full-game target
+  through CR-0001 and ADR-0021;
+- no additional speculative Story, Campaign, Map, Level or exact
+  Vertical Slice document is permitted before G4-A evidence;
+- the next growth step must be separately authorized Unity/toolchain/G4
+  evidence, not a v006-style review-document expansion;
+- R-007 remains `ACTIVE / TRIGGERED`; no closure is claimed.
 
 이 disposition은 새 설계, 구현, Unity, Graybox, Gate passage 또는
 Execution Authorization Relay를 승인하지 않는다.

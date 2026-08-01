@@ -1,13 +1,15 @@
 # BREAK NOTICE
 
-> 1인 개발용 3D TPS 물리 액션 Roguelite — Design Baseline `0.1.0`
+> 1인 개발용 single-campaign 3D corporate physics action adventure —
+> Design Baseline `0.1.0`
 
 `0.1.0`은 저장소·설계 문서 버전이며 Gate 통과 상태를 뜻하지 않는다.
 
-BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
-화물 장비와 동료의 물리적 릴레이로 사무용품을 직접 받아 던지고
-방향을 바꾸며, 읽을 수 있는 연쇄 충돌로 사무실의 국소 상태를
-재구성하는 3인칭 물리 액션 게임이다.
+코드명 `BREAK NOTICE`, Working Title
+`DESTROY YOUR COMPANY: ZERO DEFECT`는 산업용 화물 장비, 동료의
+실제 물리 릴레이와 읽을 수 있는 연쇄 충돌을 사용하는 단일 authored
+campaign이다. Story·Campaign·Map·Levels 0–6·Finale·Ending의 정확한
+권위는 [FGD-001](docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md)이다.
 
 **Grounded world. Absurd physics.**
 
@@ -43,6 +45,8 @@ Execution Authorization Relay, provisioning, IMP-0001 readiness와 현재
 
 - 승인된 Primary Production Visual: `8`
 - 승인된 Production Support: `1`
+- Full-Game Target: `OWNER-APPROVED / LOCKED`
+- G4-A: `OWNER-APPROVED BRIEF / NOT STARTED / NOT AUTHORIZED`
 - substantive gameplay·technical·Visual·scope 권위는 연결된 승인
   contract, accepted ADR, Visual Spec과 Lock 문서에 남는다.
 
@@ -52,11 +56,12 @@ Execution Authorization Relay, provisioning, IMP-0001 readiness와 현재
 2. [`docs/00_project/PROJECT_CHARTER.md`](docs/00_project/PROJECT_CHARTER.md)
 3. [`docs/01_requirements/PRODUCT_REQUIREMENTS.md`](docs/01_requirements/PRODUCT_REQUIREMENTS.md)
 4. [`docs/02_design/MASTER_GDD.md`](docs/02_design/MASTER_GDD.md)
-5. [`docs/03_art/ART_DIRECTION.md`](docs/03_art/ART_DIRECTION.md)
-6. [`docs/04_technical/G3_TECHNICAL_BASELINE.md`](docs/04_technical/G3_TECHNICAL_BASELINE.md)
-7. [`docs/05_production/WATERFALL_PLAN.md`](docs/05_production/WATERFALL_PLAN.md)
-8. [`docs/06_codex/CODEX_EXECUTION_PROTOCOL.md`](docs/06_codex/CODEX_EXECUTION_PROTOCOL.md)
-9. [`docs/07_quality/ACCEPTANCE_TESTS.md`](docs/07_quality/ACCEPTANCE_TESTS.md)
+5. [`docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md`](docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md)
+6. [`docs/03_art/ART_DIRECTION.md`](docs/03_art/ART_DIRECTION.md)
+7. [`docs/04_technical/G3_TECHNICAL_BASELINE.md`](docs/04_technical/G3_TECHNICAL_BASELINE.md)
+8. [`docs/05_production/WATERFALL_PLAN.md`](docs/05_production/WATERFALL_PLAN.md)
+9. [`docs/06_codex/CODEX_EXECUTION_PROTOCOL.md`](docs/06_codex/CODEX_EXECUTION_PROTOCOL.md)
+10. [`docs/07_quality/ACCEPTANCE_TESTS.md`](docs/07_quality/ACCEPTANCE_TESTS.md)
 
 ## 저장소 구조
 

@@ -251,6 +251,54 @@ Prototype에서 다음은 비활성 또는 제외다.
 Meaningful result는 actor/object displacement, side-lane clearance와
 causal attribution으로 검증한다. 어떤 object도 파손될 필요가 없다.
 
+## G4-A Core Room Evidence Boundary
+
+Decision Source: `CR-0001 / ADR-0021 / FGD-001 §19`
+
+G4-A는 Story chapter, micro Vertical Slice 또는 campaign production이
+아니다. 정확히 이 Lock의 one authored room, actor `4`(CHR_00 ×1,
+CHR_01 ×1, Compliance Runner ×2), object definition `4`, object
+instance `7`과 Prototype destruction cap `0`만 사용하는 bounded
+Test-Harness evidence brief다.
+
+Runner 시작 배치는 random generation이나 새 AI behavior가 아닌
+Test-Harness placement variant다.
+
+- `Variant A`: Runner 1 begins between the player and the direct Drawer approach. Runner 2 pressures the central movement lane.
+- `Variant B`: Runner 1 begins on CHR_01’s supply lane. Runner 2 begins near the Drawer objective.
+- `Variant C`: Runner 1 begins between the player and the Direct Pool. Runner 2 begins between the player and the Strap Anchor lane.
+
+Minimum Player Failure direction은 enemy pressure가 플레이 지속을
+막을 때 죽음이 아니라 restrained nonlethal presentation 뒤 현재
+encounter entry baseline으로 restart하는 것이다. encounter 이전에
+완료된 higher-level Story·rescue·map·shortcut progress는 잃지 않는다.
+Exact Stability, animation, Bark와 recovery timing은 Draft다.
+
+Evidence questions는 FGD-001 §19.6의 `Q1`~`Q5`다.
+
+- `Q1`: under pressure에서 core Relay, Throw, Strap을 자발적으로 쓰는가?
+- `Q2`: 같은 Drawer objective에 최소 두 valid physical approach가 있는가?
+- `Q3`: Player–Ally–Object causality가 설명 없이 읽히는가?
+- `Q4`: failure/Reset 뒤 layout variant가 다른 접근 이유를 만드는가?
+- `Q5`: camera가 player, active object, enemy pressure, exit objective를 동시에 읽히게 하는가?
+
+`Q1`, `Q3`, `Q5`는 mandatory다. PASS rule이 충족돼도
+`Q2 = NO`이면 G4-A core viability PASS는 유지할 수 있지만 G4-B는
+blocked이며 layout을 정확히 한 번 수정해 Q2만 재검사한다. Q2가 다시
+NO이면 Story/Campaign/Map/Level production integration은 계속 차단된다.
+범위 안 retune과 retest는 최대 한 번, exploratory evidence round도
+최대 한 번이다.
+
+G4-A production-speed evidence는 empty project에서 playable Core Room까지
+actual work time, round 동안 실제 weekly development time, rework,
+tool/asset wait, reusable output과 external-asset dependency를 기록한다.
+한 sample을 full-campaign schedule로 직접 곱하지 않는다.
+
+G4-A에는 Story NPC, rescue NPC production, Cart, As-Built/Survey/Map UI,
+glass, Momentum/Pip, HeavyAction, destruction, campaign level 또는
+promotional-wall Finale를 추가하지 않는다. 이 brief는
+`OWNER-APPROVED / NOT STARTED / NOT AUTHORIZED`다.
+
 ## Reset Content Baseline
 
 완료된 `ResetEncounter`는 다음 encounter-entry content baseline을

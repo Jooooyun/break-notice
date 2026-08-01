@@ -12,10 +12,25 @@
 
 ## 1. 한 문장 정의
 
-BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용 화물
-장비와 동료의 물리적 릴레이로 사무용품을 직접 받아 던지고 방향을
-바꾸며, 읽을 수 있는 연쇄 충돌로 사무실의 국소 상태를 재구성하는
-3인칭 물리 액션 게임이다.
+BREAK NOTICE / `DESTROY YOUR COMPANY: ZERO DEFECT`는 ZERO
+DEFECT/HANDOVER 체계가 누락한 사람과 공간을 구하기 위해 하나의
+기업 건물을 오르는 `single authored campaign` 3D third-person
+corporate physics action adventure다. 산업용 화물 장비, 동료의 실제
+물리 릴레이와 읽을 수 있는 연쇄 충돌이 핵심 행동이다.
+
+### Full-Game Direction Authority
+
+- Story, 3막 Campaign, Levels 0–6, Hybrid Vertical Loop, Official Plan
+  versus As-Built, 약 15명의 구조 대상, 중앙 Atrium Finale와 Ending:
+  [`FGD-001`](FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md)
+- main gameplay loop: `FGD-001 §8.1`
+- As-Built pillar: `FGD-001 §9`
+- Player Failure: `FGD-001 §15` 및 `PR-F-025`
+- G4-A Core Room evidence brief: `FGD-001 §19`
+
+FGD-001은 `OWNER-APPROVED / LOCKED FULL-GAME TARGET`이며 이 문서는
+그 내용을 복제하지 않는다. `3.5–5 hours`는 long-term player-time
+target이지 production schedule이 아니다.
 
 ## 2. 대표 장면
 
@@ -84,44 +99,24 @@ Light, Medium, Heavy는 피해 숫자가 아니라 전투 역할과 움직임이
 
 ## 6. 배경
 
-Status: `DRAFT / MISSING DECISION — NOT STORY CANON`
+Status: `SUPERSEDED HISTORICAL DRAFT / FGD-001 OWNS STORY CANON`
 
-아래 서술은 별도 Owner-approved Decision Source가 없는 Story
-Candidate다. `Business Continuity Lockdown`, “미승인 자산”, 최상층
-통제실, 여러 부서 직원의 이동은 승인된 World premise, Campaign,
-Map 또는 Level Canon이 아니다. 폐기 또는 승인도 추론하지 않으며
-후속 Owner 결정 전까지 이 상태를 유지한다.
-
-대형 기업이 구조조정 당일 `Business Continuity Lockdown`을 발동한다. 자동 보안 시스템은 해고 대상 직원을 “미승인 자산”으로 분류하고 건물을 봉쇄한다. 주인공과 여러 부서 직원은 최상층 통제실로 올라가 봉쇄와 해고 처리를 직접 끝내려 한다.
+과거 `Business Continuity Lockdown`, “미승인 자산”과 최상층 통제실
+서술은 primary Story authority가 아니다. ZERO DEFECT/HANDOVER
+worldline, characters, time/acts, rescue population과 Campaign의
+정확한 권위는 FGD-001 §4~§7 및 §10~§14를 따른다.
 
 ## 7. 플레이 세션 구조
 
-Policy Violation의 현재 Owner-approved G2 authority는
-[`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md)를
-따른다.
+Primary session structure는 FGD-001 §7~§8의 단일 authored campaign과
+main loop를 따른다. Levels 0–6의 exact full-game target은 FGD-001
+§14가 소유하며, 제작 integration은 G4-A PASS 전까지 차단된다.
 
-```text
-Run 시작
-→ 방 선택
-→ 전투방 진입
-→ 물체·동료·적·환경 기회 확인
-→ 패스와 연쇄 충돌로 방 클리어
-→ 다른 전투방이 남아 있으면 run당 한 번의 Policy Violation 기회
-→ 서로 다른 eligible Candidate 2개 중 정확히 1개 선택
-→ 선택 결과는 다음 전투방 진입부터 적용
-→ 같은 run의 후속 방에서 한 Active Policy 유지
-→ Run 종료 시 Policy clear
-```
-
-Policy Violation은 Prototype Core에서 비활성이고 Vertical Slice에서만
-활성이다. Selection Opportunity는 run당 정확히 한 번이며, 한 eligible
-encounter 완료 뒤 다른 combat encounter가 남아 있을 때 다음 encounter
-진입 전에 발생한다. exact room index와 final room count는 G5 Draft다.
-
-역사적 `10~15분`, `3개 전투방`, exact Elite와 finisher sequence는
-`NON-AUTHORITATIVE G5/G6 DRAFT PRODUCTION CANDIDATES`다. FIN_01은
-계속 `OUT / COULD`이며 이 session flow로 Vertical Slice에 편입되지
-않는다.
+기존 Run, room choice와 Policy Violation 흐름은
+`SUPERSEDED PRIMARY FORMAT / DEFERRED REPLAY-LAYER CANDIDATE`다.
+승인된 logical behavior는
+[`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md)에
+보존하지만 primary campaign, G4-A 또는 구현 범위가 아니다.
 
 ## 8. 전투 루프
 
@@ -438,7 +433,9 @@ destruction budget이 아니다. unrestricted room-wide destruction은
 
 ## 21. Roguelite 보상
 
-Policy Violation의 선택·current-run 적용 authority는
+Status: `SUPERSEDED PRIMARY FORMAT / DEFERRED REPLAY-LAYER CANDIDATE`
+
+Policy Violation의 보존된 선택·current-run logical authority는
 [`POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md`](POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md)를
 따른다. 현재 승인 범위는 run당 한 번의 기회, 두 Candidate, 단일 선택,
 다음 encounter 적용, one Active Policy, Reset 보존과 run-end clear다.

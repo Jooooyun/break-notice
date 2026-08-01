@@ -1,15 +1,17 @@
 # Project Charter
 
-> **OWNER-APPROVED G1 PRODUCT BASELINE**
+> **OWNER-APPROVED PRODUCT BASELINE / EXTENDED BY CR-0001 AND ADR-0021**
 >
-> 제품 정의, Target Player, 기준 플랫폼과 정성적 5분 재미 의도는
-> G1 기준으로 Owner-approved다. 아래에 별도로 표시된 정확한 수치는
-> 후속 Gate의 Draft 후보이며 G1 승인값이 아니다.
+> FGD-001은 Story, Campaign, Map, Levels 0–6, Finale, Ending과 G4-A의
+> full-game target authority다. 이 Charter는 concise product baseline이며
+> 구현, Graybox, Gate passage 또는 일정 승인이 아니다.
 
 ## 1. 프로젝트명
 
 - 코드명: `BREAK NOTICE`
-- 장르: 3D 3인칭 물리 액션 Roguelite
+- Working Title: `DESTROY YOUR COMPANY: ZERO DEFECT`
+- 장르: `3D third-person corporate physics action adventure`
+- Primary format: `single authored campaign`
 - 개발 형태: 1인 개발
 - 엔진: Unity 6
 - G1 기준 플랫폼: `Windows PC`
@@ -24,17 +26,19 @@
 
 ## 3. 제품 비전
 
-BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
-화물 장비와 동료의 물리적 릴레이로 사무용품을 직접 받아 던지고
-방향을 바꾸며, 읽을 수 있는 연쇄 충돌로 사무실의 국소 상태를
-재구성하는 3인칭 물리 액션 게임이다.
+BREAK NOTICE / DESTROY YOUR COMPANY: ZERO DEFECT는 본사 매각 전 마지막
+밤, ZERO DEFECT/HANDOVER 체계에서 누락된 인원과 비공식 공간을 찾아
+탈출시키는 단일 authored campaign이다. 플레이어는 산업용 화물 장비,
+동료의 실제 물리 릴레이와 읽을 수 있는 인과 결과로 건물의 Official
+Plan과 As-Built reality 사이를 돌파한다. 정확한 Story와 Campaign
+authority는 [`FGD-001`](../02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md)이다.
 
 ### Target Player
 
-읽기 쉬운 물리 액션 실험과 3인칭 액션을 즐기며,
-설계된 방을 반복 플레이해 다른 물체·각도·순서의 인과 결과를
-발견하려는 플레이어. Roguelite 경험은 도움이 되지만
-필수 전제는 아니다.
+읽기 쉬운 물리 액션과 authored-building exploration을 즐기고,
+하나의 기업 건물에서 인물·공간·기록의 관계를 따라가며 다른 물체,
+각도와 경로의 인과 결과를 발견하려는 플레이어다. Roguelite 경험은
+primary campaign의 전제가 아니다.
 
 ## 4. 핵심 성공 조건
 
@@ -46,14 +50,13 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 다른 물체·각도·순서를 자발적으로 시험하거나 Reset하며,
 이를 염력이 아닌 물리적 팀워크로 설명할 수 있어야 한다.
 
-### G4/G5/G6 DRAFT CANDIDATE METRICS — NOT G1-APPROVED VALUES
+### G4-A Evidence Questions
 
-- 플레이어가 60초 안에 첫 만족스러운 연쇄 충돌을 만든다.
-- 설명 없이도 동료 패스와 물체 리디렉션의 인과를 이해한다.
-- 같은 방을 세 번 플레이했을 때 서로 다른 결과가 나온다.
-- 5분 테스트 후 60% 이상의 플레이어가 자발적으로 Reset한다.
-- 실제 플레이 화면이 “염력”이 아니라 “물류 장비와 팀워크”로 읽힌다.
-- 1인 개발자가 유지·디버깅·확장 가능한 구조를 유지한다.
+첫 제작 확장 결정은 FGD-001 §19의 `Q1`~`Q5`를 사용한다. `Q1`,
+`Q3`, `Q5`는 mandatory이며 Q2의 conditional G4-B boundary,
+한 번의 retune/retest와 최대 한 exploratory round를 따른다.
+Full-campaign production은 G4-A PASS 전까지 차단된다.
+`3.5–5 hours`는 long-term play target이지 schedule estimate가 아니다.
 
 ## 5. 제약 조건
 
@@ -63,7 +66,7 @@ BREAK NOTICE는 해고 통보를 받은 사내 자산관리 직원이 산업용
 - 실시간 완전 파괴 제외
 - 포토리얼 AAA 품질 제외
 - 일반 전투 동료 1명
-- 버티컬 슬라이스 전까지 콘텐츠 확장 금지
+- G4-A PASS 전까지 full-campaign production expansion 금지
 
 ## 6. 제품 원칙
 

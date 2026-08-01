@@ -1,5 +1,7 @@
 # Vertical Slice Scope
 
+Status: `DRAFT / REAUTHOR AFTER G4-A EVIDENCE`
+
 > **OWNER-APPROVED G1 APPLICABILITY AND PRIORITY BASELINE**
 >
 > Document Decision Source: `DEC-G1-001`, `DEC-G1-002`,
@@ -9,6 +11,19 @@
 > Applicability 및 Priority 경계는 G1 기준으로 Owner-approved다.
 > 정확한 콘텐츠 수, 플레이 시간, 성능값과 playtest threshold는
 > 승인되지 않았으며 G2 통과, Graybox 시작과 제작 약속을 의미하지 않는다.
+
+## Full-Game and G4-A Boundary
+
+- FGD-001이 Story, Campaign, Map, Levels 0–6, Finale와 Ending의
+  `OWNER-APPROVED / LOCKED FULL-GAME TARGET`을 소유한다.
+- G4-A Core Room은 production evidence gate이며 Vertical Slice가 아니다.
+- PR-F-018 Policy Violation은 primary campaign의 필수 범위가 아니라
+  `P2 / COULD / DEFERRED REPLAY LAYER`다.
+- exact Vertical Slice content는 G4-A evidence 이후 별도 production
+  decision에서 reauthor한다.
+
+이 task는 새 Vertical Slice를 승인하지 않는다. 아래 기존 범위 표시는
+historical G1 applicability evidence이며 현재 exact Slice commitment가 아니다.
 
 ## 목표
 
@@ -110,14 +125,15 @@ Prototype Core 인과와 반복 흐름이 검증된 뒤 다음을 순차 후보�
 
 Decision Source: `DEC-G1-004` through `DEC-G1-007`, `DEC-G1-009`.
 
-다음은 Owner-approved G1 `VERTICAL SLICE / MUST` 범위이다.
+다음은 historical Owner-approved G1 applicability이며 FGD-001 C3 변경
+뒤 exact Slice reauthor 전까지 production commitment가 아니다.
 
 - PR-F-023 Perfect Catch;
 - PR-F-010 Momentum reward differentiation;
 - PR-F-011 Heavy-object use;
 - PR-F-014 Relay Position support;
-- PR-F-018 서로 다른 행동 변화를 주는 Policy Violation 후보 중
-  하나의 선택.
+- PR-F-018 Policy Violation은 `P2 / COULD / DEFERRED REPLAY LAYER`로
+  이동했다.
 
 Prototype Core에서 이미 검증한 `MUST` 결과도 Slice에서 회귀 없이
 유지해야 한다.

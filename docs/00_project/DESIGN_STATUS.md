@@ -2,9 +2,10 @@
 
 현재 단계: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
 
-G1 Requirements: `PASSED`
+G1 Requirements: `PASSED / C3 PRODUCT-DIRECTION CHANGE APPLIED`
 
-G2 Design: `PASSED / OWNER-APPROVED BASELINE`
+G2 Design:
+`PASSED / EXISTING CORE CONTRACTS PRESERVED / POLICY APPLICABILITY DEFERRED`
 
 G3 Technical: `PASSED / OWNER-APPROVED BASELINE`
 
@@ -61,7 +62,7 @@ Pre-G4 Full Design Lock Semantics:
 `OWNER-APPROVED / DEFINED`
 
 Pre-G4 Full Design Lock:
-`OWNER-APPROVED / LOCKED`
+`OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 AND ADR-0021`
 
 Pre-G4 Full Design Lock Record:
 `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md`
@@ -102,6 +103,8 @@ EAR-IMP-0001-001:
 Active Execution Authorization Relay:
 `ABSENT / NEW RELAY NOT AUTHORIZED`
 
+Active Relay: `ABSENT`
+
 Destruction Budget and Implementation Rules:
 `OWNER-APPROVED / LOCKED`
 
@@ -138,6 +141,39 @@ Implementation Gate: `CLOSED`
 Current Next Authorization Boundary:
 `OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED`
 
+## Full-Game Direction — Active C3 Authority
+
+- CR-0001: `OWNER-APPROVED / APPLIED`
+- ADR-0021: `ACCEPTED`
+- FGD-001: `OWNER-APPROVED / LOCKED FULL-GAME TARGET`
+- Working Title: `DESTROY YOUR COMPANY: ZERO DEFECT`
+- Public Marketing Title:
+  `NOT FINALLY LOCKED / POSITIONING TRACKER OPEN`
+- Marketing Tracker: the working title may be mistaken for a
+  complete-destruction sandbox and must be resolved before final Public
+  Marketing Title Lock; it does not promise arbitrary or complete destruction.
+- Primary Product Direction:
+  `SINGLE-CAMPAIGN PHYSICS ACTION ADVENTURE`
+- Runtime Target: `3.5–5 HOURS / LONG-TERM PRODUCT TARGET`
+- Worldline: `ZERO DEFECT / HANDOVER`
+- Full Story/Campaign/Map/Level:
+  `OWNER-APPROVED / LOCKED TARGET / THREE ACTS / LEVELS 0–6 / HYBRID VERTICAL LOOP`
+- As-Built Map Pillar: `OWNER-APPROVED FULL-GAME TARGET`
+- Central Atrium Finale and Insolvency Ending:
+  `OWNER-APPROVED / LOCKED TARGET`
+- Roguelite: `DEFERRED REPLAY LAYER`
+- Policy Violation:
+  `EXISTING LOGICAL CONTRACT PRESERVED / PRIMARY-CAMPAIGN APPLICABILITY DEFERRED`
+- Player Failure / PR-F-025:
+  `OWNER-APPROVED MINIMUM G4-A DIRECTION`
+- G4-A Brief: `OWNER-APPROVED / NOT STARTED / NOT AUTHORIZED`
+- G4-A Role: `FIRST IMPLEMENTATION EVIDENCE GATE`
+- Implementation Authority From C3 Registration: `NONE`
+
+FGD-001은 intended full game을 정의하지만 Unity, package, code, Scene,
+Prefab, Test, Build, asset, Graybox, G4 passage, Gate opening 또는 Relay
+발급 권한을 만들지 않는다.
+
 ## Current-State Authority Policy
 
 이 문서는 BREAK NOTICE 저장소의 `SOLE MUTABLE LIVE-STATE AUTHORITY`다.
@@ -170,7 +206,7 @@ Control을 거쳐 이 보드와 파생 mirror에 동기화한다.
 
 ## G4 Evidence-First Documentation Brake
 
-상태: `ACTIVE`
+상태: `ACTIVE FOR ADDITIONAL SPECULATIVE DESIGN`
 
 Human Owner가 승인한 첫 G4 evidence report가 존재하고 Human Owner가
 명시적으로 이 brake를 해제하거나 수정하기 전까지
@@ -211,12 +247,18 @@ gameplay scope를 승인하지 않는다. 종료 조건은
 `Human Owner-authorized G4 evidence exists and the Human Owner
 explicitly lifts or revises the brake`다.
 
+CR-0001에 따른 FGD-001 등록은 이번 brake의
+`CONSUMED HUMAN OWNER-APPROVED CHANGE-CONTROL EXCEPTION`이다. 이제
+추가 speculative Story/Campaign/Map/Level 확장과 approved full
+campaign의 구현은 G4-A evidence/PASS 전까지 차단된다.
+
 ## Active Risk Disposition — R-007
 
 - Risk: `R-007 — 설계 과잉`
 - Status: `ACTIVE / TRIGGERED`
 - Evidence: `Design Freeze and Pre-G4 Full Design Lock were completed
-  while Game remains a placeholder and G4 has not started`
+  while Game remains a placeholder and G4 has not started; FGD-001 was
+  registered through C3 Change Control without implementation`
 - Immediate response: `G4 EVIDENCE-FIRST DOCUMENTATION BRAKE`
 - Owner: `DESIGN AUTHORITY`
 - Owning Gate: `PRE-G4 / G4`

@@ -1,5 +1,7 @@
 # G2 Policy Violation Selection and Run-Application Contract
 
+Status: `OWNER-APPROVED LOGICAL CONTRACT / PRIMARY-CAMPAIGN APPLICABILITY DEFERRED / REPLAY-LAYER CANDIDATE`
+
 > **OWNER-APPROVED G2 POLICY VIOLATION SELECTION AND RUN-APPLICATION CONTRACT**
 >
 > Decision Source: `TASK-0044 delegated Owner decision`
@@ -30,8 +32,9 @@
 ## Applicability
 
 - Policy Violation selection은 `PROTOTYPE CORE`에서 비활성이다.
-- Policy Violation selection은 `VERTICAL SLICE`에서 활성이고
-  `PR-F-018`의 필수 행동 결과다.
+- Policy Violation selection은 primary campaign과 G4-A에서
+  `DEFERRED`다. 미래 별도 승인 replay layer에서만 `PR-F-018`의
+  `P2 / COULD` 후보로 활성화할 수 있다.
 - 선택 결과는 현재 run에만 적용하며 permanent meta progression이
   아니다.
 - Policy Violation은 Prototype acceptance condition이 아니다.

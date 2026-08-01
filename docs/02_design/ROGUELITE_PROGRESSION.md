@@ -1,5 +1,7 @@
 # Roguelite Progression
 
+Status: `DEFERRED REPLAY LAYER / NOT PRIMARY CAMPAIGN / NOT AUTHORIZED FOR IMPLEMENTATION`
+
 > **MIXED AUTHORITY — OWNER-APPROVED SELECTION LIFECYCLE /
 > SUPERSEDED HISTORICAL CANDIDATE IDEAS / G5 CONTENT DRAFT**
 >
@@ -9,9 +11,11 @@
 
 ## Authority Split
 
-### Owner-Approved G2 Selection Lifecycle
+### Preserved Owner-Approved G2 Selection Lifecycle — Deferred Applicability
 
-- Policy Violation은 `VERTICAL SLICE ONLY`다.
+- 이 logical lifecycle의 과거 적용 범위는 `VERTICAL SLICE ONLY`였고,
+  CR-0001 뒤 primary campaign에서는 `DEFERRED`다. 미래 별도 승인
+  replay layer에서만 재활성화할 수 있다.
 - run당 Selection Opportunity는 정확히 한 번이다.
 - 기회는 eligible encounter 완료 뒤, 다른 combat encounter가 남아
   있을 때 다음 encounter 진입 전에 발생한다.

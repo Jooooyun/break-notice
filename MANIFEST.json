@@ -13,13 +13,13 @@
   "visual_spec_gate_language_role": "ARTIFACT-LOCAL SAFETY BOUNDARY",
   "mutable_active_status_drift_target_count": 15,
   "mutable_active_status_drift_closure_status": "COMPLETE",
-  "g4_evidence_first_documentation_brake": "ACTIVE",
+  "g4_evidence_first_documentation_brake": "ACTIVE FOR ADDITIONAL SPECULATIVE DESIGN",
   "risk_r007_status": "ACTIVE / TRIGGERED",
   "risk_r007_owner": "DESIGN AUTHORITY",
   "risk_r007_owning_gate": "PRE-G4 / G4",
-  "g1_requirements_baseline_status": "OWNER-APPROVED",
-  "g1_gate_status": "PASSED",
-  "g2_design_baseline_status": "OWNER-APPROVED",
+  "g1_requirements_baseline_status": "OWNER-APPROVED / C3 PRODUCT-DIRECTION CHANGE APPLIED",
+  "g1_gate_status": "PASSED / C3 PRODUCT-DIRECTION CHANGE APPLIED",
+  "g2_design_baseline_status": "OWNER-APPROVED / CORE CONTRACTS PRESERVED / POLICY APPLICABILITY DEFERRED",
   "g2_gate_status": "PASSED",
   "g2_gate_passage_source": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
   "g2_gate_passage_source_sha": "439afeb3098277b8caa8856cfbc45e7020a5a3d2",
@@ -38,7 +38,7 @@
   "g2_ally_relay_suppressed_contract_path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
   "g2_prototype_content_lock_status": "OWNER-APPROVED",
   "g2_prototype_content_lock_path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
-  "g2_policy_violation_contract_status": "OWNER-APPROVED / CANDIDATE CONTENT REMAINS G5 DRAFT",
+  "g2_policy_violation_contract_status": "OWNER-APPROVED LOGICAL CONTRACT / PRIMARY-CAMPAIGN APPLICABILITY DEFERRED",
   "g2_policy_violation_contract_path": "docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md",
   "g2_policy_violation_selection_opportunities_per_run": 1,
   "g2_policy_violation_offer_count": 2,
@@ -189,7 +189,7 @@
   "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
-  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED",
+  "pre_g4_full_design_lock_status": "OWNER-APPROVED / LOCKED / EXTENDED BY CR-0001 AND ADR-0021",
   "pre_g4_full_design_lock_path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
   "pre_g4_full_design_lock_adr": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
   "pre_g4_full_design_lock_source_baseline_sha": "f638be24c6895a6969083626fa3f94228b533ec6",
@@ -202,7 +202,7 @@
   "limited_implementation_gate_current_state": "CLOSED",
   "limited_implementation_gate_one_shot": true,
   "imp0001_execution_relay_issuance_status": "NEW RELAY NOT AUTHORIZED",
-  "imp0001_execution_relay_status": "ABSENT / NEW RELAY NOT AUTHORIZED",
+  "imp0001_execution_relay_status": "ABSENT",
   "imp0001_precondition_progress": "6/10",
   "imp0001_mandatory_precondition_progress": "6/10",
   "imp0001_execution_baseline_binding": "SEPARATE EXECUTION AUTHORIZATION RELAY / NON-SELF-REFERENTIAL",
@@ -231,8 +231,8 @@
   "final_preimplementation_reaudit_limited_gate_readiness": "READY FOR OWNER DECISION — IMP-0001 ONLY",
   "final_preimplementation_reaudit_imp0001_baseline_binding": "VALID / NON-SELF-REFERENTIAL",
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
-  "g4_gate_status": "NOT PASSED",
-  "g5_gate_status": "NOT PASSED",
+  "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
+  "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
   "design_freeze_current_next_task": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
   "current_next_task": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
@@ -305,6 +305,34 @@
     "Separate cargo strap",
     "Grounded Corporate Action Realism"
   ],
+  "full_game_design_baseline_status": "OWNER-APPROVED / LOCKED TARGET",
+  "full_game_design_baseline_path": "docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md",
+  "full_game_design_baseline_bytes": 40538,
+  "full_game_design_baseline_sha256": "9babd002278f4d823609e8ee51b534ce17b3c427b211212736cd9ddda6dddb59",
+  "change_request_cr0001_status": "APPROVED / APPLIED",
+  "change_request_cr0001_path": "docs/00_project/CR-0001-FULL-GAME-DIRECTION-TRANSITION.md",
+  "adr0021_status": "ACCEPTED",
+  "adr0021_path": "docs/09_adrs/ADR-0021-FULL-GAME-DIRECTION-ZERO-DEFECT.md",
+  "working_title": "DESTROY YOUR COMPANY: ZERO DEFECT",
+  "public_marketing_title_status": "NOT FINALLY LOCKED / POSITIONING TRACKER OPEN",
+  "primary_product_direction": "SINGLE-CAMPAIGN THIRD-PERSON CORPORATE PHYSICS ACTION ADVENTURE",
+  "full_product_runtime_target": "3.5–5 HOURS / LONG-TERM TARGET",
+  "worldline": "ZERO DEFECT / HANDOVER",
+  "campaign_structure": "THREE ACTS / LEVELS 0–6 / HYBRID VERTICAL LOOP",
+  "full_story_campaign_map_level_status": "OWNER-APPROVED / LOCKED TARGET",
+  "as_built_map_pillar": "OWNER-APPROVED FULL-GAME TARGET",
+  "traditional_boss_count": 0,
+  "unaccounted_rescue_population_target": "APPROXIMATELY 15",
+  "atrium_finale_status": "OWNER-APPROVED FULL-GAME TARGET",
+  "insolvency_ending_status": "OWNER-APPROVED FULL-GAME TARGET",
+  "roguelite_status": "DEFERRED REPLAY LAYER",
+  "policy_violation_status": "OWNER-APPROVED LOGICAL CONTRACT / PRIMARY-CAMPAIGN APPLICABILITY DEFERRED",
+  "player_failure_requirement": "PR-F-025 / OWNER-APPROVED",
+  "g4a_validation_status": "OWNER-APPROVED BRIEF / NOT STARTED / NOT AUTHORIZED",
+  "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
+  "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
+  "active_execution_authorization_relay": "ABSENT",
+  "current_next_authorization_boundary": "OWNER EXPLICIT UNITY TOOLCHAIN PROVISIONING INSTRUCTION REQUIRED",
   "files": [
     {
       "path": ".editorconfig",
@@ -343,8 +371,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 19541,
-      "sha256": "aa064690430906fcc4b319c9ef5bb3a928cfe5503586c2117953a40e5e8c0297"
+      "bytes": 20518,
+      "sha256": "19bf3fbc7255466626cd9e07fe693237cc8518060ced8150ba8b37bf4dde4724"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -483,8 +511,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6606,
-      "sha256": "a635c82afbedf1353ff6c03e38d8aa1051f3c8f3f20c2951143ec58a4301706c"
+      "bytes": 6987,
+      "sha256": "b901211731ccf06dbfdde78019aa886d67351917b7c66a7bd548a7db2e49821a"
     },
     {
       "path": "docs/00_project/CHANGE_CONTROL.md",
@@ -492,14 +520,19 @@
       "sha256": "13cf928731a03100a7fdc337390f7f0bcb84dd08c33764619079ab1fc2de5773"
     },
     {
+      "path": "docs/00_project/CR-0001-FULL-GAME-DIRECTION-TRANSITION.md",
+      "bytes": 3826,
+      "sha256": "0329d415ec50dcde1a65575d2e36378233e4eab8d74dced9e9fd99abf4d064d6"
+    },
+    {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 11821,
-      "sha256": "3f512f4162f8b1f88a7f23e69b5e0980f3c99cd6f494ce8bdf5490f8f9f30cf1"
+      "bytes": 12322,
+      "sha256": "a8a4a2b9e4b2c31180360742e02ad6b8a788f495c814a82cd914ec35d7a802b7"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 21737,
-      "sha256": "9c334eb105863a5f66b7d1276af550945bd5b80c45efc23c08a25f4acfe3fdc9"
+      "bytes": 23748,
+      "sha256": "ead755cfed5bf216ef1ab48b52667ea41db531f941f0a5822588167b0b485b1b"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -508,8 +541,8 @@
     },
     {
       "path": "docs/00_project/PROJECT_CHARTER.md",
-      "bytes": 3675,
-      "sha256": "286542f43ad766335a65dfad8bd74c51295a59a03bcf16d981c5335d4c8ffb6b"
+      "bytes": 3900,
+      "sha256": "525694ac176d384d792cafd65ce830ef38b86fe953c5c5dce130274e69108d3b"
     },
     {
       "path": "docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md",
@@ -518,13 +551,13 @@
     },
     {
       "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 12114,
-      "sha256": "50e9b6451d392cb4cd46ee2f0a4fbff5ab451acec8dc242c7a9121caab35dbf8"
+      "bytes": 12763,
+      "sha256": "cbe518805cf3899e2ec35905083d2a77a3102c0e3d09e77de99e9267804ad996"
     },
     {
       "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 35608,
-      "sha256": "c6ab36d81e8db566f51e435e3ab84de25bcc8d02661c926b679a4f882fb65ddc"
+      "bytes": 35691,
+      "sha256": "06bdfc91650e2dfd17c535e9c2aca635b01c71945f4aac60fe7e91b18bba0991"
     },
     {
       "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
@@ -552,6 +585,11 @@
       "sha256": "9cb48f7dcd8a645563fc74ec2661b4d71aca5282228d258acbd283ebccd9cc39"
     },
     {
+      "path": "docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md",
+      "bytes": 40538,
+      "sha256": "9babd002278f4d823609e8ee51b534ce17b3c427b211212736cd9ddda6dddb59"
+    },
+    {
       "path": "docs/02_design/GAMEPLAY_SPEC.md",
       "bytes": 14305,
       "sha256": "e014ed98f45a98a1e78cb1c9b5f6ef048ebbbff0b2c84d6239e2560bab8f1ed5"
@@ -568,8 +606,8 @@
     },
     {
       "path": "docs/02_design/MASTER_GDD.md",
-      "bytes": 22489,
-      "sha256": "eee2f619d42bb3c76c5c071ce9d8c7aeb63f4b879c5a65c804767deb120a5c71"
+      "bytes": 22232,
+      "sha256": "6b6676176cd34d39c81c0c4311ee8bc6035a9f0429896bfc8be7c4a81e470680"
     },
     {
       "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
@@ -588,18 +626,18 @@
     },
     {
       "path": "docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md",
-      "bytes": 14160,
-      "sha256": "a92e85bb8bc6a6eb27726a1d004307e6e6c8bfee23ceddcb10467c3c5b1ad033"
+      "bytes": 14348,
+      "sha256": "15cfd60893a31db83269e8c1f091bc5711c9cad46fd402f5cadf70d22a0a7f31"
     },
     {
       "path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
-      "bytes": 11885,
-      "sha256": "fdea381df36d2e8412d9d0e3fb19ce5e0f2eea1790717272980a5e8ccd052c1a"
+      "bytes": 14588,
+      "sha256": "c1958fd89ea50fabd5194cd762024b905081cf17a016d9e03f9539f951dc79fe"
     },
     {
       "path": "docs/02_design/ROGUELITE_PROGRESSION.md",
-      "bytes": 4139,
-      "sha256": "53bb2fa1ed463f6f607efac0b1b81391be36181a72d7e1dad38c1da58519ef83"
+      "bytes": 4428,
+      "sha256": "2c1e3a0d6f43c791600849562ca10c3abc9a76d85667359cfd321c913d2710d6"
     },
     {
       "path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
@@ -783,8 +821,8 @@
     },
     {
       "path": "docs/05_production/RISK_REGISTER.md",
-      "bytes": 2226,
-      "sha256": "eb8ae2e8d9e4e7aa518cc9495669476dea9866eb2e1446e4a7ba0c01fc1743d6"
+      "bytes": 2764,
+      "sha256": "96156be0fead5e3df6c980b59df31a6bb2436480e0fd70fc8c1e9faecd3da390"
     },
     {
       "path": "docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md",
@@ -793,8 +831,8 @@
     },
     {
       "path": "docs/05_production/VERTICAL_SLICE_SCOPE.md",
-      "bytes": 7056,
-      "sha256": "5cad99e305b8c3a3a7b0cc72caf6d0b98b662fe7f1c806f85f224958d41f8057"
+      "bytes": 7824,
+      "sha256": "f04833f85f339a5e39406ade7f74c6b987507e4a4b2205c6b0c665644355fe89"
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
@@ -838,8 +876,8 @@
     },
     {
       "path": "docs/07_quality/ACCEPTANCE_TESTS.md",
-      "bytes": 12067,
-      "sha256": "9ec09da7c572c530dcc628fd34441c8bb048efb2626a69dafe5042530172b663"
+      "bytes": 12777,
+      "sha256": "df0da357c7e191d9cc8da4a7ae22eaf514cab13fe013e5f00e40a02edb17810b"
     },
     {
       "path": "docs/07_quality/BUG_SEVERITY.md",
@@ -863,8 +901,8 @@
     },
     {
       "path": "docs/08_marketing/POSITIONING.md",
-      "bytes": 1286,
-      "sha256": "828e90a46915cdaabbd6dac11f327c9329c739ada9525fce320936233505e7f3"
+      "bytes": 1654,
+      "sha256": "e8d983cce9b95d8546b933fc745580978b13cf7f85949dd6fce81ac87971b868"
     },
     {
       "path": "docs/08_marketing/TRAILER_BEATS.md",
@@ -970,6 +1008,11 @@
       "path": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
       "bytes": 3167,
       "sha256": "bff1be9109ebea0c108538fbfd478bdab1517528e27415b835ee73190002e593"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0021-FULL-GAME-DIRECTION-ZERO-DEFECT.md",
+      "bytes": 2660,
+      "sha256": "4038ec6685451b7b62eb0f7f2967e898579ffac23416f08be76150648031fea0"
     },
     {
       "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",

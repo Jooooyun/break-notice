@@ -1,8 +1,9 @@
 # Product Requirements
 
-> **OWNER-APPROVED G1 REQUIREMENTS BASELINE**
+> **OWNER-APPROVED REQUIREMENTS BASELINE / EXTENDED BY CR-0001**
 >
-> Document Decision Source: `DEC-G1-001` through `DEC-G1-019`
+> Document Decision Source: `DEC-G1-001` through `DEC-G1-019`,
+> `CR-0001`, `ADR-0021`, `FGD-001`
 >
 > 아래 정확한 요구사항 문구, disposition, Applicability와 Priority는
 > G1 기준으로 Owner-approved다. 이는 구현, 테스트 통과, G2 통과,
@@ -44,14 +45,18 @@ Decision Source: `DEC-G1-003`
 
 ## G1 Scope Summary
 
-| 범위 | Owner-Approved Requirement IDs | Decision Source |
-|---|---|---|
-| Prototype Core MUST | PR-F-001~009, PR-F-012~013, PR-F-016~017 | DEC-G1-002 |
-| Vertical Slice MUST | PR-F-010~011, PR-F-014, PR-F-018, PR-F-023 | DEC-G1-004~007, DEC-G1-009 |
-| Vertical Slice SHOULD | PR-F-015, PR-F-019, PR-F-024 | DEC-G1-006, DEC-G1-008, DEC-G1-010 |
-| P2 / Deferred | PR-F-020 | DEC-G1-011 |
-| Local COULD | PR-F-021 | DEC-G1-012 |
-| Outside approved product and Vertical Slice scope / COULD | PR-F-022 | DEC-G1-013 |
+| 범위 | Requirement IDs | Count | Decision Source |
+|---|---|---:|---|
+| Prototype Core MUST | PR-F-001~009, PR-F-012~013, PR-F-016~017, PR-F-025 | 14 | DEC-G1-002; CR-0001 / ADR-0021 / FGD-001 |
+| Vertical Slice MUST | PR-F-010~011, PR-F-014, PR-F-023 | 4 | DEC-G1-004~007 |
+| Vertical Slice SHOULD | PR-F-015, PR-F-019, PR-F-024 | 3 | DEC-G1-006, DEC-G1-008, DEC-G1-010 |
+| P2 / Deferred | PR-F-018, PR-F-020 | 2 | DEC-G1-009, DEC-G1-011; CR-0001 |
+| Local COULD | PR-F-021 | 1 | DEC-G1-012 |
+| Outside approved product and Vertical Slice scope / COULD | PR-F-022 | 1 | DEC-G1-013 |
+
+Functional Requirement inventory는 정확히 `25`개다. FGD-001의
+As-Built pillar는 post-G4 decomposition 전까지 별도 Requirement로
+추가하지 않는다.
 
 Prototype Core의 PR-F-008은 실제 Prototype에 등장하는 Light와
 Medium의 역할 구분을 검증한다. Heavy는 별도 질량 계층 후보로
@@ -79,13 +84,14 @@ Prototype Core에 포함하지 않는다.
 | PR-F-015 | VERTICAL SLICE | SHOULD | OWNER-APPROVED | 동료는 사망·영구 이탈하는 호위 대상이 아니라, 압박에 따라 지원이 일시 중단되고 복구 가능한 Suppressed 상태를 가질 수 있어야 한다. | AT-ALLY-003 | DEC-G1-003, DEC-G1-008 |
 | PR-F-016 | PROTOTYPE CORE | MUST | OWNER-APPROVED | 전투 또는 핵심 물리 상호작용 후에는 시작 상태와 구분되는 의미 있는 국소 room-state change가 남아야 한다. | AT-ROOM-001 | DEC-G1-002, DEC-G1-003 |
 | PR-F-017 | PROTOTYPE CORE | MUST | OWNER-APPROVED | 플레이어는 같은 검증 상황을 다시 시험할 수 있도록 encounter를 기준 상태로 즉시 Reset할 수 있어야 한다. | AT-FLOW-001 | DEC-G1-002, DEC-G1-003, DEC-G1-017 |
-| PR-F-018 | VERTICAL SLICE | MUST | OWNER-APPROVED | 방 완료 후 서로 다른 행동 변화를 주는 복수의 Policy Violation 후보 중 하나를 선택할 수 있어야 한다. 정확한 제시 수와 전체 pool 수는 별도 Draft다. | AT-ROGUE-001 | DEC-G1-003, DEC-G1-009 |
+| PR-F-018 | P2 | COULD | DEFERRED | In a future separately approved replay layer, the player may choose one of multiple Policy Violation candidates that changes behavior for that replay context. | AT-ROGUE-001 — DORMANT / DEFERRED REPLAY LAYER | DEC-G1-003, DEC-G1-009; CR-0001 / ADR-0021 / FGD-001 |
 | PR-F-019 | VERTICAL SLICE | SHOULD | OWNER-APPROVED | 선택된 대표 물체의 제한된 subset은 물리 결과를 통해 무게 계층 외의 행동 차이를 보여줄 수 있어야 한다. | AT-PROP-001 | DEC-G1-003, DEC-G1-010 |
 | PR-F-020 | P2 | SHOULD | DEFERRED | 승인된 후속 범위에서 중요한 causal event를 Incident Report로 재구성할 수 있어야 한다. 현재 G1, Prototype Core 또는 Vertical Slice의 차단 조건이 아니다. | DORMANT — 승격 전 활성 AT 없음 | DEC-G1-003, DEC-G1-011 |
 | PR-F-021 | VERTICAL SLICE | COULD | OWNER-APPROVED | Records Archive는 지역 한정 after-hours 조명 변주를 제공할 수 있다. 이는 Global Lighting 또는 Color Grading 기준이 아니다. | LGT_01 Visual Review | DEC-G1-003, DEC-G1-012 |
 | PR-F-022 | OUT | COULD | OWNER-APPROVED | 별도 제품 범위 승인이 있을 경우에만 희귀 scripted finisher에서 익명의 Finisher-only 보조 직원이 참여할 수 있다. 이는 CHR_02, 지속 Party 또는 일반 전투의 두 번째 Active Ally를 승인하지 않는다. | AT-FIN-001 — DORMANT / NON-BLOCKING | DEC-G1-003, DEC-G1-013 |
 | PR-F-023 | VERTICAL SLICE | MUST | OWNER-APPROVED | 플레이어는 Normal Catch와 구분되는 선택적 Perfect Catch 결과를 수행할 수 있어야 한다. 정확한 판정 창, Contact Freeze와 Momentum 값은 별도 Draft다. | AT-CATCH-002 | DEC-G1-003, DEC-G1-004 |
 | PR-F-024 | VERTICAL SLICE | SHOULD | OWNER-APPROVED | 승인된 조건을 충족하면 제한된 Structural Feature가 국소 시야, 통로 또는 공간 상태를 의미 있게 바꿀 수 있어야 한다. | AT-STRUCT-001 | DEC-G1-003, DEC-G1-006 |
+| PR-F-025 | PROTOTYPE CORE | MUST | OWNER-APPROVED | When enemy pressure prevents the player from continuing combat, the result must be presented as nonlethal restraint and a restart of the current encounter rather than death, while already completed higher-level progress remains preserved. | AT-FAIL-001 | CR-0001 / ADR-0021 / FGD-001 |
 
 ## Numerical and Implementation Boundary
 

@@ -11,7 +11,16 @@
 
 ## 한 문장 훅
 
-동료가 굴려준 의자를 산업용 스트랩으로 꺾어 보안요원을 유리벽과 복사기에 연쇄 충돌시키는 3인칭 사무실 물리 액션 Roguelite.
+본사 매각 전 마지막 밤, 기록에서 누락된 사람과 공간을 구하기 위해
+동료의 실제 물리 릴레이와 산업용 화물 스트랩으로 한 기업 건물을
+돌파하는 single-campaign 3인칭 corporate physics action adventure.
+
+## Working-Title Tracker
+
+OPEN TRACKER — The working title "DESTROY YOUR COMPANY: ZERO DEFECT"
+may be mistaken for a complete-destruction sandbox. Resolve this before
+final Public Marketing Title Lock. The working title does not promise
+arbitrary or complete destruction.
 
 ## 차별점
 
@@ -37,4 +46,4 @@
 - 완전 파괴 샌드박스
 - 팀 기반 Co-op
 - 총기 TPS
-- 퍼즐 게임
+- 순수 퍼즐 게임
