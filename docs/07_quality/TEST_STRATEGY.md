@@ -92,9 +92,17 @@ Origin 또는 Meaningful Result를 만들지 않는다. Campaign-level Story,
 rescue, As-Built/map, shortcut와 save persistence는 이 harness의 active
 G4-A PASS 범위가 아니다.
 
-observer, session, explanation, variant order, `YES/NO` evidence와 result
-reporting을 포함하는 detailed G4-A evidence protocol은 `PENDING`이다.
-이 ownership plan은 test, fixture, code 또는 실행 결과를 만들지 않는다.
+observer, session, explanation, fixed Variant order, `YES/NO` scoring,
+evidence package와 invalidation을 포함하는 현재 상세 권위는
+`docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md`다. 상태는
+`OWNER-APPROVED / READY FOR FUTURE EXECUTION AUTHORIZATION`이며 evidence는
+`NOT COLLECTED`, execution은 `NOT STARTED / NOT AUTHORIZED`다.
+
+프로토콜의 Build Qualification은 non-scoring precondition이며 test,
+fixture, framework artifact 또는 자동화 실행 결과가 아니다. 참가자 증거는
+이 문서의 `Manual / Playtest` ownership에 속한다. G3 Harness ownership은
+변경하지 않으며 프로토콜 승인만으로 Build, participant session, evidence
+collection 또는 G4 PASS를 주장할 수 없다.
 
 ## Candidate Test Pyramid
 

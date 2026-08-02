@@ -251,8 +251,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
   "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "design_freeze_current_next_task": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
-  "current_next_task": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
+  "design_freeze_current_next_task": "OWNER EXACT UNITY EDITOR VERSION AND TOOLCHAIN PROVISIONING DECISION REQUIRED",
+  "current_next_task": "OWNER EXACT UNITY EDITOR VERSION AND TOOLCHAIN PROVISIONING DECISION REQUIRED",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -348,13 +348,24 @@
   "player_failure_requirement": "PR-F-025 / OWNER-APPROVED / ACTIVE G4-A SCOPE ENCOUNTER-LOCAL",
   "player_failure_campaign_persistence_status": "FGD-001 OWNER-APPROVED FULL-GAME TARGET / LATER DECOMPOSITION / NOT ACTIVE G4-A PASS EVIDENCE",
   "g4a_direction_decision_rule_status": "OWNER-APPROVED",
-  "g4a_detailed_evidence_protocol_status": "PENDING / NEXT BOUNDED TASK",
+  "g4a_detailed_evidence_protocol_status": "OWNER-APPROVED / READY / EXECUTION NOT AUTHORIZED",
+  "g4a_detailed_evidence_protocol_path": "docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md",
+  "g4a_detailed_evidence_protocol_baseline_sha": "a90fe71abc50eea9d06898672ca73c4b48bcff34",
+  "g4a_scored_participant_count_per_binary_round": 3,
+  "g4a_scored_attempt_count_per_participant": 2,
+  "g4a_attempt_time_cap_minutes": 5,
+  "g4a_scored_attempt_count_per_binary_round": 6,
+  "g4a_optional_exploratory_session_count": 2,
+  "g4a_binary_retest_limit": 1,
+  "g4a_q2_only_layout_recheck_limit": 1,
+  "g4a_mandatory_questions": "Q1/Q3/Q5",
+  "g4a_evidence_status": "NOT COLLECTED",
   "g4a_execution_status": "NOT STARTED / NOT AUTHORIZED",
-  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / TARGETED C3 RE-AUDIT READY / DETAILED EVIDENCE PROTOCOL PENDING / NOT STARTED / NOT AUTHORIZED",
+  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / DETAILED EVIDENCE PROTOCOL OWNER-APPROVED / EVIDENCE NOT COLLECTED / NOT STARTED / NOT AUTHORIZED",
   "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
   "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
   "active_execution_authorization_relay": "ABSENT",
-  "current_next_authorization_boundary": "TASK-0070 — Define the G4-A Detailed Evidence Protocol",
+  "current_next_authorization_boundary": "OWNER EXACT UNITY EDITOR VERSION AND TOOLCHAIN PROVISIONING DECISION REQUIRED",
   "files": [
     {
       "path": ".editorconfig",
@@ -393,8 +404,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 22736,
-      "sha256": "468f7ca6af66cc49034b579694ff443815f8ed2ad7f01f275c3b45db60168be0"
+      "bytes": 23836,
+      "sha256": "54860942ccac45bdbdfb1557b33f65170ef56871fb9ecb444d4921ce324f7191"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -548,13 +559,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 12674,
-      "sha256": "3233eb34dc6b511e19ed5ff21faa20151c9c2e25d8ca993cec1444bbf8b09306"
+      "bytes": 13012,
+      "sha256": "d6d9a6927e166ca1da49363266af76c72087eb21511859b2caee1e572da0c963"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 24680,
-      "sha256": "ebb3be57ca0ec621f0a8b813dcf78e182236bfa353b8689c48e5a1fb7f621511"
+      "bytes": 25232,
+      "sha256": "a75fdc822cccfb4a7af352ac0e8bbb06847f36b7f3920b1a0f1e2c66435d4d63"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -912,14 +923,19 @@
       "sha256": "b88d07db774ff7452a6dc7dec1c0d3e40accb3553bb407eb9c7d201289ca48a9"
     },
     {
+      "path": "docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md",
+      "bytes": 18519,
+      "sha256": "56f948a6293b2e60664129b9f8d0d141ba8beda1194a6cf30f589c2d12c173dc"
+    },
+    {
       "path": "docs/07_quality/PLAYTEST_PLAN.md",
-      "bytes": 2055,
-      "sha256": "47cc238e43cd717be31416eee4930bfa7c21f5adb5d2baf25b1b756145652b87"
+      "bytes": 3263,
+      "sha256": "eb913b0d2abaa50771494a012c003d50c1fbcffb104427ea977f9103d75ed5d2"
     },
     {
       "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 8493,
-      "sha256": "a3fab2bb63942cdd81a1eb8513c96ddcfda6ca551717f971ccc02edc5b6e0ed0"
+      "bytes": 8998,
+      "sha256": "79b419735d5a50a62c5a3207d040df92f15c27132a1bac33eba7bda2cc1994c6"
     },
     {
       "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",
