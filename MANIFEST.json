@@ -348,9 +348,14 @@
   "player_failure_requirement": "PR-F-025 / OWNER-APPROVED / ACTIVE G4-A SCOPE ENCOUNTER-LOCAL",
   "player_failure_campaign_persistence_status": "FGD-001 OWNER-APPROVED FULL-GAME TARGET / LATER DECOMPOSITION / NOT ACTIVE G4-A PASS EVIDENCE",
   "g4a_direction_decision_rule_status": "OWNER-APPROVED",
-  "g4a_detailed_evidence_protocol_status": "OWNER-APPROVED / READY / EXECUTION NOT AUTHORIZED",
+  "g4a_detailed_evidence_protocol_status": "OWNER-APPROVED / CORRECTED / READY / EXECUTION NOT AUTHORIZED",
   "g4a_detailed_evidence_protocol_path": "docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md",
   "g4a_detailed_evidence_protocol_baseline_sha": "a90fe71abc50eea9d06898672ca73c4b48bcff34",
+  "g4a_detailed_evidence_protocol_initial_commit": "1be067ec154fea60646113214332ebd64fc66fd6",
+  "g4a_detailed_evidence_protocol_initial_conformance": "REVISION REQUIRED / HISTORICAL",
+  "g4a_detailed_evidence_protocol_correction_status": "TASK-0070-R1 COMPLETE / EXACT CONTRACT DEFECTS CLOSED",
+  "g4a_detailed_evidence_protocol_cr0001_path_status": "CORRECTED / VALID",
+  "g4a_detailed_evidence_protocol_build_baseline_diff": "REQUIRED",
   "g4a_scored_participant_count_per_binary_round": 3,
   "g4a_scored_attempt_count_per_participant": 2,
   "g4a_attempt_time_cap_minutes": 5,
@@ -359,9 +364,16 @@
   "g4a_binary_retest_limit": 1,
   "g4a_q2_only_layout_recheck_limit": 1,
   "g4a_mandatory_questions": "Q1/Q3/Q5",
+  "g4a_session_evidence_item_count": 16,
+  "g4a_round_evidence_required_item_count": 14,
+  "g4a_production_speed_field_count": 10,
+  "g4a_future_evidence_report_section_count": 22,
+  "g4a_evidence_disposition_count": 5,
+  "g4a_protocol_evidence_status": "NOT COLLECTED",
+  "g4a_protocol_execution_status": "NOT STARTED / NOT AUTHORIZED",
   "g4a_evidence_status": "NOT COLLECTED",
   "g4a_execution_status": "NOT STARTED / NOT AUTHORIZED",
-  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / DETAILED EVIDENCE PROTOCOL OWNER-APPROVED / EVIDENCE NOT COLLECTED / NOT STARTED / NOT AUTHORIZED",
+  "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / DETAILED EVIDENCE PROTOCOL OWNER-APPROVED AND CORRECTED / EVIDENCE NOT COLLECTED / NOT STARTED / NOT AUTHORIZED",
   "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
   "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
   "active_execution_authorization_relay": "ABSENT",
@@ -404,8 +416,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 23836,
-      "sha256": "54860942ccac45bdbdfb1557b33f65170ef56871fb9ecb444d4921ce324f7191"
+      "bytes": 24925,
+      "sha256": "f2abd255aba2fb057e20770e82546e25dd98eaa16ae11ef10a3e8f74fac98d2f"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -564,8 +576,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 25232,
-      "sha256": "a75fdc822cccfb4a7af352ac0e8bbb06847f36b7f3920b1a0f1e2c66435d4d63"
+      "bytes": 25350,
+      "sha256": "d57cd077a1bc6297e6a2d579a3f04d9aa6304fd82b2861ec81a000da22ebfd0d"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -924,8 +936,8 @@
     },
     {
       "path": "docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md",
-      "bytes": 18519,
-      "sha256": "56f948a6293b2e60664129b9f8d0d141ba8beda1194a6cf30f589c2d12c173dc"
+      "bytes": 21539,
+      "sha256": "92b564fdf956f2045c136eccd1e2ed2cab450eb71b4c3aeadaa019276969c8d2"
     },
     {
       "path": "docs/07_quality/PLAYTEST_PLAN.md",

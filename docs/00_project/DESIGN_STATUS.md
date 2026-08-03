@@ -28,7 +28,13 @@ Targeted C3 Re-Audit Record:
 `docs/05_production/C3_FULL_GAME_G4A_AUTHORITY_REAUDIT.md`
 
 G4-A Detailed Evidence Protocol:
-`OWNER-APPROVED / READY FOR FUTURE EXECUTION AUTHORIZATION`
+`OWNER-APPROVED / CORRECTED / READY`
+
+Initial TASK-0070 Protocol Registration:
+`POST-PUSH CONFORMANCE AUDIT — REVISION REQUIRED / HISTORICAL`
+
+Exact Contract Correction:
+`TASK-0070-R1 COMPLETE`
 
 G4-A Detailed Evidence Protocol Record:
 `docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md`
@@ -193,7 +199,7 @@ Current Next Authorization Boundary:
   `OWNER-APPROVED MINIMUM ENCOUNTER-LOCAL G4-A DIRECTION / C3 ADDENDUM APPLIED`
 - G4-A Direction and Decision Rule: `OWNER-APPROVED`
 - G4-A Detailed Evidence Protocol:
-  `OWNER-APPROVED / READY FOR FUTURE EXECUTION AUTHORIZATION`
+  `OWNER-APPROVED / CORRECTED / READY`
 - G4-A Evidence: `NOT COLLECTED`
 - G4-A Execution: `NOT STARTED / NOT AUTHORIZED`
 - G4-A Role: `FIRST IMPLEMENTATION EVIDENCE GATE`
@@ -365,7 +371,7 @@ Owner의 새 직접 지시 전까지 승인되지 않는다.
 | First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / 6 OF 10 / TOOLCHAIN PROVISIONING OWNER-DEFERRED | exact Gate, Relay, SHA와 Editor evidence 전 실행 금지 | DESIGN FREEZE / CHECKED |
 | Final Pre-Implementation Review | REVISION REQUIRED — historical decision preserved | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT | HISTORICAL |
 | Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY | consumed by TASK-0063 Pre-G4 Lock decision | PRE-G4 / GATE CLOSED |
-| Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6`; EXTENDED BY CR-0001; C3 ADDENDUM VERIFIED | maintain Lock through Change Control; G4-A protocol approved but execution remains separately unauthorized | PRE-G4 |
+| Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6`; EXTENDED BY CR-0001; C3 ADDENDUM VERIFIED | maintain Lock through Change Control; G4-A protocol Owner-approved, corrected and ready, but execution remains separately unauthorized | PRE-G4 |
 | Limited Implementation Gate | SEMANTICS OWNER-APPROVED / DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | Human Owner의 새 provisioning 지시 전 대기 | CLOSED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
@@ -490,8 +496,8 @@ TASK-0062 Re-Audit에서 `48 / 48 PASS`로 검증됐다. 첫 구현 티켓은
 승인되지 않았다. `EAR-IMP-0001-001`은 `EXPIRED / UNUSED`, active
 Relay와 concrete execution SHA는 없고 IMP-0001 precondition은
 `6 / 10`이다. toolchain provisioning은 `OWNER-DEFERRED`이며 G4-A
-detailed evidence protocol은 `OWNER-APPROVED / READY FOR FUTURE
-EXECUTION AUTHORIZATION`, evidence는 `NOT COLLECTED`, execution은
+detailed evidence protocol은 `OWNER-APPROVED / CORRECTED / READY`,
+evidence는 `NOT COLLECTED`, execution은
 `NOT STARTED / NOT AUTHORIZED`다. 다음 권한 경계는
 `OWNER EXACT UNITY EDITOR VERSION AND TOOLCHAIN PROVISIONING DECISION REQUIRED`다.
 남은 Design Freeze 항목은 `0`개다. Bootstrap, Graybox와 구현 권한은

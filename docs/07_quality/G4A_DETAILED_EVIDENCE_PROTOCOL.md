@@ -1,6 +1,6 @@
 # G4-A Detailed Evidence Protocol
 
-Status: `OWNER-APPROVED / READY FOR FUTURE EXECUTION AUTHORIZATION`
+Status: `OWNER-APPROVED / CORRECTED / READY FOR FUTURE EXECUTION AUTHORIZATION`
 
 Decision baseline: `a90fe71abc50eea9d06898672ca73c4b48bcff34`
 
@@ -9,6 +9,16 @@ Protocol decision: `G4-A DETAILED EVIDENCE PROTOCOL OWNER-APPROVED / EXECUTION N
 Evidence: `NOT COLLECTED`
 
 Execution: `NOT STARTED / NOT AUTHORIZED`
+
+## TASK-0070-R1 correction history
+
+- TASK-0070 initial registration commit:
+  `1be067ec154fea60646113214332ebd64fc66fd6`
+- post-push exact conformance result:
+  `REVISION REQUIRED / HISTORICAL`
+- TASK-0070-R1: `EXACT CONTRACT CORRECTION APPLIED`
+- evidence: `NOT COLLECTED`
+- execution: `NOT STARTED / NOT AUTHORIZED`
 
 이 문서는 FGD-001의 Owner-approved G4-A 방향과 이진 판정 규칙을
 미래 Build Qualification, 참가자 세션, 관찰, 증거 기록과 Owner Gate
@@ -22,7 +32,7 @@ Implementation Gate 개방 또는 Execution Authorization Relay 발급을
 실질 권위 우선순위는 다음과 같다.
 
 1. `docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md`
-2. `docs/00_project/changes/CR-0001-FULL-GAME-DIRECTION-TRANSITION.md`
+2. `docs/00_project/CR-0001-FULL-GAME-DIRECTION-TRANSITION.md`
 3. `docs/09_adrs/ADR-0021-FULL-GAME-DIRECTION-ZERO-DEFECT.md`
 4. 승인된 G1/G2/G3 계약, Prototype Content Lock과 Acceptance Tests
 5. 이 실행 프로토콜
@@ -105,10 +115,31 @@ Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`, active Relay는
 
 - manual Reset이 authored encounter-entry baseline을 복원한다.
 - 비살상 failure restart를 연속 `3`회 수행해 매번 baseline을 복원한다.
+- Manual Reset 뒤와 연속 `3`회의 validated nonlethal failure restart 각각의
+  뒤에, 승인된 baseline-diff instrumentation으로 복원된 runtime state를
+  authored encounter-entry baseline과 비교한다. 참가자 세션을 허용하기
+  전에 모든 unexpected difference count는 정확히 `0`이어야 한다.
+- baseline-diff는 최소한 다음을 모두 포함한다.
+  - actor presence와 authored start state
+  - object presence와 authored start state
+  - direct supply pool과 Ally supply pool
+  - Drawer blockage와 side-lane state
+  - Copier recognition-only state
+  - Carry ownership
+  - Relay와 reservation
+  - Queued Throw
+  - Cargo Strap
+  - Throw와 Heavy commitment
+  - Causal Origin과 Result state
+  - room-state flags
+  - event subscription 또는 handler count
 - Reset 또는 failure restart 뒤 duplicate subscription이 없다.
 - interaction, active object, Relay, Strap, queue와 causal ownership 누수가 없다.
 - required event/log capture가 동작한다.
 - 평가를 막는 crash가 없다.
+
+이 baseline-diff 비교는 Build Qualification evidence이며 Q1–Q5 scoring이
+아니다.
 
 ## 4. Round types and allowed sequence
 
@@ -201,9 +232,24 @@ Catch, queued throw, Strap, Anchor, Drawer, causal chain 또는 scoring을
 - hardware 또는 input malfunction 교정
 - 안전을 위한 pause
 
-해결법, useful object, lane, action timing, Relay, Throw, Strap, Drawer 또는
-causal relation에 대한 제안·설명·유도는 금지한다. Coaching이 발생한
-session은 무효이며 새 참가자로 대체한다.
+다음 개입은 모두 명시적으로 금지한다.
+
+- useful object의 이름을 말함
+- `CallAlly` 사용을 제안함
+- Throw를 제안함
+- Strap을 제안함
+- Anchor를 가리킴
+- lane을 가리킴
+- Catch를 설명함
+- Queued Throw를 설명함
+- Drawer 해결법을 설명함
+- `warning about an approaching enemy is prohibited`
+- causal result를 설명함
+- `suggesting Reset is prohibited`
+- mechanic을 시범 보임
+
+위 금지 개입 중 하나라도 발생하면 해당 participant session은 무효이며
+새 eligible participant로 대체한다.
 
 ## 9. Intentional-use and approach definitions
 
@@ -325,13 +371,13 @@ G4-A PASS 자체가 아니며 Design Authority의 별도 Owner Gate 결정이
 ### Q2-only branch
 
 PASS rule을 충족했지만 `Q2 = NO`이면
-`Q2-ONLY LAYOUT RECHECK REQUIRED`다. Section 4.4의 단 한 번의
+`Q2-ONLY RECHECK REQUIRED`다. Section 4.4의 단 한 번의
 layout-only recheck 외에 scope를 확장하지 않는다.
 
 ### One bounded Retune and Binary Retest
 
 total YES가 `2–3`이거나 mandatory question인 Q1, Q3, Q5 중 하나라도
-`NO`이면 `ONE BOUNDED RETUNE AND BINARY RETEST REQUIRED`다. Section
+`NO`이면 `ONE RETUNE / BINARY RETEST REQUIRED`다. Section
 4.3의 한 번의 Retest만 허용한다.
 
 ### Core redesign
@@ -345,14 +391,23 @@ production integration은 차단된다.
 한 번의 bounded Retune 또는 Q2-only revision은 다음 Draft surface에만
 한정한다.
 
-- 기존 authored position
-- lane spacing
-- Draft camera values
-- Draft Compliance Runner values
-- Draft Throw, Catch와 Strap values
-- objective marker
-- control label
-- collision와 tolerance
+- existing actor starting positions
+- existing object starting positions
+- existing Variant lane spacing
+- Draft camera distance
+- Draft camera damping
+- Draft camera collision
+- Draft camera occlusion
+- Draft Runner pressure timing
+- Draft Runner pressure spacing
+- Draft Runner movement
+- Draft Throw response
+- Draft Catch response
+- Draft Strap response
+- objective-marker visibility
+- control-label readability
+- collision tolerance required for approved actions
+- interaction tolerance required for approved actions
 
 새 mechanic, content type, enemy role, Story scene, system, asset family,
 destruction 또는 HeavyAction을 추가할 수 없다. Retest 또는 Recheck가
@@ -379,27 +434,34 @@ destruction 또는 HeavyAction을 추가할 수 없다. Retest 또는 Recheck가
 15. facilitator/technical intervention record
 16. invalid flag와 reason
 
-각 session에는 screen recording 또는 독립 observer attestation 중 하나가
-반드시 필요하다. 얼굴은 수집하지 않는다. personally identifying
-information은 anonymous ID와 broad experience bracket 외에는 수집하지
-않는다.
+`Each scored session must include at least one of exactly:`
+
+- `a full game-window screen recording`
+- `an independent second-observer record`
+
+generic screen recording, observer attestation 또는 observer note라는 약한
+대체 문구는 사용할 수 없다. 얼굴 recording은 요구하지 않는다.
+personally identifying information은 anonymous ID와 broad experience
+bracket 외에는 수집하지 않는다.
 
 ## 14. Round evidence package
 
 각 Binary Round package는 다음을 모두 포함한다.
 
-- Build Qualification result와 completed checklist
-- immutable Build ID, repository SHA와 실제 toolchain 식별자
-- participant eligibility summary
-- scored session record `6`개
-- Variant assignment matrix
-- participant-level 및 round-level Q1–Q5 matrix
-- raw event/log reference
-- screen recording 또는 independent observer attestation
-- invalid session과 replacement log
-- 적용된 경우 Retune 또는 layout-only change diff
-- production-speed ledger
-- evidence disposition과 limitation
+1. immutable build hash
+2. repository source SHA
+3. protocol version
+4. participant eligibility table
+5. exactly six attempt records
+6. Variant assignment table
+7. event and Reset logs
+8. approach-signature table
+9. Q1–Q5 aggregation table
+10. Critical Camera Event table
+11. invalid-session replacement records
+12. production-speed ledger
+13. scope-conformance checklist
+14. exactly one recommended Evidence Disposition
 
 필수 항목이 빠지면 Round는 무효다.
 
@@ -407,12 +469,16 @@ information은 anonymous ID와 broad experience bracket 외에는 수집하지
 
 G4-A package는 다음 실제값을 별도 ledger에 기록한다.
 
-1. empty project에서 playable Core Room까지의 실제 작업 시간
-2. 해당 Round 기간의 실제 주간 개발 시간
-3. rework 시간
-4. tool/asset wait 시간
-5. reusable output
-6. external dependency
+1. active implementation hours
+2. rework hours
+3. debugging hours
+4. tool or asset wait time
+5. external dependency time
+6. calendar elapsed time
+7. actual weekly development hours available
+8. reusable systems or assets created
+9. discarded work
+10. build and evidence-capture time
 
 한 개 sample을 Levels 0–6 전체 일정으로 직접 배수 추정하지 않는다.
 이 ledger는 G5/C3 계획 입력일 뿐 G4-A gameplay score가 아니다.
@@ -423,28 +489,36 @@ G4-A package는 다음 실제값을 별도 ledger에 기록한다.
 
 다음 중 하나면 session을 무효화하고 새 참가자로 대체한다.
 
-- 참가자 eligibility 실패 또는 참가자 재사용
-- 지정되지 않은 Variant order
-- coaching 또는 금지된 설명
-- required record/capture 누락
-- session 중 Build/content drift
-- 평가를 막는 crash
-- attempt time cap 위반
-- attempt 사이 baseline restore 실패
+- participant가 scored room 또는 build에 prior exposure가 있었음
+- Facilitator가 mechanic을 coaching함
+- Round 중 build가 변경됨
+- 잘못된 Variant order를 사용함
+- required evidence가 누락됨
+- excluded content가 활성화됨
+- locked actor count가 변경됨
+- locked object count가 변경됨
+- unauthorized mechanic 또는 system이 활성화됨
+- blocking crash가 정상 완료를 막음
+- 참가자 사이 input scheme이 변경됨
+
+기존의 eligibility 실패 또는 participant 재사용, attempt time cap 위반,
+attempt 사이 baseline restore 실패도 session을 무효화한다. 무효 session은
+새 eligible participant로 대체한다.
 
 ### 16.2 Invalid round
 
 다음 중 하나면 Round 전체를 무효화하고 Gate 결정을 내리지 않는다.
 
-- Build Qualification 실패
-- participant 수 또는 attempt 수 오류
-- Round 중 mutable Build/content
-- required Round package 누락
-- unresolved critical camera safety event
-- unauthorized scope 포함
-- 서로 다른 Build의 결과 혼합
+- immutable build가 변경됨
+- scored session을 둘 이상 대체할 수 없음
+- scope가 승인된 FGD-001 G4-A content와 다름
+- required log 또는 recording을 재구성할 수 없음
+- source evidence 없이 Q1–Q5 result를 편집함
 
-Round disposition은 `ROUND INVALID — REQUALIFY BEFORE DECISION`이다.
+기존의 Build Qualification 실패, participant 또는 attempt 수 오류,
+unresolved critical camera safety event도 Round를 무효화한다.
+
+Round disposition은 `EVIDENCE ROUND INVALID`다.
 
 ## 17. Future Evidence Report contract
 
@@ -455,37 +529,61 @@ Round disposition은 `ROUND INVALID — REQUALIFY BEFORE DECISION`이다.
 이 작업에서는 해당 파일을 만들지 않는다. 미래 보고서는 정확히 다음
 section을 포함해야 한다.
 
-1. Authority and Baseline
-2. Build Qualification
-3. Round and Participants
-4. Q1–Q5 Results
-5. Critical Camera Events
-6. Invalid Sessions and Replacements
-7. Retune or Recheck
-8. Production Speed
-9. Limitations
-10. Evidence Disposition
-11. Owner Gate Decision
+1. Authority and Execution Baseline
+2. Toolchain and Build Identity
+3. Build Qualification Result
+4. Exploratory Round Disposition
+5. Participant Eligibility
+6. Session and Variant Inventory
+7. Scope-Conformance Review
+8. Q1 Evidence
+9. Q2 Evidence
+10. Q3 Evidence
+11. Q4 Evidence
+12. Q5 Evidence
+13. Failure and Reset Evidence
+14. Camera Critical Events
+15. Invalid or Replaced Sessions
+16. Production-Speed Evidence
+17. Binary Decision Calculation
+18. Retune or Q2-Only Branch
+19. Blocking Issues
+20. Non-Blocking Notes
+21. Evidence Disposition
+22. Owner Gate Decision Required
 
 허용 disposition은 다음 다섯 개뿐이다.
 
 1. `EVIDENCE SUPPORTS G4-A PASS DECISION`
-2. `Q2-ONLY LAYOUT RECHECK REQUIRED`
-3. `ONE BOUNDED RETUNE AND BINARY RETEST REQUIRED`
+2. `Q2-ONLY RECHECK REQUIRED`
+3. `ONE RETUNE / BINARY RETEST REQUIRED`
 4. `CORE LOOP REDESIGN REQUIRED`
-5. `ROUND INVALID — REQUALIFY BEFORE DECISION`
+5. `EVIDENCE ROUND INVALID`
 
 Evidence Report는 스스로 G4-A를 PASS하거나 G4-B, G5, Graybox,
 Implementation Gate 또는 Relay를 승인할 수 없다.
 
 ## 18. Protocol Change Control
 
-`C0`은 spelling, formatting 또는 link correction처럼 권위를 바꾸지 않는
-교정만 허용한다. participant/session/attempt 수, Variant order, Q1–Q5
-scoring, mandatory question, PASS rule, Retune/Recheck, evidence artifact,
-invalidation 또는 allowed scope를 바꾸려면 Human Owner-approved Change
-Control이 필요하다. 이러한 값을 조용히 편집하거나 실행 중 재해석할 수
-없다.
+다음 값을 바꾸려면 evidence collection 전에 Human Owner-approved Change
+Control이 필요하다.
+
+- scored participant count
+- participant eligibility
+- attempt count
+- attempt time cap
+- Variant order
+- exact standardized introduction script
+- Coaching and intervention boundary
+- Q1–Q5 aggregation thresholds
+- Mandatory Questions
+- PASS rule
+- Retune count
+- Q2-only revision count
+- evidence-artifact requirements
+
+`C0`은 spelling, formatting 또는 valid-link correction처럼 권위를 바꾸지
+않는 교정만 허용한다. 위 값을 조용히 편집하거나 실행 중 재해석할 수 없다.
 
 ## 19. Next authorization boundary
 
