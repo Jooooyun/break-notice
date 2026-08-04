@@ -1,6 +1,6 @@
-# Unity Toolchain Intent and Historical Provisioning Evidence
+# Unity Toolchain Intent and Provisioning Evidence
 
-> **OWNER-APPROVED TOOLCHAIN INTENT AND HISTORICAL PROVISIONING EVIDENCE —
+> **OWNER-APPROVED TOOLCHAIN INTENT AND VERIFIED POINT-IN-TIME EVIDENCE —
 > NOT THE LIVE PROJECT-STATE BOARD**
 >
 > Date: `2026-07-25`
@@ -11,9 +11,10 @@
 ## Authority and Scope
 
 이 문서는 향후 별도 승인된 Unity Bootstrap이 사용해야 할 정확한
-Editor와 direct Package 의도를 기록한다. 이 기록은 문서 권위만
-갱신하며 설치, Unity Hub 변경, 라이선스 확인, Editor 실행, Package
-materialization, 테스트, 구현 또는 Gate 개방을 수행하거나 승인하지
+Editor와 direct Package 의도, 그리고 TASK-0071-R3에서 별도 승인된
+Editor 복구·검증의 point-in-time evidence를 기록한다. 설치 검증
+증거는 Package materialization, BREAK NOTICE Unity project, 테스트,
+구현, G4, Graybox, Relay 발급 또는 Gate 개방을 수행하거나 승인하지
 않는다.
 
 Pre-G4 Full Design Lock의 frozen-source 내용은 변경하지 않는다.
@@ -37,6 +38,121 @@ execution readiness와 다음 권한 경계의 유일한 가변 권위는
 위 표는 `OWNER-APPROVED / LOCKED INTENT`다. floating version과 추가
 direct Package를 승인하지 않는다. AI Navigation은 Prototype direct
 Package baseline 밖이며 계속 `DEFERRED`다.
+
+## TASK-0071-R3 Current Verified Evidence
+
+### Authority and historical stop preservation
+
+- Repository baseline: `b82bb382fc0439847d6497ee2fadd9c55781a9fa`
+- Owner Version Decision: `A — RETAIN UNITY 6000.3.20f1 / c9ba695d4f07`
+- TASK-0071: `ELEVATION STOP / HISTORICAL`
+- TASK-0071-R1: `PARTIAL INSTALLATION / UNITY.EXE ABSENT / HISTORICAL`
+- TASK-0071-R2: `UNSIGNED UNINSTALLER TRUST CHECK STOP / HISTORICAL`
+- TASK-0071-R3:
+  `PARTIAL ROOT QUARANTINED / FRESH INSTALL VERIFIED / COMPLETE`
+
+### Partial root identity and quarantine
+
+| Evidence | Verified result |
+|---|---|
+| Partial source root | `C:\Program Files\Unity\Hub\Editor\6000.3.20f1` |
+| Required `Unity.exe` before recovery | `ABSENT` |
+| Source/descendant reparse points | `0 / 0` |
+| `Editor\Unity.com` SHA-256 | `cd26e404b85345ea8eda0476ea35602e23f6000c1d865fb44593cdc865c09afc` |
+| `Editor\Uninstall.exe` SHA-256 | `21cfe061255c73f9b0d6757e311a5f595ba7dc4d780a925d86c0f661265a81fa` |
+| Unsigned Uninstaller status | `NOT SIGNED / NOT EXECUTED` |
+| Partial file count | `31,086` |
+| Partial directory count | `3,679` |
+| Partial total bytes | `6,111,841,704` |
+| Exact quarantine root | `C:\Program Files\Unity\Hub\Editor\6000.3.20f1.partial-task0071-r1` |
+| Quarantine result | `RENAMED EXACTLY / IDENTITY REVERIFIED / REMOVED AFTER FULL SUCCESS` |
+
+Source와 quarantine 내부 Unity binary는 실행하지 않았다. wildcard,
+Registry edit, reparse point, hard-link substitution, 다른 Editor 변경
+또는 보안 설정 변경 없이 exact root만 격리했고, 두 batch startup과
+후속 검증이 모두 끝난 뒤 exact quarantine root만 제거했다.
+
+### Signed installer and fresh installation
+
+| Evidence | Verified result |
+|---|---|
+| Installer path before cleanup | `C:\Users\jhbjm\AppData\Local\Temp\break-notice-task0071\UnitySetup64-6000.3.20f1.exe` |
+| Installer bytes | `4,173,270,160` |
+| Installer SHA-256 | `0e55b2b4af53a40f4204899eecc54f0020dc06e7a2de4810a1c65792ffd0dbc9` |
+| Installer FileVersion | `6000.3.20.0` |
+| Installer Authenticode | `Valid / Unity Technologies` |
+| Installer use | `ONE INTERACTIVE RUN / EXIT CODE 0` |
+| Install selection | `EDITOR CORE ONLY / NO OPTIONAL MODULE` |
+| Fresh target | `C:\Program Files\Unity\Hub\Editor\6000.3.20f1` |
+| Stable target observations | `49,756 FILES / 5,005 DIRECTORIES / 8,319,482,917 BYTES` twice identically |
+| Installer cleanup | `REMOVED AFTER SUCCESS` |
+
+새 download, 보안 경고 우회, Unity Hub launch·upgrade, 다른 Editor 제거,
+PATH 변경 또는 optional module 설치는 수행하지 않았다.
+
+### Required Unity.exe, registration and security
+
+| Evidence | Verified result |
+|---|---|
+| Required binary | `C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Unity.exe` |
+| File status | `REGULAR FILE / NOT REPARSE / ONE HARDLINK PATH` |
+| File bytes | `282,536` |
+| FileVersion | `6000.3.20.13220457` |
+| ProductVersion | `6000.3.20f1_c9ba695d4f07` |
+| Unity.exe SHA-256 | `f025d925990cbef012bba6600c8463ee0c94cbab90ee10c4c2f93dd69f85120e` |
+| Authenticode | `Valid / Unity Technologies SF` |
+| Version/changeset | `6000.3.20f1 / c9ba695d4f07 / VERIFIED` |
+| Registration | `PASS / ONE NON-CONFLICTING EXACT-VERSION ENTRY / FRESH TARGET / NO QUARANTINE REFERENCE` |
+| Security audit | `PASS / READ-ONLY DEFENDER AND EVENT CHECK / NO BLOCK, REMOVAL OR QUARANTINE EVIDENCE` |
+
+Fresh `Uninstall.exe`도 `NotSigned`였으며 실행하지 않았다. Registry 또는
+Defender 설정은 수정하지 않았고 exclusion 추가, file restore 또는
+보안 기능 비활성화도 수행하지 않았다. 기존 Editor `2021.3.45f1`,
+`2022.3.62f1`, `2022.3.74f1`, `6000.3.2f1`의 Unity.exe SHA-256은
+복구 전후 동일했고, fresh binary는 `6000.3.2f1`과 서로 달랐다.
+
+### Two independent external batch startups
+
+Disposable project와 log는 저장소 밖
+`C:\Users\jhbjm\AppData\Local\Temp\break-notice-task0071-r3` 아래에서만
+만들었고 성공 증거 hash를 캡처한 뒤 전부 제거했다.
+
+| Run | Invocation role | Exit evidence | Exact version/changeset | Log SHA-256 |
+|---|---|---|---|---|
+| 1 | `-createProject` | `0 / LOG-CONFIRMED SUCCESSFUL BATCH EXIT` | `6000.3.20f1 / c9ba695d4f07` | `9c4361e5aa1e2ec969191c20515289418baa725618686309d90fbf44dea5c058` |
+| 2 | `-projectPath` reopen | `0 / PROCESS EXIT` | `6000.3.20f1 / c9ba695d4f07` | `aaa89fd24ee77e57d88aec7f0e7dfc337d8e95aa2c9daaa1397f1426ca661197` |
+
+두 Run 모두 exact fresh Unity.exe를 사용했고 successful batch exit,
+License Error `0`, Activation Error `0`, Credential Prompt `0`, Fatal Error
+`0`, Crash `0`, 같은 project의 동시 Editor `0`을 확인했다. 두 log의
+초기 licensing access-token validation/update warning은 non-blocking이었고
+이후 local entitlement resolution과 정상 종료가 확인됐다. 허용되는
+결론은 오직
+`EXISTING LOCAL LICENSE ACCEPTED FOR TWO POINT-IN-TIME BATCH STARTUPS`다.
+Account, Email, Serial, License ID, Credential 또는 Machine Token은
+수집·기록하지 않았으며 영구 Account·Subscription·License 유효성을
+주장하지 않는다.
+
+### Cleanup, repository protection and execution boundary
+
+- Quarantine: `REMOVED AFTER SUCCESS`
+- Disposable project, batch logs and R3 temp root: `REMOVED AFTER HASH CAPTURE`
+- Signed Installer: `REMOVED AFTER SUCCESS`
+- Fresh exact Editor, Unity Hub, existing local License state and every
+  other Editor: `PRESERVED`
+- Repository HEAD/origin before success-only synchronization:
+  `b82bb382fc0439847d6497ee2fadd9c55781a9fa / 0 AHEAD / 0 BEHIND`
+- Tracked/staged/conflict: `0 / 0 / 0`
+- Existing untracked snapshot and Game placeholder digest: `UNCHANGED`
+- BREAK NOTICE ProjectVersion, Package manifest/lock, `.meta`, C#, asmdef,
+  Scene, Prefab, Test, Build and image change: `ABSENT`
+- Package Materialization: `NOT STARTED / NOT AUTHORIZED`
+- Package Resolution: `NOT VERIFIED`
+- IMP-0001: `7 / 10 / EXECUTION BLOCKED`
+- Unsatisfied preconditions: `7 / 8 / 9`
+- Active Relay / execution SHA / Gate: `ABSENT / ABSENT / CLOSED`
+- G4 / Graybox: `NOT STARTED / NOT AUTHORIZED` / `NOT STARTED`
+- Next boundary: `OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED`
 
 ## Intent versus Execution Evidence
 
@@ -135,18 +251,19 @@ Gate 개방이나 구현 권한을 추론할 수 없다.
 범위에서만 판단한다. 미래 Relay는 모든 precondition을 독립적으로
 재계산해야 한다.
 
-## Prohibited Current Claims
+## Current Claim Boundary after TASK-0071-R3
 
-현재 다음을 주장해서는 안 된다.
+현재 exact Unity Editor와 changeset, fresh Unity.exe, 두 외부 disposable
+project startup 및 existing local license acceptance의 point-in-time
+증거는 주장할 수 있다. 다음은 계속 주장해서는 안 된다.
 
-- Unity Editor 또는 정확한 changeset이 설치·검증됐다는 주장;
-- Unity Hub 또는 라이선스가 확인됐다는 주장;
-- batch mode나 임시 프로젝트가 성공했다는 주장;
-- ProjectVersion, Package manifest 또는 Package lock이 생성됐다는 주장;
-- Package가 resolve됐다는 주장;
-- BREAK NOTICE Unity project가 열렸다는 주장;
-- 테스트가 실행됐거나 구현 준비가 완료됐다는 주장;
-- 활성 Relay, concrete execution SHA 또는 열린 Gate가 있다는 주장.
+- 영구 Account, Subscription 또는 License 유효성;
+- ProjectVersion, Package manifest 또는 Package lock의 materialization;
+- Package resolution;
+- BREAK NOTICE Unity project가 열렸거나 생성됐다는 주장;
+- 테스트 실행 또는 implementation-ready 상태;
+- IMP-0001 실행, G4·Graybox 시작;
+- 활성 Relay, concrete execution SHA 또는 열린 Gate.
 
 ## Change-Control Boundary
 
