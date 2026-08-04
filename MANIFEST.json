@@ -194,7 +194,7 @@
   "unity_task0071_r3_status": "PARTIAL ROOT QUARANTINED / FRESH INSTALL VERIFIED / COMPLETE",
   "unity_unsigned_uninstaller_execution_status": "NOT EXECUTED",
   "unity_partial_root_quarantine_status": "REMOVED AFTER SUCCESS",
-  "unity_toolchain_provisioning_status": "EDITOR VERIFIED / PACKAGE MATERIALIZATION NOT STARTED",
+  "unity_toolchain_provisioning_status": "EDITOR VERIFIED / PROJECT AND EXACT PACKAGE-LOCK MATERIALIZATION VERIFIED",
   "unity_editor_installation_status": "VERIFIED",
   "unity_editor_verified_version": "6000.3.20f1",
   "unity_editor_verified_changeset": "c9ba695d4f07",
@@ -208,17 +208,24 @@
   "unity_license_verification_status": "POINT-IN-TIME PASS / NO CREDENTIAL CAPTURE",
   "unity_batchmode_verification_status": "PASS / TWO EXTERNAL DISPOSABLE-PROJECT STARTUPS",
   "unity_disposable_project_status": "EXTERNAL TEMP PROJECT REMOVED AFTER VERIFICATION",
-  "unity_package_materialization_status": "NOT STARTED / NOT AUTHORIZED",
-  "unity_package_resolution_status": "NOT VERIFIED",
-  "unity_implementation_readiness_status": "NOT READY / RELAY, GATE, AND EXECUTION SHA ABSENT",
+  "unity_package_materialization_status": "COMPLETE / VERIFIED BY TASK-0072",
+  "unity_package_resolution_status": "2/2 PASS / EXACT LOCK STABLE",
+  "unity_repository_project_status": "EMPTY BOOTSTRAP MATERIALIZED / NO GAMEPLAY",
+  "unity_project_version_status": "6000.3.20f1 / c9ba695d4f07 / VERIFIED",
+  "unity_repository_batchmode_verification_status": "2/2 PASS / RETURN CODE 0 / PACKAGE LOCK STABLE",
+  "unity_direct_package_count": 4,
+  "unity_package_lock_sha256": "2ff23a1e227df10616b04a28bd692282054f4e52ea25ad2cbe3a9688c5eb61fe",
+  "unity_generated_urp_bootstrap_asset_count": 2,
+  "unity_generated_urp_bootstrap_asset_status": "HUMAN OWNER-ALLOWED INFRASTRUCTURE / NOT GAMEPLAY OR EXTERNAL PRODUCTION ASSET",
+  "unity_implementation_readiness_status": "IMP-0001 COMPLETE / NEXT AUTHORIZATION ABSENT / GATE CLOSED",
   "task0064_result": "STOP CONDITION / NO REPOSITORY CHANGE",
   "ear_imp0001_001_status": "EXPIRED / UNUSED",
   "first_implementation_ticket_id": "IMP-0001",
   "first_implementation_ticket_title": "Unity Repository Bootstrap and Exact Package-Lock Materialization",
-  "first_implementation_ticket_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EDITOR PRECONDITION SATISFIED / RELAY, GATE, AND SHA ABSENT",
+  "first_implementation_ticket_status": "IMP-0001 COMPLETE / EMPTY UNITY BOOTSTRAP AND EXACT PACKAGE LOCK MATERIALIZED",
   "first_implementation_ticket_path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-  "first_implementation_ticket_execution_baseline_status": "ABSENT",
-  "first_implementation_ticket_execution_status": "EXECUTION BLOCKED / PRECONDITIONS 7, 8, AND 9 UNSATISFIED",
+  "first_implementation_ticket_execution_baseline_status": "9234bbed61a284b590f9b73ef44c8d0139e374e1 / CONSUMED",
+  "first_implementation_ticket_execution_status": "COMPLETE",
   "first_implementation_ticket_implementation_gate_requirement": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "first_implementation_ticket_future_commit_message": "chore: materialize Unity project and exact package lock",
   "pre_g4_full_design_lock_semantics_status": "OWNER-APPROVED / DEFINED",
@@ -234,18 +241,18 @@
   "limited_implementation_gate_allowed_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "limited_implementation_gate_current_state": "CLOSED",
   "limited_implementation_gate_one_shot": true,
-  "imp0001_execution_relay_issuance_status": "OWNER AUTHORIZATION REQUIRED / RELAY NOT ISSUED",
-  "imp0001_execution_relay_status": "ABSENT",
-  "imp0001_precondition_progress": "7/10",
-  "imp0001_mandatory_precondition_progress": "7/10",
+  "imp0001_execution_relay_issuance_status": "EAR-IMP-0001-002 ISSUED AND CONSUMED",
+  "imp0001_execution_relay_status": "CONSUMED / EXPIRED / ACTIVE RELAY ABSENT",
+  "imp0001_precondition_progress": "10/10 AT EXECUTION / CONSUMED",
+  "imp0001_mandatory_precondition_progress": "10/10 AT EXECUTION / CONSUMED",
   "imp0001_precondition_10_status": "SATISFIED",
-  "imp0001_persistent_precondition_progress": "7/10",
-  "imp0001_unsatisfied_preconditions": "7/8/9",
+  "imp0001_persistent_precondition_progress": "7/10 PERSISTENT / TRANSIENT 7/8/9 SATISFIED AND CONSUMED AT EXECUTION",
+  "imp0001_unsatisfied_preconditions": "NONE AT EXECUTION",
   "imp0001_execution_baseline_binding": "SEPARATE EXECUTION AUTHORIZATION RELAY / NON-SELF-REFERENTIAL",
   "imp0001_execution_baseline_storage": "NOT STORED IN TICKET",
-  "imp0001_execution_baseline_status": "ABSENT",
-  "imp0001_execution_status": "EXECUTION BLOCKED / PRECONDITIONS 7, 8, AND 9 UNSATISFIED",
-  "imp0001_review_readiness": "FINAL PRE-IMPLEMENTATION RE-AUDIT PASSED / PRE-G4 FULL DESIGN LOCK OWNER-APPROVED / EDITOR PRECONDITION SATISFIED / RELAY, GATE, AND SHA ABSENT",
+  "imp0001_execution_baseline_status": "9234bbed61a284b590f9b73ef44c8d0139e374e1 / CONSUMED",
+  "imp0001_execution_status": "COMPLETE",
+  "imp0001_review_readiness": "CONSUMED BY SUCCESSFUL IMP-0001 EXECUTION / COMPLETE",
   "final_preimplementation_review_status": "REVISION REQUIRED",
   "final_preimplementation_review_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
   "final_preimplementation_review_baseline_sha": "a6398513bdc017529c600c8aa5bb5d7ea6e3e5cb",
@@ -269,8 +276,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
   "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "design_freeze_current_next_task": "OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED",
-  "current_next_task": "OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED",
+  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION",
+  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -394,8 +401,10 @@
   "g4a_validation_status": "DIRECTION AND DECISION RULE OWNER-APPROVED / DETAILED EVIDENCE PROTOCOL OWNER-APPROVED AND CORRECTED / EVIDENCE NOT COLLECTED / NOT STARTED / NOT AUTHORIZED",
   "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
   "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
-  "active_execution_authorization_relay": "ABSENT",
-  "current_next_authorization_boundary": "OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED",
+  "task0072_status": "COMPLETE",
+  "ear_imp0001_002_status": "CONSUMED / EXPIRED",
+  "active_execution_authorization_relay": "ABSENT / EAR-IMP-0001-002 CONSUMED",
+  "current_next_authorization_boundary": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION",
   "files": [
     {
       "path": ".editorconfig",
@@ -434,8 +443,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 26036,
-      "sha256": "1c4df838768a75396067df62c8d507f6d1338fe5368c8c46e70fa5850d8731c3"
+      "bytes": 27074,
+      "sha256": "77db92057b2844719be2c5eb83dd5354f51bc4f3daad9e2aa483dc5051c393bf"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -564,8 +573,8 @@
     },
     {
       "path": "Game/README.md",
-      "bytes": 1279,
-      "sha256": "29bb52aee74dccd6a3de80f18f26bc529360130ea39433cf7049fb8dc8640851"
+      "bytes": 1520,
+      "sha256": "a69bf13caabc018d322165a90024a3048fc38a4629a29ed3da75576d6857a511"
     },
     {
       "path": "LICENSE.md",
@@ -594,8 +603,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 26432,
-      "sha256": "1a78a5f88e316113f5ee85916389db6ac53799df572bae935d4ff9966fa0ca66"
+      "bytes": 27191,
+      "sha256": "d4752e598cb8f7fc6467951dac5571be1a537de687b75601eff52c8255803798"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -1236,6 +1245,286 @@
       "path": "tasks/TASK_TEMPLATE.md",
       "bytes": 871,
       "sha256": "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
+    },
+    {
+      "path": "Game/Assets/_Project.meta",
+      "bytes": 172,
+      "sha256": "508f92b5649d2c54db4cbc84f083775e45df4b2b76ebc75790d26a7107671293"
+    },
+    {
+      "path": "Game/Assets/_Project/Art.meta",
+      "bytes": 172,
+      "sha256": "2d7e800f0f7fbee42a0833c8833eb0d172001767125cd98280b4b1adfdcbd14b"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Characters.meta",
+      "bytes": 172,
+      "sha256": "4abcaf15d977f94ed1f6ee5c6f6cf2750ad79682c1138b095ba28ee3a5fe0a7b"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Environment.meta",
+      "bytes": 172,
+      "sha256": "5411f03388c2ac77dd45fcdbe3ee1600a7802a6086399df96310099093be8ff5"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Materials.meta",
+      "bytes": 172,
+      "sha256": "a77b157ee1626252dc572be86cdc6d4d1af8b86c018152e7f827df24a37cfb0b"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/Props.meta",
+      "bytes": 172,
+      "sha256": "2574856eae219e2baa206e7055d62de3cbd0675e700ad4b23a02a7b1609c9a34"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/UI.meta",
+      "bytes": 172,
+      "sha256": "ef6e72eeb688290c1186848784a98afb91958bcc2ce070cbf973391ecefecf1f"
+    },
+    {
+      "path": "Game/Assets/_Project/Art/VFX.meta",
+      "bytes": 172,
+      "sha256": "2488c770e5c666b1e6cb620188f4ca258b729386f53e066e28b588faef012471"
+    },
+    {
+      "path": "Game/Assets/_Project/Audio.meta",
+      "bytes": 172,
+      "sha256": "c0980659c46d88217a5b636e326d5a9748a7368648cf09dcb9ac1a76e182c756"
+    },
+    {
+      "path": "Game/Assets/_Project/Code.meta",
+      "bytes": 172,
+      "sha256": "7e770ceddbd2cf1292804c220dfe3c9dc67b8322175ee727dee7bfca28dde5d5"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Editor.meta",
+      "bytes": 172,
+      "sha256": "1ee039da93afc33de4b77577c415a7294c4858be83f3c3626a2073f740694667"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime.meta",
+      "bytes": 172,
+      "sha256": "c8a847678349ea97af4713b07a78e1b605841462993e682b658daed4cabe3a57"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Allies.meta",
+      "bytes": 172,
+      "sha256": "072b9013aca016f27b6d48b6f634e6040c8cec027d4d147b4ea5061b36caf6c7"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Core.meta",
+      "bytes": 172,
+      "sha256": "839c570027584c106a43b4f2a0e82299ffd3ec0f176d2f88cf5043f4c50e0a07"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Enemies.meta",
+      "bytes": 172,
+      "sha256": "f2e33dff18e163c841b6b4834ecc49c6ff5e5f17708a8d8f133efe49c9f606b1"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Physics.meta",
+      "bytes": 172,
+      "sha256": "89426c67c764b2be56b5fdecacfa9495279477c13a3bd063a109aba69c035d87"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player.meta",
+      "bytes": 172,
+      "sha256": "b9a364b70887754524095770bb0e5a57869a164ce77e33bcf11a27bbcc690fb0"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Presentation.meta",
+      "bytes": 172,
+      "sha256": "e7512443ff68d81bc510a635cc6aad44b4557723d673e5d10ba556c8ef5c35cd"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Progression.meta",
+      "bytes": 172,
+      "sha256": "a4d015e09f6787ff41384e6987eea50bc693d994874c477afaea3743040491c5"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests.meta",
+      "bytes": 172,
+      "sha256": "431506febc6d97400bd4256e6911ca1d7cc85245d3a88f16eaa3bca410e13173"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode.meta",
+      "bytes": 172,
+      "sha256": "933c252ec50d93431d37a0fd884d7e939002ae33f1f29d1cbc13f97cc34cc812"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode.meta",
+      "bytes": 172,
+      "sha256": "73b99e8b636408d5565c85b9e2f61ec25155a0b13aeb7f83663e7b1c00bb6e6f"
+    },
+    {
+      "path": "Game/Assets/_Project/Data.meta",
+      "bytes": 172,
+      "sha256": "a723969d29c3817c0e0765d5a05aa2ad54fced4c89559bf6de92a6315b1761bd"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs.meta",
+      "bytes": 172,
+      "sha256": "032dc8f2dab53d34674e131cad1185325873a1ad5d69c533b09268fb3527e945"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes.meta",
+      "bytes": 172,
+      "sha256": "98e7132b7bf4c11b1a981540fa2f5eee4ee64fa4fd04975974359b0f2b148fb3"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/00_Bootstrap.meta",
+      "bytes": 172,
+      "sha256": "0346dbecb47b8263182219b93adb191ac92e1b0d72c1457ca6c34ceb4dcbc39a"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/10_Prototype.meta",
+      "bytes": 172,
+      "sha256": "0736ab37e724c8cd22c80fd18cca36280e2f7ce2409a88a8564f63c4cece9556"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/20_VerticalSlice.meta",
+      "bytes": 172,
+      "sha256": "2ed50315fb323e0f4f9053681aafe0cb34efafee20ab6ed3cfb7d5d2f1746787"
+    },
+    {
+      "path": "Game/Assets/_Project/Settings.meta",
+      "bytes": 172,
+      "sha256": "f47c7cc80eacc8f8d34cba372708ac5e330f24ea6f449be4907f1d9dddeaacc4"
+    },
+    {
+      "path": "Game/Assets/DefaultVolumeProfile.asset",
+      "bytes": 497,
+      "sha256": "70e9ed4656132bf185009cb47db521fdeece0b1f4d464a73cb9d0bd04fe3bda5"
+    },
+    {
+      "path": "Game/Assets/DefaultVolumeProfile.asset.meta",
+      "bytes": 189,
+      "sha256": "abba5d5e63244125876fbcfc1628649f89c9dddb4b7c35435bee222534376065"
+    },
+    {
+      "path": "Game/Assets/UniversalRenderPipelineGlobalSettings.asset",
+      "bytes": 25441,
+      "sha256": "4f0e8e6c2bfff260ad7c27288a032f8184b1fd9e856b0904791a0bc2264ea7cf"
+    },
+    {
+      "path": "Game/Assets/UniversalRenderPipelineGlobalSettings.asset.meta",
+      "bytes": 189,
+      "sha256": "d19c235fcc63218b0657bad2cd2b5308a4d0db1e2a3b7cf163531b03fd399a9a"
+    },
+    {
+      "path": "Game/Packages/manifest.json",
+      "bytes": 199,
+      "sha256": "7c92b2771857f8449add27916fb88f7366ada2cf76fceaaaa85899c1bfe2c410"
+    },
+    {
+      "path": "Game/Packages/packages-lock.json",
+      "bytes": 5604,
+      "sha256": "2ff23a1e227df10616b04a28bd692282054f4e52ea25ad2cbe3a9688c5eb61fe"
+    },
+    {
+      "path": "Game/ProjectSettings/AudioManager.asset",
+      "bytes": 523,
+      "sha256": "9543c41dbfc7d3951217c4dd9481ed026eb8e529b85ecf4463969a0fea747729"
+    },
+    {
+      "path": "Game/ProjectSettings/ClusterInputManager.asset",
+      "bytes": 114,
+      "sha256": "40e65dd214bf254955d2c8829ca8ce2130fd3510485560ce012e9a1ddd93e623"
+    },
+    {
+      "path": "Game/ProjectSettings/DynamicsManager.asset",
+      "bytes": 1574,
+      "sha256": "d102dd312ef330f5e5ca255c070fb34f68f59ec633d1e9fd67e2f2f6f88f66c8"
+    },
+    {
+      "path": "Game/ProjectSettings/EditorBuildSettings.asset",
+      "bytes": 190,
+      "sha256": "41bc588f6ecc03944687d496f024917cabb061e21c148a6471b74581df14f908"
+    },
+    {
+      "path": "Game/ProjectSettings/EditorSettings.asset",
+      "bytes": 1603,
+      "sha256": "4a87c54b3541c7bd242aad68c3fc28661083db1117ec56149694ee592156415e"
+    },
+    {
+      "path": "Game/ProjectSettings/GraphicsSettings.asset",
+      "bytes": 2559,
+      "sha256": "dc275077487fdfa206a1940c4a0c065f6f94593247b5d137739bbe1d7c01ffbd"
+    },
+    {
+      "path": "Game/ProjectSettings/InputManager.asset",
+      "bytes": 9754,
+      "sha256": "60c83ae48e29a782141f99032eb38e803d18475124ff5224fbd1fd81b233f051"
+    },
+    {
+      "path": "Game/ProjectSettings/MemorySettings.asset",
+      "bytes": 1192,
+      "sha256": "1e8379a461b10ae09f3f696911088c16875d63e87ed5f2d95df9e1892703f9fd"
+    },
+    {
+      "path": "Game/ProjectSettings/MultiplayerManager.asset",
+      "bytes": 232,
+      "sha256": "ce4075d7a7dd8ac7ffe55de2427692c63f90dae398208bd80cec0f27cbe09f4b"
+    },
+    {
+      "path": "Game/ProjectSettings/NavMeshAreas.asset",
+      "bytes": 1361,
+      "sha256": "7ebbf8f53b8033104e1878b95ca07a28d0954092d81c220f14196a42f651e658"
+    },
+    {
+      "path": "Game/ProjectSettings/Physics2DSettings.asset",
+      "bytes": 1862,
+      "sha256": "1cfc0c8fbceec604fd7cd2a06c04ff05dddee6335b75c92b0f5715ad80ba9490"
+    },
+    {
+      "path": "Game/ProjectSettings/PresetManager.asset",
+      "bytes": 146,
+      "sha256": "29c125923fe6e29f90190d4fce1c82d660e7051546e2c9d02908d18c9cf2436c"
+    },
+    {
+      "path": "Game/ProjectSettings/ProjectSettings.asset",
+      "bytes": 20362,
+      "sha256": "266d2571f6397ad5906f3376cb5b6fa8bfb56010c6c88c463e2d5f243e8b8de4"
+    },
+    {
+      "path": "Game/ProjectSettings/ProjectVersion.txt",
+      "bytes": 85,
+      "sha256": "4b4da11ed5c64178395a0d9608426c71cbde17a006c5bc42e752ffdb4bae7540"
+    },
+    {
+      "path": "Game/ProjectSettings/QualitySettings.asset",
+      "bytes": 9802,
+      "sha256": "f1f893b1be47ad2442f58338dd7c860dc1986bb317e2f5bb31084454ffabbf4c"
+    },
+    {
+      "path": "Game/ProjectSettings/ShaderGraphSettings.asset",
+      "bytes": 633,
+      "sha256": "6fead5a816c4eed70f224d5472340ecf1ea0b4de4f87d5926bb17fa10ffb3dc9"
+    },
+    {
+      "path": "Game/ProjectSettings/TagManager.asset",
+      "bytes": 411,
+      "sha256": "da4b5eefc927f8b91bcf9e56a186d2b852f49d9cbe91d466638d26c79d6a83ce"
+    },
+    {
+      "path": "Game/ProjectSettings/TimeManager.asset",
+      "bytes": 305,
+      "sha256": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+    },
+    {
+      "path": "Game/ProjectSettings/UnityConnectSettings.asset",
+      "bytes": 1063,
+      "sha256": "11251dae0356b6f43dd2c67bb511f6b7ecda4e5de425186bba3297e6f3dc1c6f"
+    },
+    {
+      "path": "Game/ProjectSettings/VersionControlSettings.asset",
+      "bytes": 172,
+      "sha256": "e199cdfa6a8f2bf33cfd47e549198f13e3eb2a5099e908fdb4e0f14d939ccc6b"
+    },
+    {
+      "path": "Game/ProjectSettings/VFXManager.asset",
+      "bytes": 525,
+      "sha256": "2973a6af930e142f62cde00076beda8a3cc3a66d9bfcde7a58ba7d4be2251c26"
     }
   ]
 }

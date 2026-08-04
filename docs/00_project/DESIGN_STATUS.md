@@ -114,7 +114,7 @@ Owner Unity Version Decision:
 `A — RETAIN UNITY 6000.3.20f1 / c9ba695d4f07`
 
 Unity Toolchain Provisioning:
-`EDITOR VERIFIED / PACKAGE MATERIALIZATION NOT STARTED`
+`EDITOR VERIFIED / PROJECT AND EXACT PACKAGE-LOCK MATERIALIZATION VERIFIED`
 
 Unity Editor Installation:
 `6000.3.20f1 / c9ba695d4f07 / VERIFIED`
@@ -144,10 +144,16 @@ License Evidence:
 `EXISTING LOCAL LICENSE ACCEPTED / POINT-IN-TIME ONLY`
 
 Package Materialization:
-`NOT STARTED / NOT AUTHORIZED`
+`COMPLETE / VERIFIED BY TASK-0072`
 
 Package Resolution:
-`NOT VERIFIED`
+`2 / 2 PASS / EXACT LOCK STABLE`
+
+Repository Unity Bootstrap:
+`EMPTY INFRASTRUCTURE ONLY / NO GAMEPLAY, CODE, SCENE, PREFAB, TEST OR GRAYBOX`
+
+Unity-Generated URP Bootstrap Assets:
+`2 EXACT ASSETS / HUMAN OWNER-ALLOWED INFRASTRUCTURE`
 
 Historical TASK-0064 Result:
 `STOP CONDITION / NO CHANGE`
@@ -158,12 +164,16 @@ Limited Implementation Gate Semantics:
 EAR-IMP-0001-001:
 `EXPIRED / UNUSED`
 
+EAR-IMP-0001-002:
+`CONSUMED BY SUCCESSFUL IMP-0001 / EXPIRED`
+
 Active Execution Authorization Relay:
-`ABSENT / OWNER RELAY REQUIRED`
+`ABSENT / EAR-IMP-0001-002 CONSUMED`
 
 Active Relay: `ABSENT`
 
-Execution SHA: `ABSENT`
+Consumed Execution Baseline SHA:
+`9234bbed61a284b590f9b73ef44c8d0139e374e1`
 
 Destruction Budget and Implementation Rules:
 `OWNER-APPROVED / LOCKED`
@@ -178,16 +188,16 @@ CHR_00 Player Turnaround Production Support:
 `OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT`
 
 First Implementation Ticket:
-`IMP-0001 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED / PRE-G4 FULL DESIGN LOCK SATISFIED / EDITOR PRECONDITION SATISFIED / RELAY, GATE, SHA ABSENT`
+`IMP-0001 / COMPLETE / EMPTY UNITY BOOTSTRAP AND EXACT PACKAGE LOCK MATERIALIZED`
 
 IMP-0001 Mandatory Precondition Progress:
-`7 / 10`
+`10 / 10 AT EXECUTION / CONSUMED`
 
 IMP-0001 Precondition 10:
 `SATISFIED`
 
 IMP-0001 Unsatisfied Preconditions:
-`7 / 8 / 9`
+`NONE AT EXECUTION`
 
 Production Visual Lock sequence: `COMPLETE`
 
@@ -205,7 +215,7 @@ Phase label review: `COMPLETED / OWNER-APPROVED`
 Implementation Gate: `CLOSED`
 
 Current Next Authorization Boundary:
-`OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED`
+`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION`
 
 ## Full-Game Direction — Active C3 Authority
 
@@ -403,11 +413,11 @@ Owner의 새 직접 지시 전까지 승인되지 않는다.
 | Office Core Kit asset-family and reuse policy | OWNER-APPROVED / LOCKED | 현 Lock 유지 | DESIGN FREEZE |
 | CHR_00 Player Turnaround Production Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND | 승인 계약 유지 | DESIGN FREEZE / CHECKED |
 | CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT | 현 Production Support 권위 유지 | DESIGN FREEZE / CHECKED |
-| First Implementation Ticket | IMP-0001 / EXECUTION BLOCKED / 7 OF 10 / EDITOR VERIFIED / PRECONDITIONS 7, 8, 9 UNSATISFIED | exact Gate, Relay와 Relay-supplied execution SHA 전 실행 금지 | DESIGN FREEZE / CHECKED |
+| First Implementation Ticket | IMP-0001 / COMPLETE / 10 OF 10 AT EXECUTION / EMPTY BOOTSTRAP AND EXACT PACKAGE LOCK MATERIALIZED | 완료 범위를 상속하지 않으며 다음 bounded 권한 전 gameplay·G4 금지 | DESIGN FREEZE / CHECKED |
 | Final Pre-Implementation Review | REVISION REQUIRED — historical decision preserved | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT | HISTORICAL |
 | Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY | consumed by TASK-0063 Pre-G4 Lock decision | PRE-G4 / GATE CLOSED |
 | Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6`; EXTENDED BY CR-0001; C3 ADDENDUM VERIFIED | maintain Lock through Change Control; G4-A protocol Owner-approved, corrected and ready, but execution remains separately unauthorized | PRE-G4 |
-| Limited Implementation Gate | SEMANTICS OWNER-APPROVED / DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | `OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED` | CLOSED |
+| Limited Implementation Gate | SEMANTICS OWNER-APPROVED / DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; EAR-IMP-0001-002 CONSUMED / EXPIRED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION` | CLOSED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
@@ -506,9 +516,12 @@ family `12`의 asset-family 및 reuse policy로
 creation은 `NOT STARTED / NOT AUTHORIZED`다. LGT_01은 Records
 Archive-local `COULD`, FIN_01은 `OUT / COULD`를 유지한다. Technical
 checklist는 `6 / 6`, Design Freeze는 `32 / 32`와
-`COMPLETE / DOCUMENTARY PREREQUISITE ONLY`다. 실제 Unity project와 package
-file은 생성되지 않았고 exact tuning, implementation class와 pass
-threshold는 Draft다.
+`COMPLETE / DOCUMENTARY PREREQUISITE ONLY`다. TASK-0072에서 Empty Unity
+Bootstrap과 exact package manifest/lock을 materialize했고 동일
+Editor의 연속 두 번 batch open에서 lock 안정성을 검증했다. Human
+Owner가 허용한 Unity-generated URP bootstrap infrastructure asset 두
+개 외에 gameplay·external production asset·code·Scene·Prefab·Test는
+없다. exact tuning, implementation class와 pass threshold는 Draft다.
 G3 Causal Result Family는 Owner-approved
 G2 계약의 정확한 네 family로 교정되었으며 Structural Feature는 별도
 optional design role로 유지된다. Final Audit은 active Phase와
@@ -526,20 +539,21 @@ Gate는 `CLOSED`다. Final Review는 역사적으로 `REVISION REQUIRED`이고
 TASK-0061 baseline binding과 limited Gate sequencing correction은
 TASK-0062 Re-Audit에서 `48 / 48 PASS`로 검증됐다. 첫 구현 티켓은
 `docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`로
-세분화됐지만 concrete execution baseline SHA는 티켓에 저장하지 않고
-별도 미래 Execution Authorization Relay만 공급할 수 있으며 실행은
-승인되지 않았다. `EAR-IMP-0001-001`은 `EXPIRED / UNUSED`, active
-Relay와 concrete execution SHA는 없고 IMP-0001 precondition은
-`7 / 10`이다. TASK-0071-R3에서 exact Editor precondition `10`은
-`SATISFIED`로 검증됐지만 precondition `7 / 8 / 9`는 미충족이다.
+세분화됐고 `EAR-IMP-0001-002`가 기준선
+`9234bbed61a284b590f9b73ef44c8d0139e374e1`에서 one-shot 실행을
+승인했다. 실행 시 mandatory precondition은 `10 / 10`이었고 IMP-0001은
+`COMPLETE`, Relay는 `CONSUMED / EXPIRED`, limited Gate는 자동으로
+`CLOSED`로 복귀했다. `EAR-IMP-0001-001`은 계속 `EXPIRED / UNUSED`다.
 Unity `6000.3.20f1` / changeset `c9ba695d4f07`과 외부 disposable
 project의 batch startup `2 / 2`는 point-in-time `PASS`이고 existing
 local license acceptance만 확인됐다. BREAK NOTICE Unity project와
-Package manifest/lock은 materialize되지 않았으며 Package Resolution도
-검증되지 않았다. G4-A
+정확한 네 direct package manifest/lock은 materialize됐고 repository
+batch open `2 / 2 PASS`, lock SHA 안정성, AI Navigation 부재가
+검증됐다. G4-A
 detailed evidence protocol은 `OWNER-APPROVED / CORRECTED / READY`,
 evidence는 `NOT COLLECTED`, execution은
 `NOT STARTED / NOT AUTHORIZED`다. 다음 권한 경계는
-`OWNER IMP-0001 EXECUTION AUTHORIZATION RELAY REQUIRED`다.
-남은 Design Freeze 항목은 `0`개다. Bootstrap, Graybox와 구현 권한은
-아직 없고 IMP-0001 실행은 계속 차단된다.
+`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR
+EXTERNAL-ASSET AUTHORIZATION`이다. 남은 Design Freeze 항목은 `0`개다.
+IMP-0001은 완료됐지만 Graybox와 gameplay 구현 권한은 없고
+Implementation Gate는 `CLOSED`다.
