@@ -217,7 +217,7 @@
   "unity_package_lock_sha256": "2ff23a1e227df10616b04a28bd692282054f4e52ea25ad2cbe3a9688c5eb61fe",
   "unity_generated_urp_bootstrap_asset_count": 2,
   "unity_generated_urp_bootstrap_asset_status": "HUMAN OWNER-ALLOWED INFRASTRUCTURE / NOT GAMEPLAY OR EXTERNAL PRODUCTION ASSET",
-  "unity_implementation_readiness_status": "IMP-0001 COMPLETE / NEXT AUTHORIZATION ABSENT / GATE CLOSED",
+  "unity_implementation_readiness_status": "IMP-0001 COMPLETE / IMP-0002 RELAY NOT ISSUED / GATE CLOSED",
   "task0064_result": "STOP CONDITION / NO REPOSITORY CHANGE",
   "ear_imp0001_001_status": "EXPIRED / UNUSED",
   "first_implementation_ticket_id": "IMP-0001",
@@ -237,8 +237,10 @@
   "pre_g4_full_design_lock_reaudit_result": "48/48 PASS / READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY",
   "pre_g4_full_design_lock_reaudit_disposition": "CONSUMED BY OWNER-APPROVED PRE-G4 FULL DESIGN LOCK",
   "g5_production_freeze_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "limited_implementation_gate_semantics_status": "OWNER-APPROVED / DEFINED",
-  "limited_implementation_gate_allowed_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
+  "limited_implementation_gate_semantics_status": "OWNER-APPROVED / ADR-0019 HISTORICAL IMP-0001 MODEL PRESERVED / ADR-0022 POST-BOOTSTRAP MODEL DEFINED",
+  "historical_imp0001_gate_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
+  "limited_implementation_gate_allowed_state": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
+  "g4a_bounded_gate_format": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
   "limited_implementation_gate_current_state": "CLOSED",
   "limited_implementation_gate_one_shot": true,
   "imp0001_execution_relay_issuance_status": "EAR-IMP-0001-002 ISSUED AND CONSUMED",
@@ -252,7 +254,12 @@
   "imp0001_execution_baseline_storage": "NOT STORED IN TICKET",
   "imp0001_execution_baseline_status": "9234bbed61a284b590f9b73ef44c8d0139e374e1 / CONSUMED",
   "imp0001_execution_status": "COMPLETE",
+  "imp0001_status": "COMPLETE",
   "imp0001_review_readiness": "CONSUMED BY SUCCESSFUL IMP-0001 EXECUTION / COMPLETE",
+  "imp0002_status": "OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED",
+  "imp0002_path": "docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md",
+  "imp0002_future_gate": "OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION",
+  "imp0002_execution_relay_status": "REQUIRED / NOT ISSUED",
   "final_preimplementation_review_status": "REVISION REQUIRED",
   "final_preimplementation_review_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
   "final_preimplementation_review_baseline_sha": "a6398513bdc017529c600c8aa5bb5d7ea6e3e5cb",
@@ -276,8 +283,8 @@
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
   "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
   "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION",
-  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION",
+  "design_freeze_current_next_task": "OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED",
+  "current_next_task": "OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
   "graybox_status": "NOT STARTED",
   "implementation_gate": "CLOSED",
@@ -402,9 +409,19 @@
   "g4a_role": "FIRST IMPLEMENTATION EVIDENCE GATE",
   "additional_speculative_design_brake": "ACTIVE PENDING G4-A EVIDENCE",
   "task0072_status": "COMPLETE",
+  "task0072_review_status": "APPROVE WITH NON-BLOCKING NOTES",
+  "imp0001_disposition": "APPROVE / COMPLETE",
+  "post_imp0001_design_authority_review": "APPROVE",
   "ear_imp0001_002_status": "CONSUMED / EXPIRED",
-  "active_execution_authorization_relay": "ABSENT / EAR-IMP-0001-002 CONSUMED",
-  "current_next_authorization_boundary": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION",
+  "active_execution_authorization_relay": "ABSENT",
+  "cr0002_status": "APPROVED / APPLIED",
+  "cr0002_path": "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
+  "adr0022_status": "ACCEPTED",
+  "adr0022_path": "docs/09_adrs/ADR-0022-G4A-BOUNDED-IMPLEMENTATION-GATE.md",
+  "g4a_bounded_gate_model_status": "OWNER-APPROVED / DEFINED",
+  "g4a_foundation_entry_status": "OWNER-APPROVED / RELAY PENDING",
+  "external_ai_asset_status": "NOT AUTHORIZED",
+  "current_next_authorization_boundary": "OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED",
   "files": [
     {
       "path": ".editorconfig",
@@ -438,13 +455,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 38558,
-      "sha256": "5ec7e1574a7cf4bd6309bb8c4d222ea36192cd3ce0cd37201938354303607648"
+      "bytes": 39635,
+      "sha256": "2e0617848ba04080e6cb05485138a6bc1e045f10489a1c11debd369181e9600e"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 27074,
-      "sha256": "77db92057b2844719be2c5eb83dd5354f51bc4f3daad9e2aa483dc5051c393bf"
+      "bytes": 28066,
+      "sha256": "3116bb95186a551fc302826cdc54be6a2f856c3296181491169d1eb6a66f7efe"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -598,13 +615,13 @@
     },
     {
       "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 13012,
-      "sha256": "d6d9a6927e166ca1da49363266af76c72087eb21511859b2caee1e572da0c963"
+      "bytes": 13358,
+      "sha256": "6ac0b5ce25a1404ac699559e779933991e1052088fce3b631a57658086a2eee0"
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 27191,
-      "sha256": "d4752e598cb8f7fc6467951dac5571be1a537de687b75601eff52c8255803798"
+      "bytes": 29696,
+      "sha256": "bb551a5abb99c46ecde7c4f919b759410f4aca42a8c4f0bfd2688941f2425cc9"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -888,8 +905,8 @@
     },
     {
       "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 3586,
-      "sha256": "8e40b087a2ac75352ebfb3fb1f54efc254bd2c9cc5fc7e945d9388ecda528e8a"
+      "bytes": 4179,
+      "sha256": "657d18770502ffe91f3fc9516e53cc0913efb934737d35f1b1e3129847dbd693"
     },
     {
       "path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
@@ -913,8 +930,8 @@
     },
     {
       "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 6277,
-      "sha256": "57d70d292a0a5f7660c982ea41238e9a8dc77cc6888b06fc344d878a19d5a7be"
+      "bytes": 6618,
+      "sha256": "7654e7b65e021e72c338d5ba8da72a7cbc2b00e3ae0985a6c1743ddc74697514"
     },
     {
       "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
@@ -923,8 +940,8 @@
     },
     {
       "path": "docs/06_codex/CODEX_EXECUTION_PROTOCOL.md",
-      "bytes": 1955,
-      "sha256": "049d13b8fe4bafe9a9ff4417cab7d4b183484a2a2c46775c38e4a9e49e952ae9"
+      "bytes": 3609,
+      "sha256": "e312f4d33b793b062b8b89b1a8a5ee06b675a9e076d23b1d08283bc2ac9a801e"
     },
     {
       "path": "docs/06_codex/DEFINITION_OF_DONE.md",
@@ -1525,6 +1542,21 @@
       "path": "Game/ProjectSettings/VFXManager.asset",
       "bytes": 525,
       "sha256": "2973a6af930e142f62cde00076beda8a3cc3a66d9bfcde7a58ba7d4be2251c26"
+    },
+    {
+      "path": "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
+      "bytes": 2226,
+      "sha256": "b176401719d69de219d3f42f37b17b6a7a458d819dcc9b39b4dc6c0ef3088a28"
+    },
+    {
+      "path": "docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md",
+      "bytes": 7561,
+      "sha256": "4a83f352ee4e6d298d65777bfc76bb6efb1d545b3761f9252d33613d82d8ff77"
+    },
+    {
+      "path": "docs/09_adrs/ADR-0022-G4A-BOUNDED-IMPLEMENTATION-GATE.md",
+      "bytes": 3349,
+      "sha256": "80c527d3f6578454517c76aaaf68e795be75af5099a7201d51258c9afb4512c9"
     }
   ]
 }

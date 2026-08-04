@@ -22,8 +22,12 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Active Execution Authorization Relay: `ABSENT`
+- G4-A Foundation Entry: `OWNER-APPROVED / RELAY PENDING`
+- IMP-0002: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`
+- Current Next Authorization Boundary:
+  `OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED`
 - Toolchain provisioning과 exact-version execution evidence:
-  `UNRESOLVED / SEE DESIGN_STATUS`
+  `EMPTY BOOTSTRAP VERIFIED / SEE DESIGN_STATUS`
 
 G1/G2/G3 계약, Accepted ADR, 승인 Visual Spec, scope/Lock 문서가
 substantive authority를 계속 소유한다. MANIFEST는 derived mirror이고
@@ -101,27 +105,38 @@ condition은 DESIGN_STATUS와 `docs/05_production/RISK_REGISTER.md`를
 → `later Vertical Slice production`이다. Empty Bootstrap은 G4를
 시작하지 않고 제한 Gate는 G4/G5를 통과시키지 않는다.
 
-Implementation Gate 상태는 다음 둘만 사용한다.
+Implementation Gate의 default state는 다음과 같다.
 
 - `CLOSED`: 어떤 implementation ticket도 실행할 수 없다.
-- `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`: ticket, baseline과 scope가
-  고정된 IMP-0001 empty Bootstrap 한 번만 허용한다.
 
-제한 Gate는 gameplay, C#, Test, Scene, Prefab, Graybox, 다른 ticket,
-G4/G5 passage 또는 상속 가능한 권한을 만들지 않는다. IMP-0001 완료,
-stop condition, HEAD/`origin/main` drift, 작업 전 tracked/staged 변경,
-다른 ticket/scope, unauthorized Package, scope expansion 또는 권위
-철회 시 자동 만료한다.
+ADR-0019의 역사적 open state
+`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 완료된 IMP-0001에만
+유효했다. ADR-0022의 post-Bootstrap future open-state format은 다음과
+같다.
 
-IMP-0001 실행 SHA는 티켓에 저장하지 않는다. 별도 bounded
-Owner-approved Execution Authorization Relay가 정확한 ticket ID,
-이미 push된 완전한 immutable SHA, `main`, clean equality, 정확한
-limited Gate state, allowed/forbidden files, operations, validations,
-commit/push 권한과 one-shot expiration을 제공해야 한다. TASK-0064의
-`EAR-IMP-0001-001`은 exact Editor 부재 Stop Condition 뒤
-`EXPIRED / UNUSED`가 됐고 Gate는 활성화되지 않았다. 현재 active
-Relay와 concrete SHA는 없으며 새 Relay와 provisioning은 Human
-Owner의 새 직접 지시 전까지 승인되지 않는다.
+- `OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>`
+
+모든 future open state는 ticket-, baseline-, branch-, scope-specific,
+one-shot, non-inheritable, non-reusable이어야 하고 별도의 Execution
+Authorization Relay가 공급해야 한다. 완료, stop condition,
+HEAD/`origin/main` drift, 작업 전 tracked/staged 변경, 다른
+ticket/scope, unauthorized dependency, scope expansion 또는 권위 철회
+시 자동 만료한다. 제한 Gate는 다른 implementation wave, gameplay,
+G4/G5 passage 또는 상속 가능한 권한을 자동으로 만들지 않는다.
+
+첫 future instance
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
+정의됐지만 열리지 않았다. IMP-0002는 Owner-approved ticket
+decomposition이지만 실행은 blocked다.
+
+실행 SHA는 티켓에 저장하지 않는다. 별도 bounded Owner-approved
+Execution Authorization Relay가 정확한 ticket ID, 이미 push된 완전한
+immutable SHA, branch, clean equality, 정확한 Gate state,
+allowed/forbidden files, operations, validations, commit/push 권한과
+one-shot expiration을 제공해야 한다. `EAR-IMP-0001-001`은
+`EXPIRED / UNUSED`, `EAR-IMP-0001-002`는 성공한 IMP-0001에 소비된 뒤
+`CONSUMED / EXPIRED`다. 현재 active Relay는 `ABSENT`이고 IMP-0002
+Relay는 `REQUIRED / NOT ISSUED`다.
 
 G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
@@ -348,13 +363,21 @@ CHR_00 Player Turnaround의 제작 구성과 이진 검토 계약은
 `CHECKED`다. 이 등록은 주 Identity 권위, Production Visual 수와
 sequence를 변경하거나 3D·Unity·Graybox·구현 권한을 만들지 않는다.
 
-첫 구현 티켓은
-`docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`에
-Owner-approved static execution contract로 세분화되었다. 이는 미래
-Unity repository Bootstrap과 exact Package-lock materialization의
-문서 계약일 뿐이며 concrete execution baseline SHA나 live readiness를
-저장하지 않는다. 현재 readiness는 DESIGN_STATUS, 실제 실행 권한은
-별도 bounded Owner-approved Execution Authorization Relay만 소유한다.
+첫 구현 티켓
+`docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md`는 성공한
+TASK-0072에서 Empty Unity Bootstrap과 exact Package lock을
+materialize해 `COMPLETE`됐다. 사용한 Relay는 소비·만료됐고 Gate는
+`CLOSED`로 복귀했다.
+
+다음 티켓
+`docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md`는 정확히
+여섯 engine-independent Runtime type과 열여덟 EditMode obligation의
+Owner-approved static decomposition이다. Future Gate
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
+정의됐지만 열리지 않았고 Relay는 발급되지 않았다. ticket은 concrete
+execution SHA나 live readiness를 저장하지 않는다. 현재 readiness는
+DESIGN_STATUS, 실제 실행 권한은 별도 bounded Owner-approved Execution
+Authorization Relay만 소유한다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -383,8 +406,9 @@ constraint와 구현은 계속 `DRAFT`다.
 - Acceptance Test의 정확한 입력·수치·성공 임계값
 - 파괴 hard cap을 제외한 밸런스·성능 tuning과 FPS·hardware·
   frame-time 기준
-- exact implementation class, payload, schema와 tuning
-- IMP-0001 concrete execution baseline과 Unity Bootstrap 실행
+- IMP-0002의 exact six-type 계약 밖 implementation class, payload,
+  schema와 tuning
+- IMP-0002 concrete execution baseline과 Runtime Identity Foundation 실행
 - Vertical Slice의 정확한 콘텐츠와 구현 범위
 
 ## Detailed Current History
@@ -590,7 +614,7 @@ Codex는 스스로 결과물을 `APPROVED`, `FINAL`, `LOCKED`로 선언하지 �
 - 1인 개발
 - 폭포수 기반 개발
 - 명시적 단계별 승인 게이트
-- Unity `6000.3.20f1` documentation lock; project 미생성
+- Unity `6000.3.20f1` exact Empty Bootstrap materialized; gameplay 미생성
 - 3D Third-Person 예정
 - Grounded Corporate Action Realism
 - Grounded world, absurd physics

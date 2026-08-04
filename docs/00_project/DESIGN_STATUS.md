@@ -39,6 +39,27 @@ Exact Contract Correction:
 G4-A Detailed Evidence Protocol Record:
 `docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md`
 
+TASK-0072 Completion Review:
+`APPROVE WITH NON-BLOCKING NOTES`
+
+IMP-0001 Disposition:
+`APPROVE / COMPLETE`
+
+Post-IMP-0001 Design Authority Review:
+`APPROVE`
+
+CR-0002:
+`APPROVED / APPLIED`
+
+Post-Bootstrap Bounded Gate ADR:
+`docs/09_adrs/ADR-0022-G4A-BOUNDED-IMPLEMENTATION-GATE.md / ACCEPTED`
+
+G4-A Bounded Gate Model:
+`OWNER-APPROVED / DEFINED`
+
+G4-A Foundation Entry:
+`OWNER-APPROVED / RELAY PENDING`
+
 G4-A Evidence: `NOT COLLECTED`
 
 G4-A Execution: `NOT STARTED / NOT AUTHORIZED`
@@ -159,7 +180,13 @@ Historical TASK-0064 Result:
 `STOP CONDITION / NO CHANGE`
 
 Limited Implementation Gate Semantics:
-`OWNER-APPROVED / DEFINED`
+`OWNER-APPROVED / ADR-0019 HISTORICAL IMP-0001 MODEL PRESERVED / ADR-0022 POST-BOOTSTRAP MODEL DEFINED`
+
+Post-Bootstrap Future Gate Format:
+`OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>`
+
+IMP-0002 Future Gate:
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION / DEFINED BUT NOT OPEN`
 
 EAR-IMP-0001-001:
 `EXPIRED / UNUSED`
@@ -168,7 +195,7 @@ EAR-IMP-0001-002:
 `CONSUMED BY SUCCESSFUL IMP-0001 / EXPIRED`
 
 Active Execution Authorization Relay:
-`ABSENT / EAR-IMP-0001-002 CONSUMED`
+`ABSENT / EAR-IMP-0001-002 CONSUMED / IMP-0002 RELAY NOT ISSUED`
 
 Active Relay: `ABSENT`
 
@@ -189,6 +216,18 @@ CHR_00 Player Turnaround Production Support:
 
 First Implementation Ticket:
 `IMP-0001 / COMPLETE / EMPTY UNITY BOOTSTRAP AND EXACT PACKAGE LOCK MATERIALIZED`
+
+Second Implementation Ticket:
+`IMP-0002 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`
+
+IMP-0002 Ticket Record:
+`docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md`
+
+IMP-0002 Execution Relay:
+`REQUIRED / NOT ISSUED`
+
+External AI Asset:
+`NOT AUTHORIZED BEFORE G4-A CORE EVIDENCE`
 
 IMP-0001 Mandatory Precondition Progress:
 `10 / 10 AT EXECUTION / CONSUMED`
@@ -215,7 +254,7 @@ Phase label review: `COMPLETED / OWNER-APPROVED`
 Implementation Gate: `CLOSED`
 
 Current Next Authorization Boundary:
-`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION`
+`OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED`
 
 ## Full-Game Direction — Active C3 Authority
 
@@ -360,23 +399,31 @@ narrowly authorized infrastructure preparation, separately authorized
 G4 Graybox, G4 evidence/decision, G5 Production Freeze, later Vertical
 Slice production이다.
 
-Limited Gate의 유일한 future open state는
-`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`이다. 이 state는 ticket,
-baseline과 scope가 고정된 one-shot이며 gameplay, C#, Test, Scene,
-Prefab, Graybox, 다른 ticket, G4/G5 passage 또는 상속 가능한 권한을
-만들지 않는다. 완료, stop, baseline drift, dirty tracked/staged
-pre-state, 다른 ticket/scope, unauthorized Package, scope expansion
-또는 revocation에서 자동 만료한다. 현재 state는 `CLOSED`다.
+ADR-0019의 open state
+`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 성공한 IMP-0001에 소비된
+역사적 one-shot authority다. ADR-0022의 post-Bootstrap future
+open-state format은 다음과 같다.
 
-IMP-0001 실행 기준선은 티켓에 저장하지 않는다. 별도
-Owner-approved Execution Authorization Relay가 이미 push된 완전한
-immutable SHA, `main`, clean local/origin equality, exact Gate state,
-allowed/forbidden files, operations, validations, commit/push 권한과
-one-shot expiration을 제공해야 한다. 역사적 TASK-0064의
-`EAR-IMP-0001-001`은 exact Editor 부재 Stop Condition 뒤
-`EXPIRED / UNUSED`가 됐고 Gate는 활성화되지 않았다. 현재 active
-Relay와 concrete SHA는 `ABSENT`이며 새 Relay와 provisioning은 Human
-Owner의 새 직접 지시 전까지 승인되지 않는다.
+`OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>`
+
+모든 future open state는 ticket-, baseline-, branch-, scope-specific,
+one-shot, non-inheritable, non-reusable이며 별도 Execution Authorization
+Relay가 공급한다. 완료, stop, baseline drift, dirty tracked/staged
+pre-state, 다른 ticket/scope, unauthorized dependency, scope expansion
+또는 revocation에서 자동 만료한다. 다른 implementation wave,
+gameplay, G4/G5 passage 또는 상속 가능한 권한을 자동으로 만들지
+않는다. 첫 future instance
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
+정의됐지만 열리지 않았다. 현재 state는 `CLOSED`다.
+
+실행 기준선은 티켓에 저장하지 않는다. 별도 Owner-approved Execution
+Authorization Relay가 이미 push된 완전한 immutable SHA, exact branch,
+clean local/origin equality, exact Gate state, allowed/forbidden files,
+operations, validations, commit/push 권한과 one-shot expiration을
+제공해야 한다. `EAR-IMP-0001-001`은 `EXPIRED / UNUSED`, 성공한
+IMP-0001에 사용한 `EAR-IMP-0001-002`는 `CONSUMED / EXPIRED`다. 현재
+active Relay와 IMP-0002 concrete SHA는 `ABSENT`이고 IMP-0002 Relay는
+`REQUIRED / NOT ISSUED`다.
 
 | 영역 | 상태 | 다음 산출물 | Gate |
 |---|---|---|---|
@@ -414,10 +461,12 @@ Owner의 새 직접 지시 전까지 승인되지 않는다.
 | CHR_00 Player Turnaround Production Brief | OWNER-APPROVED / CONSUMED BY APPROVED TURNAROUND | 승인 계약 유지 | DESIGN FREEZE / CHECKED |
 | CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT | 현 Production Support 권위 유지 | DESIGN FREEZE / CHECKED |
 | First Implementation Ticket | IMP-0001 / COMPLETE / 10 OF 10 AT EXECUTION / EMPTY BOOTSTRAP AND EXACT PACKAGE LOCK MATERIALIZED | 완료 범위를 상속하지 않으며 다음 bounded 권한 전 gameplay·G4 금지 | DESIGN FREEZE / CHECKED |
+| Post-Bootstrap G4-A Gate Model | CR-0002 APPROVED / ADR-0022 ACCEPTED / OWNER-APPROVED AND DEFINED | ticket별 별도 immutable baseline과 one-shot Relay 필요 | CLOSED |
+| Second Implementation Ticket | IMP-0002 / OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED | `OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED` | G4-A FOUNDATION ENTRY / RELAY PENDING |
 | Final Pre-Implementation Review | REVISION REQUIRED — historical decision preserved | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT | HISTORICAL |
 | Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY | consumed by TASK-0063 Pre-G4 Lock decision | PRE-G4 / GATE CLOSED |
 | Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6`; EXTENDED BY CR-0001; C3 ADDENDUM VERIFIED | maintain Lock through Change Control; G4-A protocol Owner-approved, corrected and ready, but execution remains separately unauthorized | PRE-G4 |
-| Limited Implementation Gate | SEMANTICS OWNER-APPROVED / DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; EAR-IMP-0001-002 CONSUMED / EXPIRED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR EXTERNAL-ASSET AUTHORIZATION` | CLOSED |
+| Limited Implementation Gate | ADR-0019 HISTORICAL IMP-0001 MODEL PRESERVED; ADR-0022 POST-BOOTSTRAP MODEL DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; EAR-IMP-0001-002 CONSUMED / EXPIRED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | `OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED` | CLOSED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
@@ -483,10 +532,10 @@ break value, final enemy identity·room geometry·object art, Relay Position
 coordinates·route, supply ranking·timing, Suppressed
 threshold·duration·recovery,
 Acceptance Test의 정확한 수치·임계값, 카메라 기능,
-조명·렌더링 구현, FIN_01 제품 편입, destruction hard cap을 제외한
-exact class·payload·schema·성능 tuning, Unity Bootstrap·구현
-ticket과 Vertical Slice의 정확한 콘텐츠는 `DRAFT`, `COULD`,
-`DEFERRED` 또는 미승인이다. 승인된 여덟
+조명·렌더링 구현, FIN_01 제품 편입, destruction hard cap과 IMP-0002의
+exact six-type foundation contract를 제외한 exact class·payload·schema·
+성능 tuning, 후속 구현 ticket과 Vertical Slice의 정확한 콘텐츠는
+`DRAFT`, `COULD`, `DEFERRED` 또는 미승인이다. 승인된 여덟
 Visual의 문서화된 Canonical Elements만
 `LOCKED`이며 현재 Phase label은 Owner가 승인한
 `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`이다. G3 Technical은
@@ -543,7 +592,18 @@ TASK-0062 Re-Audit에서 `48 / 48 PASS`로 검증됐다. 첫 구현 티켓은
 `9234bbed61a284b590f9b73ef44c8d0139e374e1`에서 one-shot 실행을
 승인했다. 실행 시 mandatory precondition은 `10 / 10`이었고 IMP-0001은
 `COMPLETE`, Relay는 `CONSUMED / EXPIRED`, limited Gate는 자동으로
-`CLOSED`로 복귀했다. `EAR-IMP-0001-001`은 계속 `EXPIRED / UNUSED`다.
+`CLOSED`로 복귀했다. TASK-0072 Completion Review는
+`APPROVE WITH NON-BLOCKING NOTES`, IMP-0001 disposition은
+`APPROVE / COMPLETE`, TASK-0073의 post-Bootstrap Design Authority
+Review는 `APPROVE`이며 CR-0002는
+`APPROVED / APPLIED`, ADR-0022는 `ACCEPTED`다. ADR-0022는 모든 future
+open state를 ticket-, baseline-, branch-, scope-specific one-shot으로
+한정하고 첫 instance
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`을
+정의했지만 열지 않았다. IMP-0002는 정확히 여섯 Runtime type과 열여덟
+EditMode obligation의 `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION
+BLOCKED`다. Relay는 `REQUIRED / NOT ISSUED`이며
+`EAR-IMP-0001-001`은 계속 `EXPIRED / UNUSED`다.
 Unity `6000.3.20f1` / changeset `c9ba695d4f07`과 외부 disposable
 project의 batch startup `2 / 2`는 point-in-time `PASS`이고 existing
 local license acceptance만 확인됐다. BREAK NOTICE Unity project와
@@ -552,8 +612,10 @@ batch open `2 / 2 PASS`, lock SHA 안정성, AI Navigation 부재가
 검증됐다. G4-A
 detailed evidence protocol은 `OWNER-APPROVED / CORRECTED / READY`,
 evidence는 `NOT COLLECTED`, execution은
-`NOT STARTED / NOT AUTHORIZED`다. 다음 권한 경계는
-`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0001 — NO G4, GAMEPLAY, OR
-EXTERNAL-ASSET AUTHORIZATION`이다. 남은 Design Freeze 항목은 `0`개다.
-IMP-0001은 완료됐지만 Graybox와 gameplay 구현 권한은 없고
-Implementation Gate는 `CLOSED`다.
+`NOT STARTED / NOT AUTHORIZED`다. G4-A Foundation Entry는
+`OWNER-APPROVED / RELAY PENDING`이지만 G4와 Graybox는 시작되지 않았고
+external AI asset은 `NOT AUTHORIZED`다. 다음 권한 경계는
+`OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED`다. 남은 Design
+Freeze 항목은 `0`개다. IMP-0001은 완료됐지만 IMP-0002, Graybox와
+gameplay 구현 권한은 없고 active Relay는 `ABSENT`, Implementation
+Gate는 `CLOSED`다.

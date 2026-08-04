@@ -35,32 +35,44 @@ live-state board 또는 next-task authority가 아니다.
   G4 Graybox, G4 evidence/decision, G5 Production Freeze, later Vertical
   Slice production이다. Empty Bootstrap은 G4를 시작하지 않는다.
 
-Implementation Gate 상태는 `CLOSED` 또는
-`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`만 사용한다. future open
-state는 ticket-, baseline-, scope-specific one-shot이며 IMP-0001
-empty Bootstrap 외 gameplay, C#, Test, Scene, Prefab, Graybox, 다른
-ticket 또는 G4/G5 passage를 허용하지 않는다. 완료, stop, baseline
-drift, dirty tracked/staged pre-state, 다른 ticket/scope, unauthorized
-Package, scope expansion 또는 revocation에서 자동 만료한다.
+Implementation Gate의 default state는 `CLOSED`다. ADR-0019의
+`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 완료된 IMP-0001의 역사적
+one-shot state로 보존한다. ADR-0022가 정의한 post-Bootstrap future
+open-state format은 다음과 같다.
 
-IMP-0001 concrete SHA는 티켓에 저장하지 않는다. 별도 Owner-approved
-Execution Authorization Relay가 이미 push된 완전한 immutable SHA,
-`main`, clean local/origin equality, exact Gate state, 범위, operations,
-validations, commit/push 권한과 one-shot expiration을 제공해야 한다.
-과거 audit, Lock과 Relay 결과는 immutable point-in-time evidence이며
-현재 Gate·Relay 값은 DESIGN_STATUS에서만 확인한다.
+`OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>`
 
-## G4-A C3 Readiness Classification
+모든 future open state는 ticket-, baseline-, branch-, scope-specific,
+one-shot, non-inheritable, non-reusable이며 별도 Execution Authorization
+Relay가 공급한다. 완료, stop, baseline drift, dirty tracked/staged
+pre-state, 다른 ticket/scope, unauthorized dependency, scope expansion
+또는 revocation에서 자동 만료한다. 다른 implementation wave,
+gameplay, Graybox 또는 G4/G5 passage를 자동으로 허용하지 않는다.
+
+첫 future instance
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
+정의됐지만 TASK-0073에서 열리지 않았다. execution SHA는 티켓에
+저장하지 않는다. 별도 Owner-approved Relay가 이미 push된 완전한
+immutable SHA, branch, clean local/origin equality, exact Gate state,
+범위, operations, validations, commit/push 권한과 expiration을 제공해야
+한다. 과거 audit, Lock과 Relay 결과는 immutable point-in-time
+evidence이며 현재 Gate·Relay 값은 DESIGN_STATUS에서만 확인한다.
+
+## G4-A Post-Bootstrap Readiness Classification
 
 - Player Failure Direction and Decision Rule: `OWNER-APPROVED`.
-- Detailed G4-A Evidence Protocol: `PENDING`.
+- Detailed G4-A Evidence Protocol:
+  `OWNER-APPROVED / CORRECTED / READY FOR FUTURE EXECUTION AUTHORIZATION`.
+- TASK-0072 Completion Review: `APPROVE WITH NON-BLOCKING NOTES`.
+- IMP-0001 Disposition: `APPROVE / COMPLETE`.
+- Post-IMP-0001 Design Authority Review: `APPROVE`.
+- CR-0002: `APPROVED / APPLIED`.
+- ADR-0022: `ACCEPTED`.
+- IMP-0002:
+  `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`.
+- G4-A Foundation Entry: `OWNER-APPROVED / RELAY PENDING`.
 - G4-A Execution: `NOT STARTED / NOT AUTHORIZED`.
-- C3 Player-Failure Addendum:
-  `APPLIED / TARGETED RE-AUDIT REQUIRED BEFORE G4-A IMPLEMENTATION`.
-- Targeted Re-Audit:
-  `TASK-0069 — Targeted C3 Full-Game and G4-A Authority Re-Audit`.
 
-후속 detailed protocol은 observer, session, explanation, variant order,
-`YES/NO` evidence와 result reporting을 정의해야 한다. 이 분류는 G4를
-시작·통과시키거나 Graybox, Unity, toolchain provisioning, Gate 또는
-Relay 권한을 만들지 않는다.
+이 분류는 G4를 시작·통과시키거나 Graybox, gameplay, external asset,
+Gate opening 또는 Relay 발급 권한을 만들지 않는다. 현재 Gate와 다음
+권한 경계의 exact live value는 DESIGN_STATUS를 따른다.

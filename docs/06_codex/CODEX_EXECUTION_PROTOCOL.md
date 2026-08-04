@@ -75,7 +75,40 @@ After editing, report changed files, tests, assumptions, and remaining risks.
 - 설계 충돌: 코드 우회 금지
 - 범위 초과 필요: 별도 작업 제안만 하고 현재 작업에는 포함하지 않음
 
-## 7. 코드 리뷰 질문
+## 7. G4-A Bounded Per-Ticket Gate and Relay
+
+post-Bootstrap implementation은 CR-0002와 ADR-0022의 fail-closed 모델을
+따른다.
+
+- Default Gate: `CLOSED`
+- Future open-state format:
+  `OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>`
+- 모든 open state는 ticket-, baseline-, branch-, scope-specific,
+  one-shot, non-inheritable, non-reusable다.
+- 각 ticket은 exact allowed/forbidden file, operation, acceptance
+  criteria와 automated validation을 자체 소유한다.
+- ticket은 execution SHA를 저장하지 않는다.
+- 별도 Owner-approved Execution Authorization Relay만 이미
+  `origin/main`에 push된 full immutable SHA, exact branch, clean
+  local/remote equality, exact Gate state, operations, validations,
+  commit/push 권한과 expiration을 공급할 수 있다.
+- completion, Stop Condition, baseline drift, dirty pre-state, 다른
+  ticket/scope, unauthorized dependency, scope expansion 또는 revocation은
+  Gate와 Relay를 자동 만료한다.
+- 이전 ticket의 Gate, Relay, SHA 또는 권한은 후속 ticket에 상속하거나
+  재사용할 수 없다.
+
+ADR-0019의 `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 완료된 IMP-0001의
+역사적 semantic authority다. 첫 post-Bootstrap future instance는
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`이지만
+현재는 정의만 됐고 열리지 않았다. 현재 Gate는 `CLOSED`, active Relay는
+`ABSENT`, IMP-0002 Relay는 `REQUIRED / NOT ISSUED`다.
+
+Gate format이나 ticket decomposition은 다른 wave, gameplay, Scene,
+Prefab, Graybox, external asset, G4 passage 또는 G5 passage를 자동으로
+승인하지 않는다.
+
+## 8. 코드 리뷰 질문
 
 - 요구사항 밖 기능을 추가했는가?
 - 물체가 순간이동하거나 전역 검색에 의존하는가?

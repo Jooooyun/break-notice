@@ -66,30 +66,34 @@ record는 `docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md`를 따른다.
 정확한 순서는 Pre-G4 documentary baseline과 Full Design Lock,
 narrowly authorized infrastructure preparation, separately authorized
 G4 Graybox, G4 evidence/decision, G5 Production Freeze, later Vertical
-Slice production이다. Empty Bootstrap은 성공한 Re-Audit, 별도
-Pre-G4 Full Design Lock 최종화와 명시적인 limited Execution
-Authorization Relay 뒤에만 가능한 Phase-3-to-G4 infrastructure
-preparation이다. Phase 4에 진입하거나 G4를 시작·통과하지 않고 G5도
-통과하지 않는다.
+Slice production이다. Empty Bootstrap은 성공한 Re-Audit, 별도 Pre-G4
+Full Design Lock과 `EAR-IMP-0001-002` 아래 완료된 Phase-3-to-G4
+infrastructure preparation이다. IMP-0001 완료는 Phase 4 진입, G4
+시작·통과 또는 G5 passage가 아니다.
 
-future limited Gate state
-`OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 ticket-, baseline-,
-scope-specific one-shot이다. gameplay, C#, Test, Scene, Prefab,
-Graybox, 다른 ticket, G4/G5 passage 또는 상속 가능한 권한을 만들지
-않고 완료·stop·baseline drift·dirty pre-state·다른 scope·unauthorized
-Package·scope expansion·revocation에서 자동 만료한다. execution SHA는
-티켓이 아닌 별도 Owner-approved Execution Authorization Relay만
-공급한다. 역사적 TASK-0064 Relay 결과는 immutable point-in-time
-evidence다. 현재 Gate, Relay, concrete SHA와 provisioning 값은
-DESIGN_STATUS를 따른다.
+ADR-0019의 `OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP`은 완료된
+IMP-0001의 역사적 one-shot state로 보존한다. ADR-0022의
+post-Bootstrap future open-state format은 다음과 같다.
+
+`OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>`
+
+모든 future open state는 ticket-, baseline-, branch-, scope-specific,
+one-shot, non-inheritable, non-reusable이며 ticket이 아닌 별도
+Owner-approved Execution Authorization Relay만 공급한다. 완료·stop·
+baseline drift·dirty pre-state·다른 scope·unauthorized dependency·scope
+expansion·revocation에서 자동 만료한다. 첫 future instance
+`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
+정의됐지만 열리지 않았다. 현재 Gate, Relay, concrete SHA와 ticket
+readiness 값은 DESIGN_STATUS를 따른다.
 
 CR-0001 full-game target과 TASK-0068 Player-Failure addendum 뒤에도
-historical G1/G2/G3 passage는 유지된다. 다만 G4-A의 Direction and
-Decision Rule만 `OWNER-APPROVED`이며 Detailed Evidence Protocol은
-`PENDING`, execution은 `NOT STARTED / NOT AUTHORIZED`다. G4-A
-implementation 전에 `TASK-0069 — Targeted C3 Full-Game and G4-A
-Authority Re-Audit`을 완료해야 한다. 이 targeted Re-Audit은 Story,
-Campaign, Map 또는 Level을 다시 설계하는 단계가 아니다.
+historical G1/G2/G3 passage는 유지된다. Targeted C3 Re-Audit과 G4-A
+Detailed Evidence Protocol 교정은 완료·승인됐지만 evidence는
+`NOT COLLECTED`, execution은 `NOT STARTED / NOT AUTHORIZED`다.
+CR-0002와 ADR-0022는 G4-A의 bounded per-ticket foundation entry만
+정의하고 Story, Campaign, Map, Level, gameplay, external asset,
+Graybox 또는 G4 passage를 승인하지 않는다. IMP-0002는 locked ticket
+decomposition이며 별도 Relay 전까지 실행할 수 없다.
 
 ## Phase 4 — Graybox Validation
 
@@ -99,8 +103,10 @@ G4-A의 active Player Failure evidence는 비살상 presentation, current
 encounter의 authored entry restart와 반복 가능한 clean baseline에만
 한정한다. Campaign-level Story, rescue, As-Built/map, shortcut와 save
 persistence는 FGD-001의 later target이며 active G4-A PASS evidence가
-아니다. detailed observer/session/variant/reporting protocol은 targeted
-C3 Re-Audit 뒤에도 별도 승인 전까지 pending이다.
+아니다. detailed observer/session/variant/reporting protocol은
+`docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md`에서
+`OWNER-APPROVED / CORRECTED / READY FOR FUTURE EXECUTION AUTHORIZATION`지만
+실행·evidence collection·G4 passage는 별도 권한 전까지 금지한다.
 
 `G4 DRAFT CONTENT CANDIDATE — NOT G1-APPROVED VALUES`
 
