@@ -39,7 +39,7 @@
 
 | Ref | Remote Target |
 |---|---|
-| `contest/game-builders-2026` | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
+| `contest/game-builders-2026` | `PUBLISHED / current through containing publication-evidence commit` |
 | `art/characters-animation` | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
 | `art/environment-ui-vfx` | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
 | `gb2026-prechallenge` | `b82bb382fc0439847d6497ee2fadd9c55781a9fa` |

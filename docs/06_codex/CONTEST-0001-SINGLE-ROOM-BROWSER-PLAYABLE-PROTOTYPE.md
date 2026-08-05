@@ -125,8 +125,10 @@ desktop browser prototype과 검증 증거를 만든다.
 - Required recovery: launch Chrome with the installed extension and restore
   the Edge local-URL security-policy verification path, then rerun both exact
   browser families without substitution.
-- Remote publication: `COMPLETE / VERIFIED` — contest and both art branches
-  point to `73d886eb2b6ccc0061e6f484afa663402418ec59`; both baseline tags are
-  published at their immutable approved targets; `origin/main` is unchanged.
+- Remote publication: `COMPLETE / VERIFIED` — the contest branch is current
+  through the containing publication-evidence commit; both art branches point
+  to verified C0 implementation baseline
+  `73d886eb2b6ccc0061e6f484afa663402418ec59`; both baseline tags are published
+  at their immutable approved targets; `origin/main` is unchanged.
 - Consequence: push is complete, but C0 acceptance remains incomplete and C1
   must not start.

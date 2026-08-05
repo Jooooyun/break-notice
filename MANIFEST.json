@@ -480,7 +480,7 @@
   "contest_c0_test_result": "EDITMODE 23/23 PASS / PLAYMODE 4/4 PASS / TOTAL 27/27 PASS",
   "contest_c0_http_result": "19/19 FILES HTTP 200 / 113598745 BYTES / SHA-256 a24d1dd102377ba01cca858a7134439d2d2f54f1fa8994b609f9abb1f88724dd",
   "contest_c0_browser_result": "RETRY INCOMPLETE / EXTENSION 1.2.27236.6274 AND NATIVE HOST VALID / CHROME NOT RUNNING / EDGE CONNECTED BUT LOCAL URL ADMIN-POLICY VERIFICATION UNAVAILABLE",
-  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED / CONTEST AND BOTH ART BRANCHES AT 73d886eb2b6ccc0061e6f484afa663402418ec59 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
+  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED / CONTEST BRANCH CURRENT THROUGH CONTAINING PUBLICATION-EVIDENCE COMMIT / BOTH ART BRANCHES AT VERIFIED C0 IMPLEMENTATION BASELINE 73d886eb2b6ccc0061e6f484afa663402418ec59 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
   "contest_start_tags": [
     "gb2026-prechallenge",
     "gb2026-sprint-start"
@@ -900,8 +900,8 @@
     },
     {
         "path":  "docs/00_project/DESIGN_STATUS.md",
-        "bytes":  34690,
-        "sha256":  "458a15c3a2a00a4d79ac075460ccc24a4f7a90de4ba4949fb6ebdee0eaa13125"
+        "bytes":  34790,
+        "sha256":  "7be747c873ea36491d88cf0137a76e74732fe61facd159dbf8c6505265e0540b"
     },
     {
         "path":  "docs/00_project/GLOSSARY.md",
@@ -1225,8 +1225,8 @@
     },
     {
         "path":  "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
-        "bytes":  6458,
-        "sha256":  "25725e4ba590026e0f0a3704d1ccfe3491f364864894a07c08127af300af90af"
+        "bytes":  6568,
+        "sha256":  "e4b28d5dbdbc2dc58305de16ff67ba8edbcc7160c070c2fe098caf190d9aa564"
     },
     {
         "path":  "docs/06_codex/DEFINITION_OF_DONE.md",
@@ -1435,8 +1435,8 @@
     },
     {
         "path":  "docs/10_contest/BUILD_AND_SUBMISSION_LOG.md",
-        "bytes":  2462,
-        "sha256":  "d46cc573cd032b7ba090f01579fdae265ac429ba72a9a36413af5415c33ca19b"
+        "bytes":  2488,
+        "sha256":  "966d149bf29a144bb82e4fa089cba0257551cae898311a871d3a64f248a5d3a7"
     },
     {
         "path":  "docs/10_contest/CODEX_COLLABORATION_LOG.md",
