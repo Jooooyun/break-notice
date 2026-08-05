@@ -2,7 +2,7 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
-  "current_phase": "PRE-PRODUCTION / DESIGN FREEZE COMPLETION",
+  "current_phase": "PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY",
   "current_state_authority_status": "OWNER-APPROVED / SINGLE MUTABLE LIVE-STATE SOURCE",
   "current_state_authority_path": "docs/00_project/DESIGN_STATUS.md",
   "manifest_current_state_role": "DERIVED MACHINE-READABLE MIRROR / NOT INDEPENDENT AUTHORITY",
@@ -210,14 +210,14 @@
   "unity_disposable_project_status": "EXTERNAL TEMP PROJECT REMOVED AFTER VERIFICATION",
   "unity_package_materialization_status": "COMPLETE / VERIFIED BY TASK-0072",
   "unity_package_resolution_status": "2/2 PASS / EXACT LOCK STABLE",
-  "unity_repository_project_status": "EMPTY BOOTSTRAP MATERIALIZED / NO GAMEPLAY",
+  "unity_repository_project_status": "EMPTY BOOTSTRAP AND EXACT PACKAGE LOCK PRESERVED / IMP-0002 CORE AND IMP-0003 BOUNDED GRAYBOX FOUNDATIONS VERIFIED",
   "unity_project_version_status": "6000.3.20f1 / c9ba695d4f07 / VERIFIED",
   "unity_repository_batchmode_verification_status": "2/2 PASS / RETURN CODE 0 / PACKAGE LOCK STABLE",
   "unity_direct_package_count": 4,
   "unity_package_lock_sha256": "2ff23a1e227df10616b04a28bd692282054f4e52ea25ad2cbe3a9688c5eb61fe",
   "unity_generated_urp_bootstrap_asset_count": 2,
   "unity_generated_urp_bootstrap_asset_status": "HUMAN OWNER-ALLOWED INFRASTRUCTURE / NOT GAMEPLAY OR EXTERNAL PRODUCTION ASSET",
-  "unity_implementation_readiness_status": "IMP-0001 COMPLETE / IMP-0002 RELAY NOT ISSUED / GATE CLOSED",
+  "unity_implementation_readiness_status": "IMP-0001 COMPLETE / IMP-0002 COMPLETE / IMP-0003 COMPLETE / GATE CLOSED",
   "task0064_result": "STOP CONDITION / NO REPOSITORY CHANGE",
   "ear_imp0001_001_status": "EXPIRED / UNUSED",
   "first_implementation_ticket_id": "IMP-0001",
@@ -285,6 +285,22 @@
   "imp0002_test_run_result": "2/2 PASS / EACH 17 OF 17",
   "imp0002_playmode_test_count": 0,
   "imp0002_gameplay_status": "NOT STARTED",
+  "task0075_status": "COMPLETE / VERIFIED",
+  "imp0003_status": "COMPLETE / LOCOMOTION, CAMERA AND LOGICAL INPUT GRAYBOX FOUNDATION VERIFIED",
+  "imp0003_execution_baseline_sha": "2c929bf7796f1d55741a12f5aab4c176ceb53208",
+  "imp0003_gate": "OPEN — IMP-0003 ONLY / LOCOMOTION, CAMERA, LOGICAL INPUT GRAYBOX FOUNDATION / ONE-SHOT CONSUMED",
+  "imp0003_execution_relay_id": "EAR-IMP-0003-001",
+  "imp0003_execution_relay_status": "CONSUMED / EXPIRED AFTER SUCCESS",
+  "imp0003_runtime_assembly": "BreakNotice.Gameplay",
+  "imp0003_presentation_assembly": "BreakNotice.Presentation",
+  "imp0003_logical_action_count": 8,
+  "imp0003_editmode_test_count": 6,
+  "imp0003_playmode_test_count": 4,
+  "imp0003_test_run_count": 2,
+  "imp0003_test_run_result": "2/2 PASS / EACH 10 OF 10",
+  "imp0003_manual_smoke_status": "PASS / CONSOLE LOG-WARNING-ERROR 0-0-0",
+  "imp0003_forbidden_gameplay_status": "NOT IMPLEMENTED",
+  "imp0003_formal_g4_evidence_status": "NOT COLLECTED",
   "final_preimplementation_review_status": "REVISION REQUIRED",
   "final_preimplementation_review_path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
   "final_preimplementation_review_baseline_sha": "a6398513bdc017529c600c8aa5bb5d7ea6e3e5cb",
@@ -306,12 +322,12 @@
   "final_preimplementation_reaudit_limited_gate_readiness": "READY FOR OWNER DECISION — IMP-0001 ONLY",
   "final_preimplementation_reaudit_imp0001_baseline_binding": "VALID / NON-SELF-REFERENTIAL",
   "final_preimplementation_reaudit_next_task": "TASK-0063 — Finalize Pre-G4 Full Design Lock and Authorize IMP-0001 Execution Relay Issuance",
-  "g4_gate_status": "NOT PASSED / NOT STARTED / NOT AUTHORIZED",
+  "g4_gate_status": "NOT PASSED / FORMAL EVIDENCE NOT COLLECTED / NOT AUTHORIZED",
   "g5_gate_status": "NOT PASSED / REQUIRES G4 EVIDENCE",
-  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION",
-  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION",
+  "design_freeze_current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION",
+  "current_next_task": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION",
   "phase_label_review": "COMPLETED / OWNER-APPROVED",
-  "graybox_status": "NOT STARTED",
+  "graybox_status": "TASK-0075 FOUNDATION COMPLETE / VERIFIED",
   "implementation_gate": "CLOSED",
   "canonical_player_image": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
   "canonical_player_visual_spec": "docs/03_art/PLAYER_VISUAL_SPEC.md",
@@ -447,9 +463,9 @@
   "adr0022_path": "docs/09_adrs/ADR-0022-G4A-BOUNDED-IMPLEMENTATION-GATE.md",
   "g4a_bounded_gate_model_status": "OWNER-APPROVED / DEFINED",
   "g4a_foundation_entry_status": "OWNER-APPROVED / IMP-0002 COMPLETE",
-  "g4a_foundation_implementation_status": "IMP-0002 COMPLETE / NO GAMEPLAY",
+  "g4a_foundation_implementation_status": "IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE",
   "external_ai_asset_status": "NOT AUTHORIZED",
-  "current_next_authorization_boundary": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION",
+  "current_next_authorization_boundary": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION",
   "files": [
     {
       "path": ".editorconfig",
@@ -483,13 +499,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 39723,
-      "sha256": "e02993b508c0d4f301501b9c4565b25e18169953ffbf6e59ccf3355d10309c9d"
+      "bytes": 40323,
+      "sha256": "0042584b1777551a3074ef02e648adff5445ad268f08e2849c7e20ed86657512"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 29010,
-      "sha256": "2bb29b1b1fd5ee416a9d1fee051518ad27b4120c8238c6efb71eabd68adc11c1"
+      "bytes": 29946,
+      "sha256": "44520e8150c230cdd50325594618be121e15a014285276f6dcbb36c5a6a384e4"
     },
     {
       "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
@@ -618,8 +634,8 @@
     },
     {
       "path": "Game/README.md",
-      "bytes": 2311,
-      "sha256": "a6d7fc9126be558e2360c488bd2b3df27dd83f42e2de41294e620145567c04ad"
+      "bytes": 3073,
+      "sha256": "14652d319fdf7db86a89f3c514e02dd87ad5e3c8076675f9e78fcb6d1fb4a313"
     },
     {
       "path": "LICENSE.md",
@@ -648,8 +664,8 @@
     },
     {
       "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 31104,
-      "sha256": "a108b96d434fd25bcc6ae835f7dd0658627b183ee523622dc5945becc3f8101e"
+      "bytes": 32588,
+      "sha256": "4ce66ddaf32379508f36410ac65cd151c500a00dd31c976284286883ad3f7020"
     },
     {
       "path": "docs/00_project/GLOSSARY.md",
@@ -1529,7 +1545,7 @@
     {
       "path": "Game/ProjectSettings/ProjectSettings.asset",
       "bytes": 20362,
-      "sha256": "266d2571f6397ad5906f3376cb5b6fa8bfb56010c6c88c463e2d5f243e8b8de4"
+      "sha256": "63f595939c41f46baccb750cf28c331acb45adffa3aac8254659a5770ba6271e"
     },
     {
       "path": "Game/ProjectSettings/ProjectVersion.txt",
@@ -1690,6 +1706,181 @@
       "path": "Game/Assets/_Project/Code/Tests/EditMode/RuntimeIdentityTests.cs.meta",
       "bytes": 59,
       "sha256": "80147b4f1b30a5c5dd1a52c31418d40e5e4c7bbdfa62783f16aec8d4a757bc6b"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/BreakNotice.Gameplay.asmdef",
+      "bytes": 377,
+      "sha256": "2349d5a1c5b4e959db38a31c91521cc48296e21fd1d88ad7e1163c600db39885"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/PrototypeLogicalAction.cs",
+      "bytes": 236,
+      "sha256": "323d81a6da73ed26974798cb6de0ad0e014dec92e45510d6917a5d57922c85db"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/LogicalInputSnapshot.cs",
+      "bytes": 1004,
+      "sha256": "220487d7ee09731e994bfdc431bbbbc162badc16c4bf03feee1b960258f8b1d1"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs",
+      "bytes": 3136,
+      "sha256": "6680e2a016f301a99bec0e47b0a5c2121eda4a4161094e50fdaca0ad74fab3dd"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs",
+      "bytes": 2993,
+      "sha256": "7a2bc81b612c46660bb29e909d2e1f219ea98d1f0837e62fe3bc96295d398d5e"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Presentation/BreakNotice.Presentation.asmdef",
+      "bytes": 413,
+      "sha256": "0872808759382f1fdad5270b962ae55fd07e83e990e90d5b7298af13f5d3acc4"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs",
+      "bytes": 4665,
+      "sha256": "7015fff347cf13a98b1ea0a110b0596fe28d133d5561d2ddc3bc7c5bb4728354"
+    },
+    {
+      "path": "Game/Assets/_Project/Input/BreakNoticePrototype.inputactions",
+      "bytes": 9589,
+      "sha256": "b6dfd2ae04ffc53b832791719732d63dfaa3c1b5d36acb0075e4fc6eb7d821e6"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef",
+      "bytes": 572,
+      "sha256": "67baa9a787fb8bd400dd9f3ec258230dc2544982e4817fdcb7cdbeed9339c024"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs",
+      "bytes": 16366,
+      "sha256": "02e16fb6f3c150fdb72fe6d88e42955510f71b7fd219136ecf36ca476fd2cc70"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/BreakNotice.LocomotionCamera.PlayModeTests.asmdef",
+      "bytes": 556,
+      "sha256": "93b61a3e3c4ddd7f4115906d4cb47fd7494355539e02a2bb52b9b1b5f5c72c83"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs",
+      "bytes": 6593,
+      "sha256": "c016b00d3a025f8e710ac1290c01cf05c8e516071df25e965edb1903372d09ed"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/10_Prototype/G4A_LocomotionCameraGraybox.unity",
+      "bytes": 71862,
+      "sha256": "0c4ab92b36bc0a9c31e7a77273f53fbadf6e878418477543e3ff2ee4fed91b95"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs/Graybox/PlayerGraybox.prefab",
+      "bytes": 5413,
+      "sha256": "7710a5056f1bf33075e7dfd734bb414c10bcaae4d3e9b03b330374ae515063ed"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs/Graybox/GameplayCameraRig.prefab",
+      "bytes": 8792,
+      "sha256": "5e5750430fd68113ceccd769a6b2f09bd20faf40ad05fd2c7bce2a3a0010ec90"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/BreakNotice.Gameplay.asmdef.meta",
+      "bytes": 166,
+      "sha256": "f257282dc58f5f53ee3249e471c04169f1fded2b850c179182a911d71ec9296e"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input.meta",
+      "bytes": 172,
+      "sha256": "a9b91ff30bd753cd89a810178f9ff2b40194cda0e8d1915f125e3d7b465a7d48"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/PrototypeLogicalAction.cs.meta",
+      "bytes": 59,
+      "sha256": "1b570badc616c013da5730fd90e7cc9c6f4b1e74cf9f53cdea1251726bb9cae4"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/LogicalInputSnapshot.cs.meta",
+      "bytes": 59,
+      "sha256": "76da6a2e6d227c784f23bd3ae656a599cf55ba731c0cec807d29c8328cfc3e14"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs.meta",
+      "bytes": 59,
+      "sha256": "3fe05ccb115f80062e7a869025924536a0836b55c1389af97f4e1d1138d71342"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs.meta",
+      "bytes": 59,
+      "sha256": "9d048584c62d4b8c9a3d086fc08c1b8e0c359493c6d27e67004f03c1315ad28f"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Presentation/BreakNotice.Presentation.asmdef.meta",
+      "bytes": 166,
+      "sha256": "3736800ea7230cc333f9fccc77fe5fb5db272dfe32f34e0ac5d890e7cae6de0d"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs.meta",
+      "bytes": 59,
+      "sha256": "849628d4bd401cd30828d7d081bfa5b08586fba25f02d704b16f89a82c76a442"
+    },
+    {
+      "path": "Game/Assets/_Project/Input.meta",
+      "bytes": 172,
+      "sha256": "83017965e8387a882f9d55db95ad3cba493d7b74d4cdb1a0c0cbf09c3f997b64"
+    },
+    {
+      "path": "Game/Assets/_Project/Input/BreakNoticePrototype.inputactions.meta",
+      "bytes": 376,
+      "sha256": "5b2e2b5c77a4affba96df2dc7f4f811e827f25b36e119aca272ef740880ebbe2"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera.meta",
+      "bytes": 172,
+      "sha256": "1e406ced324cb9eb5509d30b37c49db3000b2820c359c29713d252521ac9039b"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef.meta",
+      "bytes": 166,
+      "sha256": "b744862d8e095bccd745d2112b433863fab0688b983d8e78a640534780f3a5e2"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs.meta",
+      "bytes": 59,
+      "sha256": "f28b4bc89e2745f9a012a58184bd2f4638742824ee7b0c25a289258abfa3b6d2"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera.meta",
+      "bytes": 172,
+      "sha256": "dc895761f2fd79e1a2067f7fb960aa13b98123476644102a91bb9407ef846036"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/BreakNotice.LocomotionCamera.PlayModeTests.asmdef.meta",
+      "bytes": 166,
+      "sha256": "5e66e130ec7a85be0afb57c4bef4095e5bef3c3224edd80f2437c1278a463c9d"
+    },
+    {
+      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs.meta",
+      "bytes": 59,
+      "sha256": "52b146ecdcee48e49a619a6b675afba96d21d75b1715be2139d7aa6edddfe3ad"
+    },
+    {
+      "path": "Game/Assets/_Project/Scenes/10_Prototype/G4A_LocomotionCameraGraybox.unity.meta",
+      "bytes": 155,
+      "sha256": "786976acbdb3bce325b6acee9ba3496ec8621a9bc455e66fa0c092f463d1be71"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs/Graybox.meta",
+      "bytes": 172,
+      "sha256": "f84c5eddd780d42705f930976a365443fe0cb60579c095b585e8c79013ee29d9"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs/Graybox/PlayerGraybox.prefab.meta",
+      "bytes": 154,
+      "sha256": "4a631fdf9200fec643d1f6355f89d331163ad7ba836f2ab1095549dde3752dff"
+    },
+    {
+      "path": "Game/Assets/_Project/Prefabs/Graybox/GameplayCameraRig.prefab.meta",
+      "bytes": 154,
+      "sha256": "4098b40ce07ae313f836d367aca584359d4b298a94e286873e38c9281aea1a5f"
     }
   ]
 }

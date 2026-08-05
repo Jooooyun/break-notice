@@ -1,0 +1,24 @@
+{
+  "name": "BreakNotice.LocomotionCamera.EditModeTests",
+  "rootNamespace": "BreakNotice.LocomotionCamera.Tests",
+  "references": [
+    "BreakNotice.Gameplay",
+    "BreakNotice.Presentation",
+    "Unity.InputSystem",
+    "Unity.Cinemachine"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "noEngineReferences": false
+}

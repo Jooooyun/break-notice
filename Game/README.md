@@ -42,13 +42,26 @@ assembly는 `UnityEngine` 또는 `UnityEditor`를 참조하지 않으며 다음 
 정확히 `17`개의 EditMode Test를 서로 독립적인 Unity Editor 프로세스에서
 두 번 실행했고 두 실행 모두 `17 / 17 PASS`였다. PlayMode Test는 없다.
 
+## Locomotion, Camera and Logical Input Graybox Foundation
+
+`TASK-0075 / EAR-IMP-0003-001`에서 `BreakNotice.Gameplay`의 정확히 여덟
+Prototype logical action과 Input System adapter, grounded third-person
+locomotion, `BreakNotice.Presentation`의 normal/Aim camera rig, 두 Graybox
+Prefab과 primitive-only `G4A_LocomotionCameraGraybox` Scene을 구현했다.
+
+정확히 `6`개의 EditMode Test와 `4`개의 PlayMode Test를 독립 cycle 두
+번 실행해 각 cycle `10 / 10 PASS`를 확인했다. exact Unity Editor의 수동
+smoke에서도 Move, Look, Aim, wide/narrow traversal, camera occlusion
+recovery, actor/object readability와 금지 action 무효를 확인했고 종료 후
+Console log/warning/error는 `0 / 0 / 0`이었다.
+
 ## Scope Boundary
 
-현재 프로젝트의 C#과 asmdef는 위 Runtime Identity Foundation 및 그
-EditMode Test에만 한정된다. gameplay, Scene, Prefab, PlayMode Test,
-sample content, imported external asset, Build 또는 Graybox는 없다. 기존
-`Assets/_Project` 폴더 골격과 `.gitkeep`, Empty Bootstrap과 exact package
-lock은 보존됐다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`,
-Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`, active Relay는
-`ABSENT`다. 다음 작업에는 별도의 Design Authority 검토와 새로운
-ticket-specific one-shot Relay가 필요하다.
+현재 구현은 Runtime Identity Foundation과 TASK-0075의 locomotion,
+camera, logical-input Graybox foundation에 한정된다. Interaction, Carry,
+Throw, Cargo Strap, ally/enemy behavior, combat, production/external asset,
+Build와 formal G4 evidence는 없다. 기존 Empty Bootstrap, exact package
+lock과 URP Bootstrap asset은 보존됐다. IMP-0003은 `COMPLETE / VERIFIED`,
+G4는 `NOT PASSED`, formal evidence는 `NOT COLLECTED`, Implementation Gate는
+`CLOSED`, active Relay는 `ABSENT`다. 다음 작업에는 별도의 Design
+Authority 검토와 ticket-specific one-shot Relay가 필요하다.

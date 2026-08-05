@@ -8,7 +8,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 # 1. Current Project Phase
 
-현재 단계: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
+현재 단계: `PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY`
 
 ## Current-State Authority Role
 
@@ -16,19 +16,21 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 운영 편의를 위해 복제하며, 모든 가변 현재값의 유일한 권위는
 [`docs/00_project/DESIGN_STATUS.md`](docs/00_project/DESIGN_STATUS.md)다.
 
-- Current Phase: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
-- G4: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+- Current Phase: `PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY`
+- G4: `NOT PASSED / FORMAL EVIDENCE NOT COLLECTED`
 - G5: `NOT PASSED / REQUIRES G4 EVIDENCE`
-- Graybox: `NOT STARTED`
+- Graybox: `TASK-0075 FOUNDATION COMPLETE / VERIFIED`
 - Implementation Gate: `CLOSED`
 - Active Execution Authorization Relay: `ABSENT`
-- G4-A Foundation Implementation: `IMP-0002 COMPLETE / NO GAMEPLAY`
+- G4-A Foundation Implementation:
+  `IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE`
 - IMP-0002: `COMPLETE / VERIFIED`
+- IMP-0003: `COMPLETE / VERIFIED`
 - External AI Asset: `NOT AUTHORIZED`
 - Current Next Authorization Boundary:
-  `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION`
+  `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION`
 - Toolchain provisioning과 exact-version execution evidence:
-  `EMPTY BOOTSTRAP VERIFIED / SEE DESIGN_STATUS`
+  `EXACT TOOLCHAIN AND TASK-0075 GRAYBOX VERIFIED / SEE DESIGN_STATUS`
 
 G1/G2/G3 계약, Accepted ADR, 승인 Visual Spec, scope/Lock 문서가
 substantive authority를 계속 소유한다. MANIFEST는 derived mirror이고
@@ -127,8 +129,10 @@ G4/G5 passage 또는 상속 가능한 권한을 자동으로 만들지 않는다
 
 첫 future instance
 `OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
-정의됐지만 열리지 않았다. IMP-0002는 Owner-approved ticket
-decomposition이지만 실행은 blocked다.
+TASK-0074에서 성공적으로 소비·만료됐다. 다음 bounded instance
+`OPEN — IMP-0003 ONLY / LOCOMOTION, CAMERA, LOGICAL INPUT GRAYBOX
+FOUNDATION`은 TASK-0075에서 성공적으로 소비·만료됐다. 현재 Gate는
+`CLOSED`다.
 
 실행 SHA는 티켓에 저장하지 않는다. 별도 bounded Owner-approved
 Execution Authorization Relay가 정확한 ticket ID, 이미 push된 완전한
@@ -136,8 +140,8 @@ immutable SHA, branch, clean equality, 정확한 Gate state,
 allowed/forbidden files, operations, validations, commit/push 권한과
 one-shot expiration을 제공해야 한다. `EAR-IMP-0001-001`은
 `EXPIRED / UNUSED`, `EAR-IMP-0001-002`는 성공한 IMP-0001에 소비된 뒤
-`CONSUMED / EXPIRED`다. 현재 active Relay는 `ABSENT`이고 IMP-0002
-Relay는 `REQUIRED / NOT ISSUED`다.
+`CONSUMED / EXPIRED`다. `EAR-IMP-0002-001`과 `EAR-IMP-0003-001`도
+각 성공 작업에서 소비·만료됐고 현재 active Relay는 `ABSENT`다.
 
 G1 요구사항의 정확한 문구, disposition, Applicability, Priority와
 기술 중립적 검증 의도는 Owner-approved다. 이는 구현 또는 검증
@@ -373,12 +377,15 @@ materialize해 `COMPLETE`됐다. 사용한 Relay는 소비·만료됐고 Gate는
 다음 티켓
 `docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md`는 정확히
 여섯 engine-independent Runtime type과 열여덟 EditMode obligation의
-Owner-approved static decomposition이다. Future Gate
-`OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION`은
-정의됐지만 열리지 않았고 Relay는 발급되지 않았다. ticket은 concrete
-execution SHA나 live readiness를 저장하지 않는다. 현재 readiness는
-DESIGN_STATUS, 실제 실행 권한은 별도 bounded Owner-approved Execution
-Authorization Relay만 소유한다.
+Owner-approved static decomposition이며 TASK-0074에서 구현·검증됐다.
+
+세 번째 구현 작업 TASK-0075 / IMP-0003은 승인된 정확한 범위 안에서
+platform input을 여덟 logical action으로 변환하는 adapter, grounded
+third-person locomotion, normal/Aim camera presentation, primitive-only
+Graybox Scene과 집중 EditMode/PlayMode Test를 구현·검증했다. Interaction,
+Carry, Throw, Cargo Strap, ally/enemy behavior, combat, production asset와
+formal G4 evidence는 포함하지 않았다. 사용한 `EAR-IMP-0003-001`은
+소비·만료됐고 Gate는 `CLOSED`로 복귀했다.
 
 exact timing, range, buffer, target ranking, physical binding, movement
 constraint와 구현은 계속 `DRAFT`다.
@@ -402,14 +409,14 @@ constraint와 구현은 계속 `DRAFT`다.
 - Policy Violation의 actual Candidate names·effects, final pool,
   rarity·weighting·randomization, final room index, UI·presentation,
   save·telemetry와 technical implementation
-- 논리 입력의 timing·buffer, physical binding, exact movement
-  constraint, animation, physics와 Unity 구현
+- 논리 입력의 timing·buffer, 최종 physical binding, exact movement
+  constraint, animation, physics tuning과 IMP-0003 밖 Unity 구현
 - Acceptance Test의 정확한 입력·수치·성공 임계값
 - 파괴 hard cap을 제외한 밸런스·성능 tuning과 FPS·hardware·
   frame-time 기준
 - IMP-0002의 exact six-type 계약 밖 implementation class, payload,
   schema와 tuning
-- IMP-0002 concrete execution baseline과 Runtime Identity Foundation 실행
+- IMP-0003의 승인된 locomotion·camera·logical input Graybox 밖 gameplay 구현
 - Vertical Slice의 정확한 콘텐츠와 구현 범위
 
 ## Detailed Current History
@@ -615,7 +622,8 @@ Codex는 스스로 결과물을 `APPROVED`, `FINAL`, `LOCKED`로 선언하지 �
 - 1인 개발
 - 폭포수 기반 개발
 - 명시적 단계별 승인 게이트
-- Unity `6000.3.20f1` exact Empty Bootstrap materialized; gameplay 미생성
+- Unity `6000.3.20f1` exact project, package lock과 bounded G4-A
+  locomotion·camera·logical-input Graybox foundation 검증 완료
 - 3D Third-Person 예정
 - Grounded Corporate Action Realism
 - Grounded world, absurd physics

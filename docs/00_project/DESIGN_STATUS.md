@@ -1,6 +1,6 @@
 # Design Status Board
 
-현재 단계: `PRE-PRODUCTION / DESIGN FREEZE COMPLETION`
+현재 단계: `PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY`
 
 G1 Requirements: `PASSED / C3 PRODUCT-DIRECTION CHANGE APPLIED`
 
@@ -69,6 +69,27 @@ G4-A Foundation Implementation:
 IMP-0002:
 `COMPLETE / RUNTIME IDENTITY AND STATE FOUNDATION VERIFIED`
 
+TASK-0075:
+`COMPLETE / LOCOMOTION-CAMERA-LOGICAL-INPUT GRAYBOX VERIFIED`
+
+IMP-0003:
+`COMPLETE / LOCOMOTION, CAMERA AND LOGICAL INPUT GRAYBOX FOUNDATION VERIFIED`
+
+IMP-0003 Execution Baseline:
+`2c929bf7796f1d55741a12f5aab4c176ceb53208`
+
+IMP-0003 Relay:
+`EAR-IMP-0003-001 / CONSUMED / EXPIRED AFTER SUCCESS`
+
+IMP-0003 Gate Result:
+`CLOSED / ONE-SHOT CONSUMED`
+
+IMP-0003 Automated Validation:
+`2 / 2 INDEPENDENT CYCLES PASS / EACH 10 OF 10`
+
+IMP-0003 Manual Smoke:
+`PASS / CONSOLE LOG-WARNING-ERROR 0-0-0`
+
 Execution Baseline:
 `78eb7fab17fec3542614adbf12461902677cb03e`
 
@@ -115,7 +136,8 @@ G3 Gate Passage Source:
 `docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md` at
 `9e1487e85be5a54ba0824c209deabcf738e1abf0`
 
-G4 Graybox: `NOT PASSED / NOT STARTED / NOT AUTHORIZED`
+G4 Graybox:
+`FOUNDATION IMPLEMENTED / TASK-LOCAL VALIDATION PASS / FORMAL G4 EVIDENCE NOT COLLECTED`
 
 G5 Production Freeze:
 `NOT PASSED / REQUIRES G4 EVIDENCE`
@@ -200,7 +222,7 @@ Package Resolution:
 `2 / 2 PASS / EXACT LOCK STABLE`
 
 Repository Unity Bootstrap:
-`EMPTY BOOTSTRAP PRESERVED / IMP-0002 ENGINE-INDEPENDENT FOUNDATION ADDED / NO GAMEPLAY, SCENE, PREFAB, PLAYMODE TEST OR GRAYBOX`
+`EMPTY BOOTSTRAP AND EXACT PACKAGE LOCK PRESERVED / IMP-0002 CORE AND IMP-0003 BOUNDED GRAYBOX FOUNDATIONS VERIFIED`
 
 Unity-Generated URP Bootstrap Assets:
 `2 EXACT ASSETS / HUMAN OWNER-ALLOWED INFRASTRUCTURE`
@@ -217,6 +239,9 @@ Post-Bootstrap Future Gate Format:
 IMP-0002 Future Gate:
 `OPEN — IMP-0002 ONLY / RUNTIME IDENTITY AND STATE FOUNDATION / ONE-SHOT CONSUMED`
 
+IMP-0003 Gate:
+`OPEN — IMP-0003 ONLY / LOCOMOTION, CAMERA, LOGICAL INPUT GRAYBOX FOUNDATION / ONE-SHOT CONSUMED`
+
 EAR-IMP-0001-001:
 `EXPIRED / UNUSED`
 
@@ -226,13 +251,16 @@ EAR-IMP-0001-002:
 EAR-IMP-0002-001:
 `CONSUMED BY SUCCESSFUL IMP-0002 / EXPIRED`
 
+EAR-IMP-0003-001:
+`CONSUMED BY SUCCESSFUL IMP-0003 / EXPIRED`
+
 Active Execution Authorization Relay:
-`ABSENT / EAR-IMP-0002-001 CONSUMED / EXPIRED`
+`ABSENT / EAR-IMP-0003-001 CONSUMED / EXPIRED`
 
 Active Relay: `ABSENT`
 
 Consumed Execution Baseline SHA:
-`9234bbed61a284b590f9b73ef44c8d0139e374e1`
+`2c929bf7796f1d55741a12f5aab4c176ceb53208`
 
 Destruction Budget and Implementation Rules:
 `OWNER-APPROVED / LOCKED`
@@ -251,6 +279,12 @@ First Implementation Ticket:
 
 Second Implementation Ticket:
 `IMP-0002 / COMPLETE / RUNTIME IDENTITY AND STATE FOUNDATION VERIFIED`
+
+Third Implementation Ticket:
+`IMP-0003 / COMPLETE / LOCOMOTION-CAMERA-LOGICAL-INPUT GRAYBOX VERIFIED`
+
+IMP-0003 Execution Relay:
+`EAR-IMP-0003-001 / CONSUMED / EXPIRED AFTER SUCCESS`
 
 IMP-0002 Ticket Record:
 `docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md`
@@ -279,14 +313,14 @@ Approved Production Support Count: `1`
 Full Design Lock:
 `OWNER-APPROVED / LOCKED`
 
-Graybox: `NOT STARTED`
+Graybox: `TASK-0075 FOUNDATION COMPLETE / VERIFIED`
 
 Phase label review: `COMPLETED / OWNER-APPROVED`
 
 Implementation Gate: `CLOSED`
 
 Current Next Authorization Boundary:
-`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION`
+`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION`
 
 ## Full-Game Direction — Active C3 Authority
 
@@ -495,15 +529,16 @@ IMP-0001에 사용한 `EAR-IMP-0001-002`와 IMP-0002에 사용한
 | CHR_00 Player Turnaround Production Support | OWNER-APPROVED / REGISTERED / LOCKED PRODUCTION SUPPORT | 현 Production Support 권위 유지 | DESIGN FREEZE / CHECKED |
 | First Implementation Ticket | IMP-0001 / COMPLETE / 10 OF 10 AT EXECUTION / EMPTY BOOTSTRAP AND EXACT PACKAGE LOCK MATERIALIZED | 완료 범위를 상속하지 않으며 다음 bounded 권한 전 gameplay·G4 금지 | DESIGN FREEZE / CHECKED |
 | Post-Bootstrap G4-A Gate Model | CR-0002 APPROVED / ADR-0022 ACCEPTED / OWNER-APPROVED AND DEFINED | ticket별 별도 immutable baseline과 one-shot Relay 필요 | CLOSED |
-| Second Implementation Ticket | IMP-0002 / COMPLETE / RUNTIME IDENTITY AND STATE FOUNDATION VERIFIED | Design Authority review 전 후속 ticket·gameplay·Scene·Prefab·Graybox 금지 | CLOSED / ONE-SHOT CONSUMED |
+| Second Implementation Ticket | IMP-0002 / COMPLETE / RUNTIME IDENTITY AND STATE FOUNDATION VERIFIED | 완료 상태 유지 | CLOSED / ONE-SHOT CONSUMED |
+| Third Implementation Ticket | IMP-0003 / COMPLETE / LOCOMOTION-CAMERA-LOGICAL-INPUT GRAYBOX VERIFIED | Design Authority review 전 interaction·production asset·formal G4 evidence 금지 | CLOSED / ONE-SHOT CONSUMED |
 | Final Pre-Implementation Review | REVISION REQUIRED — historical decision preserved | TASK-0061 CORRECTIONS APPLIED / VERIFIED BY RE-AUDIT | HISTORICAL |
 | Final Pre-Implementation Re-Audit | READY FOR LIMITED IMPLEMENTATION GATE DECISION — IMP-0001 ONLY | consumed by TASK-0063 Pre-G4 Lock decision | PRE-G4 / GATE CLOSED |
 | Pre-G4 Full Design Lock | OWNER-APPROVED / LOCKED at design-source baseline `f638be24c6895a6969083626fa3f94228b533ec6`; EXTENDED BY CR-0001; C3 ADDENDUM VERIFIED | maintain Lock through Change Control; G4-A protocol Owner-approved, corrected and ready, but execution remains separately unauthorized | PRE-G4 |
-| Limited Implementation Gate | ADR-0019 HISTORICAL IMP-0001 MODEL PRESERVED; ADR-0022 POST-BOOTSTRAP MODEL DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; EAR-IMP-0001-002 AND EAR-IMP-0002-001 CONSUMED / EXPIRED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION` | CLOSED |
+| Limited Implementation Gate | ADR-0019 HISTORICAL IMP-0001 MODEL PRESERVED; ADR-0022 POST-BOOTSTRAP MODEL DEFINED; EAR-IMP-0001-001 EXPIRED / UNUSED; EAR-IMP-0001-002, EAR-IMP-0002-001 AND EAR-IMP-0003-001 CONSUMED / EXPIRED; ACTIVE RELAY ABSENT; CURRENT STATE CLOSED | `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION` | CLOSED |
 | Vertical Slice enemy·room 확장 | DRAFT | G2 Final Audit 이후 별도 범위 결정 | G2 |
 | G3 Technical Baseline | OWNER-APPROVED / PASSED | Design Freeze completion | G3 PASSED |
 | 기술 아키텍처 | OWNER-APPROVED G3 DIRECTION / IMPLEMENTATION DRAFT | Design Freeze completion | G3 PASSED |
-| Graybox | NOT STARTED / NOT AUTHORIZED | G4 별도 승인 후 | G4 NOT PASSED |
+| Graybox | TASK-0075 FOUNDATION COMPLETE / TASK-LOCAL VALIDATION PASS | formal G4 evidence는 별도 승인 필요 | G4 NOT PASSED |
 | 본 제작 | PENDING | Implementation Gate 개방 후 | G5 |
 
 ## Production Visual Lock Sequence
@@ -614,9 +649,10 @@ AI Navigation package authority drift를 발견해 `REVISION REQUIRED`로
 `READY FOR G3 GATE DECISION` 판정은 기준선
 `9e1487e85be5a54ba0824c209deabcf738e1abf0`에서 Owner-approved G3
 passage의 근거로 소비되었고 Re-Audit 문서 자체는 변경하지 않는다.
-G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`, G5는 `NOT PASSED /
+G4는 `NOT PASSED / FORMAL EVIDENCE NOT COLLECTED`, G5는 `NOT PASSED /
 REQUIRES G4 EVIDENCE`, Pre-G4 Full Design Lock은
-`OWNER-APPROVED / LOCKED`, Graybox는 `NOT STARTED`, Implementation
+`OWNER-APPROVED / LOCKED`, Graybox foundation은 `TASK-0075 COMPLETE /
+VERIFIED`, Implementation
 Gate는 `CLOSED`다. Final Review는 역사적으로 `REVISION REQUIRED`이고
 TASK-0061 baseline binding과 limited Gate sequencing correction은
 TASK-0062 Re-Audit에서 `48 / 48 PASS`로 검증됐다. 첫 구현 티켓은
@@ -638,9 +674,14 @@ open state를 ticket-, baseline-, branch-, scope-specific one-shot으로
 engine-independent `BreakNotice.Core`와 정확히 여섯 Runtime type을
 구현했다. 정확히 17개 NUnit EditMode Test는 독립 Editor 프로세스에서
 두 번 모두 `17 / 17 PASS`했고 열여덟 번째 실행 의무까지 충족했다.
-IMP-0002는 `COMPLETE / RUNTIME IDENTITY AND STATE FOUNDATION VERIFIED`,
-Relay는 `CONSUMED / EXPIRED AFTER SUCCESS`, Gate는 `CLOSED / ONE-SHOT
-IMP-0002 GATE CONSUMED`다. `EAR-IMP-0001-001`은 계속 `EXPIRED / UNUSED`다.
+IMP-0002는 `COMPLETE / RUNTIME IDENTITY AND STATE FOUNDATION VERIFIED`다.
+TASK-0075 / `EAR-IMP-0003-001`은 기준선
+`2c929bf7796f1d55741a12f5aab4c176ceb53208`에서 정확한 logical-input,
+locomotion, camera와 primitive Graybox scope를 구현했다. 두 독립 Test
+cycle은 각각 `10 / 10 PASS`, exact Unity 수동 smoke는 `PASS`, 종료 후
+Console은 `0 / 0 / 0`이었다. IMP-0003은 `COMPLETE / VERIFIED`, Relay는
+`CONSUMED / EXPIRED AFTER SUCCESS`, Gate는 `CLOSED / ONE-SHOT IMP-0003
+GATE CONSUMED`다. `EAR-IMP-0001-001`은 계속 `EXPIRED / UNUSED`다.
 Unity `6000.3.20f1` / changeset `c9ba695d4f07`과 외부 disposable
 project의 batch startup `2 / 2`는 point-in-time `PASS`이고 existing
 local license acceptance만 확인됐다. BREAK NOTICE Unity project와
@@ -648,12 +689,11 @@ local license acceptance만 확인됐다. BREAK NOTICE Unity project와
 batch open `2 / 2 PASS`, lock SHA 안정성, AI Navigation 부재가
 검증됐다. G4-A
 detailed evidence protocol은 `OWNER-APPROVED / CORRECTED / READY`,
-evidence는 `NOT COLLECTED`, execution은
-`NOT STARTED / NOT AUTHORIZED`다. G4-A Foundation Entry는
-`OWNER-APPROVED / IMP-0002 COMPLETE`지만 gameplay, G4와 Graybox는
-시작되지 않았고 external AI asset은 `NOT AUTHORIZED`다. 다음 권한
-경계는 `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003,
-GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION`이다.
-남은 Design Freeze 항목은 `0`개다. IMP-0001과 IMP-0002는 완료됐지만
-후속 ticket, gameplay, Scene, Prefab, Graybox 권한은 없고 active Relay는
-`ABSENT`, Implementation Gate는 `CLOSED`다.
+evidence는 `NOT COLLECTED`이고 formal G4 evidence execution은
+`NOT STARTED / NOT AUTHORIZED`다. G4-A Foundation Entry는 IMP-0002와
+IMP-0003의 bounded foundation까지 완료됐지만 G4는 통과하지 않았고
+interaction·production/external asset은 승인되지 않았다. 다음 권한 경계는
+`PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION,
+PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION`이다. 남은
+Design Freeze 항목은 `0`개이며 active Relay는 `ABSENT`, Implementation
+Gate는 `CLOSED`다.
