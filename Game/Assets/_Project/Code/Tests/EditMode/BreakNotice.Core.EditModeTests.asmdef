@@ -1,0 +1,21 @@
+{
+  "name": "BreakNotice.Core.EditModeTests",
+  "rootNamespace": "BreakNotice.Core.Tests",
+  "references": [
+    "BreakNotice.Core"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "noEngineReferences": false
+}

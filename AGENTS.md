@@ -22,10 +22,11 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - Graybox: `NOT STARTED`
 - Implementation Gate: `CLOSED`
 - Active Execution Authorization Relay: `ABSENT`
-- G4-A Foundation Entry: `OWNER-APPROVED / RELAY PENDING`
-- IMP-0002: `OWNER-APPROVED TICKET DECOMPOSITION / EXECUTION BLOCKED`
+- G4-A Foundation Implementation: `IMP-0002 COMPLETE / NO GAMEPLAY`
+- IMP-0002: `COMPLETE / VERIFIED`
+- External AI Asset: `NOT AUTHORIZED`
 - Current Next Authorization Boundary:
-  `OWNER IMP-0002 EXECUTION AUTHORIZATION RELAY REQUIRED`
+  `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0002 — NO IMP-0003, GAMEPLAY, SCENE, PREFAB, GRAYBOX, OR EXTERNAL-ASSET AUTHORIZATION`
 - Toolchain provisioning과 exact-version execution evidence:
   `EMPTY BOOTSTRAP VERIFIED / SEE DESIGN_STATUS`
 

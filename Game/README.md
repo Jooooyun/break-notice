@@ -25,11 +25,30 @@ Unity가 빈 URP 프로젝트 초기화 중 생성한
 Human Owner가 bootstrap infrastructure로 명시적으로 허용했다. 이들은
 gameplay 또는 external production asset이 아니다.
 
+## Runtime Identity Foundation
+
+`TASK-0074 / EAR-IMP-0002-001`에서 engine-independent
+`BreakNotice.Core` Runtime Identity Foundation을 구현했다. Runtime
+assembly는 `UnityEngine` 또는 `UnityEditor`를 참조하지 않으며 다음 여섯
+타입만 공개한다.
+
+- `ContentId`
+- `RuntimeEntityId`
+- `EncounterGenerationId`
+- `RuntimeIdentity`
+- `RuntimeIdentityAllocator`
+- `RuntimeEntityRegistry`
+
+정확히 `17`개의 EditMode Test를 서로 독립적인 Unity Editor 프로세스에서
+두 번 실행했고 두 실행 모두 `17 / 17 PASS`였다. PlayMode Test는 없다.
+
 ## Scope Boundary
 
-현재 프로젝트에는 gameplay C#, asmdef, Test, Scene, Prefab, sample
-content, imported external asset, Build 또는 Graybox가 없다. 기존
-`Assets/_Project` 폴더 골격과 `.gitkeep`은 보존됐다. G4는
-`NOT PASSED / NOT STARTED / NOT AUTHORIZED`, Graybox는 `NOT STARTED`,
-Implementation Gate는 `CLOSED`다. 이후 작업은 별도의 bounded 권한이
-필요하다.
+현재 프로젝트의 C#과 asmdef는 위 Runtime Identity Foundation 및 그
+EditMode Test에만 한정된다. gameplay, Scene, Prefab, PlayMode Test,
+sample content, imported external asset, Build 또는 Graybox는 없다. 기존
+`Assets/_Project` 폴더 골격과 `.gitkeep`, Empty Bootstrap과 exact package
+lock은 보존됐다. G4는 `NOT PASSED / NOT STARTED / NOT AUTHORIZED`,
+Graybox는 `NOT STARTED`, Implementation Gate는 `CLOSED`, active Relay는
+`ABSENT`다. 다음 작업에는 별도의 Design Authority 검토와 새로운
+ticket-specific one-shot Relay가 필요하다.
