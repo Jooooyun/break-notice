@@ -43,3 +43,23 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   - untracked REVIEW 원본 재등록 — tracked approved counterpart가 이미 존재
 - Next: `install/reinstall browser extension, exact Chrome/Edge qualification,
   explicit remote-push approval, then C0 closure`
+
+## C0 Recovery Attempt and Remote Publication — 2026-08-06
+
+- Human Owner Decisions:
+  - Computer Use browser extension installation completed
+  - normal remote push explicitly approved
+- Browser Diagnostics:
+  - Chrome extension `1.2.27236.6274`: `INSTALLED / ENABLED`
+  - Chrome native host: `VALID`
+  - Chrome runtime: `NOT RUNNING / EXACT FAMILY UNAVAILABLE`
+  - Edge extension `1.2.27236.6274`: `INSTALLED / ENABLED / CONNECTED`
+  - Edge native host: `VALID`
+  - Edge local HTTP navigation: `BLOCKED / ADMIN-ENFORCED POLICY COULD NOT BE VERIFIED / SAME-URL RETRY FAILED`
+- Remote Publication:
+  - contest and both art branches: `PUSHED / VERIFIED / 73d886eb2b6ccc0061e6f484afa663402418ec59`
+  - `gb2026-prechallenge`: `PUSHED / TARGET b82bb382fc0439847d6497ee2fadd9c55781a9fa`
+  - `gb2026-sprint-start`: `PUSHED / TARGET 28b7f70c4b6299159afe5b99ea7b98d1e5399352`
+  - `origin/main`: `UNCHANGED / 28b7f70c4b6299159afe5b99ea7b98d1e5399352`
+- Actual Result: `REMOTE PUSH COMPLETE / C0 BROWSER ACCEPTANCE STILL BLOCKED / C1 NOT STARTED`
+- Next: `launch Chrome, restore Edge local-URL policy verification, rerun exact Chrome and Edge qualification`

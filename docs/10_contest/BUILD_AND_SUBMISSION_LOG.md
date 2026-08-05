@@ -17,7 +17,7 @@
 
 | Field | Value |
 |---|---|
-| Source SHA | `BASE 28b7f70c4b6299159afe5b99ea7b98d1e5399352 + C0 WORKTREE / COMMIT PENDING` |
+| Source SHA | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
 | Build ID | `GB2026-C0-WEB-DEV-001` |
 | Build Target | `Web / Development` |
 | Build Date | `2026-08-06 01:40:42 +09:00` |
@@ -26,11 +26,24 @@
 | Compressed Size | `N/A — compression disabled for local C0 HTTP qualification` |
 | Hosting URL | `http://127.0.0.1:8765/ / LOCAL TEST ONLY / SERVER STOPPED AFTER VERIFICATION` |
 | Backup Build | `Game/Builds/WebGL/Development/ / ignored local artifact` |
-| Chrome | `BLOCKED — installed, ChatGPT browser extension absent` |
-| Edge | `BLOCKED — installed, ChatGPT browser extension absent` |
-| Pointer / Escape / Resize | `NOT EXECUTED — exact Chrome and Edge connections unavailable` |
+| Chrome | `BLOCKED — extension 1.2.27236.6274 installed/enabled and native host valid; Chrome not running, exact family unavailable` |
+| Edge | `BLOCKED — exact family connected; local HTTP navigation denied because admin-enforced policy could not be verified` |
+| Pointer / Escape / Resize | `NOT EXECUTED — local page access did not reach runtime` |
 | HTTP Verification | `PASS / 19 of 19 files returned HTTP 200` |
 | Existing Tests | `EditMode 23/23 PASS / PlayMode 4/4 PASS / total 27/27` |
-| Blocking Error | `Browser extension and native-host registration absent; remote push approval rejected` |
+| Blocking Error | `Chrome launch required; Edge admin-policy verification unavailable` |
 | Submission State | `NOT READY / C0 ENVIRONMENT BLOCKED / C1 PROHIBITED` |
 | Final Release Tag | `NOT CREATED` |
+
+## C0 Remote Publication
+
+| Ref | Remote Target |
+|---|---|
+| `contest/game-builders-2026` | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
+| `art/characters-animation` | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
+| `art/environment-ui-vfx` | `73d886eb2b6ccc0061e6f484afa663402418ec59` |
+| `gb2026-prechallenge` | `b82bb382fc0439847d6497ee2fadd9c55781a9fa` |
+| `gb2026-sprint-start` | `28b7f70c4b6299159afe5b99ea7b98d1e5399352` |
+| `main` | `28b7f70c4b6299159afe5b99ea7b98d1e5399352 / unchanged` |
+
+Publication result: `PASS / normal push / no force / verified with ls-remote`.

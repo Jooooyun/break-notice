@@ -28,6 +28,7 @@ desktop-browser physics action prototype을 완성한다. 전체 게임을 만�
 - Pre-challenge tag: `gb2026-prechallenge`
 - Sprint start: `28b7f70c4b6299159afe5b99ea7b98d1e5399352`
 - Sprint tag: `gb2026-sprint-start`
+- Remote contest/art publication: `COMPLETE / VERIFIED / 2026-08-06`
 - Final tag: `gb2026-submission` — submission freeze에서만 생성
 - Contest diff:
   `git log gb2026-prechallenge..gb2026-submission` 및

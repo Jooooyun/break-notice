@@ -112,12 +112,21 @@ desktop browser prototype과 검증 증거를 만든다.
 - Local HTTP verification: `19/19 files HTTP 200`
 - Build aggregate SHA-256:
   `a24d1dd102377ba01cca858a7134439d2d2f54f1fa8994b609f9abb1f88724dd`
-- Chrome/Edge qualification: `NOT EXECUTED`
-- Blocker: Chrome와 Edge 실행 파일은 설치됐지만 두 family 모두 ChatGPT
-  browser extension이 없고 native-host registry registration도 없다.
-- Required recovery: Codex app의 **Settings → Computer use**에서 browser
-  extension/plugin을 설치 또는 재설치한 뒤 exact Chrome와 Edge 검증을
-  다시 실행한다.
-- Remote publication: local branch/tag는 존재하지만 push는 실행 환경의
-  별도 approval review에서 거부됐다.
-- Consequence: C0 acceptance와 push는 미완료이며 C1은 시작하지 않는다.
+- Chrome/Edge qualification: `RETRY INCOMPLETE`
+- Chrome diagnostic: ChatGPT browser extension `1.2.27236.6274` is installed
+  and enabled and the native-host manifest is valid, but Chrome was not
+  running, so the exact Chrome family was unavailable.
+- Edge diagnostic: the extension and native host are valid and the exact Edge
+  family connected. Navigation to `http://127.0.0.1:8765/` was denied because
+  the admin-enforced policy could not be verified. The same URL was retried
+  once without bypass and returned the same result.
+- Browser consequence: Move, Look, Aim, pointer capture, Escape release,
+  1366×768 / 1920×1080 resize and blocking console checks remain unexecuted.
+- Required recovery: launch Chrome with the installed extension and restore
+  the Edge local-URL security-policy verification path, then rerun both exact
+  browser families without substitution.
+- Remote publication: `COMPLETE / VERIFIED` — contest and both art branches
+  point to `73d886eb2b6ccc0061e6f484afa663402418ec59`; both baseline tags are
+  published at their immutable approved targets; `origin/main` is unchanged.
+- Consequence: push is complete, but C0 acceptance remains incomplete and C1
+  must not start.
