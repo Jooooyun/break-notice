@@ -8,7 +8,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 # 1. Current Project Phase
 
-현재 단계: `PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY`
+현재 단계: `CONTEST SPRINT IMPLEMENTATION / C0 BROWSER QUALIFICATION`
 
 ## Current-State Authority Role
 
@@ -16,21 +16,26 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 운영 편의를 위해 복제하며, 모든 가변 현재값의 유일한 권위는
 [`docs/00_project/DESIGN_STATUS.md`](docs/00_project/DESIGN_STATUS.md)다.
 
-- Current Phase: `PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY`
+- Current Phase: `CONTEST SPRINT IMPLEMENTATION / C0 BROWSER QUALIFICATION`
 - G4: `NOT PASSED / FORMAL EVIDENCE NOT COLLECTED`
 - G5: `NOT PASSED / REQUIRES G4 EVIDENCE`
 - Graybox: `TASK-0075 FOUNDATION COMPLETE / VERIFIED`
-- Implementation Gate: `CLOSED`
-- Active Execution Authorization Relay: `ABSENT`
+- Implementation Gate:
+  `MAIN PRODUCT GATE CLOSED / CONTEST BRANCH OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE`
+- Active Execution Authorization Relay:
+  `EAR-CONTEST-0001-001 / ACTIVE / C0 ONLY / CONTEST BRANCH`
+- Contest C0:
+  `ENVIRONMENT BLOCKED / LOCAL BUILD, HTTP AND 27 TESTS PASS / EXACT CHROME AND EDGE QUALIFICATION NOT EXECUTED / C1 NOT AUTHORIZED`
 - G4-A Foundation Implementation:
   `IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE`
 - IMP-0002: `COMPLETE / VERIFIED`
 - IMP-0003: `COMPLETE / VERIFIED`
-- External AI Asset: `NOT AUTHORIZED`
+- External AI Asset:
+  `NEW OR RUNTIME AI ASSET NOT AUTHORIZED / EXISTING OWNER-APPROVED VISUAL REFERENCES AUTHORIZED AS PRODUCTION REFERENCES ONLY`
 - Current Next Authorization Boundary:
-  `PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION`
+  `INSTALL OR REINSTALL THE CHATGPT BROWSER EXTENSION VIA SETTINGS > COMPUTER USE, COMPLETE CHROME AND EDGE C0 QUALIFICATION, AND OBTAIN EXPLICIT REMOTE-PUSH APPROVAL / C1 REMAINS PROHIBITED`
 - Toolchain provisioning과 exact-version execution evidence:
-  `EXACT TOOLCHAIN AND TASK-0075 GRAYBOX VERIFIED / SEE DESIGN_STATUS`
+  `EXACT TOOLCHAIN, TASK-0075 GRAYBOX, C0 WEB BUILD, HTTP AND 27 TESTS VERIFIED / EXACT CHROME-EDGE QUALIFICATION BLOCKED / SEE DESIGN_STATUS`
 
 G1/G2/G3 계약, Accepted ADR, 승인 Visual Spec, scope/Lock 문서가
 substantive authority를 계속 소유한다. MANIFEST는 derived mirror이고
@@ -816,30 +821,30 @@ Codex는 별도 정리 작업 없이 다음 행동을 하지 않는다.
 
 # 11. Current Implementation Restrictions
 
-Implementation Gate가 닫혀 있으므로 다음은 금지한다.
+Main product Implementation Gate는 계속 닫혀 있다. 다만 Human Owner가
+승인한 CR-0003, Accepted ADR-0023, `CONTEST-0001`과
+`EAR-CONTEST-0001-001`에 따라 `contest/game-builders-2026` branch의
+Game Builders 2026 contest overlay만 one-shot으로 열려 있다. 이 권한은
+main branch, formal G4/G5 passage 또는 일반 제품 구현 권한으로 상속되지
+않는다.
 
-- Unity 프로젝트 초기화 또는 변경
-- C# 게임플레이 코드 작성
-- 패키지 설치
-- Input System 설정
-- Cinemachine 설정
-- Rigidbody 시스템 구현
-- 적 AI 구현
-- 씬 제작
-- Prefab 제작
-- 빌드 파이프라인 구성
-- 최적화 작업
-- 테스트 코드 구현
+현재 허용된 C0 범위는 다음에 한정한다.
 
-현재 허용 범위는 명시적으로 요청된 프리프로덕션 작업뿐이다.
+- contest branch와 start tag의 로컬 등록
+- contest authority·collaboration·asset·build 문서 작성
+- 기존 승인 Visual Reference의 분류와 read-only 연결
+- `ArtSource/`와 Runtime Art/Audio 전달 구조 생성
+- exact Unity `6000.3.20f1` Web Build Support 설치·확인
+- 기존 승인 Graybox Scene을 보존한 별도 Contest Scene 생성
+- Build Settings, deterministic EditMode/PlayMode test automation,
+  Development Web build·local server·release verification 구성
+- Chrome과 Edge에서의 C0 browser qualification 및 증거 기록
+- C0 결과의 선택적 stage·commit과 승인된 contest/art branch 운영
 
-- 저장소 상태 확인
-- 비주얼 시안 관리
-- 승인 기록
-- 문서 검토
-- 설계 조율
-- 범위 정의
-- 변경 관리
+C0 acceptance 전에는 C1을 시작하지 않는다. C1~C9도 항상 직전 contest
+wave의 acceptance 뒤에만 순차적으로 진행한다. C0 범위 밖 gameplay,
+Interaction, Carry, Throw, Cargo Strap, ally/enemy behavior, combat,
+production asset 통합, formal G4 evidence와 G4/G5 passage는 계속 금지한다.
 
 ---
 

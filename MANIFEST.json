@@ -2,7 +2,7 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
-  "current_phase": "PROTOTYPE IMPLEMENTATION / G4-A GRAYBOX ENTRY",
+  "current_phase": "CONTEST SPRINT IMPLEMENTATION / C0 BROWSER QUALIFICATION",
   "current_state_authority_status": "OWNER-APPROVED / SINGLE MUTABLE LIVE-STATE SOURCE",
   "current_state_authority_path": "docs/00_project/DESIGN_STATUS.md",
   "manifest_current_state_role": "DERIVED MACHINE-READABLE MIRROR / NOT INDEPENDENT AUTHORITY",
@@ -241,7 +241,7 @@
   "historical_imp0001_gate_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "limited_implementation_gate_allowed_state": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
   "g4a_bounded_gate_format": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
-  "limited_implementation_gate_current_state": "CLOSED",
+  "limited_implementation_gate_current_state": "MAIN PRODUCT GATE CLOSED / CONTEST BRANCH OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE",
   "limited_implementation_gate_one_shot": true,
   "imp0001_execution_relay_issuance_status": "EAR-IMP-0001-002 ISSUED AND CONSUMED",
   "imp0001_execution_relay_status": "CONSUMED / EXPIRED / ACTIVE RELAY ABSENT",
@@ -456,7 +456,7 @@
   "imp0001_disposition": "APPROVE / COMPLETE",
   "post_imp0001_design_authority_review": "APPROVE",
   "ear_imp0001_002_status": "CONSUMED / EXPIRED",
-  "active_execution_authorization_relay": "ABSENT",
+  "active_execution_authorization_relay": "EAR-CONTEST-0001-001 / ACTIVE / C0 ONLY / CONTEST BRANCH",
   "cr0002_status": "APPROVED / APPLIED",
   "cr0002_path": "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
   "adr0022_status": "ACCEPTED",
@@ -464,1423 +464,2144 @@
   "g4a_bounded_gate_model_status": "OWNER-APPROVED / DEFINED",
   "g4a_foundation_entry_status": "OWNER-APPROVED / IMP-0002 COMPLETE",
   "g4a_foundation_implementation_status": "IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE",
-  "external_ai_asset_status": "NOT AUTHORIZED",
-  "current_next_authorization_boundary": "PENDING DESIGN AUTHORITY REVIEW AFTER IMP-0003 — NO INTERACTION, PRODUCTION-ASSET, FORMAL G4 EVIDENCE, OR G4 PASS AUTHORIZATION",
+  "external_ai_asset_status": "NEW OR RUNTIME AI ASSET NOT AUTHORIZED / EXISTING OWNER-APPROVED VISUAL REFERENCES AUTHORIZED AS PRODUCTION REFERENCES ONLY",
+  "current_next_authorization_boundary": "INSTALL OR REINSTALL THE CHATGPT BROWSER EXTENSION VIA SETTINGS > COMPUTER USE, COMPLETE CHROME AND EDGE C0 QUALIFICATION, AND OBTAIN EXPLICIT REMOTE-PUSH APPROVAL / C1 REMAINS PROHIBITED",
+  "cr0003_status": "OWNER-APPROVED / APPLIED",
+  "cr0003_path": "docs/00_project/CR-0003-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
+  "adr0023_status": "ACCEPTED",
+  "adr0023_path": "docs/09_adrs/ADR-0023-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
+  "contest_ticket": "CONTEST-0001 / ACTIVE / C0 ENVIRONMENT BLOCKED",
+  "contest_ticket_path": "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
+  "contest_execution_baseline_sha": "28b7f70c4b6299159afe5b99ea7b98d1e5399352",
+  "contest_branch": "contest/game-builders-2026",
+  "contest_gate_state": "OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE",
+  "contest_c0_status": "ENVIRONMENT BLOCKED / LOCAL BUILD, HTTP AND 27 TESTS PASS / EXACT CHROME AND EDGE QUALIFICATION NOT EXECUTED / C1 NOT AUTHORIZED",
+  "contest_c0_web_build_result": "SUCCEEDED / UNITY WARNINGS 0 / UNITY ERRORS 0 / 113596991 BYTES REPORTED",
+  "contest_c0_test_result": "EDITMODE 23/23 PASS / PLAYMODE 4/4 PASS / TOTAL 27/27 PASS",
+  "contest_c0_http_result": "19/19 FILES HTTP 200 / 113598745 BYTES / SHA-256 a24d1dd102377ba01cca858a7134439d2d2f54f1fa8994b609f9abb1f88724dd",
+  "contest_c0_browser_result": "BLOCKED / CHROME AND EDGE INSTALLED / CHATGPT BROWSER EXTENSION ABSENT / NATIVE-HOST REGISTRATION ABSENT",
+  "contest_git_publication": "LOCAL BRANCH AND TAGS CREATED / REMOTE PUSH BLOCKED BY EXECUTION-ENVIRONMENT APPROVAL REVIEW",
+  "contest_start_tags": [
+    "gb2026-prechallenge",
+    "gb2026-sprint-start"
+  ],
+  "contest_visual_reference_classification": "23 EXISTING EXPLORATION IMAGES / 8 DUPLICATES OF APPROVED REFERENCES / 15 REJECTED OR HISTORICAL EXPLORATION / 0 UNRESOLVED",
+  "contest_visual_reference_git_policy": "USE EXISTING TRACKED APPROVED PATHS / DO NOT STAGE REVIEW DUPLICATES OR HISTORICAL EXPLORATION",
   "files": [
     {
-      "path": ".editorconfig",
-      "bytes": 254,
-      "sha256": "b18dd4c0ef678c62ad0cd9b137637a29a9b21889cf836de7b6a6d5683c36d6a8"
+        "path":  ".editorconfig",
+        "bytes":  254,
+        "sha256":  "b18dd4c0ef678c62ad0cd9b137637a29a9b21889cf836de7b6a6d5683c36d6a8"
     },
     {
-      "path": ".gitattributes",
-      "bytes": 332,
-      "sha256": "8cd18129b800ffa8192dde4059bac50094c6e3ed76ac7a8525b50598efea8874"
+        "path":  ".gitattributes",
+        "bytes":  332,
+        "sha256":  "8cd18129b800ffa8192dde4059bac50094c6e3ed76ac7a8525b50598efea8874"
     },
     {
-      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
-      "bytes": 272,
-      "sha256": "202037187b940545a5118b1a357566e1394f739125f98288af9ba191d7c60334"
+        "path":  ".github/ISSUE_TEMPLATE/bug_report.md",
+        "bytes":  272,
+        "sha256":  "202037187b940545a5118b1a357566e1394f739125f98288af9ba191d7c60334"
     },
     {
-      "path": ".github/ISSUE_TEMPLATE/change_request.md",
-      "bytes": 300,
-      "sha256": "7d3e82035ea62e9f4dd8f95884991b071e1c107ce5c1c40e495be5f5268af384"
+        "path":  ".github/ISSUE_TEMPLATE/change_request.md",
+        "bytes":  300,
+        "sha256":  "7d3e82035ea62e9f4dd8f95884991b071e1c107ce5c1c40e495be5f5268af384"
     },
     {
-      "path": ".github/PULL_REQUEST_TEMPLATE.md",
-      "bytes": 373,
-      "sha256": "69ee75aee8f83edfdb0451f6b3522848573a4dd2162742126acb86b21dce9420"
+        "path":  ".github/PULL_REQUEST_TEMPLATE.md",
+        "bytes":  373,
+        "sha256":  "69ee75aee8f83edfdb0451f6b3522848573a4dd2162742126acb86b21dce9420"
     },
     {
-      "path": ".gitignore",
-      "bytes": 548,
-      "sha256": "13d1bed59536c54db6f7714d7a891d9e941a86d82f3d6f07bfa37080903c78c7"
+        "path":  ".gitignore",
+        "bytes":  548,
+        "sha256":  "13d1bed59536c54db6f7714d7a891d9e941a86d82f3d6f07bfa37080903c78c7"
     },
     {
-      "path": "AGENTS.md",
-      "bytes": 40323,
-      "sha256": "0042584b1777551a3074ef02e648adff5445ad268f08e2849c7e20ed86657512"
+        "path":  "AGENTS.md",
+        "bytes":  41730,
+        "sha256":  "98162aa90cdaf64c7091a982488c5c47dbd3c198139d3db85238e0272ec8495e"
     },
     {
-      "path": "CHANGELOG.md",
-      "bytes": 29946,
-      "sha256": "44520e8150c230cdd50325594618be121e15a014285276f6dcbb36c5a6a384e4"
+        "path":  "ArtSource/Audio/DELIVERY.md",
+        "bytes":  599,
+        "sha256":  "1294aafac265b4c3b4fe58f093e56a300cd9f965db438ef51f14181e649caeb3"
     },
     {
-      "path": "Game/Assets/_Project/Art/Characters/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Audio/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Art/Environment/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Audio/Licenses/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Art/Materials/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Audio/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Art/Props/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR00_Player/Animations/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Art/UI/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR00_Player/DELIVERY.md",
+        "bytes":  579,
+        "sha256":  "68133efa2acf85336df4274808291736218193054fb851411b6fbe4581f64d82"
     },
     {
-      "path": "Game/Assets/_Project/Art/VFX/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR00_Player/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Audio/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR00_Player/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Editor/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR00_Player/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Allies/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR00_Player/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR01_Ally/Animations/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Enemies/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR01_Ally/DELIVERY.md",
+        "bytes":  587,
+        "sha256":  "3319567acdfa01456fc76e6a671bccd4fffed07de672263a60599efdf8b047de"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Physics/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR01_Ally/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR01_Ally/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Presentation/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR01_Ally/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Progression/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/CHR01_Ally/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/ENY01_ComplianceRunner/Animations/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/ENY01_ComplianceRunner/DELIVERY.md",
+        "bytes":  601,
+        "sha256":  "5bfc441b04c6305fc9e7a3fb9640f73a403360c9d50440194615f6fcfe68ee66"
     },
     {
-      "path": "Game/Assets/_Project/Data/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/ENY01_ComplianceRunner/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/ENY01_ComplianceRunner/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/00_Bootstrap/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/ENY01_ComplianceRunner/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/10_Prototype/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Characters/ENY01_ComplianceRunner/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/20_VerticalSlice/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Environment/OfficeCoreKit/Architecture/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Settings/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Environment/OfficeCoreKit/Decorative/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Packages/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Environment/OfficeCoreKit/DELIVERY.md",
+        "bytes":  607,
+        "sha256":  "538f24bbf6c68d9c12ff2f9368b63cf4b92ed1b7080e865bba903433d9321ec2"
     },
     {
-      "path": "Game/ProjectSettings/.gitkeep",
-      "bytes": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        "path":  "ArtSource/Environment/OfficeCoreKit/Furniture/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/README.md",
-      "bytes": 3073,
-      "sha256": "14652d319fdf7db86a89f3c514e02dd87ad5e3c8076675f9e78fcb6d1fb4a313"
+        "path":  "ArtSource/Environment/OfficeCoreKit/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "LICENSE.md",
-      "bytes": 747,
-      "sha256": "6f82a2798f3c734c9b5cea65e6dad178129574ab6e61c97fba6c40c03f49186a"
+        "path":  "ArtSource/Environment/OfficeCoreKit/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "README.md",
-      "bytes": 6987,
-      "sha256": "b901211731ccf06dbfdde78019aa886d67351917b7c66a7bd548a7db2e49821a"
+        "path":  "ArtSource/Equipment/GEAR01_CargoStrap/DELIVERY.md",
+        "bytes":  591,
+        "sha256":  "0ebdf4dfd27d258c4127e7eb7ededb4e925a61353fbf1ab6c5587a5f4041c129"
     },
     {
-      "path": "docs/00_project/CHANGE_CONTROL.md",
-      "bytes": 1311,
-      "sha256": "13cf928731a03100a7fdc337390f7f0bcb84dd08c33764619079ab1fc2de5773"
+        "path":  "ArtSource/Equipment/GEAR01_CargoStrap/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/00_project/CR-0001-FULL-GAME-DIRECTION-TRANSITION.md",
-      "bytes": 3826,
-      "sha256": "0329d415ec50dcde1a65575d2e36378233e4eab8d74dced9e9fd99abf4d064d6"
+        "path":  "ArtSource/Equipment/GEAR01_CargoStrap/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/00_project/DECISION_LOG.md",
-      "bytes": 13358,
-      "sha256": "6ac0b5ce25a1404ac699559e779933991e1052088fce3b631a57658086a2eee0"
+        "path":  "ArtSource/Equipment/GEAR01_CargoStrap/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/00_project/DESIGN_STATUS.md",
-      "bytes": 32588,
-      "sha256": "4ce66ddaf32379508f36410ac65cd151c500a00dd31c976284286883ad3f7020"
+        "path":  "ArtSource/Equipment/GEAR01_CargoStrap/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/00_project/GLOSSARY.md",
-      "bytes": 5092,
-      "sha256": "1bb8ca37677523ba5fb2df82b5f50b33bfecd84ff087883d175d04b8a335d70b"
+        "path":  "ArtSource/Marketing/DELIVERY.md",
+        "bytes":  607,
+        "sha256":  "1f85b84df74089b1b6a27cf34e6cd46752bdea82f95e44fecb3b7a609d78fa06"
     },
     {
-      "path": "docs/00_project/PROJECT_CHARTER.md",
-      "bytes": 3900,
-      "sha256": "525694ac176d384d792cafd65ce830ef38b86fe953c5c5dce130274e69108d3b"
+        "path":  "ArtSource/Marketing/Logo/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md",
-      "bytes": 8692,
-      "sha256": "73415565658c1c0fe33d41e3729decf3a6e810a8efc5b9a4cae5023231991d17"
+        "path":  "ArtSource/Marketing/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
-      "bytes": 13323,
-      "sha256": "170576ae54558c89399ed73cdcb2bc9e5084f0a42373bb43e9f9683de3f3418b"
+        "path":  "ArtSource/Marketing/Thumbnail/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
-      "bytes": 36153,
-      "sha256": "13b9f752c27f2083d4b35e97fe2f640d815b11c5b02ec5c67ab343a14d235db2"
+        "path":  "ArtSource/Marketing/Video/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
-      "bytes": 18715,
-      "sha256": "d2d6963647bc049eeea2bdfdd621d325a56d5422a6b8d687101578cb4ca83fdc"
+        "path":  "ArtSource/Props/PRP_Copier/DELIVERY.md",
+        "bytes":  589,
+        "sha256":  "66e39f44945b8dff9f29d37accf97baa85b48dbbf04cd1f052a543c124fd6883"
     },
     {
-      "path": "docs/02_design/ALLY_RELAY_SYSTEM.md",
-      "bytes": 4151,
-      "sha256": "c0612b07ebc8eaa45b4a9c3daaa4f767944af9e21811369c9ecd099be517659f"
+        "path":  "ArtSource/Props/PRP_Copier/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md",
-      "bytes": 16118,
-      "sha256": "65c3397964ef35cacd70b7c1c3ef625ad7d2a51c0aa8d7686723f58cf696dec4"
+        "path":  "ArtSource/Props/PRP_Copier/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/COMBAT_AND_PHYSICS.md",
-      "bytes": 3886,
-      "sha256": "0fe6a9708557ed88340d781dab84d8cc357c9d5ac7ec1a207bc593397da0ccaa"
+        "path":  "ArtSource/Props/PRP_Copier/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/ENEMY_AND_ENCOUNTER_DESIGN.md",
-      "bytes": 4009,
-      "sha256": "9cb48f7dcd8a645563fc74ec2661b4d71aca5282228d258acbd283ebccd9cc39"
+        "path":  "ArtSource/Props/PRP_Copier/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md",
-      "bytes": 40538,
-      "sha256": "9babd002278f4d823609e8ee51b534ce17b3c427b211212736cd9ddda6dddb59"
+        "path":  "ArtSource/Props/PRP_DrawerCabinet/DELIVERY.md",
+        "bytes":  605,
+        "sha256":  "56475798105fc0956a963b55a870fa93ffdd681ffa01715fc90b729c6a8237ff"
     },
     {
-      "path": "docs/02_design/GAMEPLAY_SPEC.md",
-      "bytes": 14305,
-      "sha256": "e014ed98f45a98a1e78cb1c9b5f6ef048ebbbff0b2c84d6239e2560bab8f1ed5"
+        "path":  "ArtSource/Props/PRP_DrawerCabinet/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
-      "bytes": 20785,
-      "sha256": "1633230ef227fefac1a603f0636a0620ef0e8782dd1f55543d9aef79db1ce733"
+        "path":  "ArtSource/Props/PRP_DrawerCabinet/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
-      "bytes": 14681,
-      "sha256": "37ac82f97f9919f5a6eb4e9220f43a69eeae2577be97936d5e650e6daae174cf"
+        "path":  "ArtSource/Props/PRP_DrawerCabinet/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/MASTER_GDD.md",
-      "bytes": 22232,
-      "sha256": "6b6676176cd34d39c81c0c4311ee8bc6035a9f0429896bfc8be7c4a81e470680"
+        "path":  "ArtSource/Props/PRP_DrawerCabinet/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
-      "bytes": 6309,
-      "sha256": "b397f7e7c8738212a84da5d10a36f0de1ff7e57f247e4a0d8b46306291fe6212"
+        "path":  "ArtSource/Props/PRP_FileBinder/DELIVERY.md",
+        "bytes":  599,
+        "sha256":  "53abfe8a6f27903e69d67d17819770ac701a9c76a1ad266a58862ac480651596"
     },
     {
-      "path": "docs/02_design/MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md",
-      "bytes": 12429,
-      "sha256": "568b610fd4f1e9eb8d241cade98e843819d693c850b3080d442d0f51e50838f7"
+        "path":  "ArtSource/Props/PRP_FileBinder/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/OBJECT_TAXONOMY.md",
-      "bytes": 3452,
-      "sha256": "72510a99d1d8d978eddd5130523e61a93e6c40ca7a82f726d145fd4bd95ec16c"
+        "path":  "ArtSource/Props/PRP_FileBinder/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md",
-      "bytes": 14348,
-      "sha256": "15cfd60893a31db83269e8c1f091bc5711c9cad46fd402f5cadf70d22a0a7f31"
+        "path":  "ArtSource/Props/PRP_FileBinder/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
-      "bytes": 15795,
-      "sha256": "5885b2d35cfd5395eec1c890d5e3cffe19d1b0f150d08810882047b1a64e7ef3"
+        "path":  "ArtSource/Props/PRP_FileBinder/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/02_design/ROGUELITE_PROGRESSION.md",
-      "bytes": 4428,
-      "sha256": "2c1e3a0d6f43c791600849562ca10c3abc9a76d85667359cfd321c913d2710d6"
+        "path":  "ArtSource/Props/PRP_OfficeChair/DELIVERY.md",
+        "bytes":  599,
+        "sha256":  "2ebe19a1e9bdf749f916f38af28db444a37254b1399adc6b433b1eccf026485d"
     },
     {
-      "path": "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
-      "bytes": 16237,
-      "sha256": "fb03407a9c6b1f33ddcbd81a12de2e3ae22f228d2f1c67377a75cb1603281cce"
+        "path":  "ArtSource/Props/PRP_OfficeChair/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/ALLY_VISUAL_SPEC.md",
-      "bytes": 2268,
-      "sha256": "b8635c48cfa9e3867d2a1f714c63a2b36b02c440cf4824f276862413792262cb"
+        "path":  "ArtSource/Props/PRP_OfficeChair/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/ART_DIRECTION.md",
-      "bytes": 3293,
-      "sha256": "abd792fce10d6ac571c1eadba176a58791d387f6e19a52e6da1eaf3b0fd91ab7"
+        "path":  "ArtSource/Props/PRP_OfficeChair/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/CAMERA_SPEC.md",
-      "bytes": 3303,
-      "sha256": "87d65c1fdc2f540c3e701a1c29fa90e54fccb0b2da72fcd7290dc41f354fd8a7"
+        "path":  "ArtSource/Props/PRP_OfficeChair/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/CARGO_STRAP_SPEC.md",
-      "bytes": 3415,
-      "sha256": "c1b7cbd4c5a0acc2f68ae4de680c43f5e673c066393455fc78a16c8db0e5193e"
+        "path":  "ArtSource/UI/DELIVERY.md",
+        "bytes":  591,
+        "sha256":  "26685ad12a0ed8dc94c40adf0f029133736a642e8b69dac390731c7ea29ab1bb"
     },
     {
-      "path": "docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md",
-      "bytes": 2802,
-      "sha256": "d608cfff354b0896bdee12dac0641ebb06ee576f73a82de04bfd56fd1bf65c79"
+        "path":  "ArtSource/UI/Export/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md",
-      "bytes": 3421,
-      "sha256": "9a0034613836babf936b059386d2f4c8091a18feb42b486a34a3e38cd6aec753"
+        "path":  "ArtSource/UI/Fonts/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/CONFERENCE_TABLE_TEAM_FINISHER_VISUAL_SPEC.md",
-      "bytes": 3929,
-      "sha256": "80b4404d866f28479928d342fedfe511690160ce9f75531e8e38034cca704efc"
+        "path":  "ArtSource/UI/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md",
-      "bytes": 3806,
-      "sha256": "2a17fe08ca446a1696f1b792dbf0efb3d5b210fd29e60c641444b4b512c2b3f3"
+        "path":  "ArtSource/UI/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/OFFICE_CORE_KIT.md",
-      "bytes": 10428,
-      "sha256": "d68061a17e2812d212609f42aa51ead55e71efa08a80338b320579b124fa39c6"
+        "path":  "ArtSource/VFX/DELIVERY.md",
+        "bytes":  595,
+        "sha256":  "ad13d7f317c8676d2fa6cb3de56d8581aa72e7f0a8779b44a91a139e33020477"
     },
     {
-      "path": "docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md",
-      "bytes": 9866,
-      "sha256": "68f321eb11b70e5aed942328b87c859f15e2cc096ffeb73e94aaa1f5eeeefb2e"
+        "path":  "ArtSource/VFX/Flipbooks/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/PLAYER_VISUAL_SPEC.md",
-      "bytes": 2962,
-      "sha256": "a46db3b3ee57123ca041b11ccc24a61f74300ce4c12e0ed0b4a91bc294cc28ec"
+        "path":  "ArtSource/VFX/Preview/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
-      "bytes": 8283,
-      "sha256": "c43be31d61078b7d5b236340326346fcc005b348303302ce4626ccd7dd082a26"
+        "path":  "ArtSource/VFX/References/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
-      "bytes": 3050,
-      "sha256": "14080c0df63feafd93f235286021f6b1827b95cef970524f3d54904c93152105"
+        "path":  "ArtSource/VFX/Source/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
-      "bytes": 3317,
-      "sha256": "c1264475ed9e0ce03362170d62bf8fd69558c00b124dc015deeef6e66681484d"
+        "path":  "ArtSource/VFX/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/03_art/VISUAL_REFERENCE_INDEX.md",
-      "bytes": 5992,
-      "sha256": "50b8a70b8fef622dbbc819b4cb8c82376c59b76d7703caf674b3cbd63cd3b75a"
+        "path":  "CHANGELOG.md",
+        "bytes":  30979,
+        "sha256":  "77e3284843323b2ac382958a7b9ba6317d7f788333945a2d459a2fe277fa253c"
     },
     {
-      "path": "docs/04_technical/DATA_AND_EVENTS.md",
-      "bytes": 3235,
-      "sha256": "042cba3ea908ff00ca5bef5066e1c45774cee79a032d1cf1e0231ea238dad25b"
+        "path":  "docs/00_project/CHANGE_CONTROL.md",
+        "bytes":  1311,
+        "sha256":  "13cf928731a03100a7fdc337390f7f0bcb84dd08c33764619079ab1fc2de5773"
     },
     {
-      "path": "docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md",
-      "bytes": 15390,
-      "sha256": "df4a91e32a256c540cbd78bc5517de565acf981f3aae6e4a22e3f820099f947d"
+        "path":  "docs/00_project/CR-0001-FULL-GAME-DIRECTION-TRANSITION.md",
+        "bytes":  3826,
+        "sha256":  "0329d415ec50dcde1a65575d2e36378233e4eab8d74dced9e9fd99abf4d064d6"
     },
     {
-      "path": "docs/04_technical/G3_TECHNICAL_BASELINE.md",
-      "bytes": 18808,
-      "sha256": "e9285a78c93d73bc174a6b9871e156383322ff60c0d389faf5cd74b1a309aba2"
+        "path":  "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
+        "bytes":  2226,
+        "sha256":  "b176401719d69de219d3f42f37b17b6a7a458d819dcc9b39b4dc6c0ef3088a28"
     },
     {
-      "path": "docs/04_technical/PERFORMANCE_BUDGET.md",
-      "bytes": 4768,
-      "sha256": "c3c19417cb3c27f784751a0a87ffce15a16f5d6487489930d363661f63873434"
+        "path":  "docs/00_project/CR-0003-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
+        "bytes":  3924,
+        "sha256":  "1dca3f1c86a9dfcc89f51bd80984b425d713898146ba90d8e6987655f23ea5f3"
     },
     {
-      "path": "docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md",
-      "bytes": 5959,
-      "sha256": "33df07a419e52464387380f75ef3425fae66df014d7ad27d5c7631e6f2f05052"
+        "path":  "docs/00_project/DECISION_LOG.md",
+        "bytes":  13754,
+        "sha256":  "d7ac989cbb70f95f522fc75189d3b485f8eb23ab1a577f6fa5623a0460cd0df6"
     },
     {
-      "path": "docs/04_technical/SAVE_AND_VERSIONING.md",
-      "bytes": 1681,
-      "sha256": "a20cf0c77e7f642b83b921d543977a6e00b9a3d4c976613f6bae7f8db702f6bd"
+        "path":  "docs/00_project/DESIGN_STATUS.md",
+        "bytes":  34229,
+        "sha256":  "e7177bf5c112446abb9fb7cf31478c60ee9067d8c0fe00b9348cd265036ba895"
     },
     {
-      "path": "docs/04_technical/SOFTWARE_ARCHITECTURE.md",
-      "bytes": 3263,
-      "sha256": "ee057360c5d84c795ef76c46777d93cffdafa2a86ce70be908f8d9fa9a569621"
+        "path":  "docs/00_project/GLOSSARY.md",
+        "bytes":  5092,
+        "sha256":  "1bb8ca37677523ba5fb2df82b5f50b33bfecd84ff087883d175d04b8a335d70b"
     },
     {
-      "path": "docs/04_technical/TECHNICAL_DESIGN.md",
-      "bytes": 4302,
-      "sha256": "11f0cc3daa8f81afda3fd982379f361745fe1a0f27374faaa69b067d83ead8d1"
+        "path":  "docs/00_project/PROJECT_CHARTER.md",
+        "bytes":  3900,
+        "sha256":  "525694ac176d384d792cafd65ce830ef38b86fe953c5c5dce130274e69108d3b"
     },
     {
-      "path": "docs/04_technical/UNITY_PROJECT_STANDARD.md",
-      "bytes": 2774,
-      "sha256": "0a2e996cf1f5ac0617b30766d9ffedec62eab4815ced3e86623aa16667949b29"
+        "path":  "docs/01_requirements/NON_FUNCTIONAL_REQUIREMENTS.md",
+        "bytes":  8692,
+        "sha256":  "73415565658c1c0fe33d41e3729decf3a6e810a8efc5b9a4cae5023231991d17"
     },
     {
-      "path": "docs/05_production/ASSET_LIST.md",
-      "bytes": 7360,
-      "sha256": "215b3817002ef819590e760feda2d1658a19d03eb24f53b93858812da0371ff0"
+        "path":  "docs/01_requirements/PRODUCT_REQUIREMENTS.md",
+        "bytes":  13323,
+        "sha256":  "170576ae54558c89399ed73cdcb2bc9e5084f0a42373bb43e9f9683de3f3418b"
     },
     {
-      "path": "docs/05_production/C3_FULL_GAME_G4A_AUTHORITY_REAUDIT.md",
-      "bytes": 17234,
-      "sha256": "4d76de03753d0319f0aa8baeb3d4ec0f8831fdf57e30d5ff6ebafd487a5fc807"
+        "path":  "docs/01_requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md",
+        "bytes":  36153,
+        "sha256":  "13b9f752c27f2083d4b35e97fe2f640d815b11c5b02ec5c67ab343a14d235db2"
     },
     {
-      "path": "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
-      "bytes": 2161,
-      "sha256": "18f67798132914be8a74d39af1af1f4a66c1de84d7f1879bf549d14fe86f0a87"
+        "path":  "docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md",
+        "bytes":  18715,
+        "sha256":  "d2d6963647bc049eeea2bdfdd621d325a56d5422a6b8d687101578cb4ca83fdc"
     },
     {
-      "path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
-      "bytes": 34134,
-      "sha256": "7882616163cb300f9e62891788f1743d16c58c2f018017181b2e05eee3ef1ca5"
+        "path":  "docs/02_design/ALLY_RELAY_SYSTEM.md",
+        "bytes":  4151,
+        "sha256":  "c0612b07ebc8eaa45b4a9c3daaa4f767944af9e21811369c9ecd099be517659f"
     },
     {
-      "path": "docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md",
-      "bytes": 26800,
-      "sha256": "0fd2ac5e2f1cb970a18a5677cb986a8a94a4594be2ebbcd3f64f6faf51ef062b"
+        "path":  "docs/02_design/CAUSAL_CHAIN_PROPAGATION_TERMINATION_CONTRACT.md",
+        "bytes":  16118,
+        "sha256":  "65c3397964ef35cacd70b7c1c3ef625ad7d2a51c0aa8d7686723f58cf696dec4"
     },
     {
-      "path": "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
-      "bytes": 25973,
-      "sha256": "ad69b69523892c7ef0ea6adc00341d4249b8eedaf08de613367475890988867d"
+        "path":  "docs/02_design/COMBAT_AND_PHYSICS.md",
+        "bytes":  3886,
+        "sha256":  "0fe6a9708557ed88340d781dab84d8cc357c9d5ac7ec1a207bc593397da0ccaa"
     },
     {
-      "path": "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
-      "bytes": 27761,
-      "sha256": "9fe9f52d3868d0ac65b15b6be2265ad62569429d27b6427c73aa8a1133c91534"
+        "path":  "docs/02_design/ENEMY_AND_ENCOUNTER_DESIGN.md",
+        "bytes":  4009,
+        "sha256":  "9cb48f7dcd8a645563fc74ec2661b4d71aca5282228d258acbd283ebccd9cc39"
     },
     {
-      "path": "docs/05_production/G3_TECHNICAL_BASELINE_FINAL_AUDIT.md",
-      "bytes": 29110,
-      "sha256": "c1433536450a1ed3fb204fa2b477e28f6ec34c33691552e0b8c74274b145373a"
+        "path":  "docs/02_design/FGD_001_DESTROY_YOUR_COMPANY_ZERO_DEFECT_FULL_GAME_BASELINE.md",
+        "bytes":  40538,
+        "sha256":  "9babd002278f4d823609e8ee51b534ce17b3c427b211212736cd9ddda6dddb59"
     },
     {
-      "path": "docs/05_production/G3_TECHNICAL_BASELINE_PREFLIGHT_AUDIT.md",
-      "bytes": 59292,
-      "sha256": "06df91577d7e107e04f8d7f37a8d97f1016e80103321d391c9f6363ffe6c2d19"
+        "path":  "docs/02_design/GAMEPLAY_SPEC.md",
+        "bytes":  14305,
+        "sha256":  "e014ed98f45a98a1e78cb1c9b5f6ef048ebbbff0b2c84d6239e2560bab8f1ed5"
     },
     {
-      "path": "docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md",
-      "bytes": 29625,
-      "sha256": "92f868be4d3abd0ccaa50e06e0f3f9f5845d938c8d9fa5c0cc186bc8f4194599"
+        "path":  "docs/02_design/INTERACTION_STATE_CONFLICT_CONTRACT.md",
+        "bytes":  20785,
+        "sha256":  "1633230ef227fefac1a603f0636a0620ef0e8782dd1f55543d9aef79db1ce733"
     },
     {
-      "path": "docs/05_production/MILESTONES_AND_GATES.md",
-      "bytes": 4179,
-      "sha256": "657d18770502ffe91f3fc9516e53cc0913efb934737d35f1b1e3129847dbd693"
+        "path":  "docs/02_design/LOGICAL_INPUT_CONTRACT.md",
+        "bytes":  14681,
+        "sha256":  "37ac82f97f9919f5a6eb4e9220f43a69eeae2577be97936d5e650e6daae174cf"
     },
     {
-      "path": "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
-      "bytes": 9247,
-      "sha256": "5c5ff5bb2ad6687c5d1cc9426f8162fcbebd4bb933c43476af8ea212af8736b2"
+        "path":  "docs/02_design/MASTER_GDD.md",
+        "bytes":  22232,
+        "sha256":  "6b6676176cd34d39c81c0c4311ee8bc6035a9f0429896bfc8be7c4a81e470680"
     },
     {
-      "path": "docs/05_production/RISK_REGISTER.md",
-      "bytes": 2764,
-      "sha256": "96156be0fead5e3df6c980b59df31a6bb2436480e0fd70fc8c1e9faecd3da390"
+        "path":  "docs/02_design/MOMENTUM_AND_CAUSAL_CHAIN.md",
+        "bytes":  6309,
+        "sha256":  "b397f7e7c8738212a84da5d10a36f0de1ff7e57f247e4a0d8b46306291fe6212"
     },
     {
-      "path": "docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md",
-      "bytes": 13095,
-      "sha256": "31eb40a1f96acec2debba7493018d44d4ee509ee89baaaa1547faa125e1506a8"
+        "path":  "docs/02_design/MOMENTUM_PIP_STARTING_VALUE_CONTRACT.md",
+        "bytes":  12429,
+        "sha256":  "568b610fd4f1e9eb8d241cade98e843819d693c850b3080d442d0f51e50838f7"
     },
     {
-      "path": "docs/05_production/VERTICAL_SLICE_SCOPE.md",
-      "bytes": 7824,
-      "sha256": "f04833f85f339a5e39406ade7f74c6b987507e4a4b2205c6b0c665644355fe89"
+        "path":  "docs/02_design/OBJECT_TAXONOMY.md",
+        "bytes":  3452,
+        "sha256":  "72510a99d1d8d978eddd5130523e61a93e6c40ca7a82f726d145fd4bd95ec16c"
     },
     {
-      "path": "docs/05_production/WATERFALL_PLAN.md",
-      "bytes": 6618,
-      "sha256": "7654e7b65e021e72c338d5ba8da72a7cbc2b00e3ae0985a6c1743ddc74697514"
+        "path":  "docs/02_design/POLICY_VIOLATION_SELECTION_RUN_APPLICATION_CONTRACT.md",
+        "bytes":  14348,
+        "sha256":  "15cfd60893a31db83269e8c1f091bc5711c9cad46fd402f5cadf70d22a0a7f31"
     },
     {
-      "path": "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
-      "bytes": 1854,
-      "sha256": "2c3849da49974543409c2e96ea7065131afe7bbded3f2c5656291af1be9a77a7"
+        "path":  "docs/02_design/PROTOTYPE_CONTENT_LOCK.md",
+        "bytes":  15795,
+        "sha256":  "5885b2d35cfd5395eec1c890d5e3cffe19d1b0f150d08810882047b1a64e7ef3"
     },
     {
-      "path": "docs/06_codex/CODEX_EXECUTION_PROTOCOL.md",
-      "bytes": 3609,
-      "sha256": "e312f4d33b793b062b8b89b1a8a5ee06b675a9e076d23b1d08283bc2ac9a801e"
+        "path":  "docs/02_design/ROGUELITE_PROGRESSION.md",
+        "bytes":  4428,
+        "sha256":  "2c1e3a0d6f43c791600849562ca10c3abc9a76d85667359cfd321c913d2710d6"
     },
     {
-      "path": "docs/06_codex/DEFINITION_OF_DONE.md",
-      "bytes": 896,
-      "sha256": "dd0ab8b9cae867ac175fbf0a62a9935c9e6e57090e2a5aeb28d324cfa1b8d4d0"
+        "path":  "docs/02_design/WEIGHT_CLASS_DATA_RANGE_CONTRACT.md",
+        "bytes":  16237,
+        "sha256":  "fb03407a9c6b1f33ddcbd81a12de2e3ae22f228d2f1c67377a75cb1603281cce"
     },
     {
-      "path": "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
-      "bytes": 17517,
-      "sha256": "958e5247fb94b70855fe3902d496755a1983c8a2f670797557d83db4ed6843a5"
+        "path":  "docs/03_art/ALLY_VISUAL_SPEC.md",
+        "bytes":  2268,
+        "sha256":  "b8635c48cfa9e3867d2a1f714c63a2b36b02c440cf4824f276862413792262cb"
     },
     {
-      "path": "docs/06_codex/PROMPT_LIBRARY.md",
-      "bytes": 1217,
-      "sha256": "5ff09a1aea1d497eadf5f913a475cd0c77cf6a45de967fc7df52fb27e2143a38"
+        "path":  "docs/03_art/ART_DIRECTION.md",
+        "bytes":  3293,
+        "sha256":  "abd792fce10d6ac571c1eadba176a58791d387f6e19a52e6da1eaf3b0fd91ab7"
     },
     {
-      "path": "docs/06_codex/REVIEW_CHECKLIST.md",
-      "bytes": 618,
-      "sha256": "1e7dccf3c1a39b730b868459272afeac8702bc6d65f9930e03a6a6492a67fde7"
+        "path":  "docs/03_art/CAMERA_SPEC.md",
+        "bytes":  3303,
+        "sha256":  "87d65c1fdc2f540c3e701a1c29fa90e54fccb0b2da72fcd7290dc41f354fd8a7"
     },
     {
-      "path": "docs/06_codex/TASK_TEMPLATE.md",
-      "bytes": 871,
-      "sha256": "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
+        "path":  "docs/03_art/CARGO_STRAP_SPEC.md",
+        "bytes":  3415,
+        "sha256":  "c1b7cbd4c5a0acc2f68ae4de680c43f5e673c066393455fc78a16c8db0e5193e"
     },
     {
-      "path": "docs/07_quality/ACCEPTANCE_TESTS.md",
-      "bytes": 13267,
-      "sha256": "448ea3e7fcb40bb5148cb7935a78401f3334cdd2dfe6ca357aebcc17d01b5657"
+        "path":  "docs/03_art/CHAIN_REACTION_AFTERMATH_VISUAL_SPEC.md",
+        "bytes":  3421,
+        "sha256":  "9a0034613836babf936b059386d2f4c8091a18feb42b486a34a3e38cd6aec753"
     },
     {
-      "path": "docs/07_quality/BUG_SEVERITY.md",
-      "bytes": 668,
-      "sha256": "b88d07db774ff7452a6dc7dec1c0d3e40accb3553bb407eb9c7d201289ca48a9"
+        "path":  "docs/03_art/CHAIR_REDIRECT_VISUAL_SPEC.md",
+        "bytes":  2802,
+        "sha256":  "d608cfff354b0896bdee12dac0641ebb06ee576f73a82de04bfd56fd1bf65c79"
     },
     {
-      "path": "docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md",
-      "bytes": 21539,
-      "sha256": "92b564fdf956f2045c136eccd1e2ed2cab450eb71b4c3aeadaa019276969c8d2"
+        "path":  "docs/03_art/CONFERENCE_TABLE_TEAM_FINISHER_VISUAL_SPEC.md",
+        "bytes":  3929,
+        "sha256":  "80b4404d866f28479928d342fedfe511690160ce9f75531e8e38034cca704efc"
     },
     {
-      "path": "docs/07_quality/PLAYTEST_PLAN.md",
-      "bytes": 3263,
-      "sha256": "eb913b0d2abaa50771494a012c003d50c1fbcffb104427ea977f9103d75ed5d2"
+        "path":  "docs/03_art/NIGHT_ARCHIVE_LIGHTING_VISUAL_SPEC.md",
+        "bytes":  3806,
+        "sha256":  "2a17fe08ca446a1696f1b792dbf0efb3d5b210fd29e60c641444b4b512c2b3f3"
     },
     {
-      "path": "docs/07_quality/TEST_STRATEGY.md",
-      "bytes": 8998,
-      "sha256": "79b419735d5a50a62c5a3207d040df92f15c27132a1bac33eba7bda2cc1994c6"
+        "path":  "docs/03_art/OFFICE_CORE_KIT.md",
+        "bytes":  10428,
+        "sha256":  "d68061a17e2812d212609f42aa51ead55e71efa08a80338b320579b124fa39c6"
     },
     {
-      "path": "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",
-      "bytes": 1075,
-      "sha256": "f2fd637890e18a986b250ffa61e3411ef7e5e0e9b7d8f4bcc9ba22988b8a96cc"
+        "path":  "docs/03_art/PLAYER_TURNAROUND_PRODUCTION_BRIEF.md",
+        "bytes":  9866,
+        "sha256":  "68f321eb11b70e5aed942328b87c859f15e2cc096ffeb73e94aaa1f5eeeefb2e"
     },
     {
-      "path": "docs/08_marketing/POSITIONING.md",
-      "bytes": 1654,
-      "sha256": "e8d983cce9b95d8546b933fc745580978b13cf7f85949dd6fce81ac87971b868"
+        "path":  "docs/03_art/PLAYER_VISUAL_SPEC.md",
+        "bytes":  2962,
+        "sha256":  "a46db3b3ee57123ca041b11ccc24a61f74300ce4c12e0ed0b4a91bc294cc28ec"
     },
     {
-      "path": "docs/08_marketing/TRAILER_BEATS.md",
-      "bytes": 994,
-      "sha256": "8dc27d5596e78d71e45fe51600b8c4cbdff92503d33baef8f91b861e3fa308e8"
+        "path":  "docs/03_art/PRODUCTION_IMAGE_PROMPTS.md",
+        "bytes":  8283,
+        "sha256":  "c43be31d61078b7d5b236340326346fcc005b348303302ce4626ccd7dd082a26"
     },
     {
-      "path": "docs/09_adrs/ADR-0001-ENGINE-AND-RENDERING.md",
-      "bytes": 595,
-      "sha256": "ee066d3d72fde019beb8a5827abc3abf388ed5a00624a7dd65325667b0c748c7"
+        "path":  "docs/03_art/PRODUCTION_VISUAL_LOCK_PLAN.md",
+        "bytes":  3050,
+        "sha256":  "14080c0df63feafd93f235286021f6b1827b95cef970524f3d54904c93152105"
     },
     {
-      "path": "docs/09_adrs/ADR-0002-THREE-DIMENSIONAL-TPS.md",
-      "bytes": 357,
-      "sha256": "dafd2164c32b0a08c95bab2dd3275a79fd7508f9e753cf297a6d666b553882bf"
+        "path":  "docs/03_art/VFX_AND_DESTRUCTION_STYLE.md",
+        "bytes":  3317,
+        "sha256":  "c1264475ed9e0ce03362170d62bf8fd69558c00b124dc015deeef6e66681484d"
     },
     {
-      "path": "docs/09_adrs/ADR-0003-NO-TELEKINESIS.md",
-      "bytes": 430,
-      "sha256": "ba972dbcb929ef48b3dfd7262ce8d2900a373e690c8c1b5ec94e1dacd8beebb0"
+        "path":  "docs/03_art/VISUAL_REFERENCE_INDEX.md",
+        "bytes":  5992,
+        "sha256":  "50b8a70b8fef622dbbc819b4cb8c82376c59b76d7703caf674b3cbd63cd3b75a"
     },
     {
-      "path": "docs/09_adrs/ADR-0004-ALLY-SCOPE.md",
-      "bytes": 331,
-      "sha256": "4c9ad6aa737a2a2c49778c411e19aadc26e5b622ebb0ee5d1aa72d2a5ccbe329"
+        "path":  "docs/04_technical/DATA_AND_EVENTS.md",
+        "bytes":  3235,
+        "sha256":  "042cba3ea908ff00ca5bef5066e1c45774cee79a032d1cf1e0231ea238dad25b"
     },
     {
-      "path": "docs/09_adrs/ADR-0005-ART-DIRECTION.md",
-      "bytes": 454,
-      "sha256": "a6975d5b44312f97eec38e85c28039dc9e456ea0850a5457fae99563fc13f3ac"
+        "path":  "docs/04_technical/DESTRUCTION_BUDGET_AND_IMPLEMENTATION_RULES.md",
+        "bytes":  15390,
+        "sha256":  "df4a91e32a256c540cbd78bc5517de565acf981f3aae6e4a22e3f820099f947d"
     },
     {
-      "path": "docs/09_adrs/ADR-0006-WATERFALL-WITH-VALIDATION-GATE.md",
-      "bytes": 528,
-      "sha256": "49483831ef5ba98c1c9adbd7766bbaebf2b13657470b9dd337c9501238f46bdd"
+        "path":  "docs/04_technical/G3_TECHNICAL_BASELINE.md",
+        "bytes":  18808,
+        "sha256":  "e9285a78c93d73bc174a6b9871e156383322ff60c0d389faf5cd74b1a309aba2"
     },
     {
-      "path": "docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md",
-      "bytes": 482,
-      "sha256": "d565fa1182d2fb449513d306144897dbbcc0b1dbf15b545449771f2617a2fd74"
+        "path":  "docs/04_technical/PERFORMANCE_BUDGET.md",
+        "bytes":  4768,
+        "sha256":  "c3c19417cb3c27f784751a0a87ffce15a16f5d6487489930d363661f63873434"
     },
     {
-      "path": "docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 1321,
-      "sha256": "a8e5c3c7f4419c7e344305e9ec2a682046934396c52b30a3ffb907ee321500fa"
+        "path":  "docs/04_technical/PHYSICS_DESTRUCTION_IMPLEMENTATION.md",
+        "bytes":  5959,
+        "sha256":  "33df07a419e52464387380f75ef3425fae66df014d7ad27d5c7631e6f2f05052"
     },
     {
-      "path": "docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 1394,
-      "sha256": "342c15a194aa6a0f1e564ea10e8ef4e260450200efe3b33829b27e2d77d20a6c"
+        "path":  "docs/04_technical/SAVE_AND_VERSIONING.md",
+        "bytes":  1681,
+        "sha256":  "a20cf0c77e7f642b83b921d543977a6e00b9a3d4c976613f6bae7f8db702f6bd"
     },
     {
-      "path": "docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 1529,
-      "sha256": "cfd130bcd387d67ea364fe9c70aecd543af1cb6397c1835ad91d51215e9ce753"
+        "path":  "docs/04_technical/SOFTWARE_ARCHITECTURE.md",
+        "bytes":  3263,
+        "sha256":  "ee057360c5d84c795ef76c46777d93cffdafa2a86ce70be908f8d9fa9a569621"
     },
     {
-      "path": "docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 2055,
-      "sha256": "694c988e657d9b166cb93f64516d43fda9475713daa7a6643c92fc47717b1ace"
+        "path":  "docs/04_technical/TECHNICAL_DESIGN.md",
+        "bytes":  4302,
+        "sha256":  "11f0cc3daa8f81afda3fd982379f361745fe1a0f27374faaa69b067d83ead8d1"
     },
     {
-      "path": "docs/09_adrs/ADR-0012-PGT-03-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 2243,
-      "sha256": "b7cc5a686cb7924d7ac96036fa6b379add6b3bc8236e9289bce1611260f4bd8e"
+        "path":  "docs/04_technical/UNITY_PROJECT_STANDARD.md",
+        "bytes":  2774,
+        "sha256":  "0a2e996cf1f5ac0617b30766d9ffedec62eab4815ced3e86623aa16667949b29"
     },
     {
-      "path": "docs/09_adrs/ADR-0013-LGT-01-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 2290,
-      "sha256": "cd7c0feea587800556bc6088ef469dff057a8bcf5c860155b474aff5ee66e9b6"
+        "path":  "docs/05_production/ASSET_LIST.md",
+        "bytes":  7360,
+        "sha256":  "215b3817002ef819590e760feda2d1658a19d03eb24f53b93858812da0371ff0"
     },
     {
-      "path": "docs/09_adrs/ADR-0014-FIN-01-PRODUCTION-VISUAL-LOCK.md",
-      "bytes": 2451,
-      "sha256": "4c163e09348db4c6bfe3426db976214d8eb6fed8bac74439cbdd96ab87dd446b"
+        "path":  "docs/05_production/C3_FULL_GAME_G4A_AUTHORITY_REAUDIT.md",
+        "bytes":  17234,
+        "sha256":  "4d76de03753d0319f0aa8baeb3d4ec0f8831fdf57e30d5ff6ebafd487a5fc807"
     },
     {
-      "path": "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
-      "bytes": 3953,
-      "sha256": "be53751df28fbc4a198c3752f6ddc39b0ac00df93aa2aeb33df3dcab3643cc26"
+        "path":  "docs/05_production/DESIGN_FREEZE_CHECKLIST.md",
+        "bytes":  2161,
+        "sha256":  "18f67798132914be8a74d39af1af1f4a66c1de84d7f1879bf549d14fe86f0a87"
     },
     {
-      "path": "docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md",
-      "bytes": 5413,
-      "sha256": "0a5cbf2aaf983a36e7db55f7ef0573b35d0d5695c4d80302aa2de8d539758b39"
+        "path":  "docs/05_production/FINAL_PRE_IMPLEMENTATION_REAUDIT.md",
+        "bytes":  26800,
+        "sha256":  "0fd2ac5e2f1cb970a18a5677cb986a8a94a4594be2ebbcd3f64f6faf51ef062b"
     },
     {
-      "path": "docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md",
-      "bytes": 6960,
-      "sha256": "aa6663323ee913dd15ee9f1752ea9e03b8c14a31ac9d6cde7904babc6a1a1839"
+        "path":  "docs/05_production/FINAL_PRE_IMPLEMENTATION_REVIEW.md",
+        "bytes":  34134,
+        "sha256":  "7882616163cb300f9e62891788f1743d16c58c2f018017181b2e05eee3ef1ca5"
     },
     {
-      "path": "docs/09_adrs/ADR-0018-CHR-00-PLAYER-TURNAROUND-APPROVAL.md",
-      "bytes": 4641,
-      "sha256": "cf31d48e4bf1b40c06ff5fc19894e352b999aedce75e96347e746d0ed672221a"
+        "path":  "docs/05_production/G2_DESIGN_BASELINE_FINAL_AUDIT.md",
+        "bytes":  25973,
+        "sha256":  "ad69b69523892c7ef0ea6adc00341d4249b8eedaf08de613367475890988867d"
     },
     {
-      "path": "docs/09_adrs/ADR-0019-PRE-G4-FULL-DESIGN-LOCK-AND-LIMITED-BOOTSTRAP-GATE.md",
-      "bytes": 6855,
-      "sha256": "fee9dadc54e6746e9756c3b601f24c1a007306f5c2f4d959dad6c2f4e546e61b"
+        "path":  "docs/05_production/G2_DESIGN_BASELINE_REAUDIT.md",
+        "bytes":  27761,
+        "sha256":  "9fe9f52d3868d0ac65b15b6be2265ad62569429d27b6427c73aa8a1133c91534"
     },
     {
-      "path": "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
-      "bytes": 3167,
-      "sha256": "bff1be9109ebea0c108538fbfd478bdab1517528e27415b835ee73190002e593"
+        "path":  "docs/05_production/G3_TECHNICAL_BASELINE_FINAL_AUDIT.md",
+        "bytes":  29110,
+        "sha256":  "c1433536450a1ed3fb204fa2b477e28f6ec34c33691552e0b8c74274b145373a"
     },
     {
-      "path": "docs/09_adrs/ADR-0021-FULL-GAME-DIRECTION-ZERO-DEFECT.md",
-      "bytes": 2660,
-      "sha256": "4038ec6685451b7b62eb0f7f2967e898579ffac23416f08be76150648031fea0"
+        "path":  "docs/05_production/G3_TECHNICAL_BASELINE_PREFLIGHT_AUDIT.md",
+        "bytes":  59292,
+        "sha256":  "06df91577d7e107e04f8d7f37a8d97f1016e80103321d391c9f6363ffe6c2d19"
     },
     {
-      "path": "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
-      "bytes": 35663,
-      "sha256": "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
+        "path":  "docs/05_production/G3_TECHNICAL_BASELINE_REAUDIT.md",
+        "bytes":  29625,
+        "sha256":  "92f868be4d3abd0ccaa50e06e0f3f9f5845d938c8d9fa5c0cc186bc8f4194599"
     },
     {
-      "path": "docs/archive/BREAK_NOTICE_Original_GDD_SUPERSEDED.md",
-      "bytes": 28081,
-      "sha256": "230cc5f5bad898d7fdaa7fa66f9b52c94566d947d20048104d1e91a691fa4fc0"
+        "path":  "docs/05_production/MILESTONES_AND_GATES.md",
+        "bytes":  4179,
+        "sha256":  "657d18770502ffe91f3fc9516e53cc0913efb934737d35f1b1e3129847dbd693"
     },
     {
-      "path": "docs/archive/README.md",
-      "bytes": 293,
-      "sha256": "2276416b9fab864c27525970a1fee107e045f1a7b3ced33e16d21e05c4e93be3"
+        "path":  "docs/05_production/PRE_G4_FULL_DESIGN_LOCK.md",
+        "bytes":  9247,
+        "sha256":  "5c5ff5bb2ad6687c5d1cc9426f8162fcbebd4bb933c43476af8ea212af8736b2"
     },
     {
-      "path": "references/README.md",
-      "bytes": 325,
-      "sha256": "4b2443dd92810622a88e71f4c623f6e82c74ecc22c4726443066ee83b7bc0564"
+        "path":  "docs/05_production/RISK_REGISTER.md",
+        "bytes":  2764,
+        "sha256":  "96156be0fead5e3df6c980b59df31a6bb2436480e0fd70fc8c1e9faecd3da390"
     },
     {
-      "path": "references/approved/README.md",
-      "bytes": 1102,
-      "sha256": "a175287a711df09e3d744ad0cf892295b0b129a0f52f375c3e50b8c2171c4f02"
+        "path":  "docs/05_production/UNITY_TOOLCHAIN_INTENT_AND_PROVISIONING_STATUS.md",
+        "bytes":  13095,
+        "sha256":  "31eb40a1f96acec2debba7493018d44d4ee509ee89baaaa1547faa125e1506a8"
     },
     {
-      "path": "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
-      "bytes": 2949592,
-      "sha256": "0004044cde346ec3eb9b379230cade2dda57e54725d61a606c1c8d6014bbd6b9"
+        "path":  "docs/05_production/VERTICAL_SLICE_SCOPE.md",
+        "bytes":  7824,
+        "sha256":  "f04833f85f339a5e39406ade7f74c6b987507e4a4b2205c6b0c665644355fe89"
     },
     {
-      "path": "references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png",
-      "bytes": 2096375,
-      "sha256": "8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214"
+        "path":  "docs/05_production/WATERFALL_PLAN.md",
+        "bytes":  6618,
+        "sha256":  "7654e7b65e021e72c338d5ba8da72a7cbc2b00e3ae0985a6c1743ddc74697514"
     },
     {
-      "path": "references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png",
-      "bytes": 1943223,
-      "sha256": "6bdb6564de2174ac91a5ca3a42f6d6fd5466a255dc60423e0f5e3e9b5cb6e7b9"
+        "path":  "docs/05_production/WORK_BREAKDOWN_STRUCTURE.md",
+        "bytes":  1854,
+        "sha256":  "2c3849da49974543409c2e96ea7065131afe7bbded3f2c5656291af1be9a77a7"
     },
     {
-      "path": "references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png",
-      "bytes": 2274503,
-      "sha256": "cb98cdac3ce4cd92259872e69828bba4b5ae73f0f3512398db205a4eb225e648"
+        "path":  "docs/06_codex/CODEX_EXECUTION_PROTOCOL.md",
+        "bytes":  3609,
+        "sha256":  "e312f4d33b793b062b8b89b1a8a5ee06b675a9e076d23b1d08283bc2ac9a801e"
     },
     {
-      "path": "references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png",
-      "bytes": 2465163,
-      "sha256": "00b67f037f567a3c4947cebfe6d0c6cc04e069c6aa7f4f3257fca8c98d5ec53c"
+        "path":  "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
+        "bytes":  5850,
+        "sha256":  "ba892711d075960c11d16e9cd215c9c4ad1658bb10fa50ed050066cbc6243f54"
     },
     {
-      "path": "references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png",
-      "bytes": 2370613,
-      "sha256": "603a423d98af61f2c22e363c7431375185d4060c0ec68cfeb8a4146d4f295f87"
+        "path":  "docs/06_codex/DEFINITION_OF_DONE.md",
+        "bytes":  896,
+        "sha256":  "dd0ab8b9cae867ac175fbf0a62a9935c9e6e57090e2a5aeb28d324cfa1b8d4d0"
     },
     {
-      "path": "references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png",
-      "bytes": 2522525,
-      "sha256": "9e7154afbf63eb7d82accdb61157fc437c6dfc83ccdf0be4528ca53dbcd6ad93"
+        "path":  "docs/06_codex/IMP-0001-UNITY-REPOSITORY-BOOTSTRAP.md",
+        "bytes":  17517,
+        "sha256":  "958e5247fb94b70855fe3902d496755a1983c8a2f670797557d83db4ed6843a5"
     },
     {
-      "path": "references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png",
-      "bytes": 2456623,
-      "sha256": "1ada60f305cdc1756eee30bf85950a0ef3b31b5352060c45512a09c4d8d0d86d"
+        "path":  "docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md",
+        "bytes":  7561,
+        "sha256":  "4a83f352ee4e6d298d65777bfc76bb6efb1d545b3761f9252d33613d82d8ff77"
     },
     {
-      "path": "references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png",
-      "bytes": 2038222,
-      "sha256": "aa165a79d06eec48e92861fe09431ff8180e0939f7e2f4bee46812126e808e12"
+        "path":  "docs/06_codex/PROMPT_LIBRARY.md",
+        "bytes":  1217,
+        "sha256":  "5ff09a1aea1d497eadf5f913a475cd0c77cf6a45de967fc7df52fb27e2143a38"
     },
     {
-      "path": "references/archive/CHR_00_Player_Identity_Lock_v001.png",
-      "bytes": 2915523,
-      "sha256": "e949a5496e34ed1cd8d8fe0d7cc624cedd34c813f365aa3deeccb512f4231800"
+        "path":  "docs/06_codex/REVIEW_CHECKLIST.md",
+        "bytes":  618,
+        "sha256":  "1e7dccf3c1a39b730b868459272afeac8702bc6d65f9930e03a6a6492a67fde7"
     },
     {
-      "path": "references/archive/KEYART_Exploration_Office_Chaos_A.png",
-      "bytes": 2333160,
-      "sha256": "b5b9fd1550ea53e59c4816f26d373d1c83365bc4e81de1f75d17927cc5c866c9"
+        "path":  "docs/06_codex/TASK_TEMPLATE.md",
+        "bytes":  871,
+        "sha256":  "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
     },
     {
-      "path": "references/archive/KEYART_Exploration_Office_Chaos_B.png",
-      "bytes": 2447390,
-      "sha256": "3165adf35754a02b1ec7f76db69eac8848f8ba41fefb82be318ed4135a7ff904"
+        "path":  "docs/07_quality/ACCEPTANCE_TESTS.md",
+        "bytes":  13267,
+        "sha256":  "448ea3e7fcb40bb5148cb7935a78401f3334cdd2dfe6ca357aebcc17d01b5657"
     },
     {
-      "path": "references/exploration/EXP_01_Cinematic_Key_Art.png",
-      "bytes": 3529048,
-      "sha256": "374855b69d8ea7d33668dcd804a01cc7f50efe86b717ddeaa8f29506f2bc2755"
+        "path":  "docs/07_quality/BUG_SEVERITY.md",
+        "bytes":  668,
+        "sha256":  "b88d07db774ff7452a6dc7dec1c0d3e40accb3553bb407eb9c7d201289ca48a9"
     },
     {
-      "path": "references/exploration/EXP_02_Graphic_Comic.png",
-      "bytes": 4160196,
-      "sha256": "de8e184daba5ea1a3bc97711d53fd6fa4cb07c2cff97138790c864a35aafaeae"
+        "path":  "docs/07_quality/G4A_DETAILED_EVIDENCE_PROTOCOL.md",
+        "bytes":  21539,
+        "sha256":  "92b564fdf956f2045c136eccd1e2ed2cab450eb71b4c3aeadaa019276969c8d2"
     },
     {
-      "path": "references/exploration/EXP_03_Painterly_Concept.png",
-      "bytes": 3362512,
-      "sha256": "fcc985647e1d37a7a3d53214c1d7422e916407d09e3c4105a14f2d1fce7c39e7"
+        "path":  "docs/07_quality/PLAYTEST_PLAN.md",
+        "bytes":  3263,
+        "sha256":  "eb913b0d2abaa50771494a012c003d50c1fbcffb104427ea977f9103d75ed5d2"
     },
     {
-      "path": "references/exploration/EXP_04_Isometric_Gameplay.png",
-      "bytes": 3291348,
-      "sha256": "74053ec592defdb2b47b6749dd8a5aa98c20ee2b7f8ba90b3d18d736156fd868"
+        "path":  "docs/07_quality/TEST_STRATEGY.md",
+        "bytes":  8998,
+        "sha256":  "79b419735d5a50a62c5a3207d040df92f15c27132a1bac33eba7bda2cc1994c6"
     },
     {
-      "path": "references/exploration/EXP_05_Character_Team_Lineup.png",
-      "bytes": 3185725,
-      "sha256": "24da2c4120736224a5089ea06442bcfd7f3042630bccd2e9182ac97d381ce2cb"
+        "path":  "docs/08_marketing/INCIDENT_REPORT_FEATURE.md",
+        "bytes":  1075,
+        "sha256":  "f2fd637890e18a986b250ffa61e3411ef7e5e0e9b7d8f4bcc9ba22988b8a96cc"
     },
     {
-      "path": "references/exploration/EXP_06_Night_Fluorescent_Noir.png",
-      "bytes": 3243405,
-      "sha256": "a45c7f08e20b910aa0aedf3f64498ecc15a3393f7ccca857b47d30113be083bb"
+        "path":  "docs/08_marketing/POSITIONING.md",
+        "bytes":  1654,
+        "sha256":  "e8d983cce9b95d8546b933fc745580978b13cf7f85949dd6fce81ac87971b868"
     },
     {
-      "path": "references/exploration/EXP_07_Bright_Corporate_Satire.png",
-      "bytes": 3207166,
-      "sha256": "310eb8f8c40716502d947595ea57f43d9ddf6c9e8276c8abf0fcb7afbfccb6a6"
+        "path":  "docs/08_marketing/TRAILER_BEATS.md",
+        "bytes":  994,
+        "sha256":  "8dc27d5596e78d71e45fe51600b8c4cbdff92503d33baef8f91b861e3fa308e8"
     },
     {
-      "path": "references/exploration/EXP_08_Copyroom_Paper_Storm.png",
-      "bytes": 3472821,
-      "sha256": "43111eebf7e08ce77cb1216fcc25a1f711d175e5b3da2e6b3f7a8b7debc3c0b4"
+        "path":  "docs/09_adrs/ADR-0001-ENGINE-AND-RENDERING.md",
+        "bytes":  595,
+        "sha256":  "ee066d3d72fde019beb8a5827abc3abf388ed5a00624a7dd65325667b0c748c7"
     },
     {
-      "path": "references/exploration/EXP_09_Chair_Redirect_Low_Angle.png",
-      "bytes": 3379140,
-      "sha256": "af54acf6fb13e6eb56b7ee9c0751b8a97bbaff18eaa00ad2b4f005348dc4e380"
+        "path":  "docs/09_adrs/ADR-0002-THREE-DIMENSIONAL-TPS.md",
+        "bytes":  357,
+        "sha256":  "dafd2164c32b0a08c95bab2dd3275a79fd7508f9e753cf297a6d666b553882bf"
     },
     {
-      "path": "references/exploration/EXP_10_Conference_Table_Finisher.png",
-      "bytes": 3466980,
-      "sha256": "425c220779c9b87e57c425defeea2f610e5abba056c11c9079377df581495aec"
+        "path":  "docs/09_adrs/ADR-0003-NO-TELEKINESIS.md",
+        "bytes":  430,
+        "sha256":  "ba972dbcb929ef48b3dfd7262ce8d2900a373e690c8c1b5ec94e1dacd8beebb0"
     },
     {
-      "path": "references/exploration/README.md",
-      "bytes": 915,
-      "sha256": "27c58e7d694408a4d879aaf392357378015d3e95d1a3eb22ab7d08fae090ea47"
+        "path":  "docs/09_adrs/ADR-0004-ALLY-SCOPE.md",
+        "bytes":  331,
+        "sha256":  "4c9ad6aa737a2a2c49778c411e19aadc26e5b622ebb0ee5d1aa72d2a5ccbe329"
     },
     {
-      "path": "tasks/README.md",
-      "bytes": 249,
-      "sha256": "d14f48af5bbcace86cfc61a0b9540335b3b3ed7881e0414339ce9bfd4069b9de"
+        "path":  "docs/09_adrs/ADR-0005-ART-DIRECTION.md",
+        "bytes":  454,
+        "sha256":  "a6975d5b44312f97eec38e85c28039dc9e456ea0850a5457fae99563fc13f3ac"
     },
     {
-      "path": "tasks/TASK_TEMPLATE.md",
-      "bytes": 871,
-      "sha256": "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
+        "path":  "docs/09_adrs/ADR-0006-WATERFALL-WITH-VALIDATION-GATE.md",
+        "bytes":  528,
+        "sha256":  "49483831ef5ba98c1c9adbd7766bbaebf2b13657470b9dd337c9501238f46bdd"
     },
     {
-      "path": "Game/Assets/_Project.meta",
-      "bytes": 172,
-      "sha256": "508f92b5649d2c54db4cbc84f083775e45df4b2b76ebc75790d26a7107671293"
+        "path":  "docs/09_adrs/ADR-0007-PLAYER-VISUAL-LOCK.md",
+        "bytes":  482,
+        "sha256":  "d565fa1182d2fb449513d306144897dbbcc0b1dbf15b545449771f2617a2fd74"
     },
     {
-      "path": "Game/Assets/_Project/Art.meta",
-      "bytes": 172,
-      "sha256": "2d7e800f0f7fbee42a0833c8833eb0d172001767125cd98280b4b1adfdcbd14b"
+        "path":  "docs/09_adrs/ADR-0008-GEAR-01-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  1321,
+        "sha256":  "a8e5c3c7f4419c7e344305e9ec2a682046934396c52b30a3ffb907ee321500fa"
     },
     {
-      "path": "Game/Assets/_Project/Art/Characters.meta",
-      "bytes": 172,
-      "sha256": "4abcaf15d977f94ed1f6ee5c6f6cf2750ad79682c1138b095ba28ee3a5fe0a7b"
+        "path":  "docs/09_adrs/ADR-0009-CHR-01-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  1394,
+        "sha256":  "342c15a194aa6a0f1e564ea10e8ef4e260450200efe3b33829b27e2d77d20a6c"
     },
     {
-      "path": "Game/Assets/_Project/Art/Environment.meta",
-      "bytes": 172,
-      "sha256": "5411f03388c2ac77dd45fcdbe3ee1600a7802a6086399df96310099093be8ff5"
+        "path":  "docs/09_adrs/ADR-0010-PGT-01-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  1529,
+        "sha256":  "cfd130bcd387d67ea364fe9c70aecd543af1cb6397c1835ad91d51215e9ce753"
     },
     {
-      "path": "Game/Assets/_Project/Art/Materials.meta",
-      "bytes": 172,
-      "sha256": "a77b157ee1626252dc572be86cdc6d4d1af8b86c018152e7f827df24a37cfb0b"
+        "path":  "docs/09_adrs/ADR-0011-PGT-02-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  2055,
+        "sha256":  "694c988e657d9b166cb93f64516d43fda9475713daa7a6643c92fc47717b1ace"
     },
     {
-      "path": "Game/Assets/_Project/Art/Props.meta",
-      "bytes": 172,
-      "sha256": "2574856eae219e2baa206e7055d62de3cbd0675e700ad4b23a02a7b1609c9a34"
+        "path":  "docs/09_adrs/ADR-0012-PGT-03-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  2243,
+        "sha256":  "b7cc5a686cb7924d7ac96036fa6b379add6b3bc8236e9289bce1611260f4bd8e"
     },
     {
-      "path": "Game/Assets/_Project/Art/UI.meta",
-      "bytes": 172,
-      "sha256": "ef6e72eeb688290c1186848784a98afb91958bcc2ce070cbf973391ecefecf1f"
+        "path":  "docs/09_adrs/ADR-0013-LGT-01-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  2290,
+        "sha256":  "cd7c0feea587800556bc6088ef469dff057a8bcf5c860155b474aff5ee66e9b6"
     },
     {
-      "path": "Game/Assets/_Project/Art/VFX.meta",
-      "bytes": 172,
-      "sha256": "2488c770e5c666b1e6cb620188f4ca258b729386f53e066e28b588faef012471"
+        "path":  "docs/09_adrs/ADR-0014-FIN-01-PRODUCTION-VISUAL-LOCK.md",
+        "bytes":  2451,
+        "sha256":  "4c163e09348db4c6bfe3426db976214d8eb6fed8bac74439cbdd96ab87dd446b"
     },
     {
-      "path": "Game/Assets/_Project/Audio.meta",
-      "bytes": 172,
-      "sha256": "c0980659c46d88217a5b636e326d5a9748a7368648cf09dcb9ac1a76e182c756"
+        "path":  "docs/09_adrs/ADR-0015-G3-TECHNICAL-BASELINE.md",
+        "bytes":  3953,
+        "sha256":  "be53751df28fbc4a198c3752f6ddc39b0ac00df93aa2aeb33df3dcab3643cc26"
     },
     {
-      "path": "Game/Assets/_Project/Code.meta",
-      "bytes": 172,
-      "sha256": "7e770ceddbd2cf1292804c220dfe3c9dc67b8322175ee727dee7bfca28dde5d5"
+        "path":  "docs/09_adrs/ADR-0016-BOUNDED-DESTRUCTION-BUDGET.md",
+        "bytes":  5413,
+        "sha256":  "0a5cbf2aaf983a36e7db55f7ef0573b35d0d5695c4d80302aa2de8d539758b39"
     },
     {
-      "path": "Game/Assets/_Project/Code/Editor.meta",
-      "bytes": 172,
-      "sha256": "1ee039da93afc33de4b77577c415a7294c4858be83f3c3626a2073f740694667"
+        "path":  "docs/09_adrs/ADR-0017-OFFICE-CORE-KIT-SCOPE-LOCK.md",
+        "bytes":  6960,
+        "sha256":  "aa6663323ee913dd15ee9f1752ea9e03b8c14a31ac9d6cde7904babc6a1a1839"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime.meta",
-      "bytes": 172,
-      "sha256": "c8a847678349ea97af4713b07a78e1b605841462993e682b658daed4cabe3a57"
+        "path":  "docs/09_adrs/ADR-0018-CHR-00-PLAYER-TURNAROUND-APPROVAL.md",
+        "bytes":  4641,
+        "sha256":  "cf31d48e4bf1b40c06ff5fc19894e352b999aedce75e96347e746d0ed672221a"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Allies.meta",
-      "bytes": 172,
-      "sha256": "072b9013aca016f27b6d48b6f634e6040c8cec027d4d147b4ea5061b36caf6c7"
+        "path":  "docs/09_adrs/ADR-0019-PRE-G4-FULL-DESIGN-LOCK-AND-LIMITED-BOOTSTRAP-GATE.md",
+        "bytes":  6855,
+        "sha256":  "fee9dadc54e6746e9756c3b601f24c1a007306f5c2f4d959dad6c2f4e546e61b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core.meta",
-      "bytes": 172,
-      "sha256": "839c570027584c106a43b4f2a0e82299ffd3ec0f176d2f88cf5043f4c50e0a07"
+        "path":  "docs/09_adrs/ADR-0020-PRE-G4-FULL-DESIGN-LOCK.md",
+        "bytes":  3167,
+        "sha256":  "bff1be9109ebea0c108538fbfd478bdab1517528e27415b835ee73190002e593"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Enemies.meta",
-      "bytes": 172,
-      "sha256": "f2e33dff18e163c841b6b4834ecc49c6ff5e5f17708a8d8f133efe49c9f606b1"
+        "path":  "docs/09_adrs/ADR-0021-FULL-GAME-DIRECTION-ZERO-DEFECT.md",
+        "bytes":  2660,
+        "sha256":  "4038ec6685451b7b62eb0f7f2967e898579ffac23416f08be76150648031fea0"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Physics.meta",
-      "bytes": 172,
-      "sha256": "89426c67c764b2be56b5fdecacfa9495279477c13a3bd063a109aba69c035d87"
+        "path":  "docs/09_adrs/ADR-0022-G4A-BOUNDED-IMPLEMENTATION-GATE.md",
+        "bytes":  3349,
+        "sha256":  "80c527d3f6578454517c76aaaf68e795be75af5099a7201d51258c9afb4512c9"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player.meta",
-      "bytes": 172,
-      "sha256": "b9a364b70887754524095770bb0e5a57869a164ce77e33bcf11a27bbcc690fb0"
+        "path":  "docs/09_adrs/ADR-0023-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
+        "bytes":  2271,
+        "sha256":  "20f78bcb7696b162e22e3500730f98c51541b9d854a5abb25ebae086483be60f"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Presentation.meta",
-      "bytes": 172,
-      "sha256": "e7512443ff68d81bc510a635cc6aad44b4557723d673e5d10ba556c8ef5c35cd"
+        "path":  "docs/10_contest/ART_DELIVERY_STANDARD.md",
+        "bytes":  5351,
+        "sha256":  "ab392e7262e6df4f94308b6cec3d6294d5d0ac6c8406d9da92aede7f122409bb"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Progression.meta",
-      "bytes": 172,
-      "sha256": "a4d015e09f6787ff41384e6987eea50bc693d994874c477afaea3743040491c5"
+        "path":  "docs/10_contest/ART_INTEGRATION_LOG.md",
+        "bytes":  578,
+        "sha256":  "6907fb7dfad24b24d301269ae0bdc2fc217133f25cf4bc7d5dac1b426a224636"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests.meta",
-      "bytes": 172,
-      "sha256": "431506febc6d97400bd4256e6911ca1d7cc85245d3a88f16eaa3bca410e13173"
+        "path":  "docs/10_contest/ASSET_CONTRIBUTOR_LICENSE_LEDGER.md",
+        "bytes":  4177,
+        "sha256":  "3ae3d64eb7ceb9908693b90f29ef70db23110347e9e2ff88f029e14bd5668937"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode.meta",
-      "bytes": 172,
-      "sha256": "933c252ec50d93431d37a0fd884d7e939002ae33f1f29d1cbc13f97cc34cc812"
+        "path":  "docs/10_contest/ASSET_NEEDS_STATUS.md",
+        "bytes":  6217,
+        "sha256":  "b8f779d33577822e1001779cb474709ac1e57c6890f8cf1ae1f57c9edf1dca38"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode.meta",
-      "bytes": 172,
-      "sha256": "73b99e8b636408d5565c85b9e2f61ec25155a0b13aeb7f83663e7b1c00bb6e6f"
+        "path":  "docs/10_contest/BUILD_AND_SUBMISSION_LOG.md",
+        "bytes":  1815,
+        "sha256":  "4cfa4aabac2b1187bd17be5702495cfbe5fdf17a1531df3b17d03191b9d3cff8"
     },
     {
-      "path": "Game/Assets/_Project/Data.meta",
-      "bytes": 172,
-      "sha256": "a723969d29c3817c0e0765d5a05aa2ad54fced4c89559bf6de92a6315b1761bd"
+        "path":  "docs/10_contest/CODEX_COLLABORATION_LOG.md",
+        "bytes":  2358,
+        "sha256":  "4369aac6c7b0aaf10b95fd5d22eb8df2d808ac4836ad7f739fcd66a095f66fa0"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs.meta",
-      "bytes": 172,
-      "sha256": "032dc8f2dab53d34674e131cad1185325873a1ad5d69c533b09268fb3527e945"
+        "path":  "docs/10_contest/GAME_BUILDERS_2026_SPRINT.md",
+        "bytes":  5229,
+        "sha256":  "26b9fd6864cb24f07986c045bdfe233685cc0e76b8330d9f97671b59edd042bd"
     },
     {
-      "path": "Game/Assets/_Project/Scenes.meta",
-      "bytes": 172,
-      "sha256": "98e7132b7bf4c11b1a981540fa2f5eee4ee64fa4fd04975974359b0f2b148fb3"
+        "path":  "docs/10_contest/VISUAL_REFERENCE_INVENTORY.md",
+        "bytes":  27243,
+        "sha256":  "933b977256a05d50cebebeefc9ea7d99f15926be3a508a784c2c967a60e30252"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/00_Bootstrap.meta",
-      "bytes": 172,
-      "sha256": "0346dbecb47b8263182219b93adb191ac92e1b0d72c1457ca6c34ceb4dcbc39a"
+        "path":  "docs/archive/BREAK_NOTICE_AllyPass_Integrated_Revision_SUPERSEDED.md",
+        "bytes":  35663,
+        "sha256":  "eeb8ac970e04be5fb017163ee4b0ffc6d63a35a12ccda72d2e064c6886000ca9"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/10_Prototype.meta",
-      "bytes": 172,
-      "sha256": "0736ab37e724c8cd22c80fd18cca36280e2f7ce2409a88a8564f63c4cece9556"
+        "path":  "docs/archive/BREAK_NOTICE_Original_GDD_SUPERSEDED.md",
+        "bytes":  28081,
+        "sha256":  "230cc5f5bad898d7fdaa7fa66f9b52c94566d947d20048104d1e91a691fa4fc0"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/20_VerticalSlice.meta",
-      "bytes": 172,
-      "sha256": "2ed50315fb323e0f4f9053681aafe0cb34efafee20ab6ed3cfb7d5d2f1746787"
+        "path":  "docs/archive/README.md",
+        "bytes":  293,
+        "sha256":  "2276416b9fab864c27525970a1fee107e045f1a7b3ced33e16d21e05c4e93be3"
     },
     {
-      "path": "Game/Assets/_Project/Settings.meta",
-      "bytes": 172,
-      "sha256": "f47c7cc80eacc8f8d34cba372708ac5e330f24ea6f449be4907f1d9dddeaacc4"
+        "path":  "Game/Assets/_Project.meta",
+        "bytes":  172,
+        "sha256":  "508f92b5649d2c54db4cbc84f083775e45df4b2b76ebc75790d26a7107671293"
     },
     {
-      "path": "Game/Assets/DefaultVolumeProfile.asset",
-      "bytes": 497,
-      "sha256": "70e9ed4656132bf185009cb47db521fdeece0b1f4d464a73cb9d0bd04fe3bda5"
+        "path":  "Game/Assets/_Project/Art.meta",
+        "bytes":  172,
+        "sha256":  "2d7e800f0f7fbee42a0833c8833eb0d172001767125cd98280b4b1adfdcbd14b"
     },
     {
-      "path": "Game/Assets/DefaultVolumeProfile.asset.meta",
-      "bytes": 189,
-      "sha256": "abba5d5e63244125876fbcfc1628649f89c9dddb4b7c35435bee222534376065"
+        "path":  "Game/Assets/_Project/Art/Animation.meta",
+        "bytes":  169,
+        "sha256":  "30db27cb6f88a080d6b6dbab629328c14ce27e26d682d1731386ac23ce5f2f8b"
     },
     {
-      "path": "Game/Assets/UniversalRenderPipelineGlobalSettings.asset",
-      "bytes": 25441,
-      "sha256": "4f0e8e6c2bfff260ad7c27288a032f8184b1fd9e856b0904791a0bc2264ea7cf"
+        "path":  "Game/Assets/_Project/Art/Animation/CHR00.meta",
+        "bytes":  169,
+        "sha256":  "5cf34343880de6824ffbf0dc862959bb6b5116db89a209a94dedf2f1f36b8dfd"
     },
     {
-      "path": "Game/Assets/UniversalRenderPipelineGlobalSettings.asset.meta",
-      "bytes": 189,
-      "sha256": "d19c235fcc63218b0657bad2cd2b5308a4d0db1e2a3b7cf163531b03fd399a9a"
+        "path":  "Game/Assets/_Project/Art/Animation/CHR00/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Packages/manifest.json",
-      "bytes": 199,
-      "sha256": "7c92b2771857f8449add27916fb88f7366ada2cf76fceaaaa85899c1bfe2c410"
+        "path":  "Game/Assets/_Project/Art/Animation/CHR01.meta",
+        "bytes":  169,
+        "sha256":  "7ba7bbf3cfc50a2282880021d37dda2f33b6b17dfba6148851ed13cd9072d3b6"
     },
     {
-      "path": "Game/Packages/packages-lock.json",
-      "bytes": 5604,
-      "sha256": "2ff23a1e227df10616b04a28bd692282054f4e52ea25ad2cbe3a9688c5eb61fe"
+        "path":  "Game/Assets/_Project/Art/Animation/CHR01/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/AudioManager.asset",
-      "bytes": 523,
-      "sha256": "9543c41dbfc7d3951217c4dd9481ed026eb8e529b85ecf4463969a0fea747729"
+        "path":  "Game/Assets/_Project/Art/Animation/ENY01.meta",
+        "bytes":  169,
+        "sha256":  "9f692390563ccbac1e9a49e290bdbf40456c2ab915aaadcf0282d409038bd9b0"
     },
     {
-      "path": "Game/ProjectSettings/ClusterInputManager.asset",
-      "bytes": 114,
-      "sha256": "40e65dd214bf254955d2c8829ca8ce2130fd3510485560ce012e9a1ddd93e623"
+        "path":  "Game/Assets/_Project/Art/Animation/ENY01/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/DynamicsManager.asset",
-      "bytes": 1574,
-      "sha256": "d102dd312ef330f5e5ca255c070fb34f68f59ec633d1e9fd67e2f2f6f88f66c8"
+        "path":  "Game/Assets/_Project/Art/Characters.meta",
+        "bytes":  172,
+        "sha256":  "4abcaf15d977f94ed1f6ee5c6f6cf2750ad79682c1138b095ba28ee3a5fe0a7b"
     },
     {
-      "path": "Game/ProjectSettings/EditorBuildSettings.asset",
-      "bytes": 190,
-      "sha256": "41bc588f6ecc03944687d496f024917cabb061e21c148a6471b74581df14f908"
+        "path":  "Game/Assets/_Project/Art/Characters/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/ProjectSettings/EditorSettings.asset",
-      "bytes": 1603,
-      "sha256": "4a87c54b3541c7bd242aad68c3fc28661083db1117ec56149694ee592156415e"
+        "path":  "Game/Assets/_Project/Art/Characters/CHR00.meta",
+        "bytes":  169,
+        "sha256":  "a05636a9184f1610e95c67211bbe57d83d21bb4162470a1b496a91a398c500de"
     },
     {
-      "path": "Game/ProjectSettings/GraphicsSettings.asset",
-      "bytes": 2559,
-      "sha256": "dc275077487fdfa206a1940c4a0c065f6f94593247b5d137739bbe1d7c01ffbd"
+        "path":  "Game/Assets/_Project/Art/Characters/CHR00/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/InputManager.asset",
-      "bytes": 9754,
-      "sha256": "60c83ae48e29a782141f99032eb38e803d18475124ff5224fbd1fd81b233f051"
+        "path":  "Game/Assets/_Project/Art/Characters/CHR01.meta",
+        "bytes":  169,
+        "sha256":  "bb7229d98dae37926660402ee529424d74811d03682ef95cdeb586abcd9a31fe"
     },
     {
-      "path": "Game/ProjectSettings/MemorySettings.asset",
-      "bytes": 1192,
-      "sha256": "1e8379a461b10ae09f3f696911088c16875d63e87ed5f2d95df9e1892703f9fd"
+        "path":  "Game/Assets/_Project/Art/Characters/CHR01/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/MultiplayerManager.asset",
-      "bytes": 232,
-      "sha256": "ce4075d7a7dd8ac7ffe55de2427692c63f90dae398208bd80cec0f27cbe09f4b"
+        "path":  "Game/Assets/_Project/Art/Characters/ENY01.meta",
+        "bytes":  169,
+        "sha256":  "0fad0c3ef7d6560311226c122c12b215b73cab94b4e3f64d3f02285a6db5fd37"
     },
     {
-      "path": "Game/ProjectSettings/NavMeshAreas.asset",
-      "bytes": 1361,
-      "sha256": "7ebbf8f53b8033104e1878b95ca07a28d0954092d81c220f14196a42f651e658"
+        "path":  "Game/Assets/_Project/Art/Characters/ENY01/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/Physics2DSettings.asset",
-      "bytes": 1862,
-      "sha256": "1cfc0c8fbceec604fd7cd2a06c04ff05dddee6335b75c92b0f5715ad80ba9490"
+        "path":  "Game/Assets/_Project/Art/Environment.meta",
+        "bytes":  172,
+        "sha256":  "5411f03388c2ac77dd45fcdbe3ee1600a7802a6086399df96310099093be8ff5"
     },
     {
-      "path": "Game/ProjectSettings/PresetManager.asset",
-      "bytes": 146,
-      "sha256": "29c125923fe6e29f90190d4fce1c82d660e7051546e2c9d02908d18c9cf2436c"
+        "path":  "Game/Assets/_Project/Art/Environment/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/ProjectSettings/ProjectSettings.asset",
-      "bytes": 20362,
-      "sha256": "63f595939c41f46baccb750cf28c331acb45adffa3aac8254659a5770ba6271e"
+        "path":  "Game/Assets/_Project/Art/Environment/OfficeCore.meta",
+        "bytes":  169,
+        "sha256":  "3dc9842b53d264ee97adfffa6003ceb1a926d6080789b98e2757a5b98aacfc15"
     },
     {
-      "path": "Game/ProjectSettings/ProjectVersion.txt",
-      "bytes": 85,
-      "sha256": "4b4da11ed5c64178395a0d9608426c71cbde17a006c5bc42e752ffdb4bae7540"
+        "path":  "Game/Assets/_Project/Art/Environment/OfficeCore/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/QualitySettings.asset",
-      "bytes": 9802,
-      "sha256": "f1f893b1be47ad2442f58338dd7c860dc1986bb317e2f5bb31084454ffabbf4c"
+        "path":  "Game/Assets/_Project/Art/Equipment.meta",
+        "bytes":  169,
+        "sha256":  "20189952195d809df065effe0c0f4183920d7ecc9895648365334cb4bdad4970"
     },
     {
-      "path": "Game/ProjectSettings/ShaderGraphSettings.asset",
-      "bytes": 633,
-      "sha256": "6fead5a816c4eed70f224d5472340ecf1ea0b4de4f87d5926bb17fa10ffb3dc9"
+        "path":  "Game/Assets/_Project/Art/Equipment/GEAR01.meta",
+        "bytes":  169,
+        "sha256":  "f3722e624d0f9d012ddbbaff1256a7747ba29b621a82ed1e09b2bd88d73cb108"
     },
     {
-      "path": "Game/ProjectSettings/TagManager.asset",
-      "bytes": 411,
-      "sha256": "da4b5eefc927f8b91bcf9e56a186d2b852f49d9cbe91d466638d26c79d6a83ce"
+        "path":  "Game/Assets/_Project/Art/Equipment/GEAR01/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/ProjectSettings/TimeManager.asset",
-      "bytes": 305,
-      "sha256": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+        "path":  "Game/Assets/_Project/Art/Materials.meta",
+        "bytes":  172,
+        "sha256":  "a77b157ee1626252dc572be86cdc6d4d1af8b86c018152e7f827df24a37cfb0b"
     },
     {
-      "path": "Game/ProjectSettings/UnityConnectSettings.asset",
-      "bytes": 1063,
-      "sha256": "11251dae0356b6f43dd2c67bb511f6b7ecda4e5de425186bba3297e6f3dc1c6f"
+        "path":  "Game/Assets/_Project/Art/Materials/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/ProjectSettings/VersionControlSettings.asset",
-      "bytes": 172,
-      "sha256": "e199cdfa6a8f2bf33cfd47e549198f13e3eb2a5099e908fdb4e0f14d939ccc6b"
+        "path":  "Game/Assets/_Project/Art/Materials/Characters.meta",
+        "bytes":  169,
+        "sha256":  "11492137ef94efbab3526b547a5da832b6682ccea63faefe7af17fd78260b537"
     },
     {
-      "path": "Game/ProjectSettings/VFXManager.asset",
-      "bytes": 525,
-      "sha256": "2973a6af930e142f62cde00076beda8a3cc3a66d9bfcde7a58ba7d4be2251c26"
+        "path":  "Game/Assets/_Project/Art/Materials/Characters/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
-      "bytes": 2226,
-      "sha256": "b176401719d69de219d3f42f37b17b6a7a458d819dcc9b39b4dc6c0ef3088a28"
+        "path":  "Game/Assets/_Project/Art/Materials/Environment.meta",
+        "bytes":  169,
+        "sha256":  "4df43d921e090f2acf6bc3de7b4365c35bbae37dff0f120857d21e0f56588967"
     },
     {
-      "path": "docs/06_codex/IMP-0002-RUNTIME-IDENTITY-STATE-FOUNDATION.md",
-      "bytes": 7561,
-      "sha256": "4a83f352ee4e6d298d65777bfc76bb6efb1d545b3761f9252d33613d82d8ff77"
+        "path":  "Game/Assets/_Project/Art/Materials/Environment/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "docs/09_adrs/ADR-0022-G4A-BOUNDED-IMPLEMENTATION-GATE.md",
-      "bytes": 3349,
-      "sha256": "80c527d3f6578454517c76aaaf68e795be75af5099a7201d51258c9afb4512c9"
+        "path":  "Game/Assets/_Project/Art/Materials/Props.meta",
+        "bytes":  169,
+        "sha256":  "a65fc0c85cadf6e740a3c416ca910d8a9869e7019228f357ef33645e2bcfb4e9"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/BreakNotice.Core.asmdef",
-      "bytes": 341,
-      "sha256": "0b831ba2b29008119322d52f1999cf8d3e45181be8f7474a9bce1147578ef193"
+        "path":  "Game/Assets/_Project/Art/Materials/Props/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/BreakNotice.Core.asmdef.meta",
-      "bytes": 166,
-      "sha256": "61d9dd1e65a480c3e7d07474f78788eadebf0b0b155877e0b80f561ef3d917e1"
+        "path":  "Game/Assets/_Project/Art/Materials/Shared.meta",
+        "bytes":  169,
+        "sha256":  "cbae848b9393362830ca2f5a4a3336e46c538cff9ea338fef2257465b190a804"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity.meta",
-      "bytes": 172,
-      "sha256": "6cae27f5eeb4e59199558b947ae41e6c6908c908384c22e7a39d4140ca7288d3"
+        "path":  "Game/Assets/_Project/Art/Materials/Shared/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/ContentId.cs",
-      "bytes": 1728,
-      "sha256": "8bd1da6373cb2af6cb18d4470117f6ad2f1d47102decd8dde33128859b8a7ae5"
+        "path":  "Game/Assets/_Project/Art/Props.meta",
+        "bytes":  172,
+        "sha256":  "2574856eae219e2baa206e7055d62de3cbd0675e700ad4b23a02a7b1609c9a34"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/ContentId.cs.meta",
-      "bytes": 59,
-      "sha256": "74b2c258b9bd2fc6d313b6a75036eb6cda6fbce521b966570ee9fc865dc16101"
+        "path":  "Game/Assets/_Project/Art/Props/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/EncounterGenerationId.cs",
-      "bytes": 1322,
-      "sha256": "ac49e55d6f77548506d267ae83a196043b4d442555dcacfb4230db67a6b14021"
+        "path":  "Game/Assets/_Project/Art/Props/Decorative.meta",
+        "bytes":  169,
+        "sha256":  "b34dac8d512930b0b4b8a43de8eaafefe1f689aa1f514c43993a0d7afa697509"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/EncounterGenerationId.cs.meta",
-      "bytes": 59,
-      "sha256": "60b05710dbd15f096d7a25250dd88f6b1fe6c26a1f567785d536fafde90c0e01"
+        "path":  "Game/Assets/_Project/Art/Props/Decorative/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityId.cs",
-      "bytes": 1265,
-      "sha256": "de28a4d30ac89a9fdfb1f64b9d2deac68ecee44618f1e1aeedbb6525577677eb"
+        "path":  "Game/Assets/_Project/Art/Props/Gameplay.meta",
+        "bytes":  169,
+        "sha256":  "bcb2de672a1e76babf419ca0567dbb3b1b8cf2864b7def2835f252010a2447e0"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityId.cs.meta",
-      "bytes": 59,
-      "sha256": "c270b76c8ea52aec79eacb9b40fda7e1cd8de73269e26d40606e5004310c35a3"
+        "path":  "Game/Assets/_Project/Art/Props/Gameplay/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityRegistry.cs",
-      "bytes": 2372,
-      "sha256": "69bab91899f460bd8a86963825f430bb913d5e6f87aacf455e7d01b11a562b47"
+        "path":  "Game/Assets/_Project/Art/Textures.meta",
+        "bytes":  169,
+        "sha256":  "4f0a5e49432940a9565dbcc48c5cb56e41f5d2caf2ccb5a3d76465592756c8ac"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityRegistry.cs.meta",
-      "bytes": 59,
-      "sha256": "4368980621b5e4e7e079daa6b62360691ccd9448235359f40ac6825be17a9845"
+        "path":  "Game/Assets/_Project/Art/Textures/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentity.cs",
-      "bytes": 2362,
-      "sha256": "00bacf31ea50d4d892fe3d3894bc88b23373894c7e492b5045a4c56355171c76"
+        "path":  "Game/Assets/_Project/Art/UI.meta",
+        "bytes":  172,
+        "sha256":  "ef6e72eeb688290c1186848784a98afb91958bcc2ce070cbf973391ecefecf1f"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentity.cs.meta",
-      "bytes": 59,
-      "sha256": "06cc797f56eedc7b66c77a70de66d310557626de8be79e2a54fcc831add4e136"
+        "path":  "Game/Assets/_Project/Art/UI/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentityAllocator.cs",
-      "bytes": 876,
-      "sha256": "f271655fd30057f5fca0665fe0ef3671c583ed37eff8bb7b66ebc21ce392fb2a"
+        "path":  "Game/Assets/_Project/Art/VFX.meta",
+        "bytes":  172,
+        "sha256":  "2488c770e5c666b1e6cb620188f4ca258b729386f53e066e28b588faef012471"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentityAllocator.cs.meta",
-      "bytes": 59,
-      "sha256": "e776d5fba55fc971f8bca5a4227ac4483857e0fb77545a714e404ad3f3393665"
+        "path":  "Game/Assets/_Project/Art/VFX/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/BreakNotice.Core.EditModeTests.asmdef",
-      "bytes": 462,
-      "sha256": "3aaa5fac4b7e26643c0121afc9c43029d279ec0ee4bda855b9978a99167c29c7"
+        "path":  "Game/Assets/_Project/Audio.meta",
+        "bytes":  172,
+        "sha256":  "c0980659c46d88217a5b636e326d5a9748a7368648cf09dcb9ac1a76e182c756"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/BreakNotice.Core.EditModeTests.asmdef.meta",
-      "bytes": 166,
-      "sha256": "e39d646a2919098571870cc3dfe2ae4aff3c2f627ea48f0af02e0254ea55640d"
+        "path":  "Game/Assets/_Project/Audio/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/RuntimeEntityRegistryTests.cs",
-      "bytes": 4173,
-      "sha256": "87db5024f2181e04517d44124c217d14e33351b77c7663fec8c671cd24af3e16"
+        "path":  "Game/Assets/_Project/Audio/Ambience.meta",
+        "bytes":  169,
+        "sha256":  "226c577032fb1406fd0115658ef2b52b8908c2d86837e86dc55a3b85351d7fbd"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/RuntimeEntityRegistryTests.cs.meta",
-      "bytes": 59,
-      "sha256": "bdfef5c952f97f1e4483de9eeb3753020a4280ea18ccdf371f73d431e338ae22"
+        "path":  "Game/Assets/_Project/Audio/Ambience/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/RuntimeIdentityTests.cs",
-      "bytes": 5873,
-      "sha256": "ace1862137faf37e13b88aa225e317a810275c3176f7b489f1cb7e7fde323041"
+        "path":  "Game/Assets/_Project/Audio/Character.meta",
+        "bytes":  169,
+        "sha256":  "cfb2b68fc9fb9f34a173915efb1808dd840cba351d1a304890f3405d2bb2b5bd"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/RuntimeIdentityTests.cs.meta",
-      "bytes": 59,
-      "sha256": "80147b4f1b30a5c5dd1a52c31418d40e5e4c7bbdfa62783f16aec8d4a757bc6b"
+        "path":  "Game/Assets/_Project/Audio/Character/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/BreakNotice.Gameplay.asmdef",
-      "bytes": 377,
-      "sha256": "2349d5a1c5b4e959db38a31c91521cc48296e21fd1d88ad7e1163c600db39885"
+        "path":  "Game/Assets/_Project/Audio/Impact.meta",
+        "bytes":  169,
+        "sha256":  "d087d857b80c600df648ae8a629726ddfde4ed67c8625716a1818b2746b000dc"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/PrototypeLogicalAction.cs",
-      "bytes": 236,
-      "sha256": "323d81a6da73ed26974798cb6de0ad0e014dec92e45510d6917a5d57922c85db"
+        "path":  "Game/Assets/_Project/Audio/Impact/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/LogicalInputSnapshot.cs",
-      "bytes": 1004,
-      "sha256": "220487d7ee09731e994bfdc431bbbbc162badc16c4bf03feee1b960258f8b1d1"
+        "path":  "Game/Assets/_Project/Audio/Interaction.meta",
+        "bytes":  169,
+        "sha256":  "bb90ff00e367923056a5b35d0a4e0d6aba867a078df5673c8e726b6d786b3614"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs",
-      "bytes": 3136,
-      "sha256": "6680e2a016f301a99bec0e47b0a5c2121eda4a4161094e50fdaca0ad74fab3dd"
+        "path":  "Game/Assets/_Project/Audio/Interaction/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs",
-      "bytes": 2993,
-      "sha256": "7a2bc81b612c46660bb29e909d2e1f219ea98d1f0837e62fe3bc96295d398d5e"
+        "path":  "Game/Assets/_Project/Audio/Music.meta",
+        "bytes":  169,
+        "sha256":  "60a586b8bb8bac3713594435afdbeefda7cfed9e158922f4b933c228a9f89e47"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Presentation/BreakNotice.Presentation.asmdef",
-      "bytes": 413,
-      "sha256": "0872808759382f1fdad5270b962ae55fd07e83e990e90d5b7298af13f5d3acc4"
+        "path":  "Game/Assets/_Project/Audio/Music/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs",
-      "bytes": 4665,
-      "sha256": "7015fff347cf13a98b1ea0a110b0596fe28d133d5561d2ddc3bc7c5bb4728354"
+        "path":  "Game/Assets/_Project/Audio/UI.meta",
+        "bytes":  169,
+        "sha256":  "f995760c3c91143789dd3e56f856b0c3636433a9f238e24704527c279f3c3482"
     },
     {
-      "path": "Game/Assets/_Project/Input/BreakNoticePrototype.inputactions",
-      "bytes": 9589,
-      "sha256": "b6dfd2ae04ffc53b832791719732d63dfaa3c1b5d36acb0075e4fc6eb7d821e6"
+        "path":  "Game/Assets/_Project/Audio/UI/.gitkeep",
+        "bytes":  1,
+        "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef",
-      "bytes": 572,
-      "sha256": "67baa9a787fb8bd400dd9f3ec258230dc2544982e4817fdcb7cdbeed9339c024"
+        "path":  "Game/Assets/_Project/Code.meta",
+        "bytes":  172,
+        "sha256":  "7e770ceddbd2cf1292804c220dfe3c9dc67b8322175ee727dee7bfca28dde5d5"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs",
-      "bytes": 16366,
-      "sha256": "02e16fb6f3c150fdb72fe6d88e42955510f71b7fd219136ecf36ca476fd2cc70"
+        "path":  "Game/Assets/_Project/Code/Editor.meta",
+        "bytes":  172,
+        "sha256":  "1ee039da93afc33de4b77577c415a7294c4858be83f3c3626a2073f740694667"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/BreakNotice.LocomotionCamera.PlayModeTests.asmdef",
-      "bytes": 556,
-      "sha256": "93b61a3e3c4ddd7f4115906d4cb47fd7494355539e02a2bb52b9b1b5f5c72c83"
+        "path":  "Game/Assets/_Project/Code/Editor/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs",
-      "bytes": 6593,
-      "sha256": "c016b00d3a025f8e710ac1290c01cf05c8e516071df25e965edb1903372d09ed"
+        "path":  "Game/Assets/_Project/Code/Editor/Contest.meta",
+        "bytes":  169,
+        "sha256":  "5d2c9602a349343cb62a6f9965dcedb3ec2b69f1c8419dc4a48433459e18a538"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/10_Prototype/G4A_LocomotionCameraGraybox.unity",
-      "bytes": 71862,
-      "sha256": "0c4ab92b36bc0a9c31e7a77273f53fbadf6e878418477543e3ff2ee4fed91b95"
+        "path":  "Game/Assets/_Project/Code/Editor/Contest/ContestC0Automation.cs",
+        "bytes":  6019,
+        "sha256":  "e11efa0d2289322a13a713fcf5b048f8cfd2e7b1a56d774f0199285477c943e0"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs/Graybox/PlayerGraybox.prefab",
-      "bytes": 5413,
-      "sha256": "7710a5056f1bf33075e7dfd734bb414c10bcaae4d3e9b03b330374ae515063ed"
+        "path":  "Game/Assets/_Project/Code/Editor/Contest/ContestC0Automation.cs.meta",
+        "bytes":  60,
+        "sha256":  "cb7161770861af86df6e5d5afc803f495f73a046fe970dd6d2b65fb9eae2c51d"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs/Graybox/GameplayCameraRig.prefab",
-      "bytes": 8792,
-      "sha256": "5e5750430fd68113ceccd769a6b2f09bd20faf40ad05fd2c7bce2a3a0010ec90"
+        "path":  "Game/Assets/_Project/Code/Runtime.meta",
+        "bytes":  172,
+        "sha256":  "c8a847678349ea97af4713b07a78e1b605841462993e682b658daed4cabe3a57"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/BreakNotice.Gameplay.asmdef.meta",
-      "bytes": 166,
-      "sha256": "f257282dc58f5f53ee3249e471c04169f1fded2b850c179182a911d71ec9296e"
+        "path":  "Game/Assets/_Project/Code/Runtime/Allies.meta",
+        "bytes":  172,
+        "sha256":  "072b9013aca016f27b6d48b6f634e6040c8cec027d4d147b4ea5061b36caf6c7"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input.meta",
-      "bytes": 172,
-      "sha256": "a9b91ff30bd753cd89a810178f9ff2b40194cda0e8d1915f125e3d7b465a7d48"
+        "path":  "Game/Assets/_Project/Code/Runtime/Allies/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/PrototypeLogicalAction.cs.meta",
-      "bytes": 59,
-      "sha256": "1b570badc616c013da5730fd90e7cc9c6f4b1e74cf9f53cdea1251726bb9cae4"
+        "path":  "Game/Assets/_Project/Code/Runtime/Contest.meta",
+        "bytes":  169,
+        "sha256":  "d0fb682595ec423195d0c6f3c23eb37498476763395cf09d16f639dff72d9fbf"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/LogicalInputSnapshot.cs.meta",
-      "bytes": 59,
-      "sha256": "76da6a2e6d227c784f23bd3ae656a599cf55ba731c0cec807d29c8328cfc3e14"
+        "path":  "Game/Assets/_Project/Code/Runtime/Contest/BreakNotice.ContestBrowser.asmdef",
+        "bytes":  382,
+        "sha256":  "a31ba86c430ee28db8d1385ebfbfd50c01cc6cdb2d4f4c6a85f623029cd294f3"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs.meta",
-      "bytes": 59,
-      "sha256": "3fe05ccb115f80062e7a869025924536a0836b55c1389af97f4e1d1138d71342"
+        "path":  "Game/Assets/_Project/Code/Runtime/Contest/BreakNotice.ContestBrowser.asmdef.meta",
+        "bytes":  163,
+        "sha256":  "eb3f179bea981107f1fb8df0d31b2f76f8a7b0f5fcca8cb221cadc6b9d4aab20"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs.meta",
-      "bytes": 59,
-      "sha256": "9d048584c62d4b8c9a3d086fc08c1b8e0c359493c6d27e67004f03c1315ad28f"
+        "path":  "Game/Assets/_Project/Code/Runtime/Contest/BrowserPointerCapture.cs",
+        "bytes":  994,
+        "sha256":  "8423bca6ef3053f779be3430b834ad5597d99e24a4660a028e2279f7e5c80f6a"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Presentation/BreakNotice.Presentation.asmdef.meta",
-      "bytes": 166,
-      "sha256": "3736800ea7230cc333f9fccc77fe5fb5db272dfe32f34e0ac5d890e7cae6de0d"
+        "path":  "Game/Assets/_Project/Code/Runtime/Contest/BrowserPointerCapture.cs.meta",
+        "bytes":  60,
+        "sha256":  "2542cb813b0b69852730daf3b595b518408d83f888eb613758e2f18295c46326"
     },
     {
-      "path": "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs.meta",
-      "bytes": 59,
-      "sha256": "849628d4bd401cd30828d7d081bfa5b08586fba25f02d704b16f89a82c76a442"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core.meta",
+        "bytes":  172,
+        "sha256":  "839c570027584c106a43b4f2a0e82299ffd3ec0f176d2f88cf5043f4c50e0a07"
     },
     {
-      "path": "Game/Assets/_Project/Input.meta",
-      "bytes": 172,
-      "sha256": "83017965e8387a882f9d55db95ad3cba493d7b74d4cdb1a0c0cbf09c3f997b64"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "path": "Game/Assets/_Project/Input/BreakNoticePrototype.inputactions.meta",
-      "bytes": 376,
-      "sha256": "5b2e2b5c77a4affba96df2dc7f4f811e827f25b36e119aca272ef740880ebbe2"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/BreakNotice.Core.asmdef",
+        "bytes":  341,
+        "sha256":  "0b831ba2b29008119322d52f1999cf8d3e45181be8f7474a9bce1147578ef193"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera.meta",
-      "bytes": 172,
-      "sha256": "1e406ced324cb9eb5509d30b37c49db3000b2820c359c29713d252521ac9039b"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/BreakNotice.Core.asmdef.meta",
+        "bytes":  166,
+        "sha256":  "61d9dd1e65a480c3e7d07474f78788eadebf0b0b155877e0b80f561ef3d917e1"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef.meta",
-      "bytes": 166,
-      "sha256": "b744862d8e095bccd745d2112b433863fab0688b983d8e78a640534780f3a5e2"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity.meta",
+        "bytes":  172,
+        "sha256":  "6cae27f5eeb4e59199558b947ae41e6c6908c908384c22e7a39d4140ca7288d3"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs.meta",
-      "bytes": 59,
-      "sha256": "f28b4bc89e2745f9a012a58184bd2f4638742824ee7b0c25a289258abfa3b6d2"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/ContentId.cs",
+        "bytes":  1728,
+        "sha256":  "8bd1da6373cb2af6cb18d4470117f6ad2f1d47102decd8dde33128859b8a7ae5"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera.meta",
-      "bytes": 172,
-      "sha256": "dc895761f2fd79e1a2067f7fb960aa13b98123476644102a91bb9407ef846036"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/ContentId.cs.meta",
+        "bytes":  59,
+        "sha256":  "74b2c258b9bd2fc6d313b6a75036eb6cda6fbce521b966570ee9fc865dc16101"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/BreakNotice.LocomotionCamera.PlayModeTests.asmdef.meta",
-      "bytes": 166,
-      "sha256": "5e66e130ec7a85be0afb57c4bef4095e5bef3c3224edd80f2437c1278a463c9d"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/EncounterGenerationId.cs",
+        "bytes":  1322,
+        "sha256":  "ac49e55d6f77548506d267ae83a196043b4d442555dcacfb4230db67a6b14021"
     },
     {
-      "path": "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs.meta",
-      "bytes": 59,
-      "sha256": "52b146ecdcee48e49a619a6b675afba96d21d75b1715be2139d7aa6edddfe3ad"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/EncounterGenerationId.cs.meta",
+        "bytes":  59,
+        "sha256":  "60b05710dbd15f096d7a25250dd88f6b1fe6c26a1f567785d536fafde90c0e01"
     },
     {
-      "path": "Game/Assets/_Project/Scenes/10_Prototype/G4A_LocomotionCameraGraybox.unity.meta",
-      "bytes": 155,
-      "sha256": "786976acbdb3bce325b6acee9ba3496ec8621a9bc455e66fa0c092f463d1be71"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityId.cs",
+        "bytes":  1265,
+        "sha256":  "de28a4d30ac89a9fdfb1f64b9d2deac68ecee44618f1e1aeedbb6525577677eb"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs/Graybox.meta",
-      "bytes": 172,
-      "sha256": "f84c5eddd780d42705f930976a365443fe0cb60579c095b585e8c79013ee29d9"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityId.cs.meta",
+        "bytes":  59,
+        "sha256":  "c270b76c8ea52aec79eacb9b40fda7e1cd8de73269e26d40606e5004310c35a3"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs/Graybox/PlayerGraybox.prefab.meta",
-      "bytes": 154,
-      "sha256": "4a631fdf9200fec643d1f6355f89d331163ad7ba836f2ab1095549dde3752dff"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityRegistry.cs",
+        "bytes":  2372,
+        "sha256":  "69bab91899f460bd8a86963825f430bb913d5e6f87aacf455e7d01b11a562b47"
     },
     {
-      "path": "Game/Assets/_Project/Prefabs/Graybox/GameplayCameraRig.prefab.meta",
-      "bytes": 154,
-      "sha256": "4098b40ce07ae313f836d367aca584359d4b298a94e286873e38c9281aea1a5f"
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeEntityRegistry.cs.meta",
+        "bytes":  59,
+        "sha256":  "4368980621b5e4e7e079daa6b62360691ccd9448235359f40ac6825be17a9845"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentity.cs",
+        "bytes":  2362,
+        "sha256":  "00bacf31ea50d4d892fe3d3894bc88b23373894c7e492b5045a4c56355171c76"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentity.cs.meta",
+        "bytes":  59,
+        "sha256":  "06cc797f56eedc7b66c77a70de66d310557626de8be79e2a54fcc831add4e136"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentityAllocator.cs",
+        "bytes":  876,
+        "sha256":  "f271655fd30057f5fca0665fe0ef3671c583ed37eff8bb7b66ebc21ce392fb2a"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Core/Identity/RuntimeIdentityAllocator.cs.meta",
+        "bytes":  59,
+        "sha256":  "e776d5fba55fc971f8bca5a4227ac4483857e0fb77545a714e404ad3f3393665"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Enemies.meta",
+        "bytes":  172,
+        "sha256":  "f2e33dff18e163c841b6b4834ecc49c6ff5e5f17708a8d8f133efe49c9f606b1"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Enemies/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Physics.meta",
+        "bytes":  172,
+        "sha256":  "89426c67c764b2be56b5fdecacfa9495279477c13a3bd063a109aba69c035d87"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Physics/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player.meta",
+        "bytes":  172,
+        "sha256":  "b9a364b70887754524095770bb0e5a57869a164ce77e33bcf11a27bbcc690fb0"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/BreakNotice.Gameplay.asmdef",
+        "bytes":  377,
+        "sha256":  "2349d5a1c5b4e959db38a31c91521cc48296e21fd1d88ad7e1163c600db39885"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/BreakNotice.Gameplay.asmdef.meta",
+        "bytes":  166,
+        "sha256":  "f257282dc58f5f53ee3249e471c04169f1fded2b850c179182a911d71ec9296e"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input.meta",
+        "bytes":  172,
+        "sha256":  "a9b91ff30bd753cd89a810178f9ff2b40194cda0e8d1915f125e3d7b465a7d48"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs",
+        "bytes":  3136,
+        "sha256":  "6680e2a016f301a99bec0e47b0a5c2121eda4a4161094e50fdaca0ad74fab3dd"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs.meta",
+        "bytes":  59,
+        "sha256":  "3fe05ccb115f80062e7a869025924536a0836b55c1389af97f4e1d1138d71342"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/LogicalInputSnapshot.cs",
+        "bytes":  1004,
+        "sha256":  "220487d7ee09731e994bfdc431bbbbc162badc16c4bf03feee1b960258f8b1d1"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/LogicalInputSnapshot.cs.meta",
+        "bytes":  59,
+        "sha256":  "76da6a2e6d227c784f23bd3ae656a599cf55ba731c0cec807d29c8328cfc3e14"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/PrototypeLogicalAction.cs",
+        "bytes":  236,
+        "sha256":  "323d81a6da73ed26974798cb6de0ad0e014dec92e45510d6917a5d57922c85db"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/PrototypeLogicalAction.cs.meta",
+        "bytes":  59,
+        "sha256":  "1b570badc616c013da5730fd90e7cc9c6f4b1e74cf9f53cdea1251726bb9cae4"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs",
+        "bytes":  2993,
+        "sha256":  "7a2bc81b612c46660bb29e909d2e1f219ea98d1f0837e62fe3bc96295d398d5e"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs.meta",
+        "bytes":  59,
+        "sha256":  "9d048584c62d4b8c9a3d086fc08c1b8e0c359493c6d27e67004f03c1315ad28f"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Presentation.meta",
+        "bytes":  172,
+        "sha256":  "e7512443ff68d81bc510a635cc6aad44b4557723d673e5d10ba556c8ef5c35cd"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Presentation/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Presentation/BreakNotice.Presentation.asmdef",
+        "bytes":  413,
+        "sha256":  "0872808759382f1fdad5270b962ae55fd07e83e990e90d5b7298af13f5d3acc4"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Presentation/BreakNotice.Presentation.asmdef.meta",
+        "bytes":  166,
+        "sha256":  "3736800ea7230cc333f9fccc77fe5fb5db272dfe32f34e0ac5d890e7cae6de0d"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs",
+        "bytes":  4665,
+        "sha256":  "7015fff347cf13a98b1ea0a110b0596fe28d133d5561d2ddc3bc7c5bb4728354"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs.meta",
+        "bytes":  59,
+        "sha256":  "849628d4bd401cd30828d7d081bfa5b08586fba25f02d704b16f89a82c76a442"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Progression.meta",
+        "bytes":  172,
+        "sha256":  "a4d015e09f6787ff41384e6987eea50bc693d994874c477afaea3743040491c5"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Runtime/Progression/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests.meta",
+        "bytes":  172,
+        "sha256":  "431506febc6d97400bd4256e6911ca1d7cc85245d3a88f16eaa3bca410e13173"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode.meta",
+        "bytes":  172,
+        "sha256":  "933c252ec50d93431d37a0fd884d7e939002ae33f1f29d1cbc13f97cc34cc812"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/BreakNotice.Core.EditModeTests.asmdef",
+        "bytes":  462,
+        "sha256":  "3aaa5fac4b7e26643c0121afc9c43029d279ec0ee4bda855b9978a99167c29c7"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/BreakNotice.Core.EditModeTests.asmdef.meta",
+        "bytes":  166,
+        "sha256":  "e39d646a2919098571870cc3dfe2ae4aff3c2f627ea48f0af02e0254ea55640d"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera.meta",
+        "bytes":  172,
+        "sha256":  "1e406ced324cb9eb5509d30b37c49db3000b2820c359c29713d252521ac9039b"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef",
+        "bytes":  572,
+        "sha256":  "67baa9a787fb8bd400dd9f3ec258230dc2544982e4817fdcb7cdbeed9339c024"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef.meta",
+        "bytes":  166,
+        "sha256":  "b744862d8e095bccd745d2112b433863fab0688b983d8e78a640534780f3a5e2"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs",
+        "bytes":  16366,
+        "sha256":  "02e16fb6f3c150fdb72fe6d88e42955510f71b7fd219136ecf36ca476fd2cc70"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs.meta",
+        "bytes":  59,
+        "sha256":  "f28b4bc89e2745f9a012a58184bd2f4638742824ee7b0c25a289258abfa3b6d2"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/RuntimeEntityRegistryTests.cs",
+        "bytes":  4173,
+        "sha256":  "87db5024f2181e04517d44124c217d14e33351b77c7663fec8c671cd24af3e16"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/RuntimeEntityRegistryTests.cs.meta",
+        "bytes":  59,
+        "sha256":  "bdfef5c952f97f1e4483de9eeb3753020a4280ea18ccdf371f73d431e338ae22"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/RuntimeIdentityTests.cs",
+        "bytes":  5873,
+        "sha256":  "ace1862137faf37e13b88aa225e317a810275c3176f7b489f1cb7e7fde323041"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/RuntimeIdentityTests.cs.meta",
+        "bytes":  59,
+        "sha256":  "80147b4f1b30a5c5dd1a52c31418d40e5e4c7bbdfa62783f16aec8d4a757bc6b"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode.meta",
+        "bytes":  172,
+        "sha256":  "73b99e8b636408d5565c85b9e2f61ec25155a0b13aeb7f83663e7b1c00bb6e6f"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera.meta",
+        "bytes":  172,
+        "sha256":  "dc895761f2fd79e1a2067f7fb960aa13b98123476644102a91bb9407ef846036"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/BreakNotice.LocomotionCamera.PlayModeTests.asmdef",
+        "bytes":  556,
+        "sha256":  "93b61a3e3c4ddd7f4115906d4cb47fd7494355539e02a2bb52b9b1b5f5c72c83"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/BreakNotice.LocomotionCamera.PlayModeTests.asmdef.meta",
+        "bytes":  166,
+        "sha256":  "5e66e130ec7a85be0afb57c4bef4095e5bef3c3224edd80f2437c1278a463c9d"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs",
+        "bytes":  6593,
+        "sha256":  "c016b00d3a025f8e710ac1290c01cf05c8e516071df25e965edb1903372d09ed"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs.meta",
+        "bytes":  59,
+        "sha256":  "52b146ecdcee48e49a619a6b675afba96d21d75b1715be2139d7aa6edddfe3ad"
+    },
+    {
+        "path":  "Game/Assets/_Project/Data.meta",
+        "bytes":  172,
+        "sha256":  "a723969d29c3817c0e0765d5a05aa2ad54fced4c89559bf6de92a6315b1761bd"
+    },
+    {
+        "path":  "Game/Assets/_Project/Data/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Input.meta",
+        "bytes":  172,
+        "sha256":  "83017965e8387a882f9d55db95ad3cba493d7b74d4cdb1a0c0cbf09c3f997b64"
+    },
+    {
+        "path":  "Game/Assets/_Project/Input/BreakNoticePrototype.inputactions",
+        "bytes":  9589,
+        "sha256":  "b6dfd2ae04ffc53b832791719732d63dfaa3c1b5d36acb0075e4fc6eb7d821e6"
+    },
+    {
+        "path":  "Game/Assets/_Project/Input/BreakNoticePrototype.inputactions.meta",
+        "bytes":  376,
+        "sha256":  "5b2e2b5c77a4affba96df2dc7f4f811e827f25b36e119aca272ef740880ebbe2"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs.meta",
+        "bytes":  172,
+        "sha256":  "032dc8f2dab53d34674e131cad1185325873a1ad5d69c533b09268fb3527e945"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs/Graybox.meta",
+        "bytes":  172,
+        "sha256":  "f84c5eddd780d42705f930976a365443fe0cb60579c095b585e8c79013ee29d9"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs/Graybox/GameplayCameraRig.prefab",
+        "bytes":  8792,
+        "sha256":  "5e5750430fd68113ceccd769a6b2f09bd20faf40ad05fd2c7bce2a3a0010ec90"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs/Graybox/GameplayCameraRig.prefab.meta",
+        "bytes":  154,
+        "sha256":  "4098b40ce07ae313f836d367aca584359d4b298a94e286873e38c9281aea1a5f"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs/Graybox/PlayerGraybox.prefab",
+        "bytes":  5413,
+        "sha256":  "7710a5056f1bf33075e7dfd734bb414c10bcaae4d3e9b03b330374ae515063ed"
+    },
+    {
+        "path":  "Game/Assets/_Project/Prefabs/Graybox/PlayerGraybox.prefab.meta",
+        "bytes":  154,
+        "sha256":  "4a631fdf9200fec643d1f6355f89d331163ad7ba836f2ab1095549dde3752dff"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes.meta",
+        "bytes":  172,
+        "sha256":  "98e7132b7bf4c11b1a981540fa2f5eee4ee64fa4fd04975974359b0f2b148fb3"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/00_Bootstrap.meta",
+        "bytes":  172,
+        "sha256":  "0346dbecb47b8263182219b93adb191ac92e1b0d72c1457ca6c34ceb4dcbc39a"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/00_Bootstrap/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/10_Prototype.meta",
+        "bytes":  172,
+        "sha256":  "0736ab37e724c8cd22c80fd18cca36280e2f7ce2409a88a8564f63c4cece9556"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/10_Prototype/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity",
+        "bytes":  73177,
+        "sha256":  "f5ca29a3a477a3c7d1644a8a930d930746aed4a49b4b9aadb866c68acf9dacda"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity.meta",
+        "bytes":  152,
+        "sha256":  "807c16646458de4c0163efe24fe490f443b36cddc0fdc8331030e335805749b5"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/10_Prototype/G4A_LocomotionCameraGraybox.unity",
+        "bytes":  71862,
+        "sha256":  "0c4ab92b36bc0a9c31e7a77273f53fbadf6e878418477543e3ff2ee4fed91b95"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/10_Prototype/G4A_LocomotionCameraGraybox.unity.meta",
+        "bytes":  155,
+        "sha256":  "786976acbdb3bce325b6acee9ba3496ec8621a9bc455e66fa0c092f463d1be71"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/20_VerticalSlice.meta",
+        "bytes":  172,
+        "sha256":  "2ed50315fb323e0f4f9053681aafe0cb34efafee20ab6ed3cfb7d5d2f1746787"
+    },
+    {
+        "path":  "Game/Assets/_Project/Scenes/20_VerticalSlice/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/_Project/Settings.meta",
+        "bytes":  172,
+        "sha256":  "f47c7cc80eacc8f8d34cba372708ac5e330f24ea6f449be4907f1d9dddeaacc4"
+    },
+    {
+        "path":  "Game/Assets/_Project/Settings/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Assets/DefaultVolumeProfile.asset",
+        "bytes":  497,
+        "sha256":  "70e9ed4656132bf185009cb47db521fdeece0b1f4d464a73cb9d0bd04fe3bda5"
+    },
+    {
+        "path":  "Game/Assets/DefaultVolumeProfile.asset.meta",
+        "bytes":  189,
+        "sha256":  "abba5d5e63244125876fbcfc1628649f89c9dddb4b7c35435bee222534376065"
+    },
+    {
+        "path":  "Game/Assets/UniversalRenderPipelineGlobalSettings.asset",
+        "bytes":  25441,
+        "sha256":  "4f0e8e6c2bfff260ad7c27288a032f8184b1fd9e856b0904791a0bc2264ea7cf"
+    },
+    {
+        "path":  "Game/Assets/UniversalRenderPipelineGlobalSettings.asset.meta",
+        "bytes":  189,
+        "sha256":  "d19c235fcc63218b0657bad2cd2b5308a4d0db1e2a3b7cf163531b03fd399a9a"
+    },
+    {
+        "path":  "Game/Packages/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/Packages/manifest.json",
+        "bytes":  199,
+        "sha256":  "7c92b2771857f8449add27916fb88f7366ada2cf76fceaaaa85899c1bfe2c410"
+    },
+    {
+        "path":  "Game/Packages/packages-lock.json",
+        "bytes":  5604,
+        "sha256":  "2ff23a1e227df10616b04a28bd692282054f4e52ea25ad2cbe3a9688c5eb61fe"
+    },
+    {
+        "path":  "Game/ProjectSettings/.gitkeep",
+        "bytes":  0,
+        "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+        "path":  "Game/ProjectSettings/AudioManager.asset",
+        "bytes":  523,
+        "sha256":  "9543c41dbfc7d3951217c4dd9481ed026eb8e529b85ecf4463969a0fea747729"
+    },
+    {
+        "path":  "Game/ProjectSettings/ClusterInputManager.asset",
+        "bytes":  114,
+        "sha256":  "40e65dd214bf254955d2c8829ca8ce2130fd3510485560ce012e9a1ddd93e623"
+    },
+    {
+        "path":  "Game/ProjectSettings/DynamicsManager.asset",
+        "bytes":  1574,
+        "sha256":  "d102dd312ef330f5e5ca255c070fb34f68f59ec633d1e9fd67e2f2f6f88f66c8"
+    },
+    {
+        "path":  "Game/ProjectSettings/EditorBuildSettings.asset",
+        "bytes":  323,
+        "sha256":  "de3ccbe2345089bdcc9e249f8870f2540e973c3dcb1b40cac6e0b34ccee503d3"
+    },
+    {
+        "path":  "Game/ProjectSettings/EditorSettings.asset",
+        "bytes":  1603,
+        "sha256":  "4a87c54b3541c7bd242aad68c3fc28661083db1117ec56149694ee592156415e"
+    },
+    {
+        "path":  "Game/ProjectSettings/GraphicsSettings.asset",
+        "bytes":  2559,
+        "sha256":  "dc275077487fdfa206a1940c4a0c065f6f94593247b5d137739bbe1d7c01ffbd"
+    },
+    {
+        "path":  "Game/ProjectSettings/InputManager.asset",
+        "bytes":  9754,
+        "sha256":  "60c83ae48e29a782141f99032eb38e803d18475124ff5224fbd1fd81b233f051"
+    },
+    {
+        "path":  "Game/ProjectSettings/MemorySettings.asset",
+        "bytes":  1192,
+        "sha256":  "1e8379a461b10ae09f3f696911088c16875d63e87ed5f2d95df9e1892703f9fd"
+    },
+    {
+        "path":  "Game/ProjectSettings/MultiplayerManager.asset",
+        "bytes":  232,
+        "sha256":  "ce4075d7a7dd8ac7ffe55de2427692c63f90dae398208bd80cec0f27cbe09f4b"
+    },
+    {
+        "path":  "Game/ProjectSettings/NavMeshAreas.asset",
+        "bytes":  1361,
+        "sha256":  "7ebbf8f53b8033104e1878b95ca07a28d0954092d81c220f14196a42f651e658"
+    },
+    {
+        "path":  "Game/ProjectSettings/Physics2DSettings.asset",
+        "bytes":  1862,
+        "sha256":  "1cfc0c8fbceec604fd7cd2a06c04ff05dddee6335b75c92b0f5715ad80ba9490"
+    },
+    {
+        "path":  "Game/ProjectSettings/PresetManager.asset",
+        "bytes":  146,
+        "sha256":  "29c125923fe6e29f90190d4fce1c82d660e7051546e2c9d02908d18c9cf2436c"
+    },
+    {
+        "path":  "Game/ProjectSettings/ProjectSettings.asset",
+        "bytes":  20362,
+        "sha256":  "cb1fc47a6f3e3100ad02b42b158614ddbb2c99685c5e367ecf6b053119d515d1"
+    },
+    {
+        "path":  "Game/ProjectSettings/ProjectVersion.txt",
+        "bytes":  85,
+        "sha256":  "4b4da11ed5c64178395a0d9608426c71cbde17a006c5bc42e752ffdb4bae7540"
+    },
+    {
+        "path":  "Game/ProjectSettings/QualitySettings.asset",
+        "bytes":  9802,
+        "sha256":  "f1f893b1be47ad2442f58338dd7c860dc1986bb317e2f5bb31084454ffabbf4c"
+    },
+    {
+        "path":  "Game/ProjectSettings/ShaderGraphSettings.asset",
+        "bytes":  633,
+        "sha256":  "6fead5a816c4eed70f224d5472340ecf1ea0b4de4f87d5926bb17fa10ffb3dc9"
+    },
+    {
+        "path":  "Game/ProjectSettings/TagManager.asset",
+        "bytes":  411,
+        "sha256":  "da4b5eefc927f8b91bcf9e56a186d2b852f49d9cbe91d466638d26c79d6a83ce"
+    },
+    {
+        "path":  "Game/ProjectSettings/TimeManager.asset",
+        "bytes":  305,
+        "sha256":  "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+    },
+    {
+        "path":  "Game/ProjectSettings/UnityConnectSettings.asset",
+        "bytes":  1063,
+        "sha256":  "11251dae0356b6f43dd2c67bb511f6b7ecda4e5de425186bba3297e6f3dc1c6f"
+    },
+    {
+        "path":  "Game/ProjectSettings/VersionControlSettings.asset",
+        "bytes":  172,
+        "sha256":  "e199cdfa6a8f2bf33cfd47e549198f13e3eb2a5099e908fdb4e0f14d939ccc6b"
+    },
+    {
+        "path":  "Game/ProjectSettings/VFXManager.asset",
+        "bytes":  525,
+        "sha256":  "2973a6af930e142f62cde00076beda8a3cc3a66d9bfcde7a58ba7d4be2251c26"
+    },
+    {
+        "path":  "Game/README.md",
+        "bytes":  3073,
+        "sha256":  "14652d319fdf7db86a89f3c514e02dd87ad5e3c8076675f9e78fcb6d1fb4a313"
+    },
+    {
+        "path":  "LICENSE.md",
+        "bytes":  747,
+        "sha256":  "6f82a2798f3c734c9b5cea65e6dad178129574ab6e61c97fba6c40c03f49186a"
+    },
+    {
+        "path":  "README.md",
+        "bytes":  6987,
+        "sha256":  "b901211731ccf06dbfdde78019aa886d67351917b7c66a7bd548a7db2e49821a"
+    },
+    {
+        "path":  "references/approved/characters/CHR_00_Player_Identity_Lock_v002_FINAL.png",
+        "bytes":  2949592,
+        "sha256":  "0004044cde346ec3eb9b379230cade2dda57e54725d61a606c1c8d6014bbd6b9"
+    },
+    {
+        "path":  "references/approved/characters/CHR_00_Player_Turnaround_v001_FINAL.png",
+        "bytes":  2096375,
+        "sha256":  "8a852d77296ebf39cb3cf81c51d931d141dff63f358182ab5638bbbd4329d214"
+    },
+    {
+        "path":  "references/approved/characters/CHR_01_First_Ally_Identity_v001_FINAL.png",
+        "bytes":  1943223,
+        "sha256":  "6bdb6564de2174ac91a5ca3a42f6d6fd5466a255dc60423e0f5e3e9b5cb6e7b9"
+    },
+    {
+        "path":  "references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png",
+        "bytes":  2274503,
+        "sha256":  "cb98cdac3ce4cd92259872e69828bba4b5ae73f0f3512398db205a4eb225e648"
+    },
+    {
+        "path":  "references/approved/gameplay/FIN_01_Conference_Table_Team_Finisher_v003_FINAL.png",
+        "bytes":  2465163,
+        "sha256":  "00b67f037f567a3c4947cebfe6d0c6cc04e069c6aa7f4f3257fca8c98d5ec53c"
+    },
+    {
+        "path":  "references/approved/gameplay/PGT_01_Gameplay_Camera_v002_FINAL.png",
+        "bytes":  2370613,
+        "sha256":  "603a423d98af61f2c22e363c7431375185d4060c0ec68cfeb8a4146d4f295f87"
+    },
+    {
+        "path":  "references/approved/gameplay/PGT_02_Chair_Redirect_Core_Loop_v010_FINAL.png",
+        "bytes":  2522525,
+        "sha256":  "9e7154afbf63eb7d82accdb61157fc437c6dfc83ccdf0be4528ca53dbcd6ad93"
+    },
+    {
+        "path":  "references/approved/gameplay/PGT_03_Chain_Reaction_Aftermath_v003_FINAL.png",
+        "bytes":  2456623,
+        "sha256":  "1ada60f305cdc1756eee30bf85950a0ef3b31b5352060c45512a09c4d8d0d86d"
+    },
+    {
+        "path":  "references/approved/lighting/LGT_01_Night_Archive_Lighting_v001_FINAL.png",
+        "bytes":  2038222,
+        "sha256":  "aa165a79d06eec48e92861fe09431ff8180e0939f7e2f4bee46812126e808e12"
+    },
+    {
+        "path":  "references/approved/README.md",
+        "bytes":  1102,
+        "sha256":  "a175287a711df09e3d744ad0cf892295b0b129a0f52f375c3e50b8c2171c4f02"
+    },
+    {
+        "path":  "references/archive/CHR_00_Player_Identity_Lock_v001.png",
+        "bytes":  2915523,
+        "sha256":  "e949a5496e34ed1cd8d8fe0d7cc624cedd34c813f365aa3deeccb512f4231800"
+    },
+    {
+        "path":  "references/archive/KEYART_Exploration_Office_Chaos_A.png",
+        "bytes":  2333160,
+        "sha256":  "b5b9fd1550ea53e59c4816f26d373d1c83365bc4e81de1f75d17927cc5c866c9"
+    },
+    {
+        "path":  "references/archive/KEYART_Exploration_Office_Chaos_B.png",
+        "bytes":  2447390,
+        "sha256":  "3165adf35754a02b1ec7f76db69eac8848f8ba41fefb82be318ed4135a7ff904"
+    },
+    {
+        "path":  "references/exploration/EXP_01_Cinematic_Key_Art.png",
+        "bytes":  3529048,
+        "sha256":  "374855b69d8ea7d33668dcd804a01cc7f50efe86b717ddeaa8f29506f2bc2755"
+    },
+    {
+        "path":  "references/exploration/EXP_02_Graphic_Comic.png",
+        "bytes":  4160196,
+        "sha256":  "de8e184daba5ea1a3bc97711d53fd6fa4cb07c2cff97138790c864a35aafaeae"
+    },
+    {
+        "path":  "references/exploration/EXP_03_Painterly_Concept.png",
+        "bytes":  3362512,
+        "sha256":  "fcc985647e1d37a7a3d53214c1d7422e916407d09e3c4105a14f2d1fce7c39e7"
+    },
+    {
+        "path":  "references/exploration/EXP_04_Isometric_Gameplay.png",
+        "bytes":  3291348,
+        "sha256":  "74053ec592defdb2b47b6749dd8a5aa98c20ee2b7f8ba90b3d18d736156fd868"
+    },
+    {
+        "path":  "references/exploration/EXP_05_Character_Team_Lineup.png",
+        "bytes":  3185725,
+        "sha256":  "24da2c4120736224a5089ea06442bcfd7f3042630bccd2e9182ac97d381ce2cb"
+    },
+    {
+        "path":  "references/exploration/EXP_06_Night_Fluorescent_Noir.png",
+        "bytes":  3243405,
+        "sha256":  "a45c7f08e20b910aa0aedf3f64498ecc15a3393f7ccca857b47d30113be083bb"
+    },
+    {
+        "path":  "references/exploration/EXP_07_Bright_Corporate_Satire.png",
+        "bytes":  3207166,
+        "sha256":  "310eb8f8c40716502d947595ea57f43d9ddf6c9e8276c8abf0fcb7afbfccb6a6"
+    },
+    {
+        "path":  "references/exploration/EXP_08_Copyroom_Paper_Storm.png",
+        "bytes":  3472821,
+        "sha256":  "43111eebf7e08ce77cb1216fcc25a1f711d175e5b3da2e6b3f7a8b7debc3c0b4"
+    },
+    {
+        "path":  "references/exploration/EXP_09_Chair_Redirect_Low_Angle.png",
+        "bytes":  3379140,
+        "sha256":  "af54acf6fb13e6eb56b7ee9c0751b8a97bbaff18eaa00ad2b4f005348dc4e380"
+    },
+    {
+        "path":  "references/exploration/EXP_10_Conference_Table_Finisher.png",
+        "bytes":  3466980,
+        "sha256":  "425c220779c9b87e57c425defeea2f610e5abba056c11c9079377df581495aec"
+    },
+    {
+        "path":  "references/exploration/README.md",
+        "bytes":  915,
+        "sha256":  "27c58e7d694408a4d879aaf392357378015d3e95d1a3eb22ab7d08fae090ea47"
+    },
+    {
+        "path":  "references/README.md",
+        "bytes":  325,
+        "sha256":  "4b2443dd92810622a88e71f4c623f6e82c74ecc22c4726443066ee83b7bc0564"
+    },
+    {
+        "path":  "tasks/README.md",
+        "bytes":  249,
+        "sha256":  "d14f48af5bbcace86cfc61a0b9540335b3b3ed7881e0414339ce9bfd4069b9de"
+    },
+    {
+        "path":  "tasks/TASK_TEMPLATE.md",
+        "bytes":  871,
+        "sha256":  "0d36997875070b48b6a7686f3a3051a2986d1c58adaf3c7b5bf7ce3247d5394a"
+    },
+    {
+        "path":  "tools/contest/Build-WebDevelopment.ps1",
+        "bytes":  1304,
+        "sha256":  "fc93253ba9d62b680d8d7b6b21ccc478467f6d582bc5b12e803b42d52c85d524"
+    },
+    {
+        "path":  "tools/contest/ContestCommon.ps1",
+        "bytes":  2622,
+        "sha256":  "1dcd6cff1096d3f62f0f892724c2a529a43bbd705264b9a90da646f164b3247d"
+    },
+    {
+        "path":  "tools/contest/Run-EditModeTests.ps1",
+        "bytes":  870,
+        "sha256":  "5eee392727d21f16dc29d95eb64f52fd261901759d53b9c531f4bc13cfe2a06e"
+    },
+    {
+        "path":  "tools/contest/Run-PlayModeTests.ps1",
+        "bytes":  870,
+        "sha256":  "2f447852d278eb33258995dee745b074e1f1c76567e975437b257acb07737f51"
+    },
+    {
+        "path":  "tools/contest/Start-WebServer.ps1",
+        "bytes":  1411,
+        "sha256":  "3c8b76a8636ad567cfff2d483d9283b31adc9888c06eb6f69855bf810e480deb"
+    },
+    {
+        "path":  "tools/contest/Verify-WebRelease.ps1",
+        "bytes":  2102,
+        "sha256":  "bea819c1fd0b73dc611b110133be77135d123567927b4e4a8bf925ff5b515a49"
     }
   ]
 }
