@@ -475,11 +475,11 @@
   "contest_execution_baseline_sha": "28b7f70c4b6299159afe5b99ea7b98d1e5399352",
   "contest_branch": "contest/game-builders-2026",
   "contest_gate_state": "OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE",
-  "contest_c0_status": "ENVIRONMENT BLOCKED / LOCAL BUILD, HTTP AND 27 TESTS PASS / CHROME NOT RUNNING / EDGE LOCAL URL BLOCKED BY ADMIN-POLICY VERIFICATION / REMOTE CONTEST REFS PUSHED / C1 NOT AUTHORIZED",
+  "contest_c0_status": "QUALIFICATION IN PROGRESS / TUNED LOCAL BUILD, HTTP AND 27 TESTS PASS / HUMAN OWNER MANUAL BROWSER PLAYTEST REPORTED EXCESSIVE LOOK SENSITIVITY AND VERTICAL FREEDOM / CONTEST-SCENE CAMERA OVERRIDES 0.25 AND -12 TO 35 REBUILT / EXACT CHROME-EDGE ACCEPTANCE AND OWNER RETEST PENDING / REMOTE CONTEST REFS PUSHED / C1 NOT AUTHORIZED",
   "contest_c0_web_build_result": "SUCCEEDED / UNITY WARNINGS 0 / UNITY ERRORS 0 / 113596991 BYTES REPORTED",
   "contest_c0_test_result": "EDITMODE 23/23 PASS / PLAYMODE 4/4 PASS / TOTAL 27/27 PASS",
-  "contest_c0_http_result": "19/19 FILES HTTP 200 / 113598745 BYTES / SHA-256 a24d1dd102377ba01cca858a7134439d2d2f54f1fa8994b609f9abb1f88724dd",
-  "contest_c0_browser_result": "RETRY INCOMPLETE / EXTENSION 1.2.27236.6274 AND NATIVE HOST VALID / CHROME NOT RUNNING / EDGE CONNECTED BUT LOCAL URL ADMIN-POLICY VERIFICATION UNAVAILABLE",
+  "contest_c0_http_result": "19/19 FILES HTTP 200 / 113598745 BYTES / SHA-256 21cd8725392e23d2d1c3277978561d50738f9a63f130a7debfca87735601efba",
+  "contest_c0_browser_result": "RETRY INCOMPLETE / HUMAN OWNER MANUAL BROWSER PLAYTEST REACHED LIVE CAMERA LOOK / CONTEST SCENE RETUNED TO LOOK SENSITIVITY 0.25 AND PITCH -12 TO 35 / OWNER RETEST AND EXACT CHROME-EDGE ACCEPTANCE PENDING",
   "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED / CONTEST BRANCH CURRENT THROUGH CONTAINING PUBLICATION-EVIDENCE COMMIT / BOTH ART BRANCHES AT VERIFIED C0 IMPLEMENTATION BASELINE 73d886eb2b6ccc0061e6f484afa663402418ec59 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
   "contest_start_tags": [
     "gb2026-prechallenge",
@@ -520,8 +520,8 @@
     },
     {
         "path":  "AGENTS.md",
-        "bytes":  41827,
-        "sha256":  "0eb602d9a17ec8d418051927deb73059537619b8c55161ffb54520a9ffcd503d"
+        "bytes":  42001,
+        "sha256":  "415fd6cb9feaf48f2fa6dbfbb148f9b986f4c28d15bd17bfcdd8e0c71b15292b"
     },
     {
         "path":  "ArtSource/Audio/DELIVERY.md",
@@ -870,8 +870,8 @@
     },
     {
         "path":  "CHANGELOG.md",
-        "bytes":  31635,
-        "sha256":  "ef6733d1741dc625220b176bacc66a9835023105efbc7457d9ea62a3c31ac971"
+        "bytes":  32294,
+        "sha256":  "7908ce0f0932c8c71508ce3e911df08de573e64e7b87d1178cd60608d4489d20"
     },
     {
         "path":  "docs/00_project/CHANGE_CONTROL.md",
@@ -900,8 +900,8 @@
     },
     {
         "path":  "docs/00_project/DESIGN_STATUS.md",
-        "bytes":  34790,
-        "sha256":  "7be747c873ea36491d88cf0137a76e74732fe61facd159dbf8c6505265e0540b"
+        "bytes":  34973,
+        "sha256":  "b5dd1aaa14d055f8e6cece2808316e1c393338630be78c359d154f92eff857cb"
     },
     {
         "path":  "docs/00_project/GLOSSARY.md",
@@ -2240,8 +2240,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity",
-        "bytes":  73177,
-        "sha256":  "f5ca29a3a477a3c7d1644a8a930d930746aed4a49b4b9aadb866c68acf9dacda"
+        "bytes":  73714,
+        "sha256":  "781ec63139f37bea58cb95a94c3a61cffe818e1a8e0a5b53b9912c84ced8d784"
     },
     {
         "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity.meta",

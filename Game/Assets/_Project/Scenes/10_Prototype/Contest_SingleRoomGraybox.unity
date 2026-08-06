@@ -2437,9 +2437,21 @@ PrefabInstance:
       value:
       objectReference: {fileID: 1121842303}
     - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
+      propertyPath: maximumPitch
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
+      propertyPath: minimumPitch
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
       propertyPath: playerTarget
       value:
       objectReference: {fileID: 1121842304}
+    - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
+      propertyPath: lookSensitivity
+      value: 0.25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
