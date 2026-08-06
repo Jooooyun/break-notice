@@ -125,18 +125,50 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             Assert.That(cameraRig.IsAiming, Is.True);
             Assert.That(cameraRig.CurrentDistance, Is.LessThan(normalDistance));
+            Assert.That(cameraRig.AimBlend, Is.GreaterThan(0f).And.LessThan(1f));
             Assert.That(player.transform.position.x, Is.EqualTo(initialPosition.x).Within(0.001f));
             Assert.That(player.transform.position.z, Is.EqualTo(initialPosition.z).Within(0.001f));
             Assert.That(locomotion.MoveSpeed, Is.EqualTo(initialMoveSpeed));
             Assert.That(locomotion.RotationResponse, Is.EqualTo(initialRotationResponse));
             Assert.That(locomotion.Gravity, Is.EqualTo(initialGravity));
 
+            yield return new WaitForSecondsRealtime(0.25f);
+            Assert.That(cameraRig.AimBlend, Is.EqualTo(1f).Within(0.001f));
+
             QueueGamepadState(default);
             yield return null;
             yield return null;
 
             Assert.That(cameraRig.IsAiming, Is.False);
+            Assert.That(cameraRig.AimBlend, Is.GreaterThan(0f).And.LessThan(1f));
+
+            yield return new WaitForSecondsRealtime(0.25f);
+            Assert.That(cameraRig.AimBlend, Is.EqualTo(0f).Within(0.001f));
             Assert.That(cameraRig.CurrentDistance, Is.EqualTo(normalDistance).Within(0.001f));
+        }
+
+        [UnityTest]
+        public IEnumerator RapidAimToggle_KeepsPresentationContinuousAndBounded()
+        {
+            float normalDistance = cameraRig.CurrentDistance;
+            SerializedObject cameraRigSettings = new SerializedObject(cameraRig);
+            float aimDistance = cameraRigSettings.FindProperty("aimDistance").floatValue;
+
+            for (int toggle = 0; toggle < 10; toggle++)
+            {
+                bool aiming = toggle % 2 == 0;
+                QueueGamepadState(aiming
+                    ? new GamepadState { leftTrigger = 1f }
+                    : default);
+                yield return null;
+                yield return null;
+
+                Assert.That(cameraRig.IsAiming, Is.EqualTo(aiming));
+                Assert.That(cameraRig.AimBlend, Is.InRange(0f, 1f));
+                Assert.That(cameraRig.CurrentDistance, Is.InRange(aimDistance, normalDistance));
+            }
+
+            Assert.That(cameraRig.AimBlend, Is.LessThan(1f));
         }
 
         [UnityTest]

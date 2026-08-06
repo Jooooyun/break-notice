@@ -58,11 +58,15 @@ namespace BreakNotice.Presentation
         [SerializeField]
         private float aimFieldOfView = 55f;
 
+        [SerializeField, Min(0.01f)]
+        private float aimTransitionDuration = 0.2f;
+
         [SerializeField]
         private float cameraCollisionRadius = 0.25f;
 
         private float yaw;
         private float pitch = 12f;
+        private float aimBlend;
 
         public Camera OutputCamera => outputCamera;
 
@@ -71,6 +75,8 @@ namespace BreakNotice.Presentation
         public float Pitch => pitch;
 
         public bool IsAiming { get; private set; }
+
+        public float AimBlend => aimBlend;
 
         public float CurrentDistance => thirdPersonFollow != null
             ? thirdPersonFollow.CameraDistance
@@ -101,7 +107,13 @@ namespace BreakNotice.Presentation
             orbitTarget.rotation = Quaternion.Euler(pitch, yaw, 0f);
 
             IsAiming = logicalInput != null && logicalInput.Snapshot.Aim;
-            ApplyPresentation(IsAiming);
+            float transitionDuration = Mathf.Max(aimTransitionDuration, 0.01f);
+            float targetAimBlend = IsAiming ? 1f : 0f;
+            aimBlend = Mathf.MoveTowards(
+                aimBlend,
+                targetAimBlend,
+                Time.unscaledDeltaTime / transitionDuration);
+            ApplyPresentation(aimBlend);
         }
 
         public void Configure(Transform target, InputSystemLogicalInputAdapter input)
@@ -136,16 +148,22 @@ namespace BreakNotice.Presentation
                 thirdPersonFollow.AvoidObstacles = obstacleSettings;
             }
 
-            ApplyPresentation(IsAiming);
+            aimBlend = IsAiming ? 1f : 0f;
+            ApplyPresentation(aimBlend);
         }
 
-        private void ApplyPresentation(bool aiming)
+        private void ApplyPresentation(float blend)
         {
+            float clampedBlend = Mathf.Clamp01(blend);
+
             if (thirdPersonFollow != null)
             {
-                thirdPersonFollow.CameraDistance = aiming ? aimDistance : normalDistance;
+                thirdPersonFollow.CameraDistance = Mathf.Lerp(
+                    normalDistance,
+                    aimDistance,
+                    clampedBlend);
                 thirdPersonFollow.ShoulderOffset = new Vector3(
-                    aiming ? aimShoulderOffset : normalShoulderOffset,
+                    Mathf.Lerp(normalShoulderOffset, aimShoulderOffset, clampedBlend),
                     shoulderHeight,
                     0f);
             }
@@ -153,7 +171,10 @@ namespace BreakNotice.Presentation
             if (virtualCamera != null)
             {
                 LensSettings lens = virtualCamera.Lens;
-                lens.FieldOfView = aiming ? aimFieldOfView : normalFieldOfView;
+                lens.FieldOfView = Mathf.Lerp(
+                    normalFieldOfView,
+                    aimFieldOfView,
+                    clampedBlend);
                 virtualCamera.Lens = lens;
             }
         }
