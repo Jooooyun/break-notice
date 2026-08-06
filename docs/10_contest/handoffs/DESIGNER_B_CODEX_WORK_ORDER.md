@@ -9,6 +9,18 @@
 
 # 0. 최상위 명령
 
+## Human Owner Direct Production Start
+
+- Authority baseline: `fc361a4dc42492e9b997ee42ac8bab3a6fdec2d2`
+- Authorized branch: `art/environment-ui-vfx`
+- Active package: `B1 — Office Chair editable 3D blockout, anchor and silhouette review batch`
+- Start: `IMMEDIATE / DO NOT WAIT FOR C0 OR C1`
+
+계획·조사·`DELIVERY.md` 수정만 하고 종료하지 않는다. B1의 완료 증거에는
+실제로 다시 열고 편집할 수 있는 3D Blockout source와 그 source에서 만든
+세 Preview가 반드시 함께 있어야 한다. Human Owner review는 Production
+Mesh/UV/Texture 진입 Gate이며 Blockout 제작 시작 Gate가 아니다.
+
 이 저장소에서 네 역할은 Gameplay Code나 Scene을 구현하는 것이 아니다.
 
 네 역할은 Designer B를 보조해 다음 Source Art Delivery를 순서대로 만드는 것이다.
@@ -103,7 +115,7 @@ Authority:
 2. Approved Specs/ADRs
 3. tracked `references/approved/` FINAL
 4. Contest delivery 문서
-5. AI suggestion
+5. non-generative automation validation
 
 ---
 
@@ -169,20 +181,21 @@ references/approved/equipment/GEAR_01_Cargo_Strapping_System_v002_FINAL.png
 
 ---
 
-# 5. AI 활용 규칙
+# 5. AI·자동화 도구 사용 경계
 
-AI를 다음에 활용할 수 있다.
+현재 authority에서 생성형 AI가 만든 Concept, Base Mesh, Texture, UI,
+VFX, Audio 또는 Marketing image를 새 Delivery에 포함하는 것은 금지한다.
+별도의 Human Owner 직접 승인이 있을 때만 해당 exact tool·output에 한해
+재검토할 수 있다.
 
-- concept/blockout
-- base mesh
-- retopology support
-- texture draft
-- material variation
-- UI layout variation
-- VFX flipbook draft
-- marketing composition
+현재 허용되는 자동화 보조는 다음 non-generative 검사뿐이다.
 
-반드시 사람이 검사:
+- topology·normal·UV와 texture seam 오류 분석
+- scale·pivot·axis와 export validation
+- naming, hash, budget와 delivery metadata 검증
+
+실제 geometry, texture, UI, VFX와 audio는 Designer가 editable source에서
+직접 제작하고 반드시 검사한다.
 
 - object scale
 - gameplay function
@@ -207,7 +220,9 @@ Human Corrections:
 Third-party IP Check:
 ```
 
-정확한 AI 도구를 모르면 추측하지 않는다.
+생성형 AI를 사용하지 않았다면 위 기록은 `None / not authorized`로
+명시한다. Human Owner의 별도 명시 승인 없이 AI 결과물을 생성하거나
+납품하지 않는다.
 
 ---
 
@@ -238,11 +253,16 @@ PGT02와 GEAR01 기준으로 실제 물리 Object와 Strap Anchor로 읽히는 O
 ## Required Output
 
 ```text
+ArtSource/Props/PRP_OfficeChair/Source/PRP_OfficeChair_A_Blockout_v001.blend 또는 동등한 editable DCC source
 ArtSource/Props/PRP_OfficeChair/Preview/PRP_OfficeChair_A_Blockout_v001.png
 ArtSource/Props/PRP_OfficeChair/Preview/PRP_OfficeChair_A_AnchorDetail_v001.png
 ArtSource/Props/PRP_OfficeChair/Preview/PRP_OfficeChair_A_SilhouetteGameplayView_v001.png
 ArtSource/Props/PRP_OfficeChair/DELIVERY.md
 ```
+
+`DELIVERY.md`는 `WORK IN PROGRESS`로 기록한다. 개별 binary는 `25 MiB`
+미만으로 정리한다. 초과 파일은 Stage하지 않고 Git LFS 결정을 요청한다.
+실제 editable source가 없으면 B1은 실패다.
 
 ## Review
 
@@ -254,7 +274,8 @@ ArtSource/Props/PRP_OfficeChair/DELIVERY.md
 - not racing chair
 - not sci-fi
 
-Human Owner가 Anchor와 Scale을 승인하기 전 Production Mesh로 넘어가지 않는다.
+Human Owner가 Anchor와 Scale을 승인하기 전 Production Mesh/UV/Texture로
+넘어가지 않는다. 이 Stop Boundary는 실제 Blockout 제작을 막지 않는다.
 
 Commit:
 
@@ -378,7 +399,7 @@ art: deliver drawer and copier gameplay props v001
 
 Create modular assets only. Do not edit Scene or define final layout.
 
-P0:
+Architecture / Fixed Fixture — Exactly 7:
 
 ```text
 ENV_Wall_Straight_A_v001
@@ -388,6 +409,11 @@ ENV_Floor_Module_A_v001
 ENV_Ceiling_Module_A_v001
 ENV_Column_A_v001
 ENV_FluorescentLight_A_v001
+```
+
+Furniture / Fixed Non-Interactive — Exactly 1:
+
+```text
 ENV_FixedDesk_A_v001
 ```
 
@@ -570,7 +596,7 @@ marketing: deliver contest thumbnail and video source v001
 [ ] preview
 [ ] DELIVERY.md
 [ ] approved references recorded
-[ ] AI use recorded
+[ ] generative AI status recorded as None / not authorized
 [ ] ownership/license recorded
 [ ] naming valid
 [ ] scale/pivot/axis documented
@@ -598,7 +624,7 @@ PR body:
 - Approved references
 - Source/export list
 - Preview
-- AI and human corrections
+- generative AI status (`None / not authorized`) and human corrections
 - geometry/material/texture summary
 - license
 - known issues
@@ -620,7 +646,7 @@ DESIGNER B CODEX REPORT
 3. Work Package
 4. Approved References Read
 5. Files Created/Changed
-6. AI Tools Used
+6. Generative AI Tools Used — must be `None / not authorized`
 7. Human Corrections Required/Completed
 8. Geometry/Texture/UI/VFX Summary
 9. Gameplay Readability Check
@@ -657,16 +683,22 @@ ASSET STATUS
 
 1. Git 상태 검증
 2. Approved PGT02/GEAR01/PGT01과 관련 Specs 읽기
-3. `PRP_OfficeChair/DELIVERY.md` 계획 갱신
-4. Chair Blockout Preview
-5. Anchor Detail Preview
-6. Third-person Silhouette Preview
-7. 정확한 파일만 Commit/Push
-8. PR 생성
-9. Mandatory Report
+3. 실제 editable `PRP_OfficeChair_A_Blockout_v001` 3D source 제작
+4. `PRP_OfficeChair/DELIVERY.md`를 `WORK IN PROGRESS`로 갱신
+5. Chair Blockout Preview
+6. Anchor Detail Preview
+7. Third-person Silhouette Preview
+8. 정확한 파일만 Commit/Push
+9. PR 생성
+10. Mandatory Report
 
-동시에 Binder는 Blockout Preview까지만 허용한다.
+B1을 정확한 Commit·Push·PR로 제출한 뒤에만 별도의 Binder batch를 시작할
+수 있다. B1에 Binder 파일을 섞지 않으며, Binder도 editable source 없이
+Preview만 제출하지 않는다.
 
 Human Owner가 Chair Anchor/Scale을 승인하기 전 B2로 넘어가지 않는다.
+
+`DELIVERY.md` 또는 계획 보고만 반환하지 않는다. 실제 editable 3D source와
+세 Preview가 없으면 B1을 완료·전달·검토 준비 상태로 선언하지 않는다.
 
 Begin with B1 now.

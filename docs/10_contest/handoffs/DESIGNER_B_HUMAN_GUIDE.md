@@ -7,6 +7,35 @@
 
 ---
 
+# 0. 즉시 제작 개시 — Human Owner Direct Order
+
+- Authority baseline: `fc361a4dc42492e9b997ee42ac8bab3a6fdec2d2`
+- Start state: `AUTHORIZED / BEGIN SOURCE ART NOW`
+- First exact work package: `B1 — Office Chair editable 3D blockout, anchor and silhouette review batch`
+
+이 작업은 C0 또는 C1 완료를 기다리는 문서 계획 작업이 아니다. 지금 바로
+`ArtSource/Props/PRP_OfficeChair/Source/` 아래에 실제로 다시 열고 편집할
+수 있는 Office Chair 3D Blockout 원본을 만든다. `DELIVERY.md`만
+갱신하거나 2D Preview만 생성한 뒤 완료로 보고하면 안 된다.
+
+첫 검토 batch에는 다음 다섯 종류가 모두 있어야 한다.
+
+```text
+Source/PRP_OfficeChair_A_Blockout_v001.blend 또는 동등한 editable DCC source
+Preview/PRP_OfficeChair_A_Blockout_v001.png
+Preview/PRP_OfficeChair_A_AnchorDetail_v001.png
+Preview/PRP_OfficeChair_A_SilhouetteGameplayView_v001.png
+DELIVERY.md — WORK IN PROGRESS
+```
+
+Human Owner 승인은 Production Mesh, UV와 Texture 제작에 들어가기 전
+필요하다. Blockout 모델링 자체를 시작하기 위한 승인이 아니다. DCC 제작
+도구가 없으면 2D 이미지로 대체하지 말고 즉시 toolchain blocker를 보고한다.
+첫 Blockout batch의 개별 binary는 `25 MiB` 미만으로 정리한다. 초과
+파일은 Stage하지 말고 Git LFS 결정을 요청한다.
+
+---
+
 # 1. 네 역할 한 줄
 
 BREAK NOTICE 공모전판의 한 방짜리 사무실에서 플레이어가 **무엇을 집고, 무엇을 밀고, 어디로 나가야 하는지 즉시 이해하도록** 환경·프롭·UI·이펙트를 만든다.
@@ -309,7 +338,7 @@ Runtime 역할:
 
 공모전 한 방에 필요한 최소 Production Kit부터 만든다.
 
-## Architecture / Fixed Fixture
+## Architecture / Fixed Fixture — Exactly 7
 
 ```text
 ENV_Wall_Straight_A_v001
@@ -319,6 +348,11 @@ ENV_Floor_Module_A_v001
 ENV_Ceiling_Module_A_v001
 ENV_Column_A_v001
 ENV_FluorescentLight_A_v001
+```
+
+## Furniture / Fixed Non-Interactive — Exactly 1
+
+```text
 ENV_FixedDesk_A_v001
 ```
 
@@ -410,7 +444,7 @@ Audio를 맡는 경우:
 - 직접 제작 또는 정확한 사용 허가 필요
 - WAV 48kHz 권장
 - `ArtSource/Audio/Licenses/`에 증거 저장
-- AI Audio 사용 시 도구·모델·라이선스·사람 수정 기록
+- 생성형 AI Audio는 현재 미승인이므로 사용하지 않음
 
 Marketing:
 
@@ -445,19 +479,20 @@ Marketing:
 
 ---
 
-# 16. AI 사용 규칙
+# 16. AI·자동화 도구 사용 경계
 
-AI 사용 가능:
+현재 권위에서는 생성형 AI가 만든 Concept, Base Mesh, Texture, UI,
+VFX, Audio 또는 Marketing image를 새 Delivery에 포함하는 것은 금지한다.
+별도의 Human Owner 직접 승인이 있을 때만 해당 exact tool·output에 한해
+재검토할 수 있다.
 
-- Concept
-- Base Mesh
-- Retopology 보조
-- Texture 초안
-- UI Variation
-- VFX Flipbook 초안
-- Marketing Layout
+현재 허용되는 자동화 보조는 다음 non-generative 검사뿐이다.
 
-사람이 반드시 수정·검수:
+- topology·normal·UV와 texture seam 오류 분석
+- scale·pivot·axis와 export validation
+- naming, hash, budget와 delivery metadata 검증
+
+Designer가 editable DCC source에서 직접 제작하고 반드시 검수:
 
 - Perspective·Scale
 - Topology·UV·Normal
@@ -469,7 +504,8 @@ AI 사용 가능:
 - UI 가독성
 - 제3자 IP
 
-각 `DELIVERY.md`에 기록:
+각 `DELIVERY.md`에는 아래 항목을 유지하고, 생성형 AI를 사용하지 않았다면
+`None / not authorized`로 명시한다.
 
 ```text
 AI Tool / Model:
@@ -480,7 +516,8 @@ Human Corrections:
 Third-party IP Check:
 ```
 
-AI 이미지·모델을 승인 레퍼런스보다 우선하지 않는다.
+Human Owner의 별도 명시 승인 없이 AI 이미지·모델·오디오를 생성하거나
+납품하지 않는다.
 
 ---
 
@@ -502,7 +539,7 @@ AI 이미지·모델을 승인 레퍼런스보다 우선하지 않는다.
 - Texture Resolution
 - Scale/Pivot/Axis
 - Known Issues
-- AI 사용 기록
+- 생성형 AI 사용 상태 — 현재 `None / not authorized`
 
 UI/VFX/Audio/Marketing도 원본·Export·라이선스를 모두 남긴다.
 
@@ -534,7 +571,7 @@ PR 본문:
 - Asset IDs
 - 승인 레퍼런스
 - Source/Export/Texture 목록
-- AI 사용
+- 생성형 AI 사용 상태 — 현재 `None / not authorized`
 - Budget
 - Known Issues
 - Runtime Integration 요청
@@ -551,7 +588,9 @@ PR 본문:
 
 ## Step 2
 
-Office Chair Blockout을 만든다.
+`Source/PRP_OfficeChair_A_Blockout_v001.blend` 또는 동등한 editable DCC
+source로 Office Chair Blockout을 실제 제작하고, `DELIVERY.md` 상태를
+`WORK IN PROGRESS`로 갱신한다.
 
 첫 Preview:
 
@@ -563,15 +602,15 @@ Preview/PRP_OfficeChair_A_SilhouetteGameplayView_v001.png
 
 ## Step 3
 
-동시에 File Binder Low-poly Blockout을 만든다.
-
-```text
-Preview/PRP_FileBinder_A_Blockout_v001.png
-```
+B1 Chair batch를 정확한 Commit·Push·PR로 제출한 뒤에만, Human Owner
+review 대기 중 별도의 Binder batch를 시작할 수 있다. B1 Commit이나
+PR에 Binder 파일을 섞지 않는다. Binder도 Preview만 만드는 것이 아니라
+별도의 editable DCC source를 먼저 만든다.
 
 ## Step 4
 
 조윤성이 Chair Anchor와 크기를 승인한 뒤 최종 Mesh/UV/Texture로 들어간다.
+문서 계획만 제출하거나 실제 source 없이 Preview만 제출하면 B1 미완료다.
 
 ---
 
