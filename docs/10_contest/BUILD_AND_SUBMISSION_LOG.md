@@ -39,7 +39,7 @@
 
 | Field | Value |
 |---|---|
-| Source SHA | `d9d74b3cd3c542894eb80ff4a12bcc4d37d68a8f` |
+| Source SHA | `d9d74b3d4dfabc9168c8360033af1756a42b705e` |
 | Build ID | `GB2026-C0-WEB-DEV-003` |
 | Build Target | `Web / Development` |
 | Build Date | `2026-08-06 17:56:16 +09:00` |

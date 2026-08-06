@@ -90,7 +90,7 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   - Chrome: `WebGL load PASS / 1366x768 PASS / 1920x1080 PASS / clean-tab console 0`
   - Edge: `WebGL load PASS / 1366x768 PASS / 1920x1080 PASS / Escape PASS / console 0`
   - Pointer: `AUTOMATION NOT ACCEPTED / extension-driven request returned WrongDocumentError`
-- Commit SHA: `d9d74b3cd3c542894eb80ff4a12bcc4d37d68a8f`
+- Commit SHA: `d9d74b3d4dfabc9168c8360033af1756a42b705e`
 - Actual Result:
   `C0 QUALIFICATION IN PROGRESS / AIM-SMOOTHED BUILD READY FOR HUMAN OWNER RETEST / C1 NOT STARTED`
 - Next:
