@@ -9,6 +9,18 @@
 
 # 0. 최상위 명령
 
+## Human Owner Direct Production Start
+
+- Authority baseline: `fc361a4dc42492e9b997ee42ac8bab3a6fdec2d2`
+- Authorized branch: `art/characters-animation`
+- Active package: `A1 — CHR01 editable 3D blockout and pose review batch`
+- Start: `IMMEDIATE / DO NOT WAIT FOR C0 OR C1`
+
+계획·조사·`DELIVERY.md` 수정만 하고 종료하지 않는다. A1의 완료 증거에는
+실제로 다시 열고 편집할 수 있는 3D Blockout source와 그 source에서 만든
+세 Preview가 반드시 함께 있어야 한다. Human Owner review는 Final
+Sculpt/Retopology/Rig 진입 Gate이며 Blockout 제작 시작 Gate가 아니다.
+
 이 저장소에서 네 역할은 코드를 구현하는 것이 아니다.
 
 네 역할은 Designer A를 보조해 다음 Runtime-ready Source Art Delivery를 만드는 것이다.
@@ -179,21 +191,20 @@ ENY01 전용 승인 Identity가 없으므로 최종 모델링 전에 Concept Opt
 
 ---
 
-# 5. AI 활용 규칙
+# 5. AI·자동화 도구 사용 경계
 
-Designer A가 사용하는 AI 도구를 작업 가속에 활용할 수 있다.
+현재 authority에서 생성형 AI가 만든 Concept, Base Mesh, Texture, Rig 또는
+Animation을 새 Delivery에 포함하는 것은 금지한다. 별도의 Human Owner
+직접 승인이 있을 때만 해당 exact tool·output에 한해 재검토할 수 있다.
 
-허용:
+현재 허용되는 자동화 보조는 다음 non-generative 검사뿐이다.
 
-- Concept variation
-- Base mesh
-- Retopology 보조
-- UV/texture 초안
-- Rig/weight 오류 분석
-- In-place animation 보조
-- Export validation
+- topology·normal·UV·weight 오류 분석
+- scale/pivot/axis와 export validation
+- naming, hash와 delivery metadata 검증
 
-AI 결과는 자동 승인되지 않는다.
+실제 geometry, texture, rig와 animation은 Designer가 editable DCC
+source에서 직접 제작한다.
 
 반드시 검사:
 
@@ -252,6 +263,7 @@ A1 CHR01 Blockout and Pose Approval
 ## Required Output
 
 ```text
+ArtSource/Characters/CHR01_Ally/Source/CHR01_Ally_Blockout_v001.blend 또는 동등한 editable DCC source
 ArtSource/Characters/CHR01_Ally/Preview/CHR01_Ally_Blockout_v001.png
 ArtSource/Characters/CHR01_Ally/Preview/CHR01_Supply_Binder_Pose_v001.png
 ArtSource/Characters/CHR01_Ally/Preview/CHR01_Push_Chair_Pose_v001.png
@@ -259,18 +271,21 @@ ArtSource/Characters/CHR01_Ally/DELIVERY.md
 ```
 
 `DELIVERY.md`에는 아직 없는 Export를 없는 것으로 정확히 기록한다.
+개별 binary는 `25 MiB` 미만으로 정리한다. 초과 파일은 Stage하지 않고
+Git LFS 결정을 요청한다. 실제 editable source가 없으면 A1은 실패다.
 
 ## Review Points
 
 - CHR00과 구분되는 실루엣
-- 현실적인 현장 책임자 체형
+- 평범하고 현실적인 시설·물류 직원 체형
 - 물체 공급 동작이 마법처럼 보이지 않음
 - Binder 공급과 Chair Feed 포즈가 다름
 - 손·물체 접점이 제작 가능함
 
 ## Stop Boundary
 
-Human Owner가 Blockout과 Pose를 승인하기 전 Final Sculpt/Rig에 들어가지 않는다.
+Human Owner가 Blockout과 Pose를 승인하기 전 Final Sculpt/Retopology/Rig에
+들어가지 않는다. 이 Stop Boundary는 실제 Blockout 제작을 막지 않는다.
 
 ## Commit
 
@@ -581,14 +596,18 @@ ASSET STATUS
 
 1. Git 상태 검증
 2. 권위 문서와 승인 레퍼런스 읽기
-3. `CHR01_Ally/DELIVERY.md` 계획 갱신
-4. Blockout Preview
-5. Binder Supply Pose Preview
-6. Chair Push Pose Preview
-7. 정확한 파일만 Commit/Push
-8. PR 생성
-9. Mandatory Report
+3. 실제 editable `CHR01_Ally_Blockout_v001` 3D source 제작
+4. `CHR01_Ally/DELIVERY.md`를 `WORK IN PROGRESS`로 갱신
+5. Blockout Preview
+6. Binder Supply Pose Preview
+7. Chair Push Pose Preview
+8. 정확한 파일만 Commit/Push
+9. PR 생성
+10. Mandatory Report
 
 Human Owner 승인 전 A2로 넘어가지 않는다.
+
+`DELIVERY.md` 또는 계획 보고만 반환하지 않는다. 실제 editable 3D source와
+세 Preview가 없으면 A1을 완료·전달·검토 준비 상태로 선언하지 않는다.
 
 Begin with A1 now.
