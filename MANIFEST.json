@@ -470,17 +470,17 @@
   "cr0003_path": "docs/00_project/CR-0003-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
   "adr0023_status": "ACCEPTED",
   "adr0023_path": "docs/09_adrs/ADR-0023-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
-  "contest_ticket": "CONTEST-0001 / ACTIVE / C0 ENVIRONMENT BLOCKED",
+  "contest_ticket": "CONTEST-0001 / ACTIVE / C0 QUALIFICATION IN PROGRESS / OWNER AIM-POINTER RETEST PENDING",
   "contest_ticket_path": "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
   "contest_execution_baseline_sha": "28b7f70c4b6299159afe5b99ea7b98d1e5399352",
   "contest_branch": "contest/game-builders-2026",
   "contest_gate_state": "OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE",
-  "contest_c0_status": "QUALIFICATION IN PROGRESS / TUNED LOCAL BUILD, HTTP AND 27 TESTS PASS / HUMAN OWNER MANUAL BROWSER PLAYTEST REPORTED EXCESSIVE LOOK SENSITIVITY AND VERTICAL FREEDOM / CONTEST-SCENE CAMERA OVERRIDES 0.25 AND -12 TO 35 REBUILT / EXACT CHROME-EDGE ACCEPTANCE AND OWNER RETEST PENDING / REMOTE CONTEST REFS PUSHED / C1 NOT AUTHORIZED",
-  "contest_c0_web_build_result": "SUCCEEDED / UNITY WARNINGS 0 / UNITY ERRORS 0 / 113596991 BYTES REPORTED",
-  "contest_c0_test_result": "EDITMODE 23/23 PASS / PLAYMODE 4/4 PASS / TOTAL 27/27 PASS",
-  "contest_c0_http_result": "19/19 FILES HTTP 200 / 113598745 BYTES / SHA-256 21cd8725392e23d2d1c3277978561d50738f9a63f130a7debfca87735601efba",
-  "contest_c0_browser_result": "RETRY INCOMPLETE / HUMAN OWNER MANUAL BROWSER PLAYTEST REACHED LIVE CAMERA LOOK / CONTEST SCENE RETUNED TO LOOK SENSITIVITY 0.25 AND PITCH -12 TO 35 / OWNER RETEST AND EXACT CHROME-EDGE ACCEPTANCE PENDING",
-  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED / CONTEST BRANCH CURRENT THROUGH CONTAINING PUBLICATION-EVIDENCE COMMIT / BOTH ART BRANCHES AT VERIFIED C0 IMPLEMENTATION BASELINE 73d886eb2b6ccc0061e6f484afa663402418ec59 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
+  "contest_c0_status": "QUALIFICATION IN PROGRESS / LOOK SENSITIVITY 0.25, PITCH -12 TO 35 AND POINTER RELEASE OWNER-PASS / RAPID RMB AIM OWNER-FAIL / 0.2-SECOND AIM BLEND AT d9d74b3 / 28 TESTS, WEB BUILD, HTTP, CHROME-EDGE LOAD-RESIZE-CONSOLE PASS / NEW BUILD OWNER AIM-POINTER RETEST PENDING / C1 NOT AUTHORIZED",
+  "contest_c0_web_build_result": "SUCCEEDED / BUILD GUID b03f2792cdce44a2ac08ad1049ceaca1 / UNITY WARNINGS 0 / UNITY ERRORS 0 / 113597688 BYTES REPORTED",
+  "contest_c0_test_result": "EDITMODE 23/23 PASS / PLAYMODE 5/5 PASS / TOTAL 28/28 PASS",
+  "contest_c0_http_result": "19/19 FILES HTTP 200 / 113599442 BYTES / SHA-256 6a411450d690ffd4e55949e8ce1b54b9c838a22edd902b850ab87b3b14adc2eb",
+  "contest_c0_browser_result": "PARTIAL PASS / CHROME-EDGE WEBGL LOAD, 1366x768, 1920x1080 AND CLEAN CONSOLE PASS / EDGE ESCAPE PASS / EXTENSION POINTER REQUEST WrongDocumentError / HUMAN AIM-POINTER RETEST PENDING",
+  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED / CONTEST BRANCH CURRENT THROUGH CONTAINING AIM-REMEDIATION EVIDENCE COMMIT / AIM FIX d9d74b3cd3c542894eb80ff4a12bcc4d37d68a8f / ART BRANCHES b6903e243ff2e24094207541daf93248223caea1 AND 6b994b4065ca003a28562ab30e5ef6d0007154b7 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
   "contest_start_tags": [
     "gb2026-prechallenge",
     "gb2026-sprint-start"
@@ -520,8 +520,8 @@
     },
     {
         "path":  "AGENTS.md",
-        "bytes":  42001,
-        "sha256":  "415fd6cb9feaf48f2fa6dbfbb148f9b986f4c28d15bd17bfcdd8e0c71b15292b"
+        "bytes":  42011,
+        "sha256":  "21a564d7eb08db3acb582293a6e708cbfdf4adddc737c19a4806bcb282dd2f87"
     },
     {
         "path":  "ArtSource/Audio/DELIVERY.md",
@@ -870,8 +870,8 @@
     },
     {
         "path":  "CHANGELOG.md",
-        "bytes":  32294,
-        "sha256":  "7908ce0f0932c8c71508ce3e911df08de573e64e7b87d1178cd60608d4489d20"
+        "bytes":  33197,
+        "sha256":  "42989a3f86a6e6928a3e21e250c17aa092f10140770616bbf5a064b4a4364149"
     },
     {
         "path":  "docs/00_project/CHANGE_CONTROL.md",
@@ -900,8 +900,8 @@
     },
     {
         "path":  "docs/00_project/DESIGN_STATUS.md",
-        "bytes":  34973,
-        "sha256":  "b5dd1aaa14d055f8e6cece2808316e1c393338630be78c359d154f92eff857cb"
+        "bytes":  35294,
+        "sha256":  "f4cd473ba8415b82b8351312d794b98d29daa51124890634d656d33aeb910381"
     },
     {
         "path":  "docs/00_project/GLOSSARY.md",
@@ -1435,18 +1435,18 @@
     },
     {
         "path":  "docs/10_contest/BUILD_AND_SUBMISSION_LOG.md",
-        "bytes":  2488,
-        "sha256":  "966d149bf29a144bb82e4fa089cba0257551cae898311a871d3a64f248a5d3a7"
+        "bytes":  3713,
+        "sha256":  "f9ce3fc83b8f1e07db901966d3968e3078fa743d5b738c5789ce4435d7cde2df"
     },
     {
         "path":  "docs/10_contest/CODEX_COLLABORATION_LOG.md",
-        "bytes":  3509,
-        "sha256":  "3b7330357d71a3db0cc27bd663b24bc0c33a859f3e8a33685691599988656122"
+        "bytes":  5220,
+        "sha256":  "e225f216c66fe5e06e0009c7eff1e3ba1ffc8a9476b6dd88568d937a32683847"
     },
     {
         "path":  "docs/10_contest/GAME_BUILDERS_2026_SPRINT.md",
-        "bytes":  5298,
-        "sha256":  "e8bcb894779227ca46cad4d40c6c2da0351487c665a0c337ff68ecb8861926e8"
+        "bytes":  5318,
+        "sha256":  "935fc60f8c15b2f8f365ddd216fcceead16cd5fa789adbf9eb86c60798aae21a"
     },
     {
         "path":  "docs/10_contest/VISUAL_REFERENCE_INVENTORY.md",
@@ -2030,8 +2030,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs",
-        "bytes":  4665,
-        "sha256":  "7015fff347cf13a98b1ea0a110b0596fe28d133d5561d2ddc3bc7c5bb4728354"
+        "bytes":  5397,
+        "sha256":  "2c37c060cca4f3f79bdbf7c86ed8926952680f8a9fbbebef5de88af711a7fa1f"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs.meta",
@@ -2145,8 +2145,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs",
-        "bytes":  6593,
-        "sha256":  "c016b00d3a025f8e710ac1290c01cf05c8e516071df25e965edb1903372d09ed"
+        "bytes":  8022,
+        "sha256":  "4752ac9aad7ce8360bb3af6d64a2727581db7de0c0bfeb52ec3f118f272c864a"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/LocomotionCameraGrayboxTests.cs.meta",

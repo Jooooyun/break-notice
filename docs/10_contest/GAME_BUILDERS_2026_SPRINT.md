@@ -3,7 +3,7 @@
 - Project: `BREAK NOTICE`
 - Public Working Title: `BREAK NOTICE: ZERO DEFECT`
 - Track: `OpenAI Game Builders Seoul 2026 / Track 1`
-- Status: `ACTIVE / C0 ENVIRONMENT BLOCKED / C1 NOT AUTHORIZED`
+- Status: `ACTIVE / C0 AIM-SMOOTHED BUILD OWNER RETEST PENDING / C1 NOT AUTHORIZED`
 - Owner: `조윤성`
 - Ticket: `CONTEST-0001`
 - Branch: `contest/game-builders-2026`

@@ -63,3 +63,35 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   - `origin/main`: `UNCHANGED / 28b7f70c4b6299159afe5b99ea7b98d1e5399352`
 - Actual Result: `REMOTE PUSH COMPLETE / C0 BROWSER ACCEPTANCE STILL BLOCKED / C1 NOT STARTED`
 - Next: `launch Chrome, restore Edge local-URL policy verification, rerun exact Chrome and Edge qualification`
+
+## C0 Aim Transition Remediation — 2026-08-06
+
+- Goal: Human Owner가 보고한 RMB 연타 Aim 멀미를 C0 범위에서 수정하고
+  exact Unity와 Chrome·Edge에서 재검증
+- Human Owner Decisions:
+  - Look sensitivity `0.25`: `PASS / PRESERVE`
+  - Pitch `-12°~35°`: `PASS / PRESERVE`
+  - Pointer release: `PASS / PRESERVE`
+  - rapid RMB Aim comfort: `FAIL / REVISION REQUIRED`
+  - 현재 재미 부족은 C0의 feature·asset 공백과 분리해 판단하고 C1 또는
+    room expansion을 무단 시작하지 않음
+- Codex Work:
+  - 즉시 전환되던 Aim CameraDistance, ShoulderOffset과 FOV를 공통
+    `0.2초` normalized blend로 변경
+  - 빠른 Aim 토글이 presentation 범위를 벗어나지 않는 PlayMode 회귀
+    테스트 추가
+  - Unity 자동 재직렬화 Scene·ProjectSettings 노이즈와 생성 설정 파일 제거
+- Tests: `EditMode 23/23 PASS / PlayMode 5/5 PASS / total 28/28`
+- Build:
+  `PASS / GUID b03f2792cdce44a2ac08ad1049ceaca1 / warnings 0 / errors 0`
+- HTTP:
+  `19/19 PASS / 113599442 bytes / SHA-256 6a411450d690ffd4e55949e8ce1b54b9c838a22edd902b850ab87b3b14adc2eb`
+- Browser Validation:
+  - Chrome: `WebGL load PASS / 1366x768 PASS / 1920x1080 PASS / clean-tab console 0`
+  - Edge: `WebGL load PASS / 1366x768 PASS / 1920x1080 PASS / Escape PASS / console 0`
+  - Pointer: `AUTOMATION NOT ACCEPTED / extension-driven request returned WrongDocumentError`
+- Commit SHA: `d9d74b3cd3c542894eb80ff4a12bcc4d37d68a8f`
+- Actual Result:
+  `C0 QUALIFICATION IN PROGRESS / AIM-SMOOTHED BUILD READY FOR HUMAN OWNER RETEST / C1 NOT STARTED`
+- Next:
+  `Human Owner rapid-RMB Aim and Pointer capture-release retest in the retained Chrome tab; close C0 only after PASS`
