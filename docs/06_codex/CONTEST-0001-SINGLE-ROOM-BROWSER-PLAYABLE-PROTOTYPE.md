@@ -1,13 +1,13 @@
 # CONTEST-0001 — Single-Room Browser-Playable Prototype
 
-- Status: `OWNER-APPROVED / EXECUTION ACTIVE / C0 ENVIRONMENT BLOCKED`
+- Status: `OWNER-APPROVED / C0 COMPLETE / C1 AUTHORIZATION PENDING`
 - Change Control: `CR-0003`
 - ADR: `ADR-0023`
-- Relay: `EAR-CONTEST-0001-001 / ACTIVE`
+- Relay: `EAR-CONTEST-0001-001 / CONSUMED BY C0 PASS / EXPIRED`
 - Baseline: `28b7f70c4b6299159afe5b99ea7b98d1e5399352`
 - Branch: `contest/game-builders-2026`
-- Gate:
-  `OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE`
+- Current Gate:
+  `MAIN PRODUCT CLOSED / CONTEST C0 COMPLETE / C1 CLOSED PENDING BOUNDED RELAY`
 
 ## Goal
 
@@ -89,46 +89,46 @@ desktop browser prototype과 검증 증거를 만든다.
 
 ## EAR-CONTEST-0001-001
 
-- Status: `ACTIVE`
+- Status: `CONSUMED BY HUMAN OWNER C0 PASS / EXPIRED 2026-08-08`
 - Exact Ticket: `CONTEST-0001`
 - Exact Baseline: `28b7f70c4b6299159afe5b99ea7b98d1e5399352`
 - Exact Branch: `contest/game-builders-2026`
-- Gate: 위 contest-only open state
+- Consumed Gate:
+  `OPEN — CONTEST-0001 ONLY / GAME BUILDERS 2026 SINGLE-ROOM BROWSER PROTOTYPE / C0 EXECUTION ONLY`
 - Pre-state: tracked/staged clean; Human Owner가 식별한 protected untracked
   work는 존재 가능하며 명시된 원본을 수정·stage하지 않는다.
 - Commit Permission: work package별 one-purpose commit
 - Push Permission: contest branch와 승인된 contest/art branch의 일반 push
 - Forbidden Git: amend of pushed commit, rebase/force-push, automatic main merge
-- Expiration: final submission, 2026-08-26 end, Owner revocation, identity loss,
-  unauthorized dependency/scope, data/license/contributor/security/privacy risk
+- Expiration: C0 completion, final submission, 2026-08-26 end, Owner revocation,
+  identity loss, unauthorized dependency/scope,
+  data/license/contributor/security/privacy risk
 
 일반 compile/test/implementation defect는 expiration이 아니며 승인 범위 안에서
 수정하고 재검증한다.
 
-## Current C0 Evidence and Blocker — 2026-08-06
+## Final C0 Evidence and Acceptance — 2026-08-08
 
-- Unity Web Development build: `PASS / 0 warnings / 0 errors`
-- Existing tests: `EditMode 23/23 + PlayMode 4/4 = 27/27 PASS`
+- Aim-smoothed source:
+  `d9d74b3d4dfabc9168c8360033af1756a42b705e`
+- Unity Web Development build:
+  `PASS / build GUID b03f2792cdce44a2ac08ad1049ceaca1 / 0 warnings / 0 errors`
+- Existing and added tests:
+  `EditMode 23/23 + PlayMode 5/5 = 28/28 PASS`
 - Local HTTP verification: `19/19 files HTTP 200`
 - Build aggregate SHA-256:
-  `a24d1dd102377ba01cca858a7134439d2d2f54f1fa8994b609f9abb1f88724dd`
-- Chrome/Edge qualification: `RETRY INCOMPLETE`
-- Chrome diagnostic: ChatGPT browser extension `1.2.27236.6274` is installed
-  and enabled and the native-host manifest is valid, but Chrome was not
-  running, so the exact Chrome family was unavailable.
-- Edge diagnostic: the extension and native host are valid and the exact Edge
-  family connected. Navigation to `http://127.0.0.1:8765/` was denied because
-  the admin-enforced policy could not be verified. The same URL was retried
-  once without bypass and returned the same result.
-- Browser consequence: Move, Look, Aim, pointer capture, Escape release,
-  1366×768 / 1920×1080 resize and blocking console checks remain unexecuted.
-- Required recovery: launch Chrome with the installed extension and restore
-  the Edge local-URL security-policy verification path, then rerun both exact
-  browser families without substitution.
+  `6a411450d690ffd4e55949e8ce1b54b9c838a22edd902b850ab87b3b14adc2eb`
+- Automated browser qualification:
+  `Chrome and Edge WebGL load PASS / 1366×768 and 1920×1080 PASS / clean-tab console error-warning 0 / Edge Escape PASS`
+- Human Owner acceptance:
+  `PASS / 2026-08-08 / look sensitivity 0.25, pitch -12 to 35, move-look, rapid RMB Aim comfort and pointer capture-release`
+- Pointer automation note: the earlier extension-driven `WrongDocumentError`
+  was rejected as automation acceptance evidence and is not a product error;
+  trusted Human Owner input supplied the required final evidence.
 - Remote publication: `COMPLETE / VERIFIED` — the contest branch is current
-  through the containing publication-evidence commit; both art branches point
-  to verified C0 implementation baseline
-  `73d886eb2b6ccc0061e6f484afa663402418ec59`; both baseline tags are published
-  at their immutable approved targets; `origin/main` is unchanged.
-- Consequence: push is complete, but C0 acceptance remains incomplete and C1
-  must not start.
+  through the containing C0-closure evidence commit; art branch heads are
+  `b6903e243ff2e24094207541daf93248223caea1` and
+  `6b994b4065ca003a28562ab30e5ef6d0007154b7`; baseline tags remain at their
+  immutable approved targets; `origin/main` is unchanged.
+- Consequence:
+  `C0 COMPLETE / EAR-CONTEST-0001-001 CONSUMED AND EXPIRED / C1 NOT STARTED / NEW BOUNDED RELAY REQUIRED`

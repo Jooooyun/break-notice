@@ -95,3 +95,32 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `C0 QUALIFICATION IN PROGRESS / AIM-SMOOTHED BUILD READY FOR HUMAN OWNER RETEST / C1 NOT STARTED`
 - Next:
   `Human Owner rapid-RMB Aim and Pointer capture-release retest in the retained Chrome tab; close C0 only after PASS`
+
+## C0 Human Owner Acceptance and Closure — 2026-08-08
+
+- Goal: aim-smoothed C0 build의 trusted Human 입력 판정을 반영하고 C0를
+  정확한 증거와 함께 종료
+- Human Owner Decision:
+  `PASS / APPROVED ALL REQUESTED CHECKS`
+- Preserved Results:
+  - Look sensitivity `0.25`: `PASS`
+  - Pitch `-12°~35°`: `PASS`
+  - Move-look: `PASS`
+  - rapid RMB Aim with `0.2초` blend: `PASS`
+  - Pointer capture-release: `PASS`
+- Codex Work:
+  - 검증된 WebGL build를 로컬 HTTP `200`으로 복구
+  - Chrome clean handoff tab에서 `960×600` Canvas 렌더와 console
+    error-warning `0` 재확인
+  - Human Owner 최종 판정을 live state, ticket, build log와 derived
+    manifest에 반영
+- Implementation Source SHA:
+  `d9d74b3d4dfabc9168c8360033af1756a42b705e`
+- Tests and Build Evidence:
+  `EditMode 23/23 / PlayMode 5/5 / total 28/28 / Web build warnings 0 errors 0 / HTTP 19/19`
+- Browser Result:
+  `PASS / Chrome-Edge load-resize-console / Edge Escape / Human Chrome Aim-Pointer acceptance`
+- Actual Result:
+  `C0 COMPLETE / EAR-CONTEST-0001-001 CONSUMED AND EXPIRED / C1 NOT STARTED`
+- Next:
+  `issue a separate clean pushed HEAD-bound execution relay for C1 Interaction Arbitration and Ownership`

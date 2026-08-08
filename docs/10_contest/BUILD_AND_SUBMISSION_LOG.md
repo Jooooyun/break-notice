@@ -49,16 +49,17 @@
 | Unity Build | `PASS / warnings 0 / errors 0` |
 | Tests | `EditMode 23/23 PASS / PlayMode 5/5 PASS / total 28/28` |
 | HTTP Verification | `PASS / 19 of 19 files returned HTTP 200` |
-| Chrome | `PARTIAL PASS / WebGL load PASS / 1366x768 and 1920x1080 PASS / clean-tab console error-warning 0 / Human Aim-Pointer retest pending` |
-| Edge | `PARTIAL PASS / WebGL load PASS / 1366x768 and 1920x1080 PASS / Escape PASS / console error-warning 0 / Human Aim-Pointer retest pending` |
-| Pointer Automation | `NOT ACCEPTED / extension-driven Chrome request returned WrongDocumentError / Human input required` |
-| Submission State | `NOT READY / C0 OWNER AIM-POINTER RETEST PENDING / C1 PROHIBITED` |
+| Chrome | `PASS / WebGL load / 1366x768 and 1920x1080 / clean-tab console error-warning 0 / Human Owner move-look, rapid RMB Aim and pointer capture-release PASS 2026-08-08` |
+| Edge | `PASS / WebGL load / 1366x768 and 1920x1080 / Escape / console error-warning 0` |
+| Pointer Automation | `NOT ACCEPTED AS EVIDENCE / extension-driven WrongDocumentError retained as non-product diagnostic / trusted Human Owner input PASS` |
+| Human Owner Acceptance | `PASS / 2026-08-08 / all requested aim-smoothed C0 checks` |
+| Submission State | `NOT READY / C0 COMPLETE / C1 AUTHORIZATION PENDING` |
 
 ## C0 Remote Publication
 
 | Ref | Remote Target |
 |---|---|
-| `contest/game-builders-2026` | `PUBLISHED / current through containing publication-evidence commit` |
+| `contest/game-builders-2026` | `PUBLISHED / current through containing C0-closure evidence commit` |
 | `art/characters-animation` | `b6903e243ff2e24094207541daf93248223caea1` |
 | `art/environment-ui-vfx` | `6b994b4065ca003a28562ab30e5ef6d0007154b7` |
 | `gb2026-prechallenge` | `b82bb382fc0439847d6497ee2fadd9c55781a9fa` |

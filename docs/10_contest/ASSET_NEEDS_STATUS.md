@@ -19,9 +19,11 @@ direction의 존재와 runtime deliverable의 존재를 혼동하지 않는다.
 | AUD-CONT | Contest Audio | Designer B | P1 | C8 polish | licensed WAV exports, source/licenses, DELIVERY | `ArtSource/Audio/` | `Game/Assets/_Project/Audio/` | MISSING | 2026-08-21 | — | All files/licenses | — | Silent build | No unlicensed audio |
 | MKT-CONT | Thumbnail/Video | Designer B | P0 | C9 submission | 16:9 thumbnail source/export, ≤3 min H.264 gameplay video/source, license evidence, DELIVERY | `ArtSource/Marketing/` | Submission package | MISSING | 2026-08-24 | — | All files | — | Owner-captured minimal gameplay assets | Runtime asset 아님 |
 
-## Current C0 Readiness
+## C0 Final and C1 Entry Readiness
 
-No new production asset blocks C0. Graybox fallback remains active.
+C0 is Human Owner-approved and complete. No new production asset blocks the
+bounded C1 foundation; Graybox fallback remains active. C1 execution itself
+still requires a separate Owner-authorized Relay.
 
 Approved directions are available for CHR00, CHR01, GEAR01, camera,
 chair-redirect composition, aftermath material response and local lighting.
