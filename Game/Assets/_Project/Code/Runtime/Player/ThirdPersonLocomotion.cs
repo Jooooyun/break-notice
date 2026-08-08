@@ -91,5 +91,10 @@ namespace BreakNotice.Gameplay
         {
             cameraTransform = value;
         }
+
+        public void ResetMotionState()
+        {
+            verticalVelocity = -2f;
+        }
     }
 }

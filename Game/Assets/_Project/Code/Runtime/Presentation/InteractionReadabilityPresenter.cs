@@ -27,7 +27,7 @@ namespace BreakNotice.Presentation
             PrototypeInteractionStateOwner owner = interactionController.InteractionOwner;
             if (owner.GlobalState == PrototypeGlobalInteractionState.ResetPending)
             {
-                return "RESTORING AUTHORED BASELINE";
+                return "RESET — RESTORING AUTHORED BASELINE";
             }
 
             if (owner.GlobalState == PrototypeGlobalInteractionState.FailurePending)

@@ -53,7 +53,7 @@ namespace BreakNotice.Contest.Editor
                 browserInput.AddComponent<BrowserPointerCapture>();
             }
 
-            ContestPrototypeSceneAuthoring.ApplyC2Composition(contestScene);
+            ContestPrototypeSceneAuthoring.ApplyC3Composition(contestScene);
 
             EditorSceneManager.MarkSceneDirty(contestScene);
             if (!EditorSceneManager.SaveScene(contestScene, ContestScenePath))

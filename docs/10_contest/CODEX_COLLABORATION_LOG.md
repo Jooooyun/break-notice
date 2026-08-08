@@ -124,3 +124,29 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `C0 COMPLETE / EAR-CONTEST-0001-001 CONSUMED AND EXPIRED / C1 NOT STARTED`
 - Next:
   `issue a separate clean pushed HEAD-bound execution relay for C1 Interaction Arbitration and Ownership`
+
+## C1-C3 Contest Fast-Track Core Loop — 2026-08-08
+
+- Goal: single-room Contest prototype의 첫 complete playable vertical-slice
+  foundation으로 C1 arbitration, C2 acquisition/carry/throw, C3 authored Reset을
+  논리·테스트·커밋 단위로 분리해 연속 구현
+- Human Owner Decision:
+  `DIRECT FAST-TRACK AUTHORIZATION / BASELINE 54976681bf3970fcad4e141ab4f3f6dfd1820fa1 / C1-C3 ONLY / NORMAL PUSH AUTHORIZED / C4 EXCLUDED`
+- C1 Result:
+  `PASS / commit 278d062a6b486a176a7cb9144b75dfb058567ead / deterministic arbitration, safe rejection, readability and singular ownership`
+- C2 Result:
+  `PASS / commit 083b44e86c76977bd855bf0c2c09baf0001b9750 / direct Binder-Chair visible acquisition, carry and physical throw`
+- C3 Result:
+  `PASS AUTOMATED / containing commit / exclusive Reset barrier, authored snapshot restore, ownership cleanup and baseline audit`
+- Tests:
+  `Unity compile PASS / EditMode 37/37 / PlayMode 15/15 / total 52/52 / existing 28 preserved`
+- Build:
+  `PASS / GUID a27595036f0046f083dfae44dada1463 / 113733340 bytes / warnings 0 / errors 0 / SHA-256 11bb3eafd9d4ec175ad12437be64428edec0ba18f634e093442f094007aa5d04`
+- Browser:
+  `Chrome clean WebGL load PASS / initial product console 0 / C0 Human Owner movement-look-rapid-RMB-pointer evidence preserved`
+- Manual Limitation:
+  `Trusted C1-C3 acquire-carry-throw-reset browser smoke was not collected because extension control re-entered the already-rejected WrongDocumentError pointer-lock diagnostic; automated PlayMode coverage passed.`
+- Protected Scope:
+  `26 Human Owner untracked items untouched / protected staged 0 / main, packages, production art and C4+ unchanged`
+- Next:
+  `Human Owner authorization required before C4 fixed ally relay, catch and queued throw`

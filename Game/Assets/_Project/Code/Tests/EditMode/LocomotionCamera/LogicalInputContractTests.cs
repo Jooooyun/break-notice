@@ -63,8 +63,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             string[] passiveActions =
             {
                 "CallAlly",
-                "StrapRelease",
-                "ResetEncounter"
+                "StrapRelease"
             };
 
             InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
@@ -79,6 +78,9 @@ namespace BreakNotice.LocomotionCamera.Tests
                 File.ReadAllText("Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs");
             StringAssert.Contains("Snapshot.InteractPrimary", consumerSource);
             StringAssert.Contains("Snapshot.Throw", consumerSource);
+            string resetSource = File.ReadAllText(
+                "Assets/_Project/Code/Runtime/Player/AuthoredEncounterResetController.cs");
+            StringAssert.Contains("Snapshot.ResetEncounter", resetSource);
             foreach (string actionName in passiveActions)
             {
                 StringAssert.DoesNotContain(actionName, consumerSource);

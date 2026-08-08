@@ -67,3 +67,25 @@
 | `main` | `28b7f70c4b6299159afe5b99ea7b98d1e5399352 / unchanged` |
 
 Publication result: `PASS / normal push / no force / verified with ls-remote`.
+
+## C1-C3 Fast-Track Development Build — 2026-08-08
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `54976681bf3970fcad4e141ab4f3f6dfd1820fa1` |
+| C1 Commit | `278d062a6b486a176a7cb9144b75dfb058567ead` |
+| C2 Commit | `083b44e86c76977bd855bf0c2c09baf0001b9750` |
+| C3 Commit | `containing commit` |
+| Build ID | `GB2026-C1-C3-WEB-DEV-001` |
+| Build Target | `Web / Development` |
+| Build Date | `2026-08-08 +09:00` |
+| Build GUID | `a27595036f0046f083dfae44dada1463` |
+| Build Hash | `SHA-256 11bb3eafd9d4ec175ad12437be64428edec0ba18f634e093442f094007aa5d04` over sorted relative-path/file-hash ledger |
+| Uncompressed Size | `113,733,340 bytes Unity report / 19 files` |
+| Unity Build | `PASS / warnings 0 / errors 0` |
+| Tests | `EditMode 37/37 PASS / PlayMode 15/15 PASS / total 52/52` |
+| HTTP | `PASS / index HTTP 200` |
+| Chrome | `PASS / clean WebGL load / initial product console error-warning 0` |
+| C0 Regression | `PRESERVED / existing Human Owner move-look, rapid RMB Aim and pointer capture-release PASS remains authoritative` |
+| Trusted C1-C3 Browser Manual | `NOT COLLECTED / extension-driven pointer-lock WrongDocumentError is the already-rejected automation diagnostic` |
+| Submission State | `NOT READY / C1-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED` |

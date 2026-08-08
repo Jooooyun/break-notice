@@ -1,13 +1,13 @@
 # CONTEST-0001 — Single-Room Browser-Playable Prototype
 
-- Status: `OWNER-APPROVED / C0 COMPLETE / C1 AUTHORIZATION PENDING`
+- Status: `OWNER-APPROVED / C0-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED`
 - Change Control: `CR-0003`
 - ADR: `ADR-0023`
-- Relay: `EAR-CONTEST-0001-001 / CONSUMED BY C0 PASS / EXPIRED`
+- Relay: `EAR-CONTEST-0001-001 CONSUMED BY C0 PASS / LATER HUMAN OWNER CONTEST FAST-TRACK CORE LOOP CONSUMED BY C1-C3 / C4 EXCLUDED`
 - Baseline: `28b7f70c4b6299159afe5b99ea7b98d1e5399352`
 - Branch: `contest/game-builders-2026`
 - Current Gate:
-  `MAIN PRODUCT CLOSED / CONTEST C0 COMPLETE / C1 CLOSED PENDING BOUNDED RELAY`
+  `MAIN PRODUCT CLOSED / CONTEST C0-C3 IMPLEMENTATION COMPLETE / C4 CLOSED`
 
 ## Goal
 
@@ -132,3 +132,28 @@ desktop browser prototype과 검증 증거를 만든다.
   immutable approved targets; `origin/main` is unchanged.
 - Consequence:
   `C0 COMPLETE / EAR-CONTEST-0001-001 CONSUMED AND EXPIRED / C1 NOT STARTED / NEW BOUNDED RELAY REQUIRED`
+
+## C1-C3 Fast-Track Evidence — 2026-08-08
+
+- Human Owner authorization:
+  `DIRECT CONTEST FAST-TRACK CORE LOOP / C1-C3 ONLY / ONE CONTINUOUS BOUNDED RUN / C4 AND LATER EXCLUDED`
+- Starting baseline:
+  `54976681bf3970fcad4e141ab4f3f6dfd1820fa1 / contest/game-builders-2026 / local and origin equal / tracked and staged clean`
+- Protected work:
+  `26 OF 26 HUMAN OWNER UNTRACKED ITEMS PRESERVED / 0 OPENED FOR TASK WORK / 0 STAGED`
+- C1:
+  `COMPLETE / deterministic InteractPrimary arbitration, safe rejection, target readability, Light-Medium-Heavy eligibility and singular Carry-Strap-Relay ownership / commit 278d062a6b486a176a7cb9144b75dfb058567ead`
+- C2:
+  `COMPLETE / visible direct Binder-Chair acquisition, carry and physical throw with player-owned origin identity / commit 083b44e86c76977bd855bf0c2c09baf0001b9750`
+- C3:
+  `IMPLEMENTATION COMPLETE IN THE CONTAINING COMMIT / authored player-actor-object snapshots, exclusive Reset barrier, carry-throw ownership cleanup, Rigidbody restoration and baseline audit`
+- Tests:
+  `Unity compile PASS / EditMode 37/37 / PlayMode 15/15 / total 52/52 / existing 28 preserved`
+- Web Development build:
+  `PASS / GUID a27595036f0046f083dfae44dada1463 / 113733340 bytes / warnings 0 / errors 0 / 19 files / aggregate SHA-256 11bb3eafd9d4ec175ad12437be64428edec0ba18f634e093442f094007aa5d04`
+- HTTP and Chrome:
+  `localhost HTTP 200 / Chrome clean WebGL load PASS / initial product console error-warning 0`
+- Browser input evidence:
+  `C0 Human Owner move-look-rapid-RMB-pointer acceptance remains authoritative and the baseline behavior was not modified. Chrome extension-driven pointer-lock input again emitted the already-rejected WrongDocumentError automation diagnostic, so trusted C1-C3 acquire-carry-throw-reset browser manual smoke was not collected in this run.`
+- Scope:
+  `C4, Cargo Strap, ally-enemy behavior, objective-win, production art integration, new package, second room and all later scope NOT STARTED`

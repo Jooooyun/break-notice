@@ -2,7 +2,7 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
-  "current_phase": "CONTEST SPRINT IMPLEMENTATION / C0 COMPLETE / C1 AUTHORIZATION PENDING",
+  "current_phase": "CONTEST SPRINT IMPLEMENTATION / C0-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED",
   "current_state_authority_status": "OWNER-APPROVED / SINGLE MUTABLE LIVE-STATE SOURCE",
   "current_state_authority_path": "docs/00_project/DESIGN_STATUS.md",
   "manifest_current_state_role": "DERIVED MACHINE-READABLE MIRROR / NOT INDEPENDENT AUTHORITY",
@@ -241,7 +241,7 @@
   "historical_imp0001_gate_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "limited_implementation_gate_allowed_state": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
   "g4a_bounded_gate_format": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
-  "limited_implementation_gate_current_state": "MAIN PRODUCT GATE CLOSED / CONTEST C0 COMPLETE / CONTEST-0001 REMAINS OWNER-APPROVED / C1 CLOSED PENDING BOUNDED RELAY",
+  "limited_implementation_gate_current_state": "MAIN PRODUCT GATE CLOSED / CONTEST C0-C3 IMPLEMENTATION COMPLETE / CONTEST-0001 REMAINS OWNER-APPROVED / C4 CLOSED",
   "limited_implementation_gate_one_shot": true,
   "imp0001_execution_relay_issuance_status": "EAR-IMP-0001-002 ISSUED AND CONSUMED",
   "imp0001_execution_relay_status": "CONSUMED / EXPIRED / ACTIVE RELAY ABSENT",
@@ -456,7 +456,7 @@
   "imp0001_disposition": "APPROVE / COMPLETE",
   "post_imp0001_design_authority_review": "APPROVE",
   "ear_imp0001_002_status": "CONSUMED / EXPIRED",
-  "active_execution_authorization_relay": "ABSENT / EAR-CONTEST-0001-001 CONSUMED BY HUMAN OWNER C0 PASS AND EXPIRED",
+  "active_execution_authorization_relay": "ABSENT / EAR-CONTEST-0001-001 CONSUMED BY C0 / HUMAN OWNER CONTEST FAST-TRACK CORE LOOP CONSUMED BY C1-C3 / C4 EXCLUDED",
   "cr0002_status": "APPROVED / APPLIED",
   "cr0002_path": "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
   "adr0022_status": "ACCEPTED",
@@ -465,21 +465,29 @@
   "g4a_foundation_entry_status": "OWNER-APPROVED / IMP-0002 COMPLETE",
   "g4a_foundation_implementation_status": "IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE",
   "external_ai_asset_status": "NEW OR RUNTIME AI ASSET NOT AUTHORIZED / EXISTING OWNER-APPROVED VISUAL REFERENCES AUTHORIZED AS PRODUCTION REFERENCES ONLY",
-  "current_next_authorization_boundary": "C0 COMPLETE / C1 INTERACTION ARBITRATION AND OWNERSHIP REQUIRES A SEPARATE BOUNDED OWNER-AUTHORIZED RELAY AT A CLEAN PUSHED CONTEST HEAD / C1 NOT STARTED",
+  "current_next_authorization_boundary": "C0-C3 IMPLEMENTATION COMPLETE / C4 FIXED ALLY PHYSICAL RELAY, CATCH AND QUEUED THROW REQUIRES NEW HUMAN OWNER AUTHORIZATION / C4 NOT STARTED",
   "cr0003_status": "OWNER-APPROVED / APPLIED",
   "cr0003_path": "docs/00_project/CR-0003-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
   "adr0023_status": "ACCEPTED",
   "adr0023_path": "docs/09_adrs/ADR-0023-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
-  "contest_ticket": "CONTEST-0001 / OWNER-APPROVED / C0 COMPLETE / C1 AUTHORIZATION PENDING",
+  "contest_ticket": "CONTEST-0001 / OWNER-APPROVED / C0-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED",
   "contest_ticket_path": "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
   "contest_execution_baseline_sha": "28b7f70c4b6299159afe5b99ea7b98d1e5399352",
   "contest_branch": "contest/game-builders-2026",
-  "contest_gate_state": "MAIN PRODUCT CLOSED / CONTEST C0 COMPLETE / C1 CLOSED PENDING BOUNDED RELAY",
-  "contest_c0_status": "COMPLETE / HUMAN OWNER PASS 2026-08-08 / LOOK SENSITIVITY 0.25, PITCH -12 TO 35, MOVE-LOOK, RAPID RMB AIM WITH 0.2-SECOND BLEND AND POINTER CAPTURE-RELEASE PASS / 28 TESTS, WEB BUILD, HTTP AND CHROME-EDGE LOAD-RESIZE-CONSOLE PASS / C1 NOT STARTED",
+  "contest_gate_state": "MAIN PRODUCT CLOSED / CONTEST C0-C3 IMPLEMENTATION COMPLETE / C4 CLOSED",
+  "contest_c0_status": "COMPLETE / HUMAN OWNER PASS 2026-08-08 / LOOK SENSITIVITY 0.25, PITCH -12 TO 35, MOVE-LOOK, RAPID RMB AIM WITH 0.2-SECOND BLEND AND POINTER CAPTURE-RELEASE PASS / 28 TESTS, WEB BUILD, HTTP AND CHROME-EDGE LOAD-RESIZE-CONSOLE PASS",
   "contest_c0_web_build_result": "SUCCEEDED / BUILD GUID b03f2792cdce44a2ac08ad1049ceaca1 / UNITY WARNINGS 0 / UNITY ERRORS 0 / 113597688 BYTES REPORTED",
   "contest_c0_test_result": "EDITMODE 23/23 PASS / PLAYMODE 5/5 PASS / TOTAL 28/28 PASS",
   "contest_c0_http_result": "19/19 FILES HTTP 200 / 113599442 BYTES / SHA-256 6a411450d690ffd4e55949e8ce1b54b9c838a22edd902b850ab87b3b14adc2eb",
   "contest_c0_browser_result": "PASS / HUMAN OWNER MOVE-LOOK, RAPID RMB AIM AND POINTER CAPTURE-RELEASE PASS 2026-08-08 / CHROME-EDGE WEBGL LOAD, 1366x768, 1920x1080 AND CLEAN CONSOLE PASS / EDGE ESCAPE PASS / WrongDocumentError RETAINED AS REJECTED AUTOMATION-ONLY DIAGNOSTIC",
+  "contest_c1_c3_fast_track_baseline_sha": "54976681bf3970fcad4e141ab4f3f6dfd1820fa1",
+  "contest_c1_commit_sha": "278d062a6b486a176a7cb9144b75dfb058567ead",
+  "contest_c2_commit_sha": "083b44e86c76977bd855bf0c2c09baf0001b9750",
+  "contest_c3_status": "IMPLEMENTATION AND AUTOMATED ACCEPTANCE COMPLETE / AUTHORED RESET IN CONTAINING COMMIT / C4 NOT STARTED",
+  "contest_c1_c3_test_result": "UNITY COMPILE PASS / EDITMODE 37/37 PASS / PLAYMODE 15/15 PASS / TOTAL 52/52 PASS / EXISTING 28 PRESERVED",
+  "contest_c1_c3_web_build_result": "SUCCEEDED / BUILD GUID a27595036f0046f083dfae44dada1463 / 113733340 BYTES / 19 FILES / UNITY WARNINGS 0 / UNITY ERRORS 0 / AGGREGATE SHA-256 11bb3eafd9d4ec175ad12437be64428edec0ba18f634e093442f094007aa5d04",
+  "contest_c1_c3_browser_result": "CHROME CLEAN WEBGL LOAD PASS / INITIAL PRODUCT CONSOLE ERROR-WARNING 0 / C0 OWNER-APPROVED MOVE-LOOK-AIM-POINTER BASELINE PRESERVED / TRUSTED C1-C3 GAMEPLAY MANUAL SMOKE NOT COLLECTED DUE REJECTED EXTENSION POINTER-LOCK WrongDocumentError DIAGNOSTIC",
+  "contest_c4_status": "NOT STARTED / NOT AUTHORIZED",
   "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED / CONTEST BRANCH CURRENT THROUGH CONTAINING C0-CLOSURE EVIDENCE COMMIT / AIM FIX d9d74b3d4dfabc9168c8360033af1756a42b705e / ART BRANCHES b6903e243ff2e24094207541daf93248223caea1 AND 6b994b4065ca003a28562ab30e5ef6d0007154b7 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
   "contest_start_tags": [
     "gb2026-prechallenge",
@@ -520,8 +528,8 @@
     },
     {
         "path":  "AGENTS.md",
-        "bytes":  42138,
-        "sha256":  "5a45b328c81e7709a632d52b26fa1efc52dc413c8b69ae8c965f25ff9abc5fc2"
+        "bytes":  42759,
+        "sha256":  "d3cb3b2bb0cdfabe62306c0fcc776bda6bddda12295c062465a0f86cf84e3f7e"
     },
     {
         "path":  "ArtSource/Audio/DELIVERY.md",
@@ -870,8 +878,8 @@
     },
     {
         "path":  "CHANGELOG.md",
-        "bytes":  33822,
-        "sha256":  "8d808af76c3d885615e5a3e5657df0417943e94a1c3266c66672d6d7b1152529"
+        "bytes":  34976,
+        "sha256":  "0111580c9851851b39d029cc9585f1cac6449d64fe36db188ac80f61d888fbe0"
     },
     {
         "path":  "docs/00_project/CHANGE_CONTROL.md",
@@ -900,8 +908,8 @@
     },
     {
         "path":  "docs/00_project/DESIGN_STATUS.md",
-        "bytes":  35112,
-        "sha256":  "7ce0669331e4708b90848afabe39dbb833005adbb45ea4abe2513809e9e6576e"
+        "bytes":  36320,
+        "sha256":  "48d0838677e3e558440d254a357e695f4c2a209ae211cc6bed3bd8f68874a251"
     },
     {
         "path":  "docs/00_project/GLOSSARY.md",
@@ -1225,8 +1233,8 @@
     },
     {
         "path":  "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
-        "bytes":  6533,
-        "sha256":  "38692a094008814ce67c5cd34eef1eb57191a33dc75afa0036a47c493a043085"
+        "bytes":  8580,
+        "sha256":  "3894ed1b7f1126843c000baee2fc8c2d47e79dcfc93e5372f8f6a46aa7fb31e6"
     },
     {
         "path":  "docs/06_codex/DEFINITION_OF_DONE.md",
@@ -1430,23 +1438,23 @@
     },
     {
         "path":  "docs/10_contest/ASSET_NEEDS_STATUS.md",
-        "bytes":  6362,
-        "sha256":  "730f00edfa9f74d90a1b0e4ba6f119e8bc0ec2faa4e7bc489ee0d2dc6de45bee"
+        "bytes":  6399,
+        "sha256":  "5adb2cb649eea83bd16358c656d87d1604304eb86f9102f291074868d43dc2b2"
     },
     {
         "path":  "docs/10_contest/BUILD_AND_SUBMISSION_LOG.md",
-        "bytes":  3792,
-        "sha256":  "2909e0c2ba637476dcfe7abe0367a28ac2b528728c824fd065b77aa5f9e339f5"
+        "bytes":  5076,
+        "sha256":  "9afded45f9ce00fe0f8027a10738c967698d0b09a8432919aa8be321700d9bbb"
     },
     {
         "path":  "docs/10_contest/CODEX_COLLABORATION_LOG.md",
-        "bytes":  6444,
-        "sha256":  "c30e96162df1d6520c781f58bfbf057d95b12459f92075a166caa81af57f209a"
+        "bytes":  8210,
+        "sha256":  "4d051f5e5246a07b4da0ce4ab973306efe164a3458cbb6acb9057d47169f4a6c"
     },
     {
         "path":  "docs/10_contest/GAME_BUILDERS_2026_SPRINT.md",
-        "bytes":  5315,
-        "sha256":  "f2f665fc87bff9ee289b44ac4ccccb6821d69ec01ff7a09a55ac20dbf61f05b5"
+        "bytes":  5799,
+        "sha256":  "cf3a306cfd99d9dad6b67ada273c3a66963bf3eb4eff2eb39096536df3f48c9a"
     },
     {
         "path":  "docs/10_contest/VISUAL_REFERENCE_INVENTORY.md",
@@ -1790,8 +1798,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Editor/Contest/ContestC0Automation.cs",
-        "bytes":  6019,
-        "sha256":  "e11efa0d2289322a13a713fcf5b048f8cfd2e7b1a56d774f0199285477c943e0"
+        "bytes":  6097,
+        "sha256":  "bfa3a436758db0fa3f749cf0093acf2930c180123bb462032fa8fff10ccdc1c7"
     },
     {
         "path":  "Game/Assets/_Project/Code/Editor/Contest/ContestC0Automation.cs.meta",
@@ -1970,8 +1978,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs",
-        "bytes":  3136,
-        "sha256":  "6680e2a016f301a99bec0e47b0a5c2121eda4a4161094e50fdaca0ad74fab3dd"
+        "bytes":  3170,
+        "sha256":  "2d7a1bf7098a44d6f3ee7e84793c47ce469007b7a7ec879fd880c6559eb770df"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs.meta",
@@ -2000,8 +2008,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs",
-        "bytes":  2993,
-        "sha256":  "7a2bc81b612c46660bb29e909d2e1f219ea98d1f0837e62fe3bc96295d398d5e"
+        "bytes":  3089,
+        "sha256":  "bd84cf62d42346dc974ce3ac413bffdd036ddfa0359c4ed1ddd19e4ff7fc1f99"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs.meta",
@@ -2090,8 +2098,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs",
-        "bytes":  16366,
-        "sha256":  "02e16fb6f3c150fdb72fe6d88e42955510f71b7fd219136ecf36ca476fd2cc70"
+        "bytes":  16762,
+        "sha256":  "cb3aa9739d402bdae24ee2d265075a8011dea095929abe64c7646aa2e1100548"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs.meta",
@@ -2240,8 +2248,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity",
-        "bytes":  73714,
-        "sha256":  "781ec63139f37bea58cb95a94c3a61cffe818e1a8e0a5b53b9912c84ced8d784"
+        "bytes":  85681,
+        "sha256":  "b2ab321124e4919c7e14a489fac07b4a77c94218082ed370684b75bc9d030b28"
     },
     {
         "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity.meta",

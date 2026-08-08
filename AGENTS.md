@@ -8,7 +8,7 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 
 # 1. Current Project Phase
 
-현재 단계: `CONTEST SPRINT IMPLEMENTATION / C0 COMPLETE / C1 AUTHORIZATION PENDING`
+현재 단계: `CONTEST SPRINT IMPLEMENTATION / C0-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED`
 
 ## Current-State Authority Role
 
@@ -16,16 +16,18 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 운영 편의를 위해 복제하며, 모든 가변 현재값의 유일한 권위는
 [`docs/00_project/DESIGN_STATUS.md`](docs/00_project/DESIGN_STATUS.md)다.
 
-- Current Phase: `CONTEST SPRINT IMPLEMENTATION / C0 COMPLETE / C1 AUTHORIZATION PENDING`
+- Current Phase: `CONTEST SPRINT IMPLEMENTATION / C0-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED`
 - G4: `NOT PASSED / FORMAL EVIDENCE NOT COLLECTED`
 - G5: `NOT PASSED / REQUIRES G4 EVIDENCE`
 - Graybox: `TASK-0075 FOUNDATION COMPLETE / VERIFIED`
 - Implementation Gate:
-  `MAIN PRODUCT GATE CLOSED / CONTEST C0 COMPLETE / CONTEST-0001 REMAINS OWNER-APPROVED / C1 CLOSED PENDING BOUNDED RELAY`
+  `MAIN PRODUCT GATE CLOSED / CONTEST C0-C3 IMPLEMENTATION COMPLETE / CONTEST-0001 REMAINS OWNER-APPROVED / C4 CLOSED`
 - Active Execution Authorization Relay:
-  `EAR-CONTEST-0001-001 / CONSUMED BY HUMAN OWNER C0 PASS / EXPIRED`
+  `ABSENT / HUMAN OWNER CONTEST FAST-TRACK CORE LOOP CONSUMED BY C1-C3 / ONE-SHOT / C4 EXCLUDED`
 - Contest C0:
-  `COMPLETE / HUMAN OWNER PASS 2026-08-08 / LOOK SENSITIVITY 0.25, PITCH -12 TO 35, MOVE-LOOK, RAPID RMB AIM WITH 0.2-SECOND BLEND AND POINTER CAPTURE-RELEASE PASS / 28 TESTS, WEB BUILD, HTTP AND CHROME-EDGE LOAD-RESIZE-CONSOLE PASS / C1 NOT STARTED`
+  `COMPLETE / HUMAN OWNER PASS 2026-08-08 / LOOK SENSITIVITY 0.25, PITCH -12 TO 35, MOVE-LOOK, RAPID RMB AIM WITH 0.2-SECOND BLEND AND POINTER CAPTURE-RELEASE PASS / 28 TESTS, WEB BUILD, HTTP AND CHROME-EDGE LOAD-RESIZE-CONSOLE PASS`
+- Contest C1-C3:
+  `IMPLEMENTATION COMPLETE / C1 INTERACTION ARBITRATION AND SINGULAR OWNERSHIP / C2 BINDER-CHAIR ACQUISITION-CARRY-THROW / C3 AUTHORED RESET AND BASELINE AUDIT / EDITMODE 37 OF 37 PASS / PLAYMODE 15 OF 15 PASS / WEB DEVELOPMENT BUILD PASS WITH 0 WARNINGS AND 0 ERRORS / CHROME CLEAN LOAD AND INITIAL CONSOLE PASS / TRUSTED C1-C3 MANUAL BROWSER GAMEPLAY SMOKE NOT COLLECTED`
 - G4-A Foundation Implementation:
   `IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE`
 - IMP-0002: `COMPLETE / VERIFIED`
@@ -33,9 +35,9 @@ Codex는 모든 작업을 시작하기 전에 이 파일을 읽어야 한다.
 - External AI Asset:
   `NEW OR RUNTIME AI ASSET NOT AUTHORIZED / EXISTING OWNER-APPROVED VISUAL REFERENCES AUTHORIZED AS PRODUCTION REFERENCES ONLY`
 - Current Next Authorization Boundary:
-  `C0 COMPLETE / C1 INTERACTION ARBITRATION AND OWNERSHIP REQUIRES A SEPARATE BOUNDED OWNER-AUTHORIZED RELAY AT A CLEAN PUSHED CONTEST HEAD / C1 NOT STARTED`
+  `C0-C3 IMPLEMENTATION COMPLETE / C4 FIXED ALLY RELAY, CATCH AND QUEUED THROW REQUIRES NEW HUMAN OWNER AUTHORIZATION / C4 NOT STARTED`
 - Toolchain provisioning과 exact-version execution evidence:
-  `EXACT TOOLCHAIN, TASK-0075 GRAYBOX, AIM-SMOOTHED C0 WEB BUILD, HTTP, 28 TESTS, CHROME-EDGE LOAD-RESIZE-CONSOLE AND HUMAN AIM-POINTER RETEST VERIFIED / C0 COMPLETE / SEE DESIGN_STATUS`
+  `EXACT TOOLCHAIN, TASK-0075 GRAYBOX AND C0 EVIDENCE PRESERVED / C1-C3 EDITMODE 37 OF 37 AND PLAYMODE 15 OF 15 PASS / WEB DEVELOPMENT BUILD GUID a27595036f0046f083dfae44dada1463, 113733340 BYTES, 0 WARNINGS, 0 ERRORS / SEE DESIGN_STATUS`
 
 G1/G2/G3 계약, Accepted ADR, 승인 Visual Spec, scope/Lock 문서가
 substantive authority를 계속 소유한다. MANIFEST는 derived mirror이고
@@ -823,10 +825,13 @@ Codex는 별도 정리 작업 없이 다음 행동을 하지 않는다.
 
 Main product Implementation Gate는 계속 닫혀 있다. Human Owner가 승인한
 CR-0003, Accepted ADR-0023과 `CONTEST-0001`에 따른 Game Builders 2026
-contest overlay는 유지되지만, `EAR-CONTEST-0001-001`은 C0 Human Owner
-PASS로 소비·만료됐다. C1은 clean pushed contest HEAD에 결박된 별도 bounded
-Owner-authorized Relay 전까지 열리지 않는다. 이 권한은 main branch,
-formal G4/G5 passage 또는 일반 제품 구현 권한으로 상속되지 않는다.
+contest overlay는 유지된다. `EAR-CONTEST-0001-001`은 C0 Human Owner
+PASS로 소비·만료됐고, 이후 Human Owner의 직접 `CONTEST FAST-TRACK CORE
+LOOP` one-shot 지시가 기준선
+`54976681bf3970fcad4e141ab4f3f6dfd1820fa1`에서 Contest C1, C2, C3의
+연속 구현·검증·분리 커밋과 일반 push만 승인했다. 이 권한은 C1-C3에서
+소비됐으며 main branch, formal G4/G5 passage, C4 또는 일반 제품 구현
+권한으로 상속되지 않는다.
 
 C0에서 소비된 허용 범위는 다음에 한정됐다.
 
@@ -841,12 +846,12 @@ C0에서 소비된 허용 범위는 다음에 한정됐다.
 - Chrome과 Edge에서의 C0 browser qualification 및 증거 기록
 - C0 결과의 선택적 stage·commit과 승인된 contest/art branch 운영
 
-C0는 2026-08-08 Human Owner PASS로 완료됐다. 그러나 C1은 별도 bounded
-실행 Relay가 아직 없으므로 시작하지 않는다. C1~C9도 항상 직전 contest
-wave의 acceptance와 다음 wave의 정확한 실행 권한 뒤에만 순차적으로
-진행한다. Interaction, Carry, Throw, Cargo Strap, ally/enemy behavior,
-combat, production asset 통합, formal G4 evidence와 G4/G5 passage는 해당
-별도 권한 전까지 계속 금지한다.
+C0는 2026-08-08 Human Owner PASS로 완료됐다. Contest C1은 deterministic
+interaction arbitration과 singular ownership, C2는 Binder·Chair의 visible
+acquisition/carry/physical throw, C3는 single-room authored Reset과 baseline
+audit까지 구현·자동 검증됐다. C4 이후 wave는 새 Human Owner 권한 전까지
+계속 금지한다. Cargo Strap, ally/enemy behavior, objective/win, production
+asset 통합, formal G4 evidence와 G4/G5 passage는 시작하지 않는다.
 
 ---
 

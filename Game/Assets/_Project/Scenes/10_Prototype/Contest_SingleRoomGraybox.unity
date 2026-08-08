@@ -536,6 +536,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &443728495 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6403439242221617877, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
+  m_PrefabInstance: {fileID: 1121842302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121842305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23a549a9d80bccc41a448ee58af2781c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.ThirdPersonLocomotion
 --- !u!1 &498600997
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,6 +1050,7 @@ GameObject:
   - component: {fileID: 824956722}
   - component: {fileID: 824956721}
   - component: {fileID: 824956723}
+  - component: {fileID: 824956724}
   m_Layer: 0
   m_Name: ContestBrowserInput
   m_TagString: Untagged
@@ -1086,6 +1098,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.InteractionReadabilityPresenter
   interactionController: {fileID: 1121842306}
+--- !u!114 &824956724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824956720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e761dcf9e18c5b46bc7febaa6249a5d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Encounter.AuthoredEncounterResetController
+  logicalInput: {fileID: 1121842303}
+  interactionOwner: {fileID: 1121842307}
+  physicalObjectLifecycle: {fileID: 1121842308}
+  locomotion: {fileID: 443728495}
+  playerTransform: {fileID: 1121842304}
+  authoredActors:
+  - {fileID: 1119083203}
+  - {fileID: 1081471121}
+  - {fileID: 944753667}
+  authoredObjects:
+  - {fileID: 938915423}
+  - {fileID: 1794266634}
+  - {fileID: 1557774718}
+  - {fileID: 820737517}
+  - {fileID: 149783539}
+  - {fileID: 2087965156}
+  - {fileID: 498601002}
 --- !u!1 &938915418
 GameObject:
   m_ObjectHideFlags: 0

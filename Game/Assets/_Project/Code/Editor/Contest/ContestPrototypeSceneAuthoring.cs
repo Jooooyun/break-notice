@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BreakNotice.Gameplay;
 using BreakNotice.Gameplay.Input;
+using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Interaction;
 using BreakNotice.Presentation;
 using UnityEditor;
@@ -19,7 +21,7 @@ namespace BreakNotice.Contest.Editor
         public static void PrepareCurrentContestScene()
         {
             Scene scene = EditorSceneManager.OpenScene(ContestScenePath, OpenSceneMode.Single);
-            ApplyC2Composition(scene);
+            ApplyC3Composition(scene);
             EditorSceneManager.MarkSceneDirty(scene);
             if (!EditorSceneManager.SaveScene(scene, ContestScenePath))
             {
@@ -28,7 +30,37 @@ namespace BreakNotice.Contest.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            Debug.Log("Contest C2 acquisition, carry, and throw composition prepared.");
+            Debug.Log("Contest C3 authored Reset composition prepared.");
+        }
+
+        public static void ApplyC3Composition(Scene scene)
+        {
+            ApplyC2Composition(scene);
+
+            GameObject player = RequireRoot(scene, "Player");
+            GameObject browserInput = RequireRoot(scene, "ContestBrowserInput");
+            PrototypeInteractionTarget[] targets = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                .OrderBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
+                .ToArray();
+            Transform[] actors =
+            {
+                RequireRoot(scene, "AllyProxy").transform,
+                RequireRoot(scene, "EnemyProxy_01").transform,
+                RequireRoot(scene, "EnemyProxy_02").transform
+            };
+
+            AuthoredEncounterResetController resetController =
+                GetOrAddComponent<AuthoredEncounterResetController>(browserInput);
+            resetController.Configure(
+                player.GetComponent<InputSystemLogicalInputAdapter>(),
+                player.GetComponent<PrototypeInteractionStateOwner>(),
+                player.GetComponent<PrototypePhysicalObjectLifecycle>(),
+                player.GetComponent<ThirdPersonLocomotion>(),
+                player.transform,
+                actors,
+                targets);
+            EditorUtility.SetDirty(resetController);
         }
 
         public static void ApplyC2Composition(Scene scene)
