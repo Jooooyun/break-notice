@@ -19,7 +19,7 @@ namespace BreakNotice.Contest.Editor
         public static void PrepareCurrentContestScene()
         {
             Scene scene = EditorSceneManager.OpenScene(ContestScenePath, OpenSceneMode.Single);
-            ApplyC1Composition(scene);
+            ApplyC2Composition(scene);
             EditorSceneManager.MarkSceneDirty(scene);
             if (!EditorSceneManager.SaveScene(scene, ContestScenePath))
             {
@@ -28,7 +28,60 @@ namespace BreakNotice.Contest.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            Debug.Log("Contest C1 interaction composition prepared.");
+            Debug.Log("Contest C2 acquisition, carry, and throw composition prepared.");
+        }
+
+        public static void ApplyC2Composition(Scene scene)
+        {
+            ApplyC1Composition(scene);
+
+            GameObject player = RequireRoot(scene, "Player");
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypeInteractionController controller =
+                player.GetComponent<PrototypeInteractionController>();
+            PrototypeInteractionTarget[] targets = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                .OrderBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
+                .ToArray();
+
+            ConfigureDynamicTarget(
+                targets.Single(target => target.Role == PrototypeInteractionRole.DirectBinder),
+                1f);
+            ConfigureDynamicTarget(
+                targets.Single(target => target.Role == PrototypeInteractionRole.DirectChair),
+                8f);
+
+            Transform carryAnchor = player.transform.Find("ContestCarryAnchor");
+            if (carryAnchor == null)
+            {
+                carryAnchor = new GameObject("ContestCarryAnchor").transform;
+                carryAnchor.SetParent(player.transform, false);
+            }
+
+            carryAnchor.localPosition = new Vector3(0f, 1.05f, 1.15f);
+            carryAnchor.localRotation = Quaternion.identity;
+
+            PrototypePhysicalObjectLifecycle lifecycle =
+                GetOrAddComponent<PrototypePhysicalObjectLifecycle>(player);
+            lifecycle.Configure(owner, carryAnchor);
+
+            InputSystemLogicalInputAdapter logicalInput =
+                player.GetComponent<InputSystemLogicalInputAdapter>();
+            GameObject cameraRig = RequireRoot(scene, "GameplayCameraRig");
+            Camera outputCamera = cameraRig.GetComponentInChildren<Camera>(true);
+            controller.Configure(
+                logicalInput,
+                owner,
+                outputCamera.transform,
+                targets,
+                2.8f,
+                0.25f,
+                false,
+                lifecycle);
+
+            EditorUtility.SetDirty(lifecycle);
+            EditorUtility.SetDirty(controller);
         }
 
         public static void ApplyC1Composition(Scene scene)
@@ -125,6 +178,21 @@ namespace BreakNotice.Contest.Editor
         {
             T component = gameObject.GetComponent<T>();
             return component != null ? component : gameObject.AddComponent<T>();
+        }
+
+        private static void ConfigureDynamicTarget(
+            PrototypeInteractionTarget target,
+            float provisionalMass)
+        {
+            target.gameObject.isStatic = false;
+            Rigidbody body = GetOrAddComponent<Rigidbody>(target.gameObject);
+            body.mass = provisionalMass;
+            body.useGravity = true;
+            body.isKinematic = false;
+            body.interpolation = RigidbodyInterpolation.Interpolate;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            body.constraints = RigidbodyConstraints.None;
+            EditorUtility.SetDirty(body);
         }
 
         private readonly struct TargetDefinition

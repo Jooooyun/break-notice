@@ -116,6 +116,18 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        public bool CancelCarry(PrototypeInteractionTarget target)
+        {
+            if (HandState != PrototypeHandOwnershipState.Carrying || CarriedTarget != target)
+            {
+                return false;
+            }
+
+            CarriedTarget = null;
+            HandState = PrototypeHandOwnershipState.Free;
+            return true;
+        }
+
         public bool CompleteThrow(PrototypeInteractionTarget target)
         {
             if (HandState != PrototypeHandOwnershipState.ThrowCommitted ||

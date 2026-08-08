@@ -62,7 +62,6 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             string[] passiveActions =
             {
-                "Throw",
                 "CallAlly",
                 "StrapRelease",
                 "ResetEncounter"
@@ -79,6 +78,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 File.ReadAllText("Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs") +
                 File.ReadAllText("Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs");
             StringAssert.Contains("Snapshot.InteractPrimary", consumerSource);
+            StringAssert.Contains("Snapshot.Throw", consumerSource);
             foreach (string actionName in passiveActions)
             {
                 StringAssert.DoesNotContain(actionName, consumerSource);

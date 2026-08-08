@@ -29,6 +29,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private bool strapContextEnabled;
 
+        [SerializeField]
+        private PrototypePhysicalObjectLifecycle physicalObjectLifecycle;
+
         private readonly PrototypeInteractionArbitrator arbitrator =
             new PrototypeInteractionArbitrator();
 
@@ -67,6 +70,11 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 ProcessInteractPrimary(isAiming);
             }
+
+            if (logicalInput.Snapshot.Throw)
+            {
+                ProcessThrow();
+            }
         }
 
         public void Configure(
@@ -76,7 +84,8 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeInteractionTarget[] authoredTargets,
             float range,
             float forwardDot,
-            bool enableStrapContext)
+            bool enableStrapContext,
+            PrototypePhysicalObjectLifecycle physicalLifecycle = null)
         {
             logicalInput = input;
             interactionOwner = owner;
@@ -85,6 +94,7 @@ namespace BreakNotice.Gameplay.Interaction
             interactionRange = Mathf.Max(0.5f, range);
             minimumForwardDot = Mathf.Clamp(forwardDot, -1f, 1f);
             strapContextEnabled = enableStrapContext;
+            physicalObjectLifecycle = physicalLifecycle;
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
@@ -166,7 +176,34 @@ namespace BreakNotice.Gameplay.Interaction
                     CurrentTarget);
             }
 
+            else if (LastDecision.IsAccepted &&
+                     (LastDecision.Outcome == PrototypeInteractionOutcome.Scoop ||
+                      LastDecision.Outcome == PrototypeInteractionOutcome.Catch) &&
+                     physicalObjectLifecycle != null &&
+                     !physicalObjectLifecycle.BeginCarry(LastDecision.Target))
+            {
+                interactionOwner.CancelCarry(LastDecision.Target);
+                LastDecision = PrototypeInteractionDecision.Reject(
+                    PrototypeInteractionRejection.OwnershipConflict,
+                    CurrentTarget);
+            }
+
             return LastDecision;
+        }
+
+        public bool ProcessThrow()
+        {
+            if (interactionOwner == null ||
+                interactionOwner.BlocksNewInteraction ||
+                physicalObjectLifecycle == null)
+            {
+                return false;
+            }
+
+            Vector3 direction = viewTransform != null
+                ? viewTransform.forward
+                : transform.forward;
+            return physicalObjectLifecycle.TryThrow(direction);
         }
     }
 }

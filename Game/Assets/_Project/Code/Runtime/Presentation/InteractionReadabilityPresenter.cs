@@ -37,7 +37,7 @@ namespace BreakNotice.Presentation
 
             if (owner.HandState == PrototypeHandOwnershipState.Carrying && owner.CarriedTarget != null)
             {
-                return $"CARRYING {owner.CarriedTarget.DisplayName} [{owner.CarriedTarget.WeightClass.ToString().ToUpperInvariant()}]";
+                return $"CARRYING {owner.CarriedTarget.DisplayName} [{owner.CarriedTarget.WeightClass.ToString().ToUpperInvariant()}] — LMB THROW";
             }
 
             PrototypeInteractionTarget target = interactionController.CurrentTarget;
