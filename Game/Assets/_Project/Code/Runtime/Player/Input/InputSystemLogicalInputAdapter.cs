@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace BreakNotice.Gameplay.Input
 {
+    [DefaultExecutionOrder(-300)]
     [DisallowMultipleComponent]
     public sealed class InputSystemLogicalInputAdapter : MonoBehaviour
     {

@@ -58,11 +58,10 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void OtherApprovedActions_AreButtonsAndHaveNoRuntimeConsumers()
+        public void ApprovedInteractionAction_HasBoundedConsumerAndLaterActionsRemainPassive()
         {
             string[] passiveActions =
             {
-                "InteractPrimary",
                 "Throw",
                 "CallAlly",
                 "StrapRelease",
@@ -77,7 +76,9 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             string consumerSource =
                 File.ReadAllText("Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs") +
-                File.ReadAllText("Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs");
+                File.ReadAllText("Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs") +
+                File.ReadAllText("Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs");
+            StringAssert.Contains("Snapshot.InteractPrimary", consumerSource);
             foreach (string actionName in passiveActions)
             {
                 StringAssert.DoesNotContain(actionName, consumerSource);
