@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace BreakNotice.Presentation
 {
+    [DefaultExecutionOrder(-100)]
     [DisallowMultipleComponent]
     public sealed class ThirdPersonCameraRig : MonoBehaviour
     {
@@ -67,6 +68,9 @@ namespace BreakNotice.Presentation
         private float yaw;
         private float pitch = 12f;
         private float aimBlend;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        private bool pointerWasLocked;
+#endif
 
         public Camera OutputCamera => outputCamera;
 
@@ -100,6 +104,15 @@ namespace BreakNotice.Presentation
             }
 
             Vector2 look = logicalInput != null ? logicalInput.Snapshot.Look : Vector2.zero;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            bool pointerCaptured = Cursor.lockState == CursorLockMode.Locked;
+            bool pointerJustCaptured = pointerCaptured && !pointerWasLocked;
+            pointerWasLocked = pointerCaptured;
+            if (!pointerCaptured || pointerJustCaptured)
+            {
+                look = Vector2.zero;
+            }
+#endif
             yaw += look.x * lookSensitivity;
             pitch = Mathf.Clamp(pitch - look.y * lookSensitivity, minimumPitch, maximumPitch);
 
@@ -107,6 +120,9 @@ namespace BreakNotice.Presentation
             orbitTarget.rotation = Quaternion.Euler(pitch, yaw, 0f);
 
             IsAiming = logicalInput != null && logicalInput.Snapshot.Aim;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            IsAiming &= pointerCaptured && !pointerJustCaptured;
+#endif
             float transitionDuration = Mathf.Max(aimTransitionDuration, 0.01f);
             float targetAimBlend = IsAiming ? 1f : 0f;
             aimBlend = Mathf.MoveTowards(

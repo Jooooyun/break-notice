@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using BreakNotice.Gameplay.Encounter;
+using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
 using NUnit.Framework;
 using UnityEngine;
@@ -188,6 +190,80 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             AsyncOperation unload = SceneManager.UnloadSceneAsync(scene);
             yield return unload;
+        }
+
+        [UnityTest]
+        public IEnumerator ResetAndInteractSameFrame_ResetWinsWithoutInteractionAttempt()
+        {
+            Scene scene = default;
+            try
+            {
+                AsyncOperation load = SceneManager.LoadSceneAsync(
+                    "Contest_SingleRoomGraybox",
+                    LoadSceneMode.Additive);
+                yield return load;
+                scene = SceneManager.GetSceneByName("Contest_SingleRoomGraybox");
+                PrototypeInteractionController controller = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionController>(true))
+                    .Single();
+                InputSystemLogicalInputAdapter logicalInput = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<InputSystemLogicalInputAdapter>(true))
+                    .Single();
+                PrototypeInteractionStateOwner owner = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionStateOwner>(true))
+                    .Single();
+                AuthoredEncounterResetController reset = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<AuthoredEncounterResetController>(true))
+                    .Single();
+                uint interactionSequenceBefore = controller.InteractionAttemptSequence;
+
+                SetLogicalSnapshot(
+                    logicalInput,
+                    new LogicalInputSnapshot(
+                        Vector2.zero,
+                        Vector2.zero,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        true));
+                reset.SendMessage("Update", SendMessageOptions.RequireReceiver);
+                reset.SendMessage("LateUpdate", SendMessageOptions.RequireReceiver);
+                controller.SendMessage("LateUpdate", SendMessageOptions.RequireReceiver);
+
+                Assert.That(reset.ResetCount, Is.EqualTo(1));
+                Assert.That(
+                    controller.InteractionAttemptSequence,
+                    Is.EqualTo(interactionSequenceBefore));
+                Assert.That(owner.GlobalState, Is.EqualTo(PrototypeGlobalInteractionState.Playable));
+                Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
+                Assert.That(owner.CarriedTarget, Is.Null);
+
+                SetLogicalSnapshot(logicalInput, default);
+                AsyncOperation unload = SceneManager.UnloadSceneAsync(scene);
+                yield return unload;
+                scene = default;
+            }
+            finally
+            {
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+        }
+
+        private static void SetLogicalSnapshot(
+            InputSystemLogicalInputAdapter logicalInput,
+            LogicalInputSnapshot snapshot)
+        {
+            PropertyInfo snapshotProperty = typeof(InputSystemLogicalInputAdapter).GetProperty(
+                nameof(InputSystemLogicalInputAdapter.Snapshot),
+                BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo setter = snapshotProperty?.GetSetMethod(true);
+            Assert.That(setter, Is.Not.Null);
+            setter.Invoke(logicalInput, new object[] { snapshot });
         }
 
         private sealed class ResetFixture

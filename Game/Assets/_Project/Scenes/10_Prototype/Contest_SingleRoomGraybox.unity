@@ -1721,7 +1721,6 @@ MonoBehaviour:
   - {fileID: 2087965156}
   - {fileID: 498601002}
   interactionRange: 2.8
-  minimumForwardDot: 0.25
   strapContextEnabled: 0
   physicalObjectLifecycle: {fileID: 1121842308}
 --- !u!114 &1121842307

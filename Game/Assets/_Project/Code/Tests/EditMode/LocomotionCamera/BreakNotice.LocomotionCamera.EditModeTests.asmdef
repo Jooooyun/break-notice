@@ -4,6 +4,7 @@
   "references": [
     "BreakNotice.Gameplay",
     "BreakNotice.Presentation",
+    "BreakNotice.ContestBrowser",
     "Unity.InputSystem",
     "Unity.Cinemachine"
   ],

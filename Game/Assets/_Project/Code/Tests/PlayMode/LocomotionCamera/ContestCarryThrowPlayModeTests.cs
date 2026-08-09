@@ -366,7 +366,6 @@ namespace BreakNotice.LocomotionCamera.Tests
                     null,
                     new[] { Target },
                     2.8f,
-                    0.25f,
                     false,
                     Lifecycle);
                 Physics.SyncTransforms();

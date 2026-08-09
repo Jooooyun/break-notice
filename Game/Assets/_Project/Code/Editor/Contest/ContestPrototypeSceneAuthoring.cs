@@ -108,7 +108,6 @@ namespace BreakNotice.Contest.Editor
                 outputCamera.transform,
                 targets,
                 2.8f,
-                0.25f,
                 false,
                 lifecycle);
 
@@ -143,7 +142,6 @@ namespace BreakNotice.Contest.Editor
                 outputCamera.transform,
                 targets,
                 2.8f,
-                0.25f,
                 false);
 
             InteractionReadabilityPresenter presenter =
