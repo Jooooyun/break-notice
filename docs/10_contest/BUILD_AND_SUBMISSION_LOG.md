@@ -106,5 +106,5 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Tests | `EditMode 37/37 PASS / PlayMode 17/17 PASS / total 54/54` |
 | HTTP | `PASS / 19 of 19 files HTTP 200` |
 | Browser | `PASS / in-app browser clean WebGL load / 960x600 canvas ready / initial product console error-warning 0` |
-| Manual Defect Status | `REPAIRED AND AUTOMATED / Human Owner post-repair Binder-Chair carry-near-wall retest pending` |
+| Manual Defect Status | `PASS / Human Owner post-repair Binder-Chair carry-near-wall camera retest 2026-08-09 / broader C1-C3 manual acceptance not inferred` |
 | Submission State | `NOT READY / C4 NOT AUTHORIZED` |

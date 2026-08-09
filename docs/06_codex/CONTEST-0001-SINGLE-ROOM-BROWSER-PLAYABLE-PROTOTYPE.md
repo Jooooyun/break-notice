@@ -175,6 +175,6 @@ desktop browser prototype과 검증 증거를 만든다.
 - HTTP and browser:
   `19/19 HTTP 200 / in-app browser clean WebGL load PASS / 960x600 canvas ready / initial product console error-warning 0`
 - Manual acceptance:
-  `Human Owner post-repair Binder and Chair carry-near-wall retest pending. Automated evidence must not be treated as that manual pass.`
+  `PASS / Human Owner confirmed the post-repair camera is normal on 2026-08-09 for the Binder-Chair carry-near-wall defect scope. Broader C1-C3 manual acceptance is not inferred from this bounded result.`
 - Scope:
   `C4 and later, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`

@@ -168,8 +168,8 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
 - Browser:
   `In-app browser clean WebGL load PASS / 960x600 canvas ready / initial product console error-warning 0.`
 - Manual Status:
-  `Pre-repair Human Owner reproduction is REVISION REQUIRED. Post-repair Human Owner Binder-Chair carry-near-wall retest remains pending.`
+  `Pre-repair Human Owner reproduction was REVISION REQUIRED. Post-repair Human Owner Binder-Chair carry-near-wall camera retest PASS on 2026-08-09. Broader C1-C3 manual acceptance is not inferred.`
 - Protected Scope:
   `26 Human Owner untracked items unchanged and unstaged / main, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and C4+ unchanged.`
 - Next:
-  `Collect the Human Owner post-repair carry-near-wall manual result before any C4 implementation decision.`
+  `Report the bounded manual PASS to GPT Pro and obtain the next bounded work recommendation. C4 remains unauthorized until a new Human Owner directive opens it.`
