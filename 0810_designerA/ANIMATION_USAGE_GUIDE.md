@@ -16,15 +16,14 @@ Source: Mixamo mocap, `main_norig_tex.fbx` 베이스 리그(41 bone, Standard Hu
 | left turn.fbx | 32 | 제자리 좌회전 |
 | right turn.fbx | 32 | 제자리 우회전 |
 
-### Idle — 대기 (5종, 실제 포즈 다 다름)
+### Idle — 대기 (2종으로 축소됨)
 
-| 파일 | 프레임 | 포즈 특징 | 추천 용도 |
+| 파일 | 프레임 | 포즈 특징 | 용도 |
 |---|---|---|---|
 | idle.fbx | 120 | 기본 이완 자세 | **Default Idle** |
 | idle (2).fbx | 300 | 주먹 살짝 든 경계 자세 | **Combat-Ready Idle** |
-| idle (3).fbx | 98 | 고개 숙인 피곤/방심 자세 | 랜덤 Idle Break 후보 |
-| idle (4).fbx | 77 | 낮은 방어 자세(스쿼트성) | 압박/피격 직후 Idle 후보 |
-| idle (5).fbx | 68 | 주먹 든 얕은 경계 자세 | idle(2)와 목적 겹침 |
+
+idle(3)/(4)/(5) 삭제됨(2026-08-10 정리). idle(5)는 idle(2)와 목적 겹쳐서 제거, idle(3)/(4)는 별도 상태로 안 쓰기로 함.
 
 ### Traversal — 점프/낙하
 
@@ -40,13 +39,13 @@ Source: Mixamo mocap, `main_norig_tex.fbx` 베이스 리그(41 bone, Standard Hu
 | 파일 | 프레임 | 용도 |
 |---|---|---|
 | stand to cover.fbx | 29 | 서있다가 엄폐 진입 |
-| stand to cover (2).fbx | 38 | 서있다가 엄폐 진입 (변형) |
 | cover to stand.fbx | 46 | 엄폐에서 일어서기 |
-| cover to stand (2).fbx | 34 | 엄폐에서 일어서기 (변형) |
 | crouched sneaking left.fbx | 39 | 크라우치 좌측 이동 |
 | crouched sneaking right.fbx | 33 | 크라우치 우측 이동 |
 | left cover sneak.fbx | 35 | 엄폐물 붙은 채 좌측 이동 |
 | right cover sneak.fbx | 34 | 엄폐물 붙은 채 우측 이동 |
+
+`stand to cover (2)`, `cover to stand (2)` 변형본은 삭제됨(2026-08-10 정리, 목적 중복).
 
 ### Core Mechanic — 잡고 당기기 (Cargo Strap 후보)
 
@@ -65,20 +64,20 @@ Source: Mixamo mocap, `main_norig_tex.fbx` 베이스 리그(41 bone, Standard Hu
 | Fist Fight A.fbx | 141 | 맨손 격투 콤보 |
 | Reaction.fbx | 56 | 피격 리액션 |
 | Dodging.fbx | 68 | 회피 |
-| Dying.fbx | 133 | 사망 모션 A |
-| Dying (1).fbx | 141 | 사망 모션 B |
+| Dying1.fbx | 133 | 사망 모션 A |
+| Dying2.fbx | 141 | 사망 모션 B |
 | Stable Sword Outward Slash.fbx | 62 | 검 베기 |
 | Rifle Block.fbx | 85 | 총기 막기 자세 |
 
 **주의**: 게임 설계 문서상 플레이어 무기 체계는 화물 스트랩뿐, 검/총 언급 없음. 이 2개는 지금 캐논과 안 맞음 — 적/동료용으로 재해석하거나 드롭 검토.
 
-## 중복/축소 후보 (삭제 안 함, 판단만 요청)
+## 중복/축소 처리 결과 (2026-08-10)
 
-1. **idle 5종 → 2~3종으로 축소 가능**: idle.fbx(기본) + idle(2).fbx(전투 대기)면 상태머신 커버 가능. idle(5)는 idle(2)와 포즈 목적 겹침. idle(3)/idle(4)는 랜덤 배리에이션 용도로 남길지 판단 필요.
-2. **stand to cover / stand to cover (2)**: 둘 다 동일 목적(서기→엄폐). 하나만 채택 추천.
-3. **cover to stand / cover to stand (2)**: 둘 다 동일 목적(엄폐→서기). 하나만 채택 추천.
-4. **crouched sneaking left/right vs left/right cover sneak**: 목적 유사(크라우치 이동)하지만 엄폐물 밀착 여부가 다름 — 실제 다른 상황(오픈필드 잠입 vs 엄폐 벽 이동)이라 중복 아닐 수 있음, 기획 확인 필요.
-5. **Dying / Dying (1)**: 사망 변주 2개, 의도적 다양성일 수 있음(반복감 감소) — 스펙상 예산 여유 있으면 유지 추천.
+1. ~~idle 5종 → 2종으로 축소~~ **완료**: idle(3)/(4)/(5) 삭제, idle.fbx + idle(2).fbx만 유지.
+2. ~~stand to cover 중복~~ **완료**: `stand to cover (2).fbx` 삭제, `stand to cover.fbx`만 유지.
+3. ~~cover to stand 중복~~ **완료**: `cover to stand (2).fbx` 삭제, `cover to stand.fbx`만 유지.
+4. **crouched sneaking left/right vs left/right cover sneak**: 유지. 목적 유사(크라우치 이동)하지만 엄폐물 밀착 여부가 다름 — 실제 다른 상황(오픈필드 잠입 vs 엄폐 벽 이동)이라 중복 아닐 수 있음, 기획 확인 필요.
+5. **Dying1 / Dying2**: 유지 + 구분 가능하게 파일명 정리(`Dying.fbx`→`Dying1.fbx`, `Dying (1).fbx`→`Dying2.fbx`). 사망 변주 2개, 의도적 다양성으로 유지.
 
 ## 기술적 확인 필요 사항 (Unity 통합 전)
 
