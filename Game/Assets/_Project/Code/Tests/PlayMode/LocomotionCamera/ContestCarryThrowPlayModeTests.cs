@@ -85,6 +85,22 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
+        public IEnumerator CarryBinderAgainstSolidWall_StopsBeforeWallWithoutOwnershipLoss()
+        {
+            yield return AssertCarryStopsBeforeSolidWall(
+                PrototypeWeightClass.Light,
+                new Vector3(0.6f, 0.6f, 0.25f));
+        }
+
+        [UnityTest]
+        public IEnumerator CarryChairAgainstSolidWall_StopsBeforeWallWithoutOwnershipLoss()
+        {
+            yield return AssertCarryStopsBeforeSolidWall(
+                PrototypeWeightClass.Medium,
+                new Vector3(1.2f, 1.3f, 1.2f));
+        }
+
+        [UnityTest]
         public IEnumerator ThrowRelease_ProducesPlayerOwnedTrajectoryAndPhysicalCollision()
         {
             CarryFixture fixture = new CarryFixture(PrototypeWeightClass.Light);
@@ -187,6 +203,125 @@ namespace BreakNotice.LocomotionCamera.Tests
             yield return unload;
         }
 
+        private static IEnumerator AssertCarryStopsBeforeSolidWall(
+            PrototypeWeightClass weightClass,
+            Vector3 targetScale)
+        {
+            CarryFixture fixture = new CarryFixture(weightClass);
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            wall.name = $"CarryBlockingWall-{weightClass}";
+            wall.transform.position = new Vector3(0f, 1f, 2.65f);
+            wall.transform.localScale = new Vector3(8f, 2f, 0.2f);
+            fixture.Target.transform.localScale = targetScale;
+            Physics.SyncTransforms();
+
+            try
+            {
+                int originalLayer = fixture.Target.gameObject.layer;
+                Assert.That(fixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
+                for (int step = 0; step < 24; step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                Collider targetCollider = fixture.Target.GetComponent<Collider>();
+                Collider wallCollider = wall.GetComponent<Collider>();
+                Assert.That(
+                    Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
+                    Is.False,
+                    $"{weightClass} carry must restore player collision after acquisition clears the player.");
+                for (int step = 0; step < 36; step++)
+                {
+                    fixture.PlayerController.Move(Vector3.forward * 0.08f);
+                    yield return new WaitForFixedUpdate();
+                    AssertCarryRemainsOnNearSide(fixture, wallCollider, weightClass);
+                }
+
+                float clearance = wallCollider.bounds.min.z - targetCollider.bounds.max.z;
+                Assert.That(clearance, Is.GreaterThanOrEqualTo(-0.001f));
+                Assert.That(clearance, Is.LessThanOrEqualTo(0.05f));
+
+                float beforeSlideX = fixture.Target.transform.position.x;
+                fixture.PlayerTransform.rotation = Quaternion.Euler(0f, 30f, 0f);
+                for (int step = 0; step < 24; step++)
+                {
+                    fixture.PlayerController.Move(Vector3.right * 0.08f);
+                    yield return new WaitForFixedUpdate();
+                    AssertCarryRemainsOnNearSide(fixture, wallCollider, weightClass);
+                }
+
+                Assert.That(
+                    fixture.Target.transform.position.x,
+                    Is.GreaterThan(beforeSlideX + 0.5f),
+                    $"{weightClass} carry must keep moving along a blocking wall.");
+                Assert.That(fixture.Controller.ProcessThrow(), Is.True);
+                Assert.That(fixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
+                Assert.That(fixture.Owner.CarriedTarget, Is.Null);
+                Assert.That(fixture.Lifecycle.CarriedTarget, Is.Null);
+                Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(originalLayer));
+                Assert.That(fixture.Target.GetComponent<Rigidbody>().isKinematic, Is.False);
+                Assert.That(fixture.Target.GetComponent<Rigidbody>().useGravity, Is.True);
+                Assert.That(fixture.Lifecycle.LastThrowOrigin.IsPlayerOwned, Is.True);
+                Assert.That(fixture.Lifecycle.ThrowOriginCount, Is.EqualTo(1));
+                Assert.That(
+                    Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
+                    Is.False);
+            }
+            finally
+            {
+                fixture.Dispose();
+                Object.Destroy(wall);
+            }
+
+            yield return null;
+        }
+
+        private static void AssertCarryRemainsOnNearSide(
+            CarryFixture fixture,
+            Collider wallCollider,
+            PrototypeWeightClass weightClass)
+        {
+            Collider targetCollider = fixture.Target.GetComponent<Collider>();
+            bool penetrates = Physics.ComputePenetration(
+                targetCollider,
+                fixture.Target.transform.position,
+                fixture.Target.transform.rotation,
+                wallCollider,
+                wallCollider.transform.position,
+                wallCollider.transform.rotation,
+                out _,
+                out float penetrationDistance);
+
+            Assert.That(
+                penetrates && penetrationDistance > 0.001f,
+                Is.False,
+                $"{weightClass} carry penetration depth was {penetrationDistance}.");
+            Assert.That(
+                targetCollider.bounds.max.z,
+                Is.LessThanOrEqualTo(wallCollider.bounds.min.z + 0.001f),
+                $"{weightClass} carry crossed to the far side of the wall.");
+            Assert.That(fixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
+            Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(fixture.Target));
+            Assert.That(fixture.Lifecycle.CarriedTarget, Is.SameAs(fixture.Target));
+            Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(LayerMask.NameToLayer("Ignore Raycast")));
+            Assert.That(targetCollider.enabled, Is.True);
+            Assert.That(fixture.Target.gameObject.activeInHierarchy, Is.True);
+
+            bool overlapsPlayer = Physics.ComputePenetration(
+                targetCollider,
+                fixture.Target.transform.position,
+                fixture.Target.transform.rotation,
+                fixture.PlayerController,
+                fixture.PlayerController.transform.position,
+                fixture.PlayerController.transform.rotation,
+                out _,
+                out float playerPenetrationDistance);
+            Assert.That(
+                overlapsPlayer && playerPenetrationDistance > 0.001f,
+                Is.False,
+                $"{weightClass} carry penetrated the player by {playerPenetrationDistance}.");
+        }
+
         private sealed class CarryFixture
         {
             private readonly GameObject player;
@@ -195,7 +330,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             public CarryFixture(PrototypeWeightClass weightClass)
             {
                 player = new GameObject("Player");
-                player.AddComponent<CharacterController>();
+                PlayerController = player.AddComponent<CharacterController>();
                 Owner = player.AddComponent<PrototypeInteractionStateOwner>();
                 Lifecycle = player.AddComponent<PrototypePhysicalObjectLifecycle>();
                 Controller = player.AddComponent<PrototypeInteractionController>();
@@ -242,6 +377,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             public PrototypeInteractionController Controller { get; }
             public PrototypeInteractionTarget Target { get; }
             public Transform Anchor { get; }
+            public Transform PlayerTransform => player.transform;
+            public CharacterController PlayerController { get; }
 
             public void Dispose()
             {

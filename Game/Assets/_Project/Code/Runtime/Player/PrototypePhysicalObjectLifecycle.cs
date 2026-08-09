@@ -6,6 +6,12 @@ namespace BreakNotice.Gameplay.Interaction
     [DisallowMultipleComponent]
     public sealed class PrototypePhysicalObjectLifecycle : MonoBehaviour
     {
+        private const float CarryCollisionSkin = 0.02f;
+        private const float CarryPenetrationTolerance = 0.001f;
+        private const float CarryRotationCollisionStep = 2f;
+        private const int CarryCollisionCapacity = 32;
+        private const int CarryCollisionResolveIterations = 8;
+
         [SerializeField]
         private PrototypeInteractionStateOwner interactionOwner;
 
@@ -31,10 +37,13 @@ namespace BreakNotice.Gameplay.Interaction
         private PrototypeInteractionTarget carriedTarget;
         private Rigidbody carriedBody;
         private Collider carriedCollider;
+        private BoxCollider carriedBoxCollider;
         private bool playerCollisionIgnored;
         private int carriedOriginalLayer;
         private bool carriedCameraCollisionIgnored;
         private uint nextThrowOriginSequence;
+        private readonly RaycastHit[] carrySweepHits = new RaycastHit[CarryCollisionCapacity];
+        private readonly Collider[] carryOverlapHits = new Collider[CarryCollisionCapacity];
 
         public PrototypeInteractionTarget CarriedTarget => carriedTarget;
 
@@ -68,14 +77,18 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             Rigidbody body = target.GetComponent<Rigidbody>();
-            if (body == null)
+            Collider targetCollider = target.GetComponent<Collider>();
+            if (body == null ||
+                targetCollider is not BoxCollider targetBoxCollider ||
+                targetBoxCollider.transform != body.transform)
             {
                 return false;
             }
 
             carriedTarget = target;
             carriedBody = body;
-            carriedCollider = target.GetComponent<Collider>();
+            carriedCollider = targetCollider;
+            carriedBoxCollider = targetBoxCollider;
             AcquisitionPathLength = 0f;
 
             carriedBody.linearVelocity = Vector3.zero;
@@ -127,6 +140,7 @@ namespace BreakNotice.Gameplay.Interaction
             carriedTarget = null;
             carriedBody = null;
             carriedCollider = null;
+            carriedBoxCollider = null;
             interactionOwner.CompleteThrow(target);
             return true;
         }
@@ -153,6 +167,7 @@ namespace BreakNotice.Gameplay.Interaction
             carriedTarget = null;
             carriedBody = null;
             carriedCollider = null;
+            carriedBoxCollider = null;
             AcquisitionPathLength = 0f;
             LastReleaseSpeed = 0f;
         }
@@ -192,9 +207,292 @@ namespace BreakNotice.Gameplay.Interaction
                 transform.rotation,
                 carryRotationSpeed * Time.fixedDeltaTime);
 
+            Quaternion currentRotation = carriedBody.rotation;
+            nextPosition = ResolveCarryTranslation(before, nextPosition, currentRotation);
+            if (WouldCarryPosePenetrate(nextPosition, currentRotation))
+            {
+                nextPosition = ResolveCarryPenetration(before, nextPosition, currentRotation);
+            }
+
+            nextRotation = ResolveCarryRotation(nextPosition, currentRotation, nextRotation);
+            TryRestorePlayerCollision(nextPosition, nextRotation);
+
             carriedBody.MovePosition(nextPosition);
             carriedBody.MoveRotation(nextRotation);
             AcquisitionPathLength += Vector3.Distance(before, nextPosition);
+        }
+
+        private Vector3 ResolveCarryTranslation(
+            Vector3 currentPosition,
+            Vector3 requestedPosition,
+            Quaternion currentRotation)
+        {
+            if (carriedBoxCollider == null || carriedBoxCollider.transform != carriedBody.transform)
+            {
+                return requestedPosition;
+            }
+
+            Vector3 displacement = requestedPosition - currentPosition;
+            float requestedDistance = displacement.magnitude;
+            if (requestedDistance <= Mathf.Epsilon)
+            {
+                return currentPosition;
+            }
+
+            Vector3 direction = displacement / requestedDistance;
+            float permittedDistance = GetPermittedCarryDistance(
+                currentPosition,
+                direction,
+                requestedDistance,
+                currentRotation,
+                out Vector3 blockingNormal);
+            Vector3 resolvedPosition = currentPosition + direction * permittedDistance;
+            if (permittedDistance >= requestedDistance - Mathf.Epsilon)
+            {
+                return resolvedPosition;
+            }
+
+            Vector3 remainingDisplacement = requestedPosition - resolvedPosition;
+            Vector3 slideDisplacement = Vector3.ProjectOnPlane(
+                remainingDisplacement,
+                blockingNormal);
+            float slideDistance = slideDisplacement.magnitude;
+            if (slideDistance <= Mathf.Epsilon)
+            {
+                return resolvedPosition;
+            }
+
+            Vector3 slideDirection = slideDisplacement / slideDistance;
+            float permittedSlideDistance = GetPermittedCarryDistance(
+                resolvedPosition,
+                slideDirection,
+                slideDistance,
+                currentRotation,
+                out _);
+            return resolvedPosition + slideDirection * permittedSlideDistance;
+        }
+
+        private float GetPermittedCarryDistance(
+            Vector3 currentPosition,
+            Vector3 direction,
+            float requestedDistance,
+            Quaternion currentRotation,
+            out Vector3 blockingNormal)
+        {
+            Vector3 halfExtents = GetCarryBoxHalfExtents();
+            Vector3 queryHalfExtents = new Vector3(
+                Mathf.Max(0.001f, halfExtents.x - CarryPenetrationTolerance),
+                Mathf.Max(0.001f, halfExtents.y - CarryPenetrationTolerance),
+                Mathf.Max(0.001f, halfExtents.z - CarryPenetrationTolerance));
+            Vector3 center = GetCarryBoxCenter(currentPosition, currentRotation);
+            int hitCount = Physics.BoxCastNonAlloc(
+                center,
+                queryHalfExtents,
+                direction,
+                carrySweepHits,
+                currentRotation,
+                requestedDistance + CarryCollisionSkin,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore);
+
+            blockingNormal = -direction;
+            if (hitCount >= CarryCollisionCapacity)
+            {
+                return 0f;
+            }
+
+            float permittedDistance = requestedDistance;
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = carrySweepHits[index];
+                if (!IsCarryBlockingCollider(hit.collider))
+                {
+                    continue;
+                }
+
+                if (Vector3.Dot(direction, hit.normal) >= -CarryPenetrationTolerance)
+                {
+                    continue;
+                }
+
+                float candidateDistance = Mathf.Max(
+                    0f,
+                    hit.distance - CarryCollisionSkin - CarryPenetrationTolerance);
+                if (candidateDistance < permittedDistance)
+                {
+                    permittedDistance = candidateDistance;
+                    blockingNormal = hit.normal;
+                }
+            }
+
+            return permittedDistance;
+        }
+
+        private Quaternion ResolveCarryRotation(
+            Vector3 position,
+            Quaternion currentRotation,
+            Quaternion requestedRotation)
+        {
+            float requestedAngle = Quaternion.Angle(currentRotation, requestedRotation);
+            if (requestedAngle <= Mathf.Epsilon)
+            {
+                return currentRotation;
+            }
+
+            int stepCount = Mathf.Max(
+                1,
+                Mathf.CeilToInt(requestedAngle / CarryRotationCollisionStep));
+            Quaternion acceptedRotation = currentRotation;
+            for (int step = 1; step <= stepCount; step++)
+            {
+                Quaternion candidate = Quaternion.Slerp(
+                    currentRotation,
+                    requestedRotation,
+                    step / (float)stepCount);
+                if (WouldCarryPosePenetrate(position, candidate))
+                {
+                    break;
+                }
+
+                acceptedRotation = candidate;
+            }
+
+            return acceptedRotation;
+        }
+
+        private Vector3 ResolveCarryPenetration(
+            Vector3 safePosition,
+            Vector3 requestedPosition,
+            Quaternion requestedRotation)
+        {
+            if (WouldCarryPosePenetrate(safePosition, requestedRotation))
+            {
+                return safePosition;
+            }
+
+            Vector3 accepted = safePosition;
+            Vector3 rejected = requestedPosition;
+            for (int iteration = 0; iteration < CarryCollisionResolveIterations; iteration++)
+            {
+                Vector3 candidate = Vector3.Lerp(accepted, rejected, 0.5f);
+                if (WouldCarryPosePenetrate(candidate, requestedRotation))
+                {
+                    rejected = candidate;
+                }
+                else
+                {
+                    accepted = candidate;
+                }
+            }
+
+            return accepted;
+        }
+
+        private bool WouldCarryPosePenetrate(Vector3 position, Quaternion rotation)
+        {
+            if (carriedBoxCollider == null || carriedBoxCollider.transform != carriedBody.transform)
+            {
+                return false;
+            }
+
+            int overlapCount = Physics.OverlapBoxNonAlloc(
+                GetCarryBoxCenter(position, rotation),
+                GetCarryBoxHalfExtents(),
+                carryOverlapHits,
+                rotation,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore);
+            if (overlapCount >= CarryCollisionCapacity)
+            {
+                return true;
+            }
+
+            for (int index = 0; index < overlapCount; index++)
+            {
+                Collider other = carryOverlapHits[index];
+                if (!IsCarryBlockingCollider(other))
+                {
+                    continue;
+                }
+
+                if (Physics.ComputePenetration(
+                        carriedBoxCollider,
+                        position,
+                        rotation,
+                        other,
+                        other.transform.position,
+                        other.transform.rotation,
+                        out _,
+                        out float distance) &&
+                    distance > CarryPenetrationTolerance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsCarryBlockingCollider(Collider other)
+        {
+            bool belongsToPlayer = other != null &&
+                (other == playerController || other.transform.IsChildOf(transform));
+            if (other == null ||
+                other == carriedCollider ||
+                other.attachedRigidbody == carriedBody ||
+                (belongsToPlayer && playerCollisionIgnored))
+            {
+                return false;
+            }
+
+            if (Physics.GetIgnoreLayerCollision(
+                    carriedCollider.gameObject.layer,
+                    other.gameObject.layer))
+            {
+                return false;
+            }
+
+            return !Physics.GetIgnoreCollision(carriedCollider, other);
+        }
+
+        private void TryRestorePlayerCollision(Vector3 position, Quaternion rotation)
+        {
+            if (!playerCollisionIgnored ||
+                playerController == null ||
+                carriedBoxCollider == null)
+            {
+                return;
+            }
+
+            bool overlapsPlayer = Physics.ComputePenetration(
+                carriedBoxCollider,
+                position,
+                rotation,
+                playerController,
+                playerController.transform.position,
+                playerController.transform.rotation,
+                out _,
+                out float distance) &&
+                distance > CarryPenetrationTolerance;
+            if (!overlapsPlayer)
+            {
+                SetPlayerCollisionIgnored(false);
+            }
+        }
+
+        private Vector3 GetCarryBoxCenter(Vector3 position, Quaternion rotation)
+        {
+            Vector3 scaledCenter = Vector3.Scale(
+                carriedBoxCollider.center,
+                carriedBoxCollider.transform.lossyScale);
+            return position + rotation * scaledCenter;
+        }
+
+        private Vector3 GetCarryBoxHalfExtents()
+        {
+            Vector3 scale = carriedBoxCollider.transform.lossyScale;
+            scale = new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z));
+            return Vector3.Scale(carriedBoxCollider.size * 0.5f, scale);
         }
 
         private void SetPlayerCollisionIgnored(bool ignored)

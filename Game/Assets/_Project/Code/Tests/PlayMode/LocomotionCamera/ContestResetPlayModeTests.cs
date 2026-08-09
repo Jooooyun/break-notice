@@ -67,22 +67,61 @@ namespace BreakNotice.LocomotionCamera.Tests
         public IEnumerator ResetDuringCarry_ClearsOwnershipAndRestoresSameObject()
         {
             ResetFixture fixture = new ResetFixture();
+            GameObject wall = null;
             try
             {
                 PrototypeInteractionTarget binder = fixture.Targets[0];
                 Vector3 baseline = binder.transform.position;
+                int originalLayer = binder.gameObject.layer;
+                int instanceId = binder.gameObject.GetInstanceID();
+                for (int index = 1; index < fixture.Targets.Length; index++)
+                {
+                    fixture.Targets[index].transform.position += Vector3.forward * 20f;
+                }
+
+                Vector3 horizontalCarryDirection = Vector3.ProjectOnPlane(
+                    fixture.Anchor.position - baseline,
+                    Vector3.up).normalized;
+                wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                wall.name = "ResetDuringBlockedCarryWall";
+                wall.transform.position = Vector3.Lerp(baseline, fixture.Anchor.position, 0.5f);
+                wall.transform.rotation = Quaternion.LookRotation(horizontalCarryDirection);
+                wall.transform.localScale = new Vector3(4f, 4f, 0.2f);
+                Physics.SyncTransforms();
+
                 var arbitrator = new PrototypeInteractionArbitrator();
                 Assert.That(fixture.Owner.TryCommit(
                     arbitrator.Decide(fixture.Owner.CreateContext(false, binder))), Is.True);
                 Assert.That(fixture.Lifecycle.BeginCarry(binder), Is.True);
-                yield return new WaitForFixedUpdate();
+                for (int step = 0; step < 30; step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
                 Assert.That(binder.transform.position, Is.Not.EqualTo(baseline));
+                bool penetrates = Physics.ComputePenetration(
+                    binder.GetComponent<Collider>(),
+                    binder.transform.position,
+                    binder.transform.rotation,
+                    wall.GetComponent<Collider>(),
+                    wall.transform.position,
+                    wall.transform.rotation,
+                    out _,
+                    out float penetrationDistance);
+                Assert.That(penetrates && penetrationDistance > 0.001f, Is.False);
+                Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(binder));
 
                 Assert.That(
                     fixture.Reset.RequestReset(EncounterResetCause.ManualInput),
                     Is.True);
                 Assert.That(binder.transform.position, Is.EqualTo(baseline));
                 Assert.That(binder.gameObject.activeInHierarchy, Is.True);
+                Assert.That(binder.gameObject.layer, Is.EqualTo(originalLayer));
+                Assert.That(binder.gameObject.GetInstanceID(), Is.EqualTo(instanceId));
+                Assert.That(binder.GetComponent<Rigidbody>().isKinematic, Is.False);
+                Assert.That(binder.GetComponent<Rigidbody>().useGravity, Is.False);
+                Assert.That(binder.GetComponent<Rigidbody>().linearVelocity, Is.EqualTo(Vector3.zero));
+                Assert.That(binder.GetComponent<Rigidbody>().angularVelocity, Is.EqualTo(Vector3.zero));
                 yield return null;
 
                 Assert.That(fixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
@@ -93,6 +132,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             finally
             {
                 fixture.Dispose();
+                Object.Destroy(wall);
             }
 
             yield return null;
@@ -161,10 +201,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Player.AddComponent<CharacterController>();
                 Owner = Player.AddComponent<PrototypeInteractionStateOwner>();
                 Lifecycle = Player.AddComponent<PrototypePhysicalObjectLifecycle>();
-                Transform anchor = new GameObject("CarryAnchor").transform;
-                anchor.SetParent(Player.transform, false);
-                anchor.localPosition = new Vector3(0f, 1f, 1f);
-                Lifecycle.Configure(Owner, anchor);
+                Anchor = new GameObject("CarryAnchor").transform;
+                Anchor.SetParent(Player.transform, false);
+                Anchor.localPosition = new Vector3(0f, 1f, 1f);
+                Lifecycle.Configure(Owner, Anchor);
 
                 Actors = new[]
                 {
@@ -235,6 +275,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             public PrototypeInteractionStateOwner Owner { get; }
             public PrototypePhysicalObjectLifecycle Lifecycle { get; }
             public AuthoredEncounterResetController Reset { get; }
+            public Transform Anchor { get; }
 
             public void Dispose()
             {
