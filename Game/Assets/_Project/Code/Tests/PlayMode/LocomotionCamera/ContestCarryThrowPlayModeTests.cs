@@ -19,6 +19,9 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Vector3 initial = fixture.Target.transform.position;
                 Assert.That(fixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
                 Assert.That(fixture.Target.transform.position, Is.EqualTo(initial));
+                Assert.That(
+                    fixture.Target.gameObject.layer,
+                    Is.EqualTo(LayerMask.NameToLayer("Ignore Raycast")));
 
                 yield return new WaitForFixedUpdate();
                 Vector3 afterFirstStep = fixture.Target.transform.position;
@@ -34,6 +37,44 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Target.gameObject.activeInHierarchy, Is.True);
                 Assert.That(fixture.Target.GetComponent<Renderer>().enabled, Is.True);
                 Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(fixture.Target));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator CarryCameraCollisionLayer_RestoresExactlyOnThrowAndReset()
+        {
+            CarryFixture fixture = new CarryFixture(PrototypeWeightClass.Medium);
+            try
+            {
+                int originalLayer = fixture.Target.gameObject.layer;
+                Assert.That(fixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
+                Assert.That(
+                    fixture.Target.gameObject.layer,
+                    Is.EqualTo(LayerMask.NameToLayer("Ignore Raycast")));
+
+                yield return new WaitForFixedUpdate();
+                Assert.That(fixture.Controller.ProcessThrow(), Is.True);
+                Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(originalLayer));
+
+                Rigidbody body = fixture.Target.GetComponent<Rigidbody>();
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+                fixture.Target.transform.position = new Vector3(0f, 1f, 1.6f);
+                Physics.SyncTransforms();
+
+                Assert.That(fixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
+                Assert.That(
+                    fixture.Target.gameObject.layer,
+                    Is.EqualTo(LayerMask.NameToLayer("Ignore Raycast")));
+
+                fixture.Lifecycle.DetachForReset();
+                Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(originalLayer));
             }
             finally
             {

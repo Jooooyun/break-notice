@@ -140,7 +140,10 @@ namespace BreakNotice.Presentation
                 CinemachineThirdPersonFollow.ObstacleSettings obstacleSettings =
                     thirdPersonFollow.AvoidObstacles;
                 obstacleSettings.Enabled = true;
-                obstacleSettings.CollisionFilter = ~0;
+                // Carried prototype objects temporarily use Ignore Raycast so the
+                // camera boom keeps resolving against authored world geometry
+                // instead of snapping between a held collider and a nearby wall.
+                obstacleSettings.CollisionFilter = Physics.DefaultRaycastLayers;
                 obstacleSettings.IgnoreTag = string.Empty;
                 obstacleSettings.CameraRadius = cameraCollisionRadius;
                 obstacleSettings.DampingIntoCollision = 0f;

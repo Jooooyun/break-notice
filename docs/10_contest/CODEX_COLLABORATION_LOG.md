@@ -150,3 +150,26 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `26 Human Owner untracked items untouched / protected staged 0 / main, packages, production art and C4+ unchanged`
 - Next:
   `Human Owner authorization required before C4 fixed ally relay, catch and queued throw`
+
+## C1-C3 Carry-Wall Camera Collision Repair — 2026-08-09
+
+- Goal:
+  `Repair the Human Owner-reported camera viewpoint error when a carried Binder or Chair approaches a wall, without entering C4.`
+- Human Owner Decision:
+  `Proceed with the next task and treat the reported carry-near-wall camera behavior as a defect.`
+- Root Cause:
+  `The Cinemachine obstacle query included the carried collider, so a nearby wall and held object could alternate as the active obstacle.`
+- Repair:
+  `DefaultRaycastLayers for the camera; exact Ignore Raycast layer only during Carry; exact original layer restored by Throw and Reset; physical colliders preserved.`
+- Tests:
+  `Unity compile PASS / EditMode 37/37 / PlayMode 17/17 / total 54/54.`
+- Build:
+  `PASS / GUID 9d1138587e4543f78ebdd73c52eb483f / 113735698 Unity-reported bytes / warnings 0 / errors 0 / 19 HTTP files / SHA-256 ce052048e05ef56c875d1d8e1106d1ffe17d170ca6d2b8cab1bac2b494cb492f.`
+- Browser:
+  `In-app browser clean WebGL load PASS / 960x600 canvas ready / initial product console error-warning 0.`
+- Manual Status:
+  `Pre-repair Human Owner reproduction is REVISION REQUIRED. Post-repair Human Owner Binder-Chair carry-near-wall retest remains pending.`
+- Protected Scope:
+  `26 Human Owner untracked items unchanged and unstaged / main, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and C4+ unchanged.`
+- Next:
+  `Collect the Human Owner post-repair carry-near-wall manual result before any C4 implementation decision.`

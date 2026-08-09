@@ -32,6 +32,8 @@ namespace BreakNotice.Gameplay.Interaction
         private Rigidbody carriedBody;
         private Collider carriedCollider;
         private bool playerCollisionIgnored;
+        private int carriedOriginalLayer;
+        private bool carriedCameraCollisionIgnored;
         private uint nextThrowOriginSequence;
 
         public PrototypeInteractionTarget CarriedTarget => carriedTarget;
@@ -81,6 +83,7 @@ namespace BreakNotice.Gameplay.Interaction
             carriedBody.useGravity = false;
             carriedBody.isKinematic = true;
             SetPlayerCollisionIgnored(true);
+            SetCarriedCameraCollisionIgnored(true);
             return true;
         }
 
@@ -106,6 +109,7 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 releaseVelocity = direction * throwSpeed + Vector3.up * upwardThrowSpeed;
 
             SetPlayerCollisionIgnored(false);
+            SetCarriedCameraCollisionIgnored(false);
             body.isKinematic = false;
             body.useGravity = true;
             body.linearVelocity = releaseVelocity;
@@ -137,6 +141,7 @@ namespace BreakNotice.Gameplay.Interaction
         public void DetachForReset()
         {
             SetPlayerCollisionIgnored(false);
+            SetCarriedCameraCollisionIgnored(false);
             if (carriedBody != null)
             {
                 carriedBody.isKinematic = false;
@@ -206,6 +211,29 @@ namespace BreakNotice.Gameplay.Interaction
 
             Physics.IgnoreCollision(playerController, carriedCollider, ignored);
             playerCollisionIgnored = ignored;
+        }
+
+        private void SetCarriedCameraCollisionIgnored(bool ignored)
+        {
+            if (ignored)
+            {
+                if (carriedTarget == null || carriedCameraCollisionIgnored)
+                {
+                    return;
+                }
+
+                carriedOriginalLayer = carriedTarget.gameObject.layer;
+                carriedTarget.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                carriedCameraCollisionIgnored = true;
+                return;
+            }
+
+            if (carriedCameraCollisionIgnored && carriedTarget != null)
+            {
+                carriedTarget.gameObject.layer = carriedOriginalLayer;
+            }
+
+            carriedCameraCollisionIgnored = false;
         }
     }
 }

@@ -157,3 +157,24 @@ desktop browser prototype과 검증 증거를 만든다.
   `C0 Human Owner move-look-rapid-RMB-pointer acceptance remains authoritative and the baseline behavior was not modified. Chrome extension-driven pointer-lock input again emitted the already-rejected WrongDocumentError automation diagnostic, so trusted C1-C3 acquire-carry-throw-reset browser manual smoke was not collected in this run.`
 - Scope:
   `C4, Cargo Strap, ally-enemy behavior, objective-win, production art integration, new package, second room and all later scope NOT STARTED`
+
+## C1-C3 Carry-Wall Camera Collision Repair Evidence — 2026-08-09
+
+- Human Owner finding:
+  `REVISION REQUIRED / camera viewpoint error reproduced while carrying an object near a wall`
+- Starting baseline:
+  `3803dfcf05ffcfc942d5c1121d38966339227970 / contest/game-builders-2026 / local and origin equal / tracked and staged clean`
+- Root cause:
+  `Cinemachine obstacle filtering included every layer while the carried Binder or Chair collider remained camera-query-visible, allowing the held object and wall to compete as the current camera obstacle.`
+- Repair:
+  `Camera collision now uses Unity DefaultRaycastLayers. Carry temporarily assigns the exact built-in Ignore Raycast layer and Throw or authored Reset restores the exact original layer. Physical colliders remain enabled.`
+- Tests:
+  `Unity compile PASS / EditMode 37/37 / PlayMode 17/17 / total 54/54 / carry layer apply, Throw restore, Reset restore and camera-wall obstacle regression covered`
+- Web Development build:
+  `PASS / GUID 9d1138587e4543f78ebdd73c52eb483f / 113735698 Unity-reported bytes / warnings 0 / errors 0 / 19 files / 113737452 HTTP-verified bytes / aggregate SHA-256 ce052048e05ef56c875d1d8e1106d1ffe17d170ca6d2b8cab1bac2b494cb492f`
+- HTTP and browser:
+  `19/19 HTTP 200 / in-app browser clean WebGL load PASS / 960x600 canvas ready / initial product console error-warning 0`
+- Manual acceptance:
+  `Human Owner post-repair Binder and Chair carry-near-wall retest pending. Automated evidence must not be treated as that manual pass.`
+- Scope:
+  `C4 and later, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`

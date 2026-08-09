@@ -89,3 +89,22 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | C0 Regression | `PRESERVED / existing Human Owner move-look, rapid RMB Aim and pointer capture-release PASS remains authoritative` |
 | Trusted C1-C3 Browser Manual | `NOT COLLECTED / extension-driven pointer-lock WrongDocumentError is the already-rejected automation diagnostic` |
 | Submission State | `NOT READY / C1-C3 IMPLEMENTATION COMPLETE / C4 NOT AUTHORIZED` |
+
+## C1-C3 Carry-Wall Camera Repair Development Build — 2026-08-09
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `3803dfcf05ffcfc942d5c1121d38966339227970` |
+| Repair Commit | `containing commit` |
+| Build ID | `GB2026-C1-C3-CAMERA-REPAIR-WEB-DEV-001` |
+| Build Target | `Web / Development` |
+| Build Date | `2026-08-09 +09:00` |
+| Build GUID | `9d1138587e4543f78ebdd73c52eb483f` |
+| Build Hash | `SHA-256 ce052048e05ef56c875d1d8e1106d1ffe17d170ca6d2b8cab1bac2b494cb492f` over sorted relative-path/file-hash ledger |
+| Size | `113,735,698 bytes Unity report / 113,737,452 bytes across 19 HTTP-verified files` |
+| Unity Build | `PASS / warnings 0 / errors 0` |
+| Tests | `EditMode 37/37 PASS / PlayMode 17/17 PASS / total 54/54` |
+| HTTP | `PASS / 19 of 19 files HTTP 200` |
+| Browser | `PASS / in-app browser clean WebGL load / 960x600 canvas ready / initial product console error-warning 0` |
+| Manual Defect Status | `REPAIRED AND AUTOMATED / Human Owner post-repair Binder-Chair carry-near-wall retest pending` |
+| Submission State | `NOT READY / C4 NOT AUTHORIZED` |

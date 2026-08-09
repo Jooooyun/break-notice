@@ -4,6 +4,7 @@ using BreakNotice.Gameplay.Input;
 using BreakNotice.Presentation;
 using NUnit.Framework;
 using UnityEditor;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -172,6 +173,64 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
+        public IEnumerator CameraCollision_IgnoresCarryLayerButStillResolvesAgainstWalls()
+        {
+            CinemachineThirdPersonFollow thirdPersonFollow =
+                cameraRigObject.GetComponentInChildren<CinemachineThirdPersonFollow>();
+            Assert.That(thirdPersonFollow, Is.Not.Null);
+
+            int collisionMask = thirdPersonFollow.AvoidObstacles.CollisionFilter.value;
+            Assert.That(collisionMask & (1 << 0), Is.Not.EqualTo(0));
+            Assert.That(
+                collisionMask & Physics.IgnoreRaycastLayer,
+                Is.EqualTo(0));
+
+            cameraRig.enabled = false;
+            Transform orbitTarget = cameraRigObject.transform.Find("OrbitTarget");
+            Assert.That(orbitTarget, Is.Not.Null);
+            orbitTarget.position = player.transform.position + Vector3.up * 1.45f;
+            orbitTarget.rotation = Quaternion.Euler(0f, 180f, 0f);
+
+            yield return null;
+            yield return null;
+
+            thirdPersonFollow.GetRigPositions(
+                out _,
+                out _,
+                out Vector3 handPosition);
+            Vector3 boomDirection = orbitTarget.forward * -1f;
+
+            GameObject carriedObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            carriedObject.name = "CameraIgnoredCarriedObject";
+            carriedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            carriedObject.transform.position = handPosition + boomDirection * 1f;
+            carriedObject.transform.localScale = Vector3.one * 0.8f;
+
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            wall.name = "CameraBlockingWall";
+            wall.transform.position = handPosition + boomDirection * 2.2f;
+            wall.transform.localScale = new Vector3(4f, 4f, 0.25f);
+            Collider wallCollider = wall.GetComponent<Collider>();
+
+            try
+            {
+                Physics.SyncTransforms();
+                yield return null;
+                yield return null;
+                yield return null;
+
+                Assert.That(thirdPersonFollow.CurrentObstacle, Is.SameAs(wallCollider));
+                Assert.That(IsFinite(cameraRig.OutputCamera.transform.position), Is.True);
+                Assert.That(IsFinite(cameraRig.OutputCamera.transform.rotation), Is.True);
+            }
+            finally
+            {
+                Object.Destroy(carriedObject);
+                Object.Destroy(wall);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator Locomotion_RemainsGroundedWithoutUncontrolledVerticalVelocity()
         {
             QueueGamepadState(new GamepadState { leftStick = new Vector2(0.5f, 0.75f) });
@@ -198,6 +257,21 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             InputSystem.QueueStateEvent(gamepad, state);
             InputSystem.Update();
+        }
+
+        private static bool IsFinite(Vector3 value)
+        {
+            return float.IsFinite(value.x) &&
+                   float.IsFinite(value.y) &&
+                   float.IsFinite(value.z);
+        }
+
+        private static bool IsFinite(Quaternion value)
+        {
+            return float.IsFinite(value.x) &&
+                   float.IsFinite(value.y) &&
+                   float.IsFinite(value.z) &&
+                   float.IsFinite(value.w);
         }
     }
 }
