@@ -128,3 +128,24 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Previous Camera Result | `PRESERVED / Human Owner Binder-Chair carry-near-wall camera retest PASS 2026-08-09` |
 | Manual Physical Defect Status | `PENDING / Human Owner Binder-Chair solid-wall approach-yaw-slide-Throw-Reset retest` |
 | Submission State | `NOT READY / C2 MANUAL RETEST PENDING / C4 NOT AUTHORIZED` |
+
+## C0-C3 Pointer and Targeting Usability Repair Development Build — 2026-08-09
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `607282c84a12eff860c90d1f2cd81c6829a56825` |
+| Repair Commit | `b2cca79de731be91392a0c288a22d1a8f25c9077 / pushed and remote-verified` |
+| Build ID | `GB2026-C0-C3-POINTER-TARGETING-REPAIR-WEB-DEV-001` |
+| Build Target | `Web / Development` |
+| Build Date | `2026-08-09 +09:00` |
+| Build GUID | `17afceeeb36e4733a1034a54a585ef5e` |
+| Build Hash | `SHA-256 c8d90f0cab2af3fec957f8fb0bf21040f223bd33f5cf9a9f577f4851eee78e45` over sorted relative-path/file-hash ledger |
+| Size | `113,790,231 bytes Unity report / 113,791,985 bytes across 19 HTTP-verified files` |
+| Unity Build | `PASS / warnings 0 / errors 0` |
+| Tests | `EditMode 41/41 PASS / PlayMode 25/25 PASS / total 66/66` |
+| HTTP | `PASS / 19 of 19 files HTTP 200` |
+| Browser | `PASS / in-app browser cold WebGL load / 960x600 canvas / capture and center-reticle prompts visible / blocking console warning-error 0 / dialog 0` |
+| Trusted Pointer Manual | `PENDING / click capture, first-click safety, Escape release and recapture require Human Owner input` |
+| Pickup-Clarity Manual | `PENDING / E prompt, center ray, line of sight and 2.8 m range require Human Owner feel check` |
+| Fun Status | `NOT CLAIMED / C0-C3 usability repair only; C4-C7 core-loop systems remain unimplemented` |
+| Submission State | `NOT READY / MANUAL USABILITY RETEST PENDING / C4 NOT AUTHORIZED` |

@@ -483,16 +483,20 @@
   "contest_c1_c3_fast_track_baseline_sha": "54976681bf3970fcad4e141ab4f3f6dfd1820fa1",
   "contest_c1_commit_sha": "278d062a6b486a176a7cb9144b75dfb058567ead",
   "contest_c2_commit_sha": "083b44e86c76977bd855bf0c2c09baf0001b9750",
-  "contest_c3_status": "IMPLEMENTATION AND AUTOMATED ACCEPTANCE COMPLETE / AUTHORED RESET COMMIT 3803dfcf05ffcfc942d5c1121d38966339227970 / CARRY-WALL CAMERA REPAIR COMMIT 2265bd08689eea223431f6ba4850b67d1602b2b4 / C2 CARRY-SOLID-WALL REPAIR COMMIT 538f2cc781833555b2bf1839c5c37a815f75b6e3 / C4 NOT STARTED",
+  "contest_c3_status": "IMPLEMENTATION AND AUTOMATED ACCEPTANCE COMPLETE / AUTHORED RESET COMMIT 3803dfcf05ffcfc942d5c1121d38966339227970 / CARRY-WALL CAMERA REPAIR COMMIT 2265bd08689eea223431f6ba4850b67d1602b2b4 / C2 CARRY-SOLID-WALL REPAIR COMMIT 538f2cc781833555b2bf1839c5c37a815f75b6e3 / POINTER-AND-TARGETING REPAIR COMMIT b2cca79de731be91392a0c288a22d1a8f25c9077 / C4 NOT STARTED",
   "contest_c1_c3_camera_repair_baseline_sha": "3803dfcf05ffcfc942d5c1121d38966339227970",
   "contest_c2_carry_solid_wall_repair_baseline_sha": "7fc9f41a0ed5c81a44f172009ed0c79764c8ca18",
   "contest_c2_carry_solid_wall_repair_commit_sha": "538f2cc781833555b2bf1839c5c37a815f75b6e3",
   "contest_c2_carry_solid_wall_manual_status": "AUTOMATED QUALIFICATION PASS / HUMAN OWNER BINDER-CHAIR SOLID-WALL RETEST PENDING / PRIOR CAMERA-SPECIFIC PASS PRESERVED / BROADER C1-C3 MANUAL ACCEPTANCE NOT INFERRED",
-  "contest_c1_c3_test_result": "UNITY COMPILE PASS / EDITMODE 37/37 PASS / PLAYMODE 19/19 PASS / TOTAL 56/56 PASS / EXISTING 54 PRESERVED",
-  "contest_c1_c3_web_build_result": "SUCCEEDED / BUILD GUID 13076f9f2456415fa1adcf1446dbf054 / 113763737 UNITY-REPORTED BYTES / 19 FILES / 113765491 HTTP-VERIFIED BYTES / UNITY WARNINGS 0 / UNITY ERRORS 0 / AGGREGATE SHA-256 ee34aac84517eba2a668f85727042b4ca0b8ed8d51580db3a0da9757c7af46ba",
-  "contest_c1_c3_browser_result": "HUMAN OWNER CAMERA RETEST PASS 2026-08-09 PRESERVED / IN-APP BROWSER COLD WEBGL LOAD PASS AFTER C2 PHYSICAL REPAIR / 960X600 CANVAS READY / PRODUCT CONSOLE ERROR 0 / HUMAN OWNER BINDER-CHAIR SOLID-WALL RETEST PENDING / BROADER C1-C3 MANUAL ACCEPTANCE NOT INFERRED",
+  "contest_c0_c3_pointer_targeting_repair_baseline_sha": "607282c84a12eff860c90d1f2cd81c6829a56825",
+  "contest_c0_c3_pointer_targeting_repair_commit_sha": "b2cca79de731be91392a0c288a22d1a8f25c9077",
+  "contest_c0_c3_pointer_targeting_manual_status": "AUTOMATED QUALIFICATION PASS / HUMAN OWNER TRUSTED CLICK CAPTURE, FIRST-CLICK SAFETY, ESCAPE RELEASE, RECAPTURE AND PICKUP-CLARITY RETEST PENDING / BROADER C1-C3 MANUAL ACCEPTANCE NOT INFERRED",
+  "contest_c0_c3_fun_status": "NOT CLAIMED / C4-C7 CORE-LOOP SYSTEMS REMAIN UNIMPLEMENTED / C4 NOT AUTHORIZED",
+  "contest_c1_c3_test_result": "UNITY COMPILE PASS / EDITMODE 41/41 PASS / PLAYMODE 25/25 PASS / TOTAL 66/66 PASS / PRIOR 56 PRESERVED",
+  "contest_c1_c3_web_build_result": "SUCCEEDED / BUILD GUID 17afceeeb36e4733a1034a54a585ef5e / 113790231 UNITY-REPORTED BYTES / 19 FILES / 113791985 HTTP-VERIFIED BYTES / UNITY WARNINGS 0 / UNITY ERRORS 0 / AGGREGATE SHA-256 c8d90f0cab2af3fec957f8fb0bf21040f223bd33f5cf9a9f577f4851eee78e45",
+  "contest_c1_c3_browser_result": "HUMAN OWNER CAMERA RETEST PASS 2026-08-09 PRESERVED / IN-APP BROWSER COLD WEBGL LOAD PASS AFTER POINTER-AND-TARGETING REPAIR / 960X600 CANVAS READY / POINTER CAPTURE AND CENTER-RETICLE INSTRUCTIONS VISIBLE / BLOCKING CONSOLE WARNING-ERROR 0 / JAVASCRIPT DIALOG 0 / TRUSTED POINTER-PICKUP MANUAL RETEST PENDING / BROADER C1-C3 MANUAL ACCEPTANCE NOT INFERRED",
   "contest_c4_status": "NOT STARTED / NOT AUTHORIZED",
-  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED THROUGH C2 CARRY-SOLID-WALL REPAIR 538f2cc781833555b2bf1839c5c37a815f75b6e3 / DOCUMENT EVIDENCE IN CONTAINING COMMIT / ART BRANCHES b6903e243ff2e24094207541daf93248223caea1 AND 6b994b4065ca003a28562ab30e5ef6d0007154b7 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
+  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED THROUGH POINTER-AND-TARGETING REPAIR b2cca79de731be91392a0c288a22d1a8f25c9077 / DOCUMENT EVIDENCE IN CONTAINING COMMIT / ART BRANCHES b6903e243ff2e24094207541daf93248223caea1 AND 6b994b4065ca003a28562ab30e5ef6d0007154b7 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
   "contest_start_tags": [
     "gb2026-prechallenge",
     "gb2026-sprint-start"
@@ -532,8 +536,8 @@
     },
     {
         "path":  "AGENTS.md",
-        "bytes":  42938,
-        "sha256":  "b246b6f3b57fc44774f03ace46cc14531deb7f1c2566df10752ee5825adb6f63"
+        "bytes":  43062,
+        "sha256":  "7c39a92fc0190250c34c551cba2a37865633ae367fa042fd8f5ccb266829e1f7"
     },
     {
         "path":  "ArtSource/Audio/DELIVERY.md",
@@ -882,8 +886,8 @@
     },
     {
         "path":  "CHANGELOG.md",
-        "bytes":  37207,
-        "sha256":  "bb4a2bc06e7a6f0b20f32f6dd9d93f2cd6aedc81ccbd43a3251bd81dfad29be7"
+        "bytes":  38305,
+        "sha256":  "ee490d91d283e7325d3f884f317b82bc1802e173ca282b6ffd7d77b32d9dd980"
     },
     {
         "path":  "docs/00_project/CHANGE_CONTROL.md",
@@ -912,8 +916,8 @@
     },
     {
         "path":  "docs/00_project/DESIGN_STATUS.md",
-        "bytes":  37952,
-        "sha256":  "9cb6175eb73f2e7d8a0edee4fad92320a4e34196c8c0e28d2bf3273ade72d18a"
+        "bytes":  38284,
+        "sha256":  "f814be91fd8a463cb67cb7f092330842fcc6b70761e97c064b220e5333038b84"
     },
     {
         "path":  "docs/00_project/GLOSSARY.md",
@@ -1237,8 +1241,8 @@
     },
     {
         "path":  "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
-        "bytes":  12548,
-        "sha256":  "1fc0e62b1ebc7afab7783c8cbd9975e8a78650dd019c2037609842b14ae8d23c"
+        "bytes":  15386,
+        "sha256":  "b38ef624603a721e11aa88f135def4d189cc4f2256811e2a2667ada76877d68e"
     },
     {
         "path":  "docs/06_codex/DEFINITION_OF_DONE.md",
@@ -1447,13 +1451,13 @@
     },
     {
         "path":  "docs/10_contest/BUILD_AND_SUBMISSION_LOG.md",
-        "bytes":  7467,
-        "sha256":  "890cb0795e485dc2fc38aa26a5608e8053e1bdffbfa741130cace69c0cda4f0c"
+        "bytes":  8938,
+        "sha256":  "647b74ce464865bcf4c24e8278854c312926d98ce6897acaee6c69637286c9f7"
     },
     {
         "path":  "docs/10_contest/CODEX_COLLABORATION_LOG.md",
-        "bytes":  11523,
-        "sha256":  "5ce1a2fc02cfd6dcdbbcdb2c726211b2762c96a72ee7d3290d22ce9ba87181ed"
+        "bytes":  13692,
+        "sha256":  "7f7e98bba5281e77a752b7ca47db7e90d3c9a8ed7c4ecbe7e1213a312164c3d2"
     },
     {
         "path":  "docs/10_contest/GAME_BUILDERS_2026_SPRINT.md",
@@ -1479,6 +1483,26 @@
         "path":  "docs/archive/README.md",
         "bytes":  293,
         "sha256":  "2276416b9fab864c27525970a1fee107e045f1a7b3ced33e16d21e05c4e93be3"
+    },
+    {
+        "path":  "Game/Assets/Plugins.meta",
+        "bytes":  169,
+        "sha256":  "0bc56a5863a5eae3b857044b9817820d15ac912846939e2689cc642813f96306"
+    },
+    {
+        "path":  "Game/Assets/Plugins/WebGL.meta",
+        "bytes":  169,
+        "sha256":  "e1f47dfe67e24a16fe4d7a5b1f2dd7c333a70e98b2497346ceba22b937c3ebe7"
+    },
+    {
+        "path":  "Game/Assets/Plugins/WebGL/BreakNoticePointerLock.jslib",
+        "bytes":  2975,
+        "sha256":  "052453441d896b2edbf0c1d2805759c3077ba862987737fed109082a92e2cd9b"
+    },
+    {
+        "path":  "Game/Assets/Plugins/WebGL/BreakNoticePointerLock.jslib.meta",
+        "bytes":  59,
+        "sha256":  "43e5635d20873775dad81fb863705530f5f0da58737d24b238eeb6cbd595e227"
     },
     {
         "path":  "Game/Assets/_Project.meta",
@@ -1842,8 +1866,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Contest/BrowserPointerCapture.cs",
-        "bytes":  994,
-        "sha256":  "8423bca6ef3053f779be3430b834ad5597d99e24a4660a028e2279f7e5c80f6a"
+        "bytes":  3953,
+        "sha256":  "1e0ebb90c9a6a8e640a1ea1c40a723dd5ba3e0b125f52f235a97d256aba52f20"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Contest/BrowserPointerCapture.cs.meta",
@@ -2042,8 +2066,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs",
-        "bytes":  5667,
-        "sha256":  "568cd7934e6de81e60a291362efd0656b46aa3a4261519a2ee0aa7c22186216a"
+        "bytes":  6250,
+        "sha256":  "d6472d928fce65e2d5745c49b3eafe51cb749fc78dd2abcde5028014465a5320"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Presentation/ThirdPersonCameraRig.cs.meta",
@@ -2092,13 +2116,23 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef",
-        "bytes":  572,
-        "sha256":  "67baa9a787fb8bd400dd9f3ec258230dc2544982e4817fdcb7cdbeed9339c024"
+        "bytes":  606,
+        "sha256":  "30be2c5865fcbfd418e309a4206de08b5262c4ff4380716d7ed3e95c537dc9e3"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BreakNotice.LocomotionCamera.EditModeTests.asmdef.meta",
         "bytes":  166,
         "sha256":  "b744862d8e095bccd745d2112b433863fab0688b983d8e78a640534780f3a5e2"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BrowserPointerCaptureContractTests.cs",
+        "bytes":  969,
+        "sha256":  "7e4463344c5e5a86ab24063bdea37bd48beec96e4fab3679db508571353a6618"
+    },
+    {
+        "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/BrowserPointerCaptureContractTests.cs.meta",
+        "bytes":  59,
+        "sha256":  "2e02f672fc418500a624f1576d7d688585bd3ecd304a4a1fc1c4c6adabcb44d9"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/EditMode/LocomotionCamera/LogicalInputContractTests.cs",
@@ -2252,8 +2286,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity",
-        "bytes":  85681,
-        "sha256":  "b2ab321124e4919c7e14a489fac07b4a77c94218082ed370684b75bc9d030b28"
+        "bytes":  85655,
+        "sha256":  "966d775896c71518735aaf38437f1ba7d208d9879cdac06168c97d4066161cf8"
     },
     {
         "path":  "Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity.meta",
@@ -2617,8 +2651,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Editor/Contest/ContestPrototypeSceneAuthoring.cs",
-        "bytes":  12067,
-        "sha256":  "ab51a317c727cfd772c5e2199a9661e77c5ec2ef758bc56fad3ca2396b31d7ad"
+        "bytes":  12021,
+        "sha256":  "d789bc937f23c1bea7c6883d6fd7475283b14e79689edfa25536c161a87879a5"
     },
     {
         "path":  "Game/Assets/_Project/Code/Editor/Contest/ContestPrototypeSceneAuthoring.cs.meta",
@@ -2657,8 +2691,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs",
-        "bytes":  7290,
-        "sha256":  "cc02262616c34f93a43fb8d2af56418062b61cff054b85bd567b665ec6f1a62b"
+        "bytes":  11075,
+        "sha256":  "8994d5a3723088fba4ac17841133507571e9a600c388da55f0058bfb6389d42e"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs.meta",
@@ -2707,8 +2741,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Presentation/InteractionReadabilityPresenter.cs",
-        "bytes":  3606,
-        "sha256":  "a1aa5a1ddabe9d53fbd64689b1f7984989c7374d92723c2196679c5dfde76ddb"
+        "bytes":  10248,
+        "sha256":  "0ecb95982766446fddd87d221a74945167e0efef35cf9cb2be96a334aa6019ef"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Presentation/InteractionReadabilityPresenter.cs.meta",
@@ -2747,8 +2781,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/ContestCarryThrowPlayModeTests.cs",
-        "bytes":  17662,
-        "sha256":  "f2f72ada562ba5d4db16f0c578c5a4a9f0d5180123040ea7057c114ba7610bdc"
+        "bytes":  17635,
+        "sha256":  "3d975c49d87022b51a7f87c87d5263a460aaa5254a24b57ee55a5801e2f08a45"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/ContestCarryThrowPlayModeTests.cs.meta",
@@ -2757,8 +2791,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/ContestInteractionPlayModeTests.cs",
-        "bytes":  4770,
-        "sha256":  "f63df3f6448298434951045c295e3d88e9ffe7a75601e521bfa198a51c4c3386"
+        "bytes":  18046,
+        "sha256":  "98c4e4419002b5c4353d8bc295ace2022e3556b2df39e9efdbad209af4b35b48"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/ContestInteractionPlayModeTests.cs.meta",
@@ -2767,8 +2801,8 @@
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/ContestResetPlayModeTests.cs",
-        "bytes":  13555,
-        "sha256":  "727c07b0436927cde58c6ec983c7c24bd46a84f3291d5aa87f69cca7bd3a8ff4"
+        "bytes":  17170,
+        "sha256":  "8d5109d4f8edf77b976446d67073a4c68556ccde61b4772d6c68067fd34e9fef"
     },
     {
         "path":  "Game/Assets/_Project/Code/Tests/PlayMode/LocomotionCamera/ContestResetPlayModeTests.cs.meta",

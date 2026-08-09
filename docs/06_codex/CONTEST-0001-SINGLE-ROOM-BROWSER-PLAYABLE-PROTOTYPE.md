@@ -203,3 +203,30 @@ desktop browser prototype과 검증 증거를 만든다.
   `PENDING / Human Owner must retest Binder and Chair against a solid wall, including approach, yaw, wall slide, Throw and Reset. Broader C1-C3 manual acceptance is not inferred.`
 - Scope:
   `C4 and later, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`
+
+## C0-C3 Pointer Capture and Acquisition Readability Repair Evidence — 2026-08-09
+
+- Human Owner findings:
+  `REVISION REQUIRED / WebGL mouse capture did not reliably reflect the browser's real pointer-lock state, and direct pickup selection was not clear enough to predict. Structural fun is not claimed because C4-C7 remain unimplemented.`
+- Starting baseline:
+  `607282c84a12eff860c90d1f2cd81c6829a56825 / contest/game-builders-2026 / local and origin equal / tracked and staged clean`
+- Repair commit:
+  `b2cca79de731be91392a0c288a22d1a8f25c9077 / pushed and remote-verified`
+- Pointer repair:
+  `A WebGL JavaScript bridge requests lock inside the trusted canvas pointerdown event and reports document.pointerLockElement as the sole browser authority. Escape, focus loss, unsupported and request-error states are visible; unlocked Look-Aim and the first capture click's Throw-Aim side effects are blocked.`
+- Acquisition-readability repair:
+  `Targeting now uses the exact current camera-center ray, nearest solid visibility hit and Collider.ClosestPoint range <= 2.8 m. The reticle and prompt distinguish direct Binder-Chair pickup from Heavy, Drawer and ally-pool rejection, and accepted or rejected E attempts produce bounded presentation-only feedback.`
+- Priority and ordering:
+  `ThirdPersonCameraRig -100, CinemachineBrain 0, PrototypeInteractionController 100 and InteractionReadabilityPresenter 200 preserve current-frame camera alignment. ResetEncounter blocks the whole logical frame, including simultaneous Reset plus InteractPrimary.`
+- Tests:
+  `Unity compile PASS / EditMode 41/41 / PlayMode 25/25 / total 66/66 / pointer status contract, exact center-ray selection, occlusion, closest-point range, deterministic tie-break, feedback and same-frame Reset priority covered`
+- Web Development build:
+  `PASS / GUID 17afceeeb36e4733a1034a54a585ef5e / 113790231 Unity-reported bytes / warnings 0 / errors 0 / 19 files / 113791985 HTTP-verified bytes / aggregate SHA-256 c8d90f0cab2af3fec957f8fb0bf21040f223bd33f5cf9a9f577f4851eee78e45`
+- HTTP and browser:
+  `19/19 HTTP 200 / in-app browser cold WebGL load PASS / 960x600 canvas ready / pointer-capture and center-reticle instructions visible / blocking console warning-error 0 / dialog 0`
+- Manual acceptance:
+  `PENDING / Human Owner trusted click capture, first-click safety, Escape release, recapture and E pickup-clarity retest are required. Automated browser input is not accepted as trusted pointer-lock evidence.`
+- Fun disposition:
+  `NOT CLAIMED / this repair improves C0-C3 usability and feedback only. Ally relay, Cargo Strap, objective-route-win and Runner failure-pressure remain C4-C7 work and are not implemented or authorized here.`
+- Scope:
+  `C4 and later, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`

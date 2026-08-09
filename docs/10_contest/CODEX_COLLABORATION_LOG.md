@@ -198,3 +198,30 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `26 Human Owner untracked items unchanged and unstaged / main, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and C4+ unchanged.`
 - Next:
   `Human Owner manual Binder-Chair wall-containment retest, then report the explicit disposition to GPT Pro. C4 remains unauthorized.`
+
+## C0-C3 Pointer Capture and Pickup Clarity Repair — 2026-08-09
+
+- Goal:
+  `Repair the Human Owner-reported WebGL pointer-capture and unclear direct-pickup usability defects without entering C4.`
+- Human Owner Decision:
+  `Fix the reported issues now. Lack of structural fun must be reported honestly against the still-unimplemented later Contest checkpoints.`
+- Baseline:
+  `607282c84a12eff860c90d1f2cd81c6829a56825 / contest branch local-origin equal / tracked and staged clean / protected 26 preserved.`
+- Work:
+  `Added a trusted-event WebGL pointer-lock bridge and real DOM-state UI; blocked unlocked Look-Aim and first-capture mouse side effects; replaced wide body-forward target scoring with exact current camera-center ray, nearest-solid line of sight and 2.8 m closest-point range; added target/rejection/attempt feedback and deterministic camera-controller-presenter ordering; preserved Reset priority.`
+- Commit:
+  `b2cca79de731be91392a0c288a22d1a8f25c9077 / pushed and remote-verified.`
+- Tests:
+  `EditMode 41/41 / PlayMode 25/25 / total 66/66 PASS.`
+- Build:
+  `PASS / GUID 17afceeeb36e4733a1034a54a585ef5e / 113790231 Unity-reported bytes / warnings 0 / errors 0 / 19 HTTP files / 113791985 HTTP bytes / SHA-256 c8d90f0cab2af3fec957f8fb0bf21040f223bd33f5cf9a9f577f4851eee78e45.`
+- Browser:
+  `In-app browser cold WebGL load PASS / 960x600 canvas / new capture and center-reticle instructions visible / blocking console warning-error 0 / dialog 0.`
+- Manual Status:
+  `PENDING / trusted click capture, first-click safety, Escape release, recapture and pickup-clarity feel require Human Owner input. Automation is not accepted as trusted pointer evidence.`
+- Fun Status:
+  `Current C0-C3 remains a movement-pickup-carry-throw-reset sandbox. C4 ally relay, C5 Cargo Strap, C6 objective-route-win and C7 pressure-failure are not implemented, so structural fun is not claimed.`
+- Protected Scope:
+  `26 Human Owner untracked items unchanged and unstaged / main, Packages, ProjectSettings, production art and C4+ unchanged.`
+- Next:
+  `Human Owner manual usability retest in the retained WebGL tab. C4 remains unauthorized until a new direct instruction.`
