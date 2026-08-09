@@ -81,5 +81,6 @@ idle(3)/(4)/(5) 삭제됨(2026-08-10 정리). idle(5)는 idle(2)와 목적 겹�
 
 ## 기술적 확인 필요 사항 (Unity 통합 전)
 
-- **Root Motion 여부 미확인**: falling to roll / Rope Swinging 렌더 시 캐릭터가 카메라 밖으로 크게 이동함 — 클립에 루트 모션(위치 이동)이 포함된 것으로 보임. 프로젝트 스펙(`no root translation in locomotion/supply clips unless explicitly documented`)과 맞는지 확인 필요. Mixamo 재다운로드 시 In Place 옵션 확인 권장.
+- **Root Motion 처리 완료 (2026-08-10)**: 26개 클립 전부 hip 본 world 좌표 기준 수평 이동(x,y)을 프레임별로 상쇄해서 in-place로 재굽고 원본 교체함. 수직(z, 점프 높이/착지 낙차/스윙 진폭)은 그대로 보존. 변환 전/후 world-space 이동량 검증 완료 — x,y 전부 0.0000, z는 각 클립 특성에 맞게 유지됨(예: walking z=0.08 자연스러운 상하 바운스, Rope Swinging z=1.14 스윙 진폭, Dying1/2 z=0.85~0.90 쓰러지는 낙차). 렌더로 포즈 무결성도 재확인함(walking, Dying1, Rope Swinging, falling to roll).
+- 프로젝트 스펙(`no root translation in locomotion/supply clips unless explicitly documented`) 충족.
 - Rig: Mixamo Standard Skeleton, 41 bone (2 Chain Fingers). 이후 CHR01/ENY01과 리그 컨벤션 통일 여부 확인 필요.
