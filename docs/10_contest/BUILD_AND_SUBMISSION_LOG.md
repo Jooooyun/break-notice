@@ -108,3 +108,23 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Browser | `PASS / in-app browser clean WebGL load / 960x600 canvas ready / initial product console error-warning 0` |
 | Manual Defect Status | `PASS / Human Owner post-repair Binder-Chair carry-near-wall camera retest 2026-08-09 / broader C1-C3 manual acceptance not inferred` |
 | Submission State | `NOT READY / C4 NOT AUTHORIZED` |
+
+## C2 Carry-Solid-Wall Repair Development Build — 2026-08-09
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `7fc9f41a0ed5c81a44f172009ed0c79764c8ca18` |
+| Repair Commit | `538f2cc781833555b2bf1839c5c37a815f75b6e3 / pushed and remote-verified` |
+| Build ID | `GB2026-C2-CARRY-WALL-REPAIR-WEB-DEV-001` |
+| Build Target | `Web / Development` |
+| Build Date | `2026-08-09 +09:00` |
+| Build GUID | `13076f9f2456415fa1adcf1446dbf054` |
+| Build Hash | `SHA-256 ee34aac84517eba2a668f85727042b4ca0b8ed8d51580db3a0da9757c7af46ba` over sorted relative-path/file-hash ledger |
+| Size | `113,763,737 bytes Unity report / 113,765,491 bytes across 19 HTTP-verified files` |
+| Unity Build | `PASS / warnings 0 / errors 0` |
+| Tests | `Targeted 7/7 PASS / EditMode 37/37 PASS / PlayMode 19/19 PASS / total 56/56` |
+| HTTP | `PASS / 19 of 19 files HTTP 200` |
+| Browser | `PASS / in-app browser cold WebGL load / 960x600 canvas ready / product console errors 0` |
+| Previous Camera Result | `PRESERVED / Human Owner Binder-Chair carry-near-wall camera retest PASS 2026-08-09` |
+| Manual Physical Defect Status | `PENDING / Human Owner Binder-Chair solid-wall approach-yaw-slide-Throw-Reset retest` |
+| Submission State | `NOT READY / C2 MANUAL RETEST PENDING / C4 NOT AUTHORIZED` |

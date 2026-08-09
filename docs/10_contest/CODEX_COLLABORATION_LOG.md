@@ -173,3 +173,28 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `26 Human Owner untracked items unchanged and unstaged / main, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and C4+ unchanged.`
 - Next:
   `Report the bounded manual PASS to GPT Pro and obtain the next bounded work recommendation. C4 remains unauthorized until a new Human Owner directive opens it.`
+
+## C2 Carry-Solid-Wall Physical Continuity Repair — 2026-08-09
+
+- Goal:
+  `Repair the Human Owner-reported physical wall penetration of a carried Binder or Chair without entering C4.`
+- Human Owner Decision:
+  `Treat the carried-object wall penetration as a core bug and proceed with the bounded repair. The earlier camera-specific PASS remains authoritative.`
+- Baseline:
+  `7fc9f41a0ed5c81a44f172009ed0c79764c8ca18 / contest branch local-origin equal / tracked and staged clean / protected 26 preserved.`
+- Repair:
+  `Bounded root-BoxCollider sweep and penetration containment, wall-plane slide, rotation substeps, safe unsupported-shape rejection and player-collision restoration; Throw and Reset cleanup preserved.`
+- Commit:
+  `538f2cc781833555b2bf1839c5c37a815f75b6e3 / pushed and remote-verified.`
+- Tests:
+  `Targeted 7/7 / EditMode 37/37 / PlayMode 19/19 / total 56/56 PASS.`
+- Build:
+  `PASS / GUID 13076f9f2456415fa1adcf1446dbf054 / 113763737 Unity-reported bytes / warnings 0 / errors 0 / 19 HTTP files / SHA-256 ee34aac84517eba2a668f85727042b4ca0b8ed8d51580db3a0da9757c7af46ba.`
+- Browser:
+  `In-app browser cold WebGL load PASS / 960x600 canvas ready / product console errors 0.`
+- Manual Status:
+  `AUTOMATED PASS / HUMAN OWNER BINDER-CHAIR SOLID-WALL RETEST PENDING / prior camera-specific PASS preserved / broader C1-C3 manual acceptance not inferred.`
+- Protected Scope:
+  `26 Human Owner untracked items unchanged and unstaged / main, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and C4+ unchanged.`
+- Next:
+  `Human Owner manual Binder-Chair wall-containment retest, then report the explicit disposition to GPT Pro. C4 remains unauthorized.`

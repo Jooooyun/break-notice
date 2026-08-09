@@ -178,3 +178,28 @@ desktop browser prototype과 검증 증거를 만든다.
   `PASS / Human Owner confirmed the post-repair camera is normal on 2026-08-09 for the Binder-Chair carry-near-wall defect scope. Broader C1-C3 manual acceptance is not inferred from this bounded result.`
 - Scope:
   `C4 and later, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`
+
+## C2 Carry-Solid-Wall Physical Continuity Repair Evidence — 2026-08-09
+
+- Human Owner finding:
+  `REVISION REQUIRED / a carried Binder or Chair passed through a solid wall while the player continued toward it`
+- Camera disposition:
+  `The prior camera-specific repair and Human Owner PASS remain preserved. This is a separate C2 carried-object physical-continuity defect.`
+- Starting baseline:
+  `7fc9f41a0ed5c81a44f172009ed0c79764c8ca18 / contest/game-builders-2026 / local and origin equal / tracked and staged clean`
+- Repair commit:
+  `538f2cc781833555b2bf1839c5c37a815f75b6e3 / pushed and remote-verified`
+- Root cause:
+  `Carry made the Rigidbody kinematic and moved it directly toward the anchor without a solid-geometry sweep or penetration clamp. The CharacterController therefore stopped at the wall while the carried collider could continue through it.`
+- Repair:
+  `Root BoxCollider candidates now use bounded non-alloc sweep, wall clamp, wall-plane slide, rotation substeps and predicted-pose penetration rejection. Player collision is restored after acquisition separation, and Throw or authored Reset preserves the existing owner, layer and Rigidbody cleanup contracts. Unsupported root collider shapes are rejected safely for this exact Graybox scope.`
+- Tests:
+  `Unity compile PASS / targeted carry-wall 7/7 / EditMode 37/37 / PlayMode 19/19 / total 56/56 / Binder and Chair clamp-slide-rotation-player separation-Throw coverage plus blocked-carry Reset restoration`
+- Web Development build:
+  `PASS / GUID 13076f9f2456415fa1adcf1446dbf054 / 113763737 Unity-reported bytes / warnings 0 / errors 0 / 19 files / 113765491 HTTP-verified bytes / aggregate SHA-256 ee34aac84517eba2a668f85727042b4ca0b8ed8d51580db3a0da9757c7af46ba`
+- HTTP and browser:
+  `19/19 HTTP 200 / in-app browser cold WebGL load PASS / 960x600 canvas ready / product console errors 0`
+- Manual acceptance:
+  `PENDING / Human Owner must retest Binder and Chair against a solid wall, including approach, yaw, wall slide, Throw and Reset. Broader C1-C3 manual acceptance is not inferred.`
+- Scope:
+  `C4 and later, Scene, Prefab, Input Actions, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`
