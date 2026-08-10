@@ -230,3 +230,26 @@ desktop browser prototype과 검증 증거를 만든다.
   `NOT CLAIMED / this repair improves C0-C3 usability and feedback only. Ally relay, Cargo Strap, objective-route-win and Runner failure-pressure remain C4-C7 work and are not implemented or authorized here.`
 - Scope:
   `C4 and later, Packages, ProjectSettings, production art and protected Human Owner untracked work unchanged.`
+
+## C0-C3 Embedded Browser Mouse-Look and Grounded Carry Lift-Off Repair Evidence — 2026-08-10
+
+- Human Owner findings:
+  `REVISION REQUIRED / the in-app Chromium host did not grant standard Pointer Lock, and grounded Binder-Chair acquisition could remain visually frozen even after ownership was committed.`
+- Mouse-look repair commit:
+  `ff2c3cc2ff1fa61057798e963f617c8be3d89e28 / pushed and remote-verified`
+- Carry lift-off repair commit:
+  `3c9416f697fbb965bf4b06c4b8b06357d5f2370b / pushed and remote-verified`
+- Root-cause repair:
+  `The Web bridge preserves standards-based Pointer Lock for normal Chrome and Edge, but after an embedded-host rejection it activates an instance-owned DOM mouse-delta fallback, consumes the first capture click and releases on Escape. Carry sweep now ignores only the zero-distance authored support contact while lifting upward away from the floor; wall and lateral blocking-slide behavior remains active.`
+- Tests:
+  `Unity compile PASS / EditMode 44/44 / PlayMode 26/26 / total 70/70 / fallback status and bridge contract plus actual Contest-scene grounded Binder-Chair acquisition movement covered`
+- Web Development build:
+  `PASS / GUID 522b5d42361645c884e5bb293b2876c2 / 113801187 Unity-reported bytes / warnings 0 / errors 0 / 19 files / 113802941 HTTP-verified bytes / aggregate SHA-256 58c4c16572fdf62cac474bf26eb2786e20a55e95ce12cc0053eb6e9b8e9afaf4`
+- HTTP and browser:
+  `19/19 HTTP 200 / in-app browser cold WebGL load PASS / 960x600 canvas ready / blocking product console warning-error 0 / dialog 0 / fallback mouse movement and Escape release observed`
+- Manual acceptance:
+  `PASS / Human Owner confirmed the repaired mouse-look and grounded-object acquisition behavior and approved proceeding on 2026-08-10. This is a bounded defect disposition, not broader C1-C3 acceptance.`
+- Fun disposition:
+  `UNCHANGED / C0-C3 remains a movement-pickup-carry-throw-reset sandbox. C4-C7 structural loop systems remain unimplemented and C4 is not authorized.`
+- Scope:
+  `No C4 or later mechanic, package, ProjectSettings, production-art runtime integration or protected Human Owner work changed.`

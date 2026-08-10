@@ -225,3 +225,28 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `26 Human Owner untracked items unchanged and unstaged / main, Packages, ProjectSettings, production art and C4+ unchanged.`
 - Next:
   `Human Owner manual usability retest in the retained WebGL tab. C4 remains unauthorized until a new direct instruction.`
+
+## C0-C3 Embedded Browser Mouse-Look and Grounded Carry Lift-Off Repair — 2026-08-10
+
+- Goal:
+  `Restore in-app-browser camera movement and grounded Binder-Chair acquisition without entering C4.`
+- Root Cause:
+  `The embedded Chromium host rejected standard Pointer Lock, while gameplay incorrectly required the locked state; separately, the carry BoxCast treated authored floor support as a zero-distance blocking overlap during upward acquisition.`
+- Work:
+  `Added an instance-owned DOM mouse-delta fallback after a real pointer-lock rejection, preserved standards-based Chrome-Edge Pointer Lock, routed fallback look through the logical input owner, kept first-click and Escape safety, and allowed only upward separation from authored support while preserving wall-lateral collision.`
+- Commits:
+  `ff2c3cc2ff1fa61057798e963f617c8be3d89e28 / 3c9416f697fbb965bf4b06c4b8b06357d5f2370b / pushed and remote-verified.`
+- Tests:
+  `EditMode 44/44 / PlayMode 26/26 / total 70/70 PASS.`
+- Build:
+  `PASS / GUID 522b5d42361645c884e5bb293b2876c2 / 113801187 Unity-reported bytes / warnings 0 / errors 0 / 19 HTTP files / 113802941 HTTP bytes / SHA-256 58c4c16572fdf62cac474bf26eb2786e20a55e95ce12cc0053eb6e9b8e9afaf4.`
+- Browser:
+  `Cold WebGL load PASS / embedded fallback mouse movement and Escape release observed / blocking product console warning-error 0 / dialog 0.`
+- Human Owner Manual:
+  `PASS / repaired mouse-look and grounded-object acquisition accepted to proceed on 2026-08-10 / broader C1-C3 acceptance not inferred.`
+- Designer A Delivery Audit:
+  `Remote source batch 6094b41143286b6e1710087a711707416b366c20 contains 159 files, including 155 FBX, but is REVISION REQUIRED because A1 sequence, allowed paths, editable source, previews, license evidence and ENY01 canon are not satisfied. Corrective instruction 6030c4af6b800d0d7e80013382babd7b1cfc58a0 was pushed; no runtime integration or PR was performed.`
+- Protected Scope:
+  `Protected Human Owner untracked work remained unstaged and unmodified / main, packages, ProjectSettings, production-art runtime and C4+ unchanged.`
+- Next:
+  `Designer A must return only the CHR01 A1 editable blockout and three pose previews with complete rights metadata. C4 remains closed pending a new Human Owner authorization.`

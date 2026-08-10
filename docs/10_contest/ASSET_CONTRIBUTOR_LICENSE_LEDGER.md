@@ -25,3 +25,12 @@
 없다. 실제 delivery가 발생하면 creator, date, source/export/runtime path,
 original/purchased/open-license/AI-generated classification, exact license,
 written permission과 inclusion decision을 추가한다.
+
+## Remote Candidate Batch Pending Provenance — 2026-08-10
+
+| Candidate Batch | Git Commit Author | Actual Creator / GitHub ID | Classification | Exact License / Permission | Source Path | State | Contest Use |
+|---|---|---|---|---|---|---|---|
+| DESIGNER-A-0810 | `AutumnCrab` | `UNRESOLVED / Git author is not accepted as ownership proof` | `UNRESOLVED / guides mention Mixamo mocap; model, texture, rig and generation sources are not fully recorded` | `MISSING / written permission absent` | `origin/art/characters-animation` at `6094b41143286b6e1710087a711707416b366c20`, `0810_designerA/**` | `REVISION REQUIRED / REVIEW HOLD / correction 6030c4af6b800d0d7e80013382babd7b1cfc58a0` | `PROHIBITED UNTIL PROVENANCE, CANON, PATH AND DELIVERY REVIEW PASS` |
+
+이 후보 batch는 contest-period production asset 등록이 아니다. Runtime import,
+PR, merge, Owner approval 또는 submission-use permission을 의미하지 않는다.

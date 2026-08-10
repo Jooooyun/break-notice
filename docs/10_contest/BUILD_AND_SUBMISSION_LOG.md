@@ -149,3 +149,24 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Pickup-Clarity Manual | `PENDING / E prompt, center ray, line of sight and 2.8 m range require Human Owner feel check` |
 | Fun Status | `NOT CLAIMED / C0-C3 usability repair only; C4-C7 core-loop systems remain unimplemented` |
 | Submission State | `NOT READY / MANUAL USABILITY RETEST PENDING / C4 NOT AUTHORIZED` |
+
+## C0-C3 Embedded Browser and Grounded Carry Repair Development Build — 2026-08-10
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `2e6c8dd9057ea7c364265434dd20df301ee19489` |
+| Mouse-Look Repair Commit | `ff2c3cc2ff1fa61057798e963f617c8be3d89e28 / pushed and remote-verified` |
+| Grounded Carry Repair Commit | `3c9416f697fbb965bf4b06c4b8b06357d5f2370b / pushed and remote-verified` |
+| Build ID | `GB2026-C0-C3-EMBEDDED-MOUSE-CARRY-REPAIR-WEB-DEV-001` |
+| Build Target | `Web / Development` |
+| Build Date | `2026-08-10 +09:00` |
+| Build GUID | `522b5d42361645c884e5bb293b2876c2` |
+| Build Hash | `SHA-256 58c4c16572fdf62cac474bf26eb2786e20a55e95ce12cc0053eb6e9b8e9afaf4` over sorted relative-path/file-hash ledger |
+| Size | `113,801,187 bytes Unity report / 113,802,941 bytes across 19 HTTP-verified files` |
+| Unity Build | `PASS / warnings 0 / errors 0` |
+| Tests | `EditMode 44/44 PASS / PlayMode 26/26 PASS / total 70/70` |
+| HTTP | `PASS / 19 of 19 files HTTP 200` |
+| Browser | `PASS / cold WebGL load / 960x600 canvas / embedded fallback mouse movement / Escape release / blocking product console warning-error 0 / dialog 0` |
+| Human Owner Manual | `PASS / repaired mouse-look and grounded Binder-Chair acquisition accepted to proceed 2026-08-10` |
+| Scope | `C4+, packages, ProjectSettings and production-art runtime integration unchanged` |
+| Submission State | `NOT READY / C4 NOT AUTHORIZED / broader C1-C3 acceptance not inferred` |

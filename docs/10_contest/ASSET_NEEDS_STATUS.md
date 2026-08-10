@@ -54,3 +54,24 @@ UI/VFX/audio and marketing exports remain missing.
 - Unresolved: contest-wide lighting is not defined by local LGT_01
 - Referenced Runtime Assets: primitive room and seven object proxies
 - Production Deviation: none approved
+
+## Designer A Remote Delivery Audit — 2026-08-10
+
+- Source Branch: `origin/art/characters-animation`
+- Source Batch Tip: `6094b41143286b6e1710087a711707416b366c20`
+- Corrective Instruction: `6030c4af6b800d0d7e80013382babd7b1cfc58a0`
+- Inventory: `159 files / 155 FBX / 4 guides / 131,363,044 path bytes`
+- Classification: `REVISION REQUIRED / REVIEW HOLD / NOT INTEGRATED`
+- Delivered Candidates: `main_character`, `female_helper`, `enemy_normal`, `enemy_elite`
+- Missing A1 Evidence: editable CHR01 DCC source, blockout preview, Binder supply
+  pose, Chair push pose, completed `DELIVERY.md`
+- Rights Gap: creator, source, exact license, written permission, AI/generated
+  element record and third-party IP check are unresolved
+- Scope Gap: files are outside allowed `ArtSource/**` paths; ENY01 concept approval
+  was skipped; elite, firearm and grenade content conflicts with the locked scope
+- Git Gap: no PR; no LFS filter; existing history must not be rewritten
+- Integration Decision: `DO NOT IMPORT / DO NOT MERGE / HUMAN OWNER APPROVAL ABSENT`
+- Next Request to Designer A: complete only the five-file CHR01 A1 blockout and
+  pose package in the approved path with full provenance and license metadata
+
+No new production asset blocks this work package. Graybox fallback remains active.
