@@ -7,6 +7,81 @@
 
 ---
 
+# 0A. 2026-08-10 DELIVERY AUDIT — REVISION REQUIRED
+
+Remote commit `6094b41143286b6e1710087a711707416b366c20`까지의
+`0810_designerA/**` batch는 파일 존재만 확인되었으며, 승인된 production
+delivery로 판정되지 않았다. 현재 상태는
+`REVISION REQUIRED / REVIEW HOLD / DO NOT INTEGRATE`다.
+
+확인된 batch:
+
+```text
+159 files
+155 FBX + 4 usage guides
+131,363,044 path bytes
+main_character / female_helper / enemy_normal / enemy_elite
+ordinary Git blobs; no LFS filter
+PR: absent
+```
+
+다음 결함 때문에 이 batch를 `DELIVERED`, `TECHNICAL REVIEW`,
+`OWNER APPROVED` 또는 Runtime-ready로 보고하면 안 된다.
+
+1. 활성 package는 A1 `CHR01 editable blockout and pose review` 하나뿐인데
+   CHR00, ENY01, elite variant와 대량 animation까지 선행 제작됐다.
+2. 모든 새 파일이 허용 경로 `ArtSource/Characters/**` 밖의
+   `0810_designerA/**`에 있다.
+3. A1 필수 editable DCC source와 세 Preview가 없다.
+4. CHR00/CHR01/ENY01 `DELIVERY.md`와 contributor/license ledger가
+   갱신되지 않았다.
+5. creator, original model source, exact license, written permission,
+   AI/generated-element 여부와 third-party IP check가 없다. Guide에 적힌
+   Mixamo mocap만으로는 모델·텍스처·리그 전체의 사용 권리를 증명하지
+   못한다.
+6. ENY01은 Concept 승인 전 최종 모델로 진행됐고 `enemy_elite`, rifle,
+   grenade, military/police silhouette를 포함한다. 이는 one shared
+   Compliance Runner, no firearm, no military armor, no elite/boss 계약과
+   충돌한다.
+7. CHR00에는 weapon, sword, death, jump, cover 등 현재 minimum 밖 또는
+   금지된 clip이 포함되고, 승인 Canon 대조 Preview가 없다.
+8. 155개 FBX가 naming/version 규칙과 required clip set으로 정리되지
+   않았으며 총 131 MB를 일반 Git에 추가했다. 기존 history를 LFS로
+   재작성하지 않는다.
+
+즉시 수행할 교정 작업은 다음 하나뿐이다.
+
+```text
+A1 — CHR01 editable 3D blockout and pose review batch
+```
+
+필수 경로:
+
+```text
+ArtSource/Characters/CHR01_Ally/Source/CHR01_Ally_Blockout_v001.blend
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Ally_Blockout_v001.png
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Supply_Binder_Pose_v001.png
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Push_Chair_Pose_v001.png
+ArtSource/Characters/CHR01_Ally/DELIVERY.md
+```
+
+`DELIVERY.md`에는 creator, GitHub ID, exact source/license/permission,
+AI tool 여부, approved references, source/preview 목록, scale/pivot/axis,
+known issues와 `WORK IN PROGRESS`를 정확히 기록한다. 생성형 AI, purchased
+base, Mixamo 또는 다른 third-party tool/asset을 사용했다면 정확한 항목과
+license evidence를 누락 없이 기록하고, 권리가 불명확하면 즉시 멈춘다.
+
+기존 `0810_designerA/**` binary와 commit history는 Human Owner의 별도
+disposition 전까지 삭제·이동·덮어쓰기·history rewrite하지 않는다. 새 대형
+binary도 Git LFS 결정을 받기 전 추가하지 않는다. 이 batch로 PR을 만들거나
+Runtime에 import하지 않는다. ENY01/CHR00/elite/weapon animation 작업을 더
+진행하지 않는다.
+
+A1 필수 다섯 파일만 정확한 허용 경로에 추가하고 validation 결과를 보고한
+뒤 Human Owner의 Blockout/Pose 판정을 기다린다.
+
+---
+
 # 0. 최상위 명령
 
 ## Human Owner Direct Production Start

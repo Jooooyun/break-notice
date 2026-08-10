@@ -7,6 +7,54 @@
 
 ---
 
+# 0A. 2026-08-10 제출분 판정 — 수정 필요
+
+원격 commit `6094b41143286b6e1710087a711707416b366c20`까지 올라온
+`0810_designerA/**` 묶음은 **검수 가능한 파일이 도착했다는 사실만
+확인**했다. 승인된 납품이나 게임 통합 가능 상태가 아니다.
+
+현재 판정:
+
+`REVISION REQUIRED / REVIEW HOLD / DO NOT INTEGRATE`
+
+주요 이유:
+
+- 현재 승인된 첫 작업은 CHR01 Blockout과 세 Pose Preview뿐이다.
+- 새 159개 파일이 모두 허용된 `ArtSource/Characters/**` 밖에 있다.
+- 다시 편집할 수 있는 CHR01 DCC 원본과 필수 Preview 3장이 없다.
+- 각 캐릭터 `DELIVERY.md`, 제작자, 원본 출처, 정확한 라이선스와 서면
+  허가 기록이 없다.
+- ENY01은 승인 전 최종 모델·elite·총기·수류탄 방향으로 진행되어
+  `일반 회사 컴플라이언스 인력 / 총기 없음 / elite 없음 / 동일 모델 2개`
+  계약과 충돌한다.
+- CHR00의 검·총·사망·점프·엄폐 clip은 현재 필수 범위가 아니다.
+- 155 FBX, 약 131 MB가 일반 Git blob으로 올라왔고 PR은 없다.
+
+지금부터는 다른 캐릭터와 animation을 더 만들지 말고 아래 A1 다섯 파일만
+완성한다.
+
+```text
+ArtSource/Characters/CHR01_Ally/Source/CHR01_Ally_Blockout_v001.blend
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Ally_Blockout_v001.png
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Supply_Binder_Pose_v001.png
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Push_Chair_Pose_v001.png
+ArtSource/Characters/CHR01_Ally/DELIVERY.md
+```
+
+`DELIVERY.md`에는 누가 무엇을 어떤 원본과 도구로 만들었는지, 정확한
+license/permission, AI 사용 여부, 승인 reference, scale/pivot/axis와 known
+issues를 기록하고 상태를 `WORK IN PROGRESS`로 둔다. 권리나 원본 출처가
+불명확하면 작업을 멈추고 질문한다.
+
+기존 `0810_designerA/**` 파일은 별도 지시 전 삭제·이동·수정하지 말고,
+history rewrite도 하지 않는다. 이 묶음으로 PR을 만들거나 Unity Runtime에
+넣지 않는다. 새 대형 binary는 Git LFS 결정 전 추가하지 않는다.
+
+CHR01 A1을 올린 뒤에는 Human Owner가 Blockout과 두 공급 Pose를 승인할
+때까지 A2, ENY01, CHR00, elite 방향으로 넘어가지 않는다.
+
+---
+
 # 0. 즉시 제작 개시 — Human Owner Direct Order
 
 - Authority baseline: `fc361a4dc42492e9b997ee42ac8bab3a6fdec2d2`
