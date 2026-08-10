@@ -85,10 +85,10 @@ namespace BreakNotice.Gameplay.Interaction
             // The first trusted click after an Escape/focus loss is reserved for
             // browser capture. It must not also throw a carried object or commit
             // another gameplay interaction in the same frame.
-            bool pointerLocked = Cursor.lockState == CursorLockMode.Locked;
-            bool pointerJustLocked = pointerLocked && !pointerWasLocked;
-            pointerWasLocked = pointerLocked;
-            pointerActionAvailable = pointerLocked && !pointerJustLocked;
+            bool pointerCaptured = logicalInput.IsWebPointerGameplayActive;
+            bool pointerJustCaptured = pointerCaptured && !pointerWasLocked;
+            pointerWasLocked = pointerCaptured;
+            pointerActionAvailable = pointerCaptured && !pointerJustCaptured;
 #endif
 
             if (logicalInput.Snapshot.InteractPrimary)

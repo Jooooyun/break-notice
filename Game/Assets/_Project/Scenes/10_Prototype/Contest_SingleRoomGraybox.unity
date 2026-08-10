@@ -1070,6 +1070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599a8f324703d9c41a24f3dfab196b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BreakNotice.ContestBrowser::BreakNotice.Contest.BrowserPointerCapture
+  logicalInput: {fileID: 1121842303}
 --- !u!4 &824956722
 Transform:
   m_ObjectHideFlags: 0

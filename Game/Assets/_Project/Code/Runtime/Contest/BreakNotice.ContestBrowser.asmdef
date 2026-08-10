@@ -2,6 +2,7 @@
   "name": "BreakNotice.ContestBrowser",
   "rootNamespace": "BreakNotice.Contest",
   "references": [
+    "BreakNotice.Gameplay",
     "Unity.InputSystem"
   ],
   "includePlatforms": [],

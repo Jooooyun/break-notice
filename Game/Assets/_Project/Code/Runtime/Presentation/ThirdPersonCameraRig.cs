@@ -105,9 +105,15 @@ namespace BreakNotice.Presentation
 
             Vector2 look = logicalInput != null ? logicalInput.Snapshot.Look : Vector2.zero;
 #if UNITY_WEBGL && !UNITY_EDITOR
-            bool pointerCaptured = Cursor.lockState == CursorLockMode.Locked;
+            bool pointerCaptured =
+                logicalInput != null && logicalInput.IsWebPointerGameplayActive;
             bool pointerJustCaptured = pointerCaptured && !pointerWasLocked;
             pointerWasLocked = pointerCaptured;
+            if (logicalInput != null && logicalInput.IsWebPointerFallbackActive)
+            {
+                look = logicalInput.WebPointerFallbackLookDelta;
+            }
+
             if (!pointerCaptured || pointerJustCaptured)
             {
                 look = Vector2.zero;

@@ -136,6 +136,10 @@ namespace BreakNotice.Contest.Editor
                     "The authorized player input and gameplay output camera are required.");
             }
 
+            BrowserPointerCapture pointerCapture =
+                GetOrAddComponent<BrowserPointerCapture>(browserInput);
+            pointerCapture.Configure(logicalInput);
+
             controller.Configure(
                 logicalInput,
                 owner,
@@ -150,6 +154,7 @@ namespace BreakNotice.Contest.Editor
 
             EditorUtility.SetDirty(owner);
             EditorUtility.SetDirty(controller);
+            EditorUtility.SetDirty(pointerCapture);
             EditorUtility.SetDirty(presenter);
         }
 

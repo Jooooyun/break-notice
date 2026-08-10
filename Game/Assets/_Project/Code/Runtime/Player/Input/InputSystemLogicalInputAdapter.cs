@@ -27,6 +27,15 @@ namespace BreakNotice.Gameplay.Input
 
         public InputActionAsset InputActions => inputActions;
 
+        public bool IsWebPointerLocked { get; private set; }
+
+        public bool IsWebPointerFallbackActive { get; private set; }
+
+        public bool IsWebPointerGameplayActive =>
+            IsWebPointerLocked || IsWebPointerFallbackActive;
+
+        public Vector2 WebPointerFallbackLookDelta { get; private set; }
+
         private void Awake()
         {
             BindActions();
@@ -47,6 +56,7 @@ namespace BreakNotice.Gameplay.Input
         {
             actionMap?.Disable();
             Snapshot = default;
+            ClearWebPointerState();
         }
 
         private void Update()
@@ -89,6 +99,23 @@ namespace BreakNotice.Gameplay.Input
                 callAllyAction.WasPressedThisFrame(),
                 strapReleaseAction.WasPressedThisFrame(),
                 resetEncounterAction.WasPressedThisFrame());
+        }
+
+        public void SetWebPointerState(
+            bool locked,
+            bool fallbackActive,
+            Vector2 fallbackLookDelta)
+        {
+            IsWebPointerLocked = locked;
+            IsWebPointerFallbackActive = !locked && fallbackActive;
+            WebPointerFallbackLookDelta = IsWebPointerFallbackActive
+                ? fallbackLookDelta
+                : Vector2.zero;
+        }
+
+        public void ClearWebPointerState()
+        {
+            SetWebPointerState(false, false, Vector2.zero);
         }
     }
 }
