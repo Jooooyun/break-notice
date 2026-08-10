@@ -253,3 +253,28 @@ desktop browser prototype과 검증 증거를 만든다.
   `UNCHANGED / C0-C3 remains a movement-pickup-carry-throw-reset sandbox. C4-C7 structural loop systems remain unimplemented and C4 is not authorized.`
 - Scope:
   `No C4 or later mechanic, package, ProjectSettings, production-art runtime integration or protected Human Owner work changed.`
+
+## C4 Fixed Ally Physical Relay Unity Qualification — 2026-08-10
+
+- Human Owner directive:
+  `Proceed with GPT Pro's next C4 work, but do not touch the Web build; prepare Designer A work for direct inspection in a Unity Scene.`
+- Starting baseline:
+  `04b33ab3e7f48cb461606d9ffbafe4e83f060a93 / contest/game-builders-2026 / local, origin and remote equal / tracked and staged clean / protected 26 preserved.`
+- Implementation commit:
+  `30376d475ca0e07e9026965a9f11c6cfec241ba5 / pushed and remote-verified.`
+- Fixed support contract:
+  `One authored ally support position, one active reservation and the exact existing ally pool of two Light Binders plus one movable Medium Chair. No hidden inventory, replenishment, teleport acquisition or duplicate ownership was introduced.`
+- Light Binder path:
+  `Q requests the reticle-selected authored Binder, PRE-RELEASE safely freezes the same visible Rigidbody at its current pose, RELEASED applies one physical ballistic launch, E performs an in-range visible Catch, and LMB armed during the active relay converts that Catch into exactly one player-owned queued Throw origin.`
+- Medium Chair path:
+  `Q requests the authored ally Chair and releases one planar floor-supported feed. It is never Catch-eligible and cannot arm queued Throw; final redirect remains C5 Cargo Strap scope.`
+- Reset and physical resolution:
+  `Reset blocks interaction, clears reservation and queue, restores the exact authored Rigidbody-transform baseline and consumed pool, and preserves loss, duplication and ownership-leak counters at zero. Missed or settled objects remain physical in the room until Reset.`
+- Tests:
+  `Unity compile PASS / EditMode 62/62 / PlayMode 47/47 / total 109/109 / existing C0-C3 behavior preserved.`
+- Web qualification:
+  `NOT RUN BY HUMAN OWNER DIRECTIVE / no Web build output, HTTP evidence, browser state, package or ProjectSettings was changed. Prior C0-C3 Web evidence is preserved but is not attributed to C4.`
+- Manual acceptance:
+  `PENDING / Human Owner must inspect and play the C4 Unity Scene behavior before closure. Automated PASS does not infer Human acceptance.`
+- Next boundary:
+  `C5 Cargo Strap and every later checkpoint remain NOT AUTHORIZED.`

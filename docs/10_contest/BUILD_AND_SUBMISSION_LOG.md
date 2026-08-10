@@ -170,3 +170,20 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Human Owner Manual | `PASS / repaired mouse-look and grounded Binder-Chair acquisition accepted to proceed 2026-08-10` |
 | Scope | `C4+, packages, ProjectSettings and production-art runtime integration unchanged` |
 | Submission State | `NOT READY / C4 NOT AUTHORIZED / broader C1-C3 acceptance not inferred` |
+
+## C4 Fixed Ally Physical Relay — Unity Qualification Only — 2026-08-10
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `04b33ab3e7f48cb461606d9ffbafe4e83f060a93` |
+| Implementation Commit | `30376d475ca0e07e9026965a9f11c6cfec241ba5 / pushed and remote-verified` |
+| Unity Version | `6000.3.20f1` |
+| Compile | `PASS` |
+| Tests | `EditMode 62/62 PASS / PlayMode 47/47 PASS / total 109/109` |
+| C4 Scope | `fixed ally / two Light Binder supplies / one floor-supported Medium Chair supply / normal Catch / queued player Throw / authored Reset` |
+| Web Build | `NOT RUN / Human Owner explicitly directed Codex not to touch the Web build` |
+| HTTP / Browser | `NOT RUN / no C4 browser evidence claimed` |
+| Prior Web Evidence | `C0-C3 build GUID 522b5d42361645c884e5bb293b2876c2 preserved unchanged; not evidence for C4` |
+| Human Manual | `PENDING / Unity Scene play and feel check required` |
+| Scope Protection | `C5+, Packages, ProjectSettings, Input Actions and production-art runtime integration unchanged` |
+| Submission State | `NOT READY / C4 HUMAN ACCEPTANCE AND LATER WEB QUALIFICATION PENDING / C5 NOT AUTHORIZED` |

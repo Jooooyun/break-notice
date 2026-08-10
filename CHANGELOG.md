@@ -4,6 +4,8 @@
 
 ### Changed
 
+- Human Owner의 최신 C4 지시에 따라 기준선 `04b33ab3e7f48cb461606d9ffbafe4e83f060a93`에서 단일 고정 동료 위치와 정확히 Binder 2개·Chair 1개인 물리 공급 풀을 구현했다. Light Binder는 `PRE-RELEASE` 예약 후 실제 Rigidbody 비행, 일반 Catch 또는 player-owned queued Throw로 이어지고, Medium Chair는 바닥 지지 planar feed만 수행한다. Reset은 예약·queue·소비 상태와 실제 동일 오브젝트 baseline을 복원한다. 구현 commit `30376d475ca0e07e9026965a9f11c6cfec241ba5`를 원격 Contest 브랜치에 push했고 Unity compile, EditMode `62/62`, PlayMode `47/47`, 총 `109/109`를 통과했다. Human Owner 지시에 따라 이번 C4에서는 Web build·HTTP·browser qualification을 실행하지 않았으며 Unity 수동 acceptance는 대기 중이고 C5는 미승인이다.
+
 - Human Owner가 2026-08-10 embedded-browser 마우스 Look과 바닥에 놓인 Binder·Chair 획득 이동 수정을 확인해 다음 단계 진행 가능으로 판정했다. `ff2c3cc2ff1fa61057798e963f617c8be3d89e28`에서 표준 Pointer Lock을 보존하면서 embedded Chromium 거절 시 instance-owned mouse-delta fallback, 첫 클릭 보호와 Escape 해제를 구현했고, `3c9416f697fbb965bf4b06c4b8b06357d5f2370b`에서 위로 들어 올릴 때의 floor support contact만 제외해 기존 wall clamp·slide를 보존했다. EditMode `44/44`, PlayMode `26/26`, 총 `70/70`, Web Development build GUID `522b5d42361645c884e5bb293b2876c2`, Unity report `113801187` bytes, `0 warning / 0 error`, HTTP `19/19`, `113802941` bytes, aggregate SHA-256 `58c4c16572fdf62cac474bf26eb2786e20a55e95ce12cc0053eb6e9b8e9afaf4`를 검증했다. 이 bounded PASS는 C4 권한이나 broader C1-C3 acceptance로 확대하지 않는다.
 - Designer A의 원격 `6094b41143286b6e1710087a711707416b366c20` batch를 감사해 159 files, 155 FBX, 4 guides, 131363044 path bytes를 확인했으나 A1 순서, 허용 `ArtSource/**` 경로, editable CHR01 source, 세 Preview, DELIVERY·license evidence와 ENY01 no-elite/no-firearm Canon을 충족하지 못해 `REVISION REQUIRED / DO NOT INTEGRATE`로 판정했다. 기존 binary와 history는 보존하고 교정 지시 `6030c4af6b800d0d7e80013382babd7b1cfc58a0`을 `art/characters-animation`에 push했으며 Runtime import·PR·merge는 수행하지 않았다.
 

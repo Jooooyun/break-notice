@@ -250,3 +250,26 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `Protected Human Owner untracked work remained unstaged and unmodified / main, packages, ProjectSettings, production-art runtime and C4+ unchanged.`
 - Next:
   `Designer A must return only the CHR01 A1 editable blockout and three pose previews with complete rights metadata. C4 remains closed pending a new Human Owner authorization.`
+
+## C4 Fixed Ally Physical Relay and Designer A Local Unity Review — 2026-08-10
+
+- Goal:
+  `Execute GPT Pro's bounded C4 recommendation and make the Designer A delivery directly inspectable without integrating it into Contest runtime art or touching the Web build.`
+- Human Owner Decision Preserved:
+  `Proceed immediately; no Web build; inspect designer work in Unity Scene.`
+- C4 Baseline:
+  `04b33ab3e7f48cb461606d9ffbafe4e83f060a93 / contest local-origin-remote equal / tracked-staged clean / protected 26 unchanged.`
+- C4 Work:
+  `Implemented one fixed ally relay owner, exact two-Binder and one-Chair supply pool, pre-release reservation, physical Light launch and Catch, queued player Throw, grounded Medium feed, miss/settle resolution and full authored Reset restoration.`
+- C4 Commit:
+  `30376d475ca0e07e9026965a9f11c6cfec241ba5 / normal push complete and remote-verified.`
+- Tests:
+  `Unity compile PASS / EditMode 62/62 / PlayMode 47/47 / total 109/109.`
+- Web:
+  `Not run and not modified by Human Owner directive. No new HTTP or browser qualification is claimed.`
+- Designer A Review Setup:
+  `Created a detached local worktree at C:/Users/jhbjm/Desktop/break-notice-designerA-review from origin/art/characters-animation 6030c4af6b800d0d7e80013382babd7b1cfc58a0, copied the 159-file incoming batch into an untracked _LocalArtReview area, and opened LOCAL_REVIEW_ONLY_DesignerA_Characters in Unity 6000.3.20f1. Four model Prefabs are displayed under neutral lighting with explicit rights, Canon and non-integration warnings.`
+- Designer A Repository State:
+  `Detached worktree only / tracked dirty 0 / staged 0 / commit 0 / push 0. The local review Scene does not approve rights, Canon, runtime integration, elite enemy or firearm content.`
+- Next:
+  `Human Owner Unity inspection of Designer A models and C4 manual gameplay acceptance. C5 remains unauthorized.`
