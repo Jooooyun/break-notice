@@ -27,6 +27,9 @@ namespace BreakNotice.Gameplay.Encounter
         private PrototypePhysicalObjectLifecycle physicalObjectLifecycle;
 
         [SerializeField]
+        private PrototypeAllyRelayController allyRelayController;
+
+        [SerializeField]
         private ThirdPersonLocomotion locomotion;
 
         [SerializeField]
@@ -104,7 +107,8 @@ namespace BreakNotice.Gameplay.Encounter
             ThirdPersonLocomotion playerLocomotion,
             Transform player,
             Transform[] actors,
-            PrototypeInteractionTarget[] objects)
+            PrototypeInteractionTarget[] objects,
+            PrototypeAllyRelayController relayController = null)
         {
             logicalInput = input;
             interactionOwner = owner;
@@ -113,6 +117,7 @@ namespace BreakNotice.Gameplay.Encounter
             playerTransform = player;
             authoredActors = actors ?? Array.Empty<Transform>();
             authoredObjects = objects ?? Array.Empty<PrototypeInteractionTarget>();
+            allyRelayController = relayController;
 
             if (Application.isPlaying)
             {
@@ -172,6 +177,7 @@ namespace BreakNotice.Gameplay.Encounter
             ResetCount++;
 
             physicalObjectLifecycle?.DetachForReset();
+            allyRelayController?.ResetToAuthoredBaseline();
             RestorePlayer();
 
             foreach (TransformBaseline baseline in actorBaselines)
@@ -295,7 +301,8 @@ namespace BreakNotice.Gameplay.Encounter
                    interactionOwner.ThrowCommittedTarget == null &&
                    interactionOwner.StrapTarget == null &&
                    interactionOwner.RelayReservedTarget == null &&
-                   !interactionOwner.QueuedThrowArmed;
+                   !interactionOwner.QueuedThrowArmed &&
+                   (allyRelayController == null || allyRelayController.HasBaselineState);
         }
 
         private readonly struct TransformBaseline
@@ -433,11 +440,13 @@ namespace BreakNotice.Gameplay.Encounter
                 }
 
                 Body.isKinematic = true;
+                Body.interpolation = RigidbodyInterpolation.None;
                 Transform.Restore();
-                Body.position = Target.transform.position;
-                Body.rotation = Target.transform.rotation;
+                Vector3 restoredPosition = Target.transform.position;
+                Quaternion restoredRotation = Target.transform.rotation;
+                Body.position = restoredPosition;
+                Body.rotation = restoredRotation;
                 Body.constraints = Constraints;
-                Body.interpolation = Interpolation;
                 Body.collisionDetectionMode = CollisionMode;
                 Body.useGravity = UseGravity;
                 Body.isKinematic = IsKinematic;
@@ -454,6 +463,15 @@ namespace BreakNotice.Gameplay.Encounter
                 {
                     Body.WakeUp();
                 }
+
+                // Reset the interpolation history as well as the physics pose.
+                // Otherwise a released relay object can render one stale flight
+                // frame after authored Reset even though Rigidbody.position was
+                // already restored.
+                Body.position = restoredPosition;
+                Body.rotation = restoredRotation;
+                Target.transform.SetPositionAndRotation(restoredPosition, restoredRotation);
+                Body.interpolation = Interpolation;
             }
 
             public bool HasDifference()

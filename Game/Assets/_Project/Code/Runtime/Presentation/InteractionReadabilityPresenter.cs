@@ -18,6 +18,7 @@ namespace BreakNotice.Presentation
         private GUIStyle targetStyle;
         private GUIStyle feedbackStyle;
         private uint observedAttemptSequence;
+        private uint observedAllyCallSequence;
         private string activeFeedback = string.Empty;
         private float feedbackExpiresAt;
 
@@ -50,6 +51,37 @@ namespace BreakNotice.Presentation
                        $"[{GetWeightLabel(owner.CarriedTarget)}] | LMB THROW";
             }
 
+            PrototypeAllyRelayController relay = interactionController.AllyRelayController;
+            if (relay != null && relay.RelayPhase == PrototypeRelayPhase.PreRelease)
+            {
+                return $"SUPPLY COMMITTED: {relay.ActiveTarget?.DisplayName ?? "OBJECT"} " +
+                       "| PHYSICAL RELEASE PENDING";
+            }
+
+            if (relay != null && relay.IsBinderIncoming)
+            {
+                if (owner.QueuedThrowArmed)
+                {
+                    return "QUEUED THROW ARMED | BINDER INCOMING | [E] CATCH";
+                }
+
+                return relay.CanCatch(interactionController.CurrentTarget)
+                    ? "BINDER INCOMING | [E] CATCH"
+                    : "BINDER INCOMING | CENTER RETICLE AND MOVE INTO CATCH RANGE";
+            }
+
+            if (relay != null && relay.IsChairFeedActive)
+            {
+                return "CHAIR GROUNDED FEED | CATCH BLOCKED | QUEUED THROW BLOCKED";
+            }
+
+            if (interactionController.CurrentRelayCandidate != null)
+            {
+                return $"ALLY READY | CALL ALLY AVAILABLE: " +
+                       $"{interactionController.CurrentRelayCandidate.DisplayName} " +
+                       "| [Q] SUPPLY";
+            }
+
             PrototypeInteractionTarget target = interactionController.CurrentTarget;
             if (target == null)
             {
@@ -80,6 +112,19 @@ namespace BreakNotice.Presentation
 
         public string BuildReticleText()
         {
+            PrototypeAllyRelayController relay = interactionController?.AllyRelayController;
+            if (relay != null &&
+                relay.IsBinderIncoming &&
+                relay.CanCatch(interactionController.CurrentTarget))
+            {
+                return "[E]";
+            }
+
+            if (interactionController?.CurrentRelayCandidate != null)
+            {
+                return "[Q]";
+            }
+
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
             if (target == null ||
                 interactionController.InteractionOwner == null ||
@@ -98,6 +143,22 @@ namespace BreakNotice.Presentation
 
         public string BuildReticleLabel()
         {
+            PrototypeAllyRelayController relay = interactionController?.AllyRelayController;
+            if (relay != null &&
+                relay.IsBinderIncoming &&
+                relay.CanCatch(interactionController.CurrentTarget))
+            {
+                return interactionController.InteractionOwner.QueuedThrowArmed
+                    ? "CATCH + QUEUED THROW"
+                    : "CATCH INCOMING BINDER";
+            }
+
+            if (interactionController?.CurrentRelayCandidate != null)
+            {
+                return $"CALL ALLY FOR " +
+                       interactionController.CurrentRelayCandidate.DisplayName;
+            }
+
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
             if (target == null ||
                 interactionController.InteractionOwner == null ||
@@ -163,17 +224,59 @@ namespace BreakNotice.Presentation
             };
         }
 
-        private void LateUpdate()
+        public string BuildLatestAllyCallFeedbackText()
         {
             if (interactionController == null ||
-                interactionController.InteractionAttemptSequence == observedAttemptSequence)
+                interactionController.AllyCallAttemptSequence == 0)
+            {
+                return string.Empty;
+            }
+
+            if (interactionController.LastAllyCallAccepted)
+            {
+                return $"SUPPLY COMMITTED: " +
+                       (interactionController.LastAllyCallTarget?.DisplayName ?? "OBJECT");
+            }
+
+            return interactionController.LastAllyCallRejection switch
+            {
+                PrototypeAllyRelayRejection.GlobalStateBlocked =>
+                    "CALL BLOCKED: RESET OR FAILURE PENDING",
+                PrototypeAllyRelayRejection.HandOwnershipBlocked =>
+                    "CALL BLOCKED: HANDS OCCUPIED",
+                PrototypeAllyRelayRejection.StrapOwnershipBlocked =>
+                    "CALL BLOCKED: STRAP OCCUPIED",
+                PrototypeAllyRelayRejection.RelayAlreadyActive =>
+                    "CALL BLOCKED: SUPPLY ALREADY COMMITTED",
+                PrototypeAllyRelayRejection.SupplyAlreadyConsumed =>
+                    "CALL BLOCKED: SUPPLY ALREADY USED",
+                PrototypeAllyRelayRejection.InvalidPhysicalLane =>
+                    "CALL BLOCKED: PHYSICAL LANE OBSTRUCTED",
+                PrototypeAllyRelayRejection.InvalidPhysicalTarget =>
+                    "CALL BLOCKED: INVALID PHYSICAL SUPPLY",
+                _ => "CALL BLOCKED: NO VALID SUPPLY"
+            };
+        }
+
+        private void LateUpdate()
+        {
+            if (interactionController == null)
             {
                 return;
             }
 
-            observedAttemptSequence = interactionController.InteractionAttemptSequence;
-            activeFeedback = BuildLatestAttemptFeedbackText();
-            feedbackExpiresAt = Time.unscaledTime + FeedbackDuration;
+            if (interactionController.AllyCallAttemptSequence != observedAllyCallSequence)
+            {
+                observedAllyCallSequence = interactionController.AllyCallAttemptSequence;
+                activeFeedback = BuildLatestAllyCallFeedbackText();
+                feedbackExpiresAt = Time.unscaledTime + FeedbackDuration;
+            }
+            else if (interactionController.InteractionAttemptSequence != observedAttemptSequence)
+            {
+                observedAttemptSequence = interactionController.InteractionAttemptSequence;
+                activeFeedback = BuildLatestAttemptFeedbackText();
+                feedbackExpiresAt = Time.unscaledTime + FeedbackDuration;
+            }
         }
 
         private void OnGUI()
@@ -233,6 +336,7 @@ namespace BreakNotice.Presentation
             return reticle switch
             {
                 "[E]" => new Color(0.35f, 1f, 0.45f, 0.95f),
+                "[Q]" => new Color(0.3f, 0.75f, 1f, 0.95f),
                 "[!]" => new Color(1f, 0.65f, 0.1f, 0.95f),
                 _ => new Color(1f, 1f, 1f, 0.8f)
             };

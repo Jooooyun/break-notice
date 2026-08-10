@@ -77,7 +77,9 @@ namespace BreakNotice.Gameplay.Interaction
                         context.Target);
             }
 
-            if (context.Target != null && context.Target.CatchEligible)
+            if (context.Target != null &&
+                context.Target == context.RelayReservedTarget &&
+                context.Target.CatchEligible)
             {
                 return PrototypeInteractionDecision.Accept(
                     PrototypeInteractionOutcome.Catch,

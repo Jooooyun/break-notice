@@ -40,6 +40,7 @@ namespace BreakNotice.Gameplay.Interaction
                 HandState,
                 StrapState,
                 RelayState,
+                RelayReservedTarget,
                 explicitStrapContext,
                 target);
         }
@@ -70,14 +71,26 @@ namespace BreakNotice.Gameplay.Interaction
                     return true;
 
                 case PrototypeInteractionOutcome.Catch:
-                    if (!decision.Target.CatchEligible || RelayState != PrototypeRelayReservationState.Active)
+                    if (!decision.Target.CatchEligible ||
+                        RelayState != PrototypeRelayReservationState.Active ||
+                        RelayReservedTarget != decision.Target)
                     {
                         return false;
                     }
 
-                    CarriedTarget = decision.Target;
-                    HandState = PrototypeHandOwnershipState.Carrying;
+                    bool consumeQueuedThrow = QueuedThrowArmed;
                     ClearRelayReservation();
+                    if (consumeQueuedThrow)
+                    {
+                        ThrowCommittedTarget = decision.Target;
+                        HandState = PrototypeHandOwnershipState.ThrowCommitted;
+                    }
+                    else
+                    {
+                        CarriedTarget = decision.Target;
+                        HandState = PrototypeHandOwnershipState.Carrying;
+                    }
+
                     return true;
 
                 case PrototypeInteractionOutcome.AttachStrap:
@@ -171,6 +184,8 @@ namespace BreakNotice.Gameplay.Interaction
                 RelayState != PrototypeRelayReservationState.Active ||
                 RelayReservedTarget == null ||
                 !RelayReservedTarget.CatchEligible ||
+                HandState != PrototypeHandOwnershipState.Free ||
+                StrapState != PrototypeStrapOwnershipState.Stored ||
                 QueuedThrowArmed)
             {
                 return false;

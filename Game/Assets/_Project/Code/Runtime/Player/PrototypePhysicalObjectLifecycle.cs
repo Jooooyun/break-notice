@@ -71,7 +71,7 @@ namespace BreakNotice.Gameplay.Interaction
                 interactionOwner.HandState != PrototypeHandOwnershipState.Carrying ||
                 interactionOwner.CarriedTarget != target ||
                 carriedTarget != null ||
-                !target.IsScoopEligible)
+                (!target.IsScoopEligible && !target.CatchEligible))
             {
                 return false;
             }
@@ -115,27 +115,9 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            Vector3 direction = requestedDirection.sqrMagnitude > 0.0001f
-                ? requestedDirection.normalized
-                : transform.forward;
-            float throwSpeed = GetThrowSpeed(target.WeightClass);
-            Vector3 releaseVelocity = direction * throwSpeed + Vector3.up * upwardThrowSpeed;
-
             SetPlayerCollisionIgnored(false);
             SetCarriedCameraCollisionIgnored(false);
-            body.isKinematic = false;
-            body.useGravity = true;
-            body.linearVelocity = releaseVelocity;
-            body.angularVelocity = Vector3.up *
-                (target.WeightClass == PrototypeWeightClass.Light ? 4f : 2f);
-
-            nextThrowOriginSequence++;
-            LastThrowOrigin = new PlayerThrowOrigin(
-                nextThrowOriginSequence,
-                target.ContentDefinitionId,
-                target.RuntimeInstanceKey,
-                target.WeightClass);
-            LastReleaseSpeed = releaseVelocity.magnitude;
+            ApplyPhysicalThrow(target, body, requestedDirection);
 
             carriedTarget = null;
             carriedBody = null;
@@ -145,11 +127,65 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        public bool TryThrowCommittedRelayTarget(
+            PrototypeInteractionTarget target,
+            Vector3 requestedDirection)
+        {
+            if (target == null ||
+                interactionOwner == null ||
+                interactionOwner.BlocksNewInteraction ||
+                interactionOwner.HandState != PrototypeHandOwnershipState.ThrowCommitted ||
+                interactionOwner.ThrowCommittedTarget != target ||
+                !target.CatchEligible)
+            {
+                return false;
+            }
+
+            Rigidbody body = target.GetComponent<Rigidbody>();
+            Collider targetCollider = target.GetComponent<Collider>();
+            if (body == null ||
+                targetCollider is not BoxCollider ||
+                targetCollider.transform != body.transform)
+            {
+                return false;
+            }
+
+            ApplyPhysicalThrow(target, body, requestedDirection);
+            return interactionOwner.CompleteThrow(target);
+        }
+
         public float GetThrowSpeed(PrototypeWeightClass weightClass)
         {
             return weightClass == PrototypeWeightClass.Light
                 ? lightThrowSpeed
                 : mediumThrowSpeed;
+        }
+
+        private void ApplyPhysicalThrow(
+            PrototypeInteractionTarget target,
+            Rigidbody body,
+            Vector3 requestedDirection)
+        {
+            Vector3 direction = requestedDirection.sqrMagnitude > 0.0001f
+                ? requestedDirection.normalized
+                : transform.forward;
+            float throwSpeed = GetThrowSpeed(target.WeightClass);
+            Vector3 releaseVelocity = direction * throwSpeed + Vector3.up * upwardThrowSpeed;
+
+            body.isKinematic = false;
+            body.useGravity = true;
+            body.linearVelocity = releaseVelocity;
+            body.angularVelocity = Vector3.up *
+                (target.WeightClass == PrototypeWeightClass.Light ? 4f : 2f);
+            body.WakeUp();
+
+            nextThrowOriginSequence++;
+            LastThrowOrigin = new PlayerThrowOrigin(
+                nextThrowOriginSequence,
+                target.ContentDefinitionId,
+                target.RuntimeInstanceKey,
+                target.WeightClass);
+            LastReleaseSpeed = releaseVelocity.magnitude;
         }
 
         public void DetachForReset()

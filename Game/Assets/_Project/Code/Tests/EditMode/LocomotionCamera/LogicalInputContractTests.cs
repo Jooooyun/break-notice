@@ -58,19 +58,11 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void ApprovedInteractionAction_HasBoundedConsumerAndLaterActionsRemainPassive()
+        public void ApprovedInteractionActions_HaveBoundedConsumersAndStrapReleaseRemainsPassive()
         {
-            string[] passiveActions =
-            {
-                "CallAlly",
-                "StrapRelease"
-            };
-
             InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
-            foreach (string actionName in passiveActions)
-            {
-                Assert.That(map.FindAction(actionName, true).type, Is.EqualTo(InputActionType.Button));
-            }
+            Assert.That(map.FindAction("CallAlly", true).type, Is.EqualTo(InputActionType.Button));
+            Assert.That(map.FindAction("StrapRelease", true).type, Is.EqualTo(InputActionType.Button));
 
             string consumerSource =
                 File.ReadAllText("Assets/_Project/Code/Runtime/Player/ThirdPersonLocomotion.cs") +
@@ -78,13 +70,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                 File.ReadAllText("Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs");
             StringAssert.Contains("Snapshot.InteractPrimary", consumerSource);
             StringAssert.Contains("Snapshot.Throw", consumerSource);
+            StringAssert.Contains("Snapshot.CallAlly", consumerSource);
             string resetSource = File.ReadAllText(
                 "Assets/_Project/Code/Runtime/Player/AuthoredEncounterResetController.cs");
             StringAssert.Contains("Snapshot.ResetEncounter", resetSource);
-            foreach (string actionName in passiveActions)
-            {
-                StringAssert.DoesNotContain(actionName, consumerSource);
-            }
+            StringAssert.DoesNotContain("StrapRelease", consumerSource);
         }
 
         [Test]

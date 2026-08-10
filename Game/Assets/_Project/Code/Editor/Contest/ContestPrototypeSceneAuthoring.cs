@@ -21,7 +21,7 @@ namespace BreakNotice.Contest.Editor
         public static void PrepareCurrentContestScene()
         {
             Scene scene = EditorSceneManager.OpenScene(ContestScenePath, OpenSceneMode.Single);
-            ApplyC3Composition(scene);
+            ApplyC4Composition(scene);
             EditorSceneManager.MarkSceneDirty(scene);
             if (!EditorSceneManager.SaveScene(scene, ContestScenePath))
             {
@@ -30,7 +30,96 @@ namespace BreakNotice.Contest.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            Debug.Log("Contest C3 authored Reset composition prepared.");
+            Debug.Log("Contest C4 fixed ally physical relay composition prepared.");
+        }
+
+        public static void ApplyC4Composition(Scene scene)
+        {
+            ApplyC3Composition(scene);
+
+            GameObject player = RequireRoot(scene, "Player");
+            GameObject ally = RequireRoot(scene, "AllyProxy");
+            GameObject cameraRig = RequireRoot(scene, "GameplayCameraRig");
+            GameObject browserInput = RequireRoot(scene, "ContestBrowserInput");
+            PrototypeInteractionTarget[] targets = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                .OrderBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
+                .ToArray();
+            PrototypeInteractionTarget[] supplyTargets = targets
+                .Where(target =>
+                    target.Role == PrototypeInteractionRole.AllyBinder ||
+                    target.Role == PrototypeInteractionRole.AllyChair)
+                .OrderBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
+                .ToArray();
+            if (supplyTargets.Length != 3)
+            {
+                throw new InvalidOperationException(
+                    $"C4 requires exactly three authored ally supply objects, found {supplyTargets.Length}.");
+            }
+
+            foreach (PrototypeInteractionTarget supplyTarget in supplyTargets)
+            {
+                ConfigureDynamicTarget(
+                    supplyTarget,
+                    supplyTarget.WeightClass == PrototypeWeightClass.Light ? 1f : 8f);
+            }
+
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                player.GetComponent<PrototypePhysicalObjectLifecycle>();
+            PrototypeInteractionController interactionController =
+                player.GetComponent<PrototypeInteractionController>();
+            InputSystemLogicalInputAdapter logicalInput =
+                player.GetComponent<InputSystemLogicalInputAdapter>();
+            Camera outputCamera = cameraRig.GetComponentInChildren<Camera>(true);
+            PrototypeAllyRelayController relayController =
+                GetOrAddComponent<PrototypeAllyRelayController>(ally);
+            relayController.Configure(
+                owner,
+                lifecycle,
+                ally.transform,
+                player.transform,
+                supplyTargets,
+                0.2f,
+                7.5f,
+                4f,
+                2.8f,
+                0.35f,
+                0.75f,
+                0.35f,
+                4f);
+            interactionController.Configure(
+                logicalInput,
+                owner,
+                outputCamera.transform,
+                targets,
+                2.8f,
+                false,
+                lifecycle,
+                relayController);
+
+            Transform[] actors =
+            {
+                ally.transform,
+                RequireRoot(scene, "EnemyProxy_01").transform,
+                RequireRoot(scene, "EnemyProxy_02").transform
+            };
+            AuthoredEncounterResetController resetController =
+                browserInput.GetComponent<AuthoredEncounterResetController>();
+            resetController.Configure(
+                logicalInput,
+                owner,
+                lifecycle,
+                player.GetComponent<ThirdPersonLocomotion>(),
+                player.transform,
+                actors,
+                targets,
+                relayController);
+
+            EditorUtility.SetDirty(relayController);
+            EditorUtility.SetDirty(interactionController);
+            EditorUtility.SetDirty(resetController);
         }
 
         public static void ApplyC3Composition(Scene scene)

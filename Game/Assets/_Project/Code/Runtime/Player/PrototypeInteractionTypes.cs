@@ -46,6 +46,34 @@ namespace BreakNotice.Gameplay.Interaction
         Active
     }
 
+    public enum PrototypeAllySupportState
+    {
+        Ready,
+        SupplyCommitted
+    }
+
+    public enum PrototypeRelayPhase
+    {
+        None,
+        PreRelease,
+        Released
+    }
+
+    public enum PrototypeAllyRelayRejection
+    {
+        None,
+        NoValidSupply,
+        GlobalStateBlocked,
+        HandOwnershipBlocked,
+        StrapOwnershipBlocked,
+        RelayAlreadyActive,
+        QueueAlreadyArmed,
+        AllyUnavailable,
+        SupplyAlreadyConsumed,
+        InvalidPhysicalLane,
+        InvalidPhysicalTarget
+    }
+
     public enum PrototypeInteractionOutcome
     {
         None,
@@ -75,6 +103,7 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeHandOwnershipState handState,
             PrototypeStrapOwnershipState strapState,
             PrototypeRelayReservationState relayState,
+            PrototypeInteractionTarget relayReservedTarget,
             bool explicitStrapContext,
             PrototypeInteractionTarget target)
         {
@@ -82,6 +111,7 @@ namespace BreakNotice.Gameplay.Interaction
             HandState = handState;
             StrapState = strapState;
             RelayState = relayState;
+            RelayReservedTarget = relayReservedTarget;
             ExplicitStrapContext = explicitStrapContext;
             Target = target;
         }
@@ -93,6 +123,8 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeStrapOwnershipState StrapState { get; }
 
         public PrototypeRelayReservationState RelayState { get; }
+
+        public PrototypeInteractionTarget RelayReservedTarget { get; }
 
         public bool ExplicitStrapContext { get; }
 

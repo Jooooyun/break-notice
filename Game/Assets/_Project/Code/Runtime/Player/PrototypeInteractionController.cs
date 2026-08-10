@@ -32,6 +32,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private PrototypePhysicalObjectLifecycle physicalObjectLifecycle;
 
+        [SerializeField]
+        private PrototypeAllyRelayController allyRelayController;
+
         private readonly PrototypeInteractionArbitrator arbitrator =
             new PrototypeInteractionArbitrator();
         private readonly RaycastHit[] visibilityHits = new RaycastHit[VisibilityHitCapacity];
@@ -43,6 +46,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public PrototypeInteractionTarget CurrentTarget { get; private set; }
 
+        public PrototypeInteractionTarget CurrentRelayCandidate { get; private set; }
+
         public PrototypeInteractionDecision LastDecision { get; private set; }
 
         public float InteractionRange => interactionRange;
@@ -50,6 +55,16 @@ namespace BreakNotice.Gameplay.Interaction
         public float CurrentTargetDistance { get; private set; } = float.PositiveInfinity;
 
         public uint InteractionAttemptSequence { get; private set; }
+
+        public uint AllyCallAttemptSequence { get; private set; }
+
+        public bool LastAllyCallAccepted { get; private set; }
+
+        public PrototypeAllyRelayRejection LastAllyCallRejection { get; private set; }
+
+        public PrototypeInteractionTarget LastAllyCallTarget { get; private set; }
+
+        public PrototypeAllyRelayController AllyRelayController => allyRelayController;
 
         private void Awake()
         {
@@ -91,6 +106,11 @@ namespace BreakNotice.Gameplay.Interaction
             pointerActionAvailable = pointerCaptured && !pointerJustCaptured;
 #endif
 
+            if (logicalInput.Snapshot.CallAlly)
+            {
+                ProcessCallAlly();
+            }
+
             if (logicalInput.Snapshot.InteractPrimary)
             {
                 ProcessInteractPrimary(isAiming && pointerActionAvailable);
@@ -109,7 +129,8 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeInteractionTarget[] authoredTargets,
             float range,
             bool enableStrapContext,
-            PrototypePhysicalObjectLifecycle physicalLifecycle = null)
+            PrototypePhysicalObjectLifecycle physicalLifecycle = null,
+            PrototypeAllyRelayController relayController = null)
         {
             logicalInput = input;
             interactionOwner = owner;
@@ -118,6 +139,7 @@ namespace BreakNotice.Gameplay.Interaction
             interactionRange = Mathf.Max(0.5f, range);
             strapContextEnabled = enableStrapContext;
             physicalObjectLifecycle = physicalLifecycle;
+            allyRelayController = relayController;
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
@@ -127,70 +149,25 @@ namespace BreakNotice.Gameplay.Interaction
             // explicit Strap context outside this resolver.
             _ = isAiming;
             Vector3 interactionOrigin = transform.position + Vector3.up;
-            Vector3 viewOrigin = viewTransform != null
-                ? viewTransform.position
-                : interactionOrigin;
-            Vector3 forward = viewTransform != null
-                ? viewTransform.forward
-                : transform.forward;
-            int hitCount = Physics.RaycastNonAlloc(
-                viewOrigin,
-                forward.normalized,
-                visibilityHits,
-                ReticleRayMaximumDistance,
-                Physics.DefaultRaycastLayers,
-                QueryTriggerInteraction.Ignore);
-            if (hitCount >= VisibilityHitCapacity)
+            if (!TryResolveReticleHit(
+                    interactionOrigin,
+                    out PrototypeInteractionTarget reticleTarget,
+                    out float interactionDistance))
             {
                 return ClearCurrentTarget();
             }
 
-            PrototypeInteractionTarget nearestTarget = null;
-            float nearestHitDistance = float.PositiveInfinity;
-            float nearestInteractionDistance = float.PositiveInfinity;
-            string nearestKey = null;
-            for (int index = 0; index < hitCount; index++)
-            {
-                RaycastHit hit = visibilityHits[index];
-                if (hit.collider == null || BelongsToPlayer(hit.collider))
-                {
-                    continue;
-                }
-
-                PrototypeInteractionTarget hitTarget = FindTargetForCollider(hit.collider);
-                float interactionDistance = hitTarget != null
-                    ? Vector3.Distance(
-                        interactionOrigin,
-                        hit.collider.ClosestPoint(interactionOrigin))
-                    : float.PositiveInfinity;
-                bool validTarget = hitTarget != null && interactionDistance <= interactionRange;
-                string key = validTarget
-                    ? hitTarget.RuntimeInstanceKey ?? string.Empty
-                    : null;
-                bool isCloser = hit.distance < nearestHitDistance - 0.0001f;
-                bool isSameDistance =
-                    Mathf.Abs(hit.distance - nearestHitDistance) <= 0.0001f;
-                bool isTargetTieWinner =
-                    isSameDistance &&
-                    validTarget &&
-                    nearestTarget != null &&
-                    string.CompareOrdinal(key, nearestKey) < 0;
-                bool blockerWinsTie = isSameDistance && !validTarget && nearestTarget != null;
-                if (isCloser || isTargetTieWinner || blockerWinsTie)
-                {
-                    nearestHitDistance = hit.distance;
-                    nearestTarget = validTarget ? hitTarget : null;
-                    nearestInteractionDistance = validTarget
-                        ? interactionDistance
-                        : float.PositiveInfinity;
-                    nearestKey = key;
-                }
-            }
-
-            CurrentTarget = nearestTarget;
-            CurrentTargetDistance = nearestTarget != null
-                ? nearestInteractionDistance
+            CurrentTarget = reticleTarget != null && interactionDistance <= interactionRange
+                ? reticleTarget
+                : null;
+            CurrentTargetDistance = CurrentTarget != null
+                ? interactionDistance
                 : float.PositiveInfinity;
+            CurrentRelayCandidate =
+                allyRelayController != null &&
+                allyRelayController.CanRequestSupply(reticleTarget, out _)
+                    ? reticleTarget
+                    : null;
             return CurrentTarget;
         }
 
@@ -210,10 +187,20 @@ namespace BreakNotice.Gameplay.Interaction
                 CurrentTarget != null &&
                 CurrentTarget.HasLoadBearingMetalAnchor;
 
+            if (interactionOwner.RelayState == PrototypeRelayReservationState.Active &&
+                (allyRelayController == null || !allyRelayController.CanCatch(CurrentTarget)))
+            {
+                return RecordDecision(PrototypeInteractionDecision.Reject(
+                    PrototypeInteractionRejection.InvalidRelayContext,
+                    CurrentTarget));
+            }
+
             PrototypeInteractionContext context = interactionOwner.CreateContext(
                 explicitStrapContext,
                 CurrentTarget);
             PrototypeInteractionDecision decision = arbitrator.Decide(context);
+            bool queuedCatch = decision.Outcome == PrototypeInteractionOutcome.Catch &&
+                               interactionOwner.QueuedThrowArmed;
 
             if (decision.IsAccepted && !interactionOwner.TryCommit(decision))
             {
@@ -223,15 +210,62 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             else if (decision.IsAccepted &&
-                     (decision.Outcome == PrototypeInteractionOutcome.Scoop ||
-                      decision.Outcome == PrototypeInteractionOutcome.Catch) &&
-                     physicalObjectLifecycle != null &&
-                     !physicalObjectLifecycle.BeginCarry(decision.Target))
+                     decision.Outcome == PrototypeInteractionOutcome.Catch &&
+                     queuedCatch)
+            {
+                Vector3 direction = viewTransform != null
+                    ? viewTransform.forward
+                    : transform.forward;
+                bool physicalThrowSucceeded = physicalObjectLifecycle != null &&
+                    physicalObjectLifecycle.TryThrowCommittedRelayTarget(
+                        decision.Target,
+                        direction);
+                if (!physicalThrowSucceeded)
+                {
+                    interactionOwner.CompleteThrow(decision.Target);
+                    allyRelayController?.ResolveCatchFailure(decision.Target);
+                    decision = PrototypeInteractionDecision.Reject(
+                        PrototypeInteractionRejection.OwnershipConflict,
+                        CurrentTarget);
+                }
+                else
+                {
+                    allyRelayController?.CompleteCatch(decision.Target, true);
+                }
+            }
+
+            else if (decision.IsAccepted &&
+                     decision.Outcome == PrototypeInteractionOutcome.Catch &&
+                     physicalObjectLifecycle == null)
             {
                 interactionOwner.CancelCarry(decision.Target);
+                allyRelayController?.ResolveCatchFailure(decision.Target);
                 decision = PrototypeInteractionDecision.Reject(
                     PrototypeInteractionRejection.OwnershipConflict,
                     CurrentTarget);
+            }
+
+            else if (decision.IsAccepted &&
+                     (decision.Outcome == PrototypeInteractionOutcome.Scoop ||
+                      decision.Outcome == PrototypeInteractionOutcome.Catch) &&
+                     physicalObjectLifecycle != null)
+            {
+                if (!physicalObjectLifecycle.BeginCarry(decision.Target))
+                {
+                    interactionOwner.CancelCarry(decision.Target);
+                    if (decision.Outcome == PrototypeInteractionOutcome.Catch)
+                    {
+                        allyRelayController?.ResolveCatchFailure(decision.Target);
+                    }
+
+                    decision = PrototypeInteractionDecision.Reject(
+                        PrototypeInteractionRejection.OwnershipConflict,
+                        CurrentTarget);
+                }
+                else if (decision.Outcome == PrototypeInteractionOutcome.Catch)
+                {
+                    allyRelayController?.CompleteCatch(decision.Target, false);
+                }
             }
 
             return RecordDecision(decision);
@@ -240,8 +274,19 @@ namespace BreakNotice.Gameplay.Interaction
         public bool ProcessThrow()
         {
             if (interactionOwner == null ||
-                interactionOwner.BlocksNewInteraction ||
-                physicalObjectLifecycle == null)
+                interactionOwner.BlocksNewInteraction)
+            {
+                return false;
+            }
+
+            if (interactionOwner.HandState == PrototypeHandOwnershipState.Free &&
+                interactionOwner.RelayState == PrototypeRelayReservationState.Active)
+            {
+                return allyRelayController != null &&
+                       allyRelayController.TryArmQueuedThrow();
+            }
+
+            if (physicalObjectLifecycle == null)
             {
                 return false;
             }
@@ -252,6 +297,26 @@ namespace BreakNotice.Gameplay.Interaction
             return physicalObjectLifecycle.TryThrow(direction);
         }
 
+        public bool ProcessCallAlly()
+        {
+            RefreshTarget(false);
+            PrototypeInteractionTarget candidate = CurrentRelayCandidate;
+            PrototypeAllyRelayRejection rejection =
+                PrototypeAllyRelayRejection.AllyUnavailable;
+            bool accepted = allyRelayController != null &&
+                allyRelayController.TryRequestSupply(
+                    candidate,
+                    out rejection);
+
+            AllyCallAttemptSequence++;
+            LastAllyCallAccepted = accepted;
+            LastAllyCallRejection = accepted
+                ? PrototypeAllyRelayRejection.None
+                : rejection;
+            LastAllyCallTarget = candidate;
+            return accepted;
+        }
+
         private PrototypeInteractionDecision RecordDecision(
             PrototypeInteractionDecision decision)
         {
@@ -260,9 +325,80 @@ namespace BreakNotice.Gameplay.Interaction
             return LastDecision;
         }
 
+        private bool TryResolveReticleHit(
+            Vector3 interactionOrigin,
+            out PrototypeInteractionTarget nearestTarget,
+            out float nearestInteractionDistance)
+        {
+            Vector3 viewOrigin = viewTransform != null
+                ? viewTransform.position
+                : interactionOrigin;
+            Vector3 forward = viewTransform != null
+                ? viewTransform.forward
+                : transform.forward;
+            int hitCount = Physics.RaycastNonAlloc(
+                viewOrigin,
+                forward.normalized,
+                visibilityHits,
+                ReticleRayMaximumDistance,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            if (hitCount >= VisibilityHitCapacity)
+            {
+                nearestTarget = null;
+                nearestInteractionDistance = float.PositiveInfinity;
+                return false;
+            }
+
+            nearestTarget = null;
+            float nearestHitDistance = float.PositiveInfinity;
+            nearestInteractionDistance = float.PositiveInfinity;
+            string nearestKey = null;
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = visibilityHits[index];
+                if (hit.collider == null || BelongsToPlayer(hit.collider))
+                {
+                    continue;
+                }
+
+                PrototypeInteractionTarget hitTarget = FindTargetForCollider(hit.collider);
+                float interactionDistance = hitTarget != null
+                    ? Vector3.Distance(
+                        interactionOrigin,
+                        hit.collider.ClosestPoint(interactionOrigin))
+                    : float.PositiveInfinity;
+                string key = hitTarget != null
+                    ? hitTarget.RuntimeInstanceKey ?? string.Empty
+                    : null;
+                bool isCloser = hit.distance < nearestHitDistance - 0.0001f;
+                bool isSameDistance =
+                    Mathf.Abs(hit.distance - nearestHitDistance) <= 0.0001f;
+                bool isTargetTieWinner =
+                    isSameDistance &&
+                    hitTarget != null &&
+                    nearestTarget != null &&
+                    string.CompareOrdinal(key, nearestKey) < 0;
+                bool blockerWinsTie =
+                    isSameDistance && hitTarget == null && nearestTarget != null;
+                if (isCloser || isTargetTieWinner || blockerWinsTie)
+                {
+                    nearestHitDistance = hit.distance;
+                    nearestTarget = hitTarget;
+                    nearestInteractionDistance = hitTarget != null
+                        ? interactionDistance
+                        : float.PositiveInfinity;
+                    nearestKey = key;
+                }
+            }
+
+            return true;
+        }
+
         private PrototypeInteractionTarget ClearCurrentTarget()
         {
             CurrentTarget = null;
+            CurrentRelayCandidate = null;
             CurrentTargetDistance = float.PositiveInfinity;
             return null;
         }

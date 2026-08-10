@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f17c6166b0cd94b9253f4fc4fde87a, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.PrototypeInteractionTarget
   contentDefinitionId: OBJ-P-M-001
   runtimeInstanceKey: CHAIR-DIRECT-01
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f17c6166b0cd94b9253f4fc4fde87a, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.PrototypeInteractionTarget
   contentDefinitionId: OBJ-P-M-002
   runtimeInstanceKey: DRAWER-01
@@ -918,12 +918,13 @@ GameObject:
   - component: {fileID: 820737514}
   - component: {fileID: 820737513}
   - component: {fileID: 820737517}
+  - component: {fileID: 820737518}
   m_Layer: 0
   m_Name: ObjectProxy_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!23 &820737513
 MeshRenderer:
@@ -1028,7 +1029,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f17c6166b0cd94b9253f4fc4fde87a, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.PrototypeInteractionTarget
   contentDefinitionId: OBJ-P-M-001
   runtimeInstanceKey: CHAIR-ALLY-01
@@ -1039,6 +1040,33 @@ MonoBehaviour:
   catchEligible: 0
   strapEligible: 1
   hasLoadBearingMetalAnchor: 1
+--- !u!54 &820737518
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820737512}
+  serializedVersion: 5
+  m_Mass: 8
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &824956720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,7 +1096,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 599a8f324703d9c41a24f3dfab196b0e, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: BreakNotice.ContestBrowser::BreakNotice.Contest.BrowserPointerCapture
   logicalInput: {fileID: 1121842303}
 --- !u!4 &824956722
@@ -1114,6 +1142,7 @@ MonoBehaviour:
   logicalInput: {fileID: 1121842303}
   interactionOwner: {fileID: 1121842307}
   physicalObjectLifecycle: {fileID: 1121842308}
+  allyRelayController: {fileID: 1119083204}
   locomotion: {fileID: 443728495}
   playerTransform: {fileID: 1121842304}
   authoredActors:
@@ -1141,12 +1170,13 @@ GameObject:
   - component: {fileID: 938915420}
   - component: {fileID: 938915419}
   - component: {fileID: 938915423}
+  - component: {fileID: 938915424}
   m_Layer: 0
   m_Name: ObjectProxy_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!23 &938915419
 MeshRenderer:
@@ -1262,6 +1292,33 @@ MonoBehaviour:
   catchEligible: 1
   strapEligible: 0
   hasLoadBearingMetalAnchor: 0
+--- !u!54 &938915424
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938915418}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &944753663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1559,7 @@ GameObject:
   - component: {fileID: 1119083202}
   - component: {fileID: 1119083201}
   - component: {fileID: 1119083200}
+  - component: {fileID: 1119083204}
   m_Layer: 0
   m_Name: AllyProxy
   m_TagString: Untagged
@@ -1604,6 +1662,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1119083204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119083199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d625d9beee7da2408607017de4ffe29, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.PrototypeAllyRelayController
+  interactionOwner: {fileID: 1121842307}
+  physicalObjectLifecycle: {fileID: 1121842308}
+  allyTransform: {fileID: 1119083203}
+  playerTransform: {fileID: 1121842304}
+  supplyTargets:
+  - {fileID: 938915423}
+  - {fileID: 1794266634}
+  - {fileID: 820737517}
+  preReleaseDelay: 0.2
+  binderHorizontalSpeed: 7.5
+  chairFeedSpeed: 4
+  catchRange: 2.8
+  settleSpeed: 0.35
+  settleAngularSpeed: 0.75
+  settleDuration: 0.35
+  maximumRelayDuration: 4
 --- !u!1001 &1121842302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1724,6 +1810,7 @@ MonoBehaviour:
   interactionRange: 2.8
   strapContextEnabled: 0
   physicalObjectLifecycle: {fileID: 1121842308}
+  allyRelayController: {fileID: 1119083204}
 --- !u!114 &1121842307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2268,12 +2355,13 @@ GameObject:
   - component: {fileID: 1794266631}
   - component: {fileID: 1794266630}
   - component: {fileID: 1794266634}
+  - component: {fileID: 1794266635}
   m_Layer: 0
   m_Name: ObjectProxy_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!23 &1794266630
 MeshRenderer:
@@ -2389,6 +2477,33 @@ MonoBehaviour:
   catchEligible: 1
   strapEligible: 0
   hasLoadBearingMetalAnchor: 0
+--- !u!54 &1794266635
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794266629}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &1836514008
 GameObject:
   m_ObjectHideFlags: 0
