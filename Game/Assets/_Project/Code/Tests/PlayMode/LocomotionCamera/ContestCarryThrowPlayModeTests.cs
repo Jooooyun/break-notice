@@ -203,6 +203,83 @@ namespace BreakNotice.LocomotionCamera.Tests
             yield return unload;
         }
 
+        [UnityTest]
+        public IEnumerator ContestScene_GroundedDirectObjectsLiftOffWhenCarryBegins()
+        {
+            AsyncOperation load = SceneManager.LoadSceneAsync(
+                "Contest_SingleRoomGraybox",
+                LoadSceneMode.Additive);
+            yield return load;
+            Scene scene = SceneManager.GetSceneByName("Contest_SingleRoomGraybox");
+            AsyncOperation unload = null;
+            try
+            {
+                PrototypeInteractionStateOwner owner = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionStateOwner>(true))
+                    .Single();
+                PrototypePhysicalObjectLifecycle lifecycle = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypePhysicalObjectLifecycle>(true))
+                    .Single();
+                PrototypeInteractionTarget[] directTargets = scene.GetRootGameObjects()
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                    .Where(target => target.DirectAcquisitionEligible)
+                    .OrderBy(target => target.RuntimeInstanceKey)
+                    .ToArray();
+
+                yield return new WaitForFixedUpdate();
+                foreach (PrototypeInteractionTarget target in directTargets)
+                {
+                    Rigidbody body = target.GetComponent<Rigidbody>();
+                    Vector3 baselinePosition = body.position;
+                    Quaternion baselineRotation = body.rotation;
+                    int baselineLayer = target.gameObject.layer;
+
+                    Assert.That(
+                        owner.TryCommit(PrototypeInteractionDecision.Accept(
+                            PrototypeInteractionOutcome.Scoop,
+                            target)),
+                        Is.True,
+                        target.RuntimeInstanceKey);
+                    Assert.That(lifecycle.BeginCarry(target), Is.True, target.RuntimeInstanceKey);
+
+                    for (int step = 0; step < 4; step++)
+                    {
+                        yield return new WaitForFixedUpdate();
+                    }
+
+                    Assert.That(
+                        lifecycle.AcquisitionPathLength,
+                        Is.GreaterThan(0.05f),
+                        $"{target.RuntimeInstanceKey} remained frozen on its authored floor contact.");
+                    Assert.That(
+                        Vector3.Distance(body.position, baselinePosition),
+                        Is.GreaterThan(0.05f),
+                        $"{target.RuntimeInstanceKey} did not move toward the visible carry anchor.");
+
+                    lifecycle.DetachForReset();
+                    Assert.That(owner.CancelCarry(target), Is.True, target.RuntimeInstanceKey);
+                    body.position = baselinePosition;
+                    body.rotation = baselineRotation;
+                    body.linearVelocity = Vector3.zero;
+                    body.angularVelocity = Vector3.zero;
+                    target.gameObject.layer = baselineLayer;
+                    Physics.SyncTransforms();
+                }
+            }
+            finally
+            {
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    unload = SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+
+            if (unload != null)
+            {
+                yield return unload;
+            }
+        }
+
         private static IEnumerator AssertCarryStopsBeforeSolidWall(
             PrototypeWeightClass weightClass,
             Vector3 targetScale)

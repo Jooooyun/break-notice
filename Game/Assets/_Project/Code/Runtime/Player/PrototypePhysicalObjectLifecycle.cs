@@ -310,6 +310,21 @@ namespace BreakNotice.Gameplay.Interaction
                     continue;
                 }
 
+                // BoxCast reports an authored support contact as a zero-distance
+                // initial overlap whose normal points opposite the whole sweep.
+                // Ignore only a surface at or below the carried box while the
+                // requested step lifts away from it. Wall and lateral contacts
+                // continue through the normal blocking/slide path below.
+                if (hit.distance <= CarryCollisionSkin + CarryPenetrationTolerance &&
+                    IsLiftingAwayFromSupportingSurface(
+                        hit.collider,
+                        currentPosition,
+                        currentRotation,
+                        direction))
+                {
+                    continue;
+                }
+
                 if (Vector3.Dot(direction, hit.normal) >= -CarryPenetrationTolerance)
                 {
                     continue;
@@ -326,6 +341,32 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             return permittedDistance;
+        }
+
+        private bool IsLiftingAwayFromSupportingSurface(
+            Collider other,
+            Vector3 currentPosition,
+            Quaternion currentRotation,
+            Vector3 direction)
+        {
+            if (direction.y <= CarryPenetrationTolerance)
+            {
+                return false;
+            }
+
+            Vector3 halfExtents = GetCarryBoxHalfExtents();
+            Vector3 worldRight = currentRotation * Vector3.right;
+            Vector3 worldUp = currentRotation * Vector3.up;
+            Vector3 worldForward = currentRotation * Vector3.forward;
+            float verticalHalfExtent =
+                Mathf.Abs(worldRight.y) * halfExtents.x +
+                Mathf.Abs(worldUp.y) * halfExtents.y +
+                Mathf.Abs(worldForward.y) * halfExtents.z;
+            float carriedBottom =
+                GetCarryBoxCenter(currentPosition, currentRotation).y -
+                verticalHalfExtent;
+            return other.bounds.max.y <=
+                carriedBottom + CarryCollisionSkin + CarryPenetrationTolerance;
         }
 
         private Quaternion ResolveCarryRotation(
