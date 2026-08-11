@@ -68,6 +68,12 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             Assert.That(
                 lifecycle.GetThrowSpeed(PrototypeWeightClass.Light),
+                Is.EqualTo(12.5f).Within(0.001f));
+            Assert.That(
+                lifecycle.GetThrowSpeed(PrototypeWeightClass.Medium),
+                Is.EqualTo(8f).Within(0.001f));
+            Assert.That(
+                lifecycle.GetThrowSpeed(PrototypeWeightClass.Light),
                 Is.GreaterThan(lifecycle.GetThrowSpeed(PrototypeWeightClass.Medium)));
             Assert.That(
                 lifecycle.GetThrowSpeed(PrototypeWeightClass.Heavy),

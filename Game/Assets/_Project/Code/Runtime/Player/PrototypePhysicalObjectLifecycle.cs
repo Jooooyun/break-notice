@@ -25,10 +25,10 @@ namespace BreakNotice.Gameplay.Interaction
         private float carryRotationSpeed = 540f;
 
         [SerializeField, Min(0.1f)]
-        private float lightThrowSpeed = 10f;
+        private float lightThrowSpeed = 12.5f;
 
         [SerializeField, Min(0.1f)]
-        private float mediumThrowSpeed = 6.5f;
+        private float mediumThrowSpeed = 8f;
 
         [SerializeField]
         private float upwardThrowSpeed = 0.8f;

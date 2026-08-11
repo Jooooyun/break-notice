@@ -118,6 +118,7 @@ namespace BreakNotice.LocomotionCamera.Tests
 
                 Physics.SyncTransforms();
                 Assert.That(controller.RefreshTarget(false), Is.SameAs(centered));
+                Assert.That(controller.CurrentTargetUsesPickupAssist, Is.False);
                 Assert.That(controller.CurrentTargetDistance, Is.LessThan(2.8f));
                 controller.Configure(
                     null,
@@ -137,6 +138,170 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Object.Destroy(view);
                 Object.Destroy(centeredObject);
                 Object.Destroy(closerOffAxisObject);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator Targeting_GroundedPickupBelowReticleUsesNarrowVerticalAssist()
+        {
+            GameObject player = new GameObject("Player");
+            GameObject view = new GameObject("View");
+            GameObject targetObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                player.transform.position = Vector3.zero;
+                view.transform.position = new Vector3(0f, 1.8f, 0f);
+                view.transform.rotation = Quaternion.identity;
+                targetObject.transform.position = new Vector3(0f, 0.25f, 1.5f);
+                targetObject.transform.localScale = new Vector3(0.6f, 0.5f, 0.4f);
+
+                PrototypeInteractionStateOwner owner =
+                    player.AddComponent<PrototypeInteractionStateOwner>();
+                PrototypeInteractionController controller =
+                    player.AddComponent<PrototypeInteractionController>();
+                InteractionReadabilityPresenter presenter =
+                    player.AddComponent<InteractionReadabilityPresenter>();
+                PrototypeInteractionTarget target = CreateTarget(
+                    targetObject,
+                    "BINDER-FLOOR-ASSIST",
+                    "FLOOR BINDER",
+                    PrototypeWeightClass.Light,
+                    PrototypeInteractionRole.DirectBinder,
+                    true);
+                controller.Configure(
+                    null,
+                    owner,
+                    view.transform,
+                    new[] { target },
+                    2.8f,
+                    false);
+                presenter.Configure(controller);
+
+                Physics.SyncTransforms();
+                Assert.That(controller.RefreshTarget(false), Is.SameAs(target));
+                Assert.That(controller.CurrentTargetUsesPickupAssist, Is.True);
+                Assert.That(controller.CurrentTargetDistance, Is.LessThan(2.8f));
+                Assert.That(presenter.BuildStatusText(), Does.StartWith("PICKUP ASSIST:"));
+                Assert.That(
+                    presenter.BuildReticleLabel(),
+                    Is.EqualTo("PICKUP ASSIST: FLOOR BINDER"));
+
+                PrototypeInteractionDecision decision =
+                    controller.ProcessInteractPrimary(false);
+                Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Scoop));
+                Assert.That(owner.CarriedTarget, Is.SameAs(target));
+            }
+            finally
+            {
+                Object.Destroy(player);
+                Object.Destroy(view);
+                Object.Destroy(targetObject);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator Targeting_GroundedPickupAssistRejectsHorizontalOffset()
+        {
+            GameObject player = new GameObject("Player");
+            GameObject view = new GameObject("View");
+            GameObject targetObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                view.transform.position = new Vector3(0f, 1.8f, 0f);
+                view.transform.rotation = Quaternion.identity;
+                targetObject.transform.position = new Vector3(0.45f, 0.25f, 1.5f);
+                targetObject.transform.localScale = new Vector3(0.4f, 0.5f, 0.4f);
+
+                PrototypeInteractionStateOwner owner =
+                    player.AddComponent<PrototypeInteractionStateOwner>();
+                PrototypeInteractionController controller =
+                    player.AddComponent<PrototypeInteractionController>();
+                PrototypeInteractionTarget target = CreateTarget(
+                    targetObject,
+                    "BINDER-FLOOR-OFFSET",
+                    "OFFSET BINDER",
+                    PrototypeWeightClass.Light,
+                    PrototypeInteractionRole.DirectBinder,
+                    true);
+                controller.Configure(
+                    null,
+                    owner,
+                    view.transform,
+                    new[] { target },
+                    2.8f,
+                    false);
+
+                Physics.SyncTransforms();
+                Assert.That(controller.RefreshTarget(false), Is.Null);
+                Assert.That(controller.CurrentTargetUsesPickupAssist, Is.False);
+                Assert.That(
+                    controller.ProcessInteractPrimary(false).Rejection,
+                    Is.EqualTo(PrototypeInteractionRejection.NoValidTarget));
+                Assert.That(owner.CarriedTarget, Is.Null);
+            }
+            finally
+            {
+                Object.Destroy(player);
+                Object.Destroy(view);
+                Object.Destroy(targetObject);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator Targeting_GroundedPickupAssistRejectsWorldOcclusion()
+        {
+            GameObject player = new GameObject("Player");
+            GameObject view = new GameObject("View");
+            GameObject targetObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                view.transform.position = new Vector3(0f, 1.8f, 0f);
+                view.transform.rotation = Quaternion.identity;
+                targetObject.transform.position = new Vector3(0f, 0.25f, 1.5f);
+                targetObject.transform.localScale = new Vector3(0.6f, 0.5f, 0.4f);
+                wall.transform.position = new Vector3(0f, 0.9f, 0.8f);
+                wall.transform.localScale = new Vector3(1.5f, 2.8f, 0.2f);
+
+                PrototypeInteractionStateOwner owner =
+                    player.AddComponent<PrototypeInteractionStateOwner>();
+                PrototypeInteractionController controller =
+                    player.AddComponent<PrototypeInteractionController>();
+                PrototypeInteractionTarget target = CreateTarget(
+                    targetObject,
+                    "BINDER-FLOOR-OCCLUDED",
+                    "OCCLUDED FLOOR BINDER",
+                    PrototypeWeightClass.Light,
+                    PrototypeInteractionRole.DirectBinder,
+                    true);
+                controller.Configure(
+                    null,
+                    owner,
+                    view.transform,
+                    new[] { target },
+                    2.8f,
+                    false);
+
+                Physics.SyncTransforms();
+                Assert.That(controller.RefreshTarget(false), Is.Null);
+                Assert.That(controller.CurrentTargetUsesPickupAssist, Is.False);
+                Assert.That(
+                    controller.ProcessInteractPrimary(false).Rejection,
+                    Is.EqualTo(PrototypeInteractionRejection.NoValidTarget));
+                Assert.That(owner.CarriedTarget, Is.Null);
+            }
+            finally
+            {
+                Object.Destroy(player);
+                Object.Destroy(view);
+                Object.Destroy(targetObject);
+                Object.Destroy(wall);
             }
 
             yield return null;
@@ -364,17 +529,29 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Object.FindObjectsByType<InteractionReadabilityPresenter>(FindObjectsSortMode.None);
             PrototypeInteractionController[] controllers =
                 Object.FindObjectsByType<PrototypeInteractionController>(FindObjectsSortMode.None);
+            PrototypePhysicalObjectLifecycle[] lifecycles =
+                Object.FindObjectsByType<PrototypePhysicalObjectLifecycle>(FindObjectsSortMode.None);
 
             Assert.That(owners, Has.Length.EqualTo(1));
             Assert.That(targets, Has.Length.EqualTo(7));
             Assert.That(presenters, Has.Length.EqualTo(1));
             Assert.That(controllers, Has.Length.EqualTo(1));
+            Assert.That(lifecycles, Has.Length.EqualTo(1));
             Assert.That(targets.Count(target => target.WeightClass == PrototypeWeightClass.Light), Is.EqualTo(3));
             Assert.That(targets.Count(target => target.WeightClass == PrototypeWeightClass.Medium), Is.EqualTo(3));
             Assert.That(targets.Count(target => target.WeightClass == PrototypeWeightClass.Heavy), Is.EqualTo(1));
             Assert.That(targets.Single(target => target.Role == PrototypeInteractionRole.Drawer).DirectAcquisitionEligible, Is.False);
             Assert.That(targets.Single(target => target.Role == PrototypeInteractionRole.Copier).DirectAcquisitionEligible, Is.False);
             Assert.That(owners[0].GlobalState, Is.EqualTo(PrototypeGlobalInteractionState.Playable));
+            Assert.That(controllers[0].PickupAssistHorizontalAngle, Is.EqualTo(8f));
+            Assert.That(controllers[0].PickupAssistUpwardAngle, Is.EqualTo(8f));
+            Assert.That(controllers[0].PickupAssistDownwardAngle, Is.EqualTo(65f));
+            Assert.That(
+                lifecycles[0].GetThrowSpeed(PrototypeWeightClass.Light),
+                Is.EqualTo(12.5f));
+            Assert.That(
+                lifecycles[0].GetThrowSpeed(PrototypeWeightClass.Medium),
+                Is.EqualTo(8f));
             Assert.That(presenters[0].BuildStatusText(), Is.Not.Null);
 
             AsyncOperation unload = SceneManager.UnloadSceneAsync(contestScene);

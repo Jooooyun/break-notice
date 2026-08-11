@@ -27,6 +27,15 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(0.5f)]
         private float interactionRange = 2.8f;
 
+        [SerializeField, Range(1f, 20f)]
+        private float pickupAssistHorizontalAngle = 8f;
+
+        [SerializeField, Range(0f, 30f)]
+        private float pickupAssistUpwardAngle = 8f;
+
+        [SerializeField, Range(0f, 80f)]
+        private float pickupAssistDownwardAngle = 65f;
+
         [SerializeField]
         private bool strapContextEnabled;
 
@@ -52,6 +61,14 @@ namespace BreakNotice.Gameplay.Interaction
         public float InteractionRange => interactionRange;
 
         public float CurrentTargetDistance { get; private set; } = float.PositiveInfinity;
+
+        public bool CurrentTargetUsesPickupAssist { get; private set; }
+
+        public float PickupAssistHorizontalAngle => pickupAssistHorizontalAngle;
+
+        public float PickupAssistUpwardAngle => pickupAssistUpwardAngle;
+
+        public float PickupAssistDownwardAngle => pickupAssistDownwardAngle;
 
         public uint InteractionAttemptSequence { get; private set; }
 
@@ -135,7 +152,10 @@ namespace BreakNotice.Gameplay.Interaction
             float range,
             bool enableStrapContext,
             PrototypePhysicalObjectLifecycle physicalLifecycle = null,
-            PrototypeAllyRelayController relayController = null)
+            PrototypeAllyRelayController relayController = null,
+            float authoredPickupAssistHorizontalAngle = 8f,
+            float authoredPickupAssistUpwardAngle = 8f,
+            float authoredPickupAssistDownwardAngle = 65f)
         {
             logicalInput = input;
             interactionOwner = owner;
@@ -145,13 +165,26 @@ namespace BreakNotice.Gameplay.Interaction
             strapContextEnabled = enableStrapContext;
             physicalObjectLifecycle = physicalLifecycle;
             allyRelayController = relayController;
+            pickupAssistHorizontalAngle = Mathf.Clamp(
+                authoredPickupAssistHorizontalAngle,
+                1f,
+                20f);
+            pickupAssistUpwardAngle = Mathf.Clamp(
+                authoredPickupAssistUpwardAngle,
+                0f,
+                30f);
+            pickupAssistDownwardAngle = Mathf.Clamp(
+                authoredPickupAssistDownwardAngle,
+                0f,
+                80f);
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
         {
-            // The centre reticle ray is the exact selector in both normal and Aim.
-            // isAiming remains part of the public contract because it controls the
-            // explicit Strap context outside this resolver.
+            // The centre reticle ray remains the first-priority selector. When it
+            // misses, a narrow horizontal strip can assist only eligible floor
+            // pickups below the reticle so the bounded camera pitch does not make
+            // a nearby authored object unreachable.
             _ = isAiming;
             Vector3 interactionOrigin = transform.position + Vector3.up;
             if (!TryResolveReticleHit(
@@ -170,6 +203,12 @@ namespace BreakNotice.Gameplay.Interaction
             CurrentTargetDistance = CurrentTarget != null
                 ? interactionDistance
                 : float.PositiveInfinity;
+            CurrentTargetUsesPickupAssist = false;
+            if (CurrentTarget == null)
+            {
+                TryResolveManualPickupAssist(interactionOrigin);
+            }
+
             TryApplyIncomingCatchAssist(interactionOrigin);
             return CurrentTarget;
         }
@@ -397,10 +436,125 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        private bool TryResolveManualPickupAssist(Vector3 interactionOrigin)
+        {
+            Vector3 viewOrigin = viewTransform != null
+                ? viewTransform.position
+                : interactionOrigin;
+            Vector3 forward = viewTransform != null
+                ? viewTransform.forward.normalized
+                : transform.forward.normalized;
+            Vector3 right = viewTransform != null
+                ? viewTransform.right.normalized
+                : transform.right.normalized;
+            Vector3 up = viewTransform != null
+                ? viewTransform.up.normalized
+                : transform.up.normalized;
+
+            PrototypeInteractionTarget bestTarget = null;
+            float bestHorizontalAngle = float.PositiveInfinity;
+            float bestVerticalDistance = float.PositiveInfinity;
+            float bestInteractionDistance = float.PositiveInfinity;
+            string bestKey = null;
+
+            foreach (PrototypeInteractionTarget target in targets)
+            {
+                if (target == null ||
+                    !target.gameObject.activeInHierarchy ||
+                    target == interactionOwner?.CarriedTarget ||
+                    !target.IsScoopEligible)
+                {
+                    continue;
+                }
+
+                Collider targetCollider = target.GetComponent<Collider>();
+                if (targetCollider == null)
+                {
+                    continue;
+                }
+
+                float interactionDistance = Vector3.Distance(
+                    interactionOrigin,
+                    targetCollider.ClosestPoint(interactionOrigin));
+                if (interactionDistance > interactionRange)
+                {
+                    continue;
+                }
+
+                Vector3 targetPoint = targetCollider.bounds.center;
+                Vector3 toTarget = targetPoint - viewOrigin;
+                float forwardDistance = Vector3.Dot(toTarget, forward);
+                if (forwardDistance <= 0.01f)
+                {
+                    continue;
+                }
+
+                float lateralDistance = Vector3.Dot(toTarget, right);
+                float verticalDistance = Vector3.Dot(toTarget, up);
+                float horizontalAngle = Mathf.Abs(
+                    Mathf.Atan2(lateralDistance, forwardDistance) * Mathf.Rad2Deg);
+                float verticalAngle = Mathf.Atan2(
+                    verticalDistance,
+                    Mathf.Sqrt(
+                        (forwardDistance * forwardDistance) +
+                        (lateralDistance * lateralDistance))) * Mathf.Rad2Deg;
+                if (horizontalAngle > pickupAssistHorizontalAngle ||
+                    verticalAngle > pickupAssistUpwardAngle ||
+                    verticalAngle < -pickupAssistDownwardAngle ||
+                    !HasDirectVisibility(viewOrigin, targetPoint, target))
+                {
+                    continue;
+                }
+
+                float verticalDistanceFromReticle = Mathf.Abs(verticalAngle);
+                string key = target.RuntimeInstanceKey ?? string.Empty;
+                bool betterHorizontal =
+                    horizontalAngle < bestHorizontalAngle - 0.001f;
+                bool sameHorizontal =
+                    Mathf.Abs(horizontalAngle - bestHorizontalAngle) <= 0.001f;
+                bool betterVertical =
+                    sameHorizontal &&
+                    verticalDistanceFromReticle < bestVerticalDistance - 0.001f;
+                bool sameVertical =
+                    sameHorizontal &&
+                    Mathf.Abs(verticalDistanceFromReticle - bestVerticalDistance) <= 0.001f;
+                bool betterDistance =
+                    sameVertical &&
+                    interactionDistance < bestInteractionDistance - 0.0001f;
+                bool sameDistance =
+                    sameVertical &&
+                    Mathf.Abs(interactionDistance - bestInteractionDistance) <= 0.0001f;
+                bool keyWins =
+                    sameDistance &&
+                    (bestTarget == null || string.CompareOrdinal(key, bestKey) < 0);
+                if (!betterHorizontal && !betterVertical && !betterDistance && !keyWins)
+                {
+                    continue;
+                }
+
+                bestTarget = target;
+                bestHorizontalAngle = horizontalAngle;
+                bestVerticalDistance = verticalDistanceFromReticle;
+                bestInteractionDistance = interactionDistance;
+                bestKey = key;
+            }
+
+            if (bestTarget == null)
+            {
+                return false;
+            }
+
+            CurrentTarget = bestTarget;
+            CurrentTargetDistance = bestInteractionDistance;
+            CurrentTargetUsesPickupAssist = true;
+            return true;
+        }
+
         private PrototypeInteractionTarget ClearCurrentTarget()
         {
             CurrentTarget = null;
             CurrentTargetDistance = float.PositiveInfinity;
+            CurrentTargetUsesPickupAssist = false;
             return null;
         }
 
@@ -444,6 +598,7 @@ namespace BreakNotice.Gameplay.Interaction
             CurrentTargetDistance = Vector3.Distance(
                 interactionOrigin,
                 targetCollider.ClosestPoint(interactionOrigin));
+            CurrentTargetUsesPickupAssist = false;
             return true;
         }
 

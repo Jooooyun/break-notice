@@ -116,7 +116,7 @@ namespace BreakNotice.Presentation
             PrototypeInteractionTarget target = interactionController.CurrentTarget;
             if (target == null)
             {
-                return $"CENTER RETICLE ON AN OBJECT | RANGE <= " +
+                return $"CENTER RETICLE OR ALIGN A FLOOR PICKUP BELOW IT | RANGE <= " +
                        $"{interactionController.InteractionRange.ToString("0.0", CultureInfo.InvariantCulture)} M " +
                        "| CLEAR LINE OF SIGHT";
             }
@@ -138,7 +138,10 @@ namespace BreakNotice.Presentation
                 return $"TARGET: {identity} | {distance} | ALLY SUPPLY / DIRECT PICKUP BLOCKED";
             }
 
-            return $"TARGET LOCKED: {identity} | {distance} | [E] PICK UP";
+            string selection = interactionController.CurrentTargetUsesPickupAssist
+                ? "PICKUP ASSIST"
+                : "TARGET LOCKED";
+            return $"{selection}: {identity} | {distance} | [E] PICK UP";
         }
 
         public string BuildReticleText()
@@ -199,7 +202,9 @@ namespace BreakNotice.Presentation
 
             if (target.IsScoopEligible)
             {
-                return $"PICK UP {target.DisplayName}";
+                return interactionController.CurrentTargetUsesPickupAssist
+                    ? $"PICKUP ASSIST: {target.DisplayName}"
+                    : $"PICK UP {target.DisplayName}";
             }
 
             if (target.WeightClass == PrototypeWeightClass.Heavy)

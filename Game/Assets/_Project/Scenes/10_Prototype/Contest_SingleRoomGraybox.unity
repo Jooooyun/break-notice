@@ -1815,6 +1815,9 @@ MonoBehaviour:
   - {fileID: 2087965156}
   - {fileID: 498601002}
   interactionRange: 2.8
+  pickupAssistHorizontalAngle: 8
+  pickupAssistUpwardAngle: 8
+  pickupAssistDownwardAngle: 65
   strapContextEnabled: 0
   physicalObjectLifecycle: {fileID: 1121842308}
   allyRelayController: {fileID: 1119083204}
@@ -1846,8 +1849,8 @@ MonoBehaviour:
   carryAnchor: {fileID: 216534213}
   acquisitionSpeed: 7
   carryRotationSpeed: 540
-  lightThrowSpeed: 10
-  mediumThrowSpeed: 6.5
+  lightThrowSpeed: 12.5
+  mediumThrowSpeed: 8
   upwardThrowSpeed: 0.8
 --- !u!1 &1358109081
 GameObject:
