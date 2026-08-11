@@ -349,3 +349,14 @@ desktop browser prototype과 검증 증거를 만든다.
   `Local server READY at http://127.0.0.1:8765/. Automated in-app navigation was blocked because the admin-enforced local-browser policy check was unavailable; no product failure is inferred. Human NPC speed-variation, tap-to-full-charge Throw feel, queued Catch-Throw, Reset and preserved C0-C4 regression checks remain pending.`
 - Scope:
   `C5 Cargo Strap, damage, Breakable, fracture, packages, ProjectSettings, production-art runtime integration and protected Human Owner work remain unchanged and unauthorized.`
+
+## Charged Throw and Ally Supply Variation Human Acceptance Closure — 2026-08-11
+
+- Human Owner disposition:
+  `ALL PASS / the Human Owner completed the requested browser gameplay checklist and directed Codex to close the work package and publish the evidence.`
+- Accepted checks:
+  `Bounded variation across NPC Binder supplies, tap-mid-full player charge differentiation, charged queued Catch-Throw, stronger physical collision response, authored Reset restoration, mouse-camera-direct acquisition, carry-wall continuity, grounded Chair feed and duplicate-Q protection all passed the Human Owner check.`
+- Evidence boundary:
+  `The Human checklist closes gameplay feel and regression acceptance for this work package. It does not independently assert a zero browser-console count; automated Unity compile, 65/65 EditMode, 59/59 PlayMode, zero Unity warnings-errors and HTTP 19/19 remain the exact machine qualification.`
+- Next boundary:
+  `Post-acceptance throw-pickup-supply tuning is complete. C5 Cargo Strap and every later checkpoint remain NOT AUTHORIZED until a new direct Human Owner instruction.`

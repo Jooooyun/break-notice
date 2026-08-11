@@ -346,3 +346,18 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `C5, damage-destruction, Packages, ProjectSettings and production-art runtime integration unchanged; protected Human Owner untracked work remained untouched and unstaged.`
 - Next:
   `Complete the bounded Human feel and regression retest. Any C5 work still requires a new direct authorization.`
+
+## Charged Throw and Ally Supply Variation Human Acceptance Closure — 2026-08-11
+
+- Human Owner Decision:
+  `ALL PASS / close the work package and complete commit-push publication.`
+- Accepted Manual Scope:
+  `NPC Binder supply variation, tap-mid-full charged Throw differentiation, charged queued Catch-Throw, physical collision response, Reset and preserved C0-C4 behavior passed.`
+- Evidence Preserved:
+  `Implementation f1fd9b15f407be9003eff622231e338358376bcc / Unity compile PASS / EditMode 65/65 / PlayMode 59/59 / Web GUID 3cc7416d44c44067bc51c6474c46351d / warning 0 / error 0 / HTTP 19/19.`
+- Evidence Boundary:
+  `The Human Owner did not separately report a final browser-console count, so console zero is not inferred from the all-pass gameplay checklist.`
+- Protected Scope:
+  `No runtime source, C5, damage-destruction, Package, ProjectSettings, production-art integration or protected Human Owner untracked item changed during acceptance closure.`
+- Next:
+  `No active Contest implementation authorization remains. C5 requires a new direct Human Owner instruction.`

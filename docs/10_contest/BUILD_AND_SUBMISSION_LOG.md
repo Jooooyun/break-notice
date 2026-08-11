@@ -241,3 +241,15 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Browser | `PENDING HUMAN RETEST / local server READY / automated local navigation unavailable because the admin-enforced browser policy check could not be verified / no product failure inferred` |
 | Scope Protection | `C5 Cargo Strap, damage-destruction, Packages, ProjectSettings, production-art runtime integration and protected Human Owner work unchanged` |
 | Submission State | `NOT READY / CHARGE-SUPPLY FEEL AND C0-C4 REGRESSION RETEST PENDING / C5 NOT AUTHORIZED` |
+
+## Charged Throw and Ally Supply Variation Human Acceptance Closure — 2026-08-11
+
+| Field | Value |
+|---|---|
+| Accepted Build GUID | `3cc7416d44c44067bc51c6474c46351d` |
+| Human Owner Manual | `PASS / all requested gameplay checklist items accepted 2026-08-11` |
+| Accepted Gameplay | `NPC Binder speed variation / tap-mid-full player charge / charged queued Catch-Throw / physical impact response / Reset / C0-C4 regression` |
+| Automated Evidence Preserved | `Unity compile PASS / EditMode 65/65 / PlayMode 59/59 / warnings 0 / errors 0 / HTTP 19/19` |
+| Browser Console Boundary | `No independent final-build console-zero claim was requested or inferred from the Human checklist` |
+| Scope Protection | `C5 Cargo Strap, damage-destruction, Packages, ProjectSettings, production-art runtime integration and protected Human Owner work unchanged` |
+| Submission State | `WORK PACKAGE ACCEPTED / CONTEST SUBMISSION STILL NOT READY / C5 NOT AUTHORIZED` |
