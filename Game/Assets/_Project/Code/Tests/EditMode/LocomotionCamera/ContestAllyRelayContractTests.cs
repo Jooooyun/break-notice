@@ -178,6 +178,17 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void BinderSupplySpeedVariation_HasSafeResettableBounds()
+        {
+            RelayFixture fixture = CreateFixture();
+
+            Assert.That(fixture.Relay.MinimumBinderSpeedMultiplier, Is.EqualTo(0.9f).Within(0.001f));
+            Assert.That(fixture.Relay.MaximumBinderSpeedMultiplier, Is.EqualTo(1.1f).Within(0.001f));
+            Assert.That(fixture.Relay.LastBinderSpeedMultiplier, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(fixture.Relay.BinderSpeedVariationSequence, Is.Zero);
+        }
+
+        [Test]
         public void ChairRelay_CannotArmQueuedThrow()
         {
             RelayFixture fixture = CreateFixture();

@@ -33,6 +33,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private float upwardThrowSpeed = 0.8f;
 
+        [SerializeField, Range(1f, 3f)]
+        private float maximumThrowSpeedMultiplier = 1.6f;
+
         private CharacterController playerController;
         private PrototypeInteractionTarget carriedTarget;
         private Rigidbody carriedBody;
@@ -55,12 +58,25 @@ namespace BreakNotice.Gameplay.Interaction
 
         public float LastReleaseSpeed { get; private set; }
 
+        public float LastThrowCharge01 { get; private set; }
+
+        public float LastThrowSpeedMultiplier { get; private set; } = 1f;
+
+        public float LastReleaseKineticEnergy { get; private set; }
+
+        public float MaximumThrowSpeedMultiplier => maximumThrowSpeedMultiplier;
+
         public void Configure(
             PrototypeInteractionStateOwner owner,
-            Transform authoredCarryAnchor)
+            Transform authoredCarryAnchor,
+            float authoredMaximumThrowSpeedMultiplier = 1.6f)
         {
             interactionOwner = owner;
             carryAnchor = authoredCarryAnchor;
+            maximumThrowSpeedMultiplier = Mathf.Clamp(
+                authoredMaximumThrowSpeedMultiplier,
+                1f,
+                3f);
             playerController = GetComponent<CharacterController>();
         }
 
@@ -100,7 +116,7 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
-        public bool TryThrow(Vector3 requestedDirection)
+        public bool TryThrow(Vector3 requestedDirection, float charge01 = 0f)
         {
             if (carriedTarget == null || carriedBody == null || interactionOwner == null)
             {
@@ -117,7 +133,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             SetPlayerCollisionIgnored(false);
             SetCarriedCameraCollisionIgnored(false);
-            ApplyPhysicalThrow(target, body, requestedDirection);
+            ApplyPhysicalThrow(target, body, requestedDirection, charge01);
 
             carriedTarget = null;
             carriedBody = null;
@@ -129,7 +145,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool TryThrowCommittedRelayTarget(
             PrototypeInteractionTarget target,
-            Vector3 requestedDirection)
+            Vector3 requestedDirection,
+            float charge01 = 0f)
         {
             if (target == null ||
                 interactionOwner == null ||
@@ -150,7 +167,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            ApplyPhysicalThrow(target, body, requestedDirection);
+            ApplyPhysicalThrow(target, body, requestedDirection, charge01);
             return interactionOwner.CompleteThrow(target);
         }
 
@@ -161,15 +178,31 @@ namespace BreakNotice.Gameplay.Interaction
                 : mediumThrowSpeed;
         }
 
+        public float GetThrowSpeed(PrototypeWeightClass weightClass, float charge01)
+        {
+            return GetThrowSpeed(weightClass) * GetThrowSpeedMultiplier(charge01);
+        }
+
+        public float GetThrowSpeedMultiplier(float charge01)
+        {
+            return Mathf.Lerp(
+                1f,
+                maximumThrowSpeedMultiplier,
+                Mathf.Clamp01(charge01));
+        }
+
         private void ApplyPhysicalThrow(
             PrototypeInteractionTarget target,
             Rigidbody body,
-            Vector3 requestedDirection)
+            Vector3 requestedDirection,
+            float charge01)
         {
             Vector3 direction = requestedDirection.sqrMagnitude > 0.0001f
                 ? requestedDirection.normalized
                 : transform.forward;
-            float throwSpeed = GetThrowSpeed(target.WeightClass);
+            float clampedCharge = Mathf.Clamp01(charge01);
+            float speedMultiplier = GetThrowSpeedMultiplier(clampedCharge);
+            float throwSpeed = GetThrowSpeed(target.WeightClass) * speedMultiplier;
             Vector3 releaseVelocity = direction * throwSpeed + Vector3.up * upwardThrowSpeed;
 
             body.isKinematic = false;
@@ -186,6 +219,9 @@ namespace BreakNotice.Gameplay.Interaction
                 target.RuntimeInstanceKey,
                 target.WeightClass);
             LastReleaseSpeed = releaseVelocity.magnitude;
+            LastThrowCharge01 = clampedCharge;
+            LastThrowSpeedMultiplier = speedMultiplier;
+            LastReleaseKineticEnergy = 0.5f * body.mass * releaseVelocity.sqrMagnitude;
         }
 
         public void DetachForReset()
@@ -206,6 +242,9 @@ namespace BreakNotice.Gameplay.Interaction
             carriedBoxCollider = null;
             AcquisitionPathLength = 0f;
             LastReleaseSpeed = 0f;
+            LastThrowCharge01 = 0f;
+            LastThrowSpeedMultiplier = 1f;
+            LastReleaseKineticEnergy = 0f;
         }
 
         public void ClearThrowOriginForReset()

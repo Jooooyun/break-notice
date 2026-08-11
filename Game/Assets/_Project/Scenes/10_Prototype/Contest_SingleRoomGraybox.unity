@@ -1684,6 +1684,8 @@ MonoBehaviour:
   - {fileID: 820737517}
   preReleaseDelay: 0.2
   binderHorizontalSpeed: 7.5
+  minimumBinderSpeedMultiplier: 0.9
+  maximumBinderSpeedMultiplier: 1.1
   chairFeedSpeed: 4
   catchRange: 2.8
   settleSpeed: 0.35
@@ -1821,6 +1823,7 @@ MonoBehaviour:
   strapContextEnabled: 0
   physicalObjectLifecycle: {fileID: 1121842308}
   allyRelayController: {fileID: 1119083204}
+  fullThrowChargeDuration: 1.2
 --- !u!114 &1121842307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1852,6 +1855,7 @@ MonoBehaviour:
   lightThrowSpeed: 12.5
   mediumThrowSpeed: 8
   upwardThrowSpeed: 0.8
+  maximumThrowSpeedMultiplier: 1.6
 --- !u!1 &1358109081
 GameObject:
   m_ObjectHideFlags: 0

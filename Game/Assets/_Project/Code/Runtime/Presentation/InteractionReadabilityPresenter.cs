@@ -48,8 +48,11 @@ namespace BreakNotice.Presentation
 
             if (owner.HandState == PrototypeHandOwnershipState.Carrying && owner.CarriedTarget != null)
             {
+                string throwPrompt = interactionController.HasThrowCharge
+                    ? $"THROW CHARGE {GetThrowChargePercent()}% | RELEASE LMB"
+                    : "HOLD LMB TO CHARGE THROW";
                 return $"CARRYING {owner.CarriedTarget.DisplayName} " +
-                       $"[{GetWeightLabel(owner.CarriedTarget)}] | LMB THROW";
+                       $"[{GetWeightLabel(owner.CarriedTarget)}] | {throwPrompt}";
             }
 
             PrototypeAllyRelayController relay = interactionController.AllyRelayController;
@@ -63,7 +66,13 @@ namespace BreakNotice.Presentation
             {
                 if (owner.QueuedThrowArmed)
                 {
-                    return "QUEUED THROW ARMED | BINDER INCOMING | [E] CATCH";
+                    string charge = interactionController.IsQueuedThrowCharge
+                        ? $" {GetThrowChargePercent()}%"
+                        : string.Empty;
+                    string state = interactionController.IsThrowCharging
+                        ? "CHARGING"
+                        : "ARMED";
+                    return $"QUEUED THROW {state}{charge} | BINDER INCOMING | [E] CATCH";
                 }
 
                 return relay.CanCatch(interactionController.CurrentTarget)
@@ -361,6 +370,11 @@ namespace BreakNotice.Presentation
             return float.IsInfinity(distance)
                 ? "OUT OF RANGE"
                 : $"{distance.ToString("0.0", CultureInfo.InvariantCulture)} M";
+        }
+
+        private int GetThrowChargePercent()
+        {
+            return Mathf.RoundToInt(interactionController.ThrowCharge01 * 100f);
         }
 
         private static string GetWeightLabel(PrototypeInteractionTarget target)

@@ -81,6 +81,29 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void ChargedThrowProfile_PreservesTapAndBoundsMaximumSpeedAndEnergyMultiplier()
+        {
+            PrototypePhysicalObjectLifecycle lifecycle = CreatePlayer().lifecycle;
+
+            Assert.That(lifecycle.MaximumThrowSpeedMultiplier, Is.EqualTo(1.6f).Within(0.001f));
+            Assert.That(lifecycle.GetThrowSpeedMultiplier(0f), Is.EqualTo(1f).Within(0.001f));
+            Assert.That(lifecycle.GetThrowSpeedMultiplier(0.5f), Is.EqualTo(1.3f).Within(0.001f));
+            Assert.That(lifecycle.GetThrowSpeedMultiplier(1f), Is.EqualTo(1.6f).Within(0.001f));
+            Assert.That(
+                lifecycle.GetThrowSpeed(PrototypeWeightClass.Light, 0f),
+                Is.EqualTo(12.5f).Within(0.001f));
+            Assert.That(
+                lifecycle.GetThrowSpeed(PrototypeWeightClass.Light, 1f),
+                Is.EqualTo(20f).Within(0.001f));
+            Assert.That(
+                lifecycle.GetThrowSpeed(PrototypeWeightClass.Medium, 1f),
+                Is.EqualTo(12.8f).Within(0.001f));
+            Assert.That(
+                lifecycle.GetThrowSpeedMultiplier(1f) * lifecycle.GetThrowSpeedMultiplier(1f),
+                Is.EqualTo(2.56f).Within(0.001f));
+        }
+
+        [Test]
         public void PlayerThrowOrigin_SeparatesDefinitionInstanceAndSequence()
         {
             var origin = new PlayerThrowOrigin(

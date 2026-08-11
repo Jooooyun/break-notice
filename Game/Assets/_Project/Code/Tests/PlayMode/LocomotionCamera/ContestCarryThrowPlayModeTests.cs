@@ -73,8 +73,12 @@ namespace BreakNotice.LocomotionCamera.Tests
                     fixture.Target.gameObject.layer,
                     Is.EqualTo(LayerMask.NameToLayer("Ignore Raycast")));
 
+                Assert.That(fixture.Controller.BeginThrowCharge(), Is.True);
+                Assert.That(fixture.Controller.HasThrowCharge, Is.True);
                 fixture.Lifecycle.DetachForReset();
+                yield return null;
                 Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(originalLayer));
+                Assert.That(fixture.Controller.HasThrowCharge, Is.False);
             }
             finally
             {
@@ -135,6 +139,54 @@ namespace BreakNotice.LocomotionCamera.Tests
             {
                 fixture.Dispose();
                 Object.Destroy(wall);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator HeldThrowCharge_IncreasesReleaseSpeedAndPhysicalKineticEnergy()
+        {
+            float tapSpeed = 0f;
+            float tapEnergy = 0f;
+            CarryFixture tapFixture = new CarryFixture(PrototypeWeightClass.Light);
+            try
+            {
+                Assert.That(tapFixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
+                Assert.That(tapFixture.Controller.BeginThrowCharge(), Is.True);
+                Assert.That(tapFixture.Controller.ReleaseThrowCharge(), Is.True);
+                tapSpeed = tapFixture.Lifecycle.LastReleaseSpeed;
+                tapEnergy = tapFixture.Lifecycle.LastReleaseKineticEnergy;
+                Assert.That(tapFixture.Lifecycle.LastThrowCharge01, Is.LessThan(0.05f));
+                Assert.That(tapFixture.Lifecycle.LastThrowSpeedMultiplier, Is.EqualTo(1f).Within(0.03f));
+            }
+            finally
+            {
+                tapFixture.Dispose();
+            }
+
+            yield return null;
+
+            CarryFixture chargedFixture = new CarryFixture(PrototypeWeightClass.Light);
+            try
+            {
+                Assert.That(chargedFixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
+                Assert.That(chargedFixture.Controller.BeginThrowCharge(), Is.True);
+                Assert.That(chargedFixture.Controller.IsThrowCharging, Is.True);
+                yield return new WaitForSecondsRealtime(1.25f);
+                Assert.That(chargedFixture.Controller.ThrowCharge01, Is.EqualTo(1f).Within(0.01f));
+                Assert.That(chargedFixture.Controller.ReleaseThrowCharge(), Is.True);
+
+                Assert.That(chargedFixture.Lifecycle.LastThrowCharge01, Is.EqualTo(1f).Within(0.01f));
+                Assert.That(chargedFixture.Lifecycle.LastThrowSpeedMultiplier, Is.EqualTo(1.6f).Within(0.01f));
+                Assert.That(chargedFixture.Lifecycle.LastReleaseSpeed, Is.GreaterThan(tapSpeed * 1.55f));
+                Assert.That(chargedFixture.Lifecycle.LastReleaseKineticEnergy, Is.GreaterThan(tapEnergy * 2.4f));
+                Assert.That(chargedFixture.Lifecycle.ThrowOriginCount, Is.EqualTo(1));
+                Assert.That(chargedFixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
+            }
+            finally
+            {
+                chargedFixture.Dispose();
             }
 
             yield return null;

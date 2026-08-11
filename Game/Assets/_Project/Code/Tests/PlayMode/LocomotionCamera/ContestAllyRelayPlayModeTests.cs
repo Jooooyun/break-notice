@@ -262,6 +262,50 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
+        public IEnumerator ConsecutiveBinderSupplies_UseDistinctBoundedResettableSpeeds()
+        {
+            RelayFixture fixture = new RelayFixture();
+            try
+            {
+                Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderOne, out _), Is.True);
+                yield return fixture.WaitForRelease();
+                float firstMultiplier = fixture.Relay.LastBinderSpeedMultiplier;
+                float firstHorizontalSpeed = fixture.Relay.LastBinderHorizontalSpeed;
+
+                fixture.Relay.ResolveCatchFailure(fixture.BinderOne);
+                Rigidbody firstBody = fixture.BinderOne.GetComponent<Rigidbody>();
+                firstBody.linearVelocity = Vector3.zero;
+                firstBody.angularVelocity = Vector3.zero;
+                firstBody.isKinematic = true;
+                fixture.BinderOne.transform.position = new Vector3(10f, 1f, 10f);
+                Physics.SyncTransforms();
+
+                Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderTwo, out _), Is.True);
+                yield return fixture.WaitForRelease();
+                float secondMultiplier = fixture.Relay.LastBinderSpeedMultiplier;
+                float secondHorizontalSpeed = fixture.Relay.LastBinderHorizontalSpeed;
+
+                Assert.That(firstMultiplier, Is.InRange(0.9f, 1.1f));
+                Assert.That(secondMultiplier, Is.InRange(0.9f, 1.1f));
+                Assert.That(Mathf.Abs(secondMultiplier - firstMultiplier), Is.GreaterThan(0.001f));
+                Assert.That(firstHorizontalSpeed, Is.GreaterThan(0f));
+                Assert.That(secondHorizontalSpeed, Is.GreaterThan(0f));
+                Assert.That(fixture.Relay.BinderSpeedVariationSequence, Is.EqualTo(2));
+
+                Assert.That(fixture.Reset.RequestReset(EncounterResetCause.ManualInput), Is.True);
+                Assert.That(fixture.Relay.BinderSpeedVariationSequence, Is.Zero);
+                Assert.That(fixture.Relay.LastBinderSpeedMultiplier, Is.EqualTo(1f).Within(0.001f));
+                Assert.That(fixture.Relay.LastBinderHorizontalSpeed, Is.Zero);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator ReleasedBinder_IsBlockedBySolidWorldCollider()
         {
             RelayFixture fixture = new RelayFixture();
@@ -409,6 +453,42 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Relay.QueuedThrowCount, Is.EqualTo(1));
                 Assert.That(fixture.Relay.CatchCount, Is.EqualTo(1));
                 Assert.That(fixture.Owner.QueuedThrowArmed, Is.False);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator ChargedQueuedCatch_PreservesHeldChargeUntilSinglePlayerRelease()
+        {
+            RelayFixture fixture = new RelayFixture();
+            try
+            {
+                Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderOne, out _), Is.True);
+                Assert.That(fixture.Interaction.BeginThrowCharge(), Is.True);
+                Assert.That(fixture.Interaction.IsQueuedThrowCharge, Is.True);
+                yield return new WaitForSecondsRealtime(0.12f);
+                float heldCharge = fixture.Interaction.ThrowCharge01;
+                Assert.That(heldCharge, Is.GreaterThan(0.05f));
+                Assert.That(fixture.Interaction.ReleaseThrowCharge(), Is.True);
+                Assert.That(fixture.Interaction.IsThrowCharging, Is.False);
+                Assert.That(fixture.Interaction.ThrowCharge01, Is.EqualTo(heldCharge).Within(0.01f));
+
+                yield return fixture.WaitForRelease();
+                fixture.AimAt(fixture.BinderOne);
+                PrototypeInteractionDecision decision =
+                    fixture.Interaction.ProcessInteractPrimary(false);
+
+                Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Catch));
+                Assert.That(fixture.Lifecycle.LastThrowCharge01, Is.EqualTo(heldCharge).Within(0.01f));
+                Assert.That(fixture.Lifecycle.LastThrowSpeedMultiplier, Is.GreaterThan(1f));
+                Assert.That(fixture.Lifecycle.ThrowOriginCount, Is.EqualTo(1));
+                Assert.That(fixture.Relay.QueuedThrowCount, Is.EqualTo(1));
+                Assert.That(fixture.Interaction.HasThrowCharge, Is.False);
             }
             finally
             {

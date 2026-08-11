@@ -8,6 +8,13 @@ namespace BreakNotice.Gameplay.Interaction
     [DisallowMultipleComponent]
     public sealed class PrototypeInteractionController : MonoBehaviour
     {
+        private enum ThrowChargeMode
+        {
+            None,
+            DirectCarry,
+            QueuedRelay
+        }
+
         private const int VisibilityHitCapacity = 32;
         private const float ReticleRayMaximumDistance = 100f;
         private const float CatchAssistMinimumForwardDot = 0.65f;
@@ -45,9 +52,16 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private PrototypeAllyRelayController allyRelayController;
 
+        [SerializeField, Min(0.1f)]
+        private float fullThrowChargeDuration = 1.2f;
+
         private readonly PrototypeInteractionArbitrator arbitrator =
             new PrototypeInteractionArbitrator();
         private readonly RaycastHit[] visibilityHits = new RaycastHit[VisibilityHitCapacity];
+        private ThrowChargeMode throwChargeMode;
+        private bool throwChargeHeld;
+        private float throwChargeStartedAt;
+        private float frozenThrowCharge01;
 #if UNITY_WEBGL && !UNITY_EDITOR
         private bool pointerWasLocked;
 #endif
@@ -84,6 +98,20 @@ namespace BreakNotice.Gameplay.Interaction
 
         public Transform ViewTransform => viewTransform;
 
+        public bool HasThrowCharge => throwChargeMode != ThrowChargeMode.None;
+
+        public bool IsThrowCharging => HasThrowCharge && throwChargeHeld;
+
+        public bool IsQueuedThrowCharge => throwChargeMode == ThrowChargeMode.QueuedRelay;
+
+        public float FullThrowChargeDuration => fullThrowChargeDuration;
+
+        public float ThrowCharge01 => !HasThrowCharge
+            ? 0f
+            : throwChargeHeld
+                ? CalculateThrowCharge01(Time.unscaledTime - throwChargeStartedAt)
+                : frozenThrowCharge01;
+
         public Camera ViewCamera => viewTransform != null
             ? viewTransform.GetComponent<Camera>()
             : null;
@@ -103,7 +131,13 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void LateUpdate()
         {
-            if (logicalInput == null || interactionOwner == null)
+            if (interactionOwner == null)
+            {
+                return;
+            }
+
+            ValidateThrowChargeOwnership();
+            if (logicalInput == null)
             {
                 return;
             }
@@ -114,6 +148,7 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 // Reset owns this entire logical frame even though the authored
                 // restore barrier completes earlier in LateUpdate.
+                ClearThrowCharge();
                 return;
             }
 
@@ -128,6 +163,16 @@ namespace BreakNotice.Gameplay.Interaction
             pointerActionAvailable = pointerCaptured && !pointerJustCaptured;
 #endif
 
+            if (!pointerActionAvailable && HasThrowCharge)
+            {
+                SuspendOrCancelThrowCharge();
+            }
+
+            if (logicalInput.Snapshot.Throw && pointerActionAvailable)
+            {
+                BeginThrowCharge();
+            }
+
             if (logicalInput.Snapshot.CallAlly)
             {
                 ProcessCallAlly();
@@ -138,9 +183,13 @@ namespace BreakNotice.Gameplay.Interaction
                 ProcessInteractPrimary(isAiming && pointerActionAvailable);
             }
 
-            if (logicalInput.Snapshot.Throw && pointerActionAvailable)
+            if (logicalInput.Snapshot.ThrowReleased && pointerActionAvailable)
             {
-                ProcessThrow();
+                ReleaseThrowCharge();
+            }
+            else if (throwChargeHeld && !logicalInput.Snapshot.ThrowHeld)
+            {
+                SuspendOrCancelThrowCharge();
             }
         }
 
@@ -155,7 +204,8 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeAllyRelayController relayController = null,
             float authoredPickupAssistHorizontalAngle = 8f,
             float authoredPickupAssistUpwardAngle = 8f,
-            float authoredPickupAssistDownwardAngle = 65f)
+            float authoredPickupAssistDownwardAngle = 65f,
+            float authoredFullThrowChargeDuration = 1.2f)
         {
             logicalInput = input;
             interactionOwner = owner;
@@ -177,6 +227,7 @@ namespace BreakNotice.Gameplay.Interaction
                 authoredPickupAssistDownwardAngle,
                 0f,
                 80f);
+            fullThrowChargeDuration = Mathf.Max(0.1f, authoredFullThrowChargeDuration);
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
@@ -261,7 +312,8 @@ namespace BreakNotice.Gameplay.Interaction
                 bool physicalThrowSucceeded = physicalObjectLifecycle != null &&
                     physicalObjectLifecycle.TryThrowCommittedRelayTarget(
                         decision.Target,
-                        direction);
+                        direction,
+                        IsQueuedThrowCharge ? ThrowCharge01 : 0f);
                 if (!physicalThrowSucceeded)
                 {
                     interactionOwner.CompleteThrow(decision.Target);
@@ -274,6 +326,8 @@ namespace BreakNotice.Gameplay.Interaction
                 {
                     allyRelayController?.CompleteCatch(decision.Target, true);
                 }
+
+                ClearThrowCharge();
             }
 
             else if (decision.IsAccepted &&
@@ -315,6 +369,11 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool ProcessThrow()
         {
+            return ProcessThrow(0f);
+        }
+
+        public bool ProcessThrow(float charge01)
+        {
             if (interactionOwner == null ||
                 interactionOwner.BlocksNewInteraction)
             {
@@ -336,7 +395,75 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 direction = viewTransform != null
                 ? viewTransform.forward
                 : transform.forward;
-            return physicalObjectLifecycle.TryThrow(direction);
+            bool released = physicalObjectLifecycle.TryThrow(direction, charge01);
+            if (released)
+            {
+                ClearThrowCharge();
+            }
+
+            return released;
+        }
+
+        public bool BeginThrowCharge()
+        {
+            ValidateThrowChargeOwnership();
+            if (interactionOwner == null ||
+                interactionOwner.BlocksNewInteraction ||
+                HasThrowCharge)
+            {
+                return false;
+            }
+
+            ThrowChargeMode mode;
+            if (interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                interactionOwner.CarriedTarget != null &&
+                physicalObjectLifecycle != null &&
+                physicalObjectLifecycle.CarriedTarget == interactionOwner.CarriedTarget)
+            {
+                mode = ThrowChargeMode.DirectCarry;
+            }
+            else if (interactionOwner.HandState == PrototypeHandOwnershipState.Free &&
+                     interactionOwner.RelayState == PrototypeRelayReservationState.Active &&
+                     allyRelayController != null &&
+                     (interactionOwner.QueuedThrowArmed || allyRelayController.TryArmQueuedThrow()))
+            {
+                mode = ThrowChargeMode.QueuedRelay;
+            }
+            else
+            {
+                return false;
+            }
+
+            throwChargeMode = mode;
+            throwChargeHeld = true;
+            throwChargeStartedAt = Time.unscaledTime;
+            frozenThrowCharge01 = 0f;
+            return true;
+        }
+
+        public bool ReleaseThrowCharge()
+        {
+            ValidateThrowChargeOwnership();
+            if (!HasThrowCharge)
+            {
+                return false;
+            }
+
+            float charge01 = ThrowCharge01;
+            if (throwChargeMode == ThrowChargeMode.QueuedRelay)
+            {
+                frozenThrowCharge01 = charge01;
+                throwChargeHeld = false;
+                return interactionOwner != null && interactionOwner.QueuedThrowArmed;
+            }
+
+            ClearThrowCharge();
+            return ProcessThrow(charge01);
+        }
+
+        public float CalculateThrowCharge01(float heldDuration)
+        {
+            return Mathf.Clamp01(Mathf.Max(0f, heldDuration) / fullThrowChargeDuration);
         }
 
         public bool ProcessCallAlly()
@@ -364,6 +491,60 @@ namespace BreakNotice.Gameplay.Interaction
             LastDecision = decision;
             InteractionAttemptSequence++;
             return LastDecision;
+        }
+
+        private void ValidateThrowChargeOwnership()
+        {
+            if (!HasThrowCharge || interactionOwner == null)
+            {
+                return;
+            }
+
+            bool valid = !interactionOwner.BlocksNewInteraction &&
+                (throwChargeMode switch
+                {
+                    ThrowChargeMode.DirectCarry =>
+                        interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                        interactionOwner.CarriedTarget != null &&
+                        physicalObjectLifecycle != null &&
+                        physicalObjectLifecycle.CarriedTarget == interactionOwner.CarriedTarget,
+                    ThrowChargeMode.QueuedRelay =>
+                        interactionOwner.HandState == PrototypeHandOwnershipState.Free &&
+                        interactionOwner.RelayState == PrototypeRelayReservationState.Active &&
+                        interactionOwner.QueuedThrowArmed &&
+                        allyRelayController != null &&
+                        allyRelayController.ActiveTarget == interactionOwner.RelayReservedTarget,
+                    _ => false
+                });
+            if (!valid)
+            {
+                ClearThrowCharge();
+            }
+        }
+
+        private void SuspendOrCancelThrowCharge()
+        {
+            if (!HasThrowCharge)
+            {
+                return;
+            }
+
+            if (throwChargeMode == ThrowChargeMode.QueuedRelay)
+            {
+                frozenThrowCharge01 = ThrowCharge01;
+                throwChargeHeld = false;
+                return;
+            }
+
+            ClearThrowCharge();
+        }
+
+        private void ClearThrowCharge()
+        {
+            throwChargeMode = ThrowChargeMode.None;
+            throwChargeHeld = false;
+            throwChargeStartedAt = 0f;
+            frozenThrowCharge01 = 0f;
         }
 
         private bool TryResolveReticleHit(

@@ -58,6 +58,43 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void ThrowSnapshot_ExposesPressHoldAndReleaseWithoutAddingAnAction()
+        {
+            var held = new LogicalInputSnapshot(
+                Vector2.zero,
+                Vector2.zero,
+                false,
+                false,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false);
+            var released = new LogicalInputSnapshot(
+                Vector2.zero,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                true);
+
+            Assert.That(held.Throw, Is.True);
+            Assert.That(held.ThrowHeld, Is.True);
+            Assert.That(held.ThrowReleased, Is.False);
+            Assert.That(released.Throw, Is.False);
+            Assert.That(released.ThrowHeld, Is.False);
+            Assert.That(released.ThrowReleased, Is.True);
+            Assert.That(
+                LoadInputAsset().FindActionMap("PrototypePlayer", true).actions.Count,
+                Is.EqualTo(8));
+        }
+
+        [Test]
         public void ApprovedInteractionActions_HaveBoundedConsumersAndStrapReleaseRemainsPassive()
         {
             InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);

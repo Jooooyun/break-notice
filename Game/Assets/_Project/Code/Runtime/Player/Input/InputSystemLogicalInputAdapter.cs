@@ -98,7 +98,9 @@ namespace BreakNotice.Gameplay.Input
                 throwAction.WasPressedThisFrame(),
                 callAllyAction.WasPressedThisFrame(),
                 strapReleaseAction.WasPressedThisFrame(),
-                resetEncounterAction.WasPressedThisFrame());
+                resetEncounterAction.WasPressedThisFrame(),
+                throwAction.IsPressed(),
+                throwAction.WasReleasedThisFrame());
         }
 
         public void SetWebPointerState(

@@ -35,6 +35,12 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(0.1f)]
         private float binderHorizontalSpeed = 7.5f;
 
+        [SerializeField, Range(0.5f, 1f)]
+        private float minimumBinderSpeedMultiplier = 0.9f;
+
+        [SerializeField, Range(1f, 1.5f)]
+        private float maximumBinderSpeedMultiplier = 1.1f;
+
         [SerializeField, Min(0.1f)]
         private float chairFeedSpeed = 4f;
 
@@ -101,6 +107,7 @@ namespace BreakNotice.Gameplay.Interaction
         private Vector3 chairFeedDestination;
         private Vector3 chairFeedDirection;
         private bool chairFeedDestinationValid;
+        private uint binderSpeedVariationSequence;
 
         public PrototypeAllySupportState AllyState { get; private set; } =
             PrototypeAllySupportState.Ready;
@@ -147,9 +154,19 @@ namespace BreakNotice.Gameplay.Interaction
 
         public Vector3 LastLaunchVelocity { get; private set; }
 
+        public float LastBinderSpeedMultiplier { get; private set; } = 1f;
+
+        public float LastBinderHorizontalSpeed { get; private set; }
+
+        public uint BinderSpeedVariationSequence => binderSpeedVariationSequence;
+
         public float PreReleaseDelay => preReleaseDelay;
 
         public float BinderHorizontalSpeed => binderHorizontalSpeed;
+
+        public float MinimumBinderSpeedMultiplier => minimumBinderSpeedMultiplier;
+
+        public float MaximumBinderSpeedMultiplier => maximumBinderSpeedMultiplier;
 
         public float ChairFeedSpeed => chairFeedSpeed;
 
@@ -204,7 +221,9 @@ namespace BreakNotice.Gameplay.Interaction
             float authoredAllyTurnSpeed = 540f,
             float authoredSupplyAcquisitionSpeed = 3.5f,
             float authoredSupplyApproachDistance = 0.85f,
-            float authoredChairPlayerClearance = 0.45f)
+            float authoredChairPlayerClearance = 0.45f,
+            float authoredMinimumBinderSpeedMultiplier = 0.9f,
+            float authoredMaximumBinderSpeedMultiplier = 1.1f)
         {
             interactionOwner = owner;
             physicalObjectLifecycle = lifecycle;
@@ -224,6 +243,14 @@ namespace BreakNotice.Gameplay.Interaction
             supplyAcquisitionSpeed = Mathf.Max(0.1f, authoredSupplyAcquisitionSpeed);
             supplyApproachDistance = Mathf.Max(0.25f, authoredSupplyApproachDistance);
             chairPlayerClearance = Mathf.Max(0.1f, authoredChairPlayerClearance);
+            minimumBinderSpeedMultiplier = Mathf.Clamp(
+                authoredMinimumBinderSpeedMultiplier,
+                0.5f,
+                1f);
+            maximumBinderSpeedMultiplier = Mathf.Clamp(
+                authoredMaximumBinderSpeedMultiplier,
+                1f,
+                1.5f);
         }
 
         public bool TryRequestReadySupply(
@@ -456,6 +483,9 @@ namespace BreakNotice.Gameplay.Interaction
             LastRequestRejection = PrototypeAllyRelayRejection.None;
             LastReleasePosition = Vector3.zero;
             LastLaunchVelocity = Vector3.zero;
+            LastBinderSpeedMultiplier = 1f;
+            LastBinderHorizontalSpeed = 0f;
+            binderSpeedVariationSequence = 0;
             PreparationPathLength = 0f;
             AllyTravelPathLength = 0f;
         }
@@ -562,7 +592,13 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 activeBody.constraints = preReleaseConstraints;
                 activeBody.useGravity = true;
-                activeBody.linearVelocity = CalculateBinderLaunchVelocity(activeBody.worldCenterOfMass);
+                LastBinderSpeedMultiplier = GetNextBinderSpeedMultiplier();
+                activeBody.linearVelocity = CalculateBinderLaunchVelocity(
+                    activeBody.worldCenterOfMass,
+                    binderHorizontalSpeed * LastBinderSpeedMultiplier);
+                LastBinderHorizontalSpeed = Vector3.ProjectOnPlane(
+                    activeBody.linearVelocity,
+                    Vector3.up).magnitude;
                 activeBody.angularVelocity = Vector3.up * 2f;
                 chairFeedDestinationValid = false;
             }
@@ -608,13 +644,15 @@ namespace BreakNotice.Gameplay.Interaction
             ReleaseCount++;
         }
 
-        private Vector3 CalculateBinderLaunchVelocity(Vector3 start)
+        private Vector3 CalculateBinderLaunchVelocity(
+            Vector3 start,
+            float requestedHorizontalSpeed)
         {
             Vector3 destination = GetBinderDestination();
             Vector3 displacement = destination - start;
             Vector3 horizontal = Vector3.ProjectOnPlane(displacement, Vector3.up);
             float flightTime = Mathf.Clamp(
-                horizontal.magnitude / binderHorizontalSpeed,
+                horizontal.magnitude / Mathf.Max(0.1f, requestedHorizontalSpeed),
                 0.35f,
                 1.1f);
             Vector3 horizontalVelocity = horizontal / flightTime;
@@ -622,6 +660,20 @@ namespace BreakNotice.Gameplay.Interaction
                 (displacement.y - 0.5f * Physics.gravity.y * flightTime * flightTime) /
                 flightTime;
             return horizontalVelocity + Vector3.up * verticalVelocity;
+        }
+
+        private float GetNextBinderSpeedMultiplier()
+        {
+            binderSpeedVariationSequence++;
+            // A resettable low-discrepancy sequence varies every authored release
+            // without mutating Unity's global random state or making tests flaky.
+            float unit = Mathf.Repeat(
+                binderSpeedVariationSequence * 0.61803398875f + 0.137f,
+                1f);
+            return Mathf.Lerp(
+                minimumBinderSpeedMultiplier,
+                maximumBinderSpeedMultiplier,
+                unit);
         }
 
         private Vector3 CalculateChairFeedVelocity(Vector3 start)
