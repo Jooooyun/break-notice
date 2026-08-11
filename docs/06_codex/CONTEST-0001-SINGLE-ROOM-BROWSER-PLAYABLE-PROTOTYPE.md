@@ -1,13 +1,13 @@
 # CONTEST-0001 — Single-Room Browser-Playable Prototype
 
-- Status: `OWNER-APPROVED / C0-C4 IMPLEMENTATION COMPLETE / C4 UNITY QUALIFICATION PASS / HUMAN ACCEPTANCE PENDING / C5 NOT AUTHORIZED`
+- Status: `OWNER-APPROVED / C0-C4 IMPLEMENTATION COMPLETE / C4 AUTOMATED AND WEB QUALIFICATION PASS / HUMAN ACCEPTANCE PENDING / C5 NOT AUTHORIZED`
 - Change Control: `CR-0003`
 - ADR: `ADR-0023`
-- Relay: `EAR-CONTEST-0001-001 CONSUMED BY C0 PASS / HUMAN OWNER CONTEST FAST-TRACK CORE LOOP CONSUMED BY C1-C3 / HUMAN OWNER C4 DIRECTIVE CONSUMED BY IMPLEMENTATION COMMIT 30376d475ca0e07e9026965a9f11c6cfec241ba5 / WEB QUALIFICATION EXPLICITLY DEFERRED BY HUMAN OWNER / C5 EXCLUDED`
+- Relay: `EAR-CONTEST-0001-001 CONSUMED BY C0 PASS / HUMAN OWNER CONTEST FAST-TRACK CORE LOOP CONSUMED BY C1-C3 / HUMAN OWNER INITIAL C4 DIRECTIVE CONSUMED BY 30376d475ca0e07e9026965a9f11c6cfec241ba5 / HUMAN OWNER C4 ACCEPTANCE REVISION CONSUMED BY e4ee3b714552fb8bf8ba90216ce858a988f0f006 / C5 EXCLUDED`
 - Baseline: `28b7f70c4b6299159afe5b99ea7b98d1e5399352`
 - Branch: `contest/game-builders-2026`
 - Current Gate:
-  `MAIN PRODUCT CLOSED / CONTEST C0-C4 IMPLEMENTATION COMPLETE / C4 HUMAN UNITY ACCEPTANCE PENDING / C4 WEB QUALIFICATION DEFERRED / C5 CLOSED`
+  `MAIN PRODUCT CLOSED / CONTEST C0-C4 IMPLEMENTATION COMPLETE / C4 AUTOMATED AND WEB QUALIFICATION PASS / C4 HUMAN MANUAL ACCEPTANCE PENDING / C5 CLOSED`
 
 ## Goal
 
@@ -23,7 +23,7 @@ desktop browser prototype과 검증 증거를 만든다.
 | C1 | Interaction arbitration and singular ownership |
 | C2 | Binder/Chair acquisition, carry and physical throw |
 | C3 | Authored reset and baseline diff |
-| C4 | Fixed ally physical relay, catch and queued throw |
+| C4 | Bounded ally move-acquire-ready physical relay, catch and queued throw |
 | C5 | Bounded Cargo Strap chair redirect |
 | C6 | Drawer objective, route, EXIT and win/retry |
 | C7 | Two deterministic nonlethal Compliance Runners and restart |
@@ -278,3 +278,30 @@ desktop browser prototype과 검증 증거를 만든다.
   `PENDING / Human Owner must inspect and play the C4 Unity Scene behavior before closure. Automated PASS does not infer Human acceptance.`
 - Next boundary:
   `C5 Cargo Strap and every later checkpoint remain NOT AUTHORIZED.`
+
+## C4 Human Acceptance Revision — 2026-08-11
+
+- Human Owner pre-repair findings:
+  `Reticle-selected Q supply, Binder flight, queued Catch-Throw, duplicate-call rejection, authored Reset and prior movement-camera-direct handling passed. Normal E Catch failed in real flight, the grounded Chair pushed the player and could levitate, and the fixed reticle-targeted supply call did not express the intended ally behavior.`
+- Human Owner preserved decision:
+  `Within C4, the ally must visibly move to an authored physical supply, acquire the same object, show a world-space exclamation only when a valid supply is ready, and accept Q without reticle targeting. A solid movement path or throw lane must block the action with zero reservation, release or ownership side effects. C5 Cargo Strap remains excluded.`
+- Implementation commit:
+  `e4ee3b714552fb8bf8ba90216ce858a988f0f006 / pushed to origin/contest/game-builders-2026.`
+- Normal Catch repair:
+  `The exact centre ray remains the ordinary interaction selector, but an incoming reserved Light Binder inside the authored catch range, visible line of sight and bounded forward cone receives Catch assist. E now commits the same visible Rigidbody to singular Carry without requiring one exact ray-frame; queued Catch still produces exactly one player-owned Throw origin.`
+- Ally preparation and call flow:
+  `The ally walks toward the next deterministic unconsumed authored supply, physically lifts a Binder into a visible hold position or prepares the grounded Chair, then exposes READY and the world-space exclamation. Q reads the ally's prepared target rather than the reticle. No hidden inventory, object replacement, teleport acquisition, duplicate reservation or replenishment was added.`
+- Blocked state:
+  `A solid obstacle on the ally-to-supply movement segment or the prepared-supply-to-player lane produces an observable blocked state. The exclamation is removed, Q rejects with InvalidPhysicalLane, and reservation, release and ownership counts remain unchanged.`
+- Medium Chair repair:
+  `The feed destination is a collider-aware standoff position in front of the player rather than the player centre. During feed the Rigidbody keeps planar Y and upright X-Z rotation constraints, then stops and restores grounded gravity before the safe clearance is crossed. Catch and queued Throw remain prohibited; C5 redirect remains unimplemented.`
+- Tests:
+  `Unity compile PASS / EditMode 62/62 / PlayMode 53/53 / total 115/115. New coverage includes pre-ready Q rejection, visible ally move and Binder acquisition, untargeted Q, ready exclamation mapping, blocked movement and throw lanes with zero side effect, off-reticle real-flight normal Catch, full Chair feed floor-upright-player separation and actual Contest Scene preparation.`
+- Web qualification:
+  `Unity 6000.3.20f1 Web Development build PASS / GUID 60e7c31297b646c3b701ca878da6c1f8 / 113862520 Unity-reported bytes / warning 0 / error 0 / HTTP 19/19 / 113864274 bytes / aggregate SHA-256 f495246aad21e80fda8f0a13050af86f2a4cc5e9994d8a36a39c9df006d1f238.`
+- Browser qualification:
+  `In-app browser cold load PASS at 960x600 / ally exclamation visible / ALLY READY FILE BINDER Q SUPPLY prompt visible / product console warning-error 0 after autonomous preparation / JavaScript dialog 0.`
+- Manual acceptance:
+  `PENDING / Human Owner must retest normal Binder Catch, queued Catch-Throw, Chair safe grounded feed, blocked state, duplicate Q, Reset and preserved C0-C3 regressions in the retained final build.`
+- Next boundary:
+  `C5 and later remain NOT AUTHORIZED.`

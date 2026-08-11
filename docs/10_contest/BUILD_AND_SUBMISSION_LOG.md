@@ -187,3 +187,21 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Human Manual | `PENDING / Unity Scene play and feel check required` |
 | Scope Protection | `C5+, Packages, ProjectSettings, Input Actions and production-art runtime integration unchanged` |
 | Submission State | `NOT READY / C4 HUMAN ACCEPTANCE AND LATER WEB QUALIFICATION PENDING / C5 NOT AUTHORIZED` |
+
+## C4 Human Acceptance Revision — Automated and Web Qualification — 2026-08-11
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `88935d61abed4fdf967fff5e10fa0e3976bcb74a` |
+| Implementation Commit | `e4ee3b714552fb8bf8ba90216ce858a988f0f006 / pushed and remote-verified` |
+| Unity Version | `6000.3.20f1` |
+| Compile | `PASS` |
+| Tests | `EditMode 62/62 PASS / PlayMode 53/53 PASS / total 115/115` |
+| Revised C4 Scope | `ally move-to-supply / visible Binder acquisition / ready exclamation / untargeted Q / blocked movement and throw lane / assisted normal Catch / queued Throw / safe-clearance grounded Chair feed / authored Reset` |
+| Web Build | `PASS / GUID 60e7c31297b646c3b701ca878da6c1f8 / 113862520 Unity-reported bytes / warning 0 / error 0` |
+| HTTP | `PASS / 19 of 19 / 113864274 bytes / SHA-256 f495246aad21e80fda8f0a13050af86f2a4cc5e9994d8a36a39c9df006d1f238` |
+| Browser | `PASS / in-app cold load / 960x600 / ready exclamation and Q prompt visible / console warning-error 0 / dialog 0` |
+| Pre-Repair Human Findings | `normal E Catch FAIL / Chair player-push and levitation FAIL / reticle-targeted fixed supply flow REVISION REQUIRED / other listed C4 and C0-C3 checks PASS` |
+| Human Manual | `PENDING / revised Binder Catch, Chair feed, blocked state and complete regression retest required` |
+| Scope Protection | `C5+, Packages, ProjectSettings, Input Actions and production-art runtime integration unchanged` |
+| Submission State | `NOT READY / C4 HUMAN ACCEPTANCE PENDING / C5 NOT AUTHORIZED` |

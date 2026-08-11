@@ -273,3 +273,28 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `Detached worktree only / tracked dirty 0 / staged 0 / commit 0 / push 0. The local review Scene does not approve rights, Canon, runtime integration, elite enemy or firearm content.`
 - Next:
   `Human Owner Unity inspection of Designer A models and C4 manual gameplay acceptance. C5 remains unauthorized.`
+
+## C4 Human Acceptance Revision — 2026-08-11
+
+- Goal:
+  `Repair the Human Owner-reported normal Catch failure and unsafe grounded Chair feed, then replace reticle-targeted fixed supply with a bounded visible ally move-acquire-ready-call flow without entering C5.`
+- Human Owner Decision Preserved:
+  `The ally must move to an authored physical object, visibly acquire it, show a world-space exclamation only when supply is possible, and respond to untargeted Q. Solid movement paths and supply lanes must reject safely.`
+- Baseline:
+  `88935d61abed4fdf967fff5e10fa0e3976bcb74a / contest local-origin equal / tracked-staged clean / protected 26 unchanged.`
+- Work:
+  `Implemented deterministic ally movement and visible Binder acquisition, grounded Chair preparation, READY-BLOCKED-DEPLETED observability, a world-space ready exclamation, untargeted Q, solid path and lane checks, assisted real-flight normal Catch, collider-aware Chair standoff and upright floor-supported stopping. Existing singular reservation, ownership, queued Throw and authored Reset contracts were preserved.`
+- Commit:
+  `e4ee3b714552fb8bf8ba90216ce858a988f0f006 / normal push complete and remote-verified.`
+- Tests:
+  `Unity compile PASS / EditMode 62/62 / PlayMode 53/53 / total 115/115.`
+- Web:
+  `PASS / Unity 6000.3.20f1 / GUID 60e7c31297b646c3b701ca878da6c1f8 / 113862520 Unity-reported bytes / warning 0 / error 0 / HTTP 19/19 / 113864274 bytes / SHA-256 f495246aad21e80fda8f0a13050af86f2a4cc5e9994d8a36a39c9df006d1f238.`
+- Browser:
+  `In-app cold load PASS / 960x600 canvas / ally ready exclamation and Q prompt visible / console warning-error 0 after autonomous preparation / dialog 0.`
+- Manual Status:
+  `PENDING / Human Owner must retest normal Binder Catch, queued Catch-Throw, safe grounded Chair feed, blocked path-lane behavior, duplicate Q, Reset and prior C0-C3 regressions in the retained final build.`
+- Protected Scope:
+  `C5+, Packages, ProjectSettings, Input Actions and production-art runtime integration unchanged; protected Human Owner untracked work remained untouched and unstaged.`
+- Next:
+  `Close C4 only after the Human Owner manual retest. C5 remains unauthorized and requires a new direct instruction.`
