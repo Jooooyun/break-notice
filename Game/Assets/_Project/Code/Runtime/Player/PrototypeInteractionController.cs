@@ -52,6 +52,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private PrototypeAllyRelayController allyRelayController;
 
+        [SerializeField]
+        private ShowcaseMobileAllyController showcaseMobileAllyController;
+
         [SerializeField, Min(0.1f)]
         private float fullThrowChargeDuration = 1.2f;
 
@@ -95,6 +98,9 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeInteractionTarget LastAllyCallTarget { get; private set; }
 
         public PrototypeAllyRelayController AllyRelayController => allyRelayController;
+
+        public ShowcaseMobileAllyController ShowcaseMobileAllyController =>
+            showcaseMobileAllyController;
 
         public Transform ViewTransform => viewTransform;
 
@@ -175,7 +181,15 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (logicalInput.Snapshot.CallAlly)
             {
-                ProcessCallAlly();
+                if (showcaseMobileAllyController != null &&
+                    showcaseMobileAllyController.OwnsRegroupFallback)
+                {
+                    showcaseMobileAllyController.TryRequestRegroup();
+                }
+                else
+                {
+                    ProcessCallAlly();
+                }
             }
 
             if (logicalInput.Snapshot.InteractPrimary)
@@ -228,6 +242,11 @@ namespace BreakNotice.Gameplay.Interaction
                 0f,
                 80f);
             fullThrowChargeDuration = Mathf.Max(0.1f, authoredFullThrowChargeDuration);
+        }
+
+        public void ConfigureShowcaseMobileAlly(ShowcaseMobileAllyController controller)
+        {
+            showcaseMobileAllyController = controller;
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)

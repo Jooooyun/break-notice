@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Interaction;
+using BreakNotice.Presentation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -21,6 +23,8 @@ namespace BreakNotice.Contest.Editor
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v001.unity";
 
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
+
+        public const string MobileAllyRootName = "SHOWCASE_S2_MOBILE_ALLY";
 
         private static readonly string[] LegacyEnvironmentRootNames =
         {
@@ -70,6 +74,25 @@ namespace BreakNotice.Contest.Editor
                 "figure-eight topology, preserved C0-C4 gameplay roots, no Production Art.");
         }
 
+        [MenuItem("BREAK NOTICE/Contest/Prepare S2 Mobile Ally")]
+        public static void PrepareS2MobileAlly()
+        {
+            RequireSceneAsset(ShowcaseScenePath);
+            Scene scene = EditorSceneManager.OpenScene(ShowcaseScenePath, OpenSceneMode.Single);
+            ApplyS2MobileAlly(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseScenePath))
+            {
+                throw new InvalidOperationException($"Could not save {ShowcaseScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "S2 Showcase mobile ally prepared: 12 authored follow anchors, " +
+                "side switching, catch-up, blocked/regroup and Reset-safe restoration.");
+        }
+
         public static void ApplyS1Layout(Scene scene)
         {
             if (!scene.IsValid() || !scene.isLoaded)
@@ -78,6 +101,7 @@ namespace BreakNotice.Contest.Editor
             }
 
             ValidatePreservedGameplayRoots(scene);
+            RemoveS2MobileAlly(scene);
             RemoveLegacyEnvironment(scene);
 
             GameObject previousRoot = FindRoot(scene, ShowcaseRootName);
@@ -103,6 +127,173 @@ namespace BreakNotice.Contest.Editor
             RepositionPreservedGameplay(scene);
 
             ValidatePreservedGameplayRoots(scene);
+        }
+
+        public static void ApplyS2MobileAlly(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            RemoveS2MobileAlly(scene);
+            GameObject player = RequireRoot(scene, "Player");
+            GameObject ally = RequireRoot(scene, "AllyProxy");
+            GameObject browserInput = RequireRoot(scene, "ContestBrowserInput");
+            GameObject mobileRoot = CreateRoot(scene, MobileAllyRootName);
+            Transform[] anchors = BuildFollowAnchorNetwork(mobileRoot.transform);
+            Vector2Int[] links = BuildFollowAnchorLinks();
+
+            CapsuleCollider legacyCollider = ally.GetComponent<CapsuleCollider>();
+            if (legacyCollider != null)
+            {
+                legacyCollider.enabled = false;
+            }
+
+            CharacterController allyController = ally.AddComponent<CharacterController>();
+            allyController.center = Vector3.zero;
+            allyController.radius = 0.48f;
+            allyController.height = 1.9f;
+            allyController.skinWidth = 0.06f;
+            allyController.stepOffset = 0.2f;
+            allyController.slopeLimit = 45f;
+
+            PrototypeAllyRelayController relay = ally.GetComponent<PrototypeAllyRelayController>();
+            if (relay == null)
+            {
+                throw new InvalidOperationException("The preserved C4 Ally relay is required.");
+            }
+            relay.enabled = false;
+
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypeInteractionController interaction =
+                player.GetComponent<PrototypeInteractionController>();
+            AuthoredEncounterResetController reset = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<AuthoredEncounterResetController>(true))
+                .Single();
+
+            ShowcaseMobileAllyController mobile =
+                ally.AddComponent<ShowcaseMobileAllyController>();
+            mobile.Configure(
+                owner,
+                reset,
+                ally.transform,
+                player.transform,
+                allyController,
+                anchors,
+                links);
+            interaction.ConfigureShowcaseMobileAlly(mobile);
+
+            ShowcaseMobileAllyPresenter presenter =
+                browserInput.AddComponent<ShowcaseMobileAllyPresenter>();
+            presenter.Configure(mobile);
+            EditorUtility.SetDirty(ally);
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(browserInput);
+        }
+
+        private static Transform[] BuildFollowAnchorNetwork(Transform parent)
+        {
+            Vector2[] positions =
+            {
+                new Vector2(-2f, -14f),
+                new Vector2(-3f, -10f),
+                new Vector2(-4f, -5f),
+                new Vector2(0f, 3f),
+                new Vector2(-14f, -5f),
+                new Vector2(-17f, 7f),
+                new Vector2(-7f, 12f),
+                new Vector2(12f, -4f),
+                new Vector2(14f, 5f),
+                new Vector2(11f, 9f),
+                new Vector2(14f, 11f),
+                new Vector2(19f, 15f)
+            };
+            var anchors = new Transform[positions.Length];
+            for (int index = 0; index < positions.Length; index++)
+            {
+                anchors[index] = CreateMarker(
+                    parent,
+                    $"FA-{index:00}",
+                    new Vector3(positions[index].x, 1f, positions[index].y),
+                    Vector3.one);
+            }
+            return anchors;
+        }
+
+        private static Vector2Int[] BuildFollowAnchorLinks()
+        {
+            return new[]
+            {
+                new Vector2Int(0, 1),
+                new Vector2Int(1, 2),
+                new Vector2Int(2, 3),
+                new Vector2Int(2, 4),
+                new Vector2Int(4, 5),
+                new Vector2Int(5, 6),
+                new Vector2Int(6, 3),
+                new Vector2Int(3, 7),
+                new Vector2Int(7, 8),
+                new Vector2Int(8, 9),
+                new Vector2Int(9, 10),
+                new Vector2Int(10, 11),
+                new Vector2Int(6, 9)
+            };
+        }
+
+        private static void RemoveS2MobileAlly(Scene scene)
+        {
+            GameObject player = FindRoot(scene, "Player");
+            if (player != null)
+            {
+                PrototypeInteractionController interaction =
+                    player.GetComponent<PrototypeInteractionController>();
+                interaction?.ConfigureShowcaseMobileAlly(null);
+            }
+
+            GameObject ally = FindRoot(scene, "AllyProxy");
+            if (ally != null)
+            {
+                ShowcaseMobileAllyController mobile =
+                    ally.GetComponent<ShowcaseMobileAllyController>();
+                if (mobile != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(mobile);
+                }
+                CharacterController controller = ally.GetComponent<CharacterController>();
+                if (controller != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(controller);
+                }
+                CapsuleCollider legacyCollider = ally.GetComponent<CapsuleCollider>();
+                if (legacyCollider != null)
+                {
+                    legacyCollider.enabled = true;
+                }
+                PrototypeAllyRelayController relay = ally.GetComponent<PrototypeAllyRelayController>();
+                if (relay != null)
+                {
+                    relay.enabled = true;
+                }
+            }
+
+            GameObject browserInput = FindRoot(scene, "ContestBrowserInput");
+            if (browserInput != null)
+            {
+                ShowcaseMobileAllyPresenter presenter =
+                    browserInput.GetComponent<ShowcaseMobileAllyPresenter>();
+                if (presenter != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(presenter);
+                }
+            }
+
+            GameObject previousRoot = FindRoot(scene, MobileAllyRootName);
+            if (previousRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
         }
 
         private static void BuildEnvelope(Transform parent)
