@@ -298,3 +298,26 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `C5+, Packages, ProjectSettings, Input Actions and production-art runtime integration unchanged; protected Human Owner untracked work remained untouched and unstaged.`
 - Next:
   `Close C4 only after the Human Owner manual retest. C5 remains unauthorized and requires a new direct instruction.`
+
+## C4 Acceptance Closure and Post-Acceptance Throw-Pickup Tuning — 2026-08-11
+
+- Human Owner Decision Preserved:
+  `The revised C4 behavior passed the Human Owner check. Player Throw should feel faster, and direct floor pickup should tolerate bounded camera pitch without broadening selection through walls or across the screen.`
+- Baseline:
+  `7c09f5c8bfd19f3ada97bcbb1c57c6c3d127b4d3 / contest local-origin-remote equal / tracked-staged clean / protected 26 unchanged.`
+- Work:
+  `Raised only player Light-Medium Throw speed to 12.5-8.0; preserved ally Binder supply at 7.5. Added a direct-pickup-only floor assist below the exact center ray with narrow horizontal scope, bounded vertical scope, existing range, solid LOS and deterministic ranking.`
+- Commit:
+  `e5be4c476ab9cc8f2e3ffacc17b124db60b15f12 / normal push complete and remote-verified.`
+- Tests:
+  `Unity compile PASS / EditMode 62/62 / PlayMode 56/56 / total 118/118.`
+- Web:
+  `PASS / Unity 6000.3.20f1 / GUID 309aef34701a4d96a0e1a6c20a7cb93b / 113868019 Unity-reported bytes / warning 0 / error 0 / HTTP 19/19 / 113869773 bytes / SHA-256 1cd31326642b81270ccc83579c940cc102a8914bdeac1e432d1d9431513f248c.`
+- Browser:
+  `Local server READY. Automated in-app inspection remained uncollected because the admin-enforced local-browser policy check was temporarily unavailable; no product failure is inferred.`
+- Manual Status:
+  `PENDING / Human Owner must judge new Throw feel, assisted floor pickup, horizontal rejection, wall occlusion and preserved C4 behavior.`
+- Protected Scope:
+  `C5+, Packages, ProjectSettings and production-art runtime integration unchanged; protected Human Owner untracked work remained untouched and unstaged.`
+- Next:
+  `Complete the bounded Human tuning retest. C5 remains unauthorized and requires a new direct instruction.`

@@ -205,3 +205,20 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Human Manual | `PENDING / revised Binder Catch, Chair feed, blocked state and complete regression retest required` |
 | Scope Protection | `C5+, Packages, ProjectSettings, Input Actions and production-art runtime integration unchanged` |
 | Submission State | `NOT READY / C4 HUMAN ACCEPTANCE PENDING / C5 NOT AUTHORIZED` |
+
+## C4 Acceptance Closure and Throw-Pickup Tuning Development Build — 2026-08-11
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `7c09f5c8bfd19f3ada97bcbb1c57c6c3d127b4d3` |
+| Implementation Commit | `e5be4c476ab9cc8f2e3ffacc17b124db60b15f12 / pushed and remote-verified` |
+| Human C4 Acceptance | `PASS / revised C4 behavior accepted to proceed 2026-08-11` |
+| Unity Version | `6000.3.20f1` |
+| Compile | `PASS` |
+| Tests | `EditMode 62/62 PASS / PlayMode 56/56 PASS / total 118/118` |
+| Tuning | `player Light 12.5 / player Medium 8.0 / ally Binder supply unchanged 7.5 / bounded direct floor pickup assist` |
+| Web Build | `PASS / GUID 309aef34701a4d96a0e1a6c20a7cb93b / 113868019 Unity-reported bytes / warning 0 / error 0` |
+| HTTP | `PASS / 19 of 19 / 113869773 bytes / SHA-256 1cd31326642b81270ccc83579c940cc102a8914bdeac1e432d1d9431513f248c` |
+| Browser | `PENDING HUMAN RETEST / server READY / automated local inspection unavailable because the admin-enforced browser policy check could not be verified / no product failure inferred` |
+| Scope Protection | `C5+, Packages, ProjectSettings and production-art runtime integration unchanged` |
+| Submission State | `NOT READY / POST-ACCEPTANCE TUNING HUMAN FEEL RETEST PENDING / C5 NOT AUTHORIZED` |

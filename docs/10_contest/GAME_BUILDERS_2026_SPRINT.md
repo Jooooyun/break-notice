@@ -3,7 +3,7 @@
 - Project: `BREAK NOTICE`
 - Public Working Title: `BREAK NOTICE: ZERO DEFECT`
 - Track: `OpenAI Game Builders Seoul 2026 / Track 1`
-- Status: `ACTIVE / C0-C4 IMPLEMENTATION COMPLETE / C4 AUTOMATED AND WEB QUALIFICATION PASS / HUMAN ACCEPTANCE PENDING / C5 NOT AUTHORIZED`
+- Status: `ACTIVE / C0-C4 IMPLEMENTATION COMPLETE / C4 HUMAN ACCEPTANCE PASS / POST-ACCEPTANCE THROW-PICKUP TUNING HUMAN RETEST PENDING / C5 NOT AUTHORIZED`
 - Owner: `조윤성`
 - Ticket: `CONTEST-0001`
 - Branch: `contest/game-builders-2026`
@@ -107,8 +107,9 @@ optimization을 구현하지 않는다.
 - C1: `COMPLETE / commit 278d062a6b486a176a7cb9144b75dfb058567ead`
 - C2: `COMPLETE / commit 083b44e86c76977bd855bf0c2c09baf0001b9750`
 - C3: `IMPLEMENTATION AND AUTOMATED ACCEPTANCE COMPLETE / containing commit`
-- C4: `IMPLEMENTATION COMPLETE / initial commit 30376d475ca0e07e9026965a9f11c6cfec241ba5 / Human Owner acceptance revision e4ee3b714552fb8bf8ba90216ce858a988f0f006 / HUMAN MANUAL ACCEPTANCE RETEST PENDING`
-- Validation: `Current Unity compile PASS / EditMode 62/62 / PlayMode 53/53 / total 115/115 / Web Development GUID 60e7c31297b646c3b701ca878da6c1f8 / warnings 0 / errors 0 / HTTP 19/19 / in-app browser cold load and console PASS`
+- C4: `IMPLEMENTATION COMPLETE / initial commit 30376d475ca0e07e9026965a9f11c6cfec241ba5 / Human Owner acceptance revision e4ee3b714552fb8bf8ba90216ce858a988f0f006 / HUMAN MANUAL ACCEPTANCE PASS 2026-08-11`
+- Post-Acceptance Tuning: `PLAYER THROW SPEED AND BOUNDED DIRECT FLOOR PICKUP ASSIST / commit e5be4c476ab9cc8f2e3ffacc17b124db60b15f12 / HUMAN FEEL RETEST PENDING`
+- Validation: `Current Unity compile PASS / EditMode 62/62 / PlayMode 56/56 / total 118/118 / Web Development GUID 309aef34701a4d96a0e1a6c20a7cb93b / warnings 0 / errors 0 / HTTP 19/19 / new-build Human browser retest pending`
 - Boundary: `C5 AND LATER NOT AUTHORIZED / MAIN PRODUCT GATE CLOSED`
 
 ## Definition of Complete

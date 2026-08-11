@@ -305,3 +305,24 @@ desktop browser prototype과 검증 증거를 만든다.
   `PENDING / Human Owner must retest normal Binder Catch, queued Catch-Throw, Chair safe grounded feed, blocked state, duplicate Q, Reset and preserved C0-C3 regressions in the retained final build.`
 - Next boundary:
   `C5 and later remain NOT AUTHORIZED.`
+
+## C4 Acceptance Closure and Post-Acceptance Throw-Pickup Tuning — 2026-08-11
+
+- Human Owner acceptance:
+  `PASS / the Human Owner confirmed the revised C4 behavior worked and approved proceeding. C5 is not authorized by that acceptance.`
+- Tuning request:
+  `Increase player Throw speed and make direct floor pickup usable despite bounded camera pitch without returning to broad automatic targeting.`
+- Implementation commit:
+  `e5be4c476ab9cc8f2e3ffacc17b124db60b15f12 / pushed and remote-verified.`
+- Throw tuning:
+  `Player Light and Medium Throw speeds are 12.5 and 8.0. Ally Binder supply remains 7.5 to preserve Catch readability.`
+- Pickup assist:
+  `The exact center ray remains first priority. Only direct Scoop-eligible floor objects can use an 8-degree horizontal, 8-degree upward and 65-degree downward assist. Range <= 2.8 m, solid line of sight, wall rejection and deterministic ranking remain mandatory.`
+- Tests:
+  `Unity compile PASS / EditMode 62/62 / PlayMode 56/56 / total 118/118. New coverage verifies floor assist acceptance, horizontal rejection, wall occlusion rejection and exact authored throw values.`
+- Web qualification:
+  `Unity 6000.3.20f1 Web Development build PASS / GUID 309aef34701a4d96a0e1a6c20a7cb93b / 113868019 Unity-reported bytes / warning 0 / error 0 / HTTP 19/19 / 113869773 bytes / aggregate SHA-256 1cd31326642b81270ccc83579c940cc102a8914bdeac1e432d1d9431513f248c.`
+- Browser and manual status:
+  `Local server READY. Automated in-app inspection was not collected because the admin-enforced local browser policy check was temporarily unavailable; this is not recorded as a product failure. Human Throw-feel, pickup-assist, wall-occlusion and C4 regression retest remain pending.`
+- Scope:
+  `No C5 Cargo Strap, package, ProjectSettings, production-art runtime integration or protected Human Owner work changed.`
