@@ -1,0 +1,1920 @@
+HUMAN OWNER DIRECT ADDITIVE ANIMATION EXPANSION ORDER
+BREAK NOTICE GAMEPLAY ANIMATION COVERAGE v003 — FINAL
+
+이번 지시는 기존 제출물을 삭제하거나 교체하는 작업이 아닙니다.
+
+현재 0810_designerA/** 아래의 기존 FBX, Guide와 commit history는 원본 그대로 보존하십시오.
+
+본 문서에 기재된 Clip 이름은 논리적 기본 이름입니다.
+실제 납품 파일에는 반드시 version suffix를 붙입니다.
+
+첫 납품:
+<ClipName>_v001.fbx
+
+동일한 이름이 이미 존재하는 경우:
+<ClipName>_v002.fbx
+
+기존 파일을 덮어써서는 안 됩니다.
+
+
+================================================================================
+0. 기존 제출물 보존 규칙
+================================================================================
+
+금지:
+
+- 기존 binary 삭제
+- 기존 binary 이동 또는 rename
+- 기존 binary 덮어쓰기
+- history rewrite
+- force push
+- pushed commit amend
+- rebase를 통한 기존 history 변경
+- 기존 batch를 Runtime approved라고 선언
+- 현재 총기/Elite 모션을 Prototype Runtime에 통합
+- 기존 파일을 새 허용 경로로 강제 이동
+- 기존 대형 binary를 LFS로 소급 변환
+- Human Owner 승인 없이 PR 또는 merge 생성
+
+
+[REUSE CANDIDATE]
+
+현재 게임에서 재사용 가능성이 있는 모션입니다.
+
+- Idle
+- Walk
+- Run
+- Strafe
+- Turn
+- Hit
+- Stagger
+- Generic Interaction
+- Generic Carry
+- Generic Push
+
+Reuse Candidate도 자동 승인되지 않습니다.
+Skeleton, 품질, 권리, Canon, gameplay 적합성을 검토해야 합니다.
+
+
+[ARCHIVE ONLY]
+
+기존 파일을 보존하지만 현재 BREAK NOTICE Prototype Runtime에서는 사용하지 않는 모션입니다.
+
+- Rifle
+- Gun Fire
+- Grenade
+- Sword
+- Cover Shooting
+- Military Action
+- Enemy Elite
+- Boss
+- Execution
+- Lethal Death
+- Weapon Finisher
+
+정확한 상태:
+
+PRESERVED BINARY
+NON-CANON FOR CURRENT PROTOTYPE
+NOT APPROVED FOR RUNTIME INTEGRATION
+
+
+[MISSING / NEW GENERATION REQUIRED]
+
+현재 게임의 실제 Gameplay Loop에 필요하지만 기존 batch에서 빠졌거나 품질이 불충분한 모션입니다.
+
+- Pickup
+- Carry
+- Throw
+- Catch
+- Queued Throw
+- Ally Supply
+- Chair Feed
+- Carabiner Attach
+- Strap Tension
+- Strap Redirect
+- Body Check
+- Punch
+- Hook
+- Grab
+- Shove
+- Physical Impact Reaction
+- Knockdown
+- Recovery
+- Abort
+
+
+================================================================================
+0.1 허용 작업 경로
+================================================================================
+
+새 작업은 기존 파일을 수정하지 않고 아래 허용 경로에 추가합니다.
+
+ArtSource/Characters/CHR00_Player/**
+ArtSource/Characters/CHR01_Ally/**
+ArtSource/Characters/ENY01_ComplianceRunner/**
+ArtSource/Equipment/GEAR01_CargoStrap/**
+
+허용 경로 밖에 새 animation, model, texture 또는 source를 추가하지 마십시오.
+
+수정 금지:
+
+Game/Assets/_Project/Code/**
+Game/Assets/_Project/Scenes/**
+Game/Assets/_Project/Prefabs/**
+Game/Packages/**
+Game/ProjectSettings/**
+references/approved/**
+references/exploration/**
+tools/**
+
+Designer A는 Source Art와 Preview를 제작합니다.
+
+다음은 Human Owner와 통합 담당 Codex가 별도로 수행합니다.
+
+- Unity Runtime import
+- .meta 생성 및 관리
+- Animator Controller
+- Avatar Mask
+- Animation Event
+- Prefab
+- Scene Integration
+- Collider
+- Gameplay timing
+- Runtime physics
+- Build
+- Browser qualification
+
+
+================================================================================
+1. AI-ASSISTED ANIMATION AUTHORIZATION
+================================================================================
+
+Human Owner는 이번 Additive Animation Expansion Batch에 한해 다음을 허용합니다.
+
+- AI-assisted animation generation
+- AI motion generation
+- AI-assisted retargeting
+- AI-assisted keyframe cleanup
+- AI-assisted loop cleanup
+- AI-assisted contact-pose correction
+- AI-assisted motion variation generation
+
+이 권한은 Animation 제작에만 적용합니다.
+
+별도 승인 없이 다음은 금지합니다.
+
+- AI로 Character Identity 변경
+- AI로 새 Character Model 생성
+- AI로 새 얼굴 생성
+- AI로 새 Costume 또는 Texture 생성
+- 승인 Canon과 다른 외형 생성
+- third-party IP를 닮은 Character 생성
+- 실제 유명인 얼굴 사용
+- 유명 게임 캐릭터 동작을 그대로 복제
+- 출처 불명의 mocap을 권리 확인 없이 사용
+- AI 결과를 Human Cleanup 없이 최종 납품
+
+각 DELIVERY.md에 반드시 기록합니다.
+
+AI Tool / Model:
+Tool Version:
+Generation Method:
+Input Skeleton:
+Input Reference:
+Prompt or Motion Description:
+Generated Elements:
+Retargeting Method:
+Human Cleanup:
+Exact License:
+Commercial-use Permission:
+Redistribution Permission:
+Derivative-work Permission:
+Known AI Artifacts:
+Third-party Asset Used:
+Third-party IP Check:
+
+권리나 라이선스가 불명확하면 즉시 멈추고 다음으로 보고합니다.
+
+BLOCKED — PROVENANCE OR LICENSE INCOMPLETE
+
+AI가 빠르게 생성했다는 사실은 Cleanup, Rights, Preview, Contact 검증을 생략할 이유가 아닙니다.
+
+
+================================================================================
+2. FIRST OUTPUT — ANIMATION COVERAGE MATRIX
+================================================================================
+
+먼저 다음 파일을 작성합니다.
+
+ArtSource/Characters/ANIMATION_COVERAGE_MATRIX_v001.csv
+
+필수 컬럼:
+
+- Character
+- Existing File
+- Required Gameplay Clip
+- Motion Description
+- Priority
+- CORE / EXPANSION / ARCHIVE
+- Reuse / New Generation
+- Full Body / Upper Body / Additive
+- Loop
+- Root Motion
+- Expected Prop
+- Expected Contact Bone
+- Sync Group
+- Telegraph Start Frame
+- Contact Frame
+- Attack Active Start Frame
+- Attack Active End Frame
+- Grip Frame
+- Release Frame
+- Recovery Start Frame
+- Paired Reaction Clip
+- Rights Status
+- Preview Status
+- Human Owner Status
+- Known Issues
+
+기존 151 Animation FBX를 모두 조사하고 다음 중 하나로 분류합니다.
+
+REUSE CANDIDATE
+ARCHIVE ONLY
+MISSING / NEW GENERATION REQUIRED
+
+Matrix에는 기존 파일이 실제로 어떤 캐릭터 Skeleton을 사용하는지,
+동일 Skeleton으로 retarget 가능한지도 기록합니다.
+
+이 Matrix를 만들지 않고 다시 Generic Animation을 대량 생성하지 마십시오.
+
+
+================================================================================
+3. CHR00 PLAYER — BASE LOCOMOTION VERIFICATION
+================================================================================
+
+아래 Clip은 기존 모션에서 우선 Reuse Candidate를 찾습니다.
+품질이나 Skeleton이 맞지 않을 때만 새로 생성합니다.
+
+- CHR00_Idle
+  플레이어가 아무 행동 없이 자연스럽게 서 있는 기본 대기 모션.
+
+- CHR00_Walk_F
+  플레이어가 전방으로 이동할 때 사용하는 in-place 걷기.
+
+- CHR00_Walk_B
+  뒤를 보거나 조준한 채 후퇴할 때 사용하는 in-place 걷기.
+
+- CHR00_Strafe_L
+  상체 방향을 유지하며 왼쪽으로 이동하는 모션.
+
+- CHR00_Strafe_R
+  상체 방향을 유지하며 오른쪽으로 이동하는 모션.
+
+- CHR00_Turn_L_90
+  제자리에서 왼쪽으로 약 90도 방향을 전환하는 모션.
+
+- CHR00_Turn_R_90
+  제자리에서 오른쪽으로 약 90도 방향을 전환하는 모션.
+
+- CHR00_Turn_180
+  반대 방향을 향할 때 사용하는 짧은 제자리 회전.
+
+- CHR00_Move_Stop
+  이동 후 발을 정리하며 자연스럽게 멈추는 모션.
+
+- CHR00_Aim_Idle
+  조준 상태에서 상체와 시선이 목표 방향을 향하는 대기 모션.
+
+- CHR00_Aim_UpperBody_Additive
+  하체 이동과 혼합할 수 있는 상체 조준 Additive 모션.
+
+
+================================================================================
+3.1 CHR00 PLAYER — PICKUP
+================================================================================
+
+필수 신규 또는 교정 Clip:
+
+- CHR00_Pickup_Light_Floor
+  바닥에 놓인 Binder 같은 Light 물체를 몸을 낮춰 집는 모션.
+
+- CHR00_Pickup_Medium_Floor
+  바닥의 Chair 같은 Medium 물체를 양손과 하체 힘으로 집는 모션.
+
+- CHR00_Pickup_Light_Abort
+  Light 물체 획득이 취소됐을 때 물체를 잡지 않고 기본 자세로 복귀하는 모션.
+
+- CHR00_Pickup_Medium_Abort
+  Medium 물체 획득이 Reset·거리 이탈·상태 차단으로 취소됐을 때 복귀하는 모션.
+
+Acceptance:
+
+- Light와 Medium의 무게감이 구분되어야 함
+- 손이 실제 object contact 위치와 맞아야 함
+- 물체가 손에 닿기 전에 미리 들어 올리는 것처럼 보이면 안 됨
+- Abort에는 object ownership이 생긴 것처럼 보이는 grip이 남으면 안 됨
+
+
+================================================================================
+3.2 CHR00 PLAYER — CARRY
+================================================================================
+
+- CHR00_Carry_Light_UpperBody_Loop
+  Binder 같은 Light 물체를 들고 있는 동안 하체 이동과 혼합하는 상체 Loop.
+
+- CHR00_Carry_Medium_UpperBody_Loop
+  Chair 같은 Medium 물체를 양손으로 지지하며 이동하는 상체 Loop.
+
+- CHR00_Carry_Light_Turn_L
+  Light 물체를 든 상태로 왼쪽 방향을 전환하는 보정 모션.
+
+- CHR00_Carry_Light_Turn_R
+  Light 물체를 든 상태로 오른쪽 방향을 전환하는 보정 모션.
+
+- CHR00_Carry_Medium_Turn_L
+  Medium 물체의 무게를 유지하며 왼쪽으로 방향을 바꾸는 모션.
+
+- CHR00_Carry_Medium_Turn_R
+  Medium 물체의 무게를 유지하며 오른쪽으로 방향을 바꾸는 모션.
+
+- CHR00_Carry_Release
+  물체를 내려놓거나 Carry가 해제된 뒤 손과 상체가 기본 자세로 돌아오는 모션.
+
+Carry Loop는 기본적으로 Upper-body 또는 Avatar Mask 혼합을 전제로 합니다.
+
+하체:
+Walk / Strafe / Turn
+
+상체:
+Carry_Light 또는 Carry_Medium
+
+Character FBX 안에 Binder 또는 Chair mesh를 포함하지 마십시오.
+
+
+================================================================================
+3.3 CHR00 PLAYER — THROW
+================================================================================
+
+- CHR00_Throw_Light
+  Binder 같은 Light 물체를 빠르게 한 손 또는 보조 손을 사용해 던지는 모션.
+
+- CHR00_Throw_Medium
+  Chair 같은 Medium 물체를 양손과 몸통 회전을 이용해 힘껏 던지는 모션.
+
+- CHR00_Throw_Light_Recovery
+  Light Throw 직후 균형을 회복하고 기본 자세로 돌아가는 모션.
+
+- CHR00_Throw_Medium_Recovery
+  Medium Throw 후 큰 Follow-through에서 천천히 균형을 회복하는 모션.
+
+- CHR00_Throw_Blocked_Recovery
+  벽·상태 충돌·Reset 등으로 Throw가 실행되지 않았을 때 물체를 놓지 않고 복귀하는 모션.
+
+Light와 Medium의 차이:
+
+Light:
+- 빠른 wind-up
+- 짧은 release
+- 빠른 recovery
+
+Medium:
+- 양손 사용
+- 큰 무게중심 이동
+- 강한 몸통 회전
+- 느린 recovery
+
+Object Release Frame을 반드시 기록하십시오.
+
+
+================================================================================
+3.4 CHR00 PLAYER — CATCH / QUEUED THROW
+================================================================================
+
+- CHR00_Catch_Light_Center
+  정면 중앙으로 날아오는 Binder를 양손 또는 주손으로 받는 모션.
+
+- CHR00_Catch_Light_Left
+  플레이어 왼쪽으로 약간 벗어난 Binder를 몸을 틀어 받는 모션.
+
+- CHR00_Catch_Light_Right
+  플레이어 오른쪽으로 약간 벗어난 Binder를 몸을 틀어 받는 모션.
+
+- CHR00_Catch_Light_Miss
+  Binder를 잡으려 손을 뻗었지만 놓친 뒤 균형을 회복하는 모션.
+
+- CHR00_Catch_To_Carry_Light
+  Catch 성공 직후 Binder를 안정적으로 Carry 자세로 전환하는 모션.
+
+- CHR00_Catch_To_Throw_Light
+  정면 Catch 직후 멈추지 않고 곧바로 player-owned Throw로 이어지는 연속 모션.
+
+- CHR00_Catch_To_Throw_Light_Left
+  왼쪽에서 Catch한 Binder의 운동을 이어 받아 Throw하는 모션.
+
+- CHR00_Catch_To_Throw_Light_Right
+  오른쪽에서 Catch한 Binder의 운동을 이어 받아 Throw하는 모션.
+
+Normal Catch 결과:
+
+Catch
+→ object hand contact
+→ secure grip
+→ Carry pose
+
+Queued Throw 결과:
+
+Catch
+→ secure grip
+→ immediate redirected Throw
+→ recovery
+
+Catch Clip과 Throw Clip 사이에 기본 Idle pose가 끼면 안 됩니다.
+
+
+================================================================================
+3.5 CHR00 PLAYER — BODY CHECK / FAILURE REACTIONS
+================================================================================
+
+- CHR00_BodyCheck_Receive_F
+  정면 Body Check를 맞고 뒤로 크게 밀리는 반응.
+
+- CHR00_BodyCheck_Receive_L
+  왼쪽 측면에서 Body Check를 맞고 오른쪽으로 균형을 잃는 반응.
+
+- CHR00_BodyCheck_Receive_R
+  오른쪽 측면에서 Body Check를 맞고 왼쪽으로 밀리는 반응.
+
+- CHR00_Shove_Receive
+  적의 양손 밀치기나 Forearm Check를 맞고 짧게 비틀거리는 반응.
+
+- CHR00_Stagger_Medium
+  강한 충격을 받아 여러 걸음 비틀거리지만 즉시 쓰러지지는 않는 반응.
+
+- CHR00_Wall_Impact
+  밀려난 플레이어가 벽에 등이나 어깨를 부딪히는 반응.
+
+- CHR00_Knockdown_F
+  앞쪽 방향으로 균형을 잃고 비살상으로 넘어지는 모션.
+
+- CHR00_Knockdown_B
+  뒤로 밀리며 바닥에 넘어지는 비살상 모션.
+
+- CHR00_Getup_F
+  엎어진 상태에서 손과 무릎을 사용해 일어나는 모션.
+
+- CHR00_Getup_B
+  등을 대고 넘어진 상태에서 옆으로 돌아 일어나는 모션.
+
+- CHR00_Failure_Nonlethal
+  사망이 아닌 encounter failure를 보여주는 주저앉기·넘어짐 모션.
+
+- CHR00_Reset_Recover
+  Reset 이후 authored 기본 자세로 자연스럽게 복귀하는 모션.
+
+금지:
+
+- 총상 사망
+- 목이 꺾이는 연출
+- 피니시 공격
+- 처형
+- 과도한 유혈 표현
+- 시체처럼 완전히 축 늘어지는 lethal death
+
+
+================================================================================
+3.6 CHR00 PLAYER — MELEE VICTIM / GRAB REACTIONS
+================================================================================
+
+이 섹션은 ENY01 근접 공격과 동기화하기 위한 Source Art Expansion입니다.
+현재 Runtime 구현 승인이 아닙니다.
+
+- CHR00_Melee_Hit_Jab_F
+  짧은 정면 잽을 맞고 얼굴·상체가 순간적으로 뒤로 흔들리는 반응.
+
+- CHR00_Melee_Hit_Straight_F
+  강한 정면 스트레이트를 맞고 상체 전체가 뒤로 밀리는 반응.
+
+- CHR00_Melee_Hit_Hook_L
+  플레이어 왼쪽 측면에 훅을 맞고 머리와 몸통이 오른쪽으로 회전하는 반응.
+
+- CHR00_Melee_Hit_Hook_R
+  플레이어 오른쪽 측면에 훅을 맞고 머리와 몸통이 왼쪽으로 회전하는 반응.
+
+- CHR00_Melee_Hit_Body
+  복부 또는 옆구리 타격을 받고 몸을 앞으로 접으며 한 걸음 물러나는 반응.
+
+- CHR00_Melee_Hit_Forearm
+  팔뚝이나 어깨로 밀어낸 공격을 맞고 옆으로 비틀거리는 반응.
+
+- CHR00_Grabbed_Front_Enter
+  적이 정면에서 팔이나 상의를 붙잡았을 때 Grab 상태로 진입하는 모션.
+
+- CHR00_Grabbed_Front_Loop
+  적에게 붙잡힌 동안 균형을 유지하며 저항하는 짧은 Loop.
+
+- CHR00_Grab_Pull_OffBalance
+  적이 잡아당길 때 앞으로 끌려가며 균형을 잃는 반응.
+
+- CHR00_Grab_Break
+  플레이어가 적의 손을 떼어내며 Grab에서 빠져나오는 반응.
+
+- CHR00_Grab_Shove_Release
+  적이 붙잡은 뒤 밀어 놓았을 때 뒤로 물러나는 반응.
+
+- CHR00_Grab_Interrupted
+  Grab 과정이 다른 물체 충돌이나 Reset으로 중단될 때 복귀하는 모션.
+
+Grab은 비살상 통제 행동으로 표현합니다.
+
+금지:
+
+- 목 조르기
+- 관절 파괴
+- 목 꺾기
+- 처형
+- Suplex
+- Wrestling finisher
+- 공중으로 던지기
+
+
+================================================================================
+4. CHR00 PLAYER — CARGO STRAP
+================================================================================
+
+Source Art 제작은 허용합니다.
+
+이 지시는 C5 Runtime 구현 또는 Integration 승인이 아닙니다.
+
+
+[4.1 SOLO ATTACH]
+
+- CHR00_Strap_Deploy
+  허리 Reel에서 Strap과 Carabiner를 꺼내 사용하는 준비 모션.
+
+- CHR00_Strap_Carabiner_Open
+  플레이어가 Carabiner gate를 손으로 여는 모션.
+
+- CHR00_Strap_Attach_Chair_Solo
+  플레이어가 Chair 아래 하중 지지 금속 프레임에 Carabiner와 Clamp를 직접 연결하는 모션.
+
+- CHR00_Strap_Clamp_Close
+  부착 위치에 Clamp jaw를 닫아 고정하는 모션.
+
+- CHR00_Strap_Attach_Check
+  연결 후 손으로 한 번 당겨 부착 상태를 확인하는 모션.
+
+- CHR00_Strap_Tension_Enter
+  느슨한 Strap을 당겨 장력이 생기는 자세로 들어가는 모션.
+
+- CHR00_Strap_Tension_Loop
+  장력을 유지하며 Chair를 통제하는 Upper-body Loop.
+
+- CHR00_Strap_Redirect_L
+  몸을 왼쪽으로 기울여 Chair의 진행 방향을 왼쪽으로 바꾸는 모션.
+
+- CHR00_Strap_Redirect_R
+  몸을 오른쪽으로 기울여 Chair의 진행 방향을 오른쪽으로 바꾸는 모션.
+
+- CHR00_Strap_Release
+  플레이어가 명시적으로 Clamp 또는 Carabiner 연결을 해제하는 모션.
+
+- CHR00_Strap_Recover
+  Strap을 해제한 뒤 Reel과 손을 기본 위치로 복구하는 모션.
+
+- CHR00_Strap_Attach_Abort
+  유효한 Anchor가 없거나 Attach가 차단됐을 때 연결 없이 복귀하는 모션.
+
+
+[4.2 ALLY-ASSISTED ATTACH — PLAYER SIDE]
+
+- CHR00_Strap_Request_Ally_Assist
+  플레이어가 동료에게 Strap 연결 보조를 요청하는 손짓.
+
+- CHR00_Strap_Present_Carabiner
+  플레이어가 열린 Carabiner와 Clamp를 동료가 잡을 수 있도록 내미는 모션.
+
+- CHR00_Strap_Hold_Line_For_Ally
+  동료가 부착하는 동안 Strap 선을 느슨하지 않게 잡아주는 모션.
+
+- CHR00_Strap_Hold_Tension_For_Ally
+  동료가 연결 상태를 확인하는 동안 플레이어가 약한 장력을 유지하는 Loop.
+
+- CHR00_Strap_Receive_Control
+  동료의 작업 완료 후 플레이어가 Strap 제어권을 넘겨받는 모션.
+
+- CHR00_Strap_Assist_Abort
+  동료 보조 연결이 실패하거나 중단됐을 때 Strap을 회수하는 모션.
+
+
+================================================================================
+5. CHR01 ALLY — PHYSICAL SUPPLY
+================================================================================
+
+[5.1 BASE STATE / RESPONSE]
+
+- CHR01_Idle
+  고정된 support position에서 자연스럽게 대기하는 기본 모션.
+
+- CHR01_Idle_Variant_A
+  주변을 짧게 살피거나 작업 자세를 정리하는 첫 번째 Idle 변형.
+
+- CHR01_Idle_Variant_B
+  손이나 작업복을 정리하는 두 번째 Idle 변형.
+
+- CHR01_Look_To_Player
+  CallAlly 요청을 듣고 플레이어 방향을 확인하는 모션.
+
+- CHR01_Turn_To_Player_L
+  왼쪽에 있는 플레이어 쪽으로 상체와 발을 전환하는 모션.
+
+- CHR01_Turn_To_Player_R
+  오른쪽에 있는 플레이어 쪽으로 방향을 전환하는 모션.
+
+- CHR01_Call_Response
+  유효한 CallAlly 요청을 인식하고 공급을 시작하겠다는 짧은 반응.
+
+- CHR01_No_Supply_Response
+  사용할 수 있는 공급 물체가 없을 때 빈손임을 알리는 제스처.
+
+- CHR01_Blocked_Lane_Response
+  공급 경로가 막혔음을 플레이어에게 몸짓으로 알리는 반응.
+
+- CHR01_Reset
+  authored fixed support pose와 방향으로 돌아가는 모션.
+
+
+[5.2 BINDER SUPPLY]
+
+- CHR01_Reach_Binder
+  실제 Ally-pool Binder 쪽으로 손을 뻗는 모션.
+
+- CHR01_Grip_Binder
+  손가락과 손바닥이 Binder를 안정적으로 잡는 접촉 모션.
+
+- CHR01_Supply_Binder_Windup
+  Binder를 플레이어에게 던지기 전 팔과 몸통을 준비하는 모션.
+
+- CHR01_Supply_Binder_Release
+  정확한 release frame에서 Binder를 손에서 놓는 모션.
+
+- CHR01_Supply_Binder_Recovery
+  Binder를 던진 뒤 균형을 회복하고 Idle로 돌아가는 모션.
+
+- CHR01_Supply_Binder_Abort
+  Reset·경로 차단·예약 취소로 Binder를 던지지 않고 원래 지지 상태로 돌려놓는 모션.
+
+
+[5.3 CHAIR GROUNDED FEED]
+
+- CHR01_Approach_Chair
+  고정 위치 주변의 Chair에 손이 닿도록 자세를 조정하는 짧은 접근 모션.
+
+- CHR01_Grip_Chair
+  양손으로 Chair의 안정적인 프레임이나 등받이를 잡는 모션.
+
+- CHR01_Push_Chair_Enter
+  하체를 고정하고 몸을 앞으로 기울여 바닥 Push를 시작하는 모션.
+
+- CHR01_Push_Chair_Loop
+  Chair가 바닥을 유지한 채 움직이는 동안 힘을 전달하는 짧은 Loop.
+
+- CHR01_Push_Chair_Release
+  Chair가 진행하기 시작한 뒤 동료가 손을 놓는 모션.
+
+- CHR01_Push_Chair_Recovery
+  손을 놓은 뒤 뒤로 물러나 기본 자세로 돌아오는 모션.
+
+- CHR01_Push_Chair_Abort
+  경로 차단이나 Reset으로 Push를 중단하고 Chair를 안정화하는 모션.
+
+Chair Feed는 Chair를 공중에 들어 올리거나 던지는 모션이 아닙니다.
+
+two-hand contact
+→ grounded push
+→ visible hand release
+→ recovery
+
+
+================================================================================
+6. CHR01 ALLY — CARABINER ASSIST
+================================================================================
+
+아래 세 가지 Variant를 모두 Source Art 후보로 제작합니다.
+
+Runtime에서는 나중에 Human Owner가 선택한 한 방식 또는 조합만 사용할 수 있습니다.
+
+
+[6.1 VARIANT A — STABILIZE CHAIR]
+
+- CHR01_Assist_Chair_Stabilize_Enter
+  플레이어가 Strap을 연결하기 전에 동료가 Chair를 잡고 고정 자세로 들어가는 모션.
+
+- CHR01_Assist_Chair_Stabilize_Loop
+  플레이어가 Carabiner를 연결하는 동안 Chair가 움직이지 않도록 지지하는 Loop.
+
+- CHR01_Assist_Chair_Stabilize_Exit
+  연결이 끝난 뒤 동료가 Chair에서 손을 떼고 안전하게 물러나는 모션.
+
+
+[6.2 VARIANT B — ALLY ATTACHES CARABINER]
+
+- CHR01_Assist_Receive_Carabiner
+  플레이어가 내민 Carabiner와 Clamp를 동료가 받아드는 모션.
+
+- CHR01_Assist_Carabiner_Open
+  동료가 한 손으로 Carabiner gate를 여는 모션.
+
+- CHR01_Assist_Carabiner_Attach
+  열린 Carabiner를 Chair의 하중 지지 금속 프레임에 거는 모션.
+
+- CHR01_Assist_Clamp_Close
+  Clamp jaw를 닫아 Chair Anchor에 고정하는 모션.
+
+- CHR01_Assist_Attachment_Check
+  동료가 연결 부위를 한 번 당겨 제대로 잠겼는지 확인하는 모션.
+
+- CHR01_Assist_Hand_Control_Back
+  연결 완료 후 Strap 제어를 플레이어에게 돌려주는 모션.
+
+- CHR01_Assist_Carabiner_Abort
+  Anchor 불일치·Reset·상태 차단으로 연결을 취소하고 장비를 플레이어에게 반환하는 모션.
+
+
+[6.3 VARIANT C — ATTACH TO PLAYER TENSION]
+
+- CHR01_Assist_Attach_To_Player_Tension
+  동료가 Carabiner를 연결하는 순간 플레이어가 Strap 장력을 이어받도록 연결되는 협동 모션.
+
+- CHR01_Assist_Confirm_Ready
+  동료가 손짓이나 고개 움직임으로 연결 완료를 알리는 모션.
+
+- CHR01_Assist_Clear_From_Chair
+  플레이어가 Redirect를 시작하기 전에 동료가 Chair 진행 경로에서 물러나는 모션.
+
+
+[6.4 ROLE BOUNDARY]
+
+Player selects the Chair.
+Player initiates Attach.
+Ally may stabilize the Chair.
+Ally may physically attach the Carabiner.
+Player owns final Tension.
+Player owns final Redirect.
+Player owns final Release.
+Ally does not automatically select another target.
+Ally does not remotely control the Chair.
+Ally does not replace the Player’s final gameplay decision.
+
+
+[6.5 CHR01 ADDITIONAL REACTIONS]
+
+- CHR01_Duck_Incoming_Object
+  날아오는 Binder나 물체를 보고 몸을 낮춰 피하는 반응.
+
+- CHR01_Flinch_Light_Impact
+  Light 물체에 맞고 짧게 움찔하는 반응.
+
+- CHR01_Step_Back_Medium_Impact
+  Medium 물체가 가까이 충돌했을 때 한두 걸음 물러나는 반응.
+
+- CHR01_Chair_Collision_Reaction
+  움직이는 Chair와 부딪혀 균형을 잃는 비살상 반응.
+
+- CHR01_Point_Supply_Target
+  사용 가능한 Binder 또는 Chair 위치를 플레이어에게 가리키는 제스처.
+
+- CHR01_Call_Blocked_Gesture
+  현재 요청을 수행할 수 없음을 손짓으로 표현하는 모션.
+
+
+================================================================================
+7. ENY01 COMPLIANCE RUNNER — BASE MOVEMENT
+================================================================================
+
+ENY01은 동일 모델을 두 instance에 재사용합니다.
+
+아래 모션은 기존 파일에서 우선 Reuse Candidate를 찾고,
+품질이 맞지 않으면 생성합니다.
+
+- ENY01_Idle_A
+  기본적인 경계 자세로 서 있는 첫 번째 Idle.
+
+- ENY01_Idle_B
+  복제 느낌을 줄이기 위한 두 번째 경계 Idle.
+
+- ENY01_Alert
+  소리나 움직임을 감지하고 긴장 상태로 들어가는 모션.
+
+- ENY01_Spot_Player
+  플레이어를 발견하고 몸과 시선을 플레이어 방향으로 전환하는 모션.
+
+- ENY01_Move_F
+  플레이어를 향해 전진하는 in-place 이동.
+
+- ENY01_Move_B
+  플레이어를 보며 뒤로 거리를 조절하는 이동.
+
+- ENY01_Strafe_L
+  플레이어를 향한 채 왼쪽으로 위치를 조정하는 이동.
+
+- ENY01_Strafe_R
+  플레이어를 향한 채 오른쪽으로 위치를 조정하는 이동.
+
+- ENY01_Turn_L_90
+  왼쪽으로 약 90도 방향을 전환하는 모션.
+
+- ENY01_Turn_R_90
+  오른쪽으로 약 90도 방향을 전환하는 모션.
+
+- ENY01_Turn_180
+  플레이어가 뒤로 이동했을 때 반대 방향으로 전환하는 모션.
+
+- ENY01_Move_Stop
+  이동에서 자연스럽게 멈추며 공격 준비 자세로 전환하는 모션.
+
+- ENY01_Reset
+  authored 초기 위치와 기본 자세로 돌아가는 모션.
+
+
+================================================================================
+7.1 ENY01 — CORE PRESSURE: DASH BODY CHECK
+================================================================================
+
+이 패턴은 현재 Prototype Core에 가장 적합한
+한 가지 readable close-range pressure pattern입니다.
+
+- ENY01_Pressure_Telegraph
+  공격 전에 어깨를 낮추고 발을 고정해 돌진을 명확히 예고하는 모션.
+
+- ENY01_Pressure_Dash
+  Runtime 이동과 결합되는 짧은 in-place 돌진 달리기 모션.
+
+- ENY01_Pressure_BodyCheck
+  어깨 또는 양팔 상체로 플레이어를 강하게 밀어내는 비살상 공격 모션.
+
+- ENY01_Pressure_BodyCheck_HitFollowThrough
+  Body Check가 적중한 뒤 앞으로 관성을 이어가며 균형을 정리하는 모션.
+
+- ENY01_Pressure_BodyCheck_MissRecovery
+  공격이 빗나갔을 때 앞으로 쏠린 몸을 회복하며 빈틈을 보이는 모션.
+
+- ENY01_Pressure_Interrupted
+  돌진 또는 Body Check 도중 Binder·Chair 충돌로 공격이 중단되는 반응.
+
+- ENY01_Pressure_Reset
+  공격 sequence 종료 후 기본 pressure stance로 돌아가는 모션.
+
+Pressure_Dash와 BodyCheck의 실제 이동 거리는
+Animation Root Motion이 아니라 Runtime logic이 소유합니다.
+
+
+================================================================================
+8. ENY01 — NONLETHAL MELEE ATTACK EXPANSION
+================================================================================
+
+다음은 Source Art Expansion입니다.
+
+NOT ACTIVE IN CURRENT PROTOTYPE
+REQUIRES SEPARATE GAMEPLAY AUTHORIZATION
+
+공격은 군인·격투기 선수처럼 화려한 기술이 아니라,
+평범한 회사 보안·컴플라이언스 인력이 플레이어를 제지하고
+밀어내는 거친 행동으로 표현합니다.
+
+
+--------------------------------------------------------------------------------
+8.1 SINGLE STRIKE ATTACKS
+--------------------------------------------------------------------------------
+
+- ENY01_Melee_Jab_L
+  왼손으로 빠르게 거리를 확인하며 플레이어 얼굴이나 상체를 찌르는 짧은 잽.
+
+- ENY01_Melee_Jab_R
+  오른손으로 짧고 빠르게 내지르는 잽.
+
+- ENY01_Melee_Straight_R
+  오른손을 몸통 회전과 함께 정면으로 강하게 뻗는 스트레이트.
+
+- ENY01_Melee_Straight_L
+  왼손으로 정면을 강하게 밀어붙이는 스트레이트.
+
+- ENY01_Melee_Hook_L
+  왼쪽에서 원을 그리며 플레이어 측면을 노리는 왼손 훅.
+
+- ENY01_Melee_Hook_R
+  오른쪽에서 플레이어 머리나 상체 측면을 노리는 오른손 훅.
+
+- ENY01_Melee_Body_Hook_L
+  왼손으로 플레이어 옆구리나 복부를 노리는 낮은 훅.
+
+- ENY01_Melee_Body_Hook_R
+  오른손으로 플레이어 몸통을 노리는 낮은 훅.
+
+- ENY01_Melee_Overhand_R
+  크게 예고한 뒤 위에서 아래로 내려치는 오른손 공격.
+
+- ENY01_Melee_Overhand_L
+  왼손으로 크게 휘둘러 내려치는 느리고 읽기 쉬운 공격.
+
+- ENY01_Melee_Forearm_Check
+  팔뚝과 어깨를 사용해 플레이어 상체를 옆으로 밀어내는 제지 동작.
+
+- ENY01_Melee_TwoHand_Shove
+  양손으로 플레이어 가슴이나 어깨를 강하게 밀어 거리를 벌리는 공격.
+
+- ENY01_Melee_Palm_Shove
+  한 손바닥으로 플레이어 상체를 밀어 균형을 흔드는 짧은 공격.
+
+- ENY01_Melee_Close_Shoulder_Check
+  아주 가까운 거리에서 어깨로 짧게 부딪혀 플레이어를 밀어내는 공격.
+
+- ENY01_Melee_Attack_Whiff_Recovery
+  Punch나 Hook이 빗나간 뒤 팔과 몸의 관성을 회수하는 공통 Recovery.
+
+- ENY01_Melee_Attack_Block_Recoil
+  공격이 Chair·Binder·환경에 막혔을 때 팔과 상체가 튕겨 나오는 반응.
+
+- ENY01_Melee_Attack_Interrupted
+  공격 도중 외부 충격을 받아 공격을 취소하고 비틀거리는 반응.
+
+Acceptance:
+
+- 각 공격은 Telegraph 또는 읽을 수 있는 시작 자세가 있어야 함
+- Attack Active Frame이 명확해야 함
+- Hit 이후와 Miss 이후 Recovery가 구분되어야 함
+- 공격 모션 자체에 실제 전진 이동을 과도하게 bake하지 않음
+
+
+--------------------------------------------------------------------------------
+8.2 SHORT MELEE COMBOS
+--------------------------------------------------------------------------------
+
+Combo는 최대 2타 중심으로 제작합니다.
+
+보스처럼 긴 연속 공격을 만들지 않습니다.
+
+- ENY01_Melee_Combo_Jab_Cross
+  빠른 Jab으로 반응을 유도한 뒤 반대 손 Straight로 이어지는 2타 연계.
+
+- ENY01_Melee_Combo_Jab_Hook_L
+  정면 Jab 뒤 왼쪽 Hook으로 측면을 노리는 2타 연계.
+
+- ENY01_Melee_Combo_Jab_Hook_R
+  정면 Jab 뒤 오른쪽 Hook으로 이어지는 2타 연계.
+
+- ENY01_Melee_Combo_Body_Hook_Shove
+  몸통 Hook 뒤 양손 밀치기로 플레이어를 뒤로 보내는 2단 연계.
+
+- ENY01_Melee_Combo_Forearm_Shove
+  Forearm Check로 자세를 무너뜨린 뒤 양손으로 밀어내는 연계.
+
+- ENY01_Melee_Combo_Hook_Shove
+  측면 Hook 이후 가까워진 플레이어를 밀어 거리를 벌리는 연계.
+
+- ENY01_Melee_Combo_Interrupted
+  첫 타격 이후 물체 충돌이나 Reset으로 두 번째 공격이 취소되는 반응.
+
+- ENY01_Melee_Combo_Recovery
+  2타 연계 종료 후 공격 자세에서 기본 pressure stance로 복귀하는 모션.
+
+Combo는 Source Art 후보이며
+현재 Prototype Runtime 공격 수를 늘리는 승인으로 해석하지 않습니다.
+
+
+--------------------------------------------------------------------------------
+8.3 GRAB / CONTROL ATTACKS
+--------------------------------------------------------------------------------
+
+Grab은 목 조르기나 처형이 아니라
+플레이어의 팔·어깨·작업복을 붙잡아 이동을 제지하는 비살상 통제 행동입니다.
+
+- ENY01_Melee_Grab_Attempt_Front
+  정면에서 양손 또는 한 손으로 플레이어 팔과 상체를 붙잡으려 시도하는 모션.
+
+- ENY01_Melee_Grab_Contact
+  손이 플레이어에게 닿고 실제 Grab 상태가 성립하는 접촉 모션.
+
+- ENY01_Melee_Grab_Hold_Loop
+  플레이어를 붙잡은 채 짧은 시간 버티는 제어 Loop.
+
+- ENY01_Melee_Grab_Pull_OffBalance
+  붙잡은 플레이어를 앞으로 당겨 중심을 무너뜨리는 모션.
+
+- ENY01_Melee_Grab_Turn_Control
+  플레이어의 팔이나 어깨를 잡고 몸 방향을 옆으로 돌리는 제지 모션.
+
+- ENY01_Melee_Grab_Shove_Release
+  붙잡은 플레이어를 앞으로 또는 뒤로 밀어 놓으며 Grab을 해제하는 모션.
+
+- ENY01_Melee_Grab_Aside_Release
+  플레이어를 옆으로 비켜 밀며 통로를 확보하고 Grab을 종료하는 모션.
+
+- ENY01_Melee_Grab_Miss
+  플레이어가 범위를 벗어나 손이 허공을 잡은 뒤 균형을 회복하는 모션.
+
+- ENY01_Melee_Grip_Break_Reaction
+  플레이어가 적의 손을 떼어냈을 때 팔과 상체가 뒤로 밀리는 반응.
+
+- ENY01_Melee_Grab_Interrupted
+  Grab 도중 Binder·Chair 충돌이나 Reset으로 잡기가 중단되는 반응.
+
+- ENY01_Melee_Grab_Release_Recovery
+  Grab 종료 후 양손을 회수하고 기본 공격 자세로 돌아가는 모션.
+
+금지:
+
+- Choke
+- Neck Grab
+- Joint Break
+- Suplex
+- Lethal Throw
+- Ground Execution
+- Submission Hold
+- Wrestling Finisher
+
+
+--------------------------------------------------------------------------------
+8.4 NONLETHAL MELEE DIRECTION
+--------------------------------------------------------------------------------
+
+허용 방향:
+
+- rough corporate security restraint
+- short punch
+- hook
+- forearm check
+- two-hand shove
+- shoulder check
+- arm or clothing grab
+- off-balance pull
+- grab-and-shove release
+
+금지 방향:
+
+- martial-arts superhero
+- military special forces
+- lethal execution
+- sword combat
+- firearm combat
+- grenade combat
+- boss combo
+- elite-only motion
+- cinematic finisher
+- flying kick
+- spinning kick
+- acrobatic takedown
+
+
+================================================================================
+9. ENY01 — OBJECT THROW EXPANSION
+================================================================================
+
+다음은 미래 Source Art 후보입니다.
+
+SOURCE ART CANDIDATE
+NOT ACTIVE IN CURRENT PROTOTYPE
+REQUIRES SEPARATE GAMEPLAY AUTHORIZATION
+
+- ENY01_Pickup_Light_Floor
+  바닥의 Binder 같은 Light 물체를 적이 집는 모션.
+
+- ENY01_Carry_Light
+  Light 물체를 들고 플레이어를 추적하거나 위치를 조정하는 상체 Loop.
+
+- ENY01_Aim_Throw_Light
+  들고 있는 Light 물체를 플레이어 방향으로 조준하는 준비 자세.
+
+- ENY01_Throw_Light_Overhand
+  Light 물체를 머리 위 또는 어깨 위로 던지는 강한 투척 모션.
+
+- ENY01_Throw_Light_Underhand
+  가까운 거리에서 Light 물체를 아래에서 위로 던지는 짧은 투척.
+
+- ENY01_Throw_Light_Recovery
+  물체를 던진 뒤 팔과 중심을 회복하는 모션.
+
+- ENY01_Throw_Interrupted
+  물체를 던지기 전에 피격·Reset으로 Throw가 취소되는 반응.
+
+- ENY01_Kick_Light_Prop
+  바닥의 Light 물체를 발로 차서 플레이어 방향으로 보내는 모션.
+
+- ENY01_Shove_Chair
+  적이 Chair를 양손으로 밀어 플레이어 또는 통로 쪽으로 보내는 모션.
+
+- ENY01_Chair_Push_Recovery
+  Chair를 민 뒤 손을 놓고 기본 자세로 돌아오는 모션.
+
+이 모션을 제작해도 Enemy object ownership,
+enemy throw origin 또는 Runtime 구현이 승인되는 것은 아닙니다.
+
+
+================================================================================
+10. ENY01 — PHYSICAL IMPACT REACTIONS
+================================================================================
+
+이 게임에서는 적의 공격 모션만큼 물체에 맞은 반응이 중요합니다.
+
+
+[10.1 LIGHT BINDER IMPACT]
+
+- ENY01_Hit_Light_F
+  정면에서 Binder를 맞고 얼굴과 상체가 뒤로 흔들리는 반응.
+
+- ENY01_Hit_Light_L
+  왼쪽에서 Light 물체를 맞고 오른쪽으로 몸이 돌아가는 반응.
+
+- ENY01_Hit_Light_R
+  오른쪽에서 Light 물체를 맞고 왼쪽으로 몸이 돌아가는 반응.
+
+- ENY01_Hit_Light_B
+  뒤에서 Light 물체를 맞고 앞으로 움찔하는 반응.
+
+- ENY01_Hit_Light_Head
+  머리 근처에 Binder가 맞아 짧게 고개를 숙이거나 비틀거리는 반응.
+
+- ENY01_Hit_Light_Recovery
+  Light 충격 이후 빠르게 균형을 되찾는 모션.
+
+
+[10.2 MEDIUM CHAIR IMPACT]
+
+- ENY01_Stagger_Medium_F
+  정면 Chair 충돌로 여러 걸음 뒤로 밀리는 반응.
+
+- ENY01_Stagger_Medium_L
+  왼쪽 측면에서 Chair를 맞고 오른쪽으로 비틀거리는 반응.
+
+- ENY01_Stagger_Medium_R
+  오른쪽 측면에서 Chair를 맞고 왼쪽으로 비틀거리는 반응.
+
+- ENY01_Stagger_Medium_B
+  뒤쪽 Chair 충돌로 앞으로 넘어질 듯 흔들리는 반응.
+
+- ENY01_Spin_Stagger
+  회전력이 있는 측면 충돌로 상체가 크게 돌아가는 반응.
+
+- ENY01_Chair_Impact_Reaction
+  움직이는 Chair와 직접 충돌했을 때 사용하는 대표 Medium 반응.
+
+- ENY01_Desk_Impact_Reaction
+  밀려난 적이 고정 Desk에 부딪히는 반응.
+
+- ENY01_Wall_Impact_Reaction
+  적이 벽에 등·어깨를 부딪히며 멈추는 반응.
+
+
+[10.3 KNOCKDOWN / RECOVERY]
+
+- ENY01_Knockdown_F
+  앞쪽으로 비살상 넘어짐.
+
+- ENY01_Knockdown_B
+  뒤쪽으로 밀리며 넘어짐.
+
+- ENY01_Knockdown_L
+  왼쪽으로 균형을 잃고 옆으로 넘어짐.
+
+- ENY01_Knockdown_R
+  오른쪽으로 균형을 잃고 옆으로 넘어짐.
+
+- ENY01_Grounded_Dazed_Loop
+  바닥에서 짧게 정신을 가다듬는 Loop.
+
+- ENY01_Getup_F
+  엎어진 상태에서 일어나는 모션.
+
+- ENY01_Getup_B
+  등을 대고 넘어진 상태에서 일어나는 모션.
+
+- ENY01_Regain_Balance
+  넘어지지 않고 마지막 순간 균형을 되찾는 모션.
+
+
+[10.4 OFFICE OBJECT REACTIONS]
+
+- ENY01_Trip_Over_Object
+  바닥의 Binder나 작은 물체에 발이 걸려 앞으로 휘청이는 반응.
+
+- ENY01_Bump_Drawer
+  이동 중 Drawer에 몸이나 다리를 부딪히는 반응.
+
+- ENY01_Stumble_Chair
+  Chair caster나 프레임에 걸려 균형을 잃는 반응.
+
+- ENY01_Catch_Balance_Desk
+  넘어지기 전에 Desk를 손으로 짚어 균형을 회복하는 반응.
+
+
+================================================================================
+11. GEAR01 MECHANICAL MOTION
+================================================================================
+
+- GEAR01_Reel_Deploy
+  Waist Reel에서 Strap이 밖으로 풀려 나오는 기계 동작.
+
+- GEAR01_Reel_Retract
+  사용 후 Strap이 Reel 안으로 되감기는 동작.
+
+- GEAR01_Carabiner_Open
+  Carabiner gate가 회전해 열리는 동작.
+
+- GEAR01_Carabiner_Close
+  Carabiner gate가 닫히고 잠기는 동작.
+
+- GEAR01_Clamp_Open
+  Clamp jaw가 Chair Anchor를 받을 수 있도록 벌어지는 동작.
+
+- GEAR01_Clamp_Close
+  Clamp jaw가 하중 지지 금속 프레임을 감싸며 닫히는 동작.
+
+- GEAR01_Strap_Slack
+  Strap에 장력이 없고 느슨하게 늘어진 상태.
+
+- GEAR01_Strap_Tension
+  Strap이 당겨져 직선에 가까운 장력 상태가 되는 동작.
+
+- GEAR01_Strap_Release
+  연결이 해제되며 Strap 끝이 Anchor에서 떨어지는 동작.
+
+- GEAR01_Strap_Snapback
+  해제 후 Strap이 Reel 방향으로 빠르게 회수되는 짧은 동작.
+
+- GEAR01_Reset
+  모든 기계 부품이 authored stored state로 복귀하는 동작.
+
+
+[Required Pivot/Bone Candidate]
+
+- GEAR_Root
+  전체 장비 Transform의 기준 Root.
+
+- WaistReel
+  허리에 고정되는 Reel 본체 회전 기준.
+
+- StrapOrigin
+  Strap이 Reel에서 시작되는 위치.
+
+- StrapEnd
+  Carabiner 또는 Clamp와 연결되는 Strap 끝점.
+
+- CarabinerRoot
+  Carabiner 전체 이동과 회전 기준.
+
+- CarabinerGate
+  열고 닫히는 gate 회전축.
+
+- ClampRoot
+  Clamp 전체 방향과 연결 기준.
+
+- ClampJaw_L
+  왼쪽 Clamp jaw 회전축.
+
+- ClampJaw_R
+  오른쪽 Clamp jaw 회전축.
+
+- ChairAnchorTarget
+  Chair의 하중 지지 금속 프레임 연결 위치 가이드.
+
+Character Animation FBX 안에 gameplay Binder, Chair 또는 GEAR01 mesh를 영구 포함하지 마십시오.
+
+Prop은 Preview에만 사용합니다.
+
+
+================================================================================
+12. ANIMATION TECHNICAL CONTRACT
+================================================================================
+
+모든 Character Clip:
+
+- Humanoid-compatible
+- same skeleton hierarchy per character
+- same bone naming per character
+- Unity Y-Up
+- forward +Z
+- scale 1,1,1
+- feet-ground center pivot
+- 30 fps 기본
+- baked animation
+- no unintended scale keys
+- no unintended root translation
+- in-place by default
+- no embedded gameplay prop
+- start/end pose blendable
+- foot sliding minimized
+- hand/object clipping minimized
+- no broken fingers
+- no inverted knees
+- no sudden pelvis jump
+- no floating feet
+
+
+[Full-body 권장]
+
+- Pickup
+- Throw
+- Catch
+- Attach
+- BodyCheck
+- Punch
+- Hook
+- Shove
+- Grab
+- Knockdown
+- Getup
+- Wall Impact
+
+
+[Upper-body / Additive 권장]
+
+- Aim
+- Carry
+- Strap Tension
+- Object Hold
+- Minor Hit Reaction
+- Look Direction
+
+
+[Root Motion]
+
+기본 납품은 in-place입니다.
+
+특히 다음 모션의 실제 이동 거리는 Runtime이 소유합니다.
+
+- Dash
+- Body Check
+- Shove
+- Grab Pull
+- Chair Push
+- Binder Throw
+- Knockback
+
+Root Motion Preview가 필요하면 별도 후보로 제출할 수 있지만,
+Runtime integration용 기본 Clip은 in-place로 유지합니다.
+
+
+================================================================================
+12.1 각 CLIP DELIVERY METADATA
+================================================================================
+
+각 Clip의 DELIVERY.md 또는 Clip manifest에 다음을 기록합니다.
+
+Clip Name:
+Motion Description:
+Start Frame:
+End Frame:
+Loop:
+Full Body / Upper Body / Additive:
+Root Motion:
+Expected Prop:
+Expected Contact Bone:
+Expected Hand Socket:
+Sync Group:
+Telegraph Start Frame:
+Telegraph End Frame:
+Primary Hand Contact Frame:
+Secondary Hand Contact Frame:
+Grip Confirm Frame:
+Attack Active Start Frame:
+Attack Active End Frame:
+Object Release Frame:
+Carabiner Open Frame:
+Carabiner Lock Frame:
+Clamp Close Frame:
+Grab Contact Frame:
+Grab Lock Frame:
+Grab Release Frame:
+Impact Frame:
+Recovery Start Frame:
+Recovery End Frame:
+End State:
+Paired Reaction Clip:
+Known Clipping:
+Known Foot Sliding:
+Preview File:
+Source File:
+AI Tool / Model:
+Human Cleanup:
+Rights Status:
+
+Gameplay logic이나 Unity Animation Event를 Source FBX에 임의로 박지 마십시오.
+
+정확한 frame 번호를 문서로 제공하고,
+Runtime event 설정은 통합 담당자가 수행합니다.
+
+
+================================================================================
+13. PAIRED SYNC GROUPS
+================================================================================
+
+Paired Sync Group은 두 캐릭터 또는 Character와 Prop의
+Preview timing을 맞추기 위한 기준입니다.
+
+Runtime synchronization 승인이 아닙니다.
+
+
+[SYNC_ALLY_BINDER_SUPPLY]
+
+CHR01_Supply_Binder_Release
+Binder physical Release
+
+설명:
+동료 손에서 Binder가 떨어지는 frame과
+실제 Rigidbody release 후보 frame을 맞춥니다.
+
+
+[SYNC_PLAYER_CATCH]
+
+CHR00_Catch_Light_Center
+Binder hand contact
+
+설명:
+플레이어 손이 Binder에 닿는 순간과
+Catch ownership 후보 frame을 맞춥니다.
+
+
+[SYNC_QUEUED_THROW]
+
+CHR00_Catch_To_Throw_Light
+Binder Catch
+Binder player-owned Throw
+
+설명:
+Catch contact 이후 Binder가 손에서 사라지지 않고
+하나의 연속 Throw로 이어져야 합니다.
+
+
+[SYNC_ALLY_CHAIR_FEED]
+
+CHR01_Push_Chair_Release
+Chair grounded physical Release
+
+설명:
+동료가 Chair에서 손을 떼는 frame과
+Chair가 독립된 grounded feed로 전환되는 frame을 맞춥니다.
+
+
+[SYNC_STRAP_SOLO]
+
+CHR00_Strap_Attach_Chair_Solo
+GEAR01_Carabiner_Open
+GEAR01_Carabiner_Close
+GEAR01_Clamp_Close
+ChairAnchorTarget
+
+설명:
+플레이어 손·Carabiner·Clamp·Chair Anchor가
+같은 위치와 timing에서 연결되어야 합니다.
+
+
+[SYNC_STRAP_ALLY_ASSIST]
+
+CHR00_Strap_Hold_Line_For_Ally
+CHR01_Assist_Carabiner_Attach
+GEAR01_Carabiner_Close
+GEAR01_Clamp_Close
+ChairAnchorTarget
+
+설명:
+플레이어가 Strap을 잡고 있는 동안
+동료가 Carabiner를 연결하고 Clamp를 닫는 협동 모션입니다.
+
+
+[SYNC_ENEMY_BODYCHECK]
+
+ENY01_Pressure_BodyCheck
+CHR00_BodyCheck_Receive_F
+
+설명:
+적의 어깨 또는 양팔 contact frame과
+플레이어가 밀려나기 시작하는 impact frame을 맞춥니다.
+
+
+[SYNC_ENEMY_JAB]
+
+ENY01_Melee_Jab_L 또는 ENY01_Melee_Jab_R
+CHR00_Melee_Hit_Jab_F
+
+설명:
+적 주먹의 짧은 contact와
+플레이어 머리·상체가 반응하는 frame을 맞춥니다.
+
+
+[SYNC_ENEMY_STRAIGHT]
+
+ENY01_Melee_Straight_R 또는 ENY01_Melee_Straight_L
+CHR00_Melee_Hit_Straight_F
+
+설명:
+정면 Straight impact와
+플레이어가 뒤로 밀리기 시작하는 frame을 맞춥니다.
+
+
+[SYNC_ENEMY_HOOK_L]
+
+ENY01_Melee_Hook_L
+CHR00_Melee_Hit_Hook_L
+
+설명:
+왼쪽 Hook이 플레이어 측면에 닿는 frame과
+상체 회전 반응을 맞춥니다.
+
+
+[SYNC_ENEMY_HOOK_R]
+
+ENY01_Melee_Hook_R
+CHR00_Melee_Hit_Hook_R
+
+설명:
+오른쪽 Hook과
+반대 방향으로 돌아가는 플레이어 반응을 맞춥니다.
+
+
+[SYNC_ENEMY_BODY_HOOK]
+
+ENY01_Melee_Body_Hook_L 또는 ENY01_Melee_Body_Hook_R
+CHR00_Melee_Hit_Body
+
+설명:
+적 주먹이 복부·옆구리에 닿는 frame과
+플레이어가 몸을 접는 반응을 맞춥니다.
+
+
+[SYNC_ENEMY_SHOVE]
+
+ENY01_Melee_TwoHand_Shove
+CHR00_Shove_Receive
+
+설명:
+적 양손이 플레이어 상체를 밀기 시작하는 frame과
+플레이어 후퇴 반응을 맞춥니다.
+
+
+[SYNC_ENEMY_GRAB]
+
+ENY01_Melee_Grab_Attempt_Front
+ENY01_Melee_Grab_Contact
+ENY01_Melee_Grab_Hold_Loop
+CHR00_Grabbed_Front_Enter
+CHR00_Grabbed_Front_Loop
+
+설명:
+적 손과 플레이어 팔·어깨 접촉 위치가 일치하고
+두 캐릭터가 Grab 상태에서 관통하지 않아야 합니다.
+
+
+[SYNC_ENEMY_GRAB_BREAK]
+
+ENY01_Melee_Grip_Break_Reaction
+CHR00_Grab_Break
+
+설명:
+플레이어가 적의 손을 떼어내는 순간
+양쪽 팔의 방향과 반응 timing을 맞춥니다.
+
+
+[SYNC_ENEMY_GRAB_SHOVE_RELEASE]
+
+ENY01_Melee_Grab_Shove_Release
+CHR00_Grab_Shove_Release
+
+설명:
+적이 Grab을 해제하며 플레이어를 밀어내는 frame과
+플레이어가 뒤로 이동하는 반응을 맞춥니다.
+
+
+================================================================================
+14. PREVIEW BEFORE BULK FBX
+================================================================================
+
+대량 FBX를 바로 Push하지 마십시오.
+
+먼저 각 Clip 후보의 저용량 Preview를 제출합니다.
+
+Required Preview:
+
+- front view
+- side view
+- rear view when relevant
+- actual gameplay-camera distance
+- prop-contact close view
+- paired-character sync view when relevant
+- 0.25x slow-motion contact view
+- skeleton overlay when contact is unclear
+
+
+[공격 모션 Preview 필수 항목]
+
+- Telegraph
+- Attack Active Start
+- Contact
+- Attack Active End
+- Hit Follow-through
+- Miss Recovery
+- Foot position
+- Root movement
+- Contact bone
+- Paired reaction
+
+
+[Grab Preview 필수 항목]
+
+- Grab attempt
+- First hand contact
+- Second hand contact
+- Hold pose
+- Character spacing
+- No arm/body penetration
+- Break timing
+- Release timing
+- Recovery
+
+
+[Prop Interaction Preview 필수 항목]
+
+- hand contact
+- grip
+- lift
+- release
+- prop trajectory direction
+- recovery
+- no duplicate embedded prop
+
+Human Owner가 Preview를 통과시킨 Clip만
+final FBX와 editable source를 납품합니다.
+
+
+================================================================================
+15. DELIVERY ORDER
+================================================================================
+
+STEP 1
+Existing 151 Animation mapping과 Coverage Matrix 작성.
+
+Output:
+ANIMATION_COVERAGE_MATRIX_v001.csv
+
+
+STEP 2
+CHR00 / CHR01 CORE interaction Preview 제작.
+
+- Pickup
+- Carry
+- Throw
+- Catch
+- Queued Throw
+- Binder Supply
+- Chair Feed
+
+
+STEP 3
+Human Owner가 CHR00 / CHR01 CORE Preview 검토.
+
+
+STEP 4
+승인된 CHR00 / CHR01 CORE Clip의 FBX와 editable source 납품.
+
+
+STEP 5
+CHR00 / CHR01 / GEAR01 Ally-assisted Strap Preview 제작.
+
+- Solo Attach
+- Chair Stabilize
+- Ally Carabiner Attach
+- Player Tension Handoff
+- Redirect
+- Release
+
+
+STEP 6
+Human Owner가 cooperative Attach Variant A/B/C를 검토하고 사용할 후보를 선택.
+
+
+STEP 7
+ENY01 Core Body Check와 Physical Impact Reaction Preview 제작.
+
+- Telegraph
+- Dash
+- Body Check
+- Miss Recovery
+- Light Hit
+- Medium Stagger
+- Knockdown
+- Getup
+
+
+STEP 8
+Human Owner가 ENY01 Core pressure와 reaction을 검토.
+
+
+STEP 9
+ENY01 Single Melee Attack Preview 제작.
+
+- Jab
+- Straight
+- Hook
+- Body Hook
+- Forearm Check
+- Two-hand Shove
+- Shoulder Check
+
+
+STEP 10
+ENY01 Grab / Control Preview 제작.
+
+- Grab Attempt
+- Grab Contact
+- Hold
+- Pull Off-balance
+- Shove Release
+- Grab Miss
+- Grip Break
+- Interrupted Grab
+
+
+STEP 11
+Human Owner가 ENY01 Melee와 Grab 후보를 검토.
+
+
+STEP 12
+ENY01 Object Throw와 2-hit Combo Expansion Preview 제작.
+
+- Light Prop Pickup
+- Light Throw
+- Chair Shove
+- Jab-Cross
+- Jab-Hook
+- Forearm-Shove
+
+
+STEP 13
+승인된 Clip만 final FBX와 editable source로 Export.
+
+각 단계는 one-purpose commit으로
+art/characters-animation branch에 일반 push합니다.
+
+
+================================================================================
+16. ONE-PURPOSE COMMIT EXAMPLES
+================================================================================
+
+docs: map existing animation coverage v001
+art: preview CHR00 and CHR01 core interactions v001
+art: deliver selected CHR00 and CHR01 core clips v001
+art: preview ally-assisted cargo strap motions v001
+art: preview ENY01 body check and impact reactions v001
+art: preview ENY01 melee and grab expansion v001
+art: deliver selected ENY01 gameplay clips v001
+
+금지:
+
+- git add .
+- git add -A
+- force push
+- history rewrite
+- pushed commit amend
+- unrelated binary를 같은 commit에 포함
+- 한 commit에 모든 캐릭터와 모든 Package를 섞기
+
+Stage는 정확한 파일 경로만 지정합니다.
+
+
+================================================================================
+17. DELIVERY ACCEPTANCE CHECK
+================================================================================
+
+각 Animation Package는 다음을 모두 만족해야 합니다.
+
+[ ] Coverage Matrix entry exists
+[ ] Motion Description exists
+[ ] editable source exists
+[ ] selected FBX exists
+[ ] preview exists
+[ ] front preview exists
+[ ] side preview exists
+[ ] gameplay-camera preview exists
+[ ] contact preview exists when required
+[ ] paired sync preview exists when required
+[ ] same character skeleton is preserved
+[ ] Humanoid mapping is valid
+[ ] scale is 1,1,1
+[ ] forward is +Z
+[ ] Y-Up is preserved
+[ ] no unintended root translation
+[ ] no unintended scale animation
+[ ] foot sliding is reviewed
+[ ] hand/object clipping is reviewed
+[ ] attack contact frame is documented
+[ ] release frame is documented
+[ ] recovery frame is documented
+[ ] rights metadata is complete
+[ ] AI tool and human cleanup are documented
+[ ] only allowed paths changed
+[ ] known issues are honestly recorded
+
+다음이면 REVISION REQUIRED입니다.
+
+- Generic animation 이름만 바꾼 경우
+- 손과 물체가 심하게 관통하는 경우
+- 공격 contact가 reaction과 맞지 않는 경우
+- Grab에서 두 캐릭터가 겹치는 경우
+- 발이 바닥에서 미끄러지는 경우
+- Skeleton hierarchy가 Clip마다 다른 경우
+- Root scale이 변하는 경우
+- AI 결과를 Cleanup 없이 제출한 경우
+- Source 없이 FBX만 제출한 경우
+- 권리 정보가 없는 경우
+- 기존 파일을 덮어쓴 경우
+
+
+================================================================================
+18. CURRENT AUTHORITY BOUNDARY
+================================================================================
+
+이번 지시는 Animation Source Art 제작 권한입니다.
+
+현재 승인하지 않는 작업:
+
+- PR
+- merge
+- contest Runtime integration
+- Production approval declaration
+- main modification
+- history rewrite
+- C5 gameplay implementation
+- C6 gameplay implementation
+- C7 gameplay implementation
+- Enemy melee Runtime implementation
+- Enemy Grab Runtime implementation
+- Enemy object ownership implementation
+- Enemy object Throw Runtime implementation
+- Animator Controller integration
+- Gameplay Scene modification
+- Input Actions modification
+- Package modification
+- Web build
+
+정확한 상태:
+
+ANIMATION SOURCE ART CREATION:
+AUTHORIZED WITHIN THIS DOCUMENT
+
+PREVIEW CREATION:
+AUTHORIZED
+
+SELECTED FBX EXPORT:
+AUTHORIZED AFTER HUMAN OWNER PREVIEW PASS
+
+RUNTIME INTEGRATION:
+NOT AUTHORIZED
+
+C5 / C7 GAMEPLAY:
+NOT AUTHORIZED
+
+PRODUCTION APPROVAL:
+HUMAN OWNER DECISION REQUIRED
+
+PR / MERGE:
+NOT AUTHORIZED
+
+
+================================================================================
+19. FINAL DIRECTION
+================================================================================
+
+BREAK NOTICE의 캐릭터 애니메이션 방향은 다음 문장으로 고정합니다.
+
+Grounded world. Absurd physics.
+
+캐릭터 자체가 슈퍼히어로나 군인이 되어서는 안 됩니다.
+
+플레이어, 동료, 적 모두 평범한 회사 사람처럼 보여야 합니다.
+
+재미와 과장은 다음에서 발생해야 합니다.
+
+- Binder를 던지고 받는 순간
+- Chair가 바닥을 미끄러지는 순간
+- 동료와 Carabiner를 연결하는 협동
+- 적이 몸으로 밀어붙이는 순간
+- Punch와 Hook의 읽기 쉬운 충돌
+- Grab과 Shove의 비살상 제지
+- 사무용 물체에 맞고 크게 비틀거리는 반응
+- 벽, Desk, Drawer, Chair와의 물리적 충돌
+
+총기·수류탄·Elite·군사 특수부대 모션은 기존 binary로 보존하되
+현재 Prototype Canon과 Runtime에서는 제외합니다.
+
+새 Animation은 수량이 아니라 다음 순서로 평가합니다.
+
+Gameplay relevance
+→ readable telegraph
+→ correct contact
+→ physical weight
+→ recovery quality
+→ skeleton consistency
+→ rights completeness
+→ final polish
+
+Animation quantity is cheap.
+Correct contact, sync and integration quality are the real work.

@@ -361,3 +361,30 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `No runtime source, C5, damage-destruction, Package, ProjectSettings, production-art integration or protected Human Owner untracked item changed during acceptance closure.`
 - Next:
   `No active Contest implementation authorization remains. C5 requires a new direct Human Owner instruction.`
+
+## S0 Operations Floor Showcase Authority Registration — 2026-08-11
+
+- Work Package:
+  `S0 — SHOWCASE AUTHORITY REGISTRATION / EAR-CONTEST-0002-S0-001`.
+- Human Owner Decision Preserved:
+  `APPROVE / preserve CONTEST-0001 and the accepted Scene; create the separate CR-0004 → ADR-0024 → CONTEST-0002 lineage and contest/game-builders-2026-showcase branch; documentation only; S1 and C5 remain unauthorized.`
+- Exact Baseline:
+  `contest/game-builders-2026 local-origin-remote 15c915c4c7552113941149e84ba5cc1fea9c63f1 / main local-origin-remote 28b7f70c4b6299159afe5b99ea7b98d1e5399352 / tracked-staged-conflict 0 / protected Human Owner items 26.`
+- Directive Evidence:
+  `Reconciliation 21,218 bytes / a3e3fb0b1690dabd1d61480b5155f22d9720efaa9db0ad11aa52e3a2e57e6d0d; Animation 54,065 bytes / 6c5b6aca6e83686331a1d64d967d0489327aac35d285e0f2aa7da9fb1972bb69; Map 23,050 bytes / dfe3d2f312bb84dae7df7d596f4a7153f7ec69cfaac3590b93cbc6ab78833834.`
+- Work:
+  `Registered byte-identical canonical directive copies; created CR-0004, ADR-0024, CONTEST-0002, Owner Directive Index, Showcase Gameplay Lock, Showcase Asset Matrix and Designer A/B v002 handoffs; synchronized AGENTS, MANIFEST, CHANGELOG, DESIGN_STATUS, DECISION_LOG, Sprint, Collaboration and Asset Needs live records.`
+- Preserved Foundation:
+  `CONTEST-0001 unchanged; Contest_SingleRoomGraybox.unity unchanged at 89,175 bytes and SHA-256 0ed96ae20a74a8d91888dd108915eb9eeaa56da7d3ba6581b660a1e966e8de3a; stable contest and main unchanged.`
+- Designer Boundaries:
+  `Designer A remote 6030c4af6b800d0d7e80013382babd7b1cfc58a0 remains REVIEW HOLD with unresolved rights; Designer B remote 7536f551fca146e225794219bc219d7f07dd5314 retains nine candidate sources with Runtime approval count 0; no art branch checkout or fast-forward occurred.`
+- Tests Added:
+  `0`.
+- Tests / Manual / Browser / Build:
+  `NOT RUN / DOCUMENTATION ONLY`.
+- Publication:
+  `One documentation-only containing commit on contest/game-builders-2026-showcase; exact SHA and normal-push equality are recorded in the completion report after publication.`
+- Scope:
+  `Runtime code, Unity Scene/Prefab/Input/Package, ArtSource, Runtime Art, tests, build/browser, PR, merge, stable contest and main were not modified.`
+- Next:
+  `Issue a new one-shot baseline-bound relay only if the Human Owner authorizes S1 Large Showcase Graybox. Historical C5 remains closed.`

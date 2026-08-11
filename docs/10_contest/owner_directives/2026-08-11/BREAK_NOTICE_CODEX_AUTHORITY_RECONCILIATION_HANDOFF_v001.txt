@@ -1,0 +1,860 @@
+BREAK NOTICE — CODEX AUTHORITY RECONCILIATION HANDOFF v001
+기준일: 2026-08-11 KST
+Human Owner: 조윤성
+Repository: Jooooyun/break-notice
+
+===============================================================================
+0. 이 인계의 목적
+===============================================================================
+
+Human Owner와 GPT Pro가 최신 Git 기록 이후 다음 두 영역을 새로 확정했다.
+
+1. Designer A Character / Rig / Animation / GEAR01 제작 범위
+2. Designer B Environment / Map / UI / VFX 제작 방향과 공모전 Showcase 게임 루프
+
+Codex는 이 대화 전체를 알 필요가 없다.
+
+Codex가 알아야 하는 것은 다음뿐이다.
+
+- 현재 Git의 검증된 사실
+- Git 이후 Human Owner가 확정한 최종 결정 원문
+- 기존 권위와 새 결정 사이의 충돌
+- 무엇이 기존 검증 기준선으로 보존되는가
+- 무엇이 새 Showcase 범위로 이동하는가
+- 다음에 실행할 정확히 하나의 bounded work package
+
+이 인계는 새 Gameplay 구현을 즉시 시작하라는 권한이 아니다.
+
+첫 작업은 반드시 다음이어야 한다.
+
+AUTHORITY RECONCILIATION / CHANGE CONTROL / HANDOFF REGISTRATION ONLY
+
+Runtime code, Unity Scene, Prefab, Package, Input Actions, Web build, PR, merge,
+Production Art runtime integration을 시작하지 않는다.
+
+
+===============================================================================
+1. 최신 Git 사실
+===============================================================================
+
+Repository:
+Jooooyun/break-notice
+
+Stable Contest Branch:
+contest/game-builders-2026
+
+Current Contest HEAD:
+15c915c4c7552113941149e84ba5cc1fea9c63f1
+
+Latest Commit:
+docs(contest): record charged throw acceptance
+
+Latest Commit Time:
+2026-08-11 18:18:31 KST
+GitHub UTC: 2026-08-11T09:18:31Z
+
+Main:
+28b7f70c4b6299159afe5b99ea7b98d1e5399352
+UNCHANGED
+
+Current Contest implementation source:
+f1fd9b15f407be9003eff622231e338358376bcc
+feat(contest): add charged throws and varied ally supply
+
+f1fd commit time:
+2026-08-11 17:56:36 KST
+
+Current Contest branch is exactly two documentation commits ahead of f1fd.
+
+
+===============================================================================
+2. 최신 Contest 기능·검증 상태
+===============================================================================
+
+Current state:
+
+C0-C4 IMPLEMENTATION COMPLETE
+C4 HUMAN ACCEPTANCE PASS
+POST-ACCEPTANCE THROW / PICKUP / ALLY-SUPPLY TUNING HUMAN MANUAL PASS
+C5 NOT AUTHORIZED
+MAIN PRODUCT GATE CLOSED
+
+Verified current behavior:
+
+- Light / Medium player base Throw speed: 12.5 / 8.0
+- LMB Throw hold charge: full charge 1.2 seconds
+- Throw speed multiplier: 1.0x~1.6x
+- Same-mass Rigidbody kinetic energy: up to approximately 2.56x
+- Charged queued Catch-Throw preserved
+- Ally Binder supply variation: resettable 0.9x~1.1x sequence
+- Exact center ray targeting preserved
+- Direct floor pickup assist:
+  - horizontal 8 degrees
+  - upward 8 degrees
+  - downward 65 degrees
+- 2.8m range, solid line of sight, wall rejection preserved
+- No damage, breakage, fracture or destruction system added
+- C5 Cargo Strap not started
+
+Automated qualification:
+
+EditMode:
+65 / 65 PASS
+
+PlayMode:
+59 / 59 PASS
+
+Total:
+124 / 124 PASS
+
+Web Development Build:
+PASS
+
+Build GUID:
+3cc7416d44c44067bc51c6474c46351d
+
+Unity warnings:
+0
+
+Unity errors:
+0
+
+HTTP:
+19 / 19 PASS
+
+Human Owner gameplay checklist:
+ALL PASS / 2026-08-11
+
+Final browser-console-zero is not newly inferred from the Human checklist.
+
+
+===============================================================================
+3. 현재 Git에 존재하는 C4 Ally의 정확한 한계
+===============================================================================
+
+현재 Git의 Ally는 다음까지 구현됐다.
+
+- authored physical supply object로 이동
+- Binder visible acquisition and physical Toss
+- Chair grounded feed
+- Ready exclamation
+- untargeted Q supply
+- solid movement-path rejection
+- supply-lane rejection
+- assisted normal Catch
+- queued player Throw
+- Reset restoration
+
+현재 Git에는 다음이 없다.
+
+- Player를 계속 따라다니는 full mobile Follow Ally
+- large showcase map
+- Follow Anchor Network
+- Grab Rescue
+- Combat Tag
+- Ally-assisted Carabiner connection
+- PASS / BRACE / BREAK Team Readiness
+- Team Finisher
+- four Drawer solutions
+- 48m × 34m showcase layout
+- 5~7 minute replay-focused loop
+
+따라서 현재 구현을 새 Showcase가 이미 존재한다고 기록하면 안 된다.
+
+
+===============================================================================
+4. Art Branch 최신 상태
+===============================================================================
+
+Designer A branch:
+art/characters-animation
+
+Current HEAD:
+6030c4af6b800d0d7e80013382babd7b1cfc58a0
+
+Latest commit:
+docs: require Designer A delivery correction
+
+Current disposition of prior batch:
+
+REVISION REQUIRED
+REVIEW HOLD
+DO NOT INTEGRATE
+
+Prior batch:
+
+- 159 files
+- 155 FBX
+- 4 guides
+- approximately 131 MB
+- CHR00 / CHR01 / ENY01 / elite / firearm-heavy content
+- rights and provenance unresolved
+- existing history must be preserved
+- no Runtime approval
+
+
+Designer B branch:
+art/environment-ui-vfx
+
+Current HEAD:
+7536f551fca146e225794219bc219d7f07dd5314
+
+Latest commit:
+Add environment UI VFX assets
+
+Commit time:
+2026-08-10 23:40:07 KST
+
+Added files:
+
+ArtSource/Props/PRP_Copier/Source/Copier.blend
+ArtSource/Props/PRP_Copier/Source/Copier.blend1
+ArtSource/Props/PRP_Copier/Source/copier_2.blend
+ArtSource/Props/PRP_DrawerCabinet/Source/DrawerCabinet.blend
+ArtSource/Props/PRP_FileBinder/Source/Untitled.blend
+ArtSource/Props/PRP_FileBinder/Source/Untitled.blend1
+ArtSource/Props/PRP_OfficeChair/Source/PRP_OfficeChair_A_Blockout_v001.blend
+ArtSource/Props/PRP_OfficeChair/Source/PRP_OfficeChair_A_Blockout_v001.blend1
+ArtSource/Props/PRP_OfficeChair/Source/officeChair.blend
+
+Disposition:
+
+- preserve existing files and history
+- do not delete or rewrite
+- candidate source only
+- no DELIVERY metadata in the commit
+- naming/version compliance unresolved
+- no Runtime approval
+- no PR/merge/integration
+
+
+===============================================================================
+5. Git 이후 Human Owner가 확정한 두 원문
+===============================================================================
+
+The following exact files are Human Owner directives.
+
+A. Designer A animation directive
+
+Source filename:
+BREAK_NOTICE_GAMEPLAY_ANIMATION_COVERAGE_v003_FINAL.txt
+
+SHA-256:
+6c5b6aca6e83686331a1d64d967d0489327aac35d285e0f2aa7da9fb1972bb69
+
+Bytes:
+54065
+
+Required repository destination:
+docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_GAMEPLAY_ANIMATION_COVERAGE_v003_FINAL.txt
+
+
+B. Showcase map and gameplay direction
+
+Source filename:
+BREAK_NOTICE_CONTEST_SHOWCASE_MAP_DESIGN_v001.txt
+
+SHA-256:
+dfe3d2f312bb84dae7df7d596f4a7153f7ec69cfaac3590b93cbc6ab78833834
+
+Bytes:
+23050
+
+Required repository destination:
+docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_CONTEST_SHOWCASE_MAP_DESIGN_v001.txt
+
+
+Authority rule:
+
+Human Owner's latest direct instruction
+→ these two exact owner-directive files
+→ new approved Change Control / ADR / Contest ticket
+→ existing contest documents
+→ historical handoff documents
+
+Do not paraphrase these two TXT files and then discard the originals.
+The exact files and their SHA-256 values must remain registered.
+
+
+===============================================================================
+6. Designer A 새 권위 처리
+===============================================================================
+
+The Animation Coverage v003 directive supersedes conflicting limits in the old
+Designer A handoff where the old file says that only CHR01 A1 may proceed.
+
+New exact interpretation:
+
+- existing 0810_designerA/** files remain preserved
+- existing batch remains unapproved
+- existing rights/provenance problems remain unresolved
+- no existing binary is automatically approved
+- additive animation creation in approved ArtSource paths is newly authorized
+- AI-assisted animation generation is allowed only under the exact v003 rules
+- new Character Identity, model, costume and texture generation remains prohibited
+- all new clips require source, preview, metadata, rights and Human review
+- firearm / grenade / sword / elite assets remain Archive Only for current Prototype
+- no Runtime integration is authorized
+
+Required derived files:
+
+docs/10_contest/handoffs/DESIGNER_A_CODEX_WORK_ORDER_v002.md
+docs/10_contest/handoffs/DESIGNER_A_HUMAN_GUIDE_v002.md
+
+Do not overwrite the historical v001 guidance without preserving its history.
+The v002 documents must explicitly cite the owner directive TXT and its hash.
+
+
+===============================================================================
+7. Designer B 새 권위 처리
+===============================================================================
+
+The Showcase Map Design v001 file is the owner-approved source for:
+
+- large Showcase layout
+- environment asset list
+- modular architecture direction
+- gameplay readability
+- map zones
+- Designer B asset priorities
+- VFX and dressing requirements
+
+It does not authorize Designer B to modify:
+
+- Runtime code
+- gameplay Scene
+- Prefab integration
+- Packages
+- ProjectSettings
+- Input Actions
+- Build scripts
+
+Designer B produces modular source assets and previews.
+Codex / gameplay integration owns the Graybox and Runtime Scene.
+
+Required derived files:
+
+docs/10_contest/handoffs/DESIGNER_B_CODEX_WORK_ORDER_v002.md
+docs/10_contest/handoffs/DESIGNER_B_HUMAN_GUIDE_v002.md
+
+Current 7536f551 source files must be mapped as:
+
+REUSE CANDIDATE
+REVISION REQUIRED
+ARCHIVE
+MISSING
+
+Do not delete or rewrite the files.
+For compliant future delivery, create clean versioned assets in approved paths.
+Names such as Untitled.blend, .blend1 and unversioned generic names must not be
+used as final delivery names.
+
+
+===============================================================================
+8. 새로운 Showcase 게임 방향
+===============================================================================
+
+New Showcase target:
+
+Scene:
+Contest_OperationsFloor_Showcase_v001.unity
+
+Existing Scene:
+Contest_SingleRoomGraybox.unity
+
+Existing Scene role:
+frozen regression harness for C0-C4
+
+New Showcase role:
+5~7 minute contest experience
+
+
+Map:
+
+48m × 34m single contiguous open-office floor
+
+Core topology:
+
+- Entry Staging
+- Direct Equipment Bay
+- Central Clash Bowl
+- West Logistics Loop
+- Central Cubicle Ring
+- East Physics Lane
+- North Tag Arena / Drawer Gate
+- Exit Run / Next-Area Tease
+
+Path structure:
+
+- Central fast/risky route
+- West Ally/Supply route
+- East Chair/Strap/Physics route
+- figure-eight reconnection
+
+Recommended object instances:
+
+- Binder ×5
+- Chair ×3
+- Drawer ×1
+- Copier ×1
+
+Enemy:
+
+- same Compliance Runner definition ×2
+- no firearm
+- no elite
+- no boss
+- no second enemy archetype
+
+Ally roles:
+
+1. Follow
+2. Fetch
+3. Supply
+4. Brace
+5. Rescue
+6. Combat Tag
+7. Finisher Partner
+
+Team Readiness:
+
+PASS
+BRACE
+BREAK
+
+Any two distinct badges:
+TEAM READY
+
+Finisher:
+
+FIN-P-001 — HANDOVER CRASH
+
+Drawer solutions:
+
+1. Direct Chair Throw
+2. Strap Redirect
+3. Runner Causal Collision
+4. Team Finisher
+
+Target experience:
+
+5~7 minutes
+immediate first throw
+first Ally pass by approximately two minutes
+route choice
+Rescue/Tag/Assist
+Drawer objective
+short Team Finisher
+immediate Exit
+replay result card
+
+
+===============================================================================
+9. 기존 권위와 새 방향의 충돌
+===============================================================================
+
+Codex must explicitly record this conflict matrix.
+
+A. Room and Scene
+
+Old:
+one small Contest_SingleRoomGraybox
+
+New:
+old Scene preserved + separate 48m × 34m Showcase Scene
+
+
+B. Ally
+
+Old:
+fixed / bounded supply movement
+
+New:
+player-following Ally with authored Follow Anchor Network
+
+
+C. Object Count
+
+Old:
+Binder 3 / Chair 2 / Drawer 1 / Copier 1
+
+New Showcase:
+Binder 5 / Chair 3 / Drawer 1 / Copier 1
+
+
+D. Ally Scope
+
+Old:
+Supply / Catch / queued Throw
+
+New:
+Follow / Fetch / Supply / Brace / Rescue / Combat Tag / Finisher
+
+
+E. Feature Exclusions
+
+Old:
+no active Tag / Finisher / mobile Relay Position
+
+New Showcase:
+bounded Tag, Team Readiness and one Prototype-specific Finisher
+
+
+F. Next Gate
+
+Old:
+C5 Cargo Strap is the next checkpoint
+
+New:
+the scope changed enough that C5 must not start directly
+
+
+G. Documentation Brake
+
+Old:
+new Map / Level / Encounter design frozen
+
+New:
+Human Owner directly approved a Change-Control exception through the exact
+Showcase Map Design TXT
+
+These conflicts must not be hidden through casual edits.
+They require formal Change Control and a new Contest ticket.
+
+
+===============================================================================
+10. 권장 Authority 구조
+===============================================================================
+
+Do not rewrite CONTEST-0001 as if it always contained the new design.
+
+Preserve:
+
+CONTEST-0001
+Single-room C0-C4 browser-playable foundation
+accepted regression harness
+
+
+Create:
+
+CR-0004
+GAME BUILDERS SHOWCASE GAMEPLAY REDESIGN
+
+ADR-0024
+PRESERVE CONTEST-0001 AND CREATE OPERATIONS FLOOR SHOWCASE
+
+CONTEST-0002
+OPERATIONS FLOOR 5–7 MINUTE SHOWCASE
+
+Suggested exact paths:
+
+docs/00_project/CR-0004-CONTEST-SHOWCASE-GAMEPLAY-REDESIGN.md
+docs/09_adrs/ADR-0024-CONTEST-OPERATIONS-FLOOR-SHOWCASE.md
+docs/06_codex/CONTEST-0002-OPERATIONS-FLOOR-SHOWCASE.md
+docs/10_contest/owner_directives/2026-08-11/OWNER_DIRECTIVE_INDEX.md
+docs/10_contest/showcase/SHOWCASE_GAMEPLAY_LOCK.md
+docs/10_contest/showcase/SHOWCASE_ASSET_MATRIX.md
+
+Update only after the Change Control is internally consistent:
+
+AGENTS.md
+MANIFEST.json
+CHANGELOG.md
+docs/00_project/DESIGN_STATUS.md
+docs/10_contest/GAME_BUILDERS_2026_SPRINT.md
+
+
+===============================================================================
+11. 새로운 Work Package 순서
+===============================================================================
+
+Do not continue directly as old C5.
+
+Use a new Showcase series.
+
+S0 — Authority Reconciliation
+
+- register exact owner TXT files and hashes
+- create CR-0004
+- create ADR-0024
+- create CONTEST-0002
+- define old/new authority boundary
+- update status mirrors
+- no Runtime implementation
+
+
+S1 — Large Showcase Graybox
+
+- create separate 48m × 34m Scene
+- figure-eight topology
+- zones and lanes
+- existing logic unchanged
+- no Production Art
+
+
+S2 — Mobile Ally Follow
+
+- Follow Anchor Network
+- side switching
+- catch-up
+- blocked behavior
+- regroup
+- no Supply adaptation yet
+
+
+S3 — Mobile Ally Supply Adaptation
+
+- Fetch
+- mobile Binder Toss
+- mobile Chair Feed
+- Reset
+- preserve C4 regression
+
+
+S4 — Team Context and Rescue
+
+- Q context arbitration
+- Grab Rescue
+- Combat Tag
+- PASS / BRACE / BREAK
+- TEAM READY
+
+
+S5 — Cargo Strap and Ally Assist
+
+- bounded Attach
+- Chair stabilize
+- Carabiner assist
+- Tension handoff
+- Redirect
+- Release
+
+
+S6 — Enemy Pressure
+
+- Runner Body Check
+- Shove
+- short Grab
+- Stagger states
+- one Attack Token
+
+
+S7 — Drawer Objective and Exit
+
+- four solution hooks
+- Parking Bay
+- Exit activation
+- result card
+
+
+S8 — Team Finisher
+
+- HANDOVER CRASH
+- paired animation
+- bounded camera
+- physical Drawer result
+- immediate control return
+
+
+S9 — Art / VFX / Audio / UI Integration and Web Qualification
+
+- only technically accepted assets
+- no unverified license
+- full Web build and browser validation
+
+
+===============================================================================
+12. 권장 Branch 전략
+===============================================================================
+
+Do not destabilize the accepted Contest branch immediately.
+
+Recommended new branch:
+
+contest/game-builders-2026-showcase
+
+Required source:
+
+15c915c4c7552113941149e84ba5cc1fea9c63f1
+
+The branch must not be created during the first read-only reconciliation unless
+the Human Owner explicitly adopts this recommendation.
+
+main remains unchanged.
+
+No PR or merge is authorized by this handoff.
+
+
+===============================================================================
+13. Codex가 지금 수행할 정확히 하나의 작업
+===============================================================================
+
+TASK ID:
+AR-CONTEST-0002-001
+
+TASK:
+READ-ONLY AUTHORITY RECONCILIATION AND PROPOSED REGISTRATION PLAN
+
+This is not Showcase implementation authorization.
+
+
+Required reads:
+
+AGENTS.md
+initial MASTER EXECUTION PROMPT
+docs/00_project/DESIGN_STATUS.md
+docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md
+docs/02_design/PROTOTYPE_CONTENT_LOCK.md
+docs/02_design/ALLY_RELAY_SUPPRESSED_CONTRACT.md
+docs/04_technical/G3_TECHNICAL_BASELINE.md
+docs/03_art/OFFICE_CORE_KIT.md
+docs/10_contest/ART_DELIVERY_STANDARD.md
+current Designer A/B handoffs
+the two exact Human Owner TXT directives
+
+
+Required Git checks:
+
+git fetch --all --tags
+git rev-parse contest/game-builders-2026
+git rev-parse origin/contest/game-builders-2026
+git rev-parse origin/main
+git rev-parse origin/art/characters-animation
+git rev-parse origin/art/environment-ui-vfx
+git status --porcelain=v1 --untracked-files=all
+
+Expected remote values:
+
+contest/game-builders-2026:
+15c915c4c7552113941149e84ba5cc1fea9c63f1
+
+main:
+28b7f70c4b6299159afe5b99ea7b98d1e5399352
+
+art/characters-animation:
+6030c4af6b800d0d7e80013382babd7b1cfc58a0
+
+art/environment-ui-vfx:
+7536f551fca146e225794219bc219d7f07dd5314
+
+
+Required output:
+
+1. Exact Git State
+2. Existing Verified Contest State
+3. New Human Owner Directive Inventory
+4. SHA-256 Verification
+5. Authority Conflict Matrix
+6. Supersession Matrix
+7. Existing Scene Preservation Plan
+8. Proposed CR-0004 Outline
+9. Proposed ADR-0024 Outline
+10. Proposed CONTEST-0002 Outline
+11. Proposed S0-S9 Work Packages
+12. Designer A v002 Handoff Delta
+13. Designer B v002 Handoff Delta
+14. Exact Proposed File Allowlist
+15. Exact Forbidden Paths
+16. Risks and Stop Conditions
+17. Recommended Branch Decision
+18. Final Scope Declaration
+
+
+Required final declaration:
+
+RUNTIME CODE MODIFIED: NO
+UNITY SCENE MODIFIED: NO
+PREFAB MODIFIED: NO
+PACKAGE MODIFIED: NO
+INPUT ACTIONS MODIFIED: NO
+WEB BUILD RUN: NO
+ART RUNTIME INTEGRATION: NO
+PR CREATED: NO
+MERGE PERFORMED: NO
+MAIN MODIFIED: NO
+SHOWCASE IMPLEMENTATION AUTHORIZED: NO
+C5 AUTHORIZED: NO
+
+
+===============================================================================
+14. Stop Conditions
+===============================================================================
+
+Stop immediately if:
+
+- Contest HEAD differs from 15c915c4c7552113941149e84ba5cc1fea9c63f1
+- main differs from 28b7f70c4b6299159afe5b99ea7b98d1e5399352
+- tracked or staged changes already exist
+- protected Human Owner work changed
+- either TXT hash differs
+- exact owner directive files are missing
+- Designer A/B branch heads differ unexpectedly
+- old Scene must be overwritten
+- new package appears necessary
+- main modification appears necessary
+- rights or license risk is discovered
+- implementation would be required to complete the reconciliation report
+
+
+===============================================================================
+15. Human Owner가 Codex에 보낼 시작 메시지
+===============================================================================
+
+아래 메시지와 이 파일, 그리고 두 Owner Directive TXT를 함께 전달한다.
+
+“이 작업은 구현이 아니라 최신 권위 조정이다.
+
+먼저 AGENTS.md와 최초 MASTER EXECUTION PROMPT를 전부 읽고,
+contest/game-builders-2026의 exact current HEAD,
+main, Designer A/B branch와 clean status를 검증하라.
+
+현재 Git에 없는 최신 Human Owner 결정은 함께 제공한 두 TXT가 원문 권위다.
+
+1. BREAK_NOTICE_GAMEPLAY_ANIMATION_COVERAGE_v003_FINAL.txt
+2. BREAK_NOTICE_CONTEST_SHOWCASE_MAP_DESIGN_v001.txt
+
+대화 내용을 추측하거나 기존 문서에 억지로 끼워 맞추지 마라.
+
+기존 CONTEST-0001과 Contest_SingleRoomGraybox는 C0-C4 accepted regression
+baseline으로 보존하고, 새 방향은 CR-0004 / ADR-0024 / CONTEST-0002로
+분리하는 방안을 감사하라.
+
+이번 실행에서는 코드, Scene, Prefab, Package, Input, Build, Runtime Art,
+PR, merge, main을 건드리지 마라.
+
+AR-CONTEST-0002-001 형식으로 exact conflict/supersession matrix와
+S0-S9 신규 작업 계획을 보고한 뒤 멈춰라.
+
+이 보고 자체는 Showcase 구현이나 C5 승인이 아니다.”
+
+
+===============================================================================
+16. 최종 원칙
+===============================================================================
+
+Codex에게 긴 대화 기록을 넘기지 않는다.
+
+넘길 것은 다음 네 가지다.
+
+1. exact Git baseline
+2. exact owner directive files
+3. authority conflict and supersession rules
+4. one bounded next task
+
+현재 검증된 C0-C4를 지우지 않는다.
+새 Showcase를 과거 설계에 몰래 덧씌우지 않는다.
+
+Existing verified foundation:
+preserve
+
+New contest showcase direction:
+register through formal Change Control
+
+Designer source work:
+separate from Runtime integration
+
+Implementation:
+one bounded work package at a time
+
+No bullshit.
+One source of truth, one current branch baseline, one next task.

@@ -1,77 +1,91 @@
 # Asset Needs Status
 
-Status vocabulary는 `ART_DELIVERY_STANDARD.md`를 따른다. 승인 visual
-direction의 존재와 runtime deliverable의 존재를 혼동하지 않는다.
+- Current Authority Phase: `CONTEST-0002 S0 COMPLETE / S1 NOT AUTHORIZED`
+- Runtime Integration Boundary: `S9 ONLY / SEPARATE HUMAN OWNER AUTHORIZATION`
+- Runtime-approved Designer A/B production assets: `0`
+- Graybox Policy: `ACTIVE`
 
-| Asset ID | Asset Name | Owner | Priority | Blocking Feature | Exact Required Files | Source Path | Expected Runtime Path | Status | Due | Latest Commit/PR | Missing Item | Defect | Fallback | Human Owner Decision |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CHR00 | Player | Designer A | P0 | C8 character integration | `CHR00_Player_v001.fbx`, 2K PBR set, Humanoid rig, required in-place clips, preview, DELIVERY | `ArtSource/Characters/CHR00_Player/` | `Game/Assets/_Project/Art/Characters/CHR00/` | MISSING | 2026-08-19 | — | All runtime files | — | Capsule Player | Visual reference approved; runtime asset not approved |
-| CHR01 | Fixed Ally | Designer A | P0 | C4 presentation / C8 | `CHR01_Ally_v001.fbx`, 2K PBR set, Humanoid rig, Binder/Chair supply clips, preview, DELIVERY | `ArtSource/Characters/CHR01_Ally/` | `Game/Assets/_Project/Art/Characters/CHR01/` | MISSING | 2026-08-11 | — | All runtime files | — | Capsule + code-driven supply | Visual reference approved; runtime asset missing |
-| ENY01 | Compliance Runner | Designer A | P0 | C7 presentation / C8 | one FBX, PBR set, Humanoid rig, Move/Pressure/Reaction/Stagger/Reset clips, preview, DELIVERY | `ArtSource/Characters/ENY01_ComplianceRunner/` | `Game/Assets/_Project/Art/Characters/ENY01/` | MISSING | 2026-08-17 | — | Identity and all runtime files | No approved identity visual | Capsule + code-driven movement | One shared model for two instances |
-| GEAR01 | Cargo Strap | Designer A | P0 | C5 presentation / C8 | Reel, carabiner, clamp FBX; strap visual; valid chair anchor; texture; preview; DELIVERY | `ArtSource/Equipment/GEAR01_CargoStrap/` | `Game/Assets/_Project/Art/Equipment/GEAR01/` | MISSING | 2026-08-13 | — | All runtime files | — | LineRenderer + primitive reel/clamp | Visual reference approved; runtime asset missing |
-| PRP-BINDER | File Binder | Designer B | P0 | C2 readability / C8 | FBX, 1K PBR set, preview, DELIVERY | `ArtSource/Props/PRP_FileBinder/` | `Game/Assets/_Project/Art/Props/Gameplay/` | MISSING | 2026-08-08 | — | All runtime files | — | Primitive box | Three runtime instances |
-| PRP-CHAIR | Office Chair | Designer B | P0 | C2/C5 readability / C8 | FBX with load-bearing frame readability, 1–2K PBR set, preview, DELIVERY | `ArtSource/Props/PRP_OfficeChair/` | `Game/Assets/_Project/Art/Props/Gameplay/` | MISSING | 2026-08-08 | — | All runtime files | — | Primitive grounded proxy | Two runtime instances |
-| PRP-DRAWER | Drawer Cabinet | Designer B | P0 | C6 objective / C8 | FBX, 1–2K PBR set, preview, DELIVERY | `ArtSource/Props/PRP_DrawerCabinet/` | `Game/Assets/_Project/Art/Props/Gameplay/` | MISSING | 2026-08-15 | — | All runtime files | — | Primitive drawer | One runtime instance |
-| PRP-COPIER | Copier | Designer B | P0 | Room recognition / C8 | FBX, 1K PBR set, preview, DELIVERY | `ArtSource/Props/PRP_Copier/` | `Game/Assets/_Project/Art/Props/Gameplay/` | MISSING | 2026-08-15 | — | All runtime files | — | Primitive recognition proxy | Recognition-only; no interaction |
-| ENV-OFFICE | Office Core Kit | Designer B | P0 | C8 environment | approved 16-family scope exports, materials/textures, preview, DELIVERY | `ArtSource/Environment/OfficeCoreKit/` | `Game/Assets/_Project/Art/Environment/OfficeCore/` | MISSING | 2026-08-19 | — | All runtime exports | — | Primitive Contest room | No new gameplay definitions |
-| UI-CONT | Contest UI | Designer B | P0 | C6/C8/C9 | Title, controls, objective, prompts, ally/carry/strap/route, failure/win/retry/pause/mute/credits exports, source, font license, DELIVERY | `ArtSource/UI/` | `Game/Assets/_Project/Art/UI/` | MISSING | 2026-08-20 | — | All files and font license | — | Text UI | Runtime integration after loop works |
-| VFX-CONT | Contest VFX | Designer B | P1 | C8 polish | approved effect textures/flipbooks, previews, DELIVERY | `ArtSource/VFX/` | `Game/Assets/_Project/Art/VFX/` | MISSING | 2026-08-21 | — | All files | — | Code/material feedback | No magic/neon/destruction expansion |
-| AUD-CONT | Contest Audio | Designer B | P1 | C8 polish | licensed WAV exports, source/licenses, DELIVERY | `ArtSource/Audio/` | `Game/Assets/_Project/Audio/` | MISSING | 2026-08-21 | — | All files/licenses | — | Silent build | No unlicensed audio |
-| MKT-CONT | Thumbnail/Video | Designer B | P0 | C9 submission | 16:9 thumbnail source/export, ≤3 min H.264 gameplay video/source, license evidence, DELIVERY | `ArtSource/Marketing/` | Submission package | MISSING | 2026-08-24 | — | All files | — | Owner-captured minimal gameplay assets | Runtime asset 아님 |
+Status vocabulary follows `ART_DELIVERY_STANDARD.md`. Approved visual
+direction, source-art candidacy, technical acceptance, Human Owner approval and
+Runtime integration are different states and must not be conflated.
 
-## C1-C3 Completion and C4 Entry Readiness
+## Live Showcase Needs
 
-No new production asset blocks this work package. Graybox fallback remains active.
-C1-C3 implementation and automated acceptance are complete. C4 is not
-authorized and production assets remain separate from runtime implementation.
+| Asset ID | Asset / Owner | Blocking Package | Exact Next Evidence | Current Source State | Missing / Defect | Fallback | Human Owner Decision |
+|---|---|---|---|---|---|---|---|
+| CHR00 | Player / Designer A | S9 only; S1–S8 use graybox | coverage-matrix rows, approved previews, selected FBX/editable source after preview PASS, rights metadata | 0810 batch `REVIEW HOLD / DO NOT INTEGRATE` | provenance/license and technical acceptance unresolved | existing Player proxy | identity visual approved; Runtime asset not approved |
+| CHR01 | Mobile Ally / Designer A | S2–S4 animation readability; no production blocker | Follow/Fetch/Supply/Brace/Rescue/Tag/Finisher coverage rows and preview candidates | 0810 batch preserved on REVIEW HOLD | rights, source identity, preview and selected delivery unresolved | existing Ally proxy / code-driven future graybox | mobile Showcase role is design-approved; implementation and Runtime asset not approved |
+| ENY01 | Compliance Runner / Designer A | S6 readability; no production blocker | one normal Runner coverage set and preview candidates for body check/shove/grab/stagger/recovery | normal/elite candidates preserved; no integration | identity/provenance/license unresolved; elite/firearm material archive only | two identical Runner proxies | one shared normal archetype only; Runtime asset not approved |
+| GEAR01 | Cargo Strap / Designer A | S5 presentation; no production blocker | attach/tension/redirect/release coverage, reel/carabiner/clamp source and previews | no accepted delivery | source, export, rights, preview and DELIVERY missing | line/primitive reel/clamp | visual Canon exists; Runtime asset not approved |
+| PRP-BINDER | Binder / Designer B | S3/S7 readability; no production blocker | clean versioned source candidate, preview, export plan, DELIVERY/rights | `Untitled.blend` candidate | invalid final name; `.blend1` archive; no metadata | existing Binder proxy | Showcase count 5; no Runtime asset approved |
+| PRP-CHAIR | Chair / Designer B | S3/S5/S7 readability; no production blocker | technical review of named blockout, load-bearing anchor preview, clean export plan, DELIVERY/rights | `PRP_OfficeChair_A_Blockout_v001.blend` reuse candidate | duplicate/unversioned candidate and `.blend1` archive | existing Chair proxy | Showcase count 3; no Runtime asset approved |
+| PRP-DRAWER | Drawer / Designer B | S7 objective readability; no production blocker | clean versioned source, Parking Bay/objective preview, export plan, DELIVERY/rights | `DrawerCabinet.blend` candidate | unversioned; no metadata/preview/export | existing Drawer proxy | Showcase count 1; no Runtime asset approved |
+| PRP-COPIER | Copier / Designer B | recognition only | resolve two candidates, clean versioned source, preview and rights | `Copier.blend`, `copier_2.blend` | duplicate intent unresolved; `.blend1` archive | existing Copier proxy | Showcase count 1 / recognition-only; no Runtime asset approved |
+| ENV-OFFICE | Office Core Kit / Designer B | S1 graybox does not wait; S9 visual integration | Map v001 inventory mapped to existing 16 families, modular previews, versioned sources, DELIVERY/rights | no accepted environment delivery | architecture/dressing source and evidence missing | primitive 48 m × 34 m graybox after S1 authorization | no seventeenth family; shutter maps to `OCK-A-002` |
+| UI-SHOWCASE | Q/Readiness/Objective/Result UI / Designer B | S4/S7/S8 readability; graybox text allowed | source/export preview, font rights, state mapping and DELIVERY | MISSING | all deliverables and rights missing | text UI | S9 Runtime integration only |
+| VFX-SHOWCASE | Tag/Chair/Drawer/Exit feedback / Designer B | S9 polish | restrained preview textures/flipbooks and DELIVERY/rights | MISSING | all deliverables missing | no effect or code/material feedback | non-destructive and non-magical only |
+| AUD-SHOWCASE | Gameplay/UI audio / Designer B | S9 polish | licensed WAV/source/license/DELIVERY | MISSING | exact rights and exports missing | silent build | no unlicensed audio |
+| MKT-SHOWCASE | Thumbnail/video / Designer B | release package | source/export and license ledger | MISSING | all files missing | Owner-captured minimal assets | not a Runtime asset |
 
-Approved directions are available for CHR00, CHR01, GEAR01, camera,
-chair-redirect composition, aftermath material response and local lighting.
-ENY01 runtime identity/art, all production FBX/texture/rig/animation, Office Kit,
-UI/VFX/audio and marketing exports remain missing.
+## Designer A Delivery State
 
-## 11. Approved Visual Reference Coverage
+- Remote branch: `origin/art/characters-animation`
+- Required head: `6030c4af6b800d0d7e80013382babd7b1cfc58a0`
+- Existing binary/history: `PRESERVE`
+- Existing batch: `REVISION REQUIRED / REVIEW HOLD / DO NOT INTEGRATE`
+- Rights/provenance: `UNRESOLVED`
+- First output:
+  `ArtSource/Characters/ANIMATION_COVERAGE_MATRIX_v001.csv`
+- Required classification of existing 151 Animation FBXs:
+  `REUSE CANDIDATE / ARCHIVE ONLY / MISSING / NEW GENERATION REQUIRED`
+- New source paths allowed by Animation v003 only:
+  `CHR00_Player/**`, `CHR01_Ally/**`, `ENY01_ComplianceRunner/**`,
+  `GEAR01_CargoStrap/**`
+- AI-assisted animation: allowed only with v003 provenance, license and Human
+  cleanup metadata; no new Identity/model/face/costume/texture generation.
+- Runtime integration: `NOT AUTHORIZED`.
+
+## Designer B Delivery State
+
+- Remote branch: `origin/art/environment-ui-vfx`
+- Required remote head: `7536f551fca146e225794219bc219d7f07dd5314`
+- Local branch observed: one commit behind; S0 performs no switch or fast-forward.
+- Existing source files: `9 / PRESERVE`
+- Runtime approved files: `0`
+- DELIVERY/preview/rights evidence: `MISSING`
+- Reuse candidate:
+  `PRP_OfficeChair_A_Blockout_v001.blend / TECHNICAL REVIEW REQUIRED`
+- Revision required: `officeChair.blend`, `Copier.blend`, `copier_2.blend`,
+  `DrawerCabinet.blend`, `Untitled.blend`.
+- All `.blend1`: `ARCHIVE BACKUP / NOT FINAL DELIVERY`.
+- First task: reconcile the remote batch and Map v001 asset list against
+  `SHOWCASE_ASSET_MATRIX.md`; create source candidates/previews only.
+- Runtime integration: `NOT AUTHORIZED`.
+
+## Approved Visual Reference Coverage
 
 ### Designer A
 
-- Required Approved References:
-  `CHR_00_Player_Identity_Lock_v002_FINAL.png`,
-  `CHR_00_Player_Turnaround_v001_FINAL.png`,
-  `CHR_01_First_Ally_Identity_v001_FINAL.png`,
-  `GEAR_01_Cargo_Strapping_System_v002_FINAL.png`, PGT_02 action composition
-- Available: all above at tracked `references/approved/` paths
-- Missing: approved ENY01 identity reference; runtime FBX/rig/animation for all
-- Unresolved: none for existing approved reference status
-- Referenced Runtime Assets: existing Player/Camera graybox only
-- Production Deviation: none approved
+- Available: approved CHR00 Identity and Turnaround, CHR01 Identity, GEAR01,
+  PGT_02 action composition.
+- Missing: approved ENY01 identity reference; all technically accepted Runtime
+  model/rig/animation/equipment exports.
+- Production deviation: none approved.
 
 ### Designer B
 
-- Required Approved References: PGT_01, PGT_02, PGT_03, LGT_01 plus Office
-  Core Kit and Art Direction documents
-- Available: all listed visual references and documents
-- Missing: runtime Office Kit/props/UI/VFX/audio/marketing deliverables
-- Unresolved: contest-wide lighting is not defined by local LGT_01
-- Referenced Runtime Assets: primitive room and seven object proxies
-- Production Deviation: none approved
+- Available: PGT_01, PGT_02, PGT_03, LGT_01, Office Core Kit and Art Direction.
+- Missing: technically accepted Office Kit, gameplay props, UI, VFX, audio and
+  marketing deliveries.
+- Boundary: LGT_01 is Records Archive-local and not global Showcase lighting.
+- Production deviation: none approved.
 
-## Designer A Remote Delivery Audit — 2026-08-10
+## Current Readiness Decision
 
-- Source Branch: `origin/art/characters-animation`
-- Source Batch Tip: `6094b41143286b6e1710087a711707416b366c20`
-- Corrective Instruction: `6030c4af6b800d0d7e80013382babd7b1cfc58a0`
-- Inventory: `159 files / 155 FBX / 4 guides / 131,363,044 path bytes`
-- Classification: `REVISION REQUIRED / REVIEW HOLD / NOT INTEGRATED`
-- Delivered Candidates: `main_character`, `female_helper`, `enemy_normal`, `enemy_elite`
-- Missing A1 Evidence: editable CHR01 DCC source, blockout preview, Binder supply
-  pose, Chair push pose, completed `DELIVERY.md`
-- Rights Gap: creator, source, exact license, written permission, AI/generated
-  element record and third-party IP check are unresolved
-- Scope Gap: files are outside allowed `ArtSource/**` paths; ENY01 concept approval
-  was skipped; elite, firearm and grenade content conflicts with the locked scope
-- Git Gap: no PR; no LFS filter; existing history must not be rewritten
-- Integration Decision: `DO NOT IMPORT / DO NOT MERGE / HUMAN OWNER APPROVAL ABSENT`
-- Next Request to Designer A: complete only the five-file CHR01 A1 blockout and
-  pose package in the approved path with full provenance and license metadata
+S0 is documentation-only and requires no production asset. S1 graybox must use
+primitive fallback if separately authorized. Source candidates may proceed only
+under the relevant v002 handoff and art-branch authority; Runtime integration
+remains deferred to S9.
 
-No new production asset blocks this work package. Graybox fallback remains active.
+No production asset is authorized for Runtime integration by S0.
+Graybox fallback remains active.

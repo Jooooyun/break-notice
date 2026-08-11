@@ -2,7 +2,7 @@
   "project": "BREAK NOTICE",
   "baseline_version": "0.1.0",
   "created": "2026-07-16",
-  "current_phase": "CONTEST SPRINT IMPLEMENTATION / C0-C4 IMPLEMENTATION COMPLETE / C4 HUMAN ACCEPTANCE PASS / POST-ACCEPTANCE THROW-CHARGE ALLY-SUPPLY-VARIATION AND PICKUP TUNING AUTOMATED-BUILD-HTTP AND HUMAN MANUAL PASS / C5 NOT AUTHORIZED",
+  "current_phase": "CONTEST SHOWCASE AUTHORITY REGISTRATION / CONTEST-0001 C0-C4 ACCEPTED FOUNDATION PRESERVED / CONTEST-0002 S0 COMPLETE / S1 NOT AUTHORIZED / C5 NOT AUTHORIZED / MAIN PRODUCT GATE CLOSED",
   "current_state_authority_status": "OWNER-APPROVED / SINGLE MUTABLE LIVE-STATE SOURCE",
   "current_state_authority_path": "docs/00_project/DESIGN_STATUS.md",
   "manifest_current_state_role": "DERIVED MACHINE-READABLE MIRROR / NOT INDEPENDENT AUTHORITY",
@@ -13,7 +13,7 @@
   "visual_spec_gate_language_role": "ARTIFACT-LOCAL SAFETY BOUNDARY",
   "mutable_active_status_drift_target_count": 15,
   "mutable_active_status_drift_closure_status": "COMPLETE",
-  "g4_evidence_first_documentation_brake": "ACTIVE FOR ADDITIONAL SPECULATIVE DESIGN",
+  "g4_evidence_first_documentation_brake": "ACTIVE FOR ADDITIONAL SPECULATIVE DESIGN / CR-0004 AND CONTEST-0002 S0 OWNER-DIRECTED AUTHORITY-REGISTRATION EXCEPTION CONSUMED / S1 AND LATER REMAIN FROZEN",
   "risk_r007_status": "ACTIVE / TRIGGERED",
   "risk_r007_owner": "DESIGN AUTHORITY",
   "risk_r007_owning_gate": "PRE-G4 / G4",
@@ -241,7 +241,7 @@
   "historical_imp0001_gate_state": "OPEN — IMP-0001 ONLY / EMPTY BOOTSTRAP",
   "limited_implementation_gate_allowed_state": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
   "g4a_bounded_gate_format": "OPEN — <APPROVED TICKET ID> ONLY / <EXACT APPROVED SCOPE>",
-  "limited_implementation_gate_current_state": "MAIN PRODUCT GATE CLOSED / CONTEST C0-C4 IMPLEMENTATION COMPLETE / CONTEST-0001 REMAINS OWNER-APPROVED / C4 HUMAN ACCEPTANCE PASS / POST-ACCEPTANCE CHARGED THROW AND ALLY SUPPLY VARIATION HUMAN MANUAL PASS / C5 CLOSED",
+  "limited_implementation_gate_current_state": "MAIN PRODUCT GATE CLOSED / CONTEST-0001 C0-C4 ACCEPTED FOUNDATION PRESERVED / CONTEST-0002 S0 DOCUMENTATION COMPLETE / S1 CLOSED / C5 CLOSED",
   "limited_implementation_gate_one_shot": true,
   "imp0001_execution_relay_issuance_status": "EAR-IMP-0001-002 ISSUED AND CONSUMED",
   "imp0001_execution_relay_status": "CONSUMED / EXPIRED / ACTIVE RELAY ABSENT",
@@ -456,7 +456,7 @@
   "imp0001_disposition": "APPROVE / COMPLETE",
   "post_imp0001_design_authority_review": "APPROVE",
   "ear_imp0001_002_status": "CONSUMED / EXPIRED",
-  "active_execution_authorization_relay": "ABSENT / HUMAN OWNER INITIAL C4 DIRECTIVE CONSUMED BY 30376d475ca0e07e9026965a9f11c6cfec241ba5 / HUMAN OWNER C4 ACCEPTANCE REVISION CONSUMED BY e4ee3b714552fb8bf8ba90216ce858a988f0f006 / HUMAN OWNER POST-ACCEPTANCE THROW-PICKUP TUNING DIRECTIVE CONSUMED BY e5be4c476ab9cc8f2e3ffacc17b124db60b15f12 / C5 EXCLUDED",
+  "active_execution_authorization_relay": "ABSENT / EAR-CONTEST-0002-S0-001 CONSUMED AND EXPIRED BY CONTAINING COMMIT / S1 AND C5 EXCLUDED",
   "cr0002_status": "APPROVED / APPLIED",
   "cr0002_path": "docs/00_project/CR-0002-G4A-IMPLEMENTATION-ENTRY.md",
   "adr0022_status": "ACCEPTED",
@@ -465,7 +465,7 @@
   "g4a_foundation_entry_status": "OWNER-APPROVED / IMP-0002 COMPLETE",
   "g4a_foundation_implementation_status": "IMP-0002 COMPLETE / IMP-0003 LOCOMOTION-CAMERA-INPUT GRAYBOX COMPLETE",
   "external_ai_asset_status": "NEW OR RUNTIME AI ASSET NOT AUTHORIZED / EXISTING OWNER-APPROVED VISUAL REFERENCES AUTHORIZED AS PRODUCTION REFERENCES ONLY",
-  "current_next_authorization_boundary": "C0-C4 IMPLEMENTATION COMPLETE / C4 HUMAN ACCEPTANCE PASS / POST-ACCEPTANCE THROW-CHARGE ALLY-SUPPLY-VARIATION AND PICKUP HUMAN MANUAL PASS / C5 CARGO STRAP REQUIRES NEW HUMAN OWNER AUTHORIZATION / C5 NOT STARTED",
+  "current_next_authorization_boundary": "CONTEST-0002 S0 DOCUMENTATION COMPLETE / S1 LARGE GRAYBOX REQUIRES A NEW HUMAN OWNER AUTHORIZATION RELAY / C5 REMAINS NOT AUTHORIZED / PRODUCTION ART INTEGRATION REMAINS NOT AUTHORIZED",
   "cr0003_status": "OWNER-APPROVED / APPLIED",
   "cr0003_path": "docs/00_project/CR-0003-GAME-BUILDERS-2026-CONTEST-SPRINT.md",
   "adr0023_status": "ACCEPTED",
@@ -474,6 +474,32 @@
   "contest_ticket_path": "docs/06_codex/CONTEST-0001-SINGLE-ROOM-BROWSER-PLAYABLE-PROTOTYPE.md",
   "contest_execution_baseline_sha": "28b7f70c4b6299159afe5b99ea7b98d1e5399352",
   "contest_branch": "contest/game-builders-2026",
+  "contest_stable_branch_preservation": "PRESERVED AT 15c915c4c7552113941149e84ba5cc1fea9c63f1 / NOT MODIFIED BY S0",
+  "contest_showcase_branch": "contest/game-builders-2026-showcase",
+  "contest_showcase_branch_baseline_sha": "15c915c4c7552113941149e84ba5cc1fea9c63f1",
+  "contest_showcase_human_owner_directive": "APPROVED / HOD-CONTEST-0002-S0-001",
+  "contest_showcase_execution_relay": "EAR-CONTEST-0002-S0-001 / CONSUMED AND EXPIRED BY CONTAINING COMMIT",
+  "cr0004_status": "OWNER-APPROVED / REGISTERED / NO IMPLEMENTATION AUTHORITY",
+  "cr0004_path": "docs/00_project/CR-0004-CONTEST-SHOWCASE-GAMEPLAY-REDESIGN.md",
+  "adr0024_status": "ACCEPTED / SHOWCASE AUTHORITY SEPARATION",
+  "adr0024_path": "docs/09_adrs/ADR-0024-CONTEST-OPERATIONS-FLOOR-SHOWCASE.md",
+  "contest_showcase_ticket": "CONTEST-0002 / S0 DOCUMENTATION COMPLETE / S1 NOT AUTHORIZED / C5 NOT AUTHORIZED",
+  "contest_showcase_ticket_path": "docs/06_codex/CONTEST-0002-OPERATIONS-FLOOR-SHOWCASE.md",
+  "contest_showcase_gameplay_lock_path": "docs/10_contest/showcase/SHOWCASE_GAMEPLAY_LOCK.md",
+  "contest_showcase_asset_matrix_path": "docs/10_contest/showcase/SHOWCASE_ASSET_MATRIX.md",
+  "contest_showcase_s0_status": "COMPLETE / DOCUMENTATION ONLY / 13 CREATED AND 8 MODIFIED PATHS / NO UNITY TEST OR WEB BUILD / NO RUNTIME OR ART INTEGRATION",
+  "contest_showcase_s1_status": "NOT AUTHORIZED / REQUIRES NEW HUMAN OWNER RELAY",
+  "contest_showcase_c5_status": "NOT AUTHORIZED",
+  "contest_showcase_old_scene_preservation": "PASS / Game/Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity / 89175 BYTES / SHA-256 0ed96ae20a74a8d91888dd108915eb9eeaa56da7d3ba6581b660a1e966e8de3a",
+  "contest_showcase_directive_reconciliation_path": "docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_CODEX_AUTHORITY_RECONCILIATION_HANDOFF_v001.txt",
+  "contest_showcase_directive_reconciliation_sha256": "a3e3fb0b1690dabd1d61480b5155f22d9720efaa9db0ad11aa52e3a2e57e6d0d",
+  "contest_showcase_directive_animation_path": "docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_GAMEPLAY_ANIMATION_COVERAGE_v003_FINAL.txt",
+  "contest_showcase_directive_animation_sha256": "6c5b6aca6e83686331a1d64d967d0489327aac35d285e0f2aa7da9fb1972bb69",
+  "contest_showcase_directive_map_path": "docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_CONTEST_SHOWCASE_MAP_DESIGN_v001.txt",
+  "contest_showcase_directive_map_sha256": "dfe3d2f312bb84dae7df7d596f4a7153f7ec69cfaac3590b93cbc6ab78833834",
+  "contest_showcase_designer_a_v002_handoff": "REGISTERED / FIRST REQUIRED OUTPUT ArtSource/Characters/ANIMATION_COVERAGE_MATRIX_v001.csv / EXISTING 0810 DELIVERY REVIEW HOLD / RIGHTS UNRESOLVED / RUNTIME INTEGRATION NOT AUTHORIZED",
+  "contest_showcase_designer_b_v002_handoff": "REGISTERED / NINE SOURCE CANDIDATES PRESERVED / RUNTIME APPROVED COUNT 0 / RUNTIME INTEGRATION NOT AUTHORIZED",
+  "designer_b_remote_delivery_source_sha": "7536f551fca146e225794219bc219d7f07dd5314",
   "contest_gate_state": "MAIN PRODUCT CLOSED / CONTEST C0-C4 IMPLEMENTATION COMPLETE / C4 HUMAN ACCEPTANCE PASS / POST-ACCEPTANCE TUNING HUMAN MANUAL PASS / C5 CLOSED",
   "contest_c0_status": "COMPLETE / HUMAN OWNER PASS 2026-08-08 / LOOK SENSITIVITY 0.25, PITCH -12 TO 35, MOVE-LOOK, RAPID RMB AIM WITH 0.2-SECOND BLEND AND POINTER CAPTURE-RELEASE PASS / 28 TESTS, WEB BUILD, HTTP AND CHROME-EDGE LOAD-RESIZE-CONSOLE PASS",
   "contest_c0_web_build_result": "SUCCEEDED / BUILD GUID b03f2792cdce44a2ac08ad1049ceaca1 / UNITY WARNINGS 0 / UNITY ERRORS 0 / 113597688 BYTES REPORTED",
@@ -518,7 +544,7 @@
   "contest_charged_throw_supply_variation_web_result": "SUCCEEDED / UNITY 6000.3.20f1 / BUILD GUID 3cc7416d44c44067bc51c6474c46351d / 113881344 UNITY-REPORTED BYTES / 19 FILES / 113883098 HTTP-VERIFIED BYTES / UNITY WARNINGS 0 / UNITY ERRORS 0 / AGGREGATE SHA-256 61cd70625800cf904a866d47d42138f7f4473645453e6644cbe3d305d14f9ec7",
   "contest_charged_throw_supply_variation_browser_manual_status": "HUMAN OWNER MANUAL CHECKLIST PASS 2026-08-11 / NPC BINDER VARIATION TAP-MID-FULL CHARGE QUEUED CATCH-THROW PHYSICAL IMPACT RESET AND C0-C4 REGRESSION PASS / AUTOMATED IN-APP NAVIGATION NOT COLLECTED DUE ADMIN-ENFORCED LOCAL POLICY VERIFICATION / FINAL BROWSER CONSOLE ZERO NOT INFERRED",
   "contest_charged_throw_supply_variation_human_acceptance": "ALL PASS / HUMAN OWNER DIRECT DISPOSITION 2026-08-11 / WORK PACKAGE CLOSED / C5 NOT AUTHORIZED",
-  "contest_git_publication": "REMOTE PUSH COMPLETE AND VERIFIED THROUGH POST-ACCEPTANCE CHARGED THROW AND ALLY SUPPLY VARIATION f1fd9b15f407be9003eff622231e338358376bcc / DOCUMENT EVIDENCE IN CONTAINING COMMIT / DESIGNER A CORRECTION 6030c4af6b800d0d7e80013382babd7b1cfc58a0 / ART ENVIRONMENT 6b994b4065ca003a28562ab30e5ef6d0007154b7 / BASELINE TAGS PUBLISHED / ORIGIN MAIN UNCHANGED",
+  "contest_git_publication": "STABLE CONTEST REMOTE PRESERVED AT 15c915c4c7552113941149e84ba5cc1fea9c63f1 / SHOWCASE S0 DOCUMENTATION PUBLISHED BY CONTAINING COMMIT ON contest/game-builders-2026-showcase / DESIGNER A REMOTE 6030c4af6b800d0d7e80013382babd7b1cfc58a0 / DESIGNER B REMOTE 7536f551fca146e225794219bc219d7f07dd5314 / ORIGIN MAIN PRESERVED AT 28b7f70c4b6299159afe5b99ea7b98d1e5399352",
   "designer_a_remote_delivery_source_sha": "6094b41143286b6e1710087a711707416b366c20",
   "designer_a_remote_delivery_audit": "159 FILES / 155 FBX / 4 GUIDES / 131363044 PATH BYTES / REVISION REQUIRED / RIGHTS AND LICENSE UNRESOLVED / OUTSIDE ALLOWED ARTSOURCE PATHS / A1 SOURCE AND PREVIEWS MISSING / ENY01 ELITE-FIREARM DIRECTION REJECTED / NOT INTEGRATED",
   "designer_a_local_unity_review": "PREPARED AND OPEN / DETACHED LOCAL WORKTREE AT 6030c4af6b800d0d7e80013382babd7b1cfc58a0 / FOUR MODEL LINEUP / UNTRACKED REVIEW-ONLY SCENE / TRACKED DIRTY 0 / STAGED 0 / NOT CANON APPROVAL / NOT RUNTIME INTEGRATION",
@@ -562,8 +588,8 @@
     },
     {
         "path":  "AGENTS.md",
-        "bytes":  45458,
-        "sha256":  "9c6cb7fc9b2122ce8fffcf5a361f065cf231d650c3327750b191e982a0cbf587"
+        "bytes":  46312,
+        "sha256":  "31785dc3104faf201c004e286d023c0c206c66555626f2a2e24c1aaa07027075"
     },
     {
         "path":  "ArtSource/Audio/DELIVERY.md",
@@ -912,8 +938,8 @@
     },
     {
         "path":  "CHANGELOG.md",
-        "bytes":  44548,
-        "sha256":  "8d67a23463eb5ccde79aaaa5e475b597d221402eb3e2c720ecd77f62acaadedd"
+        "bytes":  45292,
+        "sha256":  "6d5196b30379f719c9cd6b3a11f9f80c1242eba76559a09ae36126589b425d5d"
     },
     {
         "path":  "Game/Assets/_Project/Code/Runtime/Player/PrototypeAllyRelayController.cs",
@@ -966,14 +992,19 @@
         "sha256":  "1dca3f1c86a9dfcc89f51bd80984b425d713898146ba90d8e6987655f23ea5f3"
     },
     {
+        "path":  "docs/00_project/CR-0004-CONTEST-SHOWCASE-GAMEPLAY-REDESIGN.md",
+        "bytes":  3725,
+        "sha256":  "366619faea0c9dd992936dbcca4184b2dc00ac49fd1a0d0e3a55954ae8733cf7"
+    },
+    {
         "path":  "docs/00_project/DECISION_LOG.md",
-        "bytes":  13754,
-        "sha256":  "d7ac989cbb70f95f522fc75189d3b485f8eb23ab1a577f6fa5623a0460cd0df6"
+        "bytes":  14286,
+        "sha256":  "2ae1e56e3c1e181ed4da88ec40855a2738647a514bb0c0c5639a652bd1e5faac"
     },
     {
         "path":  "docs/00_project/DESIGN_STATUS.md",
-        "bytes":  44661,
-        "sha256":  "49cce2114bd889d8816f688b4282d55721b8a327309df6c6fba74297840cf665"
+        "bytes":  45753,
+        "sha256":  "d5f5f203cab1ece5b4409e2cd0ce58ff1287939532cba2d4ae3ebaf7a6f8baed"
     },
     {
         "path":  "docs/00_project/GLOSSARY.md",
@@ -1301,6 +1332,11 @@
         "sha256":  "fb46ceff5b0cdb853e5efdbff0b62d2b6f6f25e4445cb1d6379b64fc140ac5b3"
     },
     {
+        "path":  "docs/06_codex/CONTEST-0002-OPERATIONS-FLOOR-SHOWCASE.md",
+        "bytes":  5795,
+        "sha256":  "40b73a997a439212167c353a0d6769727f071aa4eae45adc43e8b34ddb2ab866"
+    },
+    {
         "path":  "docs/06_codex/DEFINITION_OF_DONE.md",
         "bytes":  896,
         "sha256":  "dd0ab8b9cae867ac175fbf0a62a9935c9e6e57090e2a5aeb28d324cfa1b8d4d0"
@@ -1486,6 +1522,11 @@
         "sha256":  "20f78bcb7696b162e22e3500730f98c51541b9d854a5abb25ebae086483be60f"
     },
     {
+        "path":  "docs/09_adrs/ADR-0024-CONTEST-OPERATIONS-FLOOR-SHOWCASE.md",
+        "bytes":  2526,
+        "sha256":  "0313e747dead944f28610340cfdc25551a804304ce1a3ba0bdf9af63f2ab2589"
+    },
+    {
         "path":  "docs/10_contest/ART_DELIVERY_STANDARD.md",
         "bytes":  5351,
         "sha256":  "ab392e7262e6df4f94308b6cec3d6294d5d0ac6c8406d9da92aede7f122409bb"
@@ -1502,8 +1543,8 @@
     },
     {
         "path":  "docs/10_contest/ASSET_NEEDS_STATUS.md",
-        "bytes":  7696,
-        "sha256":  "8e2fc8a44e8103af73499375825f6625b45276bc9ede4adf3a63ad8e8a48f588"
+        "bytes":  7399,
+        "sha256":  "db0c454acaf7bc68f2274ea4ab003c2330f33466ef300036bb4a0caeb8f1f560"
     },
     {
         "path":  "docs/10_contest/BUILD_AND_SUBMISSION_LOG.md",
@@ -1512,13 +1553,63 @@
     },
     {
         "path":  "docs/10_contest/CODEX_COLLABORATION_LOG.md",
-        "bytes":  25361,
-        "sha256":  "d6de9e2fc91c0fba8a2373f40bd823955a40206b0d27b3a76c31f814ebae5cd6"
+        "bytes":  27761,
+        "sha256":  "129aacea73d6221a59ab5a32b7d7600e5307a2291b178f9e2ece13c4cd893827"
     },
     {
         "path":  "docs/10_contest/GAME_BUILDERS_2026_SPRINT.md",
-        "bytes":  6357,
-        "sha256":  "e24a1c183309dcd99939c76247650580cbbf1986304b07223566b667f7d27c13"
+        "bytes":  8091,
+        "sha256":  "ec376a845af4048de7ff7a78145e30699833c68c514ab388bab31cb29483aa61"
+    },
+    {
+        "path":  "docs/10_contest/handoffs/DESIGNER_A_CODEX_WORK_ORDER_v002.md",
+        "bytes":  4350,
+        "sha256":  "f48552ca1a410c5c4f681281e830bd631d649bdd0bdd6e78c910228abd2db0d4"
+    },
+    {
+        "path":  "docs/10_contest/handoffs/DESIGNER_A_HUMAN_GUIDE_v002.md",
+        "bytes":  2907,
+        "sha256":  "03974e33741ac1bc6c57936fa69711c0677a61ba37d49153cd361eb97fd2b249"
+    },
+    {
+        "path":  "docs/10_contest/handoffs/DESIGNER_B_CODEX_WORK_ORDER_v002.md",
+        "bytes":  4094,
+        "sha256":  "c32a0dcc2a0e2a121ccc730a2a6239361c358b32cf5ebb599919b8e5909827ad"
+    },
+    {
+        "path":  "docs/10_contest/handoffs/DESIGNER_B_HUMAN_GUIDE_v002.md",
+        "bytes":  2768,
+        "sha256":  "aaeed39c07417f57d54055384e522b2ea218fb40134d3da23a523262a1a94279"
+    },
+    {
+        "path":  "docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_CODEX_AUTHORITY_RECONCILIATION_HANDOFF_v001.txt",
+        "bytes":  21218,
+        "sha256":  "a3e3fb0b1690dabd1d61480b5155f22d9720efaa9db0ad11aa52e3a2e57e6d0d"
+    },
+    {
+        "path":  "docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_CONTEST_SHOWCASE_MAP_DESIGN_v001.txt",
+        "bytes":  23050,
+        "sha256":  "dfe3d2f312bb84dae7df7d596f4a7153f7ec69cfaac3590b93cbc6ab78833834"
+    },
+    {
+        "path":  "docs/10_contest/owner_directives/2026-08-11/BREAK_NOTICE_GAMEPLAY_ANIMATION_COVERAGE_v003_FINAL.txt",
+        "bytes":  54065,
+        "sha256":  "6c5b6aca6e83686331a1d64d967d0489327aac35d285e0f2aa7da9fb1972bb69"
+    },
+    {
+        "path":  "docs/10_contest/owner_directives/2026-08-11/OWNER_DIRECTIVE_INDEX.md",
+        "bytes":  2157,
+        "sha256":  "468f3b8a337a8f8dd6f2a4fa3ffe46a8d41a6795520d8da84d50813de2bbce56"
+    },
+    {
+        "path":  "docs/10_contest/showcase/SHOWCASE_ASSET_MATRIX.md",
+        "bytes":  6747,
+        "sha256":  "82c489d7a1de1bc85b90f3ede3cf0b71dfc25bf12c46fc2ac0ab8c76951a612f"
+    },
+    {
+        "path":  "docs/10_contest/showcase/SHOWCASE_GAMEPLAY_LOCK.md",
+        "bytes":  3726,
+        "sha256":  "c047d657975bc43c8e749d71b14e801d8ed4e704c21087a37d997b92851417e9"
     },
     {
         "path":  "docs/10_contest/VISUAL_REFERENCE_INVENTORY.md",

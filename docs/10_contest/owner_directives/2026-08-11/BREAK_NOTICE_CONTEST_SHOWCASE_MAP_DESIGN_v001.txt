@@ -1,0 +1,995 @@
+BREAK NOTICE — CONTEST SHOWCASE MAP DESIGN v001
+5~7 MINUTE HIGH-REPLAY PROTOTYPE
+
+핵심 목표:
+- 48m × 34m 대형 오픈오피스
+- 중앙 Cubicle Island
+- 서쪽 동료 협동·Supply Loop
+- 동쪽 Chair·Strap·Physics Lane
+- 북쪽 Drawer Objective + Team Finisher
+- 5~7분 플레이
+- 3개 경로 / 4개 목표 해결법 / 3개 Team Readiness Badge / 1개 Team Finisher
+- 종료 직후 “다른 길과 다른 Tag 조합으로 한 번 더 해보고 싶다”가 목표
+
+================================================================================
+1. 기존 Scene 보존
+================================================================================
+
+기존:
+Contest_SingleRoomGraybox.unity
+용도:
+C0–C4 회귀 테스트 / 자동 테스트 / 물리 격리 검증
+
+신규 제안:
+Contest_OperationsFloor_Showcase_v001.unity
+용도:
+5~7분 공모전 플레이 / 이동형 동료 / Tag / Objective / Finisher
+
+기존 Scene을 큰 맵으로 덮어쓰지 않는다.
+
+================================================================================
+2. 맵 콘셉트
+================================================================================
+
+PRT-RM-002 — Operations Floor Handover Lockdown
+
+플레이어와 동료는 남쪽 시설관리 진입구에서 시작한다.
+북쪽 비상 EXIT로 이동해야 하지만 Rolling Drawer와 Runner가 통로를 막는다.
+
+플레이어는 다음을 조합한다.
+
+- 직접 Binder/Chair 획득
+- 동료 Binder Toss
+- Catch / Queued Throw
+- 동료 Chair Feed
+- Chair Stabilize
+- Carabiner Attach Assist
+- Cargo Strap Redirect
+- Runner Body Check 유도
+- Grab Rescue
+- Combat Tag
+- Team Finisher
+
+동료는 단순 물건 자판기가 아니라
+Follow / Fetch / Supply / Brace / Rescue / Combat Tag / Finisher Partner 역할을 맡는다.
+
+================================================================================
+3. 전체 맵 크기
+================================================================================
+
+가로 X: 48m
+세로 Z: 34m
+천장 높이: 4.2m
+좌표 범위: X -24~+24 / Z -17~+17
+예상 직선 횡단: 약 18~22초
+실제 플레이: 5~7분
+
+주요 폭:
+Central Combat Lane: 7~9m
+West Logistics Loop: 4.5~5.5m
+East Physics Lane: 6~8m
+North Cross Lane: 5m
+Drawer Connector: 초기 0.8m 이하 / 개방 후 3.0m 이상
+Exit Run: 3.5~4m
+
+바닥은 평평하게 유지한다.
+문턱, 카펫 단차, 케이블 Collider, 계단, 작은 턱 금지.
+
+================================================================================
+4. TOP-DOWN 구조
+================================================================================
+
+                                      NORTH / +Z
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                                                                            │
+│  [NORTH SUPPLY DESK]       [FINAL TAG ARENA]          [EXIT REVEAL]       │
+│    Binder A2            ┌──────────────────────┐      ┌──────────────┐    │
+│                         │ Runner 2             │      │ OPEN EXIT    │    │
+│                         │ Finisher Pocket      │─────▶│ Next-Floor   │    │
+│                         │ Drawer → Parking Bay │      │ Vista Only   │    │
+│                         └──────────▲───────────┘      └──────────────┘    │
+│                                    │                                       │
+│        WEST LOGISTICS LOOP         │        EAST PHYSICS LANE              │
+│                                    │                                       │
+│  Binder A1     Chair A1     ┌──────┴──────┐    Chair D2   Column          │
+│  Supply Desk ──────────────▶│ NORTH CROSS │◀──────────────■─────┐         │
+│        ▲                     └──────▲──────┘                       │         │
+│        │                            │                              │         │
+│        │        ┌───────────────────┴───────────────────┐          │         │
+│        │        │         CENTRAL CUBICLE ISLAND        │          │         │
+│        │        │    Fixed Desk / Low Partition Ring    │          │         │
+│        │        └──────┬───────────────────────┬────────┘          │         │
+│        │               │     CENTRAL CUT       │                   │         │
+│        │               │    Runner 1 Patrol    │                   │         │
+│        └───────────────▶│     TAG PASS ZONE    │◀──────────────────┘         │
+│                        └───────────▲───────────┘                             │
+│                                    │                                       │
+│  [COPIER]       [DIRECT BINDER]   PLAYER + ALLY   [DIRECT CHAIR]            │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
+
+                                      SOUTH / -Z
+
+Zone:
+Z0 Entry Staging
+Z1 Direct Equipment Bay
+Z2 Central Clash Bowl
+Z3 West Logistics Loop
+Z4 Central Cubicle Ring
+Z5 East Physics Lane
+Z6 North Tag Arena / Drawer Gate
+Z7 Exit Run / Next-Area Tease
+
+================================================================================
+5. Figure-Eight 구조
+================================================================================
+
+       North Cross
+       ╱         ╲
+West Loop       East Lane
+       ╲         ╱
+       South Bowl
+
+장점:
+- 길을 잃지 않음
+- 동료 Follow가 쉬움
+- 좌우 선택 가능
+- 같은 목표에 다른 접근 가능
+- 한 플레이로 모든 경로를 다 못 봄
+- Replay 이유 형성
+
+================================================================================
+6. 오브젝트 수량
+================================================================================
+
+Binder 5개
+Chair 3개
+Drawer 1개
+Copier 1개
+
+Binder:
+B-D1 (-6.0, -11.5)
+B-D2 (+12.0, -4.5)
+B-A1 (-19.0, -2.5)
+B-A2 (-7.0, +12.5)
+B-A3 (+9.5, +10.5)
+
+Chair:
+C-D1 (+6.0, -11.0)
+C-A1 (-18.0, +4.0)
+C-D2 (+13.0, -2.5)
+
+Drawer:
+(+15.5, +10.5)
+
+Parking Bay:
+(+20.0, +10.5)
+
+Copier:
+(-20.5, -10.0)
+
+모든 투척 물체는 Reset 전까지 실제 맵에 남는다.
+자동 삭제/보충/숨김 Inventory/동료 순간 반환 금지.
+
+================================================================================
+7. Z0 — ENTRY STAGING
+================================================================================
+
+범위:
+X -7~+7
+Z -17~-13
+
+Player:
+(0, -15.0)
+
+Ally:
+(-2.4, -14.2)
+
+첫 화면:
+- Direct Binder
+- Direct Chair
+- Cubicle Island
+- Runner 1 상체
+- EXIT Sign
+- Player 옆 Ally
+
+최초 UI:
+[E] PICK UP
+[Q] TAG / CALL ALLY
+
+================================================================================
+8. Z1 — DIRECT EQUIPMENT BAY
+================================================================================
+
+범위:
+X -13~+13
+Z -13~-8
+
+Direct Binder: 낮은 Desk 위 왼쪽
+Direct Chair: 바닥 오른쪽
+Copier: 서쪽 벽
+
+목표:
+10초 이내 물건 획득
+20초 이내 첫 Throw
+30초 이내 첫 Enemy Reaction
+
+================================================================================
+9. Z2 — CENTRAL CLASH BOWL
+================================================================================
+
+범위:
+X -10~+10
+Z -8~-2
+크기 20m × 6m
+
+여기서 보여줄 것:
+- Direct Throw
+- Body Check
+- Ally Follow
+- Binder Toss
+- Catch
+- Queued Throw
+- Grab Rescue
+
+중앙은 비워둔다.
+큰 Desk/Plant/Copier/높은 Partition/바닥 장애물 금지.
+
+Runner 1:
+(+1.0, +1.5)
+첫 행동은 Body Check Telegraph.
+
+================================================================================
+10. Z3 — WEST LOGISTICS LOOP
+================================================================================
+
+범위:
+X -24~-10
+Z -9~+11
+
+역할:
+- Ally Follow
+- Binder Supply
+- Chair Fetch
+- Return Pass
+- Regroup
+
+West Binder:
+(-19, -2.5)
+
+West Chair:
+(-18, +4.0)
+
+Supply Desk:
+(-20, -1.0)
+
+Wide Turn Pocket:
+(-15, +7.5)
+
+길 폭 최소 4.5m.
+Supply Pocket 6m × 6m.
+
+================================================================================
+11. Z4 — CENTRAL CUBICLE RING
+================================================================================
+
+범위:
+X -8~+8
+Z -2~+10
+
+Cubicle Island:
+16m × 12m
+
+Low Partition 14~18개
+Fixed Desk 6~8개
+Monitor Cluster 4~6개
+Paper/Archive 3개
+Plant/Waste 2개
+
+Partition 높이:
+1.15~1.25m
+
+기능:
+- 적 추격 끊기
+- Ally 재합류
+- Bank Shot
+- 좌우 Loop 연결
+- 북쪽 Tag Arena 부분 은폐
+
+================================================================================
+12. Z5 — EAST PHYSICS LANE
+================================================================================
+
+범위:
+X +10~+24
+Z -9~+10
+폭 6~8m
+
+East Binder:
+(+12, -4.5)
+
+East Chair:
+(+13, -2.5)
+
+Column:
+(+12, +2)
+0.7×0.7×4.2m
+
+Angled Desk:
+(+16, +4)
+
+Strap Assist Pocket:
+(+13, +1.5)
+
+Redirect Arc:
+(+13, +5.5)
+
+경로:
+Column 오른쪽 = Direct Throw
+Column 왼쪽 = Strap Redirect
+
+Ally:
+Chair Fetch
+→ Stabilize
+→ Carabiner/Clamp Attach
+→ Connection Check
+→ Player에게 Tension 인계
+→ 경로에서 이탈
+
+================================================================================
+13. Z6 — NORTH TAG ARENA / DRAWER GATE
+================================================================================
+
+범위:
+X +7~+22
+Z +7~+15
+
+Drawer:
+(+15.5, +10.5)
+
+Parking Bay:
+(+20.0, +10.5)
+
+Runner 2:
+(+15.0, +13.0)
+
+Finisher Pocket:
+(+13.5, +9.0)
+8m × 7m
+
+Fixed Crash Desk:
+(+10.0, +12.0)
+
+Impact Partition:
+(+18.0, +8.0)
+
+Drawer 해결법:
+
+A. Direct Chair Throw
+B. Strap Redirect
+C. Runner Causal Collision
+D. Team Finisher
+
+한 플레이에서 보통 하나만 경험.
+
+================================================================================
+14. Z7 — EXIT RUN
+================================================================================
+
+범위:
+X +16~+24
+Z +12~+17
+
+Exit:
+(+20.5, +16.5)
+폭 1.8~2.0m
+
+Drawer 해결 후:
+- Exit Sign 밝아짐
+- Alarm 약해짐
+- Player와 Ally가 함께 달림
+
+클라이맥스 후 10~20초 안에 종료.
+긴 복도/긴 Cutscene/추가 Wave 금지.
+
+================================================================================
+15. 동료 기능
+================================================================================
+
+1. Follow
+2. Fetch
+3. Supply
+4. Brace
+5. Rescue
+6. Combat Tag
+7. Finisher Partner
+
+Follow:
+Player 뒤 왼쪽 2.5~3.2m
+5.5m 이상 Catch-up
+8m 이상 빠른 Catch-up
+최대 정상 거리 12m
+
+Blocked 시 반대편 후방 또는 Follow Anchor 사용.
+
+================================================================================
+16. FOLLOW ANCHOR NETWORK
+================================================================================
+
+FA-00 (-2, -14)
+FA-01 (-3, -10)
+FA-02 (-4, -5)
+FA-03 (0, +3)
+FA-04 (-14, -5)
+FA-05 (-17, +7)
+FA-06 (-7, +12)
+FA-07 (+12, -4)
+FA-08 (+14, +5)
+FA-09 (+11, +9)
+FA-10 (+14, +11)
+FA-11 (+19, +15)
+
+금지:
+Desk/Partition 관통
+순간이동
+물체를 밀며 강제 통과
+
+================================================================================
+17. FETCH / SUPPLY / BRACE
+================================================================================
+
+FETCH:
+Aim한 Binder/Chair를 실제로 가져감.
+
+Binder Supply:
+이동 → Grip → Aim 확인 → Toss → Catch/Miss
+
+Chair Supply:
+이동 → Grip → Grounded Push → Release
+
+BRACE:
+A Chair Stabilize
+B Carabiner 직접 연결
+C 연결 후 Player에게 Tension 인계
+
+공모전 추천:
+B+C
+
+================================================================================
+18. RESCUE
+================================================================================
+
+Runner Grab
+→ Player 이동 제한
+→ [Q] BREAK GRAB
+→ Ally 접근
+→ Runner 팔/어깨 밀기
+→ Player 해방
+→ Runner Off-Balance
+
+조건:
+- Ally 7m 이내
+- 경로 열림
+- Supply/Finisher 중 아님
+
+================================================================================
+19. COMBAT TAG
+================================================================================
+
+Tag Shove:
+
+Binder Hit
+→ Runner Off-Balance
+→ [Q] TAG SHOVE
+→ Ally Forearm Check
+→ Runner를 충돌 Lane으로 이동
+
+
+Tag Hold:
+
+Chair Impact
+→ Runner Medium Stagger
+→ [Q] SET HIM UP
+→ Ally가 잠깐 Hold
+→ Player가 Throw 방향 결정
+→ Ally Release/Dodge
+
+
+Return Pass — P1:
+
+Player Binder → Ally Catch → Ally Re-Toss
+
+================================================================================
+20. Q 버튼 CONTEXT PRIORITY
+================================================================================
+
+1. Player Grabbed
+   [Q] BREAK GRAB
+
+2. Finisher Window
+   [Q] TEAM FINISH
+
+3. Chair Strap Assist
+   [Q] ASSIST ATTACH
+
+4. Staggered Enemy
+   [Q] TAG SHOVE / SET HIM UP
+
+5. Supply Candidate
+   [Q] SEND BINDER / SEND CHAIR
+
+6. Otherwise
+   [Q] REGROUP
+
+항상 Q Prompt는 하나만 표시.
+
+================================================================================
+21. TEAM READINESS
+================================================================================
+
+PASS:
+Ally Binder Supply 후 Catch
+
+BRACE:
+Ally-assisted Carabiner Attach
+
+BREAK:
+Grab Rescue 또는 Combat Tag
+
+서로 다른 2개 성공:
+TEAM READY
+
+UI:
+
+PASS  [■]
+BRACE [■]
+BREAK [□]
+
+TEAM READY
+
+Decay/소비/Persistent progression 없음.
+Run 종료 시 Reset.
+
+================================================================================
+22. TEAM FINISHER
+================================================================================
+
+FIN-P-001 — HANDOVER CRASH
+
+조건:
+- TEAM READY
+- Runner 2 Finisher Pocket
+- Runner 2 Stagger
+- Ally 7m 이내
+- Chair 유효
+- Drawer 아직 닫힘
+- 다른 Relay/Reset/Failure 없음
+
+Prompt:
+[Q] TEAM FINISH — HANDOVER CRASH
+
+Sequence:
+
+0.0~0.35
+Commit / Camera offset
+
+0.35~0.90
+Ally가 Runner 측면 Setup
+
+0.90~1.30
+Player Strap Pull 또는 Direct Chair Throw
+
+1.30~1.55
+Ally Clear
+
+1.55~1.90
+Chair → Runner → Drawer 충돌
+
+1.90~2.60
+Paper VFX / Wheel Skid / Drawer Impact / Exit 점등 / Control 반환
+
+총 약 2.5초.
+
+Finisher 없이도 Direct Chair / Strap Redirect로 클리어 가능.
+
+================================================================================
+23. ENEMY 구성
+================================================================================
+
+Runner 1 — Hunter
+(+1, +2)
+
+행동:
+Body Check
+Two-hand Shove
+Short Grab
+
+역할:
+첫 Throw 유도
+Rescue 경험
+Tag 기회
+
+
+Runner 2 — Gatekeeper
+(+15, +13)
+
+행동:
+Body Check
+Grab
+Objective Blocking
+
+역할:
+Finisher Target
+Drawer 압박
+마지막 Exit 압박
+
+
+Attack Token:
+동시에 한 명만 공격 Commit.
+
+================================================================================
+24. ENEMY 상태
+================================================================================
+
+NORMAL
+
+OFF_BALANCE
+Binder/Tag 후 약 0.8초
+
+STAGGERED
+Chair 후 약 1.3~1.7초
+
+WALL_STAGGER
+벽/Desk 후 약 1.5초
+
+GRAB_COMMITTED
+
+FINISHER_ELIGIBLE
+Team Ready + Finisher Pocket + Stagger
+
+================================================================================
+25. 5~7분 감정 곡선
+================================================================================
+
+0:00~0:25
+즉시 조작 / Pickup
+→ “바로 던질 수 있네.”
+
+0:25~1:10
+첫 Binder 충돌
+→ “물건 맞으니까 제대로 밀리네.”
+
+1:10~2:00
+Ally Supply / Catch / Queued Throw
+→ “동료가 진짜 패스하네.”
+
+2:00~3:10
+Route 선택
+→ “다른 길이 있네.”
+
+3:10~4:20
+Grab Rescue / Tag / Carabiner Assist
+→ “동료가 같이 싸우네.”
+
+4:20~5:30
+Drawer Objective
+→ “앞에서 배운 걸 조합해야 하네.”
+
+5:30~6:20
+Team Finisher
+→ “이게 핵심 장면이구나.”
+
+6:20~7:00
+Exit / Next-area tease
+→ “다른 방식으로 또 해보고 싶다.”
+
+================================================================================
+26. 종료 연출
+================================================================================
+
+3초 Tease:
+
+Security Shutter 일부 개방
+→ 더 넓은 Atrium/Office 실루엣
+→ 멀리서 경보/움직임
+
+문구:
+OPERATIONS FLOOR BREACHED
+HANDOVER INCOMPLETE
+
+결과 카드:
+
+CLEAR TIME
+DRAWER SOLUTION
+TEAM TAGS
+PHYSICAL SOLUTIONS DISCOVERED
+LONGEST CAUSAL CHAIN
+ALTERNATE ROUTES USED
+
+버튼:
+REPLAY — NEW PRESSURE VARIANT
+RETURN TO TITLE
+
+CONTINUE 없음.
+
+================================================================================
+27. REPLAY VARIANT
+================================================================================
+
+Variant A — Standard
+Runner 1 Central
+Runner 2 Drawer
+West Supply 안전
+
+Variant B — Supply Pressure
+Runner 1 West entrance
+Runner 2 North Cross
+East Lane 안전
+
+Variant C — Physics Pressure
+Runner 1 Direct Pool 사이
+Runner 2 East Strap Pocket
+West Loop 우회 강함
+
+================================================================================
+28. “더 해보고 싶다” 장치
+================================================================================
+
+첫 플레이에서 일부만 경험:
+
+- Return Pass
+- Grab Rescue
+- Carabiner Assist
+- Combat Tag
+- Team Finisher
+- Direct Drawer Solution
+- Causal Drawer Solution
+
+결과 화면:
+
+TEAM TAGS 2/5
+DRAWER SOLUTIONS 1/4
+ROUTES 1/3
+
+다른 경로는 멀리서 보이게 한다.
+클라이맥스 직후 종료한다.
+다음 공간은 3초만 보여준다.
+
+Leave on the peak.
+
+================================================================================
+29. ENVIRONMENT ASSET LIST
+================================================================================
+
+Architecture:
+
+ENV_Wall_2m
+ENV_Wall_4m
+ENV_Wall_6m
+ENV_Wall_InnerCorner
+ENV_Wall_OuterCorner
+ENV_Wall_DoorModule
+ENV_LowPartition_1m
+ENV_LowPartition_2m
+ENV_LowPartition_3m
+ENV_LowPartition_Corner
+ENV_LowPartition_TJunction
+ENV_LowPartition_EndCap
+ENV_Floor_4m
+ENV_Ceiling_4m
+ENV_Column_070
+ENV_ExitDoor_Frame
+ENV_SecurityShutter_VistaOnly
+ENV_FluorescentFixture_A
+ENV_FluorescentFixture_B
+
+Furniture:
+
+PRP_FixedDesk_Single
+PRP_FixedDesk_Double
+PRP_FixedDesk_LShape
+PRP_OfficeChair_Gameplay
+PRP_RollingDrawer_Gameplay
+PRP_Copier_Recognition
+PRP_FileBinder_Gameplay
+
+Dressing:
+
+DEC_MonitorCluster_A/B/C
+DEC_KeyboardPhoneCluster
+DEC_PaperStack_A/B
+DEC_ArchiveBox_A/B
+DEC_Plant_A/B
+DEC_WasteBin_A/B
+DEC_CableBundle_VisualOnly
+DEC_FloorTape_Set
+DEC_AssetTag_Set
+DEC_KEEP_CLEAR
+DEC_EXIT_DIRECTION
+DEC_EQUIPMENT_TRANSFER
+DEC_MOBILE_STORAGE_PARKING
+DEC_WheelMarks
+DEC_WallScuffs
+DEC_ImpactMarks
+
+Finisher VFX:
+
+VFX_PaperBurst_Small
+VFX_ChairWheelDust
+VFX_DrawerImpactDust
+VFX_WallImpactDust
+VFX_TagContactFlash_Subtle
+VFX_ExitLightActivation
+
+================================================================================
+30. 카메라 규칙
+================================================================================
+
+주 통로:
+3.5m 이상
+
+Tag Pocket:
+6m × 6m 이상
+
+Finisher Pocket:
+8m × 7m 이상
+
+Partition:
+1.25m 이하
+
+천장:
+4.2m
+
+Column 주변:
+1.5m 이상
+
+Finisher:
+0.25초 진입 Blend
+최대 0.3초 Slow Motion
+0.3초 복귀 Blend
+전체 2.5초 이내
+
+================================================================================
+31. 동료 행동 우선순위
+================================================================================
+
+Reset/Failure
+→ Finisher
+→ Rescue
+→ Current Assist
+→ Current Supply
+→ Follow
+→ Idle
+
+금지:
+- Player 앞 막기
+- Camera 가리기
+- Throw Lane에 서기
+- Redirect Lane에 남기
+- Reset 중 행동
+- Player Carry 물체와 충돌
+- 동시에 두 행동 수행
+
+================================================================================
+32. 구현 작업 분해
+================================================================================
+
+M0 Change Control
+Large Showcase / Mobile Ally / Expanded objects / Team Tag / Finisher
+
+M1 Large Map Graybox
+48×34 / Figure-eight / West / East / Drawer / Exit
+
+M2 Mobile Ally Follow
+Anchor / Side switch / Catch-up / Blocked / Regroup
+
+M3 Mobile Supply
+Fetch / Binder Toss / Chair Feed / Reset
+
+M4 Team Tag
+PASS / BRACE / BREAK / Q Arbitration / Team Ready
+
+M5 Enemy Pressure
+Body Check / Shove / Grab / Rescue / Stagger / Attack Token
+
+M6 Objective
+Drawer / Parking Bay / 4 Solutions / Exit
+
+M7 Finisher
+HANDOVER CRASH / Paired Animation / Camera / Physics / Drawer opening
+
+M8 Art Swap
+Environment / Character / Animation / GEAR01 / VFX / Audio / UI
+
+M9 Browser Qualification
+Compile / Tests / Web / HTTP / Chrome / Edge / In-app Chromium / Human playtest
+
+================================================================================
+33. 성공 기준
+================================================================================
+
+처음 플레이 5명 기준.
+
+30초:
+4명 이상 Pickup
+3명 이상 Throw
+
+2분:
+3명 이상 Ally Tag 1회
+3명 이상 alternate Route 인식
+
+5분:
+4명 이상 Drawer 이해
+3명 이상 직접/협동 해결 시도
+
+종료:
+3명 이상 “다른 Route로 다시 해보고 싶다.”
+2명 이상 즉시 Replay
+
+평균:
+5~7분
+
+완료율:
+70% 이상
+
+최종 질문:
+
+“동료가 단순한 자판기가 아니라
+내 행동을 이해하고 같이 플레이한다고 느꼈는가?”
+
+================================================================================
+34. FINAL DIRECTION
+================================================================================
+
+맵:
+48m × 34m 대형 오픈오피스
+
+중앙:
+Cubicle Island
+
+서쪽:
+동료 협동·Supply Loop
+
+동쪽:
+Chair·Strap·Physics Lane
+
+중앙 South:
+직접 전투·Tag
+
+북쪽:
+Drawer Objective·Team Finisher
+
+마지막:
+짧은 Exit Run·다음 공간 Tease
+
+
+동료:
+
+- Follow
+- Fetch
+- Binder Toss
+- Chair Push
+- Chair Stabilize
+- Carabiner Attach
+- Grab Rescue
+- Combat Tag
+- Finisher
+- Exit Run
+
+
+최종 해결법:
+
+- Direct Chair Throw
+- Strap Redirect
+- Runner Causal Collision
+- Team Finisher
+
+
+최종 경험 목표:
+
+“이제 시스템 이해했는데 끝났네.
+다른 길과 다른 Tag 조합으로 한 번 더 해보고 싶다.”
+
+Do not show everything.
+Show enough depth that the player imagines the rest.
