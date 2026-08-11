@@ -2,139 +2,145 @@
 
 Asset ID: `AUD-SHOWCASE-001`
 
-Asset Name: `CONTEST-0002 Operations Floor Showcase Audio`
+Asset Name: `CONTEST-0002 Operations Floor Showcase Audio Production Source Pack v001`
 
-Creator: `NOT ASSIGNED`
+Creator: `OpenAI Codex — Human Owner-directed deterministic procedural synthesis`
 
-GitHub ID: `N/A`
+Contribution Date: `2026-08-12 KST`
 
-Contribution Date: `N/A — PREPARATION ONLY`
-
-Current Status: `MISSING / SOURCE-DESIGN-LICENSE PREPARATION COMPLETE / NO BINARY`
+Current Status: `DELIVERED / PENDING HUMAN OWNER AUDITION AND TECHNICAL REVIEW`
 
 Human Owner Status: `NOT REVIEWED`
 
-Runtime Status: `NOT AUTHORIZED / S9-BOUND`
+Runtime Status: `NOT INTEGRATED / SEPARATE CONTROLLED RUNTIME-AUDIO RELAY REQUIRED`
 
-## Work Classification
+## Source Classification
 
-- Original: `PREFERRED / NOT DELIVERED`
+- Original: `23 deterministic procedural source masters`
+- AI-assisted procedural synthesis: `YES — fixed algorithm and seed, no generative-audio service`
 - Purchased: `NONE`
-- Open License: `CC0 CANDIDATES IDENTIFIED / NOT DOWNLOADED`
-- AI Generated: `NONE`
-- Mixed: `NONE`
+- Open License / CC0 download: `NONE`
+- Third-party sample, recording or pack: `NONE`
+- Voice, dialogue or music: `NONE`
+- Known-game or brand-sound imitation: `NONE`
 
-## Exact License
+이 패스의 오디오는 인터넷에서 끌어온 파일이 아니다. 모든 source master는
+고정 seed를 사용하는 수학적 oscillator, filtered-noise, envelope와 resonator
+조합으로 로컬 생성했다. 제3자 audio byte나 sample을 사용하지 않았으므로
+외부 attribution 의무는 없다.
 
-`MISSING — NO SOURCE SELECTED`
+Exact rights classification:
+`PROJECT ORIGINAL / NO THIRD-PARTY AUDIO SOURCE / NO EXTERNAL LICENSE DEPENDENCY`
 
-Written Permission: `NONE / NOT APPLICABLE YET`
+Exact external URL: `N/A — no network retrieval`
 
-Reference Used:
-
-- `docs/10_contest/workstreams/audio/SHOWCASE_AUDIO_DIRECTION_v001.md`
-- `docs/10_contest/workstreams/audio/SHOWCASE_AUDIO_CUE_MATRIX_v001.csv`
-- `docs/10_contest/workstreams/audio/SHOWCASE_AUDIO_LICENSE_PLAN_v001.md`
-- `docs/10_contest/workstreams/audio/SHOWCASE_AUDIO_DELIVERY_CHECKLIST_v001.md`
+Source와 변환별 SHA-256, seed, format과 destination은
+`Licenses/AUDIO_SOURCE_PROVENANCE_v001.md`에 기록했다.
 
 ## Current Files
 
-Source Files: `0`
+- Source master WAV: `23`
+- Export WAV: `23`
+- Audition WAV: `1`
+- Audio files total: `47`
+- License/provenance files: `1`
+- Preview files: `2`
+- Unity Runtime files: `0`
+- `.meta` files: `0`
+- Total committed binary payload: `16,806,191 bytes / 16.028 MiB`
+- Binary target: `PASS — below 25 MiB`
 
-Export Files: `0`
+## Delivered P0/P1 Cue Families
 
-Audio Files: `0`
+| Required family | Delivered file |
+|---|---|
+| UI / interaction confirm | `Export/AUD_UI_Confirm_01_v001.wav` |
+| UI / interaction reject | `Export/AUD_UI_Reject_01_v001.wav` |
+| Direct pickup | `Export/AUD_PLY_Binder_Acquire_01_v001.wav`, `Export/AUD_PLY_Chair_Acquire_01_v001.wav` |
+| Binder throw / release | `Export/AUD_PLY_Binder_ThrowRelease_01_v001.wav` |
+| Binder light impact variants | `Export/AUD_BND_Impact_OfficeSurface_01_v001.wav` through `_03_v001.wav` |
+| Chair medium impact variants | `Export/AUD_CHR_Impact_StaticOffice_01_v001.wav` through `_03_v001.wav` |
+| Chair wheel / ground movement loop | `Export/AUD_CHR_CasterRoll_Loop_v001.wav` |
+| Ally READY | `Export/AUD_ALY_Ready_01_v001.wav` |
+| Ally supply release | `Export/AUD_ALY_BinderSupply_Release_01_v001.wav` |
+| Catch confirmation | `Export/AUD_BND_Catch_Secure_01_v001.wav` |
+| Charged player throw release | `Export/AUD_PLY_ThrowCharge_Release_v001.wav` |
+| Authored Reset | `Export/AUD_RST_Reset_Accept_v001.wav` |
+| Hard-office-floor footsteps | `Export/AUD_PLY_Footstep_OfficeFloor_01_v001.wav` through `_04_v001.wav` |
+| Operations Floor HVAC / room tone | `Export/AUD_AMB_OperationsFloor_RoomTone_Loop_v001.wav` |
+| Exit / objective activation | `Export/AUD_EXT_Exit_Activated_v001.wav` |
 
-License Files: `0`
+## Audition
 
-Preview Files: `0`
+- Ordered reel:
+  `Preview/AUD_Showcase_ProductionSourcePack_v001_Audition.wav`
+- Waveform contact sheet:
+  `Preview/AUD_Showcase_ProductionSourcePack_v001_Waveforms.png`
+- Reel format: `PCM WAV / 48 kHz / 24-bit / stereo / 30.090 s / -2.5 dBFS peak`
+- Reel SHA-256:
+  `ba16a72bb0b17ee84038fb8d24f3aa7f5e4b391b5dbfab3fd7251ea34c6af3fb`
+- Contact sheet SHA-256:
+  `5d47e04bee7549e4178720059b643bfb33b7c55267684e8037ed839274b2320f`
 
-Unity Runtime Files: `0`
+### Ordered Reel Index
 
-`.meta` Files: `0`
+| # | Time | File |
+|---:|---:|---|
+| 01 | 00:00.500–00:00.880 | `AUD_UI_Confirm_01_v001.wav` |
+| 02 | 00:01.300–00:01.740 | `AUD_UI_Reject_01_v001.wav` |
+| 03 | 00:02.160–00:02.540 | `AUD_PLY_Binder_Acquire_01_v001.wav` |
+| 04 | 00:02.960–00:03.440 | `AUD_PLY_Chair_Acquire_01_v001.wav` |
+| 05 | 00:03.860–00:04.420 | `AUD_PLY_Binder_ThrowRelease_01_v001.wav` |
+| 06 | 00:04.840–00:05.240 | `AUD_BND_Impact_OfficeSurface_01_v001.wav` |
+| 07 | 00:05.660–00:06.060 | `AUD_BND_Impact_OfficeSurface_02_v001.wav` |
+| 08 | 00:06.480–00:06.880 | `AUD_BND_Impact_OfficeSurface_03_v001.wav` |
+| 09 | 00:07.300–00:07.920 | `AUD_CHR_Impact_StaticOffice_01_v001.wav` |
+| 10 | 00:08.340–00:08.960 | `AUD_CHR_Impact_StaticOffice_02_v001.wav` |
+| 11 | 00:09.380–00:10.000 | `AUD_CHR_Impact_StaticOffice_03_v001.wav` |
+| 12 | 00:10.420–00:12.920 | `AUD_CHR_CasterRoll_Loop_v001.wav` |
+| 13 | 00:13.340–00:13.860 | `AUD_ALY_Ready_01_v001.wav` |
+| 14 | 00:14.280–00:14.860 | `AUD_ALY_BinderSupply_Release_01_v001.wav` |
+| 15 | 00:15.280–00:15.780 | `AUD_BND_Catch_Secure_01_v001.wav` |
+| 16 | 00:16.200–00:16.980 | `AUD_PLY_ThrowCharge_Release_v001.wav` |
+| 17 | 00:17.400–00:18.100 | `AUD_RST_Reset_Accept_v001.wav` |
+| 18 | 00:18.520–00:18.860 | `AUD_PLY_Footstep_OfficeFloor_01_v001.wav` |
+| 19 | 00:19.280–00:19.620 | `AUD_PLY_Footstep_OfficeFloor_02_v001.wav` |
+| 20 | 00:20.040–00:20.380 | `AUD_PLY_Footstep_OfficeFloor_03_v001.wav` |
+| 21 | 00:20.800–00:21.140 | `AUD_PLY_Footstep_OfficeFloor_04_v001.wav` |
+| 22 | 00:21.560–00:27.560 | `AUD_AMB_OperationsFloor_RoomTone_Loop_v001.wav` |
+| 23 | 00:27.980–00:28.920 | `AUD_EXT_Exit_Activated_v001.wav` |
 
-## Folder Roles
+각 항목 사이에는 `0.420 s` silence가 있으며, label voice나 music은 없다.
 
-- `Source/`: future byte-preserved original recordings or licensed downloads.
-- `Licenses/`: future license deed/EULA, asset page evidence and source ledger.
-- `Preview/`: future low-size audition and gameplay-context review reels.
+## Technical Validation
 
-현재 `.gitkeep` 외에는 어떤 파일도 두지 않는다. source acquisition Relay의
-exact allowlist가 생기기 전에는 binary, snapshot 또는 ledger를 추가하지 않는다.
+- Independent decode: `PASS — 47 / 47 WAV`
+- Format: `PASS — PCM WAV, 48,000 Hz, 24-bit`
+- Channel choice: `PASS — spatial one-shots/Chair loop mono; room tone and Exit cue stereo`
+- Sample clipping: `PASS — 0 samples`
+- DC offset: `PASS — every source, export and reel below 2e-5 full scale`
+- Export byte/hash uniqueness: `PASS — 23 / 23 unique`
+- Binder impact variation correlation: `PASS — maximum 0.0420`
+- Chair impact variation correlation: `PASS — maximum 0.0425`
+- Footstep variation correlation: `PASS — maximum 0.3559`
+- Chair loop seam: `PASS — -41.950 dBFS jump, 0.2896 × ordinary p99 sample step`
+- HVAC loop seam: `PASS — -58.249 dBFS jump, 0.1672 × ordinary p99 sample step`
+- Reel contents/order: `PASS — 23 / 23 exports verified, residual ratio 0`
+- Waveform preview decode: `PASS — PNG 2136 × 2613 RGBA`
 
-## Expected Cue Files
+Unity Test, Web Build와 Browser test는 이 source-only Relay의 금지 범위이므로
+실행하지 않았다.
 
-각 primary expected filename의 정확한 목록은
-`docs/10_contest/workstreams/audio/SHOWCASE_AUDIO_CUE_MATRIX_v001.csv`의
-`Expected Filename` 열을 따른다. 주요 family는 다음과 같다.
+## Runtime Boundary
 
-- `AUD_AMB_*` — Operations Floor ambience와 fixture/alarm/tease.
-- `AUD_PLY_*` — Player movement, acquisition, carry, Charge와 Release.
-- `AUD_BND_*` — Binder airborne, impact, Catch와 Miss.
-- `AUD_CHR_*` — Chair grounded roll/feed/skid/impact.
-- `AUD_ALY_*` — READY, Q result, physical supply와 rejection.
-- `AUD_STR_*` — Strap deploy/attach/tension/redirect/release.
-- `AUD_TAG_*` — PASS/BRACE/BREAK/TEAM READY와 Finisher eligibility.
-- `AUD_RUN_*` — Runner pressure, contact, Grab, Rescue와 Stagger.
-- `AUD_DRW_*` — Drawer impact/movement/route-open/settle.
-- `AUD_FIN_*` — conditional HANDOVER CRASH causal sequence.
-- `AUD_RST_*` — Reset barrier.
-- `AUD_EXT_*` — Exit, clear와 result card.
-- `AUD_UI_*` — generic confirm/reject와 conditional Q-context change.
+이번 delivery는 Unity에 import하지 않았다. 따라서 AudioClip import setting,
+`.meta`, AudioSource, AudioMixer, spatial blend, rolloff, ducking, voice limit,
+event binding과 trigger timing은 전부 남아 있다. Runtime hook 이름과 exact
+timing은 계속 `PROPOSED / REVIEW REQUIRED`이며, 별도 Human Owner Relay에서
+통제된 runtime-audio integration으로 처리해야 한다.
 
-Variation은 approved primary stem에 `_02`, `_03` 순으로 추가하고 기존 파일을
-덮어쓰지 않는다. `final.wav`, `final2.wav`, `new.wav`, 한글명과 공백을 쓰지
-않는다.
-
-## Future Technical Delivery
-
-권장 Runtime Export:
-
-- WAV
-- 48 kHz
-- 24-bit preferred 또는 16-bit accepted
-- 3D cue는 mono preferred
-- ambience와 의도된 wide cue는 stereo
-- trim 상태, loop point, peak/clipping, channel과 duration 기록
-
-정확한 loudness, peak, compression, Unity import, AudioMixer route, spatial
-blend, rolloff, occlusion과 voice limit은 `PROPOSED / REVIEW REQUIRED`다.
-
-## Required Source Manifest Fields
-
-- Cue ID
-- Internal Source ID
-- Original title/filename
-- Creator/uploader
-- Exact URL
-- Download timestamp/timezone
-- License name와 canonical URL
-- Commercial-use permission
-- Modification permission
-- Attribution string
-- Original bytes/SHA-256
-- Sample rate/bit depth/channels/duration
-- Editing tool/version와 modification log
-- Derived filename/bytes/SHA-256
-- Known noise, clipping, loop, phase 또는 provenance issue
-- Human Owner decision
-- Runtime integration decision
-
-## Known Issues
-
-- 실제 source가 선택되지 않았다.
-- license evidence가 없다.
-- candidate page status는 download-time evidence가 아니다.
-- Freesound 후보는 user-upload provenance 추가 검토가 필요하다.
-- exact Runtime hook과 timing이 확정되지 않았다.
-- audio preview와 Human Owner listening review가 없다.
-
-## Requested Integration
-
-`NONE — DO NOT INTEGRATE`
-
-Blocking Feature: `NONE FOR THIS SOURCE-DESIGN PACKAGE / AUDIO BINARIES REMAIN MISSING FOR FUTURE S9`
-
-Suggested Runtime Path: `PROPOSED / REVIEW REQUIRED — Game/Assets/_Project/Audio/<Category>/`
+Human Owner의 실제 청취 승인도 아직 수행되지 않았다. 오디션 릴에서 tonal
+character, perceived loudness와 게임 맥락 적합성을 검토한 뒤 승인 또는 revision
+요청을 기록해야 한다.
 
 No new production asset blocks this work package. Graybox fallback remains active.
