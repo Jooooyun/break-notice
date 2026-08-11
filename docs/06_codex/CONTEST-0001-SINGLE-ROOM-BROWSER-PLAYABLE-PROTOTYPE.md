@@ -326,3 +326,26 @@ desktop browser prototype과 검증 증거를 만든다.
   `Local server READY. Automated in-app inspection was not collected because the admin-enforced local browser policy check was temporarily unavailable; this is not recorded as a product failure. Human Throw-feel, pickup-assist, wall-occlusion and C4 regression retest remain pending.`
 - Scope:
   `No C5 Cargo Strap, package, ProjectSettings, production-art runtime integration or protected Human Owner work changed.`
+
+## Post-Acceptance Charged Throw and Ally Supply Variation — 2026-08-11
+
+- Human Owner directive:
+  `Vary the NPC-to-player supply speed, and make player Throw speed and physical impact strength increase with LMB hold duration.`
+- Starting baseline:
+  `996c6c11f72d8466ad39058201527a06560afe4e / contest local-origin-remote equal / tracked-staged clean / protected Human Owner untracked work preserved.`
+- Implementation commit:
+  `f1fd9b15f407be9003eff622231e338358376bcc / pushed and remote-verified.`
+- Player charged Throw:
+  `The existing Throw logical action now exposes press, held and release phases without adding an input action or binding. A short click preserves the existing Light-Medium base speeds of 12.5 and 8.0. A 1.2-second full charge scales horizontal release speed from 1.0x to 1.6x and therefore raises same-mass physical kinetic energy up to approximately 2.56x. This is Rigidbody impact energy only; Prototype damage, Breakable, fracture and destruction remain absent by the locked zero budget.`
+- Queued Catch-Throw and safety:
+  `LMB can charge the existing queued relay Throw before E Catch. Releasing LMB before Catch freezes the bounded charge and the same visible Binder still produces exactly one player-owned release. Reset, failure, ownership loss and pointer loss cancel or safely freeze the appropriate charge state without creating hidden inventory or duplicate ownership.`
+- Ally Binder variation:
+  `Each airborne Binder supply selects a bounded 0.9x-1.1x horizontal-speed multiplier from a controller-owned resettable low-discrepancy sequence. The ballistic destination is recomputed from that speed, Unity global Random state is untouched, Catch readability is preserved, and authored Reset restores the variation baseline. Grounded Chair feed remains unchanged.`
+- Tests:
+  `Unity compile PASS / EditMode 65/65 / PlayMode 59/59 / total 124/124. New coverage verifies input phases, base and maximum charge values, actual release speed and kinetic energy growth, queued-charge retention through Catch, consecutive distinct bounded NPC Binder speeds, and Reset restoration.`
+- Web qualification:
+  `Unity 6000.3.20f1 Web Development build PASS / GUID 3cc7416d44c44067bc51c6474c46351d / 113881344 Unity-reported bytes / warning 0 / error 0 / HTTP 19/19 / 113883098 bytes / aggregate SHA-256 61cd70625800cf904a866d47d42138f7f4473645453e6644cbe3d305d14f9ec7.`
+- Browser and manual status:
+  `Local server READY at http://127.0.0.1:8765/. Automated in-app navigation was blocked because the admin-enforced local-browser policy check was unavailable; no product failure is inferred. Human NPC speed-variation, tap-to-full-charge Throw feel, queued Catch-Throw, Reset and preserved C0-C4 regression checks remain pending.`
+- Scope:
+  `C5 Cargo Strap, damage, Breakable, fracture, packages, ProjectSettings, production-art runtime integration and protected Human Owner work remain unchanged and unauthorized.`

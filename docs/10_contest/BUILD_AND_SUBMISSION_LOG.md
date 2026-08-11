@@ -222,3 +222,22 @@ Publication result: `PASS / normal push / no force / verified with ls-remote`.
 | Browser | `PENDING HUMAN RETEST / server READY / automated local inspection unavailable because the admin-enforced browser policy check could not be verified / no product failure inferred` |
 | Scope Protection | `C5+, Packages, ProjectSettings and production-art runtime integration unchanged` |
 | Submission State | `NOT READY / POST-ACCEPTANCE TUNING HUMAN FEEL RETEST PENDING / C5 NOT AUTHORIZED` |
+
+## Post-Acceptance Charged Throw and Ally Supply Variation Development Build — 2026-08-11
+
+| Field | Value |
+|---|---|
+| Starting Source SHA | `996c6c11f72d8466ad39058201527a06560afe4e / contest local-origin-remote equal / tracked-staged clean` |
+| Implementation Commit | `f1fd9b15f407be9003eff622231e338358376bcc / pushed and remote-verified` |
+| Human Owner Directive | `Bounded random-feeling NPC Binder supply speed plus LMB hold-duration player Throw speed and physical impact growth` |
+| Unity Version | `6000.3.20f1` |
+| Compile | `PASS` |
+| Tests | `EditMode 65/65 PASS / PlayMode 59/59 PASS / total 124/124` |
+| Player Throw Tuning | `1.2-second full charge / speed multiplier 1.0x-1.6x / short click preserves Light 12.5 and Medium 8.0` |
+| Ally Binder Variation | `Per-release 0.9x-1.1x bounded resettable sequence / ballistic destination recomputed / global Random untouched` |
+| Physical Impact Scope | `Actual Rigidbody speed and kinetic energy increase; same-mass full-charge energy approximately 2.56x / no damage, Breakable, fracture or destruction system` |
+| Web Build | `PASS / GUID 3cc7416d44c44067bc51c6474c46351d / 113881344 Unity-reported bytes / warning 0 / error 0` |
+| HTTP | `PASS / 19 of 19 / 113883098 bytes / SHA-256 61cd70625800cf904a866d47d42138f7f4473645453e6644cbe3d305d14f9ec7` |
+| Browser | `PENDING HUMAN RETEST / local server READY / automated local navigation unavailable because the admin-enforced browser policy check could not be verified / no product failure inferred` |
+| Scope Protection | `C5 Cargo Strap, damage-destruction, Packages, ProjectSettings, production-art runtime integration and protected Human Owner work unchanged` |
+| Submission State | `NOT READY / CHARGE-SUPPLY FEEL AND C0-C4 REGRESSION RETEST PENDING / C5 NOT AUTHORIZED` |

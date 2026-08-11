@@ -321,3 +321,28 @@ commit SHA가 확보된 뒤 한 행을 닫는다.
   `C5+, Packages, ProjectSettings and production-art runtime integration unchanged; protected Human Owner untracked work remained untouched and unstaged.`
 - Next:
   `Complete the bounded Human tuning retest. C5 remains unauthorized and requires a new direct instruction.`
+
+## Post-Acceptance Charged Throw and Ally Supply Variation — 2026-08-11
+
+- Goal:
+  `Make each NPC Binder handoff vary within a catch-readable band, and make player Throw speed and physical impact energy increase with LMB hold duration.`
+- Human Owner Decision Preserved:
+  `The request changes throw feel and physical release energy only. Prototype damage, Breakable, fracture and destruction remain absent under the locked zero budget; C5 Cargo Strap remains unauthorized.`
+- Baseline:
+  `996c6c11f72d8466ad39058201527a06560afe4e / contest local-origin-remote equal / tracked-staged clean / protected 26 unchanged.`
+- Work:
+  `Added press-held-release observation to the existing Throw action, a 1.2-second 1.0x-1.6x player charge profile, charged queued Catch-Throw retention, actual release kinetic-energy observability, presentation feedback, and a controller-owned resettable 0.9x-1.1x low-discrepancy Binder supply sequence. Short clicks preserve the existing 12.5-8.0 player speeds, Binder trajectories remain catch-oriented, and grounded Chair feed is unchanged.`
+- Commit:
+  `f1fd9b15f407be9003eff622231e338358376bcc / normal push complete and remote-verified.`
+- Tests:
+  `Unity compile PASS / EditMode 65/65 / PlayMode 59/59 / total 124/124. Coverage includes input phases, base-maximum charge, actual Rigidbody speed-energy growth, queued charge through Catch, consecutive bounded NPC variation and authored Reset restoration.`
+- Web:
+  `PASS / Unity 6000.3.20f1 / GUID 3cc7416d44c44067bc51c6474c46351d / 113881344 Unity-reported bytes / warning 0 / error 0 / HTTP 19/19 / 113883098 bytes / SHA-256 61cd70625800cf904a866d47d42138f7f4473645453e6644cbe3d305d14f9ec7.`
+- Browser:
+  `Local server READY. Automated in-app navigation could not pass the admin-enforced local-browser policy verification, so no final product browser PASS or FAIL is inferred from automation.`
+- Manual Status:
+  `PENDING / Human Owner must compare repeated NPC Binder supplies, tap-medium-full player charge, charged queued Catch-Throw, Reset restoration and preserved C0-C4 behavior.`
+- Protected Scope:
+  `C5, damage-destruction, Packages, ProjectSettings and production-art runtime integration unchanged; protected Human Owner untracked work remained untouched and unstaged.`
+- Next:
+  `Complete the bounded Human feel and regression retest. Any C5 work still requires a new direct authorization.`
