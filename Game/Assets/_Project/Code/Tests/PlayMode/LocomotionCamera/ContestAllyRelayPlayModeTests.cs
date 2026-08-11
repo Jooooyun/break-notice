@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Interaction;
+using BreakNotice.Presentation;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,175 @@ namespace BreakNotice.LocomotionCamera.Tests
 {
     public sealed class ContestAllyRelayPlayModeTests
     {
+        [UnityTest]
+        public IEnumerator AutonomousAlly_MovesAcquiresAndAcceptsUntargetedQOnlyWhenReady()
+        {
+            RelayFixture fixture = new RelayFixture();
+            try
+            {
+                Vector3 allyStart = fixture.Ally.transform.position;
+                Vector3 binderStart = fixture.BinderOne.transform.position;
+                Assert.That(fixture.Interaction.ProcessCallAlly(), Is.False);
+                Assert.That(fixture.Interaction.LastAllyCallRejection,
+                    Is.EqualTo(PrototypeAllyRelayRejection.AllyUnavailable));
+                Assert.That(fixture.Relay.ReleaseCount, Is.Zero);
+                yield return fixture.WaitForPreparedSupply(fixture.BinderOne);
+
+                Assert.That(fixture.Relay.AllyTravelPathLength, Is.GreaterThan(0.05f));
+                Assert.That(fixture.Relay.PreparationPathLength, Is.GreaterThan(0.05f));
+                Assert.That(Vector3.Distance(fixture.Ally.transform.position, allyStart),
+                    Is.GreaterThan(0.05f));
+                Assert.That(Vector3.Distance(fixture.BinderOne.transform.position, binderStart),
+                    Is.GreaterThan(0.05f));
+                Assert.That(fixture.Relay.PreparedTarget, Is.SameAs(fixture.BinderOne));
+                Assert.That(fixture.Relay.IsReadyForCall, Is.True);
+
+                fixture.View.transform.rotation = Quaternion.LookRotation(Vector3.back);
+                Physics.SyncTransforms();
+                fixture.Interaction.RefreshTarget(false);
+                Assert.That(fixture.Interaction.CurrentTarget, Is.Null);
+
+                Assert.That(fixture.Interaction.ProcessCallAlly(), Is.True);
+                Assert.That(fixture.Interaction.LastAllyCallTarget, Is.SameAs(fixture.BinderOne));
+                Assert.That(fixture.Owner.RelayReservedTarget, Is.SameAs(fixture.BinderOne));
+                Assert.That(fixture.Relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.PreRelease));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator SolidWall_BlocksAllyFromReachingSupplyAndQHasZeroSideEffect()
+        {
+            RelayFixture fixture = new RelayFixture();
+            GameObject wall = null;
+            try
+            {
+                wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                wall.name = "AllyAcquisitionBlockingWall";
+                wall.transform.position = new Vector3(0f, 0.75f, 3.925f);
+                wall.transform.localScale = new Vector3(3f, 2f, 0.05f);
+                Physics.SyncTransforms();
+
+                for (int step = 0;
+                     step < 20 && !fixture.Relay.IsSupplyPreparationBlocked;
+                     step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                Assert.That(fixture.Relay.PreparedTarget, Is.SameAs(fixture.BinderOne));
+                Assert.That(fixture.Relay.IsSupplyPreparationBlocked, Is.True);
+                Assert.That(fixture.Relay.IsReadyForCall, Is.False);
+                Assert.That(fixture.Interaction.ProcessCallAlly(), Is.False);
+                Assert.That(fixture.Interaction.LastAllyCallRejection,
+                    Is.EqualTo(PrototypeAllyRelayRejection.InvalidPhysicalLane));
+                Assert.That(fixture.Owner.RelayState,
+                    Is.EqualTo(PrototypeRelayReservationState.None));
+                Assert.That(fixture.Relay.ReleaseCount, Is.Zero);
+            }
+            finally
+            {
+                fixture.Dispose();
+                Object.Destroy(wall);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator ReadyAlly_ShowsIndicatorAndBlockedThrowLaneRejectsQWithoutMutation()
+        {
+            RelayFixture fixture = new RelayFixture();
+            GameObject wall = null;
+            try
+            {
+                yield return fixture.WaitForPreparedSupply(fixture.BinderOne);
+                InteractionReadabilityPresenter presenter =
+                    fixture.Player.AddComponent<InteractionReadabilityPresenter>();
+                presenter.Configure(fixture.Interaction);
+                Assert.That(presenter.BuildAllyIndicatorText(), Is.EqualTo("!"));
+                Assert.That(presenter.BuildStatusText(), Does.Contain("[Q] SUPPLY"));
+
+                wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                wall.name = "ReadySupplyBlockingWall";
+                Vector3 midpoint = Vector3.Lerp(
+                    fixture.BinderOne.GetComponent<Collider>().bounds.center,
+                    fixture.Player.transform.position + Vector3.up,
+                    0.5f);
+                wall.transform.position = midpoint;
+                wall.transform.localScale = new Vector3(4f, 3f, 0.2f);
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+
+                Assert.That(fixture.Relay.IsSupplyLaneBlocked, Is.True);
+                Assert.That(fixture.Relay.IsReadyForCall, Is.False);
+                Assert.That(presenter.BuildAllyIndicatorText(), Is.Empty);
+                Assert.That(fixture.Interaction.ProcessCallAlly(), Is.False);
+                Assert.That(fixture.Interaction.LastAllyCallRejection,
+                    Is.EqualTo(PrototypeAllyRelayRejection.InvalidPhysicalLane));
+                Assert.That(fixture.Owner.RelayState,
+                    Is.EqualTo(PrototypeRelayReservationState.None));
+                Assert.That(fixture.Relay.ReleaseCount, Is.Zero);
+            }
+            finally
+            {
+                fixture.Dispose();
+                Object.Destroy(wall);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator IncomingBinder_NormalCatchAssistWorksOffExactReticleAfterFlight()
+        {
+            RelayFixture fixture = new RelayFixture();
+            try
+            {
+                Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderOne, out _), Is.True);
+                yield return fixture.WaitForRelease();
+                yield return new WaitForFixedUpdate();
+                yield return fixture.WaitForCatchWindow(fixture.BinderOne);
+
+                fixture.View.transform.position = fixture.Player.transform.position + Vector3.up;
+                Vector3 binderCenter = fixture.BinderOne.GetComponent<Collider>().bounds.center;
+                fixture.View.transform.rotation = Quaternion.LookRotation(
+                    binderCenter + Vector3.right * 1.2f - fixture.View.transform.position);
+                Physics.SyncTransforms();
+
+                Ray centreRay = new Ray(
+                    fixture.View.transform.position,
+                    fixture.View.transform.forward);
+                bool exactReticleHitsBinder = Physics.Raycast(
+                    centreRay,
+                    out RaycastHit hit,
+                    100f,
+                    Physics.DefaultRaycastLayers,
+                    QueryTriggerInteraction.Ignore) &&
+                    (hit.transform == fixture.BinderOne.transform ||
+                     hit.transform.IsChildOf(fixture.BinderOne.transform));
+                Assert.That(exactReticleHitsBinder, Is.False);
+
+                PrototypeInteractionDecision decision =
+                    fixture.Interaction.ProcessInteractPrimary(false);
+                Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Catch));
+                Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(fixture.BinderOne));
+                Assert.That(fixture.Lifecycle.CarriedTarget, Is.SameAs(fixture.BinderOne));
+                Assert.That(fixture.Relay.CatchCount, Is.EqualTo(1));
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
+
+            yield return null;
+        }
+
         [UnityTest]
         public IEnumerator BinderRelease_StartsAtCurrentWorldPose()
         {
@@ -285,21 +455,56 @@ namespace BreakNotice.LocomotionCamera.Tests
             RelayFixture fixture = new RelayFixture();
             try
             {
-                float baselineBottom = fixture.Chair.GetComponent<Collider>().bounds.min.y;
+                Collider chairCollider = fixture.Chair.GetComponent<Collider>();
+                Collider playerCollider = fixture.Player.GetComponent<Collider>();
+                float baselineBottom = chairCollider.bounds.min.y;
+                Vector3 playerBaseline = fixture.Player.transform.position;
                 Assert.That(fixture.Relay.TryRequestSupply(fixture.Chair, out _), Is.True);
                 yield return fixture.WaitForRelease();
                 Vector3 launch = fixture.Relay.LastLaunchVelocity;
-                for (int step = 0; step < 5; step++)
+                for (int step = 0;
+                     step < 160 && fixture.Relay.RelayPhase != PrototypeRelayPhase.None;
+                     step++)
                 {
                     yield return new WaitForFixedUpdate();
+                    Assert.That(
+                        chairCollider.bounds.min.y,
+                        Is.EqualTo(baselineBottom).Within(0.08f));
+                    Assert.That(Vector3.Dot(fixture.Chair.transform.up, Vector3.up),
+                        Is.GreaterThan(0.999f));
+                    Assert.That(Vector3.Distance(fixture.Player.transform.position, playerBaseline),
+                        Is.LessThan(0.001f));
+                    Assert.That(Physics.ComputePenetration(
+                        chairCollider,
+                        fixture.Chair.transform.position,
+                        fixture.Chair.transform.rotation,
+                        playerCollider,
+                        fixture.Player.transform.position,
+                        fixture.Player.transform.rotation,
+                        out _,
+                        out float penetration),
+                        Is.False,
+                        $"Chair penetrated the player by {penetration:0.0000} m.");
                 }
 
                 Assert.That(Mathf.Abs(launch.y), Is.LessThan(0.001f));
                 Assert.That(Vector3.ProjectOnPlane(launch, Vector3.up).magnitude, Is.GreaterThan(1f));
+                Assert.That(fixture.Relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.None));
                 Assert.That(
-                    fixture.Chair.GetComponent<Collider>().bounds.min.y,
+                    chairCollider.bounds.min.y,
                     Is.EqualTo(baselineBottom).Within(0.08f));
-                Assert.That(fixture.Chair.GetComponent<Rigidbody>().useGravity, Is.True);
+                Rigidbody chairBody = fixture.Chair.GetComponent<Rigidbody>();
+                Assert.That(chairBody.useGravity, Is.True);
+                Assert.That(chairBody.linearVelocity.magnitude, Is.LessThan(0.1f));
+                Assert.That(Physics.ComputePenetration(
+                    chairCollider,
+                    fixture.Chair.transform.position,
+                    fixture.Chair.transform.rotation,
+                    playerCollider,
+                    fixture.Player.transform.position,
+                    fixture.Player.transform.rotation,
+                    out _,
+                    out _), Is.False);
             }
             finally
             {
@@ -603,7 +808,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator ContestScene_FixedAllyStartsVisibleAndAllSupplyLanesAreOpen()
+        public IEnumerator ContestScene_AutonomousAllyStartsVisibleAndAllSupplyLanesAreOpen()
         {
             AsyncOperation load = SceneManager.LoadSceneAsync(
                 "Contest_SingleRoomGraybox",
@@ -662,7 +867,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(
                     sightlineBlockers,
                     Is.Empty,
-                    $"The fixed ally must be visible from the starting camera. " +
+                    $"The autonomous ally must be visible from the starting camera. " +
                     $"camera={gameplayCamera.transform.position}, ally={allyCenter}, " +
                     $"viewport={viewportPoint}");
                 string blockedSupply = string.Join(
@@ -676,6 +881,65 @@ namespace BreakNotice.LocomotionCamera.Tests
                     blockedSupply,
                     Is.Empty,
                     "Every authored C4 supply object must have an open physical lane to the player start.");
+            }
+            finally
+            {
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    unloadOperation = SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+
+            if (unloadOperation != null)
+            {
+                yield return unloadOperation;
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator ContestScene_AllyPhysicallyPreparesBinderBeforeUntargetedQ()
+        {
+            AsyncOperation load = SceneManager.LoadSceneAsync(
+                "Contest_SingleRoomGraybox",
+                LoadSceneMode.Additive);
+            yield return load;
+
+            Scene scene = SceneManager.GetSceneByName("Contest_SingleRoomGraybox");
+            AsyncOperation unloadOperation = null;
+            try
+            {
+                GameObject[] roots = scene.GetRootGameObjects();
+                GameObject ally = roots.Single(root => root.name == "AllyProxy");
+                GameObject player = roots.Single(root => root.name == "Player");
+                PrototypeAllyRelayController relay =
+                    ally.GetComponent<PrototypeAllyRelayController>();
+                PrototypeInteractionController interaction =
+                    player.GetComponent<PrototypeInteractionController>();
+                PrototypeInteractionTarget expectedBinder = roots
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                    .Single(target => target.RuntimeInstanceKey == "BINDER-ALLY-01");
+                Vector3 allyStart = ally.transform.position;
+                Vector3 binderStart = expectedBinder.transform.position;
+
+                for (int step = 0;
+                     step < 300 && !relay.IsReadyForCall;
+                     step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                Assert.That(relay.PreparedTarget, Is.SameAs(expectedBinder));
+                Assert.That(relay.IsReadyForCall, Is.True);
+                Assert.That(relay.AllyTravelPathLength, Is.GreaterThan(0.05f));
+                Assert.That(relay.PreparationPathLength, Is.GreaterThan(0.05f));
+                Assert.That(Vector3.Distance(ally.transform.position, allyStart),
+                    Is.GreaterThan(0.05f));
+                Assert.That(Vector3.Distance(expectedBinder.transform.position, binderStart),
+                    Is.GreaterThan(0.05f));
+
+                Assert.That(interaction.ProcessCallAlly(), Is.True);
+                Assert.That(interaction.LastAllyCallTarget, Is.SameAs(expectedBinder));
+                Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.PreRelease));
             }
             finally
             {
@@ -863,6 +1127,33 @@ namespace BreakNotice.LocomotionCamera.Tests
                 }
 
                 Assert.That(Relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.Released));
+            }
+
+            public IEnumerator WaitForPreparedSupply(PrototypeInteractionTarget expected)
+            {
+                for (int step = 0;
+                     step < 240 &&
+                     (!Relay.IsReadyForCall || Relay.PreparedTarget != expected);
+                     step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                Assert.That(Relay.PreparedTarget, Is.SameAs(expected));
+                Assert.That(Relay.IsReadyForCall, Is.True);
+            }
+
+            public IEnumerator WaitForCatchWindow(PrototypeInteractionTarget expected)
+            {
+                for (int step = 0;
+                     step < 100 && !Relay.CanCatch(expected);
+                     step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                Assert.That(Relay.ActiveTarget, Is.SameAs(expected));
+                Assert.That(Relay.CanCatch(expected), Is.True);
             }
 
             public void AimAt(PrototypeInteractionTarget target)

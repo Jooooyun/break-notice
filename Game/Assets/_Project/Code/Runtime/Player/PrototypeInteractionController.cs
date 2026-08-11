@@ -10,6 +10,7 @@ namespace BreakNotice.Gameplay.Interaction
     {
         private const int VisibilityHitCapacity = 32;
         private const float ReticleRayMaximumDistance = 100f;
+        private const float CatchAssistMinimumForwardDot = 0.65f;
 
         [SerializeField]
         private InputSystemLogicalInputAdapter logicalInput;
@@ -46,8 +47,6 @@ namespace BreakNotice.Gameplay.Interaction
 
         public PrototypeInteractionTarget CurrentTarget { get; private set; }
 
-        public PrototypeInteractionTarget CurrentRelayCandidate { get; private set; }
-
         public PrototypeInteractionDecision LastDecision { get; private set; }
 
         public float InteractionRange => interactionRange;
@@ -65,6 +64,12 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeInteractionTarget LastAllyCallTarget { get; private set; }
 
         public PrototypeAllyRelayController AllyRelayController => allyRelayController;
+
+        public Transform ViewTransform => viewTransform;
+
+        public Camera ViewCamera => viewTransform != null
+            ? viewTransform.GetComponent<Camera>()
+            : null;
 
         private void Awake()
         {
@@ -154,7 +159,9 @@ namespace BreakNotice.Gameplay.Interaction
                     out PrototypeInteractionTarget reticleTarget,
                     out float interactionDistance))
             {
-                return ClearCurrentTarget();
+                ClearCurrentTarget();
+                TryApplyIncomingCatchAssist(interactionOrigin);
+                return CurrentTarget;
             }
 
             CurrentTarget = reticleTarget != null && interactionDistance <= interactionRange
@@ -163,11 +170,7 @@ namespace BreakNotice.Gameplay.Interaction
             CurrentTargetDistance = CurrentTarget != null
                 ? interactionDistance
                 : float.PositiveInfinity;
-            CurrentRelayCandidate =
-                allyRelayController != null &&
-                allyRelayController.CanRequestSupply(reticleTarget, out _)
-                    ? reticleTarget
-                    : null;
+            TryApplyIncomingCatchAssist(interactionOrigin);
             return CurrentTarget;
         }
 
@@ -299,13 +302,12 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool ProcessCallAlly()
         {
-            RefreshTarget(false);
-            PrototypeInteractionTarget candidate = CurrentRelayCandidate;
+            PrototypeInteractionTarget candidate = allyRelayController?.PreparedTarget;
             PrototypeAllyRelayRejection rejection =
                 PrototypeAllyRelayRejection.AllyUnavailable;
             bool accepted = allyRelayController != null &&
-                allyRelayController.TryRequestSupply(
-                    candidate,
+                allyRelayController.TryRequestReadySupply(
+                    out candidate,
                     out rejection);
 
             AllyCallAttemptSequence++;
@@ -398,9 +400,97 @@ namespace BreakNotice.Gameplay.Interaction
         private PrototypeInteractionTarget ClearCurrentTarget()
         {
             CurrentTarget = null;
-            CurrentRelayCandidate = null;
             CurrentTargetDistance = float.PositiveInfinity;
             return null;
+        }
+
+        private bool TryApplyIncomingCatchAssist(Vector3 interactionOrigin)
+        {
+            PrototypeInteractionTarget catchTarget = allyRelayController?.ActiveTarget;
+            if (catchTarget == null ||
+                !allyRelayController.IsBinderIncoming ||
+                !allyRelayController.CanCatch(catchTarget))
+            {
+                return false;
+            }
+
+            Collider targetCollider = catchTarget.GetComponent<Collider>();
+            if (targetCollider == null)
+            {
+                return false;
+            }
+
+            Vector3 viewOrigin = viewTransform != null
+                ? viewTransform.position
+                : interactionOrigin;
+            Vector3 targetPoint = targetCollider.bounds.center;
+            Vector3 toTarget = targetPoint - viewOrigin;
+            if (toTarget.sqrMagnitude <= 0.0001f)
+            {
+                return false;
+            }
+
+            Vector3 viewForward = viewTransform != null
+                ? viewTransform.forward
+                : transform.forward;
+            if (Vector3.Dot(viewForward.normalized, toTarget.normalized) <
+                CatchAssistMinimumForwardDot ||
+                !HasDirectVisibility(viewOrigin, targetPoint, catchTarget))
+            {
+                return false;
+            }
+
+            CurrentTarget = catchTarget;
+            CurrentTargetDistance = Vector3.Distance(
+                interactionOrigin,
+                targetCollider.ClosestPoint(interactionOrigin));
+            return true;
+        }
+
+        private bool HasDirectVisibility(
+            Vector3 origin,
+            Vector3 destination,
+            PrototypeInteractionTarget target)
+        {
+            Vector3 displacement = destination - origin;
+            float distance = displacement.magnitude;
+            if (distance <= 0.01f)
+            {
+                return true;
+            }
+
+            int hitCount = Physics.RaycastNonAlloc(
+                origin,
+                displacement / distance,
+                visibilityHits,
+                distance + 0.01f,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            if (hitCount >= VisibilityHitCapacity)
+            {
+                return false;
+            }
+
+            float nearestDistance = float.PositiveInfinity;
+            Collider nearestCollider = null;
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = visibilityHits[index];
+                if (hit.collider == null || BelongsToPlayer(hit.collider))
+                {
+                    continue;
+                }
+
+                if (hit.distance < nearestDistance)
+                {
+                    nearestDistance = hit.distance;
+                    nearestCollider = hit.collider;
+                }
+            }
+
+            return nearestCollider != null &&
+                   (nearestCollider.transform == target.transform ||
+                    nearestCollider.transform.IsChildOf(target.transform));
         }
 
         private bool BelongsToPlayer(Collider candidate)

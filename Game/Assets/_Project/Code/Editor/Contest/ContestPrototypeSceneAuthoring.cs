@@ -30,7 +30,7 @@ namespace BreakNotice.Contest.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            Debug.Log("Contest C4 fixed ally physical relay composition prepared.");
+            Debug.Log("Contest C4 autonomous ally physical relay composition prepared.");
         }
 
         public static void ApplyC4Composition(Scene scene)
@@ -51,6 +51,7 @@ namespace BreakNotice.Contest.Editor
                     target.Role == PrototypeInteractionRole.AllyChair)
                 .OrderBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
                 .ToArray();
+            GameObjectUtility.SetStaticEditorFlags(ally, (StaticEditorFlags)0);
             if (supplyTargets.Length != 3)
             {
                 throw new InvalidOperationException(

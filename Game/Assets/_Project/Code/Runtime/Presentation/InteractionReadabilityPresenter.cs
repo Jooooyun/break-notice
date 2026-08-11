@@ -17,6 +17,7 @@ namespace BreakNotice.Presentation
         private GUIStyle crosshairStyle;
         private GUIStyle targetStyle;
         private GUIStyle feedbackStyle;
+        private GUIStyle allyIndicatorStyle;
         private uint observedAttemptSequence;
         private uint observedAllyCallSequence;
         private string activeFeedback = string.Empty;
@@ -72,14 +73,44 @@ namespace BreakNotice.Presentation
 
             if (relay != null && relay.IsChairFeedActive)
             {
-                return "CHAIR GROUNDED FEED | CATCH BLOCKED | QUEUED THROW BLOCKED";
+                return "CHAIR GROUNDED FEED | SAFE PLAYER CLEARANCE | CATCH BLOCKED";
             }
 
-            if (interactionController.CurrentRelayCandidate != null)
+            if (relay != null && relay.IsReadyForCall)
             {
-                return $"ALLY READY | CALL ALLY AVAILABLE: " +
-                       $"{interactionController.CurrentRelayCandidate.DisplayName} " +
+                return $"ALLY READY: {relay.PreparedTarget?.DisplayName ?? "OBJECT"} " +
                        "| [Q] SUPPLY";
+            }
+
+            if (relay != null && relay.IsSupplyLaneBlocked)
+            {
+                return $"ALLY SUPPLY BLOCKED: {relay.PreparedTarget?.DisplayName ?? "OBJECT"} " +
+                       "| PHYSICAL LANE OBSTRUCTED";
+            }
+
+            if (relay != null && relay.IsSupplyPreparationBlocked)
+            {
+                return $"ALLY PATH BLOCKED: {relay.PreparedTarget?.DisplayName ?? "OBJECT"} " +
+                       "| CANNOT REACH SUPPLY";
+            }
+
+            if (relay != null &&
+                relay.AllyState == PrototypeAllySupportState.MovingToSupply)
+            {
+                return $"ALLY MOVING TO SUPPLY: " +
+                       (relay.PreparedTarget?.DisplayName ?? "OBJECT");
+            }
+
+            if (relay != null &&
+                relay.AllyState == PrototypeAllySupportState.AcquiringSupply)
+            {
+                return $"ALLY ACQUIRING: " +
+                       (relay.PreparedTarget?.DisplayName ?? "OBJECT");
+            }
+
+            if (relay != null && relay.AllyState == PrototypeAllySupportState.Depleted)
+            {
+                return "ALLY SUPPLY DEPLETED | RESET TO RESTORE AUTHORED POOL";
             }
 
             PrototypeInteractionTarget target = interactionController.CurrentTarget;
@@ -120,11 +151,6 @@ namespace BreakNotice.Presentation
                 return "[E]";
             }
 
-            if (interactionController?.CurrentRelayCandidate != null)
-            {
-                return "[Q]";
-            }
-
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
             if (target == null ||
                 interactionController.InteractionOwner == null ||
@@ -141,6 +167,13 @@ namespace BreakNotice.Presentation
                 : "[!]";
         }
 
+        public string BuildAllyIndicatorText()
+        {
+            return interactionController?.AllyRelayController?.IsReadyForCall == true
+                ? "!"
+                : string.Empty;
+        }
+
         public string BuildReticleLabel()
         {
             PrototypeAllyRelayController relay = interactionController?.AllyRelayController;
@@ -151,12 +184,6 @@ namespace BreakNotice.Presentation
                 return interactionController.InteractionOwner.QueuedThrowArmed
                     ? "CATCH + QUEUED THROW"
                     : "CATCH INCOMING BINDER";
-            }
-
-            if (interactionController?.CurrentRelayCandidate != null)
-            {
-                return $"CALL ALLY FOR " +
-                       interactionController.CurrentRelayCandidate.DisplayName;
             }
 
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
@@ -254,6 +281,10 @@ namespace BreakNotice.Presentation
                     "CALL BLOCKED: PHYSICAL LANE OBSTRUCTED",
                 PrototypeAllyRelayRejection.InvalidPhysicalTarget =>
                     "CALL BLOCKED: INVALID PHYSICAL SUPPLY",
+                PrototypeAllyRelayRejection.AllyUnavailable =>
+                    "CALL BLOCKED: ALLY NOT READY",
+                PrototypeAllyRelayRejection.NoValidSupply =>
+                    "CALL BLOCKED: SUPPLY DEPLETED",
                 _ => "CALL BLOCKED: NO VALID SUPPLY"
             };
         }
@@ -288,6 +319,7 @@ namespace BreakNotice.Presentation
             }
 
             EnsureStyles();
+            DrawAllyReadyIndicator();
             GUI.Label(
                 new Rect(0f, Screen.height - 78f, Screen.width, 42f),
                 status,
@@ -379,6 +411,37 @@ namespace BreakNotice.Presentation
                 fontStyle = FontStyle.Bold,
                 normal = { textColor = new Color(0.35f, 1f, 0.45f, 1f) }
             };
+
+            allyIndicatorStyle = new GUIStyle(GUI.skin.box)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 28,
+                fontStyle = FontStyle.Bold,
+                normal = { textColor = new Color(1f, 0.82f, 0.12f, 1f) }
+            };
+        }
+
+        private void DrawAllyReadyIndicator()
+        {
+            PrototypeAllyRelayController relay = interactionController?.AllyRelayController;
+            Camera viewCamera = interactionController?.ViewCamera;
+            string indicator = BuildAllyIndicatorText();
+            if (relay == null || indicator.Length == 0 || viewCamera == null)
+            {
+                return;
+            }
+
+            Vector3 screenPoint = viewCamera.WorldToScreenPoint(relay.IndicatorWorldPosition);
+            if (screenPoint.z <= 0f)
+            {
+                return;
+            }
+
+            float guiY = Screen.height - screenPoint.y;
+            GUI.Label(
+                new Rect(screenPoint.x - 24f, guiY - 24f, 48f, 48f),
+                indicator,
+                allyIndicatorStyle);
         }
     }
 }

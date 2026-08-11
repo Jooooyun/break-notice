@@ -1565,7 +1565,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!23 &1119083200
 MeshRenderer:
@@ -1690,6 +1690,13 @@ MonoBehaviour:
   settleAngularSpeed: 0.75
   settleDuration: 0.35
   maximumRelayDuration: 4
+  allyMoveSpeed: 2.5
+  allyTurnSpeed: 540
+  supplyAcquisitionSpeed: 3.5
+  supplyApproachDistance: 0.85
+  binderHoldOffset: {x: 0, y: 1.05, z: 0.6}
+  chairPlayerClearance: 0.45
+  indicatorHeight: 2.1
 --- !u!1001 &1121842302
 PrefabInstance:
   m_ObjectHideFlags: 0

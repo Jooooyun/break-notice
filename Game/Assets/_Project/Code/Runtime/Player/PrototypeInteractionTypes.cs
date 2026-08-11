@@ -49,7 +49,11 @@ namespace BreakNotice.Gameplay.Interaction
     public enum PrototypeAllySupportState
     {
         Ready,
-        SupplyCommitted
+        SupplyCommitted,
+        MovingToSupply,
+        AcquiringSupply,
+        Blocked,
+        Depleted
     }
 
     public enum PrototypeRelayPhase
