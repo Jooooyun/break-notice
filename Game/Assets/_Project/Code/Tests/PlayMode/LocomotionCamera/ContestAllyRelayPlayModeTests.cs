@@ -602,6 +602,128 @@ namespace BreakNotice.LocomotionCamera.Tests
             }
         }
 
+        [UnityTest]
+        public IEnumerator ContestScene_FixedAllyStartsVisibleAndAllSupplyLanesAreOpen()
+        {
+            AsyncOperation load = SceneManager.LoadSceneAsync(
+                "Contest_SingleRoomGraybox",
+                LoadSceneMode.Additive);
+            yield return load;
+            yield return null;
+
+            Scene scene = SceneManager.GetSceneByName("Contest_SingleRoomGraybox");
+            AsyncOperation unloadOperation = null;
+            try
+            {
+                GameObject[] roots = scene.GetRootGameObjects();
+                GameObject player = roots.Single(root => root.name == "Player");
+                GameObject ally = roots.Single(root => root.name == "AllyProxy");
+                Camera gameplayCamera = roots.Single(root => root.name == "GameplayCameraRig")
+                    .GetComponentInChildren<Camera>(true);
+                PrototypeAllyRelayController relay =
+                    ally.GetComponent<PrototypeAllyRelayController>();
+                PrototypeInteractionTarget[] supply = roots
+                    .SelectMany(root => root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                    .Where(target =>
+                        target.Role == PrototypeInteractionRole.AllyBinder ||
+                        target.Role == PrototypeInteractionRole.AllyChair)
+                    .ToArray();
+                Renderer allyRenderer = ally.GetComponent<Renderer>();
+
+                Assert.That(gameplayCamera, Is.Not.Null);
+                Assert.That(relay, Is.Not.Null);
+                Assert.That(allyRenderer, Is.Not.Null);
+                Assert.That(allyRenderer.enabled, Is.True);
+
+                Vector3 allyCenter = allyRenderer.bounds.center;
+                Vector3 viewportPoint = gameplayCamera.WorldToViewportPoint(allyCenter);
+                Assert.That(viewportPoint.z, Is.GreaterThan(0f));
+                Assert.That(viewportPoint.x, Is.InRange(0.05f, 0.95f));
+                Assert.That(viewportPoint.y, Is.InRange(0.05f, 0.95f));
+
+                Vector3 sightline = allyCenter - gameplayCamera.transform.position;
+                float sightlineDistance = sightline.magnitude;
+                string sightlineBlockers = string.Join(
+                    ", ",
+                    Physics.RaycastAll(
+                        gameplayCamera.transform.position,
+                        sightline.normalized,
+                        sightlineDistance,
+                        Physics.AllLayers,
+                        QueryTriggerInteraction.Ignore)
+                    .Where(hit =>
+                        hit.collider != null &&
+                        hit.transform != player.transform &&
+                        !hit.transform.IsChildOf(player.transform) &&
+                        hit.transform != ally.transform &&
+                        !hit.transform.IsChildOf(ally.transform) &&
+                        hit.distance < sightlineDistance - 0.01f)
+                    .Select(hit => hit.collider.name));
+                Assert.That(
+                    sightlineBlockers,
+                    Is.Empty,
+                    $"The fixed ally must be visible from the starting camera. " +
+                    $"camera={gameplayCamera.transform.position}, ally={allyCenter}, " +
+                    $"viewport={viewportPoint}");
+                string blockedSupply = string.Join(
+                    ", ",
+                    supply
+                        .Where(target => !relay.HasValidPhysicalLane(target))
+                        .Select(target =>
+                            $"{target.RuntimeInstanceKey}" +
+                            $"[{DescribeLaneBlockers(target, player.transform, ally.transform)}]"));
+                Assert.That(
+                    blockedSupply,
+                    Is.Empty,
+                    "Every authored C4 supply object must have an open physical lane to the player start.");
+            }
+            finally
+            {
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    unloadOperation = SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+
+            if (unloadOperation != null)
+            {
+                yield return unloadOperation;
+            }
+        }
+
+        private static string DescribeLaneBlockers(
+            PrototypeInteractionTarget target,
+            Transform player,
+            Transform ally)
+        {
+            Collider targetCollider = target.GetComponent<Collider>();
+            Rigidbody body = target.GetComponent<Rigidbody>();
+            Vector3 start = targetCollider.bounds.center;
+            Vector3 destination = target.Role == PrototypeInteractionRole.AllyBinder
+                ? player.position + player.forward * 0.75f + Vector3.up * 1.05f
+                : new Vector3(player.position.x, start.y, player.position.z);
+            Vector3 displacement = destination - start;
+            float distance = displacement.magnitude;
+
+            return string.Join(
+                "/",
+                Physics.RaycastAll(
+                        start,
+                        displacement / distance,
+                        distance,
+                        Physics.AllLayers,
+                        QueryTriggerInteraction.Ignore)
+                    .Where(hit =>
+                        hit.collider != null &&
+                        hit.collider != targetCollider &&
+                        hit.collider.attachedRigidbody != body &&
+                        hit.transform != player &&
+                        !hit.transform.IsChildOf(player) &&
+                        hit.transform != ally &&
+                        !hit.transform.IsChildOf(ally))
+                    .Select(hit => hit.collider.name));
+        }
+
         private sealed class RelayFixture
         {
             private readonly GameObject[] roots;
