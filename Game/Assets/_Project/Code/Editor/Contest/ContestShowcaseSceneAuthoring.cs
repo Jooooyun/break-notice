@@ -137,9 +137,9 @@ namespace BreakNotice.Contest.Editor
                 { "Z2_CENTRAL_CLASH_BOWL", new Vector3(0f, 0f, -5f) },
                 { "Z3_WEST_LOGISTICS_LOOP", new Vector3(-17f, 0f, 1f) },
                 { "Z4_CENTRAL_CUBICLE_RING", new Vector3(0f, 0f, 4f) },
-                { "Z5_EAST_PHYSICS_LANE", new Vector3(17f, 0f, 1f) },
+                { "Z5_EAST_PHYSICS_LANE", new Vector3(17f, 0f, 0.5f) },
                 { "Z6_NORTH_TAG_ARENA_DRAWER_GATE", new Vector3(14.5f, 0f, 11f) },
-                { "Z7_EXIT_RUN_NEXT_AREA_TEASE", new Vector3(20f, 0f, 15f) }
+                { "Z7_EXIT_RUN_NEXT_AREA_TEASE", new Vector3(20f, 0f, 14.5f) }
             };
 
             foreach (KeyValuePair<string, Vector3> zone in zones)
@@ -156,7 +156,7 @@ namespace BreakNotice.Contest.Editor
                 new Vector3(14f, 1f, 20f));
             CreateMarker(parent, "EAST_LANE", new Vector3(17f, 0f, 1f),
                 new Vector3(14f, 1f, 20f));
-            CreateMarker(parent, "NORTH_CROSS", new Vector3(0f, 0f, 12f),
+            CreateMarker(parent, "NORTH_CROSS", new Vector3(0f, 0f, 10.5f),
                 new Vector3(32f, 1f, 5f));
             CreateMarker(parent, "CENTRAL_CUT", new Vector3(0f, 0f, 4f),
                 new Vector3(6f, 1f, 12f));
