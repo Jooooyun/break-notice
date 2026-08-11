@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BreakNotice.Gameplay.Interaction;
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -101,8 +102,28 @@ namespace BreakNotice.Contest.Editor
             BuildLayoutMarkers(layoutMarkers);
             BuildStaticFurniture(staticFurniture);
             RepositionPreservedGameplay(scene);
+            ConfigureShowcaseCamera(scene);
 
             ValidatePreservedGameplayRoots(scene);
+        }
+
+        private static void ConfigureShowcaseCamera(Scene scene)
+        {
+            GameObject cameraRoot = RequireRoot(scene, "GameplayCameraRig");
+            CinemachineThirdPersonFollow follow =
+                cameraRoot.GetComponentInChildren<CinemachineThirdPersonFollow>(true);
+            if (follow == null)
+            {
+                throw new InvalidOperationException(
+                    "The Showcase camera rig requires CinemachineThirdPersonFollow.");
+            }
+
+            // The S1 spawn sits against the south camera boundary.  Horizontal
+            // follow lag must not carry the pre-Reset route state across the
+            // authored teleport and into that wall; retain vertical damping.
+            follow.Damping = new Vector3(0f, follow.Damping.y, 0f);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(follow);
+            EditorUtility.SetDirty(follow);
         }
 
         private static void BuildEnvelope(Transform parent)

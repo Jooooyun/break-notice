@@ -6935,6 +6935,14 @@ PrefabInstance:
       propertyPath: Lens.FieldOfView
       value: 68
       objectReference: {fileID: 0}
+    - target: {fileID: 4200797656890452524, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
+      propertyPath: Damping.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4200797656890452524, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
+      propertyPath: Damping.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7952042279976792475, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
       propertyPath: m_Name
       value: GameplayCameraRig
