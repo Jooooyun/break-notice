@@ -23,8 +23,25 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 The script validates `BuildMetadata.json`, the recorded inventory, 19-file or
 release-specific count, byte totals, required Unity files, per-file SHA-256,
+the canonical aggregate (`relative/path<TAB>sha256<LF>` in case-insensitive path order),
 safe relative paths and copy identity. It fails if the immutable destination
-already exists.
+already exists. Before packaging, every historical GUID route listed in
+`data/webgl-releases.json` must also be present in ignored deployment staging
+and verified against its tracked inventory so the current deployment preserves
+old immutable URLs as well as saved Sites rollback versions.
+
+To reconstruct an earlier release from its currently verified public immutable
+URL without reading another local build directory:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File .\scripts\stage-public-webgl-release.ps1 `
+  -ExpectedBuildGuid '<previous-32-lowercase-hex-guid>' `
+  -SourceCommitSha '<previous-40-lowercase-hex-sha>'
+```
+
+The command refuses redirects, credentials, non-HTTPS sources, path traversal,
+Content-Encoding and any byte, per-file SHA-256 or aggregate mismatch.
 
 ## Publish
 
@@ -57,7 +74,8 @@ newer version or mutate either GUID release directory.
 
 ## Current promoted build
 
-- Build GUID: `3cc7416d44c44067bc51c6474c46351d`
-- Source SHA: `f1fd9b15f407be9003eff622231e338358376bcc`
-- Label: `C0-C4 ACCEPTED PROTOTYPE / CHARGED THROW TUNING`
-- Excluded: `S1 / S2 / MAP V2 / S3+ / Production Art / premium VFX / Audio v002 / BGM / cinematic`
+- Build GUID: `89900eaad2e04c6d8aa82393cf39bc92`
+- Source SHA: `0e842d231abbb9f07aabd2afe93322629670e259`
+- Label: `CONTEST-0002 S3 / AUTHORED FETCH-SUPPLY / OPERATIONS FLOOR V003`
+- Previous: `3cc7416d44c44067bc51c6474c46351d` (preserved immutable rollback release)
+- Excluded: `S4+ / final combat / Production Art / premium VFX / Audio / BGM / cinematic`

@@ -59,18 +59,41 @@ if (-not (Test-Path -LiteralPath $metadataPath -PathType Leaf)) {
 }
 
 $metadata = Get-Content -LiteralPath $metadataPath -Raw | ConvertFrom-Json
-if ($metadata.result -ne 'Succeeded') { throw "Build result is not Succeeded: $($metadata.result)" }
-if ($metadata.buildGuid -ne $ExpectedBuildGuid) { throw "Build GUID mismatch: $($metadata.buildGuid)" }
-if ($metadata.unityVersion -ne '6000.3.20f1') { throw "Unity version mismatch: $($metadata.unityVersion)" }
-if ([long]$metadata.totalBytes -ne 113881344) { throw "Unity-reported byte count mismatch: $($metadata.totalBytes)" }
-if ([int]$metadata.totalWarnings -ne 0 -or [int]$metadata.totalErrors -ne 0) {
-  throw "Unity warnings/errors are non-zero: $($metadata.totalWarnings)/$($metadata.totalErrors)"
-}
-
 $resolvedInventory = (Resolve-Path -LiteralPath $InventoryPath).Path
 $record = Get-Content -LiteralPath $resolvedInventory -Raw | ConvertFrom-Json
 if ($record.buildGuid -ne $ExpectedBuildGuid) { throw 'Recorded inventory Build GUID mismatch.' }
 if ($record.sourceSha -ne $SourceCommitSha) { throw 'Recorded inventory source SHA mismatch.' }
+
+$historyPath = Join-Path $PSScriptRoot '..\data\webgl-releases.json'
+$history = Get-Content -LiteralPath $historyPath -Raw | ConvertFrom-Json
+$releaseMatches = @($history.releases | Where-Object { $_.buildGuid -eq $ExpectedBuildGuid })
+if ($releaseMatches.Count -ne 1) { throw "Release history must contain exactly one matching Build GUID: $ExpectedBuildGuid" }
+$release = $releaseMatches[0]
+if ($release.sourceSha -ne $SourceCommitSha) { throw 'Release history source SHA mismatch.' }
+if ($release.unityVersion -ne $metadata.unityVersion) { throw "Unity version mismatch: $($metadata.unityVersion)" }
+if ([long]$release.unityReportedBytes -ne [long]$metadata.totalBytes) {
+  throw "Unity-reported byte count mismatch: $($metadata.totalBytes)"
+}
+if ($metadata.result -ne 'Succeeded') { throw "Build result is not Succeeded: $($metadata.result)" }
+if ($metadata.buildGuid -ne $ExpectedBuildGuid) { throw "Build GUID mismatch: $($metadata.buildGuid)" }
+if ([int]$metadata.totalWarnings -ne 0 -or [int]$metadata.totalErrors -ne 0) {
+  throw "Unity warnings/errors are non-zero: $($metadata.totalWarnings)/$($metadata.totalErrors)"
+}
+
+if ($record.PSObject.Properties.Name -contains 'unityVersion' -and $record.unityVersion -ne $metadata.unityVersion) {
+  throw 'Recorded inventory Unity version mismatch.'
+}
+if ($record.PSObject.Properties.Name -contains 'scene') {
+  if (-not ($metadata.PSObject.Properties.Name -contains 'scene') -or $record.scene -ne $metadata.scene) {
+    throw "Recorded Scene mismatch: $($metadata.scene)"
+  }
+}
+if ($record.PSObject.Properties.Name -contains 'showcaseCheckpoint') {
+  if (-not ($metadata.PSObject.Properties.Name -contains 'showcaseCheckpoint') -or
+      $record.showcaseCheckpoint -ne $metadata.showcaseCheckpoint) {
+    throw "Recorded showcase checkpoint mismatch: $($metadata.showcaseCheckpoint)"
+  }
+}
 
 $actual = @(Get-ArtifactInventory -Root $resolvedArtifact)
 $expected = @($record.files)
@@ -107,6 +130,28 @@ foreach ($file in $actual) {
 
 $totalBytes = [long](($actual | Measure-Object Bytes -Sum).Sum)
 if ($totalBytes -ne [long]$record.httpBytes) { throw "Total byte mismatch: $totalBytes" }
+if ([int]$release.fileCount -ne [int]$record.fileCount -or
+    [long]$release.httpBytes -ne [long]$record.httpBytes -or
+    [string]$release.aggregateSha256 -cne [string]$record.aggregateSha256) {
+  throw 'Release history and recorded inventory evidence differ.'
+}
+
+$aggregateLines = @(
+  $actual |
+    Sort-Object @{ Expression = { $_.Path.ToLowerInvariant() } }, @{ Expression = { $_.Path } } |
+    ForEach-Object { "$($_.Path)`t$($_.Sha256)" }
+)
+$aggregateInput = ($aggregateLines -join "`n") + "`n"
+$aggregateBytes = [Text.Encoding]::UTF8.GetBytes($aggregateInput)
+$aggregateAlgorithm = [Security.Cryptography.SHA256]::Create()
+try {
+  $aggregateSha256 = ([BitConverter]::ToString($aggregateAlgorithm.ComputeHash($aggregateBytes))).Replace('-', '').ToLowerInvariant()
+} finally {
+  $aggregateAlgorithm.Dispose()
+}
+if ($aggregateSha256 -cne [string]$record.aggregateSha256) {
+  throw "Aggregate SHA-256 mismatch: $aggregateSha256"
+}
 
 if ($CompareDirectory) {
   $resolvedCompare = (Resolve-Path -LiteralPath $CompareDirectory).Path
@@ -129,6 +174,6 @@ if ($CompareDirectory) {
   FileCount = $actual.Count
   UnityReportedBytes = [long]$metadata.totalBytes
   HttpBytes = $totalBytes
-  AggregateSha256 = [string]$record.aggregateSha256
+  AggregateSha256 = $aggregateSha256
   ComparedCopy = [bool]$CompareDirectory
 } | ConvertTo-Json

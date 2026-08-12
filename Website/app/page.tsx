@@ -22,22 +22,22 @@ const statusRows = [
     detail: "LMB 차지 던지기, 바닥 물체 습득 보조, 동료 Binder 공급 속도 변주.",
   },
   {
-    label: "OPERATIONS FLOOR S0",
-    state: "DESIGN AUTHORITY REGISTERED",
-    tone: "neutral",
-    detail: "Showcase 설계 문서만 등록됨. S1/S2/MAP V2는 이 공개 빌드에 포함되지 않았습니다.",
+    label: "CONTEST-0002 S3",
+    state: "IMPLEMENTED / VERIFIED WEBGL",
+    tone: "good",
+    detail: "Operations Floor v003에서 authored fetch/supply gameplay를 제공합니다. C4 accepted foundation은 보존됩니다.",
   },
   {
-    label: "C5 / CARGO STRAP",
-    state: "NOT AUTHORIZED",
+    label: "S4+ / FINAL COMBAT",
+    state: "NOT IN THIS BUILD",
     tone: "warn",
-    detail: "현재 공개 설명에서 구현 완료 기능으로 취급하지 않습니다.",
+    detail: "Production Art, premium VFX·Audio·BGM과 Cinematic을 포함해 구현 완료로 홍보하지 않습니다.",
   },
   {
     label: "PUBLIC WEBGL",
     state: "LIVE / VERSIONED",
     tone: "good",
-    detail: "검증된 C0–C4 accepted prototype WebGL을 immutable Build GUID 경로로 공개합니다.",
+    detail: "검증된 S3 WebGL을 새 immutable Build GUID 경로로 공개하고 이전 릴리스 기록을 보존합니다.",
   },
   {
     label: "PRODUCTION ART",
@@ -68,9 +68,9 @@ const loopSteps = [
   },
   {
     number: "04",
-    en: "CALL / CATCH / RESET",
-    ko: "동료와 다시 시도한다",
-    copy: "Q로 준비된 동료 공급을 요청하고 Binder를 Catch하거나 Chair Feed를 받은 뒤, 필요하면 Reset합니다.",
+    en: "CALL / FETCH / SUPPLY",
+    ko: "동료에게 공급을 요청한다",
+    copy: "Q로 요청하면 동료가 Operations Floor v003의 authored fetch/supply 행동으로 실제 물체를 가져와 전달합니다.",
   },
 ];
 
@@ -121,15 +121,15 @@ export default function Home() {
             <div className="hero-actions" id="play">
               <a className="play-button" href="/play/" aria-describedby="play-status">
                 <span>PLAY NOW</span>
-                <small>C0–C4 ACCEPTED PROTOTYPE</small>
+                <small>CONTEST-0002 S3 / VERIFIED</small>
               </a>
               <a className="secondary-action" href="#core-loop">
                 구현된 루프 보기 <span aria-hidden="true">↓</span>
               </a>
             </div>
             <p className="play-status" id="play-status">
-              <strong>C0–C4 ACCEPTED PROTOTYPE / CHARGED THROW TUNING</strong><br />
-              전용 전체 화면 WebGL 경로를 엽니다. S1/S2/MAP V2 NOT IN THIS BUILD.
+              <strong>CONTEST-0002 S3 — OPERATIONS FLOOR V003</strong><br />
+              전용 전체 화면 WebGL 경로를 엽니다. S4+ / FINAL COMBAT / PRODUCTION ART NOT IN THIS BUILD.
             </p>
           </div>
 
@@ -156,8 +156,8 @@ export default function Home() {
 
         <section className="evidence-strip" aria-label="검증 상태 요약">
           <div>
-            <span className="evidence-value">124 / 124</span>
-            <span className="evidence-label">LATEST AUTOMATED TESTS</span>
+            <span className="evidence-value">166 / 166</span>
+            <span className="evidence-label">S3 SOURCE TESTS</span>
           </div>
           <div>
             <span className="evidence-value">0 / 0</span>
@@ -168,8 +168,8 @@ export default function Home() {
             <span className="evidence-label">HUMAN-ACCEPTED FOUNDATION</span>
           </div>
           <div>
-            <span className="evidence-value">S1 / C5</span>
-            <span className="evidence-label">NOT AUTHORIZED</span>
+            <span className="evidence-value">S4+</span>
+            <span className="evidence-label">NOT IN THIS BUILD</span>
           </div>
         </section>
 
@@ -185,8 +185,8 @@ export default function Home() {
               물리 도구로 사용합니다. 습득, 운반, 투척, 동료 공급과 Reset이 현재 검증된 루프입니다.
             </p>
             <p>
-              Operations Floor Showcase의 확장 설계는 등록됐지만 구현되지 않았습니다.
-              이 페이지는 C5 이후 기능, 파괴, 완성된 Cargo Strap 또는 최종 제품을 약속하지 않습니다.
+              현재 공개 빌드는 Operations Floor v003의 bounded S3 authored fetch/supply gameplay를 포함합니다.
+              이 페이지는 S4 이후 기능, final combat, Production Art 또는 최종 제품을 약속하지 않습니다.
             </p>
           </div>
         </section>
@@ -198,7 +198,7 @@ export default function Home() {
               <h2 id="loop-title">지금 구현된 플레이</h2>
             </div>
             <p className="section-summary">
-              C0–C4 accepted foundation과 2026-08-11 post-acceptance tuning만 설명합니다.
+              C4 accepted foundation과 검증된 CONTEST-0002 S3 bounded behavior만 설명합니다.
             </p>
           </div>
 
@@ -274,13 +274,13 @@ export default function Home() {
             <aside className="media-evidence" aria-labelledby="media-evidence-title">
               <p className="eyebrow" id="media-evidence-title">VERIFIED INSTEAD</p>
               <ul>
-                <li><strong>65 / 65</strong><span>EditMode tests</span></li>
-                <li><strong>59 / 59</strong><span>PlayMode tests</span></li>
+                <li><strong>96 / 96</strong><span>EditMode tests</span></li>
+                <li><strong>70 / 70</strong><span>PlayMode tests</span></li>
                 <li><strong>19 / 19</strong><span>HTTP build files</span></li>
               </ul>
               <p>
-                최근 Development Web build와 Human Owner 수동 체크리스트는 통과했습니다.
-                그러나 이 권한은 기존 build 산출물 공개나 신규 WebGL 생성을 포함하지 않습니다.
+                검증된 S3 Development WebGL을 새 immutable 경로로 공개합니다. 자동 브라우저 검증은
+                로드와 캔버스 준비 상태를 확인하며, 전체 gameplay 수동 체크리스트 통과는 별도로 추론하지 않습니다.
               </p>
             </aside>
           </div>
@@ -316,7 +316,7 @@ export default function Home() {
               <p className="eyebrow">05 / DEVELOPMENT STATUS</p>
               <h2 id="status-title">무엇이 됐고, 무엇이 아직 아닌가</h2>
             </div>
-            <p className="section-summary">STATUS SNAPSHOT / 2026.08.12 KST</p>
+            <p className="section-summary">STATUS SNAPSHOT / 2026.08.13 KST</p>
           </div>
 
           <div className="status-table" role="list">
@@ -431,7 +431,7 @@ export default function Home() {
       <footer className="site-footer">
         <a className="footer-wordmark" href="#top">BREAK NOTICE</a>
         <p>ZERO DEFECT / PUBLIC SHOWCASE RELEASE SITE</p>
-        <p>WEBGL: <strong>LIVE / 3CC7416D</strong></p>
+        <p>WEBGL: <strong>LIVE / 89900EAA</strong></p>
       </footer>
     </>
   );

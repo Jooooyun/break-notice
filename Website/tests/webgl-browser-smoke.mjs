@@ -1,10 +1,14 @@
 import { createRequire } from "node:module";
+import { readFile } from "node:fs/promises";
 
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 
 const baseUrl = (process.env.SITE_URL ?? "http://127.0.0.1:3001").replace(/\/$/, "");
-const buildGuid = "3cc7416d44c44067bc51c6474c46351d";
+const releaseHistory = JSON.parse(
+  await readFile(new URL("../data/webgl-releases.json", import.meta.url), "utf8"),
+);
+const buildGuid = process.env.BUILD_GUID ?? releaseHistory.latestBuildGuid;
 const browsers = [
   { name: "Chrome", executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" },
   { name: "Edge", executablePath: "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe" },

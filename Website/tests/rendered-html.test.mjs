@@ -79,13 +79,13 @@ test("server-renders the Korean Showcase release page", async () => {
   assert.match(html, /id="status"/);
   assert.match(html, /id="credits"/);
   assert.match(html, /PLAY NOW/);
-  assert.match(html, /C0–C4 ACCEPTED PROTOTYPE/);
-  assert.match(html, /S1\/S2\/MAP V2 NOT IN THIS BUILD/);
+  assert.match(html, /CONTEST-0002 S3/);
+  assert.match(html, /S4\+ \/ FINAL COMBAT \/ PRODUCTION ART NOT IN THIS BUILD/);
   assert.match(html, /href="\/play\/"/);
   assert.doesNotMatch(html, /BUILD PREPARING|disabled=""/);
   assert.match(html, /AI-GENERATED PRODUCTION VISUAL REFERENCE/);
   assert.match(html, /실제 런타임 캡처 아님/);
-  assert.match(html, /NOT AUTHORIZED/);
+  assert.match(html, /NOT IN THIS BUILD/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
   assert.doesNotMatch(html, /https?:\/\/(?:127\.0\.0\.1|localhost)/i);
 });
@@ -112,8 +112,8 @@ test("publishes a no-cache latest pointer and release history", async () => {
   assert.equal(latest.status, 200);
   assert.match(latest.headers.get("cache-control") ?? "", /no-cache/);
   const latestBody = await latest.json();
-  assert.equal(latestBody.buildGuid, "3cc7416d44c44067bc51c6474c46351d");
-  assert.equal(latestBody.sourceSha, "f1fd9b15f407be9003eff622231e338358376bcc");
+  assert.equal(latestBody.buildGuid, "89900eaad2e04c6d8aa82393cf39bc92");
+  assert.equal(latestBody.sourceSha, "0e842d231abbb9f07aabd2afe93322629670e259");
 
   const history = await render("/data/webgl-releases.json");
   assert.equal(history.status, 200);
@@ -121,11 +121,14 @@ test("publishes a no-cache latest pointer and release history", async () => {
   const historyBody = await history.json();
   assert.equal(historyBody.latestBuildGuid, latestBody.buildGuid);
   assert.equal(historyBody.releases[0].fileCount, 19);
-  assert.equal(historyBody.releases[0].httpBytes, 113883098);
+  assert.equal(historyBody.releases[0].httpBytes, 114057258);
+  assert.equal(historyBody.releases[0].previousVersion, "3cc7416d44c44067bc51c6474c46351d");
+  assert.equal(historyBody.releases[1].buildGuid, "3cc7416d44c44067bc51c6474c46351d");
+  assert.equal(historyBody.releases[1].status, "superseded");
 });
 
 test("sets immutable WebGL cache and exact uncompressed MIME headers", async () => {
-  const releaseRoot = "/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/";
+  const releaseRoot = "/play/releases/89900eaad2e04c6d8aa82393cf39bc92/Build/";
   const wasm = await renderWebglAsset(`${releaseRoot}Development.wasm`);
   assert.equal(wasm.status, 200);
   assert.equal(wasm.headers.get("content-type"), "application/wasm");
@@ -153,11 +156,11 @@ test("sets immutable WebGL cache and exact uncompressed MIME headers", async () 
 });
 
 test("reassembles chunked WebGL transport files byte-identically", async () => {
-  const wasmPath = "/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/Development.wasm";
+  const wasmPath = "/play/releases/89900eaad2e04c6d8aa82393cf39bc92/Build/Development.wasm";
   const response = await renderWebglAsset(wasmPath);
   const expected = await readFile(
     new URL(
-      "../deployment-staging/webgl/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/Development.wasm",
+      "../deployment-staging/webgl/play/releases/89900eaad2e04c6d8aa82393cf39bc92/Build/Development.wasm",
       import.meta.url,
     ),
   );
@@ -167,7 +170,7 @@ test("reassembles chunked WebGL transport files byte-identically", async () => {
   assert.deepEqual(Buffer.from(await response.arrayBuffer()), expected);
 
   const transportDirectory = new URL(
-    "../dist/client/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/",
+    "../dist/client/play/releases/89900eaad2e04c6d8aa82393cf39bc92/Build/",
     import.meta.url,
   );
   const transportFiles = await readdir(transportDirectory);
@@ -184,7 +187,7 @@ test("reassembles chunked WebGL transport files byte-identically", async () => {
     await readFile(new URL("__webgl-index.bin", releaseDirectory)),
     await readFile(
       new URL(
-        "../deployment-staging/webgl/play/releases/3cc7416d44c44067bc51c6474c46351d/index.html",
+        "../deployment-staging/webgl/play/releases/89900eaad2e04c6d8aa82393cf39bc92/index.html",
         import.meta.url,
       ),
     ),

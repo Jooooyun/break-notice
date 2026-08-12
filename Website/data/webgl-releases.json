@@ -1,7 +1,22 @@
 {
   "schemaVersion": 1,
-  "latestBuildGuid": "3cc7416d44c44067bc51c6474c46351d",
+  "latestBuildGuid": "89900eaad2e04c6d8aa82393cf39bc92",
   "releases": [
+    {
+      "buildGuid": "89900eaad2e04c6d8aa82393cf39bc92",
+      "sourceSha": "0e842d231abbb9f07aabd2afe93322629670e259",
+      "unityVersion": "6000.3.20f1",
+      "scope": "CONTEST-0002 S3 — authored fetch/supply gameplay on Operations Floor v003 with the C4 accepted foundation preserved",
+      "exclusions": "S4+, final combat, Production Art, premium VFX, Audio, BGM, cinematic",
+      "date": "2026-08-13",
+      "unityReportedBytes": 114055381,
+      "httpBytes": 114057258,
+      "fileCount": 19,
+      "aggregateSha256": "6c221e6dd331b34362d9b9b651c54870e420948c930d6d3facd10e1bb0e58de5",
+      "status": "promoted",
+      "previousVersion": "3cc7416d44c44067bc51c6474c46351d",
+      "publicUrl": "https://zero-defect-steveyun.stevejoyun.chatgpt.site/play/releases/89900eaad2e04c6d8aa82393cf39bc92/"
+    },
     {
       "buildGuid": "3cc7416d44c44067bc51c6474c46351d",
       "sourceSha": "f1fd9b15f407be9003eff622231e338358376bcc",
@@ -13,7 +28,7 @@
       "httpBytes": 113883098,
       "fileCount": 19,
       "aggregateSha256": "61cd70625800cf904a866d47d42138f7f4473645453e6644cbe3d305d14f9ec7",
-      "status": "promoted",
+      "status": "superseded",
       "previousVersion": null,
       "publicUrl": "https://zero-defect-steveyun.stevejoyun.chatgpt.site/play/releases/3cc7416d44c44067bc51c6474c46351d/"
     }

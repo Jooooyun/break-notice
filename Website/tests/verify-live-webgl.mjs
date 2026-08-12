@@ -2,7 +2,10 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 
 const baseUrl = (process.env.SITE_URL ?? "http://127.0.0.1:3001").replace(/\/$/, "");
-const buildGuid = "3cc7416d44c44067bc51c6474c46351d";
+const releaseHistory = JSON.parse(
+  await readFile(new URL("../data/webgl-releases.json", import.meta.url), "utf8"),
+);
+const buildGuid = process.env.BUILD_GUID ?? releaseHistory.latestBuildGuid;
 const inventory = JSON.parse(
   await readFile(new URL(`../data/webgl-release-inventory-${buildGuid}.json`, import.meta.url), "utf8"),
 );
@@ -45,13 +48,30 @@ for (const file of inventory.files) {
 }
 
 const totalBytes = rows.reduce((total, row) => total + row.bytes, 0);
+const aggregateSha256 = createHash("sha256")
+  .update(rows
+    .toSorted((left, right) => {
+      const leftPath = left.path.toLowerCase();
+      const rightPath = right.path.toLowerCase();
+      return leftPath < rightPath ? -1 : leftPath > rightPath ? 1 : 0;
+    })
+    .map((row) => `${row.path}\t${row.sha256}\n`)
+    .join(""))
+  .digest("hex");
 if (rows.length !== inventory.fileCount) failures.push(`file count ${rows.length}`);
 if (totalBytes !== inventory.httpBytes) failures.push(`total bytes ${totalBytes}`);
+if (aggregateSha256 !== inventory.aggregateSha256) failures.push(`aggregate SHA-256 ${aggregateSha256}`);
 
 const latestResponse = await fetch(`${baseUrl}/play/latest.json`, { cache: "no-store" });
 const latest = await latestResponse.json();
-if (latest.buildGuid !== buildGuid) failures.push(`latest GUID ${latest.buildGuid}`);
-if (latest.sourceSha !== inventory.sourceSha) failures.push(`latest source SHA ${latest.sourceSha}`);
+const promotedRelease = releaseHistory.releases.find(
+  (release) => release.buildGuid === releaseHistory.latestBuildGuid,
+);
+if (!promotedRelease) failures.push("promoted release missing from history");
+if (latest.buildGuid !== releaseHistory.latestBuildGuid) failures.push(`latest GUID ${latest.buildGuid}`);
+if (promotedRelease && latest.sourceSha !== promotedRelease.sourceSha) {
+  failures.push(`latest source SHA ${latest.sourceSha}`);
+}
 
 const launcherResponse = await fetch(releaseBase, {
   headers: { "Accept-Encoding": "identity" },
@@ -71,6 +91,7 @@ console.log(
       result: failures.length ? "FAIL" : "PASS",
       fileCount: rows.length,
       totalBytes,
+      aggregateSha256,
       recordedAggregateSha256: inventory.aggregateSha256,
       perFileIdentity: failures.length === 0,
       launcher: {
