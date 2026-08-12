@@ -103,6 +103,12 @@ export function sites(): Plugin {
                 recursive: true,
               },
             );
+            // Sites normalizes HTML assets. Keep a byte-identical, deployment-only
+            // alias so the Worker can return Unity's original index without rewriting.
+            await cp(
+              resolve(destination, "index.html"),
+              resolve(destination, "__webgl-index.bin"),
+            );
             await chunkOversizedWebGLFiles(destination);
           }
         }

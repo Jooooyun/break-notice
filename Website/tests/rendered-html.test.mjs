@@ -165,6 +165,12 @@ test("reassembles chunked WebGL transport files byte-identically", async () => {
   for (const file of transportFiles) {
     assert.ok((await stat(new URL(file, transportDirectory))).size <= 26_214_400);
   }
+
+  const releaseDirectory = new URL("../", transportDirectory);
+  assert.deepEqual(
+    await readFile(new URL("__webgl-index.bin", releaseDirectory)),
+    await readFile(new URL("index.html", releaseDirectory)),
+  );
 });
 
 test("ships only approved public media and no source maps", async () => {

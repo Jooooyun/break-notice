@@ -55,7 +55,11 @@ async function fetchWebGLAsset(request: Request, env: Env): Promise<Response | n
   const url = new URL(request.url);
   if (env?.ASSETS) {
     const assetRequestUrl = new URL(url);
-    if (assetRequestUrl.pathname.endsWith("/")) assetRequestUrl.pathname += "index.html";
+    if (assetRequestUrl.pathname.endsWith("/")) {
+      assetRequestUrl.pathname += "__webgl-index.bin";
+    } else if (assetRequestUrl.pathname.endsWith("/index.html")) {
+      assetRequestUrl.pathname = `${assetRequestUrl.pathname.slice(0, -"index.html".length)}__webgl-index.bin`;
+    }
     const response = await env.ASSETS.fetch(new Request(assetRequestUrl, request));
     return response.status === 404 ? null : response;
   }

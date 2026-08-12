@@ -34,6 +34,9 @@ already exists.
    tree into `dist/client/` only. Files above the Sites 25 MiB individual-file
    limit are split into deployment transport parts there; the Worker streams
    them back from the original immutable URL with identical bytes and MIME.
+   Sites의 HTML 정규화를 피하기 위해 Unity `index.html`과 바이트가 같은
+   deployment-only `__webgl-index.bin`도 만들고, Worker가 release directory
+   요청에 그 원본 바이트를 반환한다. 이 별칭은 source artifact와 Git에 없다.
    Package and save that Sites version.
 4. Verify anonymous HTTPS for all inventory files, MIME, no compression header,
    Chrome/Edge canvas readiness and the exact GUID redirect.
