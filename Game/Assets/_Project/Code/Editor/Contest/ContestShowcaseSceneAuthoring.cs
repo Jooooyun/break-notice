@@ -598,33 +598,33 @@ namespace BreakNotice.Contest.Editor
             foreach (float z in new[] { -1f, 11f })
             {
                 CreateCube(partitions, $"PROXY_Partition_{z:0}_West",
-                    new Vector3(-7.5f, 0.6f, z), new Vector3(5f, 1.2f, 0.2f), true);
+                    new Vector3(-7.5f, 1.05f, z), new Vector3(5f, 2.1f, 0.2f), true);
                 CreateCube(partitions, $"PROXY_Partition_{z:0}_East",
-                    new Vector3(7.5f, 0.6f, z), new Vector3(5f, 1.2f, 0.2f), true);
+                    new Vector3(7.5f, 1.05f, z), new Vector3(5f, 2.1f, 0.2f), true);
             }
 
             foreach (float z in new[] { 1.5f, 8.5f })
             {
                 CreateCube(partitions, $"PROXY_Partition_West_{z:0.0}",
-                    new Vector3(-10f, 0.6f, z), new Vector3(0.2f, 1.2f, 5f), true);
+                    new Vector3(-10f, 1.05f, z), new Vector3(0.2f, 2.1f, 5f), true);
                 CreateCube(partitions, $"PROXY_Partition_East_{z:0.0}",
-                    new Vector3(10f, 0.6f, z), new Vector3(0.2f, 1.2f, 5f), true);
+                    new Vector3(10f, 1.05f, z), new Vector3(0.2f, 2.1f, 5f), true);
             }
 
             foreach (float z in new[] { 3f, 7f })
             {
                 CreateCube(partitions, $"PROXY_Partition_Internal_West_{z:0}",
-                    new Vector3(-6.5f, 0.6f, z), new Vector3(6f, 1.2f, 0.2f), true);
+                    new Vector3(-6.5f, 1.05f, z), new Vector3(6f, 2.1f, 0.2f), true);
                 CreateCube(partitions, $"PROXY_Partition_Internal_East_{z:0}",
-                    new Vector3(6.5f, 0.6f, z), new Vector3(6f, 1.2f, 0.2f), true);
+                    new Vector3(6.5f, 1.05f, z), new Vector3(6f, 2.1f, 0.2f), true);
             }
 
             foreach (float x in new[] { -3.5f, 3.5f })
             {
                 CreateCube(partitions, $"PROXY_Partition_Internal_{x:0.0}_South",
-                    new Vector3(x, 0.6f, 1f), new Vector3(0.2f, 1.2f, 4f), true);
+                    new Vector3(x, 1.05f, 1f), new Vector3(0.2f, 2.1f, 4f), true);
                 CreateCube(partitions, $"PROXY_Partition_Internal_{x:0.0}_North",
-                    new Vector3(x, 0.6f, 9f), new Vector3(0.2f, 1.2f, 4f), true);
+                    new Vector3(x, 1.05f, 9f), new Vector3(0.2f, 2.1f, 4f), true);
             }
 
             foreach (float x in new[] { -6.5f, 6.5f })
@@ -922,8 +922,8 @@ namespace BreakNotice.Contest.Editor
                 CreateCube(
                     perimeterWorkstations,
                     $"DENSITY_PROXY_PERIMETER_PARTITION_{workstationIndex:00}",
-                    new Vector3(x, 0.65f, 20.72f),
-                    new Vector3(2.8f, 1.3f, 0.12f),
+                    new Vector3(x, 1.05f, 20.72f),
+                    new Vector3(2.8f, 2.1f, 0.12f),
                     false);
                 workstationIndex++;
             }
@@ -938,8 +938,8 @@ namespace BreakNotice.Contest.Editor
                 CreateCube(
                     perimeterWorkstations,
                     $"DENSITY_PROXY_PERIMETER_PARTITION_{workstationIndex:00}",
-                    new Vector3(x, 0.65f, -20.72f),
-                    new Vector3(2.8f, 1.3f, 0.12f),
+                    new Vector3(x, 1.05f, -20.72f),
+                    new Vector3(2.8f, 2.1f, 0.12f),
                     false);
                 workstationIndex++;
             }
@@ -954,8 +954,8 @@ namespace BreakNotice.Contest.Editor
                 GameObject partition = CreateCube(
                     perimeterWorkstations,
                     $"DENSITY_PROXY_PERIMETER_PARTITION_{workstationIndex:00}",
-                    new Vector3(x + Mathf.Sign(x) * 0.62f, 0.65f, -15f),
-                    new Vector3(2.8f, 1.3f, 0.12f),
+                    new Vector3(x + Mathf.Sign(x) * 0.62f, 1.05f, -15f),
+                    new Vector3(2.8f, 2.1f, 0.12f),
                     false);
                 desk.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
                 partition.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
@@ -1211,12 +1211,12 @@ namespace BreakNotice.Contest.Editor
                 MetricSocket("ENV_Wall_InnerCorner_v001", new Vector3(-31.9f, 0f, -21.9f), new Vector3(0.4f, 4.2f, 0.4f), "GROUND_INNER_CORNER"),
                 MetricSocket("ENV_Wall_OuterCorner_v001", new Vector3(31.9f, 0f, -21.9f), new Vector3(0.4f, 4.2f, 0.4f), "GROUND_OUTER_CORNER"),
                 MetricSocket("ENV_Wall_DoorModule_v001", new Vector3(26f, 0f, 21.9f), new Vector3(4.5f, 4.2f, 0.3f), "GROUND_CENTER"),
-                MetricSocket("ENV_LowPartition_1m_v001", new Vector3(-3.5f, 0f, 1f), new Vector3(0.2f, 1.2f, 1f), "GROUND_CENTER"),
-                MetricSocket("ENV_LowPartition_2m_v001", new Vector3(-3.5f, 0f, 5f), new Vector3(0.2f, 1.2f, 2f), "GROUND_CENTER"),
-                MetricSocket("ENV_LowPartition_3m_v001", new Vector3(-6.5f, 0f, 3f), new Vector3(3f, 1.2f, 0.2f), "GROUND_CENTER"),
-                MetricSocket("ENV_LowPartition_Corner_v001", new Vector3(-10f, 0f, -1f), new Vector3(0.4f, 1.2f, 0.4f), "GROUND_CORNER"),
-                MetricSocket("ENV_LowPartition_TJunction_v001", new Vector3(-3.5f, 0f, 3f), new Vector3(0.6f, 1.2f, 0.6f), "GROUND_CENTER"),
-                MetricSocket("ENV_LowPartition_EndCap_v001", new Vector3(3.5f, 0f, 11f), new Vector3(0.3f, 1.2f, 0.3f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_1m_v001", new Vector3(-3.5f, 0f, 1f), new Vector3(0.2f, 2.1f, 1f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_2m_v001", new Vector3(-3.5f, 0f, 5f), new Vector3(0.2f, 2.1f, 2f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_3m_v001", new Vector3(-6.5f, 0f, 3f), new Vector3(3f, 2.1f, 0.2f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_Corner_v001", new Vector3(-10f, 0f, -1f), new Vector3(0.4f, 2.1f, 0.4f), "GROUND_CORNER"),
+                MetricSocket("ENV_LowPartition_TJunction_v001", new Vector3(-3.5f, 0f, 3f), new Vector3(0.6f, 2.1f, 0.6f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_EndCap_v001", new Vector3(3.5f, 0f, 11f), new Vector3(0.3f, 2.1f, 0.3f), "GROUND_CENTER"),
                 MetricSocket("ENV_Floor_4m_v001", new Vector3(-28f, 0f, -18f), new Vector3(4f, 0.2f, 4f), "TOP_CENTER"),
                 MetricSocket("ENV_Ceiling_4m_v001", new Vector3(-28f, 4.2f, -18f), new Vector3(4f, 0.2f, 4f), "BOTTOM_CENTER"),
                 MetricSocket("ENV_Column_070_v001", new Vector3(20f, 0f, 3f), new Vector3(0.7f, 4.2f, 0.7f), "GROUND_CENTER"),

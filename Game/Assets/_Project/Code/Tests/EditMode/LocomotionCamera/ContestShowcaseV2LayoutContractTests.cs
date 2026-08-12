@@ -181,6 +181,158 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void AllV2PartitionSemanticProxies_Are2Point1MetersGroundedAndKeepBaselineFootprints()
+        {
+            Transform root = RequireRoot(V2RootName);
+            var expectedMeshNames = new HashSet<string>(StringComparer.Ordinal);
+            Transform central = RequireChild(
+                root,
+                "04_CUBICLE_ISLAND/STATIC_CUBICLE_COLLISION/PROXY_LowPartitions_16");
+            var centralExpected = new Dictionary<string, (Vector3 Position, Vector3 Scale)>
+            {
+                { "PROXY_Partition_-1_West", (new Vector3(-7.5f, 1.05f, -1f), new Vector3(5f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_-1_East", (new Vector3(7.5f, 1.05f, -1f), new Vector3(5f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_11_West", (new Vector3(-7.5f, 1.05f, 11f), new Vector3(5f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_11_East", (new Vector3(7.5f, 1.05f, 11f), new Vector3(5f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_West_1.5", (new Vector3(-10f, 1.05f, 1.5f), new Vector3(0.2f, 2.1f, 5f)) },
+                { "PROXY_Partition_East_1.5", (new Vector3(10f, 1.05f, 1.5f), new Vector3(0.2f, 2.1f, 5f)) },
+                { "PROXY_Partition_West_8.5", (new Vector3(-10f, 1.05f, 8.5f), new Vector3(0.2f, 2.1f, 5f)) },
+                { "PROXY_Partition_East_8.5", (new Vector3(10f, 1.05f, 8.5f), new Vector3(0.2f, 2.1f, 5f)) },
+                { "PROXY_Partition_Internal_West_3", (new Vector3(-6.5f, 1.05f, 3f), new Vector3(6f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_Internal_East_3", (new Vector3(6.5f, 1.05f, 3f), new Vector3(6f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_Internal_West_7", (new Vector3(-6.5f, 1.05f, 7f), new Vector3(6f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_Internal_East_7", (new Vector3(6.5f, 1.05f, 7f), new Vector3(6f, 2.1f, 0.2f)) },
+                { "PROXY_Partition_Internal_-3.5_South", (new Vector3(-3.5f, 1.05f, 1f), new Vector3(0.2f, 2.1f, 4f)) },
+                { "PROXY_Partition_Internal_-3.5_North", (new Vector3(-3.5f, 1.05f, 9f), new Vector3(0.2f, 2.1f, 4f)) },
+                { "PROXY_Partition_Internal_3.5_South", (new Vector3(3.5f, 1.05f, 1f), new Vector3(0.2f, 2.1f, 4f)) },
+                { "PROXY_Partition_Internal_3.5_North", (new Vector3(3.5f, 1.05f, 9f), new Vector3(0.2f, 2.1f, 4f)) }
+            };
+            Assert.That(central.childCount, Is.EqualTo(16));
+            CollectionAssert.AreEquivalent(
+                centralExpected.Keys,
+                central.Cast<Transform>().Select(child => child.name));
+            foreach (KeyValuePair<string, (Vector3 Position, Vector3 Scale)> expected in centralExpected)
+            {
+                Transform partition = RequireChild(central, expected.Key);
+                AssertPartitionProxy(
+                    partition,
+                    expected.Value.Position,
+                    expected.Value.Scale,
+                    Quaternion.identity,
+                    true);
+                expectedMeshNames.Add(partition.name);
+            }
+
+            Transform perimeter = RequireChild(
+                root,
+                "10_VISUAL_READABILITY/OFFICE_DENSITY_NON_COLLIDING/" +
+                "PERIMETER_WORKSTATION_SILHOUETTES_32");
+            var perimeterExpected =
+                new Dictionary<string, (Vector3 Position, Vector3 Scale, Quaternion Rotation)>();
+            int perimeterIndex = 0;
+            foreach (float x in new[] { -28f, -24f, -20f, -16f, -12f, -8f, -4f, 4f })
+            {
+                perimeterExpected.Add(
+                    $"DENSITY_PROXY_PERIMETER_PARTITION_{perimeterIndex:00}",
+                    (new Vector3(x, 1.05f, 20.72f),
+                        new Vector3(2.8f, 2.1f, 0.12f), Quaternion.identity));
+                perimeterIndex++;
+            }
+            foreach (float x in new[] { -22f, -16f, -10f, 10f, 16f, 22f })
+            {
+                perimeterExpected.Add(
+                    $"DENSITY_PROXY_PERIMETER_PARTITION_{perimeterIndex:00}",
+                    (new Vector3(x, 1.05f, -20.72f),
+                        new Vector3(2.8f, 2.1f, 0.12f), Quaternion.identity));
+                perimeterIndex++;
+            }
+            foreach (float x in new[] { -30.4f, 30.4f })
+            {
+                perimeterExpected.Add(
+                    $"DENSITY_PROXY_PERIMETER_PARTITION_{perimeterIndex:00}",
+                    (new Vector3(x + Mathf.Sign(x) * 0.62f, 1.05f, -15f),
+                        new Vector3(2.8f, 2.1f, 0.12f),
+                        Quaternion.Euler(0f, 90f, 0f)));
+                perimeterIndex++;
+            }
+            Transform[] perimeterPartitions = perimeter.Cast<Transform>()
+                .Where(child => child.name.StartsWith(
+                    "DENSITY_PROXY_PERIMETER_PARTITION_",
+                    StringComparison.Ordinal))
+                .ToArray();
+            Assert.That(perimeter.childCount, Is.EqualTo(32));
+            Assert.That(perimeterPartitions, Has.Length.EqualTo(16));
+            Assert.That(perimeter.Cast<Transform>().Count(child =>
+                child.name.StartsWith("DENSITY_PROXY_PERIMETER_DESK_", StringComparison.Ordinal)),
+                Is.EqualTo(16));
+            CollectionAssert.AreEquivalent(
+                perimeterExpected.Keys,
+                perimeterPartitions.Select(child => child.name));
+            foreach (KeyValuePair<string, (Vector3 Position, Vector3 Scale, Quaternion Rotation)>
+                     expected in perimeterExpected)
+            {
+                Transform partition = RequireChild(perimeter, expected.Key);
+                AssertPartitionProxy(
+                    partition,
+                    expected.Value.Position,
+                    expected.Value.Scale,
+                    expected.Value.Rotation,
+                    false);
+                expectedMeshNames.Add(partition.name);
+            }
+
+            Transform architecture = RequireChild(
+                root,
+                "09_DESIGNER_B_REPLACEMENT_SOCKETS/ARCHITECTURE_19");
+            var socketExpected = new Dictionary<string, (Vector3 Position, Vector3 Scale)>
+            {
+                { "ENV_LowPartition_1m_v001", (new Vector3(-3.5f, 0f, 1f), new Vector3(0.2f, 2.1f, 1f)) },
+                { "ENV_LowPartition_2m_v001", (new Vector3(-3.5f, 0f, 5f), new Vector3(0.2f, 2.1f, 2f)) },
+                { "ENV_LowPartition_3m_v001", (new Vector3(-6.5f, 0f, 3f), new Vector3(3f, 2.1f, 0.2f)) },
+                { "ENV_LowPartition_Corner_v001", (new Vector3(-10f, 0f, -1f), new Vector3(0.4f, 2.1f, 0.4f)) },
+                { "ENV_LowPartition_TJunction_v001", (new Vector3(-3.5f, 0f, 3f), new Vector3(0.6f, 2.1f, 0.6f)) },
+                { "ENV_LowPartition_EndCap_v001", (new Vector3(3.5f, 0f, 11f), new Vector3(0.3f, 2.1f, 0.3f)) }
+            };
+            Transform[] partitionSockets = architecture.Cast<Transform>()
+                .Where(child => child.name.StartsWith(
+                    "SOCKET_ENV_LowPartition_",
+                    StringComparison.Ordinal))
+                .ToArray();
+            Assert.That(partitionSockets, Has.Length.EqualTo(6));
+            CollectionAssert.AreEquivalent(
+                socketExpected.Keys.Select(id => "SOCKET_" + id),
+                partitionSockets.Select(child => child.name));
+            foreach (KeyValuePair<string, (Vector3 Position, Vector3 Scale)> expected in socketExpected)
+            {
+                Transform socket = RequireChild(architecture, "SOCKET_" + expected.Key);
+                AssertVector(socket.position, expected.Value.Position);
+                Assert.That(Quaternion.Angle(socket.rotation, Quaternion.identity),
+                    Is.LessThan(0.01f), expected.Key);
+                AssertVector(
+                    RequireChild(socket, "INTENDED_BOUNDS_PROVISIONAL_REVIEW_REQUIRED").localScale,
+                    expected.Value.Scale);
+                Transform proxy = RequireChild(socket, "VISIBLE_REVIEW_PROXY_" + expected.Key);
+                AssertPartitionProxy(
+                    proxy,
+                    expected.Value.Position + Vector3.up * 1.05f,
+                    expected.Value.Scale,
+                    Quaternion.identity,
+                    false);
+                expectedMeshNames.Add(proxy.name);
+            }
+
+            string[] allPartitionMeshNames = root.GetComponentsInChildren<MeshRenderer>(true)
+                .Where(renderer => renderer.name.IndexOf(
+                    "Partition",
+                    StringComparison.OrdinalIgnoreCase) >= 0)
+                .Select(renderer => renderer.name)
+                .ToArray();
+            Assert.That(allPartitionMeshNames, Has.Length.EqualTo(38));
+            CollectionAssert.AreEquivalent(expectedMeshNames, allPartitionMeshNames,
+                "Every v2 partition semantic mesh must be enumerated exactly once.");
+        }
+
+        [Test]
         public void FigureEight_CurrentPlayerCapsule_HasWestEastCentralAndNorthConnectivity()
         {
             CharacterController playerController = RequirePlayer()
@@ -757,6 +909,39 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(collider, Is.Not.Null, runtimeKey);
             AssertVector(collider.bounds.size, expected);
             Assert.That(collider.bounds.min.y, Is.EqualTo(0f).Within(0.002f), runtimeKey);
+        }
+
+        private static void AssertPartitionProxy(
+            Transform partition,
+            Vector3 expectedPosition,
+            Vector3 expectedScale,
+            Quaternion expectedRotation,
+            bool expectsCollider)
+        {
+            AssertVector(partition.position, expectedPosition);
+            AssertVector(partition.localScale, expectedScale);
+            Assert.That(Quaternion.Angle(partition.rotation, expectedRotation),
+                Is.LessThan(0.01f), partition.name);
+
+            MeshRenderer renderer = partition.GetComponent<MeshRenderer>();
+            Assert.That(renderer, Is.Not.Null, partition.name);
+            Assert.That(renderer.bounds.min.y, Is.EqualTo(0f).Within(0.002f), partition.name);
+            Assert.That(renderer.bounds.size.y, Is.EqualTo(2.1f).Within(0.002f), partition.name);
+
+            Collider[] colliders = partition.GetComponents<Collider>();
+            if (expectsCollider)
+            {
+                Assert.That(colliders, Has.Length.EqualTo(1), partition.name);
+                Assert.That(colliders[0], Is.TypeOf<BoxCollider>(), partition.name);
+                Assert.That(colliders[0].bounds.min.y, Is.EqualTo(0f).Within(0.002f),
+                    partition.name);
+                Assert.That(colliders[0].bounds.size.y, Is.EqualTo(2.1f).Within(0.002f),
+                    partition.name);
+            }
+            else
+            {
+                Assert.That(colliders, Is.Empty, partition.name);
+            }
         }
 
         private PrototypeInteractionTarget RequireTarget(string runtimeKey)
