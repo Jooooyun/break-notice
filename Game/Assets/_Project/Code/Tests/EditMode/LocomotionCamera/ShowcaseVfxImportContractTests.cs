@@ -22,6 +22,13 @@ namespace BreakNotice.LocomotionCamera.Tests
         private const string PremiumRootPath =
             ReviewRootPath + "/Premium_v002";
 
+        private const string CompleteRootPath =
+            ReviewRootPath + "/Complete_v003";
+
+        private const string CompleteLedgerRelativePath =
+            "ArtSource/VFX/Showcase/Licenses/" +
+            "VFX_Showcase_Complete_Provenance_Ledger_v003.csv";
+
         private const string ReviewScenePath =
             "Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity";
 
@@ -341,8 +348,44 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(layers.Cast<Transform>().Count(child => child.name.StartsWith("LAYER_STATION_", StringComparison.Ordinal)), Is.EqualTo(8));
                 Assert.That(variations.Cast<Transform>().Count(child => child.name.StartsWith("VARIATION_STATION_", StringComparison.Ordinal)), Is.EqualTo(4));
                 Assert.That(gameplay.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(24));
-                Assert.That(root.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(188));
-                Assert.That(root.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(140));
+                Transform[] completePages = root.transform.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("COMPLETE_PAGE_", StringComparison.Ordinal))
+                    .OrderBy(child => child.name, StringComparer.Ordinal)
+                    .ToArray();
+                Assert.That(completePages.Length, Is.EqualTo(14));
+                Assert.That(
+                    completePages[0].Cast<Transform>().Count(child =>
+                        child.name.StartsWith("SELECTED_STATION_", StringComparison.Ordinal)),
+                    Is.EqualTo(8));
+                Assert.That(
+                    completePages.Skip(1)
+                        .SelectMany(page => page.Cast<Transform>())
+                        .Count(child => child.name.StartsWith("CUE_STATION_", StringComparison.Ordinal)),
+                    Is.EqualTo(48));
+                Assert.That(
+                    completePages.Skip(1)
+                        .SelectMany(page => page.GetComponentsInChildren<Transform>(true))
+                        .Count(item => item.name == "COMPLETE_V003_COMPOSITE"),
+                    Is.EqualTo(48));
+                Transform[] soloLayers = completePages.Skip(1)
+                    .SelectMany(page => page.GetComponentsInChildren<Transform>(true))
+                    .Where(item => item.name.StartsWith("SOLO_LAYER_", StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(soloLayers.Length, Is.EqualTo(144));
+                Assert.That(
+                    soloLayers.All(item =>
+                        item.GetComponentsInChildren<ParticleSystem>(true).Length == 1),
+                    Is.True);
+                Transform[] gameplayEffects = completePages[13].Cast<Transform>()
+                    .Where(item => item.name.StartsWith("GAMEPLAY_EFFECT_", StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(gameplayEffects.Length, Is.EqualTo(8));
+                Assert.That(
+                    gameplayEffects.All(item =>
+                        item.GetComponentsInChildren<ParticleSystem>(true).Length == 3),
+                    Is.True);
+                Assert.That(root.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(510));
+                Assert.That(root.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(462));
                 MonoBehaviour[] reviewComponents =
                     root.GetComponentsInChildren<MonoBehaviour>(true);
                 Assert.That(reviewComponents.Length, Is.EqualTo(1));
@@ -397,7 +440,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 }
 
                 Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
-                Assert.That(camera.transform.position, Is.EqualTo(new Vector3(0f, 0.65f, -19.5f)));
+                Assert.That(camera.transform.position, Is.EqualTo(new Vector3(400f, 0.65f, -19.5f)));
                 Assert.That(Vector3.Dot(camera.transform.forward, Vector3.forward), Is.GreaterThan(0.999f));
                 Assert.That(Vector3.Dot(camera.transform.up, Vector3.up), Is.GreaterThan(0.999f));
                 Assert.That(Vector3.Dot(camera.transform.right, Vector3.right), Is.GreaterThan(0.999f));
@@ -428,7 +471,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void ReviewCamera_ContainsAllEightStationsAtSixteenByNine()
+        public void ReviewCamera_ContainsAllCompletePagesAtSixteenByNine()
         {
             Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
             try
@@ -436,25 +479,62 @@ namespace BreakNotice.LocomotionCamera.Tests
                 GameObject root = FindReviewRoot(scene);
                 Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
                 camera.aspect = 16f / 9f;
-                Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
-                Transform oldNew = root.transform.Find("ZONE_01_OLD_VS_NEW");
-                Transform[] stations = oldNew.Cast<Transform>()
-                    .Where(child => child.name.StartsWith("STATION_", StringComparison.Ordinal))
+                Transform[] pages = root.transform.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("COMPLETE_PAGE_", StringComparison.Ordinal))
+                    .OrderBy(child => child.name, StringComparer.Ordinal)
                     .ToArray();
-                Assert.That(stations.Length, Is.EqualTo(8));
+                Assert.That(pages.Length, Is.EqualTo(14));
 
-                foreach (Transform station in stations)
+                foreach (Transform page in pages)
                 {
-                    Renderer backdrop = station.GetComponentsInChildren<Renderer>(true)
-                        .Single(item => item.gameObject.name == "REVIEW_BACKDROP");
+                    Transform anchor = page.Find("CAMERA_ANCHOR");
+                    Transform target = page.Find("CAMERA_TARGET");
+                    Assert.That(anchor, Is.Not.Null, page.name);
+                    Assert.That(target, Is.Not.Null, page.name);
+                    camera.transform.SetPositionAndRotation(
+                        anchor.position,
+                        Quaternion.LookRotation(target.position - anchor.position, Vector3.up));
+                    camera.fieldOfView = page.name.Contains(
+                        "GAMEPLAY_CAMERA",
+                        StringComparison.Ordinal) ? 48f : 40f;
+                    Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
+                    if (page.name.Contains("GAMEPLAY_CAMERA", StringComparison.Ordinal))
+                    {
+                        Transform[] gameplayEffects = page.Cast<Transform>()
+                            .Where(child => child.name.StartsWith("GAMEPLAY_EFFECT_", StringComparison.Ordinal))
+                            .ToArray();
+                        Assert.That(gameplayEffects.Length, Is.EqualTo(8));
+                        foreach (Transform effect in gameplayEffects)
+                        {
+                            Vector3 viewport = camera.WorldToViewportPoint(effect.position);
+                            Assert.That(viewport.z, Is.GreaterThan(camera.nearClipPlane), effect.name);
+                            Assert.That(viewport.x, Is.InRange(0f, 1f), effect.name);
+                            Assert.That(viewport.y, Is.InRange(0f, 1f), effect.name);
+                        }
+                        continue;
+                    }
+                    Transform[] pageStations = page.Cast<Transform>()
+                        .Where(child =>
+                            child.name.StartsWith("SELECTED_STATION_", StringComparison.Ordinal) ||
+                            child.name.StartsWith("CUE_STATION_", StringComparison.Ordinal))
+                        .ToArray();
                     Assert.That(
-                        GeometryUtility.TestPlanesAABB(frustum, backdrop.bounds),
-                        Is.True,
-                        station.name);
-                    Vector3 viewport = camera.WorldToViewportPoint(backdrop.bounds.center);
-                    Assert.That(viewport.z, Is.GreaterThan(camera.nearClipPlane), station.name);
-                    Assert.That(viewport.x, Is.InRange(0f, 1f), station.name);
-                    Assert.That(viewport.y, Is.InRange(0f, 1f), station.name);
+                        pageStations.Length,
+                        Is.EqualTo(page.name.Contains("OWNER_SELECTED", StringComparison.Ordinal) ? 8 : 4),
+                        page.name);
+                    foreach (Transform station in pageStations)
+                    {
+                        Renderer backdrop = station.GetComponentsInChildren<Renderer>(true)
+                            .Single(item => item.gameObject.name == "REVIEW_BACKDROP");
+                        Assert.That(
+                            GeometryUtility.TestPlanesAABB(frustum, backdrop.bounds),
+                            Is.True,
+                            page.name + "/" + station.name);
+                        Vector3 viewport = camera.WorldToViewportPoint(backdrop.bounds.center);
+                        Assert.That(viewport.z, Is.GreaterThan(camera.nearClipPlane), station.name);
+                        Assert.That(viewport.x, Is.InRange(0f, 1f), station.name);
+                        Assert.That(viewport.y, Is.InRange(0f, 1f), station.name);
+                    }
                 }
             }
             finally
@@ -477,25 +557,47 @@ namespace BreakNotice.LocomotionCamera.Tests
                 MethodInfo restart = playback.GetType().GetMethod("RestartAllNow");
                 Assert.That(restart, Is.Not.Null);
                 int started = (int)restart.Invoke(playback, null);
-                Assert.That(started, Is.EqualTo(140));
+                Assert.That(started, Is.EqualTo(462));
                 Assert.That(
                     root.GetComponentsInChildren<ParticleSystem>(false)
                         .All(system => system.isPlaying),
                     Is.True);
 
-                Transform oldNew = root.transform.Find("ZONE_01_OLD_VS_NEW");
-                Transform[] stations = oldNew.Cast<Transform>()
-                    .Where(child => child.name.StartsWith("STATION_", StringComparison.Ordinal))
-                    .ToArray();
-                foreach (Transform station in stations)
+                MethodInfo start = playback.GetType().GetMethod(
+                    "Start",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(start, Is.Not.Null);
+                start.Invoke(playback, null);
+                Assert.That(
+                    (int)playback.GetType().GetProperty("PageCount").GetValue(playback),
+                    Is.EqualTo(14));
+                MethodInfo showPage = playback.GetType().GetMethod("ShowPageNow");
+                Assert.That(showPage, Is.Not.Null);
+                for (int pageIndex = 0; pageIndex < 14; pageIndex++)
                 {
-                    Transform composite = station.Find("NEW_PREMIUM_V002_COMPOSITE");
-                    ParticleSystem[] systems =
-                        composite.GetComponentsInChildren<ParticleSystem>(false);
-                    Assert.That(systems.Length, Is.EqualTo(3), station.name);
+                    int pageStarted = (int)showPage.Invoke(playback, new object[] { pageIndex });
+                    int expected = pageIndex == 0 ? 10 : 24;
+                    Assert.That(pageStarted, Is.EqualTo(expected));
+                }
+
+                MethodInfo replayPage = playback.GetType().GetMethod("ReplayCurrentPageNow");
+                Assert.That(replayPage, Is.Not.Null);
+                Assert.That((int)replayPage.Invoke(playback, null), Is.EqualTo(24));
+
+                Transform[] completeComposites = root.transform.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("COMPLETE_PAGE_", StringComparison.Ordinal))
+                    .Skip(1)
+                    .SelectMany(page => page.GetComponentsInChildren<Transform>(true))
+                    .Where(item => item.name == "COMPLETE_V003_COMPOSITE")
+                    .ToArray();
+                Assert.That(completeComposites.Length, Is.EqualTo(48));
+                foreach (Transform composite in completeComposites)
+                {
+                    ParticleSystem[] systems = composite.GetComponentsInChildren<ParticleSystem>(false);
+                    Assert.That(systems.Length, Is.EqualTo(3), composite.parent.name);
                     foreach (ParticleSystem system in systems)
                     {
-                        system.Simulate(0.42f, false, true, false);
+                        system.Simulate(0.28f, false, true, false);
                         Assert.That(system.particleCount, Is.GreaterThan(0), system.name);
                     }
                 }
@@ -531,6 +633,280 @@ namespace BreakNotice.LocomotionCamera.Tests
                         Material material = renderer.sharedMaterial;
                         Assert.That(material.HasProperty("_MainTex"), Is.True, material.name);
                         Assert.That(material.GetTexture("_MainTex"), Is.Not.Null, material.name);
+                    }
+                }
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(scene, true);
+            }
+        }
+
+        [Test]
+        public void CompleteDelivery_LedgerDeclaresAllFortyEightEffectsAndOneHundredFortyFourLayers()
+        {
+            IReadOnlyList<CompleteCandidate> candidates = LoadCompleteCandidates();
+            Assert.That(candidates.Count, Is.EqualTo(144));
+            Assert.That(candidates.Count(candidate => !candidate.IsFlipbook), Is.EqualTo(69));
+            Assert.That(candidates.Count(candidate => candidate.IsFlipbook), Is.EqualTo(75));
+            Assert.That(candidates.Sum(candidate => candidate.ExpectedBytes), Is.EqualTo(14176680));
+            Assert.That(candidates.Sum(candidate => candidate.ExpectedAlphaNonzero), Is.EqualTo(4672714));
+            Assert.That(candidates.Sum(candidate => candidate.ExpectedAlphaPartial), Is.EqualTo(4669321));
+            Assert.That(
+                candidates.Select(candidate => candidate.ExpectedSha256)
+                    .Distinct(StringComparer.Ordinal).Count(),
+                Is.EqualTo(144));
+            Assert.That(
+                candidates.Select(candidate => candidate.TexturePath)
+                    .Distinct(StringComparer.Ordinal).Count(),
+                Is.EqualTo(144));
+            Assert.That(
+                candidates.Select(candidate => candidate.MaterialPath)
+                    .Distinct(StringComparer.Ordinal).Count(),
+                Is.EqualTo(144));
+            Assert.That(candidates.All(candidate => candidate.ThirdPartySource == "NONE"), Is.True);
+            Assert.That(
+                candidates.All(candidate =>
+                    candidate.ProvenanceClassification.StartsWith("ORIGINAL_", StringComparison.Ordinal) &&
+                    candidate.TransparentMargin >= 24),
+                Is.True);
+            Assert.That(
+                candidates.All(candidate =>
+                    candidate.CommercialUse.Contains("AUTHORIZED", StringComparison.Ordinal) &&
+                    candidate.RepositoryRedistribution.Contains("AUTHORIZED", StringComparison.Ordinal)),
+                Is.True);
+            Assert.That(
+                candidates.All(candidate =>
+                    candidate.ReviewStatus ==
+                    "REVIEW / OWNER APPROVAL PENDING / GAMEPLAY INTEGRATION NONE"),
+                Is.True);
+
+            string[] prefabGuids = AssetDatabase.FindAssets(
+                "t:Prefab",
+                new[] { CompleteRootPath + "/Prefabs" });
+            Assert.That(prefabGuids.Length, Is.EqualTo(48));
+            string[] materialGuids = AssetDatabase.FindAssets(
+                "t:Material",
+                new[] { CompleteRootPath + "/Materials" });
+            Assert.That(materialGuids.Length, Is.EqualTo(144));
+            string[] allGuids = candidates.Select(candidate =>
+                    AssetDatabase.AssetPathToGUID(candidate.TexturePath))
+                .Concat(candidates.Select(candidate =>
+                    AssetDatabase.AssetPathToGUID(candidate.MaterialPath)))
+                .Concat(prefabGuids)
+                .ToArray();
+            Assert.That(allGuids.All(guid => !string.IsNullOrWhiteSpace(guid)), Is.True);
+            Assert.That(allGuids.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(allGuids.Length));
+        }
+
+        [Test]
+        public void CompleteCandidates_AreByteIdenticalLedgerVerifiedStraightAlphaPngs()
+        {
+            foreach (CompleteCandidate candidate in LoadCompleteCandidates())
+            {
+                byte[] source = File.ReadAllBytes(candidate.SourcePath);
+                byte[] runtime = File.ReadAllBytes(ToPhysicalPath(candidate.TexturePath));
+                Assert.That(runtime, Is.EqualTo(source), candidate.TexturePath);
+                Assert.That(runtime.Length, Is.EqualTo(candidate.ExpectedBytes), candidate.TexturePath);
+                Assert.That(
+                    runtime.Take(8).ToArray(),
+                    Is.EqualTo(new byte[] { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a }),
+                    candidate.TexturePath);
+                Assert.That(Sha256(runtime), Is.EqualTo(candidate.ExpectedSha256), candidate.TexturePath);
+
+                Texture2D decoded = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);
+                try
+                {
+                    Assert.That(ImageConversion.LoadImage(decoded, runtime, false), Is.True, candidate.TexturePath);
+                    int dimension = candidate.IsFlipbook ? 2048 : 512;
+                    Assert.That(decoded.width, Is.EqualTo(dimension), candidate.TexturePath);
+                    Assert.That(decoded.height, Is.EqualTo(dimension), candidate.TexturePath);
+                    Color32[] pixels = decoded.GetPixels32();
+                    int alphaNonzero = 0;
+                    int alphaPartial = 0;
+                    int missingMagenta = 0;
+                    int neonCyan = 0;
+                    int greenSpill = 0;
+                    int blackHaloRisk = 0;
+                    foreach (Color32 pixel in pixels)
+                    {
+                        alphaNonzero += pixel.a > 0 ? 1 : 0;
+                        alphaPartial += pixel.a > 0 && pixel.a < 255 ? 1 : 0;
+                        missingMagenta += IsMissingTextureMagenta(pixel) ? 1 : 0;
+                        neonCyan += IsNeonCyan(pixel) ? 1 : 0;
+                        greenSpill += IsGreenSpill(pixel) ? 1 : 0;
+                        blackHaloRisk +=
+                            pixel.a > 8 && pixel.r < 8 && pixel.g < 8 && pixel.b < 8 ? 1 : 0;
+                    }
+                    Assert.That(
+                        alphaNonzero,
+                        Is.EqualTo(candidate.ExpectedAlphaNonzero),
+                        candidate.TexturePath);
+                    Assert.That(
+                        alphaPartial,
+                        Is.EqualTo(candidate.ExpectedAlphaPartial),
+                        candidate.TexturePath);
+                    Assert.That(missingMagenta, Is.Zero, candidate.TexturePath);
+                    Assert.That(neonCyan, Is.Zero, candidate.TexturePath);
+                    Assert.That(greenSpill, Is.Zero, candidate.TexturePath);
+                    Assert.That(blackHaloRisk, Is.Zero,
+                        candidate.TexturePath + " has a visible-alpha black-halo risk.");
+
+                    if (candidate.IsFlipbook)
+                    {
+                        AssertCompleteFlipbookCells(candidate, pixels, decoded.width);
+                    }
+                    else
+                    {
+                        AssertTransparentOuterMargin(pixels, decoded.width, decoded.height, 24);
+                    }
+                }
+                finally
+                {
+                    UnityEngine.Object.DestroyImmediate(decoded);
+                }
+            }
+        }
+
+        [Test]
+        public void CompleteImportersAndMaterials_PreserveAlphaAndUseBuiltInParticleShader()
+        {
+            foreach (CompleteCandidate candidate in LoadCompleteCandidates())
+            {
+                TextureImporter importer = AssetImporter.GetAtPath(candidate.TexturePath) as TextureImporter;
+                Assert.That(importer, Is.Not.Null, candidate.TexturePath);
+                Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Default), candidate.TexturePath);
+                Assert.That(importer.textureShape, Is.EqualTo(TextureImporterShape.Texture2D), candidate.TexturePath);
+                Assert.That(importer.sRGBTexture, Is.True, candidate.TexturePath);
+                Assert.That(importer.alphaSource, Is.EqualTo(TextureImporterAlphaSource.FromInput), candidate.TexturePath);
+                Assert.That(importer.alphaIsTransparency, Is.True, candidate.TexturePath);
+                Assert.That(importer.isReadable, Is.False, candidate.TexturePath);
+                Assert.That(importer.mipmapEnabled, Is.EqualTo(candidate.IsFlipbook), candidate.TexturePath);
+                Assert.That(importer.borderMipmap, Is.EqualTo(candidate.IsFlipbook), candidate.TexturePath);
+                Assert.That(importer.streamingMipmaps, Is.False, candidate.TexturePath);
+                Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), candidate.TexturePath);
+                Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Bilinear), candidate.TexturePath);
+                Assert.That(importer.anisoLevel, Is.EqualTo(1), candidate.TexturePath);
+                Assert.That(importer.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed), candidate.TexturePath);
+                Assert.That(importer.crunchedCompression, Is.False, candidate.TexturePath);
+                Assert.That(importer.maxTextureSize, Is.EqualTo(candidate.IsFlipbook ? 2048 : 512), candidate.TexturePath);
+
+                Material material = AssetDatabase.LoadAssetAtPath<Material>(candidate.MaterialPath);
+                Assert.That(material, Is.Not.Null, candidate.MaterialPath);
+                Assert.That(material.shader, Is.Not.Null, candidate.MaterialPath);
+                Assert.That(material.shader.name, Is.EqualTo(ParticleShaderName), candidate.MaterialPath);
+                Assert.That(material.HasProperty("_MainTex"), Is.True, candidate.MaterialPath);
+                Assert.That(
+                    AssetDatabase.GetAssetPath(material.GetTexture("_MainTex")),
+                    Is.EqualTo(candidate.TexturePath),
+                    candidate.MaterialPath);
+                Assert.That(material.GetFloat("_Mode"), Is.EqualTo(2f).Within(0.001f), candidate.MaterialPath);
+                Assert.That(material.GetFloat("_SrcBlend"), Is.EqualTo((float)BlendMode.SrcAlpha).Within(0.001f), candidate.MaterialPath);
+                Assert.That(material.GetFloat("_DstBlend"), Is.EqualTo((float)BlendMode.OneMinusSrcAlpha).Within(0.001f), candidate.MaterialPath);
+                Assert.That(material.GetFloat("_ZWrite"), Is.EqualTo(0f).Within(0.001f), candidate.MaterialPath);
+                Assert.That(material.GetTag("RenderType", false), Is.EqualTo("Transparent"), candidate.MaterialPath);
+                Assert.That(material.IsKeywordEnabled("_ALPHAPREMULTIPLY_ON"), Is.False, candidate.MaterialPath);
+                Assert.That(material.GetShaderPassEnabled("ShadowCaster"), Is.False, candidate.MaterialPath);
+            }
+        }
+
+        [Test]
+        public void CompletePrefabs_AreFortyEightThreeLayerReviewOnlyComposites()
+        {
+            string[] prefabPaths = AssetDatabase.FindAssets(
+                    "t:Prefab",
+                    new[] { CompleteRootPath + "/Prefabs" })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            Assert.That(prefabPaths.Length, Is.EqualTo(48));
+
+            foreach (string prefabPath in prefabPaths)
+            {
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                Assert.That(prefab, Is.Not.Null, prefabPath);
+                Assert.That(prefab.transform.childCount, Is.EqualTo(3), prefabPath);
+                Assert.That(prefab.GetComponentsInChildren<MonoBehaviour>(true), Is.Empty, prefabPath);
+                ParticleSystem[] systems = prefab.GetComponentsInChildren<ParticleSystem>(true);
+                Assert.That(systems.Length, Is.EqualTo(3), prefabPath);
+                bool? isFlipbook = null;
+                foreach (ParticleSystem system in systems)
+                {
+                    Assert.That(system.main.loop, Is.True, prefabPath);
+                    Assert.That(system.main.playOnAwake, Is.True, prefabPath);
+                    Assert.That(system.main.prewarm, Is.False, prefabPath);
+                    Assert.That(system.main.cullingMode, Is.EqualTo(ParticleSystemCullingMode.AlwaysSimulate), prefabPath);
+                    Assert.That(system.main.maxParticles, Is.EqualTo(1), prefabPath);
+                    Assert.That(system.main.startSpeed.constant, Is.EqualTo(0f), prefabPath);
+                    Assert.That(system.emission.burstCount, Is.EqualTo(1), prefabPath);
+                    Assert.That(system.shape.enabled, Is.False, prefabPath);
+                    Assert.That(system.collision.enabled, Is.False, prefabPath);
+                    Assert.That(system.trigger.enabled, Is.False, prefabPath);
+                    Assert.That(system.noise.enabled, Is.False, prefabPath);
+                    Assert.That(system.trails.enabled, Is.False, prefabPath);
+                    Assert.That(system.lights.enabled, Is.False, prefabPath);
+
+                    ParticleSystemRenderer renderer = system.GetComponent<ParticleSystemRenderer>();
+                    Assert.That(renderer, Is.Not.Null, prefabPath);
+                    Assert.That(renderer.renderMode, Is.EqualTo(ParticleSystemRenderMode.Billboard), prefabPath);
+                    Assert.That(renderer.alignment, Is.EqualTo(ParticleSystemRenderSpace.View), prefabPath);
+                    Assert.That(renderer.shadowCastingMode, Is.EqualTo(ShadowCastingMode.Off), prefabPath);
+                    Assert.That(renderer.receiveShadows, Is.False, prefabPath);
+                    Assert.That(
+                        AssetDatabase.GetAssetPath(renderer.sharedMaterial),
+                        Does.StartWith(CompleteRootPath + "/Materials/"),
+                        prefabPath);
+                    string texturePath = AssetDatabase.GetAssetPath(
+                        renderer.sharedMaterial.GetTexture("_MainTex"));
+                    bool layerIsFlipbook = texturePath.Contains("/Flipbooks/", StringComparison.Ordinal);
+                    isFlipbook ??= layerIsFlipbook;
+                    Assert.That(layerIsFlipbook, Is.EqualTo(isFlipbook.Value), prefabPath);
+                    Assert.That(system.textureSheetAnimation.enabled, Is.EqualTo(layerIsFlipbook), prefabPath);
+                    if (layerIsFlipbook)
+                    {
+                        ParticleSystem.TextureSheetAnimationModule sheet = system.textureSheetAnimation;
+                        Assert.That(sheet.numTilesX, Is.EqualTo(4), prefabPath);
+                        Assert.That(sheet.numTilesY, Is.EqualTo(4), prefabPath);
+                        Assert.That(sheet.animation, Is.EqualTo(ParticleSystemAnimationType.WholeSheet), prefabPath);
+                        Assert.That(sheet.cycleCount, Is.EqualTo(1), prefabPath);
+                        Assert.That(sheet.startFrame.constant, Is.EqualTo(0f).Within(0.001f), prefabPath);
+                        Assert.That(sheet.frameOverTime.curve.Evaluate(0f), Is.EqualTo(0f).Within(0.001f), prefabPath);
+                        Assert.That(sheet.frameOverTime.curve.Evaluate(1f), Is.EqualTo(0.999f).Within(0.002f), prefabPath);
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void OwnerSelectedCore_UsesOldSevenAndNewExitWithoutGameplayIntegration()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
+            try
+            {
+                GameObject root = FindReviewRoot(scene);
+                Transform page = root.transform.Find("COMPLETE_PAGE_00_OWNER_SELECTED_CORE");
+                Assert.That(page, Is.Not.Null);
+                Transform[] stations = page.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("SELECTED_STATION_", StringComparison.Ordinal))
+                    .OrderBy(child => child.name, StringComparer.Ordinal)
+                    .ToArray();
+                Assert.That(stations.Length, Is.EqualTo(8));
+                for (int index = 0; index < stations.Length; index++)
+                {
+                    Transform composite = stations[index].Find("OWNER_SELECTED_COMPOSITE");
+                    Assert.That(composite, Is.Not.Null, stations[index].name);
+                    GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(composite.gameObject);
+                    Assert.That(source, Is.Not.Null, stations[index].name);
+                    string sourcePath = AssetDatabase.GetAssetPath(source);
+                    if (index == 7)
+                    {
+                        Assert.That(sourcePath, Does.StartWith(PremiumRootPath + "/Prefabs/"));
+                        Assert.That(sourcePath, Does.Contain("ExitRoute"));
+                    }
+                    else
+                    {
+                        Assert.That(sourcePath, Does.StartWith(ReviewRootPath + "/Prefabs/"));
+                        Assert.That(sourcePath, Does.EndWith("_v001.prefab"));
                     }
                 }
             }
@@ -582,6 +958,145 @@ namespace BreakNotice.LocomotionCamera.Tests
                     item.name == "LOCAL_REVIEW_ONLY_ShowcaseVFX_ROOT");
             Assert.That(root, Is.Not.Null);
             return root;
+        }
+
+        private static void AssertCompleteFlipbookCells(
+            CompleteCandidate candidate,
+            Color32[] pixels,
+            int sheetWidth)
+        {
+            Assert.That(candidate.FrameOrder, Is.EqualTo("UNITY_WHOLE_SHEET_LOWER_LEFT_ROW_MAJOR"));
+            Assert.That(candidate.ExpectedFrameHashUnique, Is.EqualTo(16));
+            const int cellSize = 512;
+            const int safeMargin = 24;
+            var hashes = new HashSet<string>(StringComparer.Ordinal);
+            int marginViolations = 0;
+            for (int frame = 0; frame < 16; frame++)
+            {
+                int cellX = frame % 4;
+                int cellY = frame / 4;
+                byte[] cellBytes = new byte[cellSize * cellSize * 4];
+                int write = 0;
+                int alphaCount = 0;
+                for (int localY = 0; localY < cellSize; localY++)
+                {
+                    for (int localX = 0; localX < cellSize; localX++)
+                    {
+                        Color32 pixel = pixels[
+                            ((cellY * cellSize) + localY) * sheetWidth +
+                            (cellX * cellSize) + localX];
+                        alphaCount += pixel.a > 0 ? 1 : 0;
+                        if (localX < safeMargin || localX >= cellSize - safeMargin ||
+                            localY < safeMargin || localY >= cellSize - safeMargin)
+                        {
+                            marginViolations += pixel.a > 0 ? 1 : 0;
+                        }
+                        cellBytes[write++] = pixel.r;
+                        cellBytes[write++] = pixel.g;
+                        cellBytes[write++] = pixel.b;
+                        cellBytes[write++] = pixel.a;
+                    }
+                }
+                Assert.That(alphaCount, Is.GreaterThan(31),
+                    $"{candidate.TexturePath} frame {frame}");
+                hashes.Add(Sha256(cellBytes));
+            }
+            Assert.That(hashes.Count, Is.EqualTo(16), candidate.TexturePath);
+            Assert.That(marginViolations, Is.Zero, candidate.TexturePath + " cell margins");
+        }
+
+        private static IReadOnlyList<CompleteCandidate> LoadCompleteCandidates()
+        {
+            string repositoryRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "..", ".."));
+            string ledgerPath = Path.Combine(
+                repositoryRoot,
+                CompleteLedgerRelativePath.Replace('/', Path.DirectorySeparatorChar));
+            Assert.That(File.Exists(ledgerPath), Is.True, ledgerPath);
+            string[] lines = File.ReadAllLines(ledgerPath);
+            Assert.That(lines.Length, Is.GreaterThanOrEqualTo(153), ledgerPath);
+            string[] headers = ParseCsvLine(lines[0]);
+            var index = headers.Select((name, position) => new { name, position })
+                .ToDictionary(item => item.name, item => item.position, StringComparer.Ordinal);
+            var candidates = new List<CompleteCandidate>();
+            foreach (string line in lines.Skip(1))
+            {
+                string[] fields = ParseCsvLine(line);
+                string role = fields[index["asset_role"]];
+                bool isFlipbook = role == "UNITY_REVIEW_4X4_FLIPBOOK_LAYER_CANDIDATE";
+                if (!isFlipbook && role != "UNITY_REVIEW_TEXTURE_LAYER_CANDIDATE")
+                {
+                    continue;
+                }
+
+                string artSourcePath = fields[index["asset_path"]].Replace('\\', '/');
+                string texturePath = artSourcePath.Replace(
+                    "ArtSource/VFX/Showcase/",
+                    ReviewRootPath + "/");
+                string fileStem = Path.GetFileNameWithoutExtension(artSourcePath);
+                const string prefix = "T_VFX_Showcase_";
+                string suffix = isFlipbook ? "_4x4_v003" : "_v003";
+                Assert.That(fileStem, Does.StartWith(prefix), artSourcePath);
+                Assert.That(fileStem, Does.EndWith(suffix), artSourcePath);
+                string materialCore = fileStem.Substring(
+                    prefix.Length,
+                    fileStem.Length - prefix.Length - suffix.Length);
+                string materialPath =
+                    CompleteRootPath + "/Materials/M_VFX_Showcase_Complete_" +
+                    materialCore + "_v003.mat";
+                candidates.Add(new CompleteCandidate(
+                    Path.Combine(repositoryRoot, artSourcePath.Replace('/', Path.DirectorySeparatorChar)),
+                    texturePath,
+                    materialPath,
+                    fields[index["sha256"]],
+                    int.Parse(fields[index["bytes"]]),
+                    int.Parse(fields[index["alpha_nonzero_pixels"]]),
+                    int.Parse(fields[index["alpha_partial_pixels"]]),
+                    int.Parse(fields[index["transparent_margin_px"]]),
+                    isFlipbook,
+                    fields[index["frame_order"]],
+                    isFlipbook ? int.Parse(fields[index["frame_hash_unique"]]) : 0,
+                    fields[index["provenance_classification"]],
+                    fields[index["third_party_source"]],
+                    fields[index["commercial_use"]],
+                    fields[index["repository_redistribution"]],
+                    fields[index["review_status"]]));
+            }
+            return candidates.OrderBy(candidate => candidate.TexturePath, StringComparer.Ordinal).ToArray();
+        }
+
+        private static string[] ParseCsvLine(string line)
+        {
+            var fields = new List<string>();
+            var current = new System.Text.StringBuilder();
+            bool quoted = false;
+            for (int index = 0; index < line.Length; index++)
+            {
+                char value = line[index];
+                if (value == '"')
+                {
+                    if (quoted && index + 1 < line.Length && line[index + 1] == '"')
+                    {
+                        current.Append('"');
+                        index++;
+                    }
+                    else
+                    {
+                        quoted = !quoted;
+                    }
+                }
+                else if (value == ',' && !quoted)
+                {
+                    fields.Add(current.ToString());
+                    current.Clear();
+                }
+                else
+                {
+                    current.Append(value);
+                }
+            }
+            Assert.That(quoted, Is.False, line);
+            fields.Add(current.ToString());
+            return fields.ToArray();
         }
 
         private static Candidate C(
@@ -636,22 +1151,24 @@ namespace BreakNotice.LocomotionCamera.Tests
             int height,
             int margin)
         {
+            int violations = 0;
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < margin; x++)
                 {
-                    Assert.That(pixels[y * width + x].a, Is.Zero);
-                    Assert.That(pixels[y * width + (width - 1 - x)].a, Is.Zero);
+                    violations += pixels[y * width + x].a > 0 ? 1 : 0;
+                    violations += pixels[y * width + (width - 1 - x)].a > 0 ? 1 : 0;
                 }
             }
             for (int y = 0; y < margin; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    Assert.That(pixels[y * width + x].a, Is.Zero);
-                    Assert.That(pixels[(height - 1 - y) * width + x].a, Is.Zero);
+                    violations += pixels[y * width + x].a > 0 ? 1 : 0;
+                    violations += pixels[(height - 1 - y) * width + x].a > 0 ? 1 : 0;
                 }
             }
+            Assert.That(violations, Is.Zero);
         }
 
         private static string ToPhysicalPath(string assetPath)
@@ -701,6 +1218,63 @@ namespace BreakNotice.LocomotionCamera.Tests
             public int ExpectedFrameZeroAlpha { get; }
             public int ExpectedFrameFifteenAlpha { get; }
             public override string ToString() => Name;
+        }
+
+        public sealed class CompleteCandidate
+        {
+            public CompleteCandidate(
+                string sourcePath,
+                string texturePath,
+                string materialPath,
+                string expectedSha256,
+                int expectedBytes,
+                int expectedAlphaNonzero,
+                int expectedAlphaPartial,
+                int transparentMargin,
+                bool isFlipbook,
+                string frameOrder,
+                int expectedFrameHashUnique,
+                string provenanceClassification,
+                string thirdPartySource,
+                string commercialUse,
+                string repositoryRedistribution,
+                string reviewStatus)
+            {
+                SourcePath = sourcePath;
+                TexturePath = texturePath;
+                MaterialPath = materialPath;
+                ExpectedSha256 = expectedSha256;
+                ExpectedBytes = expectedBytes;
+                ExpectedAlphaNonzero = expectedAlphaNonzero;
+                ExpectedAlphaPartial = expectedAlphaPartial;
+                TransparentMargin = transparentMargin;
+                IsFlipbook = isFlipbook;
+                FrameOrder = frameOrder;
+                ExpectedFrameHashUnique = expectedFrameHashUnique;
+                ProvenanceClassification = provenanceClassification;
+                ThirdPartySource = thirdPartySource;
+                CommercialUse = commercialUse;
+                RepositoryRedistribution = repositoryRedistribution;
+                ReviewStatus = reviewStatus;
+            }
+
+            public string SourcePath { get; }
+            public string TexturePath { get; }
+            public string MaterialPath { get; }
+            public string ExpectedSha256 { get; }
+            public int ExpectedBytes { get; }
+            public int ExpectedAlphaNonzero { get; }
+            public int ExpectedAlphaPartial { get; }
+            public int TransparentMargin { get; }
+            public bool IsFlipbook { get; }
+            public string FrameOrder { get; }
+            public int ExpectedFrameHashUnique { get; }
+            public string ProvenanceClassification { get; }
+            public string ThirdPartySource { get; }
+            public string CommercialUse { get; }
+            public string RepositoryRedistribution { get; }
+            public string ReviewStatus { get; }
+            public override string ToString() => TexturePath;
         }
 
         public sealed class PrefabContract

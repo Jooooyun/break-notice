@@ -25,6 +25,9 @@ namespace BreakNotice.Contest.Editor
         public const string PremiumRootPath =
             ReviewRootPath + "/Premium_v002";
 
+        public const string CompleteRootPath =
+            ReviewRootPath + "/Complete_v003";
+
         public const string ReviewScenePath =
             "Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity";
 
@@ -40,6 +43,9 @@ namespace BreakNotice.Contest.Editor
         private const string LayerZoneName = "ZONE_02_SOLO_LAYER_AND_COMPOSITE";
         private const string VariationZoneName = "ZONE_03_PHYSICAL_VARIATION_AUDITION";
         private const string GameplayZoneName = "ZONE_04_GAMEPLAY_CAMERA_EQUIVALENT";
+        private const string CompletePagePrefix = "COMPLETE_PAGE_";
+        private const string CompleteCaptureDirectoryArgument =
+            "-showcaseVfxCompleteCaptureDirectory";
         private const string FixedSceneViewCaptureArgument =
             "-showcaseVfxFixedSceneViewCapture";
         private const string ActualPlayCaptureArgument =
@@ -52,13 +58,13 @@ namespace BreakNotice.Contest.Editor
         private const float ReviewCameraNearClip = 0.1f;
         private const float ReviewCameraFarClip = 80f;
         private const float ReviewSceneViewSize = 6.15f;
-        private const float ActualPlayCaptureDelay = 0.42f;
+        private const float ActualPlayCaptureDelay = 0.36f;
 
         private static readonly Vector3 ReviewCameraPosition =
-            new Vector3(0f, 0.65f, -19.5f);
+            new Vector3(400f, 0.65f, -19.5f);
 
         private static readonly Vector3 ReviewCameraTarget =
-            new Vector3(0f, 0.55f, 0f);
+            new Vector3(400f, 0.55f, 0f);
 
         private static readonly Quaternion ReviewCameraRotation =
             Quaternion.LookRotation(
@@ -209,19 +215,71 @@ namespace BreakNotice.Contest.Editor
                 })
         };
 
+        private static readonly CompleteEffectDefinition[] CompleteEffects =
+        {
+            CE("VFX-SHW-ACQ-001", "BinderEligible", "BINDER ACQUISITION AVAILABLE", false, 1.00f, 0f),
+            CE("VFX-SHW-ACQ-002", "ChairEligible", "CHAIR ACQUISITION AVAILABLE", false, 1.00f, 0f),
+            CE("VFX-SHW-ACQ-003", "AcquisitionConfirmed", "ACQUISITION CONFIRMED", false, 1.00f, 0f),
+            CE("VFX-SHW-THR-001", "ThrowChargeStage1", "THROW CHARGE / STAGE 1", false, 0.96f, 0f),
+            CE("VFX-SHW-THR-002", "ThrowChargeStage2", "THROW CHARGE / STAGE 2", false, 1.00f, 0f),
+            CE("VFX-SHW-THR-003", "ThrowChargeFull", "THROW CHARGE / FULL", false, 1.05f, 0f),
+            CE("VFX-SHW-THR-004", "ThrowPhysicalRelease", "THROW PHYSICAL RELEASE", true, 0.92f, 8f),
+            CE("VFX-SHW-THR-005", "BinderPhysicalContact", "BINDER PHYSICAL CONTACT", true, 1.04f, 12f),
+            CE("VFX-SHW-THR-006", "ChairPhysicalContact", "CHAIR PHYSICAL CONTACT", true, 1.18f, 4f),
+            CE("VFX-SHW-ALY-001", "AllyReady", "ALLY READY SUPPORT", false, 1.00f, 0f),
+            CE("VFX-SHW-ALY-002", "QBinderSupplyAccepted", "Q BINDER SUPPLY ACCEPTED", true, 0.92f, 15f),
+            CE("VFX-SHW-ALY-003", "QChairSupplyAccepted", "Q CHAIR SUPPLY ACCEPTED", true, 1.05f, 2f),
+            CE("VFX-SHW-ALY-004", "BinderCatch", "BINDER CATCH", true, 0.98f, -4f),
+            CE("VFX-SHW-ALY-005", "ChairFeedRelease", "CHAIR FLOOR-SUPPORTED FEED", true, 1.08f, 0f),
+            CE("VFX-SHW-ALY-006", "ChairWheelFloorContact", "CHAIR WHEEL / FLOOR CONTACT", true, 1.12f, -2f),
+            CE("VFX-SHW-ALY-007", "SupplyRejected", "SUPPLY REJECTED", false, 1.00f, 0f),
+            CE("VFX-SHW-ALY-008", "SupplyPathRejected", "SUPPLY PATH REJECTED", false, 1.00f, 0f),
+            CE("VFX-SHW-TEAM-001", "PassBadge", "PASS BADGE", false, 1.00f, 0f),
+            CE("VFX-SHW-TEAM-002", "BraceBadge", "BRACE BADGE", false, 1.00f, 0f),
+            CE("VFX-SHW-TEAM-003", "BreakBadge", "BREAK BADGE", false, 1.00f, 0f),
+            CE("VFX-SHW-TEAM-004", "TeamReady", "TEAM READY", false, 1.05f, 0f),
+            CE("VFX-SHW-FIN-001", "HandoverCommit", "HANDOVER CRASH / COMMIT", false, 1.00f, 0f),
+            CE("VFX-SHW-FIN-002", "HandoverChairSkid", "HANDOVER / CHAIR SKID", true, 1.20f, 1f),
+            CE("VFX-SHW-FIN-003", "HandoverChairRunnerContact", "HANDOVER / CHAIR TO RUNNER", true, 1.18f, 7f),
+            CE("VFX-SHW-FIN-004", "HandoverRunnerDrawerContact", "HANDOVER / RUNNER TO DRAWER", true, 1.20f, 5f),
+            CE("VFX-SHW-OBJ-001", "DrawerCausalImpact", "DRAWER CAUSAL IMPACT", true, 1.24f, 3f),
+            CE("VFX-SHW-OBJ-002", "DrawerRouteOpen", "DRAWER ROUTE STATE OPEN", false, 1.05f, 0f),
+            CE("VFX-SHW-OBJ-003", "ExitActivation", "EXIT / ROUTE ACTIVATION", false, 1.08f, 0f),
+            CE("VFX-SHW-RUN-001", "RunnerPressureTelegraph", "RUNNER PRESSURE TELEGRAPH", false, 1.04f, 0f),
+            CE("VFX-SHW-RUN-002", "RunnerPressureContact", "RUNNER PRESSURE CONTACT", true, 1.08f, 4f),
+            CE("VFX-SHW-RUN-003", "RunnerStaggerOpportunity", "RUNNER STAGGER / TAG READABILITY", false, 1.00f, 0f),
+            CE("VFX-SHW-RUN-004", "RunnerGrabPressure", "RUNNER GRAB PRESSURE", false, 1.03f, 0f),
+            CE("VFX-SHW-SYS-001", "ResetStart", "RESET START", false, 1.00f, 0f),
+            CE("VFX-SHW-SYS-002", "ResetComplete", "RESET COMPLETE", false, 1.00f, 0f),
+            CE("VFX-SHW-SYS-003", "UiConfirmation", "UI CONFIRMATION", false, 0.94f, 0f),
+            CE("VFX-SHW-SYS-004", "UiRejection", "UI REJECTION", false, 0.94f, 0f),
+            CE("VFX-LAB-HIT-001", "PunchLightCloth", "PUNCH LIGHT / CLOTH CONTACT", true, 0.96f, 10f),
+            CE("VFX-LAB-HIT-002", "PunchMediumCloth", "PUNCH MEDIUM / CLOTH CONTACT", true, 1.10f, 4f),
+            CE("VFX-LAB-HIT-003", "PunchStrongNonlethal", "PUNCH STRONG / NONLETHAL CONTACT", true, 1.28f, -2f),
+            CE("VFX-LAB-HIT-004", "PunchGlancing", "PUNCH GLANCING CONTACT", true, 0.98f, 24f),
+            CE("VFX-LAB-HIT-005", "PunchBraceBlock", "PUNCH / FOREARM BRACE BLOCK", true, 1.12f, -16f),
+            CE("VFX-LAB-HIT-006", "ShoulderBodyCheck", "SHOULDER / BODY CHECK", true, 1.22f, 2f),
+            CE("VFX-LAB-MAT-001", "HandDeskMiss", "HAND TO DESK / MISS CONTACT", true, 1.02f, -8f),
+            CE("VFX-LAB-MAT-002", "MetalDrawerContact", "PAINTED METAL DRAWER CONTACT", true, 1.16f, 6f),
+            CE("VFX-LAB-MAT-003", "ChairFramePlasticContact", "CHAIR FRAME / PLASTIC CONTACT", true, 1.10f, 0f),
+            CE("VFX-LAB-MAT-004", "BinderPaperEdgeContact", "BINDER / PAPER EDGE CONTACT", true, 1.02f, 18f),
+            CE("VFX-LAB-MAT-005", "ObjectFloorDrop", "OFFICE OBJECT / FLOOR DROP", true, 1.24f, 72f),
+            CE("VFX-LAB-MAT-006", "WallPartitionContact", "WALL / PARTITION CONTACT", true, 1.12f, -6f),
+        };
+
         [MenuItem(ReviewMenuPath)]
         public static void PrepareReviewSetup()
         {
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            EnsureAssetFolder(PremiumRootPath);
-            EnsureAssetFolder(PremiumRootPath + "/Materials");
-            EnsureAssetFolder(PremiumRootPath + "/Prefabs");
+            EnsureAssetFolder(CompleteRootPath);
+            EnsureAssetFolder(CompleteRootPath + "/Materials");
+            EnsureAssetFolder(CompleteRootPath + "/Prefabs");
             EnsureAssetFolder("Assets/_Project/Scenes/90_Review");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
 
-            foreach (LayerDefinition layer in Effects.SelectMany(effect => effect.Layers))
+            foreach (CompleteLayerDefinition layer in CompleteEffects.SelectMany(effect => effect.Layers))
             {
-                ConfigureTextureImporter(layer);
+                ConfigureCompleteTextureImporter(layer);
             }
 
             Shader particleShader = Shader.Find(ParticleShaderName);
@@ -231,48 +289,30 @@ namespace BreakNotice.Contest.Editor
                     $"Required built-in particle shader is unavailable: {ParticleShaderName}");
             }
 
-            var materials = new Dictionary<string, Material>(StringComparer.Ordinal);
-            foreach (LayerDefinition layer in Effects.SelectMany(effect => effect.Layers))
+            var completeMaterials = new Dictionary<string, Material>(StringComparer.Ordinal);
+            foreach (CompleteLayerDefinition layer in CompleteEffects.SelectMany(effect => effect.Layers))
             {
-                materials.Add(layer.Name, CreateParticleMaterial(layer, particleShader));
+                completeMaterials.Add(layer.MaterialName, CreateCompleteParticleMaterial(layer, particleShader));
+            }
+            foreach (CompleteEffectDefinition effect in CompleteEffects)
+            {
+                CreateCompletePrefab(effect, completeMaterials);
             }
 
-            foreach (EffectDefinition effect in Effects)
-            {
-                if (effect.IsPhysical)
-                {
-                    foreach (VariationDefinition variation in PhysicalVariations)
-                    {
-                        CreateCompositePrefab(effect, variation, materials);
-                    }
-                }
-                else
-                {
-                    CreateCompositePrefab(effect, VariationDefinition.Static, materials);
-                }
-            }
-
-            Material backdrop = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumBackdrop_v002",
-                new Color(0.055f, 0.064f, 0.068f, 1f));
-            Material panel = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumPanel_v002",
-                new Color(0.082f, 0.094f, 0.097f, 1f));
-            Material floor = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumFloor_v002",
-                new Color(0.16f, 0.17f, 0.17f, 1f));
-            Material prop = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumProp_v002",
-                new Color(0.32f, 0.34f, 0.34f, 1f));
-            Material binder = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumBinder_v002",
-                new Color(0.31f, 0.37f, 0.43f, 1f));
-            Material ally = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumAlly_v002",
-                new Color(0.31f, 0.40f, 0.45f, 1f));
-            Material exit = CreateSolidMaterial(
-                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumExit_v002",
-                new Color(0.28f, 0.38f, 0.32f, 1f));
+            Material backdrop = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumBackdrop_v002");
+            Material panel = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumPanel_v002");
+            Material floor = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumFloor_v002");
+            Material prop = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumProp_v002");
+            Material binder = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumBinder_v002");
+            Material ally = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumAlly_v002");
+            Material exit = LoadExistingPremiumReviewMaterial(
+                "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumExit_v002");
 
             GameObject reviewRoot = CreateReviewScene(
                 backdrop,
@@ -287,9 +327,11 @@ namespace BreakNotice.Contest.Editor
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             FrameSceneViewForReview(reviewRoot, true);
             Debug.Log(
-                "Premium Showcase VFX review prepared: replacementEffects=8/8, " +
-                "layerImports=24, compositeStations=8/8, physicalVariations=12, " +
-                "sceneViewFrontFramed=1, playBootstrap=1, gameplayIntegration=0, " +
+                "Showcase VFX complete review prepared: selectedCore=8/8, " +
+                "lockedCueEffects=36/36, impactMaterialAuditions=12/12, " +
+                "completeLayerImports=144, completeCompositeStations=48/48, pages=14, " +
+                "soloLayerAuditions=144/144, gameplayContextEffects=8/8, " +
+                "sceneViewFrontFramed=1, automaticPlayTour=1, gameplayIntegration=0, " +
                 "status=REVIEW / OWNER APPROVAL PENDING.");
         }
 
@@ -312,7 +354,17 @@ namespace BreakNotice.Contest.Editor
 
             Camera reviewCamera = root.GetComponentsInChildren<Camera>(true).Single();
             ConfigureReviewCamera(reviewCamera);
-            Texture2D capture = RenderCamera(reviewCamera, 1920, 1080);
+            GameObject captureCameraObject = new GameObject(
+                "LOCAL_REVIEW_ONLY_FIXED_SCENE_CAPTURE_CAMERA");
+            Camera captureCamera = captureCameraObject.AddComponent<Camera>();
+            captureCamera.CopyFrom(reviewCamera);
+            captureCamera.transform.SetPositionAndRotation(
+                reviewCamera.transform.position,
+                reviewCamera.transform.rotation);
+            captureCamera.enabled = false;
+            captureCamera.aspect = 16f / 9f;
+            captureCamera.ResetProjectionMatrix();
+            Texture2D capture = RenderCamera(captureCamera, 1920, 1080);
             try
             {
                 File.WriteAllBytes(outputPath, capture.EncodeToPNG());
@@ -320,10 +372,11 @@ namespace BreakNotice.Contest.Editor
             finally
             {
                 DestroyReviewObject(capture);
+                DestroyReviewObject(captureCameraObject);
             }
 
             Debug.Log(
-                $"Premium Showcase VFX fixed Scene View capture written: {outputPath}; " +
+                $"Complete Showcase VFX fixed Scene View capture written: {outputPath}; " +
                 "orientation=FRONT_UPRIGHT; stations=8/8.");
         }
 
@@ -337,6 +390,7 @@ namespace BreakNotice.Contest.Editor
             GameObject root = FindReviewRoot(scene);
             Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
             ConfigureReviewCamera(camera);
+            camera.aspect = 16f / 9f;
             EditorApplication.isPlaying = true;
             Debug.Log(
                 $"Premium Showcase VFX actual Play capture armed: {outputPath}");
@@ -427,6 +481,60 @@ namespace BreakNotice.Contest.Editor
             UnityEngine.Object.DestroyImmediate(gameplayCapture);
         }
 
+        public static void CaptureCompleteReviewPages()
+        {
+            string outputDirectory = ReadCommandLineValue(CompleteCaptureDirectoryArgument);
+            if (string.IsNullOrWhiteSpace(outputDirectory))
+            {
+                throw new ArgumentException(
+                    $"An output directory is required through {CompleteCaptureDirectoryArgument}.");
+            }
+            string fullOutputDirectory = Path.GetFullPath(outputDirectory);
+            Directory.CreateDirectory(fullOutputDirectory);
+
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Single);
+            GameObject root = FindReviewRoot(scene);
+            Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
+            Transform[] pages = root.transform.Cast<Transform>()
+                .Where(child => child.name.StartsWith(CompletePagePrefix, StringComparison.Ordinal))
+                .OrderBy(child => child.name, StringComparer.Ordinal)
+                .ToArray();
+            if (pages.Length != 14)
+            {
+                throw new InvalidOperationException(
+                    $"Complete capture requires 14 pages; found {pages.Length}.");
+            }
+
+            for (int index = 0; index < pages.Length; index++)
+            {
+                Transform anchor = pages[index].Find("CAMERA_ANCHOR");
+                Transform target = pages[index].Find("CAMERA_TARGET");
+                camera.transform.SetPositionAndRotation(
+                    anchor.position,
+                    Quaternion.LookRotation(target.position - anchor.position, Vector3.up));
+                camera.fieldOfView = pages[index].name.Contains(
+                    "GAMEPLAY_CAMERA",
+                    StringComparison.Ordinal) ? 48f : ReviewCameraFieldOfView;
+                camera.nearClipPlane = ReviewCameraNearClip;
+                camera.farClipPlane = ReviewCameraFarClip;
+                SimulateAllParticles(root, 0.28f + index * 0.005f);
+                Texture2D capture = RenderCamera(camera, 1920, 1080);
+                Texture2D grayscale = CreateGrayscale(capture);
+                string stem = $"VFX_Showcase_Complete_UnityPage_{index:00}_v003";
+                string colorPath = Path.Combine(fullOutputDirectory, stem + ".png");
+                string grayscalePath = Path.Combine(
+                    fullOutputDirectory,
+                    stem + "_Grayscale.png");
+                File.WriteAllBytes(colorPath, capture.EncodeToPNG());
+                File.WriteAllBytes(grayscalePath, grayscale.EncodeToPNG());
+                DestroyReviewObject(capture);
+                DestroyReviewObject(grayscale);
+                Debug.Log(
+                    $"Complete Showcase VFX page capture written: {colorPath}; " +
+                    $"page={index + 1}/14; orientation=FRONT_UPRIGHT.");
+            }
+        }
+
         private static LayerDefinition TextureLayer(
             string name,
             string fileName,
@@ -461,6 +569,217 @@ namespace BreakNotice.Contest.Editor
                 delay,
                 startSize,
                 rotation);
+        }
+
+        private static CompleteEffectDefinition CE(
+            string cueId,
+            string slug,
+            string displayName,
+            bool isPhysical,
+            float reviewScale,
+            float rotation)
+        {
+            string folder = isPhysical ? "Flipbooks" : "Textures";
+            string[] layerNames = isPhysical
+                ? new[] { "PrimaryTransient", "DirectionalBody", "Settle" }
+                : new[] { "Primary", "Support", "Settle" };
+            var layers = new CompleteLayerDefinition[3];
+            for (int index = 0; index < layers.Length; index++)
+            {
+                string flipbookSuffix = isPhysical ? "_4x4" : string.Empty;
+                string texturePath =
+                    $"{ReviewRootPath}/{folder}/Complete_v003/" +
+                    $"T_VFX_Showcase_{slug}_{layerNames[index]}{flipbookSuffix}_v003.png";
+                float lifetime = isPhysical
+                    ? new[] { 0.38f, 0.66f, 0.92f }[index]
+                    : new[] { 0.72f, 0.90f, 1.08f }[index];
+                float delay = isPhysical
+                    ? new[] { 0.000f, 0.022f, 0.082f }[index]
+                    : new[] { 0.000f, 0.055f, 0.115f }[index];
+                float size = reviewScale * (isPhysical
+                    ? new[] { 1.44f, 1.56f, 1.46f }[index]
+                    : new[] { 1.38f, 1.46f, 1.40f }[index]);
+                layers[index] = new CompleteLayerDefinition(
+                    slug,
+                    layerNames[index],
+                    texturePath,
+                    isPhysical,
+                    lifetime,
+                    delay,
+                    size,
+                    rotation + (index - 1) * 1.5f);
+            }
+            return new CompleteEffectDefinition(
+                cueId,
+                slug,
+                displayName,
+                isPhysical,
+                isPhysical ? 1.34f : 1.58f,
+                reviewScale,
+                layers);
+        }
+
+        private static void ConfigureCompleteTextureImporter(CompleteLayerDefinition layer)
+        {
+            TextureImporter importer = AssetImporter.GetAtPath(layer.TexturePath) as TextureImporter;
+            if (importer == null)
+            {
+                throw new InvalidOperationException(
+                    $"Required complete review texture is missing: {layer.TexturePath}");
+            }
+            importer.textureType = TextureImporterType.Default;
+            importer.textureShape = TextureImporterShape.Texture2D;
+            importer.sRGBTexture = true;
+            importer.alphaSource = TextureImporterAlphaSource.FromInput;
+            importer.alphaIsTransparency = true;
+            importer.isReadable = false;
+            importer.mipmapEnabled = layer.IsFlipbook;
+            importer.borderMipmap = layer.IsFlipbook;
+            importer.streamingMipmaps = false;
+            importer.wrapMode = TextureWrapMode.Clamp;
+            importer.filterMode = FilterMode.Bilinear;
+            importer.anisoLevel = 1;
+            importer.npotScale = TextureImporterNPOTScale.None;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.crunchedCompression = false;
+            importer.maxTextureSize = layer.IsFlipbook ? 2048 : 512;
+            importer.SaveAndReimport();
+        }
+
+        private static Material CreateCompleteParticleMaterial(
+            CompleteLayerDefinition layer,
+            Shader shader)
+        {
+            Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(layer.TexturePath);
+            if (texture == null)
+            {
+                throw new InvalidOperationException(
+                    $"Imported complete review texture is unavailable: {layer.TexturePath}");
+            }
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(layer.MaterialPath);
+            if (material == null)
+            {
+                material = new Material(shader) { name = layer.MaterialName };
+                AssetDatabase.CreateAsset(material, layer.MaterialPath);
+            }
+            else
+            {
+                material.shader = shader;
+            }
+            SetTextureIfPresent(material, "_MainTex", texture);
+            SetColorIfPresent(material, "_Color", Color.white);
+            SetFloatIfPresent(material, "_Mode", 2f);
+            SetFloatIfPresent(material, "_ColorMode", 0f);
+            SetFloatIfPresent(material, "_SrcBlend", (float)BlendMode.SrcAlpha);
+            SetFloatIfPresent(material, "_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            SetFloatIfPresent(material, "_ZWrite", 0f);
+            SetFloatIfPresent(material, "_Cull", (float)CullMode.Off);
+            SetFloatIfPresent(material, "_AlphaClip", 0f);
+            SetFloatIfPresent(material, "_SoftParticlesEnabled", 0f);
+            SetFloatIfPresent(material, "_CameraFadingEnabled", 0f);
+            SetFloatIfPresent(material, "_FlipbookMode", 0f);
+            SetFloatIfPresent(material, "_LightingEnabled", 0f);
+            SetFloatIfPresent(material, "_EmissionEnabled", 0f);
+            material.SetOverrideTag("RenderType", "Transparent");
+            material.EnableKeyword("_ALPHABLEND_ON");
+            material.DisableKeyword("_ALPHATEST_ON");
+            material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            material.DisableKeyword("_ALPHAMODULATE_ON");
+            material.DisableKeyword("_SOFTPARTICLES_ON");
+            material.DisableKeyword("_FADING_ON");
+            material.renderQueue = (int)RenderQueue.Transparent;
+            material.enableInstancing = false;
+            material.doubleSidedGI = false;
+            material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
+            material.SetShaderPassEnabled("ShadowCaster", false);
+            EditorUtility.SetDirty(material);
+            return material;
+        }
+
+        private static void CreateCompletePrefab(
+            CompleteEffectDefinition effect,
+            IReadOnlyDictionary<string, Material> materials)
+        {
+            GameObject root = new GameObject(effect.PrefabName);
+            try
+            {
+                for (int index = 0; index < effect.Layers.Length; index++)
+                {
+                    CompleteLayerDefinition layer = effect.Layers[index];
+                    GameObject layerObject = new GameObject($"LAYER_{index + 1:00}_{layer.LayerName}");
+                    layerObject.transform.SetParent(root.transform, false);
+                    layerObject.transform.localPosition = new Vector3(0f, 0f, -0.012f * index);
+                    layerObject.transform.localRotation = Quaternion.Euler(0f, 0f, layer.Rotation);
+                    ParticleSystem system = layerObject.AddComponent<ParticleSystem>();
+                    ConfigureCompleteParticleSystem(system, effect, layer, index, materials[layer.MaterialName]);
+                }
+                if (PrefabUtility.SaveAsPrefabAsset(root, effect.PrefabPath) == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not save complete review prefab: {effect.PrefabPath}");
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+        }
+
+        private static void ConfigureCompleteParticleSystem(
+            ParticleSystem particleSystem,
+            CompleteEffectDefinition effect,
+            CompleteLayerDefinition layer,
+            int layerIndex,
+            Material material)
+        {
+            particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ParticleSystem.MainModule main = particleSystem.main;
+            main.duration = effect.CycleDuration;
+            main.loop = true;
+            main.prewarm = false;
+            main.playOnAwake = true;
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+            main.simulationSpeed = 1f;
+            main.startLifetime = layer.Lifetime;
+            main.startSpeed = 0f;
+            main.startSize = layer.StartSize;
+            main.startRotation = 0f;
+            main.startColor = Color.white;
+            main.gravityModifier = 0f;
+            main.maxParticles = 1;
+            main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
+            ParticleSystem.EmissionModule emission = particleSystem.emission;
+            emission.enabled = true;
+            emission.rateOverTime = 0f;
+            emission.rateOverDistance = 0f;
+            emission.SetBursts(new[] { new ParticleSystem.Burst(layer.Delay, 1) });
+            ParticleSystem.ShapeModule shape = particleSystem.shape;
+            shape.enabled = false;
+            ConfigureLifetimeCurves(particleSystem, layer.IsFlipbook, layerIndex);
+            ConfigureTextureSheetAnimation(particleSystem, layer.IsFlipbook);
+            ParticleSystem.NoiseModule noise = particleSystem.noise;
+            noise.enabled = false;
+            ParticleSystem.CollisionModule collision = particleSystem.collision;
+            collision.enabled = false;
+            ParticleSystem.TriggerModule trigger = particleSystem.trigger;
+            trigger.enabled = false;
+            ParticleSystem.TrailModule trails = particleSystem.trails;
+            trails.enabled = false;
+            ParticleSystem.LightsModule lights = particleSystem.lights;
+            lights.enabled = false;
+            ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
+            renderer.sharedMaterial = material;
+            renderer.renderMode = ParticleSystemRenderMode.Billboard;
+            renderer.alignment = ParticleSystemRenderSpace.View;
+            renderer.sortMode = ParticleSystemSortMode.Distance;
+            renderer.sortingOrder = 20 + layerIndex;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            renderer.motionVectorGenerationMode = MotionVectorGenerationMode.ForceNoMotion;
+            renderer.minParticleSize = 0f;
+            renderer.maxParticleSize = 1f;
+            renderer.enableGPUInstancing = false;
         }
 
         private static void ConfigureTextureImporter(LayerDefinition layer)
@@ -727,6 +1046,18 @@ namespace BreakNotice.Contest.Editor
             sheet.cycleCount = 1;
         }
 
+        private static Material LoadExistingPremiumReviewMaterial(string name)
+        {
+            string path = $"{PremiumRootPath}/Materials/{name}.mat";
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material == null || material.shader == null)
+            {
+                throw new InvalidOperationException(
+                    $"Required existing premium review material is unavailable: {path}");
+            }
+            return material;
+        }
+
         private static Material CreateSolidMaterial(string name, Color color)
         {
             string path = $"{PremiumRootPath}/Materials/{name}.mat";
@@ -781,6 +1112,16 @@ namespace BreakNotice.Contest.Editor
                 scene,
                 root.transform,
                 new Vector3(300f, 0f, 0f),
+                floor,
+                prop,
+                binder,
+                ally,
+                exit);
+            CreateCompleteGalleryPages(
+                scene,
+                root.transform,
+                backdrop,
+                panel,
                 floor,
                 prop,
                 binder,
@@ -1104,6 +1445,350 @@ namespace BreakNotice.Contest.Editor
             PlaceGameplayEffect(scene, zone, Effects[7], new Vector3(5.5f, 2.05f, 9.6f), 1.54f, 0f);
         }
 
+        private static void CreateCompleteGalleryPages(
+            Scene scene,
+            Transform parent,
+            Material backdrop,
+            Material panel,
+            Material floor,
+            Material prop,
+            Material binder,
+            Material ally,
+            Material exit)
+        {
+            CreateOwnerSelectedCorePage(
+                scene,
+                parent,
+                new Vector3(400f, 0f, 0f),
+                backdrop,
+                panel);
+
+            const int effectsPerPage = 4;
+            int pageCount = Mathf.CeilToInt(CompleteEffects.Length / (float)effectsPerPage);
+            for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
+            {
+                CompleteEffectDefinition[] pageEffects = CompleteEffects
+                    .Skip(pageIndex * effectsPerPage)
+                    .Take(effectsPerPage)
+                    .ToArray();
+                CreateCompleteEffectPage(
+                    scene,
+                    parent,
+                    new Vector3(440f + pageIndex * 40f, 0f, 0f),
+                    pageIndex + 1,
+                    pageCount,
+                    pageEffects,
+                    backdrop,
+                    panel);
+            }
+
+            CreateCompleteGameplayContextPage(
+                scene,
+                parent,
+                new Vector3(920f, 0f, 0f),
+                backdrop,
+                floor,
+                prop,
+                binder,
+                ally,
+                exit);
+        }
+
+        private static void CreateOwnerSelectedCorePage(
+            Scene scene,
+            Transform parent,
+            Vector3 position,
+            Material backdrop,
+            Material panel)
+        {
+            Transform page = CreateCompletePageShell(
+                parent,
+                CompletePagePrefix + "00_OWNER_SELECTED_CORE",
+                position,
+                "OWNER-SELECTED CORE  /  OLD v001 x7 + NEW EXIT v002  /  REVIEW",
+                backdrop);
+            float[] columns = { -7.5f, -2.5f, 2.5f, 7.5f };
+            float[] rows = { 2.55f, -1.55f };
+            for (int index = 0; index < Effects.Length; index++)
+            {
+                EffectDefinition effect = Effects[index];
+                GameObject station = CreateGalleryStation(
+                    page,
+                    $"SELECTED_STATION_{index + 1:00}_{effect.EffectName}",
+                    columns[index % 4],
+                    rows[index / 4],
+                    effect.DisplayName,
+                    index == 7 ? "NEW v002 / OWNER SELECTED" : "OLD v001 / OWNER SELECTED",
+                    panel);
+                string path = index == 7 ? effect.PrimaryPrefabPath : effect.OldPrefabPath;
+                GameObject instance = InstantiatePrefab(
+                    path,
+                    scene,
+                    station.transform,
+                    "OWNER_SELECTED_COMPOSITE");
+                instance.transform.localPosition = new Vector3(0f, -0.05f, -0.22f);
+                instance.transform.localScale = Vector3.one * (index == 7 ? 1.38f : 1.62f);
+            }
+        }
+
+        private static void CreateCompleteEffectPage(
+            Scene scene,
+            Transform parent,
+            Vector3 position,
+            int pageIndex,
+            int pageCount,
+            IReadOnlyList<CompleteEffectDefinition> effects,
+            Material backdrop,
+            Material panel)
+        {
+            string first = effects[0].CueId;
+            string last = effects[effects.Count - 1].CueId;
+            Transform page = CreateCompletePageShell(
+                parent,
+                $"{CompletePagePrefix}{pageIndex:00}_{effects[0].Slug}",
+                position,
+                $"COMPLETE v003  /  PAGE {pageIndex}/{pageCount}  /  {first} - {last}  /  REVIEW",
+                backdrop);
+            float[] columns = { -5f, 5f };
+            float[] rows = { 2.55f, -1.55f };
+            for (int index = 0; index < effects.Count; index++)
+            {
+                CompleteEffectDefinition effect = effects[index];
+                GameObject station = CreateGalleryStation(
+                    page,
+                    $"CUE_STATION_{effect.CueId}_{effect.Slug}",
+                    columns[index % 2],
+                    rows[index / 2],
+                    effect.DisplayName,
+                    effect.CueId + " / COMPOSITE LEFT + SOLO P-B-S RIGHT",
+                    panel,
+                    true);
+                GameObject instance = InstantiatePrefab(
+                    effect.PrefabPath,
+                    scene,
+                    station.transform,
+                    "COMPLETE_V003_COMPOSITE");
+                instance.transform.localPosition = new Vector3(-1.62f, -0.02f, -0.24f);
+                instance.transform.localScale = Vector3.one *
+                    (effect.IsPhysical ? 2.35f : 1.82f);
+                CreateCompleteSoloLayers(scene, station.transform, effect);
+            }
+        }
+
+        private static void CreateCompleteSoloLayers(
+            Scene scene,
+            Transform station,
+            CompleteEffectDefinition effect)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(effect.PrefabPath);
+            if (prefab == null || prefab.transform.childCount != 3)
+            {
+                throw new InvalidOperationException(
+                    $"Complete solo-layer source prefab is invalid: {effect.PrefabPath}");
+            }
+
+            float[] rows = { 0.82f, 0f, -0.82f };
+            for (int layerIndex = 0; layerIndex < 3; layerIndex++)
+            {
+                Transform source = prefab.transform.GetChild(layerIndex);
+                GameObject solo = UnityEngine.Object.Instantiate(source.gameObject);
+                solo.name = $"SOLO_LAYER_{layerIndex + 1:00}_{effect.Layers[layerIndex].LayerName}";
+                SceneManager.MoveGameObjectToScene(solo, scene);
+                solo.transform.SetParent(station, false);
+                solo.transform.localPosition = new Vector3(2.35f, rows[layerIndex], -0.26f);
+                solo.transform.localRotation = source.localRotation;
+                solo.transform.localScale = Vector3.one *
+                    (effect.IsPhysical ? 0.98f : 0.72f);
+                solo.SetActive(true);
+            }
+        }
+
+        private static void CreateCompleteGameplayContextPage(
+            Scene scene,
+            Transform parent,
+            Vector3 position,
+            Material backdrop,
+            Material floor,
+            Material prop,
+            Material binder,
+            Material ally,
+            Material exit)
+        {
+            Transform page = CreateCompletePageShell(
+                parent,
+                CompletePagePrefix + "13_GAMEPLAY_CAMERA_IMPACT_CONTEXT",
+                position,
+                "COMPLETE v003 / GAMEPLAY-CAMERA IMPACT CONTEXT / REVIEW",
+                backdrop);
+            Transform pageBackdrop = page.Find("PAGE_BACKDROP");
+            pageBackdrop.localPosition = new Vector3(0f, 2.4f, 12f);
+            pageBackdrop.localScale = new Vector3(18f, 7f, 0.12f);
+            Transform cameraAnchor = page.Find("CAMERA_ANCHOR");
+            Transform cameraTarget = page.Find("CAMERA_TARGET");
+            cameraAnchor.localPosition = new Vector3(0f, 4.65f, -8.6f);
+            cameraTarget.localPosition = new Vector3(0f, 1.25f, 4.8f);
+
+            CreatePrimitive(page, "OFFICE_FLOOR", PrimitiveType.Cube,
+                new Vector3(0f, -0.18f, 5.4f), new Vector3(17f, 0.22f, 14f), floor);
+            CreatePrimitive(page, "LEFT_PARTITION", PrimitiveType.Cube,
+                new Vector3(-7.8f, 1.6f, 5.8f), new Vector3(0.18f, 3.2f, 11f), prop);
+            CreatePrimitive(page, "RIGHT_PARTITION", PrimitiveType.Cube,
+                new Vector3(7.8f, 1.6f, 5.8f), new Vector3(0.18f, 3.2f, 11f), prop);
+            CreatePrimitive(page, "PLAYER_PROXY", PrimitiveType.Capsule,
+                new Vector3(-2.8f, 1.0f, 0.7f), new Vector3(0.72f, 1.0f, 0.72f), prop);
+            CreatePrimitive(page, "ALLY_PROXY", PrimitiveType.Capsule,
+                new Vector3(3.5f, 1.0f, 5.5f), new Vector3(0.68f, 1.0f, 0.68f), ally);
+            CreatePrimitive(page, "RUNNER_PROXY_A", PrimitiveType.Capsule,
+                new Vector3(-0.6f, 1.0f, 2.6f), new Vector3(0.68f, 1.0f, 0.68f), prop);
+            CreatePrimitive(page, "RUNNER_PROXY_B", PrimitiveType.Capsule,
+                new Vector3(1.35f, 1.0f, 4.1f), new Vector3(0.68f, 1.0f, 0.68f), prop);
+            CreatePrimitive(page, "RUNNER_PROXY_C", PrimitiveType.Capsule,
+                new Vector3(-1.2f, 1.0f, 6.2f), new Vector3(0.68f, 1.0f, 0.68f), prop);
+            CreatePrimitive(page, "DESK_PROXY", PrimitiveType.Cube,
+                new Vector3(-4.4f, 0.65f, 5.2f), new Vector3(2.3f, 1.3f, 1.1f), prop);
+            CreatePrimitive(page, "BINDER_PROXY", PrimitiveType.Cube,
+                new Vector3(-3.75f, 1.38f, 4.95f), new Vector3(0.72f, 0.12f, 0.52f), binder);
+            CreatePrimitive(page, "DRAWER_PROXY", PrimitiveType.Cube,
+                new Vector3(3.55f, 0.72f, 7.35f), new Vector3(1.35f, 1.44f, 1.25f), prop);
+            Transform chair = new GameObject("CHAIR_PROXY").transform;
+            chair.SetParent(page, false);
+            chair.localPosition = new Vector3(2.2f, 0f, 3.6f);
+            CreatePrimitive(chair, "SEAT", PrimitiveType.Cube,
+                new Vector3(0f, 0.76f, 0f), new Vector3(1.15f, 0.16f, 1.05f), prop);
+            CreatePrimitive(chair, "BACK", PrimitiveType.Cube,
+                new Vector3(0f, 1.38f, 0.46f), new Vector3(1.12f, 1.18f, 0.14f), prop);
+            CreatePrimitive(chair, "CASTER_LEFT", PrimitiveType.Cylinder,
+                new Vector3(-0.42f, 0.12f, -0.32f), new Vector3(0.16f, 0.08f, 0.16f), prop)
+                .transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            CreatePrimitive(chair, "CASTER_RIGHT", PrimitiveType.Cylinder,
+                new Vector3(0.42f, 0.12f, -0.32f), new Vector3(0.16f, 0.08f, 0.16f), prop)
+                .transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            Transform doorway = new GameObject("EXIT_HARDWARE_PROXY").transform;
+            doorway.SetParent(page, false);
+            doorway.localPosition = new Vector3(5.35f, 0f, 10.6f);
+            CreatePrimitive(doorway, "LEFT_JAMB", PrimitiveType.Cube,
+                new Vector3(-1.15f, 1.7f, 0f), new Vector3(0.18f, 3.4f, 0.24f), exit);
+            CreatePrimitive(doorway, "RIGHT_JAMB", PrimitiveType.Cube,
+                new Vector3(1.15f, 1.7f, 0f), new Vector3(0.18f, 3.4f, 0.24f), exit);
+            CreatePrimitive(doorway, "HEADER", PrimitiveType.Cube,
+                new Vector3(0f, 3.35f, 0f), new Vector3(2.48f, 0.18f, 0.24f), exit);
+
+            PlaceCompleteGameplayEffect(scene, page, 1, "PunchLightCloth",
+                new Vector3(-0.58f, 1.38f, 2.35f), 1.10f, 8f);
+            PlaceCompleteGameplayEffect(scene, page, 2, "PunchMediumCloth",
+                new Vector3(1.28f, 1.42f, 3.78f), 1.18f, 3f);
+            PlaceCompleteGameplayEffect(scene, page, 3, "PunchStrongNonlethal",
+                new Vector3(-1.12f, 1.48f, 5.92f), 1.30f, -4f);
+            PlaceCompleteGameplayEffect(scene, page, 4, "PunchBraceBlock",
+                new Vector3(0.18f, 1.62f, 6.75f), 1.18f, -14f);
+            PlaceCompleteGameplayEffect(scene, page, 5, "BinderPhysicalContact",
+                new Vector3(-3.72f, 1.34f, 4.70f), 1.08f, 16f);
+            PlaceCompleteGameplayEffect(scene, page, 6, "ChairWheelFloorContact",
+                new Vector3(2.18f, 0.24f, 3.25f), 1.20f, -2f);
+            PlaceCompleteGameplayEffect(scene, page, 7, "DrawerCausalImpact",
+                new Vector3(3.32f, 1.02f, 6.95f), 1.24f, 5f);
+            PlaceCompleteGameplayEffect(scene, page, 8, "ExitActivation",
+                new Vector3(5.35f, 2.18f, 10.35f), 1.36f, 0f);
+        }
+
+        private static void PlaceCompleteGameplayEffect(
+            Scene scene,
+            Transform parent,
+            int index,
+            string slug,
+            Vector3 localPosition,
+            float scale,
+            float rotation)
+        {
+            CompleteEffectDefinition effect = CompleteEffects.Single(item => item.Slug == slug);
+            GameObject instance = InstantiatePrefab(
+                effect.PrefabPath,
+                scene,
+                parent,
+                $"GAMEPLAY_EFFECT_{index:00}_{slug}");
+            instance.transform.localPosition = localPosition;
+            instance.transform.localRotation = Quaternion.Euler(0f, 0f, rotation);
+            instance.transform.localScale = Vector3.one * scale *
+                (effect.IsPhysical ? 1.65f : 1.15f);
+        }
+
+        private static Transform CreateCompletePageShell(
+            Transform parent,
+            string name,
+            Vector3 position,
+            string header,
+            Material backdrop)
+        {
+            Transform page = CreateZone(parent, name, position);
+            CreatePrimitive(
+                page,
+                "PAGE_BACKDROP",
+                PrimitiveType.Cube,
+                new Vector3(0f, 0.5f, 0.9f),
+                new Vector3(21f, 9.8f, 0.12f),
+                backdrop);
+            CreateLabel(
+                page,
+                "HEADER",
+                header,
+                new Vector3(0f, 4.82f, -0.25f),
+                0.033f,
+                new Color(0.80f, 0.84f, 0.83f, 1f));
+            CreateLabel(
+                page,
+                "FOOTER",
+                "AUTO TOUR IN PLAY MODE  /  PRIMARY TRANSIENT > DIRECTIONAL BODY > SETTLE  /  GAMEPLAY HOOK 0",
+                new Vector3(0f, -4.64f, -0.25f),
+                0.019f,
+                new Color(0.49f, 0.57f, 0.55f, 1f));
+            Transform cameraAnchor = new GameObject("CAMERA_ANCHOR").transform;
+            cameraAnchor.SetParent(page, false);
+            cameraAnchor.localPosition = new Vector3(0f, 0.65f, -19.5f);
+            cameraAnchor.localRotation = Quaternion.identity;
+            Transform cameraTarget = new GameObject("CAMERA_TARGET").transform;
+            cameraTarget.SetParent(page, false);
+            cameraTarget.localPosition = new Vector3(0f, 0.55f, 0f);
+            cameraTarget.localRotation = Quaternion.identity;
+            return page;
+        }
+
+        private static GameObject CreateGalleryStation(
+            Transform page,
+            string name,
+            float x,
+            float y,
+            string displayName,
+            string status,
+            Material panel,
+            bool wide = false)
+        {
+            GameObject station = new GameObject(name);
+            station.transform.SetParent(page, false);
+            station.transform.localPosition = new Vector3(x, y, 0f);
+            CreatePrimitive(
+                station.transform,
+                "REVIEW_BACKDROP",
+                PrimitiveType.Cube,
+                new Vector3(0f, 0f, 0.35f),
+                new Vector3(wide ? 9.35f : 4.55f, 3.65f, 0.08f),
+                panel);
+            CreateLabel(
+                station.transform,
+                "LABEL",
+                displayName,
+                new Vector3(0f, 1.48f, -0.30f),
+                0.016f,
+                new Color(0.70f, 0.75f, 0.74f, 1f));
+            CreateLabel(
+                station.transform,
+                "STATUS",
+                status,
+                new Vector3(0f, -1.42f, -0.30f),
+                0.012f,
+                new Color(0.56f, 0.64f, 0.61f, 1f));
+            return station;
+        }
+
         private static void PlaceGameplayEffect(
             Scene scene,
             Transform parent,
@@ -1269,10 +1954,15 @@ namespace BreakNotice.Contest.Editor
             };
             Texture2D capture = new Texture2D(width, height, TextureFormat.RGBA32, false);
             RenderTexture previous = RenderTexture.active;
+            Rect previousRect = camera.rect;
+            float previousAspect = camera.aspect;
             try
             {
                 renderTexture.Create();
                 camera.targetTexture = renderTexture;
+                camera.rect = new Rect(0f, 0f, 1f, 1f);
+                camera.aspect = width / (float)height;
+                camera.ResetProjectionMatrix();
                 camera.Render();
                 RenderTexture.active = renderTexture;
                 capture.ReadPixels(new Rect(0f, 0f, width, height), 0, 0, false);
@@ -1282,6 +1972,9 @@ namespace BreakNotice.Contest.Editor
             finally
             {
                 camera.targetTexture = null;
+                camera.rect = previousRect;
+                camera.aspect = previousAspect;
+                camera.ResetProjectionMatrix();
                 RenderTexture.active = previous;
                 renderTexture.Release();
                 DestroyReviewObject(renderTexture);
@@ -1379,7 +2072,7 @@ namespace BreakNotice.Contest.Editor
             }
 
             actualPlayCaptureScheduled = true;
-            actualPlayCaptureEnteredAt = EditorApplication.timeSinceStartup;
+            actualPlayCaptureEnteredAt = Time.unscaledTimeAsDouble;
             EditorApplication.update -= ActualPlayCaptureTick;
             EditorApplication.update += ActualPlayCaptureTick;
         }
@@ -1387,7 +2080,7 @@ namespace BreakNotice.Contest.Editor
         private static void ActualPlayCaptureTick()
         {
             if (!EditorApplication.isPlaying ||
-                EditorApplication.timeSinceStartup - actualPlayCaptureEnteredAt <
+                Time.unscaledTimeAsDouble - actualPlayCaptureEnteredAt <
                 ActualPlayCaptureDelay)
             {
                 return;
@@ -1420,79 +2113,124 @@ namespace BreakNotice.Contest.Editor
             GameObject root = FindReviewRoot(scene);
             Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
             ConfigureReviewCamera(camera);
+            camera.aspect = 16f / 9f;
+            camera.ResetProjectionMatrix();
 
-            Transform oldNewZone = root.transform.Find(OldNewZoneName);
-            if (oldNewZone == null)
+            Transform[] pages = root.transform.Cast<Transform>()
+                .Where(child => child.name.StartsWith(CompletePagePrefix, StringComparison.Ordinal))
+                .OrderBy(child => child.name, StringComparer.Ordinal)
+                .ToArray();
+            if (pages.Length != 14)
             {
-                throw new InvalidOperationException("Old/new review zone is unavailable.");
+                throw new InvalidOperationException(
+                    $"Complete review page count is not 14: {pages.Length}");
             }
 
             Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
-            int stationCount = 0;
-            int playingStationCount = 0;
-            int liveStationCount = 0;
-            int visibleStationCount = 0;
-            int activeSystemCount = 0;
-            int systemsWithParticles = 0;
-            for (int index = 0; index < oldNewZone.childCount; index++)
+            Transform[] selectedStations = pages[0].Cast<Transform>()
+                .Where(child => child.name.StartsWith("SELECTED_STATION_", StringComparison.Ordinal))
+                .ToArray();
+            int visibleSelected = selectedStations.Count(station =>
             {
-                Transform station = oldNewZone.GetChild(index);
-                if (!station.name.StartsWith("STATION_", StringComparison.Ordinal))
-                {
-                    continue;
-                }
+                Renderer backdrop = station.GetComponentsInChildren<Renderer>(true)
+                    .Single(item => item.gameObject.name == "REVIEW_BACKDROP");
+                return GeometryUtility.TestPlanesAABB(frustum, backdrop.bounds);
+            });
+            int playingSelected = selectedStations.Count(station =>
+            {
+                ParticleSystem[] systems = station.GetComponentsInChildren<ParticleSystem>(false);
+                return systems.Length > 0 && systems.All(system => system.isPlaying);
+            });
+            int liveSelected = selectedStations.Count(station =>
+                station.GetComponentsInChildren<ParticleSystem>(false)
+                    .Any(system => system.particleCount > 0));
 
-                stationCount++;
-                Transform composite = station.Find("NEW_PREMIUM_V002_COMPOSITE");
-                if (composite == null)
-                {
-                    throw new InvalidOperationException(
-                        $"Premium composite is unavailable: {station.name}");
-                }
-
-                ParticleSystem[] systems =
-                    composite.GetComponentsInChildren<ParticleSystem>(false);
+            Transform[] completeComposites = pages
+                .SelectMany(page => page.GetComponentsInChildren<Transform>(true))
+                .Where(item => item.name == "COMPLETE_V003_COMPOSITE")
+                .ToArray();
+            Transform[] completeSoloLayers = pages
+                .SelectMany(page => page.GetComponentsInChildren<Transform>(true))
+                .Where(item => item.name.StartsWith("SOLO_LAYER_", StringComparison.Ordinal))
+                .ToArray();
+            int playingStations = 0;
+            int liveStations = 0;
+            int activeSystems = 0;
+            int systemsWithParticles = 0;
+            foreach (Transform composite in completeComposites)
+            {
+                ParticleSystem[] systems = composite.GetComponentsInChildren<ParticleSystem>(false);
                 if (systems.Length != 3)
                 {
                     throw new InvalidOperationException(
-                        $"Premium composite layer count is not 3: {station.name}={systems.Length}");
+                        $"Complete composite layer count is not 3: {composite.parent.name}={systems.Length}");
                 }
-
-                bool stationPlaying = true;
-                bool stationHasParticles = false;
+                bool allPlaying = true;
+                bool anyLive = false;
                 foreach (ParticleSystem system in systems)
                 {
-                    bool activeAndPlaying = system.gameObject.activeInHierarchy && system.isPlaying;
-                    stationPlaying &= activeAndPlaying;
-                    activeSystemCount += activeAndPlaying ? 1 : 0;
+                    bool playing = system.gameObject.activeInHierarchy && system.isPlaying;
+                    allPlaying &= playing;
+                    activeSystems += playing ? 1 : 0;
                     bool hasParticles = system.particleCount > 0;
-                    stationHasParticles |= hasParticles;
+                    anyLive |= hasParticles;
                     systemsWithParticles += hasParticles ? 1 : 0;
                 }
-
-                playingStationCount += stationPlaying ? 1 : 0;
-                liveStationCount += stationHasParticles ? 1 : 0;
-                Renderer backdrop = station.GetComponentsInChildren<Renderer>(true)
-                    .Single(item => item.gameObject.name == "REVIEW_BACKDROP");
-                visibleStationCount += GeometryUtility.TestPlanesAABB(frustum, backdrop.bounds)
-                    ? 1
-                    : 0;
+                playingStations += allPlaying ? 1 : 0;
+                liveStations += anyLive ? 1 : 0;
             }
 
-            if (stationCount != 8 || playingStationCount != 8 ||
-                liveStationCount != 8 || activeSystemCount != 24 ||
-                systemsWithParticles < 8 || visibleStationCount != 8)
+            int playingSoloSystems = completeSoloLayers.Count(layer =>
+            {
+                ParticleSystem[] systems = layer.GetComponentsInChildren<ParticleSystem>(false);
+                return systems.Length == 1 && systems[0].isPlaying;
+            });
+            Transform[] gameplayEffects = pages[13].Cast<Transform>()
+                .Where(item => item.name.StartsWith("GAMEPLAY_EFFECT_", StringComparison.Ordinal))
+                .ToArray();
+            int playingGameplayEffects = gameplayEffects.Count(effect =>
+            {
+                ParticleSystem[] systems = effect.GetComponentsInChildren<ParticleSystem>(false);
+                return systems.Length == 3 && systems.All(system => system.isPlaying);
+            });
+
+            if (selectedStations.Length != 8 || visibleSelected != 8 ||
+                playingSelected != 8 || liveSelected != 8 ||
+                completeComposites.Length != 48 || playingStations != 48 ||
+                completeSoloLayers.Length != 144 || playingSoloSystems != 144 ||
+                gameplayEffects.Length != 8 || playingGameplayEffects != 8 ||
+                liveStations != 48 || activeSystems != 144 || systemsWithParticles < 48)
             {
                 throw new InvalidOperationException(
-                    "Actual Play review contract failed: " +
-                    $"stations={stationCount}/8, playing={playingStationCount}/8, " +
-                    $"liveStations={liveStationCount}/8, " +
-                    $"activeSystems={activeSystemCount}/24, " +
-                    $"systemsWithParticles={systemsWithParticles}/24 (minimum 8), " +
-                    $"visible={visibleStationCount}/8.");
+                    "Complete actual Play review contract failed: " +
+                    $"pages={pages.Length}/14, selected={selectedStations.Length}/8, " +
+                    $"visibleSelected={visibleSelected}/8, complete={completeComposites.Length}/48, " +
+                    $"playingSelected={playingSelected}/8, liveSelected={liveSelected}/8, " +
+                    $"playing={playingStations}/48, live={liveStations}/48, " +
+                    $"soloPlaying={playingSoloSystems}/144, " +
+                    $"gameplayPlaying={playingGameplayEffects}/8, " +
+                    $"activeSystems={activeSystems}/144, " +
+                    $"systemsWithParticles={systemsWithParticles}/144 (instantaneous minimum 48).");
             }
 
-            Texture2D capture = RenderCamera(camera, 1920, 1080);
+            Debug.Log(
+                "Complete Showcase VFX actual Play camera contract: " +
+                $"position={camera.transform.position}; fov={camera.fieldOfView}; " +
+                $"aspect={camera.aspect}; rect={camera.rect}; " +
+                $"rootScale={root.transform.lossyScale}; pageScale={pages[0].lossyScale}; " +
+                $"screen={Screen.width}x{Screen.height}.");
+
+            GameObject captureCameraObject = new GameObject(
+                "LOCAL_REVIEW_ONLY_ACTUAL_PLAY_CAPTURE_CAMERA");
+            Camera captureCamera = captureCameraObject.AddComponent<Camera>();
+            captureCamera.CopyFrom(camera);
+            captureCamera.transform.SetPositionAndRotation(
+                camera.transform.position,
+                camera.transform.rotation);
+            captureCamera.enabled = false;
+            captureCamera.aspect = 16f / 9f;
+            captureCamera.ResetProjectionMatrix();
+            Texture2D capture = RenderCamera(captureCamera, 1920, 1080);
             try
             {
                 File.WriteAllBytes(outputPath, capture.EncodeToPNG());
@@ -1500,14 +2238,17 @@ namespace BreakNotice.Contest.Editor
             finally
             {
                 DestroyReviewObject(capture);
+                DestroyReviewObject(captureCameraObject);
             }
 
             Debug.Log(
-                "Premium Showcase VFX actual Play capture PASS: " +
-                $"{outputPath}; stations=8/8; playing=8/8; " +
-                $"liveStations=8/8; activeSystems=24/24; " +
-                $"systemsWithParticles={systemsWithParticles}/24; " +
-                "visible=8/8; gameplayIntegration=0.");
+                "Complete Showcase VFX actual Play capture PASS: " +
+                $"{outputPath}; pages=14/14; selectedVisible=8/8; " +
+                $"selectedPlaying={playingSelected}/8; selectedLive={liveSelected}/8; " +
+                $"completeStations=48/48; playing=48/48; live=48/48; " +
+                $"soloPlaying={playingSoloSystems}/144; gameplayPlaying={playingGameplayEffects}/8; " +
+                $"activeSystems=144/144; systemsWithParticles={systemsWithParticles}/144; " +
+                "gameplayIntegration=0.");
         }
 
         private static void ExitAfterActualPlayCapture()
@@ -1687,6 +2428,75 @@ namespace BreakNotice.Contest.Editor
 
             public string PrimaryPrefabPath => PrefabPath(
                 IsPhysical ? PhysicalVariations[0] : VariationDefinition.Static);
+        }
+
+        private sealed class CompleteLayerDefinition
+        {
+            public CompleteLayerDefinition(
+                string effectSlug,
+                string layerName,
+                string texturePath,
+                bool isFlipbook,
+                float lifetime,
+                float delay,
+                float startSize,
+                float rotation)
+            {
+                EffectSlug = effectSlug;
+                LayerName = layerName;
+                TexturePath = texturePath;
+                IsFlipbook = isFlipbook;
+                Lifetime = lifetime;
+                Delay = delay;
+                StartSize = startSize;
+                Rotation = rotation;
+            }
+
+            public string EffectSlug { get; }
+            public string LayerName { get; }
+            public string TexturePath { get; }
+            public bool IsFlipbook { get; }
+            public float Lifetime { get; }
+            public float Delay { get; }
+            public float StartSize { get; }
+            public float Rotation { get; }
+            public string MaterialName =>
+                $"M_VFX_Showcase_Complete_{EffectSlug}_{LayerName}_v003";
+            public string MaterialPath =>
+                CompleteRootPath + "/Materials/" + MaterialName + ".mat";
+        }
+
+        private sealed class CompleteEffectDefinition
+        {
+            public CompleteEffectDefinition(
+                string cueId,
+                string slug,
+                string displayName,
+                bool isPhysical,
+                float cycleDuration,
+                float reviewScale,
+                CompleteLayerDefinition[] layers)
+            {
+                CueId = cueId;
+                Slug = slug;
+                DisplayName = displayName;
+                IsPhysical = isPhysical;
+                CycleDuration = cycleDuration;
+                ReviewScale = reviewScale;
+                Layers = layers;
+            }
+
+            public string CueId { get; }
+            public string Slug { get; }
+            public string DisplayName { get; }
+            public bool IsPhysical { get; }
+            public float CycleDuration { get; }
+            public float ReviewScale { get; }
+            public CompleteLayerDefinition[] Layers { get; }
+            public string PrefabName =>
+                $"PF_VFX_Showcase_{Slug}_COMPLETE_REVIEW_ONLY_v003";
+            public string PrefabPath =>
+                CompleteRootPath + "/Prefabs/" + PrefabName + ".prefab";
         }
 
         private readonly struct VariationDefinition
