@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile, readdir } from "node:fs/promises";
+import { extname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -23,6 +25,45 @@ async function render(pathname = "/") {
   );
 }
 
+async function renderWebglAsset(pathname) {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("asset-test", `${process.pid}-${Date.now()}-${encodeURIComponent(pathname)}`);
+  const { default: worker } = await import(workerUrl.href);
+
+  const distClient = fileURLToPath(new URL("../dist/client/", import.meta.url));
+  const contentTypes = new Map([
+    [".wasm", "application/wasm"],
+    [".data", "application/octet-stream"],
+    [".js", "text/javascript; charset=utf-8"],
+    [".html", "text/html; charset=utf-8"],
+  ]);
+
+  return worker.fetch(
+    new Request(new URL(pathname, "http://localhost")),
+    {
+      ASSETS: {
+        fetch: async (assetRequest) => {
+          const assetPath = new URL(assetRequest.url).pathname.replace(/^\//, "");
+          try {
+            const body = await readFile(join(distClient, assetPath));
+            return new Response(body, {
+              status: 200,
+              headers: { "Content-Type": contentTypes.get(extname(assetPath)) ?? "application/octet-stream" },
+            });
+          } catch (error) {
+            if (error.code !== "ENOENT") throw error;
+            return new Response("Not found", { status: 404 });
+          }
+        },
+      },
+    },
+    {
+      waitUntil() {},
+      passThroughOnException() {},
+    },
+  );
+}
+
 test("server-renders the Korean Showcase release page", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -36,8 +77,11 @@ test("server-renders the Korean Showcase release page", async () => {
   assert.match(html, /id="media"/);
   assert.match(html, /id="status"/);
   assert.match(html, /id="credits"/);
-  assert.match(html, /BUILD PREPARING/);
-  assert.match(html, /disabled=""/);
+  assert.match(html, /PLAY NOW/);
+  assert.match(html, /C0–C4 ACCEPTED PROTOTYPE/);
+  assert.match(html, /S1\/S2\/MAP V2 NOT IN THIS BUILD/);
+  assert.match(html, /href="\/play\/"/);
+  assert.doesNotMatch(html, /BUILD PREPARING|disabled=""/);
   assert.match(html, /AI-GENERATED PRODUCTION VISUAL REFERENCE/);
   assert.match(html, /실제 런타임 캡처 아님/);
   assert.match(html, /NOT AUTHORIZED/);
@@ -46,7 +90,7 @@ test("server-renders the Korean Showcase release page", async () => {
 });
 
 test("returns an explicit 404 page for unknown routes", async () => {
-  const response = await render("/this-route-does-not-exist");
+  const response = await render("/this-route-does-not-exist/");
   assert.equal(response.status, 404);
   const html = await response.text();
   assert.match(html, /PAGE NOT FOUND/);
@@ -60,6 +104,40 @@ test("sets baseline privacy and browser security headers", async () => {
   assert.equal(response.headers.get("x-frame-options"), "DENY");
   assert.equal(response.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
   assert.match(response.headers.get("permissions-policy") ?? "", /camera=\(\)/);
+});
+
+test("publishes a no-cache latest pointer and release history", async () => {
+  const latest = await render("/play/latest.json");
+  assert.equal(latest.status, 200);
+  assert.match(latest.headers.get("cache-control") ?? "", /no-cache/);
+  const latestBody = await latest.json();
+  assert.equal(latestBody.buildGuid, "3cc7416d44c44067bc51c6474c46351d");
+  assert.equal(latestBody.sourceSha, "f1fd9b15f407be9003eff622231e338358376bcc");
+
+  const history = await render("/data/webgl-releases.json");
+  assert.equal(history.status, 200);
+  assert.match(history.headers.get("cache-control") ?? "", /no-cache/);
+  const historyBody = await history.json();
+  assert.equal(historyBody.latestBuildGuid, latestBody.buildGuid);
+  assert.equal(historyBody.releases[0].fileCount, 19);
+  assert.equal(historyBody.releases[0].httpBytes, 113883098);
+});
+
+test("sets immutable WebGL cache and exact uncompressed MIME headers", async () => {
+  const releaseRoot = "/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/";
+  const wasm = await renderWebglAsset(`${releaseRoot}Development.wasm`);
+  assert.equal(wasm.status, 200);
+  assert.equal(wasm.headers.get("content-type"), "application/wasm");
+  assert.match(wasm.headers.get("cache-control") ?? "", /max-age=31536000, immutable/);
+  assert.equal(wasm.headers.get("content-encoding"), null);
+
+  const data = await renderWebglAsset(`${releaseRoot}Development.data`);
+  assert.equal(data.headers.get("content-type"), "application/octet-stream");
+  assert.equal(data.headers.get("content-encoding"), null);
+
+  const loader = await renderWebglAsset(`${releaseRoot}Development.loader.js`);
+  assert.equal(loader.headers.get("content-type"), "text/javascript; charset=utf-8");
+  assert.equal(loader.headers.get("content-encoding"), null);
 });
 
 test("ships only approved public media and no source maps", async () => {

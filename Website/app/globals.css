@@ -293,10 +293,10 @@ a {
   justify-content: space-between;
   gap: 1.4rem;
   padding: 0.9rem 1.15rem 0.9rem 1.35rem;
-  border: 1px solid #786220;
-  background: #28230e;
-  color: #c3a94d;
-  cursor: not-allowed;
+  border: 1px solid var(--hazard);
+  background: var(--hazard);
+  color: #07090a;
+  cursor: pointer;
   font-family: var(--display);
   text-align: left;
 }
@@ -304,9 +304,9 @@ a {
 .play-button::after {
   width: 2.25rem;
   height: 2.25rem;
-  border: 1px solid #786220;
-  content: "×";
-  color: #a88e37;
+  border: 1px solid #07090a;
+  content: "→";
+  color: #07090a;
   font-family: var(--mono);
   font-size: 1rem;
   line-height: 2.1rem;
@@ -322,11 +322,15 @@ a {
 
 .play-button small {
   display: block;
-  color: #a88e37;
+  color: #343000;
   font-family: var(--mono);
   font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.08em;
+}
+
+.play-button:hover {
+  background: #ffe24d;
 }
 
 .secondary-action {

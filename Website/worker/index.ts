@@ -3,7 +3,7 @@ import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } fr
 import handler from "vinext/server/app-router-entry";
 
 interface Env {
-  ASSETS: Fetcher;
+  ASSETS?: Fetcher;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -34,6 +34,58 @@ function withSecurityHeaders(response: Response): Response {
   });
 }
 
+const WEBGL_RELEASE_PREFIX = "/play/releases/";
+
+function localWebGLFallback(url: URL): Promise<Response | null> {
+  if (!url.pathname.startsWith(WEBGL_RELEASE_PREFIX)) return Promise.resolve(null);
+  return import("node:fs/promises")
+    .then(async ({ readFile }) => {
+      const relativePath = url.pathname.slice(1) || "index.html";
+      const assetPath = relativePath.endsWith("/") ? `${relativePath}index.html` : relativePath;
+      const body = await readFile(new URL(`../client/${assetPath}`, import.meta.url));
+      return new Response(body, { status: 200 });
+    })
+    .catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return null;
+      throw error;
+    });
+}
+
+function withWebGLHeaders(request: Request, response: Response): Response {
+  const url = new URL(request.url);
+  const headers = new Headers(response.headers);
+
+  if (url.pathname.startsWith(WEBGL_RELEASE_PREFIX)) {
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (url.pathname === "/play" || url.pathname === "/play/" || url.pathname.startsWith("/data/")) {
+    headers.set("Cache-Control", "no-cache, max-age=0, must-revalidate");
+  }
+
+  if (url.pathname.endsWith(".wasm")) {
+    headers.set("Content-Type", "application/wasm");
+  } else if (url.pathname.endsWith(".data")) {
+    headers.set("Content-Type", "application/octet-stream");
+  } else if (url.pathname.endsWith(".js")) {
+    headers.set("Content-Type", "text/javascript; charset=utf-8");
+  } else if (url.pathname.endsWith("/") || url.pathname.endsWith(".html")) {
+    headers.set("Content-Type", "text/html; charset=utf-8");
+  } else if (url.pathname.endsWith(".css")) {
+    headers.set("Content-Type", "text/css; charset=utf-8");
+  } else if (url.pathname.endsWith(".png")) {
+    headers.set("Content-Type", "image/png");
+  } else if (url.pathname.endsWith(".ico")) {
+    headers.set("Content-Type", "image/x-icon");
+  } else if (url.pathname.endsWith(".json")) {
+    headers.set("Content-Type", "application/json; charset=utf-8");
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -56,8 +108,17 @@ const worker = {
       return withSecurityHeaders(imageResponse);
     }
 
+    if (url.pathname.startsWith(WEBGL_RELEASE_PREFIX)) {
+      const assetResponse = env?.ASSETS
+        ? await env.ASSETS.fetch(request)
+        : await localWebGLFallback(url);
+      if (assetResponse && assetResponse.status !== 404) {
+        return withSecurityHeaders(withWebGLHeaders(request, assetResponse));
+      }
+    }
+
     const response = await handler.fetch(request, env, ctx);
-    return withSecurityHeaders(response);
+    return withSecurityHeaders(withWebGLHeaders(request, response));
   },
 };
 

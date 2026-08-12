@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "latestBuildGuid": "3cc7416d44c44067bc51c6474c46351d",
+  "releases": [
+    {
+      "buildGuid": "3cc7416d44c44067bc51c6474c46351d",
+      "sourceSha": "f1fd9b15f407be9003eff622231e338358376bcc",
+      "unityVersion": "6000.3.20f1",
+      "scope": "C0-C4 accepted prototype with charged player Throw tuning and resettable ally Binder supply variation",
+      "exclusions": "CONTEST-0002 S1, S2, provisional map v002, S3+, Production Art, premium VFX, Audio v002, BGM, cinematic",
+      "date": "2026-08-11",
+      "unityReportedBytes": 113881344,
+      "httpBytes": 113883098,
+      "fileCount": 19,
+      "aggregateSha256": "61cd70625800cf904a866d47d42138f7f4473645453e6644cbe3d305d14f9ec7",
+      "status": "promoted",
+      "previousVersion": null,
+      "publicUrl": "https://zero-defect-steveyun.stevejoyun.chatgpt.site/play/releases/3cc7416d44c44067bc51c6474c46351d/"
+    }
+  ]
+}

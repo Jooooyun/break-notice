@@ -40,6 +40,28 @@ export function sites(): Plugin {
           recursive: true,
         });
       }
+
+      const webglStaging = resolve(root, "deployment-staging", "webgl");
+      if (await exists(webglStaging)) {
+        const releasesSource = resolve(webglStaging, "play", "releases");
+        if (await exists(releasesSource)) {
+          const releaseEntries = await import("node:fs/promises").then(({ readdir }) =>
+            readdir(releasesSource, { withFileTypes: true }),
+          );
+          for (const release of releaseEntries) {
+            if (!release.isDirectory()) continue;
+            const destination = resolve(root, "dist", "client", "play", "releases", release.name);
+            await rm(destination, { recursive: true, force: true });
+            await cp(
+              resolve(releasesSource, release.name),
+              destination,
+              {
+                recursive: true,
+              },
+            );
+          }
+        }
+      }
     },
   };
 }

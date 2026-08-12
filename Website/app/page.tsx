@@ -25,7 +25,7 @@ const statusRows = [
     label: "OPERATIONS FLOOR S0",
     state: "DESIGN AUTHORITY REGISTERED",
     tone: "neutral",
-    detail: "Showcase 설계 문서만 등록됨. S1 Large Showcase Graybox는 아직 승인되지 않았습니다.",
+    detail: "Showcase 설계 문서만 등록됨. S1/S2/MAP V2는 이 공개 빌드에 포함되지 않았습니다.",
   },
   {
     label: "C5 / CARGO STRAP",
@@ -35,9 +35,9 @@ const statusRows = [
   },
   {
     label: "PUBLIC WEBGL",
-    state: "BUILD PREPARING",
-    tone: "warn",
-    detail: "검증된 공개 WebGL URL이 없어 Play 버튼은 비활성 상태입니다.",
+    state: "LIVE / VERSIONED",
+    tone: "good",
+    detail: "검증된 C0–C4 accepted prototype WebGL을 immutable Build GUID 경로로 공개합니다.",
   },
   {
     label: "PRODUCTION ART",
@@ -98,9 +98,9 @@ export default function Home() {
           <a href="#credits">Credits</a>
         </nav>
 
-        <a className="header-status" href="#play">
+        <a className="header-status" href="/play/">
           <span aria-hidden="true" />
-          BUILD PREPARING
+          PLAY WEBGL
         </a>
       </header>
 
@@ -119,16 +119,17 @@ export default function Home() {
             <p className="hero-tagline">GROUNDED WORLD. ABSURD PHYSICS.</p>
 
             <div className="hero-actions" id="play">
-              <button className="play-button" type="button" disabled aria-describedby="play-status">
-                <span>PLAY</span>
-                <small>BUILD PREPARING</small>
-              </button>
+              <a className="play-button" href="/play/" aria-describedby="play-status">
+                <span>PLAY NOW</span>
+                <small>C0–C4 ACCEPTED PROTOTYPE</small>
+              </a>
               <a className="secondary-action" href="#core-loop">
                 구현된 루프 보기 <span aria-hidden="true">↓</span>
               </a>
             </div>
             <p className="play-status" id="play-status">
-              검증된 공개 WebGL URL이 연결될 때까지 Play는 활성화되지 않습니다.
+              <strong>C0–C4 ACCEPTED PROTOTYPE / CHARGED THROW TUNING</strong><br />
+              전용 전체 화면 WebGL 경로를 엽니다. S1/S2/MAP V2 NOT IN THIS BUILD.
             </p>
           </div>
 
@@ -395,7 +396,7 @@ export default function Home() {
             <article>
               <h3>BROWSER / SYSTEM</h3>
               <p>
-                이 웹사이트는 모바일과 최신 브라우저에 대응합니다. 게임은 공개 WebGL 연결 후 Desktop Chrome·Edge,
+                이 웹사이트는 모바일과 최신 브라우저에 대응합니다. 공개 WebGL 게임은 Desktop Chrome·Edge,
                 키보드·마우스를 우선 지원하며 모바일 gameplay는 검증되지 않았습니다. 마지막 승인 browser baseline은
                 1366×768과 1920×1080입니다.
               </p>
@@ -430,7 +431,7 @@ export default function Home() {
       <footer className="site-footer">
         <a className="footer-wordmark" href="#top">BREAK NOTICE</a>
         <p>ZERO DEFECT / PUBLIC SHOWCASE RELEASE SITE</p>
-        <p>WEBGL: <strong>BUILD PREPARING</strong></p>
+        <p>WEBGL: <strong>LIVE / 3CC7416D</strong></p>
       </footer>
     </>
   );

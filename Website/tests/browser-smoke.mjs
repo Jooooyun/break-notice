@@ -107,7 +107,7 @@ for (const browserConfig of browsers) {
           horizontalOverflow: html.scrollWidth > html.clientWidth,
           h1Count: document.querySelectorAll("h1").length,
           headings,
-          playDisabled: play?.disabled === true,
+          playHref: play?.getAttribute("href"),
           playLabel: play?.textContent?.replace(/\s+/g, " ").trim(),
           missingAlt: [...document.images]
             .filter((image) => !image.hasAttribute("alt") || image.alt.trim() === "")
@@ -151,8 +151,8 @@ for (const browserConfig of browsers) {
       check(metrics.title === "BREAK NOTICE — Showcase", `${label}: unexpected title`);
       check(!metrics.horizontalOverflow, `${label}: horizontal overflow`);
       check(metrics.h1Count === 1, `${label}: h1 count ${metrics.h1Count}`);
-      check(metrics.playDisabled, `${label}: Play must remain disabled`);
-      check(metrics.playLabel?.includes("BUILD PREPARING"), `${label}: Play status missing`);
+      check(metrics.playHref === "/play/", `${label}: Play href is ${metrics.playHref}`);
+      check(metrics.playLabel?.includes("PLAY NOW"), `${label}: Play label missing`);
       check(metrics.missingAlt.length === 0, `${label}: missing alt ${metrics.missingAlt.join(", ")}`);
       check(metrics.brokenImages.length === 0, `${label}: broken images ${metrics.brokenImages.join(", ")}`);
       check(metrics.blankLinks.length === 0, `${label}: blank links`);
