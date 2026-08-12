@@ -15,6 +15,7 @@ async function exists(path: string): Promise<boolean> {
 }
 
 const SITES_WEBGL_CHUNK_BYTES = 24 * 1024 * 1024;
+const WEBGL_DIRECT_ASSET_SUFFIX = ".__webgl.bin";
 
 async function chunkOversizedWebGLFiles(root: string): Promise<void> {
   const entries = await readdir(root, { withFileTypes: true });
@@ -54,6 +55,29 @@ async function chunkOversizedWebGLFiles(root: string): Promise<void> {
       `${JSON.stringify({ schemaVersion: 1, bytes: file.size, parts })}\n`,
       "utf8",
     );
+    await rm(path);
+  }
+}
+
+async function aliasDirectWebGLFiles(root: string): Promise<void> {
+  const entries = await readdir(root, { withFileTypes: true });
+  for (const entry of entries) {
+    const path = resolve(root, entry.name);
+    if (entry.isDirectory()) {
+      await aliasDirectWebGLFiles(path);
+      continue;
+    }
+    if (!entry.isFile()) continue;
+    if (
+      entry.name === "__webgl-index.bin" ||
+      entry.name.endsWith(WEBGL_DIRECT_ASSET_SUFFIX) ||
+      entry.name.endsWith(".parts.json") ||
+      /\.part\d{3}$/.test(entry.name)
+    ) {
+      continue;
+    }
+
+    await cp(path, `${path}${WEBGL_DIRECT_ASSET_SUFFIX}`);
     await rm(path);
   }
 }
@@ -111,6 +135,7 @@ export function sites(): Plugin {
             );
             await rm(resolve(destination, "index.html"));
             await chunkOversizedWebGLFiles(destination);
+            await aliasDirectWebGLFiles(destination);
           }
         }
       }

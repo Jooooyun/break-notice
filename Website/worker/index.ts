@@ -35,17 +35,21 @@ function withSecurityHeaders(response: Response): Response {
 }
 
 const WEBGL_RELEASE_PREFIX = "/play/releases/";
+const WEBGL_DIRECT_ASSET_SUFFIX = ".__webgl.bin";
+const WEBGL_INDEX_TRANSPORT = "__webgl-index.bin";
 
-function localWebGLFallback(url: URL): Promise<Response | null> {
+function getWebGLTransportPath(pathname: string): string {
+  if (pathname.endsWith("/") || pathname.endsWith("/index.html") || pathname.endsWith("/index.source")) {
+    return `${pathname.slice(0, pathname.lastIndexOf("/") + 1)}${WEBGL_INDEX_TRANSPORT}`;
+  }
+  return `${pathname}${WEBGL_DIRECT_ASSET_SUFFIX}`;
+}
+
+function localStaticFallback(url: URL): Promise<Response | null> {
   if (!url.pathname.startsWith(WEBGL_RELEASE_PREFIX)) return Promise.resolve(null);
   return import("node:fs/promises")
     .then(async ({ readFile }) => {
-      const relativePath = url.pathname.slice(1) || "index.html";
-      const assetPath = relativePath.endsWith("/")
-        ? `${relativePath}__webgl-index.bin`
-        : relativePath.endsWith("/index.html")
-          ? `${relativePath.slice(0, -"index.html".length)}__webgl-index.bin`
-          : relativePath;
+      const assetPath = url.pathname.slice(1);
       const body = await readFile(new URL(`../client/${assetPath}`, import.meta.url));
       return new Response(body, { status: 200 });
     })
@@ -55,26 +59,26 @@ function localWebGLFallback(url: URL): Promise<Response | null> {
     });
 }
 
-async function fetchWebGLAsset(request: Request, env: Env): Promise<Response | null> {
+async function fetchStaticAsset(request: Request, env: Env): Promise<Response | null> {
   const url = new URL(request.url);
   if (env?.ASSETS) {
-    const assetRequestUrl = new URL(url);
-    if (assetRequestUrl.pathname.endsWith("/")) {
-      assetRequestUrl.pathname += "__webgl-index.bin";
-    } else if (assetRequestUrl.pathname.endsWith("/index.html")) {
-      assetRequestUrl.pathname = `${assetRequestUrl.pathname.slice(0, -"index.html".length)}__webgl-index.bin`;
-    }
-    const response = await env.ASSETS.fetch(new Request(assetRequestUrl, request));
+    const response = await env.ASSETS.fetch(request);
     return response.status === 404 ? null : response;
   }
-  return localWebGLFallback(url);
+  return localStaticFallback(url);
+}
+
+async function fetchWebGLAsset(request: Request, env: Env): Promise<Response | null> {
+  const transportUrl = new URL(request.url);
+  transportUrl.pathname = getWebGLTransportPath(transportUrl.pathname);
+  return fetchStaticAsset(new Request(transportUrl, request), env);
 }
 
 async function fetchChunkedWebGLAsset(request: Request, env: Env): Promise<Response | null> {
   const requestUrl = new URL(request.url);
   const manifestUrl = new URL(requestUrl);
   manifestUrl.pathname = `${manifestUrl.pathname}.parts.json`;
-  const manifestResponse = await fetchWebGLAsset(new Request(manifestUrl), env);
+  const manifestResponse = await fetchStaticAsset(new Request(manifestUrl), env);
   if (!manifestResponse) return null;
 
   const manifest = (await manifestResponse.json()) as {
@@ -91,7 +95,7 @@ async function fetchChunkedWebGLAsset(request: Request, env: Env): Promise<Respo
       const part = manifest.parts[partIndex];
       const partUrl = new URL(requestUrl);
       partUrl.pathname = `${requestUrl.pathname.slice(0, requestUrl.pathname.lastIndexOf("/") + 1)}${part.path}`;
-      const partResponse = await fetchWebGLAsset(new Request(partUrl), env);
+      const partResponse = await fetchStaticAsset(new Request(partUrl), env);
       if (!partResponse) {
         controller.error(new Error(`Missing WebGL transport part: ${part.path}`));
         return;

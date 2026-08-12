@@ -67,6 +67,17 @@ for (const browserConfig of browsers) {
         renderWidth: element.width,
         renderHeight: element.height,
       }));
+      await page.waitForLoadState("networkidle", { timeout: 30_000 });
+      await page.waitForTimeout(1_000);
+      const initialDialogs = dialogs;
+      const initialConsoleProblems = [...consoleProblems];
+      const initialNonBlockingWebglWarnings = [...nonBlockingWebglWarnings];
+      const initialFailedRequests = [...failedRequests];
+      dialogs = 0;
+      consoleProblems.length = 0;
+      nonBlockingWebglWarnings.length = 0;
+      failedRequests.length = 0;
+
       const refreshResponse = await page.reload({ waitUntil: "domcontentloaded", timeout: 120_000 });
       const refreshedUrl = page.url();
       await page.locator("#unity-canvas").waitFor({ state: "visible", timeout: 30_000 });
@@ -81,15 +92,20 @@ for (const browserConfig of browsers) {
       } catch {
         refreshUnityReady = false;
       }
+      await page.waitForLoadState("networkidle", { timeout: 30_000 });
+      await page.waitForTimeout(1_000);
       if (response?.status() !== 200) failures.push(`${browserConfig.name} ${viewport.width}: HTTP ${response?.status()}`);
       if (!finalUrl.includes(`/play/releases/${buildGuid}/`)) failures.push(`${browserConfig.name} ${viewport.width}: GUID URL ${finalUrl}`);
       if (!unityReady) failures.push(`${browserConfig.name} ${viewport.width}: Unity canvas not ready`);
       if (refreshResponse?.status() !== 200) failures.push(`${browserConfig.name} ${viewport.width}: refresh HTTP ${refreshResponse?.status()}`);
       if (refreshedUrl !== finalUrl) failures.push(`${browserConfig.name} ${viewport.width}: refresh changed GUID URL ${finalUrl} -> ${refreshedUrl}`);
       if (!refreshUnityReady) failures.push(`${browserConfig.name} ${viewport.width}: refreshed Unity canvas not ready`);
-      if (dialogs) failures.push(`${browserConfig.name} ${viewport.width}: dialogs ${dialogs}`);
-      if (consoleProblems.length) failures.push(`${browserConfig.name} ${viewport.width}: console ${consoleProblems.join(" | ")}`);
-      if (failedRequests.length) failures.push(`${browserConfig.name} ${viewport.width}: requests ${failedRequests.join(" | ")}`);
+      if (initialDialogs) failures.push(`${browserConfig.name} ${viewport.width}: initial dialogs ${initialDialogs}`);
+      if (dialogs) failures.push(`${browserConfig.name} ${viewport.width}: refresh dialogs ${dialogs}`);
+      if (initialConsoleProblems.length) failures.push(`${browserConfig.name} ${viewport.width}: initial console ${initialConsoleProblems.join(" | ")}`);
+      if (consoleProblems.length) failures.push(`${browserConfig.name} ${viewport.width}: refresh console ${consoleProblems.join(" | ")}`);
+      if (initialFailedRequests.length) failures.push(`${browserConfig.name} ${viewport.width}: initial requests ${initialFailedRequests.join(" | ")}`);
+      if (failedRequests.length) failures.push(`${browserConfig.name} ${viewport.width}: refresh requests ${failedRequests.join(" | ")}`);
 
       results.push({
         browser: browserConfig.name,
@@ -100,10 +116,10 @@ for (const browserConfig of browsers) {
         refreshStatus: refreshResponse?.status(),
         sameGuidAfterRefresh: refreshedUrl === finalUrl,
         refreshUnityReady,
-        dialogs,
-        blockingConsoleProblems: consoleProblems.length,
-        nonBlockingWebglWarnings: nonBlockingWebglWarnings.length,
-        failedRequests: failedRequests.length,
+        dialogs: initialDialogs + dialogs,
+        blockingConsoleProblems: initialConsoleProblems.length + consoleProblems.length,
+        nonBlockingWebglWarnings: initialNonBlockingWebglWarnings.length + nonBlockingWebglWarnings.length,
+        failedRequests: initialFailedRequests.length + failedRequests.length,
         ...canvasMetrics,
       });
       await context.close();
