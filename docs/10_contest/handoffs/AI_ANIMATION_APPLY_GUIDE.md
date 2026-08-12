@@ -86,10 +86,14 @@ Integration 권한 범위는 상위 문서(추가업무.txt, DESIGNER_A_CODEX_WO
 
 `ENY01_ComplianceRunner/Animations/approved/` 5종(Hit 리액션)은 바로 적용.
 
-`ENY01_ComplianceRunner/Animations/pending_producer_review/` 6종은 `ENY01_ComplianceRunner/DELIVERY.md`에
-이미 개별 판정 완료돼 있음(부적합 5종 + 조건부 1종). Owner에게 다시 "이거 봐라"
-식으로 묻지 말고, DELIVERY.md에 적어놓은 대로 **"One Hand Club Combo 편집해서
-살릴지 vs 6종 전부 폐기"** 이 결정 하나만 확인할 것 — 이미 근거는 다 설명해놨음.
+`ENY01_ComplianceRunner/Animations/pending_producer_review/` 6종 — **2026-08-13
+Producer 승인으로 Unity 로드 가능 상태로 전환됨.** DELIVERY.md에 개별 톤 판정
+근거는 이미 적어놨으니 참고하되, "폴더를 불러와서 확인한다"까지는 승인된 것이고
+**클립 하나하나의 최종 채택 여부까지 자동 승인된 건 아님** — Unity에서 실제로
+재생해보고 톤 맞는지 다시 판단할 것. 특히 `Mutant Punch/Swiping/Walking`(정체성
+문제), `Stabbing`(살상 연출 위험), `Jump Attack`(§8.4 위반 소지)은 확인 후에도
+여전히 리스크가 남아있다는 점을 Owner에게 재확인 없이 임의로 최종 승인 처리하지
+말 것.
 
 ---
 

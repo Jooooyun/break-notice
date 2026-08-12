@@ -27,21 +27,16 @@ Animation Files:
   근접 공격 후보(미확정): Melee_candidate_Boxing, Melee_candidate_Boxing_2,
   Melee_candidate_Kicking, Melee_candidate_Kicking_2 — root motion 미처리,
   톤 검토 안 됨(§8.4 "평범한 회사 보안" 기준 부합 여부 확인 필요)
-  **[결정 요청] ENY01_Elite/pending_producer_review/ 6종 개별 검토 결과입니다.**
-  각 항목 실제 렌더 확인해서 아래처럼 판단했습니다:
-  - `Mutant Punch/Swiping/Walking` 3종: Mixamo "Mutant"(괴물/좀비용) 모션 팩입니다.
-    "평범한 회사 사람" 캐릭터 정체성 자체를 깨는 방향이라 **부적합 판정**.
-  - `One Hand Club Combo`: 이름은 둔기지만 실제로는 "무기 없이 한 손으로 무작정 크게
-    휘두르는" 동작으로도 재해석 가능(디자이너 의견). 무기 프롭 없이 맨손 스윙으로만
-    쓰면 **조건부 적합**.
-  - `Stabbing`: 칼 찌르기로 보이는 동작이라 처형/살상 연출로 읽힐 위험이 큽니다.
-    **부적합 판정**.
-  - `Jump Attack`: 점프 공격은 §8.4가 명시적으로 금지하는 "elite-only 과장 연출/
-    cinematic finisher" 계열에 가깝습니다. **부적합 판정**.
-  요약하면 6종 중 실제로 검토 여지가 있는 건 `One Hand Club Combo` 하나뿐이고,
-  나머지 5종은 톤 기준으로 이미 부적합 쪽입니다. **"One Hand Club Combo만 맨손
-  스윙으로 편집해서 살릴지, 아니면 6종 전부 폐기하고 새로 소싱할지"만 결정해
-  주시면 그에 맞춰 진행합니다.**
+  **[승인됨— 2026-08-13 Producer 확인] `Animations/pending_producer_review/` 6종,
+  Unity에 로드해서 검토 진행 가능.** 개별 톤 판정(참고용, 여전히 유효):
+  - `Mutant Punch/Swiping/Walking` 3종: Mixamo "Mutant"(괴물/좀비용) 모션 팩,
+    "평범한 회사 사람" 정체성과 충돌 — 실사용 여부는 Unity 확인 후 재판단 권장
+  - `One Hand Club Combo`: 무기 프롭 없이 맨손 스윙으로 쓰면 조건부 적합
+  - `Stabbing`: 칼 찌르기로 보여 처형/살상 연출 위험 — Unity 확인 후 재판단 권장
+  - `Jump Attack`: §8.4 "elite-only 과장 연출" 금지 항목에 근접 — Unity 확인 후 재판단 권장
+  Producer 승인은 "폴더를 Runtime/Unity로 불러와서 실제로 확인해본다"는 의미이며,
+  개별 클립의 최종 Canon 채택 여부까지 자동 승인된 것은 아님. Unity에서 확인한 뒤
+  각 클립 채택/폐기를 다시 확정할 것.
 Audio Files: N/A
 UI Files: N/A
 VFX Files: N/A
