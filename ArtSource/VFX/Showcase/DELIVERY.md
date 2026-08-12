@@ -1,201 +1,214 @@
-# Showcase VFX Production Source Delivery
+# Showcase VFX Premium Revision v002 Delivery
 
-Asset ID: `VFX-SHOWCASE-SOURCE-PACK-001`
+Asset ID: `VFX-SHOWCASE-PREMIUM-REVISION-002`
 
-Asset Name: `BREAK NOTICE Showcase P0/P1 Production Source Pack v001`
+기준선: `de866ef3bae2af137f65e349caa06cd17360065e`
 
-Creator: `OpenAI Codex for the BREAK NOTICE Human Owner`
+브랜치: `codex/showcase-vfx-premium-revision`
 
-Contribution Date: `2026-08-12 KST`
+상태: `REVIEW / OWNER APPROVAL PENDING`
 
-Branch / Starting Baseline:
-`codex/showcase-vfx / 578f2282bcace5f25e2d1603e66ee256ac8ac347`
+Gameplay/Runtime Integration Eligibility: `NONE`
 
-Current Status:
-`DELIVERED / PENDING HUMAN OWNER TECHNICAL REVIEW / NOT OWNER APPROVED / NOT RUNTIME INTEGRATED`
+## 1. Human Owner 판정 상태
 
-## 1. Scope and rights classification
+- 기존 VFX 8종(v001): `REVISION_REQUIRED / OWNER NOT APPROVED`
+- 기존 Unity Review package: `TECHNICALLY FUNCTIONAL, VISUALLY REJECTED`
+- Premium replacement v002: `REVIEW / OWNER APPROVAL PENDING`
+- v002는 기술 검수 후보이며 `OWNER APPROVED`, `FINAL`, `LOCKED`가 아니다.
+- 기존 commit/history와 v001 파일은 비교 증거로 보존했다.
 
-- Original deterministic vector/raster work: `YES`
-- Original AI-generated natural-material source: `YES — THREE SOURCE IMAGES`
-- Purchased or downloaded third-party content: `NO`
-- Open-license third-party content: `NO EXTERNAL SOURCE USED`
-- Reference-image input to generation: `NONE`
-- Copyrighted logo, printed text or brand mark: `NONE`
-- Exact rights basis:
-  `PROJECT ORIGINAL; NO THIRD-PARTY LICENSE APPLIES; HUMAN OWNER AUTHORIZED CREATION`
-- Commercial use:
-  `AUTHORIZED FOR BREAK NOTICE PROJECT AND CONTEST MATERIALS BY HUMAN OWNER`
-- Redistribution:
-  `AUTHORIZED WITH PROJECT DELIVERY; NO EXTERNAL SOURCE RESTRICTION`
-- Derivative work: `AUTHORIZED`
-- Final rights/technical approval: `HUMAN OWNER REVIEW REQUIRED`
+## 2. Premium replacement 8/8 및 레이어 구성
 
-The approved Production Visuals and tracked art/camera documents were used only as
-directional Canon. No pixels, logos, proprietary third-party source files or other
-lane assets were copied into this pack.
+각 효과는 세 개의 독립 레이어를 Built-in-compatible ParticleSystem에서 합성한다.
+물리 효과는 짧은 primary transient, 방향성 body, settle/residue 순서를 유지한다.
 
-Machine-readable per-file provenance, SHA-256, byte count, dimensions and alpha
-metrics are recorded in:
+| Station | Effect | Layer 1 | Layer 2 | Layer 3 | 상태 |
+|---:|---|---|---|---|---|
+| 1 | Interaction Target Readability | EdgeTrace | ContactBracket | MaterialWink | REVIEW |
+| 2 | Catch Confirm | PrimaryCompression | PaperSnap | DirectionalSettle | REVIEW |
+| 3 | Invalid/Rejected Action | ReticleInterruption | TargetDropout | ReverseEcho | REVIEW |
+| 4 | Ally READY | GazeTick | PostureCue | FootContact | REVIEW |
+| 5 | Light Office Contact / Binder Impact | PrimaryTransient | DirectionalDust | FiberSettle | REVIEW |
+| 6 | Chair Wheel Contact / Skid | CasterBite | RubberBody | ContactSettle | REVIEW |
+| 7 | Paper Material Burst | PrimarySnap | PageFan | FlutterSettle | REVIEW |
+| 8 | EXIT / Route Activation | PracticalLamp | SignHardware | RouteEdge | REVIEW |
 
-`ArtSource/VFX/Showcase/Licenses/VFX_Showcase_Provenance_Ledger_v001.csv`
+상태 효과 12개는 각각 `512x512 RGBA` single texture다. 물리 효과 12개는 각각
+`2048x2048 RGBA`, `4x4`, `512x512/cell` flipbook이다. 총 Runtime candidate는
+24개이며 4x4 animation frame은 합계 192개다.
 
-## 2. Unity-ready delivery candidates
+Unity frame order는 `UNITY_WHOLE_SHEET_LOWER_LEFT_ROW_MAJOR`로 고정했다.
+각 flipbook은 16/16 frame이 서로 다르고 모든 cell이 비어 있지 않다.
 
-These files contain usable visual content. They are source-lane candidates only;
-no Unity `.meta`, Material, Prefab, Particle System, VFX Graph, Shader Graph or
-Runtime hook was created.
+## 3. 물리 효과 deterministic variation
 
-| Inspection index | File | Role | Format | SHA-256 |
-|---:|---|---|---|---|
-| 1 | `Textures/T_VFX_Showcase_InteractionSoftRing_v001.png` | interaction target soft ring/highlight | 512×512 RGBA | `3cdefac76ca1fcde0d35d58b602e9c6ea6a4f5abaad43fff49b0b0c5add91841` |
-| 2 | `Textures/T_VFX_Showcase_PickupCatchConfirm_v001.png` | valid pickup/catch confirmation | 512×512 RGBA | `01c9410152bf89e0ba35c0897d879ba6144bb80a307ef349ccb3d504f7b7b0df` |
-| 3 | `Textures/T_VFX_Showcase_InteractionRejected_v001.png` | invalid/rejected interaction pulse | 512×512 RGBA | `79a350a04630a07f06d9af12c52eb7202cd091615a9452577208e6ee709ca02a` |
-| 4 | `Flipbooks/T_VFX_Showcase_LightContactDust_4x4_v001.png` | Light object contact dust | 2048×2048 RGBA, 4×4 | `db85987ec72d905fdd75dc6ea20a8598f0075493b4e2c71fde1c744beda70f33` |
-| 5 | `Flipbooks/T_VFX_Showcase_ChairWheelContact_4x4_v001.png` | Medium Chair wheel/contact dust with paired grounded strokes | 2048×2048 RGBA, 4×4 | `4e528117f430367a1f3b69df330145584f5b440c54e80e63c69696ac538d0970` |
-| 6 | `Flipbooks/T_VFX_Showcase_RestrainedPaperBurst_4x4_v001.png` | restrained Binder paper burst | 2048×2048 RGBA, 4×4 | `07e97069f6c25bc077971ffda8dd34add53b795522039e459df655d1e120af76` |
-| 7 | `Textures/T_VFX_Showcase_AllyReadySupport_v001.png` | pulse/support frame around the existing Ally READY exclamation | 512×512 RGBA | `73f389e9d608274eda96a9a7f497163e5e0c9b7c7675759647840ca982e93d27` |
-| 8 | `Textures/T_VFX_Showcase_ExitActivation_v001.png` | Exit activation/readability pulse | 512×512 RGBA | `14e9c3daeb0704e64092e23614cb92a40328b95945c39930bd702c4c8ecdc398` |
+Catch, Binder impact, Chair skid, Paper burst 각각에 다음 세 변주를 제공한다.
 
-All three flipbooks use row-major order from frame `0` at upper-left to frame
-`15` at lower-right. Every frame is exactly 512×512, non-empty, unique and has
-at least 20 transparent pixels of per-cell outer margin.
+- Variation A: 기준 방향, scale `1.00`, layer delay `0.000s`
+- Variation B: 방향 `+14°`, scale `0.82`, layer delay `0.035s`, layer offset 적용
+- Variation C: 방향 `-12°`, scale `1.20`, layer delay `0.060s`, 반대 layer offset 적용
 
-## 3. Editable and reproducible sources
+변주는 같은 stock flipbook을 단순 반복한 것이 아니라 회전, 크기, layer 시차와
+레이어 위치 관계를 결정적으로 바꾼 review audition이다. Gameplay randomization이나
+Runtime hook은 포함하지 않는다.
 
-Deterministic vector sources:
+## 4. Source와 제작 방식
 
-- `Source/VFX_Showcase_InteractionSoftRing_v001.svg`
-- `Source/VFX_Showcase_PickupCatchConfirm_v001.svg`
-- `Source/VFX_Showcase_InteractionRejected_v001.svg`
-- `Source/VFX_Showcase_AllyReadySupport_v001.svg`
-- `Source/VFX_Showcase_ExitActivation_v001.svg`
+Self-created originals만 사용했다. 외부 다운로드, 제3자 asset, 로고, 상표, 타사
+게임 source, 저작권 보호 source는 사용하지 않았다.
 
-Natural-material generation sources:
+Image generation source:
 
-- `Source/VFX_Showcase_LightContactDust_ImageGen_v001.png`
-- `Source/VFX_Showcase_ChairWheelDust_ImageGen_v001.png`
-- `Source/VFX_Showcase_PaperElements_ImageGen_v001.png`
+- `Source/VFX_Showcase_PremiumDustBank_ImageGen_v002.png`
+- `Source/VFX_Showcase_PremiumRubberBank_ImageGen_v002.png`
+- `Source/VFX_Showcase_PremiumPaperBank_ImageGen_v002.png`
 
-The three ImageGen files are preserved 1254×1254 RGB chroma-key intermediates for
-reproducibility. They are not Unity-ready textures. The delivered flipbooks use
-locally recovered straight transparent alpha, neutralized key spill and clean
-transparent borders.
+Straight-alpha element bank:
 
-Reproducible build source:
+- `Source/VFX_Showcase_PremiumDustBank_AlphaExtract_v002.png`
+- `Source/VFX_Showcase_PremiumRubberBank_AlphaExtract_v002.png`
+- `Source/VFX_Showcase_PremiumPaperBank_AlphaExtract_v002.png`
 
-`Source/build_showcase_vfx_pack_v001.py`
+Reproducible deterministic build source:
 
-Required workspace libraries: Python 3.13, Pillow 12.1.1, NumPy 2.4.4 and SciPy
-1.17.1. Rebuild/validate from repository root with:
+- `Source/build_showcase_vfx_premium_v002.py`
 
-```powershell
-python ArtSource/VFX/Showcase/Source/build_showcase_vfx_pack_v001.py
-```
+Alpha extraction은 imagegen skill의 chroma-key workflow를 사용했고 `--auto-key border`,
+`--soft-matte`, `--transparent-threshold 12`, `--opaque-threshold 220`, `--despill`을
+적용했다. 출력은 straight alpha이며 투명 pixel의 RGB 오염과 green spill을 제거했다.
+CLI/model downgrade는 발생하지 않았다.
 
-The script writes only within `ArtSource/VFX/Showcase/{Source,Textures,Flipbooks,Preview,Licenses}`.
+### ImageGen prompt record
 
-## 4. Image generation provenance and exact prompts
+세 요청 모두 reference image 없이 OpenAI built-in image generation으로 새로 생성했다.
 
-Generation mode: `OpenAI built-in image generation through the imagegen skill`.
-Each request was a new, independent generation with no reference image and no
-third-party source input. The selected generated originals remain unchanged in
-the Codex generated-image directory; the byte-identical selected copies are
-preserved under `Source/`.
-
-### IG-VFX-SHW-001 — Light contact dust
+`IG-VFX-SHW-PREMIUM-002-A`
 
 ```text
-Use case: production-ready game VFX source sprite.
-Asset type: isolated natural-material source image for a restrained office-floor contact dust effect.
-Primary request: create one compact, low-profile puff of fine dry gray-beige dust caused by a light file binder touching a dusty office floor. The motion must feel small, physical, and close to the ground, with several soft particulate lobes and a few tiny grains, suitable as source material for a short 4x4 flipbook.
-Scene/backdrop: perfectly flat, uniform solid chroma-key green #00FF00 background filling the entire canvas; no horizon, floor plane, gradient, texture, shadow, or ambient environment.
-Style/medium: realistic natural dust sprite source, clean game-production element, restrained corporate-office material response; not concept art and not an illustration panel.
-Composition: one centered dust puff occupying about 45% of canvas width and no more than 24% of canvas height; generous empty green margin on every edge; asymmetric horizontal direction with the contact origin near lower center; subject fully visible and uncropped.
-Color/lighting: dust only in muted warm gray, cool gray, and very subtle beige; matte, soft, internally shaded enough to retain form after alpha extraction; absolutely no green within the dust subject.
-Constraints: no fire, explosion, smoke column, fog bank, sparks, embers, glowing energy, rocks, glass, paper, object, text, letters, numbers, logo, watermark, border, frame, cast shadow, or magenta. No photoreal scene. Keep the effect sparse and gameplay-readable.
+Create a production game-VFX source bank on a perfectly flat uniform chroma-key green #00FF00 background. Arrange sixteen clearly separated, isolated, restrained office-contact dust and paper-fiber elements in a clean 4 by 4 specimen grid with generous green space between every element and around all canvas edges. Include low directional dust wisps, thin compression streaks, tiny warm-gray particulate clusters, short floor-hugging settle trails, and subtle paper-fiber accents. Use realistic muted warm gray, cool gray and pale beige material values with soft translucent edges and internal texture. Each element must have a distinct asymmetrical silhouette and a clear physical direction, suitable for constructing layered binder-contact and catch-confirm flipbooks. No floor, horizon, cast shadow, text, icons, logos, watermark, fire, explosion, smoke column, opaque cartoon puff, spark shower, neon, cyan, magenta, glow core, radial burst, celebration confetti, object, hand, binder, chair, crop or overlap.
 ```
 
-Selected source SHA-256:
-`5d3a2704941467028bd8912b43e4f255b8e0fa2b6c97277feddf427b19524436`
-
-### IG-VFX-SHW-002 — Chair wheel/contact dust
+`IG-VFX-SHW-PREMIUM-002-B`
 
 ```text
-Use case: production-ready game VFX source sprite.
-Asset type: isolated natural-material source image for a grounded office-chair wheel contact effect.
-Primary request: create one thin, lateral trail of fine gray-brown office-floor dust caused by wheeled office-chair casters rolling and skidding while the chair remains fully floor-supported. Include two visually separated low puffs and a faint narrow dust streak between them, with a few tiny grains; suitable as source material for a short 4x4 flipbook.
-Scene/backdrop: perfectly flat, uniform solid chroma-key green #00FF00 background filling the entire canvas; no horizon, floor plane, gradient, texture, shadow, or ambient environment.
-Style/medium: realistic natural dust sprite source, restrained physical office-material response, clean game-production element; not concept art.
-Composition: centered horizontally in the lower-middle, occupying about 62% of canvas width and no more than 16% of canvas height; strongly horizontal left-to-right flow, generous empty green margin on every edge, fully visible and uncropped.
-Color/lighting: muted cool gray, neutral gray-brown, and tiny beige dust variation only; matte and soft with enough internal value variation for alpha extraction; absolutely no green in the subject.
-Constraints: no chair, wheel, caster, floor, object, fire, explosion, smoke column, fog bank, sparks, embers, glowing energy, rocks, paper, glass, text, letters, numbers, logo, watermark, frame, cast shadow, or magenta. No upward blast. Keep it sparse, low, directional, and gameplay-readable.
+Create a production game-VFX source bank on a perfectly flat uniform chroma-key green #00FF00 background. Arrange sixteen clearly separated, isolated chair-caster and rubber-skid contact elements in a clean 4 by 4 specimen grid with generous green space between every element and around all canvas edges. Include paired low caster bites, narrow directional rubber scuffs, fine gray-brown floor dust ribbons, compressed contact smears, and short settling grains. Keep every shape extremely low to the ground, lateral, restrained, asymmetrical and physically caused by wheeled office-chair contact. Use muted charcoal, neutral gray-brown and tiny cold-metal highlights only, with soft translucent edges and material texture. No chair, wheel, floor plane, horizon, cast shadow, text, icons, logo, watermark, fire, explosion, smoke cloud, opaque cartoon puff, sparks, neon, cyan, magenta, glow core, radial burst, crop or overlap.
 ```
 
-Selected source SHA-256:
-`fe7722f615a7e9ab8528072c5baef59e95c34b497e21989ac90392a7f2ba5d22`
-
-### IG-VFX-SHW-003 — Restrained paper elements
+`IG-VFX-SHW-PREMIUM-002-C`
 
 ```text
-Use case: production-ready game VFX source sprite bank.
-Asset type: isolated natural office-paper elements for a restrained paper-contact burst flipbook.
-Primary request: create a sparse collection of 14 separate small office-paper scraps and thin paper slivers, as if a file binder made a modest physical contact. Shapes should include a few irregular torn rectangles, narrow strips, folded corner silhouettes, and edge-on slivers. Every piece must be clearly separated from every other piece so it can be masked independently.
-Scene/backdrop: perfectly flat, uniform solid chroma-key green #00FF00 background filling the entire canvas; no horizon, floor plane, gradient, texture, shadow, or environment.
-Style/medium: realistic but simplified game VFX source elements, restrained office-material response, matte paper with subtle thickness and gentle folds; not a scene and not concept art.
-Composition: elements distributed within the central 64% of the canvas, generous empty green margin on all edges, no overlap between pieces, no crop, no large sheet dominating the image. Preserve clear negative space.
-Color/lighting: paper only in off-white, cool light gray, very pale recycled beige, and a few muted blue-gray pieces; low contrast internal fold shading; absolutely no green within subjects.
-Constraints: absolutely no writing, printed lines, typography, letters, numbers, logos, watermarks, stamps, brand marks, folders, binder covers, clips, staples, fire, explosion, dust cloud, smoke, sparks, glow, magenta, cast shadow, border, or frame. Keep the set sparse and physically plausible, not a confetti celebration.
+Create a production game-VFX source bank on a perfectly flat uniform chroma-key green #00FF00 background. Arrange twenty clearly separated, isolated office-paper elements in a clean 5 by 4 specimen grid with generous green space between every element and around all canvas edges. Include irregular torn paper fragments, folded corners, thin edge-on slivers, small page fans, curled strips and asymmetric flutter shapes. Use off-white, recycled beige, cool light gray and a few muted blue-gray paper tones with subtle fiber edges, thickness and fold shading. Every piece must be physically plausible and individually maskable for layered catch, binder-impact and paper-burst flipbooks. No writing, printed lines, letters, numbers, logos, watermarks, folder cover, binder, clip, staple, hand, dust cloud, fire, explosion, sparks, neon, cyan, magenta, glow, celebration confetti, cast shadow, crop, overlap or stock icon shape.
 ```
 
-Selected source SHA-256:
-`16853debb2a3d1315a8feba79e36b68af33e3c0cae567730bcb062ac01ab573a`
+## 5. Provenance와 권리
 
-## 5. Human Owner inspection previews
+원산지 분류:
 
-- `Preview/VFX_Showcase_ProductionSourcePack_ContactSheet_v001.png`
-  - 2048×1152 RGBA
-  - inspection order is the `1`–`8` order in the delivery table
-  - SHA-256: `5526bd2f9375426dcf79f8427317d81a90804c18651d6a42e49185fdb27d59b2`
-- `Preview/VFX_Showcase_GrayscaleAlphaReadability_v001.png`
-  - 2048×1920 RGBA
-  - each numbered asset is shown as a grayscale composite followed by its alpha mask
-  - SHA-256: `7071f42a433084cd8abf3c5341f74da339458e558add65e9c928f6a924bd28a1`
+- AI source 3개: `ORIGINAL_AI_GENERATED_SOURCE`
+- alpha element bank 3개: `ORIGINAL_AI_GENERATED_DERIVATIVE_SOURCE`
+- 24개 Runtime candidate: `ORIGINAL_DETERMINISTIC_SOURCE` 또는
+  `ORIGINAL_AI_ASSISTED_DETERMINISTIC_DERIVATIVE`
+- review preview 8개: `DETERMINISTIC_REVIEW_PREVIEW`
+- 제3자 source/license: `NONE`
 
-Both previews are review composites only and are not Runtime textures.
+상업 이용 및 저장소 재배포 근거:
+`PROJECT ORIGINAL; NO THIRD-PARTY SOURCE; HUMAN OWNER AUTHORIZED CREATION`.
 
-## 6. Validation result
+39개 source/candidate/preview/build 항목의 SHA-256, byte, dimensions, alpha metrics,
+frame order, rights basis와 review 상태는 다음 UTF-8 CSV에 기록했다.
 
-- PNG signature: `PASS — 13/13`
-- Unity-ready candidate dimensions: `PASS — 5×512², 3×2048²`
-- Unity-ready color mode: `PASS — RGBA 8-bit`
-- Alpha coverage and partial-alpha pixels: `PASS — 8/8`
-- Outer transparent margin: `PASS — minimum 24 px per delivery image`
-- Flipbook grid: `PASS — 4×4 / 512² cells / row-major`
-- Flipbook cell content: `PASS — 48/48 non-empty and partially transparent`
-- Flipbook frame uniqueness: `PASS — 16/16 unique for each atlas`
-- Magenta/missing-texture color signature: `PASS — 0 pixels in Runtime candidates`
-- Baked text, logo or watermark in Runtime candidates: `PASS — none`
-- Visual inspection: `PASS — all source, delivery and preview images inspected`
-- Binary count / total bytes: `13 / 5,084,775 bytes`
-- Runtime integration, Unity tests, build and browser smoke: `NOT RUN / OUT OF SCOPE`
+- `Licenses/VFX_Showcase_Premium_Provenance_Ledger_v002.csv`
 
-## 7. Runtime integration still missing
+Runtime Unity 영역의 24개 PNG는 ArtSource 후보와 `24/24 byte-identical`이며
+focused EditMode test가 동일 SHA-256을 검증한다.
 
-Requested Integration: `NONE IN THIS PASS`
+## 6. Unity review delivery
 
-The following remain `PROPOSED / REVIEW REQUIRED` and require a separate S9
-Runtime Art Integration relay:
+Unity project:
+`C:\Users\jhbjm\Desktop\break-notice-wt-vfx-premium-revision\Game`
 
-- Unity import settings, compression, mipmaps, color space and wrap/filter mode
-- alpha blend/material choice and renderer ownership
-- authoritative existing signal audit and exact presentation hook binding
-- object-local/world/contact-normal attach space and scale
-- duration, rate limiting, pooling, occlusion and Reset cancellation
-- READY exclamation composition, Exit fixture placement and UI pairing
-- WebGL alpha-overdraw/performance verification, Unity tests and browser smoke
+Scene:
+`Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity`
 
-No Gameplay state, damage, breakage, fracture, causal carrier, physics, input or
-Scene behavior is contained in these files.
+Menu:
+`BREAK NOTICE > Contest > Prepare Isolated Showcase VFX Review`
+
+Unity review 구성:
+
+- Runtime PNG import: 24
+- Built-in `Particles/Standard Unlit` 기반 Material: 24 effect layer + 7 review environment
+- Composite Prefab: 16 (status 4 + physical A/B/C 12)
+- Composite station: 8/8
+- Solo layer view: 24/24
+- Physical variation audition: 12/12
+- Old vs new comparison: 8/8
+- Gameplay-camera-equivalent zone: 8/8
+- Gameplay Scene/Prefab/runtime hook 연결: 0
+
+## 7. Human Owner inspection preview
+
+- `Preview/Premium_v002/VFX_Showcase_Premium_SourceContactSheet_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_LayerBreakdown_Source_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_GrayscaleAlphaAudit_Source_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_OldVsNew_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_LayerBreakdown_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_PhysicalVariations_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_GameplayCamera_v002.png`
+- `Preview/Premium_v002/VFX_Showcase_Premium_GrayscaleReadability_v002.png`
+
+Source contact sheet와 다섯 Unity capture를 모두 육안 검수했다. 확인 항목은 8/8
+가시성, 합성/solo 차이, A/B/C 변주, straight-alpha edge, 검은 halo, magenta,
+green spill, 화면 점유, grayscale silhouette다.
+
+## 8. Alpha/overdraw risk note
+
+- 모든 후보에 partial alpha가 있어 hard-alpha silhouette를 피했다.
+- magenta, neon cyan, green spill pixel은 후보 24개 전체에서 각각 0이다.
+- 투명 여백 최소값은 static/flipbook cell 모두 32px 이상이다.
+- 투명 pixel의 pure-black RGB를 제거해 straight-alpha mip edge의 black halo 위험을 줄였다.
+- 한 composite의 동시 layer는 정확히 3개다. 큰 fullscreen quad, screen flash와 bloom
+  stack은 없다.
+- 가장 높은 overdraw 후보는 Binder `DirectionalDust`, Chair `RubberBody`, Paper
+  `PageFan`이다. 좁고 짧은 lifetime으로 제한했지만 최종 Runtime camera/target
+  hardware profiling은 아직 수행하지 않았다.
+- Chair skid는 현실적인 낮은 명도를 지켜 grayscale에서 가장 약하게 보인다.
+  Catch transient도 camera distance에서 작게 느껴질 수 있으므로 두 항목은 Human Owner가
+  Keep/Revise/Cut로 직접 판정해야 한다.
+
+## 9. Validation
+
+- Unity Editor `6000.3.20f1` compile: `PASS`
+- Premium replacement: `8/8`
+- Runtime PNG ArtSource→Unity byte identity: `24/24 PASS`
+- PNG signature/dimensions/RGBA/alpha coverage: `24/24 PASS`
+- Flipbook grid/frame order/non-empty/unique: `12/12 PASS`, `192/192 frames`
+- Importer contract: `24/24 PASS`
+- Material and shader reference contract: `PASS`
+- Missing texture/material/shader: `0`
+- Magenta: `0`
+- Alpha fringe/black halo signature: `0`
+- Duplicate GUID/path: `0`
+- Focused EditMode: `127/127 PASS`
+- Full EditMode: `192/192 PASS`
+- Full PlayMode: `59/59 PASS`
+- Review capture hard console error: `0`
+- Gameplay integration: `0`
+- Web build/browser: `NOT RUN / FORBIDDEN`
+
+시각 품질은 자동 PASS로 판정하지 않는다. Human Owner가 각 station을 실제 camera에서
+Keep / Revise / Cut 판정하기 전까지 모든 v002 결과는
+`REVIEW / OWNER APPROVAL PENDING`이다.
+
+## 10. Runtime integration remaining
+
+다음 항목은 이번 revision에 포함하지 않았고 새 Human Owner Relay가 필요하다.
+
+- Gameplay event/hook 연결
+- Runtime pooling과 rate limiting
+- 실제 target/normal/velocity data binding
+- 실제 카메라 거리별 scale과 lifetime 최종 조정
+- occlusion, Reset cancellation과 WebGL overdraw profiling
+- Gameplay Scene/Prefab 변경
 
 No new production asset blocks this work package. Graybox fallback remains active.
