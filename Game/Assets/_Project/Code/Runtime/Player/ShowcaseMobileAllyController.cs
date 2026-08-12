@@ -7,6 +7,7 @@ namespace BreakNotice.Gameplay.Interaction
 {
     public enum ShowcaseMobileAllyState
     {
+        HoldingPosition,
         Following,
         CatchingUp,
         FastCatchingUp,
@@ -115,9 +116,10 @@ namespace BreakNotice.Gameplay.Interaction
         private Transform taskIgnoredPayload;
         private bool taskReached;
         private bool taskBlocked;
+        private bool followCommanded;
 
         public ShowcaseMobileAllyState State { get; private set; } =
-            ShowcaseMobileAllyState.Following;
+            ShowcaseMobileAllyState.HoldingPosition;
 
         public ShowcaseAllyFollowSide FollowSide { get; private set; } =
             ShowcaseAllyFollowSide.Left;
@@ -144,11 +146,17 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool TaskBlocked => taskBlocked;
 
+        public bool IsFollowCommanded => followCommanded;
+
         public Transform FetchTarget => fetchTarget;
 
         public uint RegroupAttemptSequence { get; private set; }
 
         public bool LastRegroupAccepted { get; private set; }
+
+        public uint FollowToggleAttemptSequence { get; private set; }
+
+        public bool LastFollowToggleAccepted { get; private set; }
 
         public int SideSwitchCount { get; private set; }
 
@@ -216,6 +224,17 @@ namespace BreakNotice.Gameplay.Interaction
             if (IsGlobalInteractionBlocked)
             {
                 LastStepDistance = 0f;
+                return;
+            }
+
+            if (!HasTaskMovement && !followCommanded)
+            {
+                State = ShowcaseMobileAllyState.HoldingPosition;
+                LastStepDistance = 0f;
+                CurrentMovementTarget = allyTransform.position;
+                CurrentAnchorIndex = -1;
+                blockedElapsed = 0f;
+                taskBlocked = false;
                 return;
             }
 
@@ -328,6 +347,43 @@ namespace BreakNotice.Gameplay.Interaction
             observedResetCount = resetController != null ? resetController.ResetCount : 0;
         }
 
+        public bool TryToggleFollow()
+        {
+            FollowToggleAttemptSequence++;
+            if (!OwnsRegroupFallback || IsGlobalInteractionBlocked || HasTaskMovement)
+            {
+                LastFollowToggleAccepted = false;
+                return false;
+            }
+
+            if (followCommanded)
+            {
+                followCommanded = false;
+                regroupUntilTime = 0f;
+                State = ShowcaseMobileAllyState.HoldingPosition;
+                CurrentMovementTarget = allyTransform.position;
+                CurrentAnchorIndex = -1;
+                blockedElapsed = 0f;
+                taskBlocked = false;
+                LastStepDistance = 0f;
+                LastFollowToggleAccepted = true;
+                return true;
+            }
+
+            followCommanded = true;
+            if (!TryResolveMovementTarget(out _, out _))
+            {
+                followCommanded = false;
+                State = ShowcaseMobileAllyState.HoldingPosition;
+                LastFollowToggleAccepted = false;
+                return false;
+            }
+
+            regroupUntilTime = 0f;
+            LastFollowToggleAccepted = true;
+            return true;
+        }
+
         public bool TryRequestRegroup()
         {
             RegroupAttemptSequence++;
@@ -338,9 +394,14 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             ShowcaseAllyFollowSide previousSide = FollowSide;
-            FollowSide = FollowSide == ShowcaseAllyFollowSide.Left
-                ? ShowcaseAllyFollowSide.Right
-                : ShowcaseAllyFollowSide.Left;
+            bool wasFollowCommanded = followCommanded;
+            followCommanded = true;
+            if (wasFollowCommanded)
+            {
+                FollowSide = FollowSide == ShowcaseAllyFollowSide.Left
+                    ? ShowcaseAllyFollowSide.Right
+                    : ShowcaseAllyFollowSide.Left;
+            }
             if (FollowSide != previousSide)
             {
                 SideSwitchCount++;
@@ -351,6 +412,7 @@ namespace BreakNotice.Gameplay.Interaction
             if (!LastRegroupAccepted)
             {
                 FollowSide = previousSide;
+                followCommanded = wasFollowCommanded;
                 regroupUntilTime = 0f;
             }
             return LastRegroupAccepted;
@@ -365,6 +427,7 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             movementTask = MovementTask.Fetch;
+            followCommanded = false;
             fetchTarget = target;
             fetchStoppingDistance = Mathf.Max(0.5f, stoppingDistance);
             taskAdditionalClearance = 0f;
@@ -413,13 +476,55 @@ namespace BreakNotice.Gameplay.Interaction
                 State == ShowcaseMobileAllyState.ReturningWithSupply ||
                 State == ShowcaseMobileAllyState.Blocked)
             {
-                State = ShowcaseMobileAllyState.Following;
+                State = followCommanded
+                    ? ShowcaseMobileAllyState.Following
+                    : ShowcaseMobileAllyState.HoldingPosition;
             }
         }
 
         public bool IsFetching(Transform target)
         {
             return movementTask == MovementTask.Fetch && fetchTarget == target;
+        }
+
+        public bool TryEvaluateFetchRoute(
+            Transform target,
+            float stoppingDistance,
+            out float routeCost)
+        {
+            routeCost = float.PositiveInfinity;
+            if (!OwnsRegroupFallback || IsGlobalInteractionBlocked || target == null ||
+                HasTaskMovement)
+            {
+                return false;
+            }
+
+            Vector3 toFetch = target.position - allyTransform.position;
+            toFetch.y = 0f;
+            float distance = toFetch.magnitude;
+            float clampedStoppingDistance = Mathf.Max(0.5f, stoppingDistance);
+            if (distance <= clampedStoppingDistance + arrivalTolerance)
+            {
+                routeCost = 0f;
+                return true;
+            }
+
+            Vector3 desired = target.position -
+                              toFetch.normalized * clampedStoppingDistance;
+            desired.y = allyTransform.position.y;
+            if (HasClearPath(allyTransform.position, desired))
+            {
+                routeCost = PlanarDistance(allyTransform.position, desired);
+                return true;
+            }
+
+            if (!TryPlanAnchorRoute(desired, out _, out _, out float plannedCost))
+            {
+                return false;
+            }
+
+            routeCost = plannedCost;
+            return true;
         }
 
         public Vector3 CalculateFollowPosition(ShowcaseAllyFollowSide side)
@@ -521,7 +626,7 @@ namespace BreakNotice.Gameplay.Interaction
                 }
             }
 
-            State = ShowcaseMobileAllyState.Following;
+            State = ShowcaseMobileAllyState.HoldingPosition;
             FollowSide = ShowcaseAllyFollowSide.Left;
             CurrentMovementTarget = baselineCaptured ? baselinePosition : Vector3.zero;
             CurrentAnchorIndex = -1;
@@ -529,6 +634,8 @@ namespace BreakNotice.Gameplay.Interaction
             regroupUntilTime = 0f;
             RegroupAttemptSequence = 0;
             LastRegroupAccepted = false;
+            FollowToggleAttemptSequence = 0;
+            LastFollowToggleAccepted = false;
             SideSwitchCount = 0;
             AnchorRouteCount = 0;
             BlockedCount = 0;
@@ -542,6 +649,7 @@ namespace BreakNotice.Gameplay.Interaction
             taskIgnoredPayload = null;
             taskReached = false;
             taskBlocked = false;
+            followCommanded = false;
         }
 
         private bool HasRequiredBindings()
@@ -589,11 +697,13 @@ namespace BreakNotice.Gameplay.Interaction
             bool hasPreferredRoute = TryPlanAnchorRoute(
                 target,
                 out int preferredAnchor,
-                out int preferredLength);
+                out int preferredLength,
+                out _);
             bool hasAlternateRoute = TryPlanAnchorRoute(
                 alternateTarget,
                 out int alternateAnchor,
-                out int alternateLength);
+                out int alternateLength,
+                out _);
             if (hasPreferredRoute || hasAlternateRoute)
             {
                 bool useAlternate = !hasPreferredRoute ||
@@ -697,7 +807,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return true;
             }
 
-            if (!TryPlanAnchorRoute(desired, out anchorIndex, out _))
+            if (!TryPlanAnchorRoute(desired, out anchorIndex, out _, out _))
             {
                 return false;
             }
@@ -707,10 +817,15 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
-        private bool TryPlanAnchorRoute(Vector3 desired, out int nextAnchor, out int pathLength)
+        private bool TryPlanAnchorRoute(
+            Vector3 desired,
+            out int nextAnchor,
+            out int pathLength,
+            out float pathCost)
         {
             nextAnchor = -1;
             pathLength = int.MaxValue;
+            pathCost = float.PositiveInfinity;
             int count = AnchorCount;
             if (count == 0 || !IsAnchorNetworkConnected())
             {
@@ -812,7 +927,51 @@ namespace BreakNotice.Gameplay.Interaction
 
             nextAnchor = routeNext;
             pathLength = distance[foundGoal];
+            pathCost = CalculateAnchorPathCost(
+                allyTransform.position,
+                desired,
+                routeStart,
+                foundGoal,
+                previous);
             return true;
+        }
+
+        private float CalculateAnchorPathCost(
+            Vector3 start,
+            Vector3 desired,
+            int routeStart,
+            int foundGoal,
+            int[] previous)
+        {
+            var route = new List<int>();
+            int current = foundGoal;
+            while (current >= 0)
+            {
+                route.Add(current);
+                if (current == routeStart)
+                {
+                    break;
+                }
+
+                current = previous[current];
+            }
+
+            if (route.Count == 0 || route[route.Count - 1] != routeStart)
+            {
+                return float.PositiveInfinity;
+            }
+
+            route.Reverse();
+            float cost = PlanarDistance(start, followAnchors[route[0]].position);
+            for (int index = 1; index < route.Count; index++)
+            {
+                cost += PlanarDistance(
+                    followAnchors[route[index - 1]].position,
+                    followAnchors[route[index]].position);
+            }
+
+            cost += PlanarDistance(followAnchors[route[route.Count - 1]].position, desired);
+            return cost;
         }
 
         private List<int>[] BuildAdjacency(int count)

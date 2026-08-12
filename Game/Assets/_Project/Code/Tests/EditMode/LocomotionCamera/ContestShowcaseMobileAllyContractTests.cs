@@ -64,7 +64,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(interaction.ShowcaseMobileAllyController, Is.SameAs(mobile));
             Assert.That(presenter, Is.Not.Null);
             Assert.That(presenter.MobileAlly, Is.SameAs(mobile));
-            Assert.That(presenter.BuildStatusText(), Is.EqualTo("ALLY FOLLOWING | [Q] REGROUP"));
+            Assert.That(mobile.State, Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobile.IsFollowCommanded, Is.False);
+            Assert.That(
+                presenter.BuildStatusText(),
+                Is.EqualTo("ALLY HOLDING POSITION | [Q] FOLLOW | [G] REGROUP"));
             Assert.That(
                 scene.GetRootGameObjects()
                     .SelectMany(root => root.GetComponentsInChildren<ShowcaseMobileAllyController>(true))

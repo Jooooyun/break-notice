@@ -31,14 +31,14 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void LogicalActionInventory_IncludesOwnerApprovedS3AllyTask()
+        public void LogicalActionInventory_IncludesDistinctFetchCallAndRegroupActions()
         {
             InputActionAsset asset = LoadInputAsset();
             Assert.That(asset.actionMaps.Count, Is.EqualTo(1));
 
             InputActionMap map = asset.actionMaps[0];
             Assert.That(map.name, Is.EqualTo("PrototypePlayer"));
-            Assert.That(map.actions.Count, Is.EqualTo(9));
+            Assert.That(map.actions.Count, Is.EqualTo(10));
             Assert.That(
                 map.actions.Select(action => action.name),
                 Is.EquivalentTo(Enum.GetNames(typeof(PrototypeLogicalAction))));
@@ -82,6 +82,16 @@ namespace BreakNotice.LocomotionCamera.Tests
                 false,
                 false,
                 true);
+            var regroup = new LogicalInputSnapshot(
+                Vector2.zero,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                regroupAlly: true);
 
             Assert.That(held.Throw, Is.True);
             Assert.That(held.ThrowHeld, Is.True);
@@ -89,17 +99,18 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(released.Throw, Is.False);
             Assert.That(released.ThrowHeld, Is.False);
             Assert.That(released.ThrowReleased, Is.True);
+            Assert.That(regroup.RegroupAlly, Is.True);
             Assert.That(
                 LoadInputAsset().FindActionMap("PrototypePlayer", true).actions.Count,
-                Is.EqualTo(9));
+                Is.EqualTo(10));
         }
 
         [Test]
-        public void AllyTask_UsesOwnerApprovedKeyboardAndGamepadBindings()
+        public void AllyTaskAndRegroup_UseDistinctKeyboardAndGamepadBindings()
         {
-            InputAction action = LoadInputAsset()
-                .FindActionMap("PrototypePlayer", true)
-                .FindAction("AllyTask", true);
+            InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
+            InputAction action = map.FindAction("AllyTask", true);
+            InputAction regroup = map.FindAction("RegroupAlly", true);
 
             Assert.That(action.type, Is.EqualTo(InputActionType.Button));
             Assert.That(
@@ -108,6 +119,13 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(
                 action.bindings.Select(binding => binding.effectivePath),
                 Does.Contain("<Gamepad>/dpad/up"));
+            Assert.That(regroup.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(
+                regroup.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Keyboard>/g"));
+            Assert.That(
+                regroup.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Gamepad>/dpad/down"));
         }
 
         [Test]
@@ -125,6 +143,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             StringAssert.Contains("Snapshot.Throw", consumerSource);
             StringAssert.Contains("Snapshot.AllyTask", consumerSource);
             StringAssert.Contains("Snapshot.CallAlly", consumerSource);
+            StringAssert.Contains("Snapshot.RegroupAlly", consumerSource);
             string resetSource = File.ReadAllText(
                 "Assets/_Project/Code/Runtime/Player/AuthoredEncounterResetController.cs");
             StringAssert.Contains("Snapshot.ResetEncounter", resetSource);

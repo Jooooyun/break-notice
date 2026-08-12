@@ -34,7 +34,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator ExplicitBinderFetch_ReturnsReadyAndQReleasesPhysicalObject()
+        public IEnumerator ExplicitBinderFetch_AcquiresAndHoldsAtSourceUntilQReleases()
         {
             Fixture fixture = CreateFixture(
                 PrototypeWeightClass.Light,
@@ -45,9 +45,50 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(fixture.Mobile.IsFetchTask, Is.True);
             yield return WaitForReady(fixture);
 
-            Assert.That(fixture.Mobile.IsReturnTask, Is.True);
+            Assert.That(fixture.Mobile.HasTaskMovement, Is.False);
+            Assert.That(fixture.Mobile.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(fixture.Mobile.IsFollowCommanded, Is.False);
             Assert.That(fixture.Relay.IsReadyForCall, Is.True);
             Assert.That(fixture.FetchBody.isKinematic, Is.True);
+            Vector3 heldAllyPosition = fixture.Ally.transform.position;
+            for (int frame = 0; frame < 20; frame++)
+            {
+                yield return new WaitForFixedUpdate();
+                Vector3 expectedHold = fixture.Ally.transform.TransformPoint(
+                    new Vector3(0f, 1.05f, 0.6f));
+                Assert.That(
+                    Vector3.Distance(fixture.FetchBody.position, expectedHold),
+                    Is.LessThan(0.005f),
+                    $"Binder separated from the Ally hold anchor at frame {frame}.");
+                Assert.That(
+                    PlanarDistance(fixture.Ally.transform.position, heldAllyPosition),
+                    Is.LessThan(0.001f),
+                    $"Ally left the acquisition point before Q at frame {frame}.");
+            }
+
+            Vector3 laneMidpoint = Vector3.Lerp(
+                fixture.FetchBody.worldCenterOfMass,
+                fixture.Player.transform.position + Vector3.up,
+                0.5f);
+            GameObject laneBlocker = CreateBlocker(
+                laneMidpoint,
+                new Vector3(1.5f, 3f, 1.5f));
+            Physics.SyncTransforms();
+            yield return new WaitForFixedUpdate();
+            Assert.That(fixture.Relay.IsSupplyLaneBlocked, Is.True);
+            Assert.That(fixture.Relay.IsReadyForCall, Is.False);
+            Assert.That(fixture.Controller.ProcessCallAlly(), Is.False);
+            Assert.That(fixture.Relay.ReleaseCount, Is.Zero);
+
+            UnityEngine.Object.Destroy(laneBlocker);
+            yield return null;
+            Physics.SyncTransforms();
+            for (int frame = 0; frame < 10 && !fixture.Relay.IsReadyForCall; frame++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            Assert.That(fixture.Relay.IsReadyForCall, Is.True);
             Assert.That(fixture.Controller.ProcessCallAlly(), Is.True);
             yield return WaitForRelease(fixture);
 
@@ -96,6 +137,25 @@ namespace BreakNotice.LocomotionCamera.Tests
             }
 
             Assert.That(fixture.Relay.IsReadyForCall, Is.True);
+            Assert.That(fixture.Mobile.HasTaskMovement, Is.False);
+            Assert.That(fixture.Mobile.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Vector3 heldAllyPosition = fixture.Ally.transform.position;
+            for (int frame = 0; frame < 20; frame++)
+            {
+                yield return new WaitForFixedUpdate();
+                Assert.That(
+                    PlanarDistance(fixture.Ally.transform.position, heldAllyPosition),
+                    Is.LessThan(0.001f),
+                    $"Ally left the Chair acquisition point before Q at frame {frame}.");
+                Assert.That(
+                    PlanarDistance(fixture.FetchBody.position, fixture.Ally.transform.position),
+                    Is.InRange(0.84f, 0.86f),
+                    $"Chair detached from the grounded Ally hold point at frame {frame}.");
+                Assert.That(
+                    Mathf.Abs(fixture.FetchBody.position.y - groundHeight),
+                    Is.LessThan(0.005f));
+            }
             Assert.That(fixture.Controller.ProcessCallAlly(), Is.True);
             for (int frame = 0; frame < 240 && fixture.Relay.PhysicalResolutionCount == 0; frame++)
             {
@@ -122,7 +182,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator NoTargetDuplicateTaskAndReset_AreDeterministicAndLeakFree()
+        public IEnumerator CameraDirectionDoesNotGateAutomaticFetch_DuplicateAndResetStayLeakFree()
         {
             Fixture fixture = CreateFixture(
                 PrototypeWeightClass.Light,
@@ -132,14 +192,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 .ToArray();
 
             fixture.View.transform.rotation = Quaternion.LookRotation(Vector3.back, Vector3.up);
-            Assert.That(fixture.Controller.ProcessAllyTask(), Is.False);
-            Assert.That(fixture.Controller.LastAllyTaskRejection,
-                Is.EqualTo(PrototypeAllyRelayRejection.NoValidSupply));
-            Assert.That(fixture.Mobile.HasTaskMovement, Is.False);
-            Assert.That(fixture.Relay.PreparedTarget, Is.Null);
-
-            AimViewAt(fixture.View.transform, fixture.FetchTarget.transform.position);
             Assert.That(fixture.Controller.ProcessAllyTask(), Is.True);
+            Assert.That(fixture.Controller.LastAllyTaskTarget, Is.SameAs(fixture.FetchTarget));
             Assert.That(fixture.Controller.ProcessAllyTask(), Is.False);
             Assert.That(fixture.Controller.LastAllyTaskRejection,
                 Is.EqualTo(PrototypeAllyRelayRejection.RelayAlreadyActive));
@@ -172,32 +226,68 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator SolidBlockedFetch_RejectsQWithoutMovingOrConsumingObject()
+        public IEnumerator SolidBlockedFetch_IsRejectedBeforeAllyMovesOrConsumesObject()
         {
             Fixture fixture = CreateFixture(
                 PrototypeWeightClass.Light,
                 PrototypeInteractionRole.AllyBinder);
             Vector3 objectStart = fixture.FetchTarget.transform.position;
 
-            Assert.That(fixture.Controller.ProcessAllyTask(), Is.True);
             EncloseAlly(fixture.Ally.transform.position);
             Physics.SyncTransforms();
-            for (int frame = 0; frame < 30; frame++)
-            {
-                yield return new WaitForFixedUpdate();
-            }
-
-            Assert.That(fixture.Mobile.State, Is.EqualTo(ShowcaseMobileAllyState.Blocked));
-            Assert.That(fixture.Relay.AllyState, Is.EqualTo(PrototypeAllySupportState.Blocked));
-            Assert.That(fixture.Controller.ProcessCallAlly(), Is.False);
-            Assert.That(fixture.Controller.LastAllyCallRejection,
+            Assert.That(fixture.Controller.ProcessAllyTask(), Is.False);
+            Assert.That(fixture.Controller.LastAllyTaskRejection,
                 Is.EqualTo(PrototypeAllyRelayRejection.InvalidPhysicalLane));
+            Assert.That(fixture.Mobile.HasTaskMovement, Is.False);
+            Assert.That(fixture.Relay.PreparedTarget, Is.Null);
+            Assert.That(fixture.Controller.ProcessCallAlly(), Is.False);
             Assert.That(fixture.Relay.ReleaseCount, Is.Zero);
             Assert.That(fixture.Relay.ConsumedTargetCount, Is.Zero);
             Assert.That(
                 Vector3.Distance(fixture.FetchTarget.transform.position, objectStart),
                 Is.LessThan(0.002f));
             Assert.That(fixture.Owner.RelayState, Is.EqualTo(PrototypeRelayReservationState.None));
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator AutomaticFetch_SkipsNearestBlockedCandidateAndRetrievesReachableCandidate()
+        {
+            Fixture fixture = CreateFixture(
+                PrototypeWeightClass.Light,
+                PrototypeInteractionRole.AllyBinder,
+                true);
+            Assert.That(fixture.SecondFetchTarget, Is.Not.Null);
+
+            CreateBlocker(
+                new Vector3(-1f, 1.5f, -1.5f),
+                new Vector3(3f, 3f, 0.25f));
+            Physics.SyncTransforms();
+            Assert.That(
+                fixture.Relay.TryEvaluateFetchTarget(fixture.FetchTarget, out _),
+                Is.False,
+                "The nearest candidate is intentionally outside the current reachable lane.");
+            Assert.That(
+                fixture.Relay.TryEvaluateFetchTarget(fixture.SecondFetchTarget, out _),
+                Is.True,
+                "The alternate candidate must remain reachable inside the authored movement envelope.");
+
+            for (int frame = 0; frame < 13; frame++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            Assert.That(fixture.Relay.SuggestedFetchTarget,
+                Is.SameAs(fixture.SecondFetchTarget),
+                "The idle Ally must proactively assess and expose the best reachable supply.");
+
+            fixture.View.transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+            Assert.That(fixture.Controller.ProcessAllyTask(), Is.True);
+            Assert.That(fixture.Controller.LastAllyTaskTarget,
+                Is.SameAs(fixture.SecondFetchTarget));
+            Assert.That(fixture.Relay.PreparedTarget,
+                Is.SameAs(fixture.SecondFetchTarget));
+            yield return WaitForReady(fixture);
+            Assert.That(fixture.Relay.IsReadyForCall, Is.True);
         }
 
         [UnityTest]
@@ -228,15 +318,25 @@ namespace BreakNotice.LocomotionCamera.Tests
                     SceneComponents<PrototypeInteractionTarget>(scene);
 
                 Assert.That(controller.AllyRelayController, Is.SameAs(relay));
-                PrototypeInteractionTarget selected = relay.SupplyTargets
-                    .Where(target => target.Role == PrototypeInteractionRole.AllyBinder)
-                    .OrderBy(target => PlanarDistance(
-                        mobile.transform.position,
-                        target.transform.position))
-                    .ThenBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
-                    .First();
-                Assert.That(relay.TryRequestFetch(selected, out var fetchRejection), Is.True,
-                    fetchRejection.ToString());
+                Assert.That(mobile.State,
+                    Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+                Assert.That(mobile.IsFollowCommanded, Is.False);
+                Assert.That(controller.ProcessToggleAllyFollow(), Is.True);
+                Assert.That(mobile.IsFollowCommanded, Is.True);
+                Assert.That(controller.ProcessRegroupAlly(), Is.True);
+                Assert.That(controller.ProcessToggleAllyFollow(), Is.True);
+                Assert.That(mobile.IsFollowCommanded, Is.False);
+                Assert.That(mobile.State,
+                    Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+                PrototypeInteractionTarget selected = relay.ResolveBestFetchTarget();
+                Assert.That(selected, Is.Not.Null,
+                    "At least one authored Binder or Chair must be reachable by the Ally.");
+                controller.ViewTransform.rotation = Quaternion.LookRotation(
+                    -controller.ViewTransform.forward,
+                    Vector3.up);
+                Assert.That(controller.ProcessAllyTask(), Is.True,
+                    controller.LastAllyTaskRejection.ToString());
+                Assert.That(controller.LastAllyTaskTarget, Is.SameAs(selected));
                 for (int frame = 0; frame < 2400 && !relay.IsReadyForCall; frame++)
                 {
                     yield return new WaitForFixedUpdate();
@@ -275,7 +375,8 @@ namespace BreakNotice.LocomotionCamera.Tests
 
         private Fixture CreateFixture(
             PrototypeWeightClass weight,
-            PrototypeInteractionRole role)
+            PrototypeInteractionRole role,
+            bool includeSecondFetchTarget = false)
         {
             GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Track(floor);
@@ -327,10 +428,28 @@ namespace BreakNotice.LocomotionCamera.Tests
                 "FETCH-01",
                 weight,
                 role,
-                new Vector3(0f, weight == PrototypeWeightClass.Light ? 0.16f : 0.499f, 4f));
+                includeSecondFetchTarget
+                    ? new Vector3(-1f, weight == PrototypeWeightClass.Light ? 0.16f : 0.499f, 0f)
+                    : new Vector3(0f, weight == PrototypeWeightClass.Light ? 0.16f : 0.499f, 4f));
+            PrototypeInteractionTarget secondFetchTarget = includeSecondFetchTarget
+                ? CreateTarget(
+                    "FETCH-02",
+                    weight,
+                    role,
+                    new Vector3(-8f, weight == PrototypeWeightClass.Light ? 0.16f : 0.499f, -3f))
+                : null;
+            PrototypeInteractionTarget[] supplyTargets = secondFetchTarget != null
+                ? new[] { fetchTarget, secondFetchTarget }
+                : new[] { fetchTarget };
             PrototypeInteractionTarget[] allTargets = new PrototypeInteractionTarget[10];
             allTargets[0] = fetchTarget;
-            for (int index = 1; index < allTargets.Length; index++)
+            int resetStart = 1;
+            if (secondFetchTarget != null)
+            {
+                allTargets[1] = secondFetchTarget;
+                resetStart = 2;
+            }
+            for (int index = resetStart; index < allTargets.Length; index++)
             {
                 allTargets[index] = CreateTarget(
                     $"RESET-{index:00}",
@@ -346,14 +465,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                 lifecycle,
                 ally.transform,
                 player.transform,
-                new[] { fetchTarget },
+                supplyTargets,
                 authoredPreReleaseDelay: 0.02f,
                 authoredBinderHorizontalSpeed: 8f,
                 authoredChairFeedSpeed: 4f,
                 authoredMaximumRelayDuration: 3f,
                 authoredAllyMoveSpeed: 12f,
                 authoredSupplyAcquisitionSpeed: 12f);
-            relay.ConfigureShowcaseFetch(mobile, new[] { fetchTarget }, true);
+            relay.ConfigureShowcaseFetch(mobile, supplyTargets, true);
 
             PrototypeInteractionController interaction =
                 player.AddComponent<PrototypeInteractionController>();
@@ -394,6 +513,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 relay,
                 reset,
                 fetchTarget,
+                secondFetchTarget,
                 fetchTarget.GetComponent<Rigidbody>(),
                 allTargets);
         }
@@ -452,7 +572,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 }
             }
 
-            Assert.Fail("Ally did not acquire and return the requested supply.");
+            Assert.Fail("Ally did not fully acquire and hold the requested supply.");
         }
 
         private IEnumerator WaitForRelease(Fixture fixture)
@@ -477,12 +597,13 @@ namespace BreakNotice.LocomotionCamera.Tests
             CreateBlocker(center + new Vector3(-1.1f, 1.5f, 0f), new Vector3(0.2f, 3f, 3f));
         }
 
-        private void CreateBlocker(Vector3 position, Vector3 scale)
+        private GameObject CreateBlocker(Vector3 position, Vector3 scale)
         {
             GameObject blocker = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Track(blocker);
             blocker.transform.SetPositionAndRotation(position, Quaternion.identity);
             blocker.transform.localScale = scale;
+            return blocker;
         }
 
         private GameObject Track(GameObject item)
@@ -516,6 +637,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 PrototypeAllyRelayController relay,
                 AuthoredEncounterResetController reset,
                 PrototypeInteractionTarget fetchTarget,
+                PrototypeInteractionTarget secondFetchTarget,
                 Rigidbody fetchBody,
                 PrototypeInteractionTarget[] allTargets)
             {
@@ -529,6 +651,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Relay = relay;
                 Reset = reset;
                 FetchTarget = fetchTarget;
+                SecondFetchTarget = secondFetchTarget;
                 FetchBody = fetchBody;
                 AllTargets = allTargets;
             }
@@ -543,6 +666,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             public PrototypeAllyRelayController Relay { get; }
             public AuthoredEncounterResetController Reset { get; }
             public PrototypeInteractionTarget FetchTarget { get; }
+            public PrototypeInteractionTarget SecondFetchTarget { get; }
             public Rigidbody FetchBody { get; }
             public PrototypeInteractionTarget[] AllTargets { get; }
         }

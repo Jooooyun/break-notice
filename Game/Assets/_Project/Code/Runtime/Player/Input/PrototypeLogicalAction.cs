@@ -9,6 +9,7 @@ namespace BreakNotice.Gameplay.Input
         Throw,
         AllyTask,
         CallAlly,
+        RegroupAlly,
         StrapRelease,
         ResetEncounter
     }

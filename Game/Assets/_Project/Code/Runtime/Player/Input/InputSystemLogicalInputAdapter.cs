@@ -21,6 +21,7 @@ namespace BreakNotice.Gameplay.Input
         private InputAction throwAction;
         private InputAction allyTaskAction;
         private InputAction callAllyAction;
+        private InputAction regroupAllyAction;
         private InputAction strapReleaseAction;
         private InputAction resetEncounterAction;
 
@@ -80,6 +81,7 @@ namespace BreakNotice.Gameplay.Input
             throwAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Throw), true);
             allyTaskAction = actionMap.FindAction(nameof(PrototypeLogicalAction.AllyTask), true);
             callAllyAction = actionMap.FindAction(nameof(PrototypeLogicalAction.CallAlly), true);
+            regroupAllyAction = actionMap.FindAction(nameof(PrototypeLogicalAction.RegroupAlly), true);
             strapReleaseAction = actionMap.FindAction(nameof(PrototypeLogicalAction.StrapRelease), true);
             resetEncounterAction = actionMap.FindAction(nameof(PrototypeLogicalAction.ResetEncounter), true);
         }
@@ -103,7 +105,8 @@ namespace BreakNotice.Gameplay.Input
                 resetEncounterAction.WasPressedThisFrame(),
                 throwAction.IsPressed(),
                 throwAction.WasReleasedThisFrame(),
-                allyTaskAction.WasPressedThisFrame());
+                allyTaskAction.WasPressedThisFrame(),
+                regroupAllyAction.WasPressedThisFrame());
         }
 
         public void SetWebPointerState(

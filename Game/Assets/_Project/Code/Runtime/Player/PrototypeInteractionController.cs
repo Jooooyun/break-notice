@@ -18,8 +18,6 @@ namespace BreakNotice.Gameplay.Interaction
         private const int VisibilityHitCapacity = 32;
         private const float ReticleRayMaximumDistance = 100f;
         private const float CatchAssistMinimumForwardDot = 0.65f;
-        private const float AllyFetchMaximumDistance = 20f;
-        private const float AllyFetchMinimumForwardDot = 0.9702957f; // 14 degrees.
 
         [SerializeField]
         private InputSystemLogicalInputAdapter logicalInput;
@@ -162,10 +160,13 @@ namespace BreakNotice.Gameplay.Interaction
 
             bool isAiming = logicalInput.Snapshot.Aim;
             RefreshTarget(isAiming);
-            CurrentAllyFetchCandidate = allyRelayController != null &&
-                allyRelayController.RequiresExplicitFetch
-                ? ResolveAllyFetchTarget()
-                : null;
+            if (allyRelayController == null ||
+                !allyRelayController.RequiresExplicitFetch ||
+                (allyRelayController.PreparedTarget == null &&
+                 allyRelayController.RelayPhase == PrototypeRelayPhase.None))
+            {
+                CurrentAllyFetchCandidate = null;
+            }
             if (logicalInput.Snapshot.ResetEncounter)
             {
                 // Reset owns this entire logical frame even though the authored
@@ -212,12 +213,17 @@ namespace BreakNotice.Gameplay.Interaction
                 else if (showcaseMobileAllyController != null &&
                          showcaseMobileAllyController.OwnsRegroupFallback)
                 {
-                    showcaseMobileAllyController.TryRequestRegroup();
+                    ProcessToggleAllyFollow();
                 }
                 else
                 {
                     ProcessCallAlly();
                 }
+            }
+
+            if (logicalInput.Snapshot.RegroupAlly)
+            {
+                ProcessRegroupAlly();
             }
 
             if (logicalInput.Snapshot.InteractPrimary)
@@ -542,16 +548,35 @@ namespace BreakNotice.Gameplay.Interaction
             return accepted;
         }
 
+        public bool ProcessToggleAllyFollow()
+        {
+            return showcaseMobileAllyController != null &&
+                   showcaseMobileAllyController.TryToggleFollow();
+        }
+
+        public bool ProcessRegroupAlly()
+        {
+            if (allyRelayController != null &&
+                (allyRelayController.PreparedTarget != null ||
+                 allyRelayController.RelayPhase != PrototypeRelayPhase.None))
+            {
+                return false;
+            }
+
+            return showcaseMobileAllyController != null &&
+                   showcaseMobileAllyController.TryRequestRegroup();
+        }
+
         public bool ProcessAllyTask()
         {
-            PrototypeInteractionTarget candidate = ResolveAllyFetchTarget();
+            PrototypeInteractionTarget candidate = null;
+            PrototypeAllyRelayRejection rejection =
+                PrototypeAllyRelayRejection.AllyUnavailable;
+            bool accepted = allyRelayController != null &&
+                allyRelayController.TryRequestAutomaticFetch(
+                    out candidate,
+                    out rejection);
             CurrentAllyFetchCandidate = candidate;
-            PrototypeAllyRelayRejection rejection = candidate == null
-                ? PrototypeAllyRelayRejection.NoValidSupply
-                : PrototypeAllyRelayRejection.AllyUnavailable;
-            bool accepted = candidate != null &&
-                allyRelayController != null &&
-                allyRelayController.TryRequestFetch(candidate, out rejection);
 
             AllyTaskAttemptSequence++;
             LastAllyTaskAccepted = accepted;
@@ -692,82 +717,6 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             return true;
-        }
-
-        private PrototypeInteractionTarget ResolveAllyFetchTarget()
-        {
-            if (interactionOwner == null || interactionOwner.BlocksNewInteraction ||
-                viewTransform == null)
-            {
-                return null;
-            }
-
-            Vector3 interactionOrigin = transform.position + Vector3.up;
-            Vector3 viewOrigin = viewTransform.position;
-            Vector3 viewForward = viewTransform.forward.normalized;
-            PrototypeInteractionTarget best = null;
-            float bestDot = float.NegativeInfinity;
-            float bestDistance = float.PositiveInfinity;
-            string bestKey = null;
-            foreach (PrototypeInteractionTarget target in targets)
-            {
-                if (target == null || !target.gameObject.activeInHierarchy ||
-                    (target.Role != PrototypeInteractionRole.AllyBinder &&
-                     target.Role != PrototypeInteractionRole.AllyChair) ||
-                    allyRelayController == null ||
-                    !allyRelayController.IsFetchTargetAvailable(target))
-                {
-                    continue;
-                }
-
-                Collider collider = target.GetComponent<Collider>();
-                if (collider == null)
-                {
-                    continue;
-                }
-
-                float distance = Vector3.Distance(
-                    interactionOrigin,
-                    collider.ClosestPoint(interactionOrigin));
-                if (distance > AllyFetchMaximumDistance)
-                {
-                    continue;
-                }
-
-                Vector3 targetPoint = collider.bounds.center;
-                Vector3 toTarget = targetPoint - viewOrigin;
-                if (toTarget.sqrMagnitude <= 0.0001f)
-                {
-                    continue;
-                }
-
-                float dot = Vector3.Dot(viewForward, toTarget.normalized);
-                if (dot < AllyFetchMinimumForwardDot ||
-                    !HasDirectVisibility(viewOrigin, targetPoint, target))
-                {
-                    continue;
-                }
-
-                string key = target.RuntimeInstanceKey ?? string.Empty;
-                bool moreCentered = dot > bestDot + 0.0001f;
-                bool sameCenter = Mathf.Abs(dot - bestDot) <= 0.0001f;
-                bool closer = sameCenter && distance < bestDistance - 0.0001f;
-                bool sameDistance = sameCenter &&
-                    Mathf.Abs(distance - bestDistance) <= 0.0001f;
-                bool keyWins = sameDistance &&
-                    (best == null || string.CompareOrdinal(key, bestKey) < 0);
-                if (!moreCentered && !closer && !keyWins)
-                {
-                    continue;
-                }
-
-                best = target;
-                bestDot = dot;
-                bestDistance = distance;
-                bestKey = key;
-            }
-
-            return best;
         }
 
         private bool TryResolveManualPickupAssist(Vector3 interactionOrigin)

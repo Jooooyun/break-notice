@@ -63,7 +63,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void S3Scene_EnablesOneExplicitFetchRelayAndTenObjectReset()
+        public void S3Scene_EnablesOneFControlledAutomaticFetchRelayAndTenObjectReset()
         {
             PrototypeAllyRelayController relay = Single<PrototypeAllyRelayController>();
             ShowcaseMobileAllyController mobile = Single<ShowcaseMobileAllyController>();
@@ -80,6 +80,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(relay.PreparedTarget, Is.Null);
             Assert.That(relay.IsAwaitingFetchTask, Is.True);
             Assert.That(mobile.HasTaskMovement, Is.False);
+            Assert.That(mobile.State, Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobile.IsFollowCommanded, Is.False);
             Assert.That(interaction.AllyRelayController, Is.SameAs(relay));
             Assert.That(interaction.ShowcaseMobileAllyController, Is.SameAs(mobile));
             Assert.That(reset.ExpectedObjectCount, Is.EqualTo(10));
@@ -98,7 +100,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             InteractionReadabilityPresenter presenter =
                 Single<InteractionReadabilityPresenter>();
             Assert.That(presenter.BuildStatusText(), Does.Contain("[F] FETCH"));
-            Assert.That(presenter.BuildStatusText(), Does.Contain("[Q] REGROUP"));
+            Assert.That(presenter.BuildStatusText(), Does.Not.Contain("AIM AT"));
+            Assert.That(presenter.BuildStatusText(), Does.Contain("NEAREST REACHABLE"));
+            Assert.That(presenter.BuildStatusText(), Does.Contain("[Q] FOLLOW"));
+            Assert.That(presenter.BuildStatusText(), Does.Contain("[G] REGROUP"));
         }
 
         private T Single<T>() where T : Component

@@ -34,13 +34,17 @@ namespace BreakNotice.Presentation
 
             return mobileAlly.State switch
             {
-                ShowcaseMobileAllyState.Blocked => "ALLY BLOCKED | [Q] REGROUP",
-                ShowcaseMobileAllyState.Regrouping => "ALLY REGROUPING",
+                ShowcaseMobileAllyState.HoldingPosition =>
+                    "ALLY HOLDING POSITION | [Q] FOLLOW | [G] REGROUP",
+                ShowcaseMobileAllyState.Blocked => "ALLY BLOCKED | [G] REGROUP",
+                ShowcaseMobileAllyState.Regrouping => "ALLY REGROUPING | [Q] HOLD",
                 ShowcaseMobileAllyState.Fetching => "ALLY FETCHING OBJECT",
                 ShowcaseMobileAllyState.ReturningWithSupply => "ALLY RETURNING WITH SUPPLY",
-                ShowcaseMobileAllyState.FastCatchingUp => "ALLY FAST CATCH-UP | [Q] REGROUP",
-                ShowcaseMobileAllyState.CatchingUp => "ALLY CATCH-UP | [Q] REGROUP",
-                _ => "ALLY FOLLOWING | [Q] REGROUP"
+                ShowcaseMobileAllyState.FastCatchingUp =>
+                    "ALLY FAST CATCH-UP | [Q] HOLD | [G] REGROUP",
+                ShowcaseMobileAllyState.CatchingUp =>
+                    "ALLY CATCH-UP | [Q] HOLD | [G] REGROUP",
+                _ => "ALLY FOLLOWING | [Q] HOLD | [G] REGROUP"
             };
         }
 

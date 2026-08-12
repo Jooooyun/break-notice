@@ -12,6 +12,7 @@ namespace BreakNotice.Gameplay.Interaction
         private const float MovementHeight = 0.75f;
         private const float MovementArrivalTolerance = 0.025f;
         private const float AcquisitionArrivalTolerance = 0.02f;
+        private const float FetchAssessmentInterval = 0.25f;
 
         [SerializeField]
         private PrototypeInteractionStateOwner interactionOwner;
@@ -115,6 +116,8 @@ namespace BreakNotice.Gameplay.Interaction
         private bool chairFeedDestinationValid;
         private uint binderSpeedVariationSequence;
         private float preparedGroundHeight;
+        private float fetchAssessmentElapsed;
+        private PrototypeInteractionTarget suggestedFetchTarget;
 
         public PrototypeAllySupportState AllyState { get; private set; } =
             PrototypeAllySupportState.Ready;
@@ -127,6 +130,8 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeInteractionTarget PreparedTarget => preparedTarget;
 
         public IReadOnlyList<PrototypeInteractionTarget> SupplyTargets => supplyTargets;
+
+        public PrototypeInteractionTarget SuggestedFetchTarget => suggestedFetchTarget;
 
         public bool RequiresExplicitFetch => requiresExplicitFetch;
 
@@ -149,6 +154,59 @@ namespace BreakNotice.Gameplay.Interaction
                    IsKnownSupplyTarget(target) &&
                    !consumedTargets.Contains(target) &&
                    TryGetPhysicalTarget(target, out _, out _);
+        }
+
+        public bool TryEvaluateFetchTarget(
+            PrototypeInteractionTarget target,
+            out float routeCost)
+        {
+            routeCost = float.PositiveInfinity;
+            return IsFetchTargetAvailable(target) &&
+                   mobileAllyController != null &&
+                   mobileAllyController.TryEvaluateFetchRoute(
+                       target.transform,
+                       supplyApproachDistance,
+                       out routeCost);
+        }
+
+        public PrototypeInteractionTarget ResolveBestFetchTarget()
+        {
+            if (!requiresExplicitFetch || mobileAllyController == null ||
+                interactionOwner == null ||
+                interactionOwner.GlobalState != PrototypeGlobalInteractionState.Playable ||
+                RelayPhase != PrototypeRelayPhase.None || activeTarget != null ||
+                preparedTarget != null || mobileAllyController.HasTaskMovement)
+            {
+                return null;
+            }
+
+            PrototypeInteractionTarget best = null;
+            float bestRouteCost = float.PositiveInfinity;
+            string bestKey = null;
+            for (int index = 0; index < supplyTargets.Length; index++)
+            {
+                PrototypeInteractionTarget candidate = supplyTargets[index];
+                if (!TryEvaluateFetchTarget(candidate, out float routeCost))
+                {
+                    continue;
+                }
+
+                string key = candidate.RuntimeInstanceKey ?? string.Empty;
+                bool lowerCost = routeCost < bestRouteCost - 0.0001f;
+                bool sameCost = Mathf.Abs(routeCost - bestRouteCost) <= 0.0001f;
+                bool keyWins = sameCost &&
+                    (best == null || string.CompareOrdinal(key, bestKey) < 0);
+                if (!lowerCost && !keyWins)
+                {
+                    continue;
+                }
+
+                best = candidate;
+                bestRouteCost = routeCost;
+                bestKey = key;
+            }
+
+            return best;
         }
 
         public bool IsReadyForCall =>
@@ -295,6 +353,8 @@ namespace BreakNotice.Gameplay.Interaction
             mobileAllyController = mobileAlly;
             supplyTargets = authoredSupplyTargets ?? Array.Empty<PrototypeInteractionTarget>();
             requiresExplicitFetch = explicitFetchRequired;
+            suggestedFetchTarget = null;
+            fetchAssessmentElapsed = FetchAssessmentInterval;
             ClearPreparedTarget(true);
             ClearActiveRelayState();
             AllyState = PrototypeAllySupportState.Ready;
@@ -364,10 +424,54 @@ namespace BreakNotice.Gameplay.Interaction
             preparedLaneOpen = false;
             preparedBodyStateCaptured = false;
             preparedGroundHeight = body.position.y;
+            suggestedFetchTarget = null;
+            fetchAssessmentElapsed = 0f;
             AllyState = PrototypeAllySupportState.MovingToSupply;
             LastRequestRejection = PrototypeAllyRelayRejection.None;
             rejection = PrototypeAllyRelayRejection.None;
             return true;
+        }
+
+        public bool TryRequestAutomaticFetch(
+            out PrototypeInteractionTarget target,
+            out PrototypeAllyRelayRejection rejection)
+        {
+            target = null;
+            if (!requiresExplicitFetch || mobileAllyController == null)
+            {
+                rejection = PrototypeAllyRelayRejection.AllyUnavailable;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (interactionOwner == null ||
+                interactionOwner.GlobalState != PrototypeGlobalInteractionState.Playable)
+            {
+                rejection = PrototypeAllyRelayRejection.GlobalStateBlocked;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (RelayPhase != PrototypeRelayPhase.None || activeTarget != null ||
+                preparedTarget != null || mobileAllyController.HasTaskMovement)
+            {
+                target = preparedTarget ?? activeTarget;
+                rejection = PrototypeAllyRelayRejection.RelayAlreadyActive;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            target = ResolveBestFetchTarget();
+            if (target == null)
+            {
+                rejection = HasAvailableFetchTarget()
+                    ? PrototypeAllyRelayRejection.InvalidPhysicalLane
+                    : PrototypeAllyRelayRejection.NoValidSupply;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            return TryRequestFetch(target, out rejection);
         }
 
         public bool TryRequestReadySupply(
@@ -607,6 +711,8 @@ namespace BreakNotice.Gameplay.Interaction
             PreparationPathLength = 0f;
             AllyTravelPathLength = 0f;
             preparedGroundHeight = 0f;
+            suggestedFetchTarget = null;
+            fetchAssessmentElapsed = FetchAssessmentInterval;
         }
 
         public bool HasValidPhysicalLane(PrototypeInteractionTarget target)
@@ -863,9 +969,18 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 if (requiresExplicitFetch)
                 {
-                    AllyState = HasAvailableFetchTarget()
+                    fetchAssessmentElapsed += deltaTime;
+                    if (fetchAssessmentElapsed >= FetchAssessmentInterval)
+                    {
+                        suggestedFetchTarget = ResolveBestFetchTarget();
+                        fetchAssessmentElapsed = 0f;
+                    }
+
+                    AllyState = suggestedFetchTarget != null
                         ? PrototypeAllySupportState.Ready
-                        : PrototypeAllySupportState.Depleted;
+                        : HasAvailableFetchTarget()
+                            ? PrototypeAllySupportState.Blocked
+                            : PrototypeAllySupportState.Depleted;
                     return;
                 }
 
@@ -903,25 +1018,8 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
-            MaintainPreparedSupply(deltaTime);
-            if (requiresExplicitFetch && mobileAllyController != null)
-            {
-                if (mobileAllyController.TaskBlocked)
-                {
-                    AllyState = PrototypeAllySupportState.Blocked;
-                    preparedLaneOpen = false;
-                    return;
-                }
-
-                if (!mobileAllyController.TaskReached)
-                {
-                    AllyState = PrototypeAllySupportState.ReturningWithSupply;
-                    preparedLaneOpen = false;
-                    return;
-                }
-            }
-
             FacePlayer(deltaTime);
+            MaintainPreparedSupply(deltaTime);
             preparedLaneOpen = HasValidPhysicalLane(preparedTarget);
             AllyState = preparedLaneOpen
                 ? PrototypeAllySupportState.Ready
@@ -1008,14 +1106,17 @@ namespace BreakNotice.Gameplay.Interaction
             preparedBody.useGravity = false;
             preparedBody.isKinematic = true;
 
-            if (preparedTarget.Role == PrototypeInteractionRole.AllyChair)
+            bool chair = preparedTarget.Role == PrototypeInteractionRole.AllyChair;
+            Vector3 destination = chair
+                ? allyTransform.TransformPoint(new Vector3(0f, 0f, supplyApproachDistance))
+                : allyTransform.TransformPoint(binderHoldOffset);
+            if (chair)
             {
-                preparedTargetAcquired = true;
-                BeginPreparedReturn();
-                return;
+                destination.y = preparedGroundHeight;
             }
-
-            Vector3 destination = allyTransform.TransformPoint(binderHoldOffset);
+            Quaternion destinationRotation = chair
+                ? Quaternion.Euler(0f, allyTransform.eulerAngles.y, 0f)
+                : allyTransform.rotation;
             Vector3 before = preparedBody.position;
             Vector3 next = Vector3.MoveTowards(
                 before,
@@ -1023,43 +1124,30 @@ namespace BreakNotice.Gameplay.Interaction
                 supplyAcquisitionSpeed * deltaTime);
             Quaternion nextRotation = Quaternion.RotateTowards(
                 preparedBody.rotation,
-                allyTransform.rotation,
+                destinationRotation,
                 allyTurnSpeed * deltaTime);
             preparedBody.MovePosition(next);
             preparedBody.MoveRotation(nextRotation);
             PreparationPathLength += Vector3.Distance(before, next);
-            if (Vector3.Distance(next, destination) <= AcquisitionArrivalTolerance)
+            if (Vector3.Distance(next, destination) <= AcquisitionArrivalTolerance &&
+                Quaternion.Angle(nextRotation, destinationRotation) <= 1f)
             {
+                preparedBody.position = destination;
+                preparedBody.rotation = destinationRotation;
                 preparedTargetAcquired = true;
-                BeginPreparedReturn();
+                CompletePreparedAcquisition(deltaTime);
             }
         }
 
-        private void BeginPreparedReturn()
+        private void CompletePreparedAcquisition(float deltaTime)
         {
-            if (!requiresExplicitFetch || mobileAllyController == null)
-            {
-                preparedLaneOpen = HasValidPhysicalLane(preparedTarget);
-                AllyState = preparedLaneOpen
-                    ? PrototypeAllySupportState.Ready
-                    : PrototypeAllySupportState.Blocked;
-                return;
-            }
-
-            float payloadClearance = preparedTarget.Role == PrototypeInteractionRole.AllyChair
-                ? Mathf.Max(preparedCollider.bounds.extents.x, preparedCollider.bounds.extents.z)
-                : 0.1f;
-            if (!mobileAllyController.TryBeginReturnMovement(
-                    preparedTarget.transform,
-                    payloadClearance))
-            {
-                preparedLaneOpen = false;
-                AllyState = PrototypeAllySupportState.Blocked;
-                return;
-            }
-
-            preparedLaneOpen = false;
-            AllyState = PrototypeAllySupportState.ReturningWithSupply;
+            mobileAllyController?.ClearTaskMovement();
+            FacePlayer(deltaTime);
+            MaintainPreparedSupply(deltaTime);
+            preparedLaneOpen = HasValidPhysicalLane(preparedTarget);
+            AllyState = preparedLaneOpen
+                ? PrototypeAllySupportState.Ready
+                : PrototypeAllySupportState.Blocked;
         }
 
         private void MaintainPreparedSupply(float deltaTime)
@@ -1079,14 +1167,8 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             Vector3 destination = allyTransform.TransformPoint(binderHoldOffset);
-            preparedBody.MovePosition(Vector3.MoveTowards(
-                preparedBody.position,
-                destination,
-                supplyAcquisitionSpeed * deltaTime));
-            preparedBody.MoveRotation(Quaternion.RotateTowards(
-                preparedBody.rotation,
-                allyTransform.rotation,
-                allyTurnSpeed * deltaTime));
+            preparedBody.position = destination;
+            preparedBody.rotation = allyTransform.rotation;
         }
 
         private void MaintainPreparedChair(float deltaTime)
@@ -1102,15 +1184,9 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 destination = allyTransform.TransformPoint(
                 new Vector3(0f, 0f, supplyApproachDistance));
             destination.y = preparedGroundHeight;
-            preparedBody.MovePosition(Vector3.MoveTowards(
-                preparedBody.position,
-                destination,
-                supplyAcquisitionSpeed * deltaTime));
+            preparedBody.position = destination;
             Quaternion yaw = Quaternion.Euler(0f, allyTransform.eulerAngles.y, 0f);
-            preparedBody.MoveRotation(Quaternion.RotateTowards(
-                preparedBody.rotation,
-                yaw,
-                allyTurnSpeed * deltaTime));
+            preparedBody.rotation = yaw;
         }
 
         private void FacePlayer(float deltaTime)

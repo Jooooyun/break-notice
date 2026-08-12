@@ -16,11 +16,27 @@ namespace BreakNotice.LocomotionCamera.Tests
     public sealed class ContestShowcaseMobileAllyPlayModeTests
     {
         [UnityTest]
-        public IEnumerator MobileAlly_CatchesUpWithoutTeleport_AndSettlesInFollowBand()
+        public IEnumerator MobileAlly_HoldsUntilRegroup_ThenCatchesUpWithoutTeleport()
         {
             using var fixture = MobileFixture.Create(
                 new Vector3(0f, 1f, 0f),
                 new Vector3(0f, 1f, 10f));
+            Vector3 authoredHoldPosition = fixture.Ally.transform.position;
+
+            for (int step = 0; step < 20; step++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            Assert.That(fixture.Mobile.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(fixture.Mobile.IsFollowCommanded, Is.False);
+            Assert.That(PlanarDistance(authoredHoldPosition, fixture.Ally.transform.position),
+                Is.LessThan(0.001f));
+            Assert.That(fixture.Mobile.TotalPathLength, Is.Zero.Within(0.001f));
+
+            Assert.That(fixture.Mobile.TryToggleFollow(), Is.True);
+            Assert.That(fixture.Mobile.IsFollowCommanded, Is.True);
             bool reachedFollowTarget = false;
 
             for (int step = 0; step < 180; step++)
@@ -51,6 +67,20 @@ namespace BreakNotice.LocomotionCamera.Tests
                 PlanarDistance(fixture.Ally.transform.position, fixture.Player.transform.position),
                 Is.InRange(2.5f, 3.2f));
             Assert.That(fixture.Ally.transform.position.y, Is.InRange(0.94f, 1.01f));
+
+            Assert.That(fixture.Mobile.TryToggleFollow(), Is.True);
+            Assert.That(fixture.Mobile.IsFollowCommanded, Is.False);
+            Vector3 heldPosition = fixture.Ally.transform.position;
+            fixture.Player.transform.position += Vector3.forward * 5f;
+            Physics.SyncTransforms();
+            for (int step = 0; step < 20; step++)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            Assert.That(fixture.Mobile.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(PlanarDistance(heldPosition, fixture.Ally.transform.position),
+                Is.LessThan(0.001f));
         }
 
         [UnityTest]
@@ -65,6 +95,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 new Vector3(0.25f, 2f, 0.8f));
             Physics.SyncTransforms();
 
+            Assert.That(fixture.Mobile.TryToggleFollow(), Is.True);
+
             yield return new WaitForFixedUpdate();
             yield return new WaitForFixedUpdate();
 
@@ -77,7 +109,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator MobileAlly_BlockedRegroupRejectsSafely_WithoutTeleportOrPenetration()
+        public IEnumerator MobileAlly_BlockedFollowToggleRejectsSafely_WithoutMovement()
         {
             using var fixture = MobileFixture.Create(
                 new Vector3(0f, 1f, 0f),
@@ -98,23 +130,28 @@ namespace BreakNotice.LocomotionCamera.Tests
                 yield return new WaitForFixedUpdate();
             }
 
-            Assert.That(fixture.Mobile.State, Is.EqualTo(ShowcaseMobileAllyState.Blocked));
-            Assert.That(fixture.Mobile.BlockedCount, Is.EqualTo(1));
+            Assert.That(fixture.Mobile.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(fixture.Mobile.IsFollowCommanded, Is.False);
+            Assert.That(fixture.Mobile.BlockedCount, Is.Zero);
             Assert.That(PlanarDistance(baseline, fixture.Ally.transform.position),
                 Is.LessThan(0.001f));
 
-            bool accepted = fixture.Mobile.TryRequestRegroup();
+            bool accepted = fixture.Mobile.TryToggleFollow();
 
             Assert.That(accepted, Is.False);
-            Assert.That(fixture.Mobile.RegroupAttemptSequence, Is.EqualTo(1));
-            Assert.That(fixture.Mobile.LastRegroupAccepted, Is.False);
+            Assert.That(fixture.Mobile.FollowToggleAttemptSequence, Is.EqualTo(1));
+            Assert.That(fixture.Mobile.LastFollowToggleAccepted, Is.False);
+            Assert.That(fixture.Mobile.IsFollowCommanded, Is.False);
+            Assert.That(fixture.Mobile.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
             Assert.That(fixture.Mobile.FollowSide, Is.EqualTo(ShowcaseAllyFollowSide.Left));
             Assert.That(PlanarDistance(baseline, fixture.Ally.transform.position),
                 Is.LessThan(0.001f));
         }
 
         [UnityTest]
-        public IEnumerator QRoutesToRegroup_AndAuthoredResetRestoresMobileAllyBaseline()
+        public IEnumerator QRoutesToFollowToggle_GRoutesToRegroup_AndResetRestoresHold()
         {
             AsyncOperation load = SceneManager.LoadSceneAsync(
                 "Contest_SingleRoomGraybox",
@@ -173,8 +210,27 @@ namespace BreakNotice.LocomotionCamera.Tests
                 interaction.SendMessage("LateUpdate", SendMessageOptions.DontRequireReceiver);
                 SetSnapshot(input, default);
 
-                Assert.That(mobile.RegroupAttemptSequence, Is.EqualTo(1));
+                Assert.That(mobile.FollowToggleAttemptSequence, Is.EqualTo(1));
+                Assert.That(mobile.RegroupAttemptSequence, Is.Zero);
+                Assert.That(mobile.LastFollowToggleAccepted,
+                    Is.EqualTo(mobile.IsFollowCommanded));
                 Assert.That(interaction.AllyCallAttemptSequence, Is.EqualTo(legacyCallSequence));
+
+                SetSnapshot(input, new LogicalInputSnapshot(
+                    Vector2.zero,
+                    Vector2.zero,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    regroupAlly: true));
+                interaction.SendMessage("LateUpdate", SendMessageOptions.DontRequireReceiver);
+                SetSnapshot(input, default);
+
+                Assert.That(mobile.RegroupAttemptSequence, Is.EqualTo(1));
+                Assert.That(mobile.FollowToggleAttemptSequence, Is.EqualTo(1));
 
                 allyController.enabled = false;
                 ally.transform.position += new Vector3(1.5f, 0f, 0f);
@@ -193,14 +249,16 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.LessThanOrEqualTo(mobile.NormalSpeed * Time.fixedDeltaTime + 0.002f));
                 Assert.That(Mathf.Abs(ally.transform.position.y - allyBaseline.y),
                     Is.LessThanOrEqualTo(allyController.skinWidth + 0.001f));
-                Assert.That(mobile.State, Is.EqualTo(ShowcaseMobileAllyState.Following));
+                Assert.That(mobile.State,
+                    Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+                Assert.That(mobile.IsFollowCommanded, Is.False);
                 Assert.That(mobile.FollowSide, Is.EqualTo(ShowcaseAllyFollowSide.Left));
                 Assert.That(mobile.RegroupAttemptSequence, Is.Zero);
+                Assert.That(mobile.FollowToggleAttemptSequence, Is.Zero);
                 Assert.That(mobile.SideSwitchCount, Is.Zero);
                 Assert.That(mobile.AnchorRouteCount, Is.Zero);
                 Assert.That(mobile.BlockedCount, Is.Zero);
-                Assert.That(mobile.TotalPathLength,
-                    Is.LessThanOrEqualTo(mobile.NormalSpeed * Time.fixedDeltaTime + 0.002f));
+                Assert.That(mobile.TotalPathLength, Is.Zero.Within(0.001f));
             }
             finally
             {

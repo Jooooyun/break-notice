@@ -130,21 +130,17 @@ namespace BreakNotice.Presentation
                 return "ALLY SUPPLY DEPLETED | RESET TO RESTORE AUTHORED POOL";
             }
 
-            if (relay != null && relay.IsAwaitingFetchTask &&
-                interactionController.CurrentAllyFetchCandidate != null)
-            {
-                PrototypeInteractionTarget fetch =
-                    interactionController.CurrentAllyFetchCandidate;
-                return $"ALLY FETCH TARGET LOCKED: {fetch.DisplayName} " +
-                       $"[{GetWeightLabel(fetch)}] | [F] FETCH";
-            }
-
             PrototypeInteractionTarget target = interactionController.CurrentTarget;
             if (target == null)
             {
                 if (relay != null && relay.IsAwaitingFetchTask)
                 {
-                    return "AIM AT AN ALLY BINDER OR CHAIR | [F] FETCH | [Q] REGROUP";
+                    string scouted = relay.SuggestedFetchTarget != null
+                        ? $"ALLY SCOUTED: {relay.SuggestedFetchTarget.DisplayName} | "
+                        : string.Empty;
+                    return scouted +
+                           "[F] FETCH NEAREST REACHABLE BINDER OR CHAIR | " +
+                           BuildAllyMovementPrompt();
                 }
 
                 return $"CENTER RETICLE OR ALIGN A FLOOR PICKUP BELOW IT | RANGE <= " +
@@ -170,7 +166,7 @@ namespace BreakNotice.Presentation
                     (target.Role == PrototypeInteractionRole.AllyBinder ||
                      target.Role == PrototypeInteractionRole.AllyChair))
                 {
-                    return $"ALLY FETCH TARGET: {identity} | {distance} | [F] FETCH";
+                    return $"ALLY SUPPLY OBJECT: {identity} | {distance} | [F] AUTO FETCH";
                 }
 
                 return $"TARGET: {identity} | {distance} | ALLY SUPPLY / DIRECT PICKUP BLOCKED";
@@ -194,8 +190,7 @@ namespace BreakNotice.Presentation
 
             if (relay != null && relay.IsAwaitingFetchTask &&
                 interactionController?.InteractionOwner?.GlobalState ==
-                    PrototypeGlobalInteractionState.Playable &&
-                interactionController.CurrentAllyFetchCandidate != null)
+                    PrototypeGlobalInteractionState.Playable)
             {
                 return "[F]";
             }
@@ -237,10 +232,9 @@ namespace BreakNotice.Presentation
 
             if (relay != null && relay.IsAwaitingFetchTask &&
                 interactionController?.InteractionOwner?.GlobalState ==
-                    PrototypeGlobalInteractionState.Playable &&
-                interactionController.CurrentAllyFetchCandidate != null)
+                    PrototypeGlobalInteractionState.Playable)
             {
-                return $"FETCH {interactionController.CurrentAllyFetchCandidate.DisplayName}";
+                return "AUTO FETCH NEAREST REACHABLE OBJECT";
             }
 
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
@@ -372,10 +366,23 @@ namespace BreakNotice.Presentation
                     "FETCH BLOCKED: OBJECT ALREADY USED",
                 PrototypeAllyRelayRejection.InvalidPhysicalTarget =>
                     "FETCH BLOCKED: INVALID PHYSICAL OBJECT",
+                PrototypeAllyRelayRejection.InvalidPhysicalLane =>
+                    "NO REACHABLE FETCH TARGET INSIDE THE AUTHORED ALLY ROUTE",
                 PrototypeAllyRelayRejection.AllyUnavailable =>
                     "FETCH BLOCKED: ALLY UNAVAILABLE",
-                _ => "NO FETCH TARGET: AIM AT AN AVAILABLE ALLY BINDER OR CHAIR"
+                PrototypeAllyRelayRejection.NoValidSupply =>
+                    "NO AVAILABLE ALLY BINDER OR CHAIR | RESET TO RESTORE USED OBJECTS",
+                _ => "FETCH BLOCKED: NO VALID SUPPLY"
             };
+        }
+
+        private string BuildAllyMovementPrompt()
+        {
+            ShowcaseMobileAllyController mobile =
+                interactionController?.ShowcaseMobileAllyController;
+            return mobile != null && mobile.IsFollowCommanded
+                ? "[Q] HOLD | [G] REGROUP"
+                : "[Q] FOLLOW | [G] REGROUP";
         }
 
         private void LateUpdate()

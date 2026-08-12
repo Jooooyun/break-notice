@@ -161,6 +161,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                 new RoutePoint("Exit Run", 26f, 19.5f)
             };
 
+            Assert.That(mobileAlly.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobileAlly.IsFollowCommanded, Is.False);
+            Assert.That(mobileAlly.TryToggleFollow(), Is.True);
             observedCatchUp = false;
             yield return TraverseRoute(route, "first traversal");
             yield return WaitForAllyFollowBand("first traversal");
@@ -183,9 +187,12 @@ namespace BreakNotice.LocomotionCamera.Tests
             AssertPlanarNear(player.transform.position, playerSpawn, 0.05f, "Player Reset");
             Assert.That(PlanarDistance(mobileAlly.transform.position, allySpawn), Is.LessThan(0.2f));
             Assert.That(mobileAlly.FollowSide, Is.EqualTo(ShowcaseAllyFollowSide.Left));
-            Assert.That(mobileAlly.State, Is.EqualTo(ShowcaseMobileAllyState.Following));
+            Assert.That(mobileAlly.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobileAlly.IsFollowCommanded, Is.False);
             ValidatePlayableFrame("post-Reset settled frame");
 
+            Assert.That(mobileAlly.TryToggleFollow(), Is.True);
             observedCatchUp = false;
             yield return TraverseRoute(route, "second traversal");
             yield return WaitForAllyFollowBand("second traversal");
@@ -204,9 +211,16 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator S2SideSwitchBlockedRegroupAndReset_WorkInActualV2Scene()
+        public IEnumerator S2ExplicitRegroupSideSwitchBlockedRecoveryAndReset_WorkInActualV2Scene()
         {
             ShowcaseAllyFollowSide initialSide = mobileAlly.FollowSide;
+            Assert.That(mobileAlly.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobileAlly.IsFollowCommanded, Is.False);
+            Assert.That(mobileAlly.TryToggleFollow(), Is.True);
+            Assert.That(mobileAlly.IsFollowCommanded, Is.True);
+            Assert.That(mobileAlly.FollowSide, Is.EqualTo(initialSide));
+            Assert.That(mobileAlly.SideSwitchCount, Is.Zero);
             Assert.That(mobileAlly.TryRequestRegroup(), Is.True);
             Assert.That(mobileAlly.FollowSide, Is.Not.EqualTo(initialSide));
             Assert.That(mobileAlly.SideSwitchCount, Is.EqualTo(1));
@@ -223,6 +237,9 @@ namespace BreakNotice.LocomotionCamera.Tests
             yield return new WaitForFixedUpdate();
             Assert.That(PlanarDistance(mobileAlly.transform.position, allySpawn), Is.LessThan(0.2f));
             Assert.That(mobileAlly.FollowSide, Is.EqualTo(ShowcaseAllyFollowSide.Left));
+            Assert.That(mobileAlly.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobileAlly.IsFollowCommanded, Is.False);
 
             CreateAllyEnclosure();
             Physics.SyncTransforms();
@@ -232,10 +249,12 @@ namespace BreakNotice.LocomotionCamera.Tests
                 ValidatePlayableFrame("blocked enclosure");
             }
 
-            Assert.That(mobileAlly.State, Is.EqualTo(ShowcaseMobileAllyState.Blocked));
-            Assert.That(mobileAlly.BlockedCount, Is.EqualTo(1));
-            Assert.That(mobileAlly.TryRequestRegroup(), Is.False);
+            Assert.That(mobileAlly.State,
+                Is.EqualTo(ShowcaseMobileAllyState.HoldingPosition));
+            Assert.That(mobileAlly.BlockedCount, Is.Zero);
+            Assert.That(mobileAlly.TryToggleFollow(), Is.False);
             Assert.That(mobileAlly.LastRegroupAccepted, Is.False);
+            Assert.That(mobileAlly.IsFollowCommanded, Is.False);
 
             foreach (GameObject blocker in temporaryBlockers)
             {

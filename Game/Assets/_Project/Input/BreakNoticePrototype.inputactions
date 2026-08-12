@@ -69,6 +69,15 @@
           "initialStateCheck": false
         },
         {
+          "name": "RegroupAlly",
+          "type": "Button",
+          "id": "fe3ac6ab-daa4-4f4d-86ce-50f529859fc5",
+          "expectedControlType": "Button",
+          "processors": "",
+          "interactions": "",
+          "initialStateCheck": false
+        },
+        {
           "name": "StrapRelease",
           "type": "Button",
           "id": "714e87de-3239-472d-9c72-4cf53a15fc67",
@@ -283,6 +292,28 @@
           "processors": "",
           "groups": "Gamepad",
           "action": "CallAlly",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "d2adc553-9d0c-4917-8da1-f0f4e37fe5c4",
+          "path": "<Keyboard>/g",
+          "interactions": "",
+          "processors": "",
+          "groups": "Keyboard&Mouse",
+          "action": "RegroupAlly",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "6d8e588e-a1cd-4be2-b434-e180630586ef",
+          "path": "<Gamepad>/dpad/down",
+          "interactions": "",
+          "processors": "",
+          "groups": "Gamepad",
+          "action": "RegroupAlly",
           "isComposite": false,
           "isPartOfComposite": false
         },
