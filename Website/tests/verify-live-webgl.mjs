@@ -11,9 +11,10 @@ const failures = [];
 const rows = [];
 
 for (const file of inventory.files) {
-  const response = await fetch(new URL(file.path, releaseBase), {
+  const requestedUrl = new URL(file.path === "index.html" ? "" : file.path, releaseBase);
+  const response = await fetch(requestedUrl, {
     headers: { "Accept-Encoding": "identity" },
-    redirect: "error",
+    redirect: "follow",
   });
   const body = Buffer.from(await response.arrayBuffer());
   const hash = createHash("sha256").update(body).digest("hex");
@@ -29,6 +30,9 @@ for (const file of inventory.files) {
         : null;
 
   if (response.status !== 200) failures.push(`${file.path}: HTTP ${response.status}`);
+  if (new URL(response.url).pathname !== requestedUrl.pathname) {
+    failures.push(`${file.path}: redirected to ${response.url}`);
+  }
   if (body.byteLength !== file.bytes) failures.push(`${file.path}: bytes ${body.byteLength}`);
   if (hash !== file.sha256) failures.push(`${file.path}: SHA-256 ${hash}`);
   if (expectedMime && !contentType.toLowerCase().includes(expectedMime)) {

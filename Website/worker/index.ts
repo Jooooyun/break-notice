@@ -54,7 +54,9 @@ function localWebGLFallback(url: URL): Promise<Response | null> {
 async function fetchWebGLAsset(request: Request, env: Env): Promise<Response | null> {
   const url = new URL(request.url);
   if (env?.ASSETS) {
-    const response = await env.ASSETS.fetch(request);
+    const assetRequestUrl = new URL(url);
+    if (assetRequestUrl.pathname.endsWith("/")) assetRequestUrl.pathname += "index.html";
+    const response = await env.ASSETS.fetch(new Request(assetRequestUrl, request));
     return response.status === 404 ? null : response;
   }
   return localWebGLFallback(url);
