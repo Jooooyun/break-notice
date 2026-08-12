@@ -20,6 +20,7 @@ namespace BreakNotice.Presentation
         private GUIStyle allyIndicatorStyle;
         private uint observedAttemptSequence;
         private uint observedAllyCallSequence;
+        private uint observedAllyTaskSequence;
         private string activeFeedback = string.Empty;
         private float feedbackExpiresAt;
 
@@ -104,6 +105,13 @@ namespace BreakNotice.Presentation
             }
 
             if (relay != null &&
+                relay.AllyState == PrototypeAllySupportState.ReturningWithSupply)
+            {
+                return $"ALLY RETURNING WITH: " +
+                       (relay.PreparedTarget?.DisplayName ?? "OBJECT");
+            }
+
+            if (relay != null &&
                 relay.AllyState == PrototypeAllySupportState.MovingToSupply)
             {
                 return $"ALLY MOVING TO SUPPLY: " +
@@ -122,9 +130,23 @@ namespace BreakNotice.Presentation
                 return "ALLY SUPPLY DEPLETED | RESET TO RESTORE AUTHORED POOL";
             }
 
+            if (relay != null && relay.IsAwaitingFetchTask &&
+                interactionController.CurrentAllyFetchCandidate != null)
+            {
+                PrototypeInteractionTarget fetch =
+                    interactionController.CurrentAllyFetchCandidate;
+                return $"ALLY FETCH TARGET LOCKED: {fetch.DisplayName} " +
+                       $"[{GetWeightLabel(fetch)}] | [F] FETCH";
+            }
+
             PrototypeInteractionTarget target = interactionController.CurrentTarget;
             if (target == null)
             {
+                if (relay != null && relay.IsAwaitingFetchTask)
+                {
+                    return "AIM AT AN ALLY BINDER OR CHAIR | [F] FETCH | [Q] REGROUP";
+                }
+
                 return $"CENTER RETICLE OR ALIGN A FLOOR PICKUP BELOW IT | RANGE <= " +
                        $"{interactionController.InteractionRange.ToString("0.0", CultureInfo.InvariantCulture)} M " +
                        "| CLEAR LINE OF SIGHT";
@@ -144,6 +166,13 @@ namespace BreakNotice.Presentation
 
             if (!target.DirectAcquisitionEligible)
             {
+                if (relay != null && relay.RequiresExplicitFetch &&
+                    (target.Role == PrototypeInteractionRole.AllyBinder ||
+                     target.Role == PrototypeInteractionRole.AllyChair))
+                {
+                    return $"ALLY FETCH TARGET: {identity} | {distance} | [F] FETCH";
+                }
+
                 return $"TARGET: {identity} | {distance} | ALLY SUPPLY / DIRECT PICKUP BLOCKED";
             }
 
@@ -161,6 +190,14 @@ namespace BreakNotice.Presentation
                 relay.CanCatch(interactionController.CurrentTarget))
             {
                 return "[E]";
+            }
+
+            if (relay != null && relay.IsAwaitingFetchTask &&
+                interactionController?.InteractionOwner?.GlobalState ==
+                    PrototypeGlobalInteractionState.Playable &&
+                interactionController.CurrentAllyFetchCandidate != null)
+            {
+                return "[F]";
             }
 
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
@@ -196,6 +233,14 @@ namespace BreakNotice.Presentation
                 return interactionController.InteractionOwner.QueuedThrowArmed
                     ? "CATCH + QUEUED THROW"
                     : "CATCH INCOMING BINDER";
+            }
+
+            if (relay != null && relay.IsAwaitingFetchTask &&
+                interactionController?.InteractionOwner?.GlobalState ==
+                    PrototypeGlobalInteractionState.Playable &&
+                interactionController.CurrentAllyFetchCandidate != null)
+            {
+                return $"FETCH {interactionController.CurrentAllyFetchCandidate.DisplayName}";
             }
 
             PrototypeInteractionTarget target = interactionController?.CurrentTarget;
@@ -303,6 +348,36 @@ namespace BreakNotice.Presentation
             };
         }
 
+        public string BuildLatestAllyTaskFeedbackText()
+        {
+            if (interactionController == null ||
+                interactionController.AllyTaskAttemptSequence == 0)
+            {
+                return string.Empty;
+            }
+
+            if (interactionController.LastAllyTaskAccepted)
+            {
+                return $"FETCH ORDER ACCEPTED: " +
+                       (interactionController.LastAllyTaskTarget?.DisplayName ?? "OBJECT");
+            }
+
+            return interactionController.LastAllyTaskRejection switch
+            {
+                PrototypeAllyRelayRejection.GlobalStateBlocked =>
+                    "FETCH BLOCKED: RESET OR FAILURE PENDING",
+                PrototypeAllyRelayRejection.RelayAlreadyActive =>
+                    "FETCH BLOCKED: ALLY TASK ALREADY ACTIVE",
+                PrototypeAllyRelayRejection.SupplyAlreadyConsumed =>
+                    "FETCH BLOCKED: OBJECT ALREADY USED",
+                PrototypeAllyRelayRejection.InvalidPhysicalTarget =>
+                    "FETCH BLOCKED: INVALID PHYSICAL OBJECT",
+                PrototypeAllyRelayRejection.AllyUnavailable =>
+                    "FETCH BLOCKED: ALLY UNAVAILABLE",
+                _ => "NO FETCH TARGET: AIM AT AN AVAILABLE ALLY BINDER OR CHAIR"
+            };
+        }
+
         private void LateUpdate()
         {
             if (interactionController == null)
@@ -310,7 +385,13 @@ namespace BreakNotice.Presentation
                 return;
             }
 
-            if (interactionController.AllyCallAttemptSequence != observedAllyCallSequence)
+            if (interactionController.AllyTaskAttemptSequence != observedAllyTaskSequence)
+            {
+                observedAllyTaskSequence = interactionController.AllyTaskAttemptSequence;
+                activeFeedback = BuildLatestAllyTaskFeedbackText();
+                feedbackExpiresAt = Time.unscaledTime + FeedbackDuration;
+            }
+            else if (interactionController.AllyCallAttemptSequence != observedAllyCallSequence)
             {
                 observedAllyCallSequence = interactionController.AllyCallAttemptSequence;
                 activeFeedback = BuildLatestAllyCallFeedbackText();

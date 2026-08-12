@@ -60,6 +60,15 @@
           "initialStateCheck": false
         },
         {
+          "name": "AllyTask",
+          "type": "Button",
+          "id": "6d2d56a7-c6a3-4fb6-8264-c144c9391337",
+          "expectedControlType": "Button",
+          "processors": "",
+          "interactions": "",
+          "initialStateCheck": false
+        },
+        {
           "name": "StrapRelease",
           "type": "Button",
           "id": "714e87de-3239-472d-9c72-4cf53a15fc67",
@@ -241,6 +250,28 @@
           "processors": "",
           "groups": "Keyboard&Mouse",
           "action": "CallAlly",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "4e459c06-8a2b-4690-b4f7-545ff87990a6",
+          "path": "<Keyboard>/f",
+          "interactions": "",
+          "processors": "",
+          "groups": "Keyboard&Mouse",
+          "action": "AllyTask",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "4364b0d1-6b55-42c0-826f-3bb32c819a4a",
+          "path": "<Gamepad>/dpad/up",
+          "interactions": "",
+          "processors": "",
+          "groups": "Gamepad",
+          "action": "AllyTask",
           "isComposite": false,
           "isPartOfComposite": false
         },

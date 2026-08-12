@@ -52,6 +52,7 @@ namespace BreakNotice.Gameplay.Interaction
         SupplyCommitted,
         MovingToSupply,
         AcquiringSupply,
+        ReturningWithSupply,
         Blocked,
         Depleted
     }

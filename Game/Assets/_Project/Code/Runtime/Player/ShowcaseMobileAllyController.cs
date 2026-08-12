@@ -11,6 +11,8 @@ namespace BreakNotice.Gameplay.Interaction
         CatchingUp,
         FastCatchingUp,
         Regrouping,
+        Fetching,
+        ReturningWithSupply,
         Blocked
     }
 
@@ -24,6 +26,13 @@ namespace BreakNotice.Gameplay.Interaction
     [DisallowMultipleComponent]
     public sealed class ShowcaseMobileAllyController : MonoBehaviour
     {
+        private enum MovementTask
+        {
+            None,
+            Fetch,
+            Return
+        }
+
         private const int SweepHitCapacity = 64;
         private const int OverlapHitCapacity = 64;
         private const float MinimumPlanarDistance = 0.001f;
@@ -99,6 +108,13 @@ namespace BreakNotice.Gameplay.Interaction
         private float blockedElapsed;
         private float regroupUntilTime;
         private int observedResetCount;
+        private MovementTask movementTask;
+        private Transform fetchTarget;
+        private float fetchStoppingDistance;
+        private float taskAdditionalClearance;
+        private Transform taskIgnoredPayload;
+        private bool taskReached;
+        private bool taskBlocked;
 
         public ShowcaseMobileAllyState State { get; private set; } =
             ShowcaseMobileAllyState.Following;
@@ -117,6 +133,18 @@ namespace BreakNotice.Gameplay.Interaction
             interactionOwner != null &&
             playerTransform != null &&
             allyTransform != null;
+
+        public bool HasTaskMovement => movementTask != MovementTask.None;
+
+        public bool IsFetchTask => movementTask == MovementTask.Fetch;
+
+        public bool IsReturnTask => movementTask == MovementTask.Return;
+
+        public bool TaskReached => taskReached;
+
+        public bool TaskBlocked => taskBlocked;
+
+        public Transform FetchTarget => fetchTarget;
 
         public uint RegroupAttemptSequence { get; private set; }
 
@@ -191,13 +219,16 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
-            if (!TryResolveMovementTarget(out Vector3 movementTarget, out int anchorIndex))
+            if (!TryResolveActiveMovementTarget(
+                    out Vector3 movementTarget,
+                    out int anchorIndex))
             {
                 RegisterBlockedStep();
                 return;
             }
 
             blockedElapsed = 0f;
+            taskBlocked = false;
             CurrentMovementTarget = movementTarget;
             if (anchorIndex != CurrentAnchorIndex && anchorIndex >= 0)
             {
@@ -210,11 +241,16 @@ namespace BreakNotice.Gameplay.Interaction
             float remainingDistance = toTarget.magnitude;
             float playerDistance = PlanarDistance(allyTransform.position, playerTransform.position);
             ShowcaseMobileAllyState distanceState = EvaluateMovementState(playerDistance);
-            State = Time.time < regroupUntilTime
-                ? ShowcaseMobileAllyState.Regrouping
-                : distanceState;
+            State = movementTask switch
+            {
+                MovementTask.Fetch => ShowcaseMobileAllyState.Fetching,
+                MovementTask.Return => ShowcaseMobileAllyState.ReturningWithSupply,
+                _ => Time.time < regroupUntilTime
+                    ? ShowcaseMobileAllyState.Regrouping
+                    : distanceState
+            };
 
-            if (remainingDistance <= arrivalTolerance)
+            if (taskReached || remainingDistance <= arrivalTolerance)
             {
                 LastStepDistance = 0f;
                 return;
@@ -295,7 +331,7 @@ namespace BreakNotice.Gameplay.Interaction
         public bool TryRequestRegroup()
         {
             RegroupAttemptSequence++;
-            if (!OwnsRegroupFallback || IsGlobalInteractionBlocked)
+            if (!OwnsRegroupFallback || IsGlobalInteractionBlocked || HasTaskMovement)
             {
                 LastRegroupAccepted = false;
                 return false;
@@ -318,6 +354,72 @@ namespace BreakNotice.Gameplay.Interaction
                 regroupUntilTime = 0f;
             }
             return LastRegroupAccepted;
+        }
+
+        public bool TryBeginFetchMovement(Transform target, float stoppingDistance)
+        {
+            if (!OwnsRegroupFallback || IsGlobalInteractionBlocked || target == null ||
+                HasTaskMovement)
+            {
+                return false;
+            }
+
+            movementTask = MovementTask.Fetch;
+            fetchTarget = target;
+            fetchStoppingDistance = Mathf.Max(0.5f, stoppingDistance);
+            taskAdditionalClearance = 0f;
+            taskIgnoredPayload = null;
+            taskReached = false;
+            taskBlocked = false;
+            blockedElapsed = 0f;
+            regroupUntilTime = 0f;
+            State = ShowcaseMobileAllyState.Fetching;
+            return true;
+        }
+
+        public bool TryBeginReturnMovement(
+            Transform ignoredPayload,
+            float additionalClearance = 0f)
+        {
+            if (!OwnsRegroupFallback || IsGlobalInteractionBlocked ||
+                movementTask != MovementTask.Fetch)
+            {
+                return false;
+            }
+
+            movementTask = MovementTask.Return;
+            fetchTarget = null;
+            taskAdditionalClearance = Mathf.Max(0f, additionalClearance);
+            taskIgnoredPayload = ignoredPayload;
+            taskReached = false;
+            taskBlocked = false;
+            blockedElapsed = 0f;
+            State = ShowcaseMobileAllyState.ReturningWithSupply;
+            return true;
+        }
+
+        public void ClearTaskMovement()
+        {
+            movementTask = MovementTask.None;
+            fetchTarget = null;
+            fetchStoppingDistance = 0f;
+            taskAdditionalClearance = 0f;
+            taskIgnoredPayload = null;
+            taskReached = false;
+            taskBlocked = false;
+            blockedElapsed = 0f;
+            CurrentAnchorIndex = -1;
+            if (State == ShowcaseMobileAllyState.Fetching ||
+                State == ShowcaseMobileAllyState.ReturningWithSupply ||
+                State == ShowcaseMobileAllyState.Blocked)
+            {
+                State = ShowcaseMobileAllyState.Following;
+            }
+        }
+
+        public bool IsFetching(Transform target)
+        {
+            return movementTask == MovementTask.Fetch && fetchTarget == target;
         }
 
         public Vector3 CalculateFollowPosition(ShowcaseAllyFollowSide side)
@@ -433,6 +535,13 @@ namespace BreakNotice.Gameplay.Interaction
             TotalPathLength = 0f;
             LastStepDistance = 0f;
             MaximumObservedStepDistance = 0f;
+            movementTask = MovementTask.None;
+            fetchTarget = null;
+            fetchStoppingDistance = 0f;
+            taskAdditionalClearance = 0f;
+            taskIgnoredPayload = null;
+            taskReached = false;
+            taskBlocked = false;
         }
 
         private bool HasRequiredBindings()
@@ -512,6 +621,90 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             return false;
+        }
+
+        private bool TryResolveActiveMovementTarget(
+            out Vector3 target,
+            out int anchorIndex)
+        {
+            taskReached = false;
+            if (movementTask == MovementTask.None)
+            {
+                return TryResolveMovementTarget(out target, out anchorIndex);
+            }
+
+            if (movementTask == MovementTask.Fetch)
+            {
+                target = allyTransform.position;
+                anchorIndex = -1;
+                if (fetchTarget == null)
+                {
+                    return false;
+                }
+
+                Vector3 toFetch = fetchTarget.position - allyTransform.position;
+                toFetch.y = 0f;
+                float distance = toFetch.magnitude;
+                if (distance <= fetchStoppingDistance + arrivalTolerance)
+                {
+                    taskReached = true;
+                    return true;
+                }
+
+                Vector3 desired = fetchTarget.position -
+                                  toFetch.normalized * fetchStoppingDistance;
+                desired.y = allyTransform.position.y;
+                return TryResolveTaskDestination(desired, out target, out anchorIndex);
+            }
+
+            Vector3 preferred = CalculateFollowPosition(FollowSide);
+            if (PlanarDistance(allyTransform.position, preferred) <= arrivalTolerance)
+            {
+                target = allyTransform.position;
+                anchorIndex = -1;
+                taskReached = true;
+                return true;
+            }
+
+            if (TryResolveTaskDestination(preferred, out target, out anchorIndex))
+            {
+                return true;
+            }
+
+            ShowcaseAllyFollowSide alternate = FollowSide == ShowcaseAllyFollowSide.Left
+                ? ShowcaseAllyFollowSide.Right
+                : ShowcaseAllyFollowSide.Left;
+            Vector3 alternateTarget = CalculateFollowPosition(alternate);
+            if (!TryResolveTaskDestination(alternateTarget, out target, out anchorIndex))
+            {
+                return false;
+            }
+
+            FollowSide = alternate;
+            SideSwitchCount++;
+            return true;
+        }
+
+        private bool TryResolveTaskDestination(
+            Vector3 desired,
+            out Vector3 target,
+            out int anchorIndex)
+        {
+            target = desired;
+            anchorIndex = -1;
+            if (HasClearPath(allyTransform.position, desired))
+            {
+                return true;
+            }
+
+            if (!TryPlanAnchorRoute(desired, out anchorIndex, out _))
+            {
+                return false;
+            }
+
+            target = followAnchors[anchorIndex].position;
+            target.y = allyTransform.position.y;
+            return true;
         }
 
         private bool TryPlanAnchorRoute(Vector3 desired, out int nextAnchor, out int pathLength)
@@ -722,6 +915,10 @@ namespace BreakNotice.Gameplay.Interaction
         {
             Vector3 scale = allyTransform.lossyScale;
             radius = characterController.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.z));
+            if (HasTaskMovement)
+            {
+                radius += taskAdditionalClearance;
+            }
             float height = Mathf.Max(
                 characterController.height * Mathf.Abs(scale.y),
                 radius * 2f);
@@ -733,7 +930,11 @@ namespace BreakNotice.Gameplay.Interaction
 
         private bool IsOwnedCollider(Collider collider)
         {
-            return collider.transform == allyTransform || collider.transform.IsChildOf(allyTransform);
+            return collider.transform == allyTransform ||
+                   collider.transform.IsChildOf(allyTransform) ||
+                   (taskIgnoredPayload != null &&
+                    (collider.transform == taskIgnoredPayload ||
+                     collider.transform.IsChildOf(taskIgnoredPayload)));
         }
 
         private void RegisterBlockedStep()
@@ -744,6 +945,7 @@ namespace BreakNotice.Gameplay.Interaction
             if (blockedElapsed >= blockedConfirmationTime && State != ShowcaseMobileAllyState.Blocked)
             {
                 State = ShowcaseMobileAllyState.Blocked;
+                taskBlocked = HasTaskMovement;
                 BlockedCount++;
             }
         }

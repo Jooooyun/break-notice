@@ -31,14 +31,14 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void LogicalActionInventory_IsExactlyApprovedEight()
+        public void LogicalActionInventory_IncludesOwnerApprovedS3AllyTask()
         {
             InputActionAsset asset = LoadInputAsset();
             Assert.That(asset.actionMaps.Count, Is.EqualTo(1));
 
             InputActionMap map = asset.actionMaps[0];
             Assert.That(map.name, Is.EqualTo("PrototypePlayer"));
-            Assert.That(map.actions.Count, Is.EqualTo(8));
+            Assert.That(map.actions.Count, Is.EqualTo(9));
             Assert.That(
                 map.actions.Select(action => action.name),
                 Is.EquivalentTo(Enum.GetNames(typeof(PrototypeLogicalAction))));
@@ -58,7 +58,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void ThrowSnapshot_ExposesPressHoldAndReleaseWithoutAddingAnAction()
+        public void ThrowSnapshot_ExposesPressHoldAndReleaseAlongsideS3AllyTask()
         {
             var held = new LogicalInputSnapshot(
                 Vector2.zero,
@@ -91,7 +91,23 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(released.ThrowReleased, Is.True);
             Assert.That(
                 LoadInputAsset().FindActionMap("PrototypePlayer", true).actions.Count,
-                Is.EqualTo(8));
+                Is.EqualTo(9));
+        }
+
+        [Test]
+        public void AllyTask_UsesOwnerApprovedKeyboardAndGamepadBindings()
+        {
+            InputAction action = LoadInputAsset()
+                .FindActionMap("PrototypePlayer", true)
+                .FindAction("AllyTask", true);
+
+            Assert.That(action.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(
+                action.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Keyboard>/f"));
+            Assert.That(
+                action.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Gamepad>/dpad/up"));
         }
 
         [Test]
@@ -107,6 +123,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 File.ReadAllText("Assets/_Project/Code/Runtime/Player/PrototypeInteractionController.cs");
             StringAssert.Contains("Snapshot.InteractPrimary", consumerSource);
             StringAssert.Contains("Snapshot.Throw", consumerSource);
+            StringAssert.Contains("Snapshot.AllyTask", consumerSource);
             StringAssert.Contains("Snapshot.CallAlly", consumerSource);
             string resetSource = File.ReadAllText(
                 "Assets/_Project/Code/Runtime/Player/AuthoredEncounterResetController.cs");

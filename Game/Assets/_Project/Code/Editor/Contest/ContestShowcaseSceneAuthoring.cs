@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BreakNotice.Gameplay;
 using BreakNotice.Gameplay.Encounter;
+using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
 using BreakNotice.Presentation;
 using UnityEditor;
@@ -27,12 +29,17 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseV2ScenePath =
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v002.unity";
 
+        public const string ShowcaseS3ScenePath =
+            ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v003.unity";
+
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
 
         public const string ShowcaseV2RootName =
             "SHOWCASE_V2_PROVISIONAL_LOCAL_REVIEW_ONLY";
 
         public const string MobileAllyRootName = "SHOWCASE_S2_MOBILE_ALLY";
+
+        public const string ShowcaseS3RootName = "SHOWCASE_S3_FETCH_SUPPLY";
 
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
@@ -152,6 +159,43 @@ namespace BreakNotice.Contest.Editor
                 "Provisional v002 layout prepared: LOCAL_REVIEW_ONLY 64m x 44m envelope, " +
                 "eight-zone figure-eight, S2 mobile ally, 60 Designer B replacement " +
                 "sockets, zero Production Art integration and no S3 implementation.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Prepare S3 Fetch And Supply")]
+        public static void PrepareS3ShowcaseScene()
+        {
+            RequireSceneAsset(ShowcaseV2ScenePath);
+            EnsureShowcaseFolder();
+
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ShowcaseS3ScenePath) == null)
+            {
+                if (!AssetDatabase.CopyAsset(ShowcaseV2ScenePath, ShowcaseS3ScenePath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not copy the accepted v002 Scene to {ShowcaseS3ScenePath}.");
+                }
+
+                AssetDatabase.ImportAsset(
+                    ShowcaseS3ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseS3ScenePath,
+                OpenSceneMode.Single);
+            ApplyS3FetchAndSupply(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseS3ScenePath))
+            {
+                throw new InvalidOperationException(
+                    $"Could not save {ShowcaseS3ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "S3 Showcase prepared: explicit F fetch, mobile Binder/Chair return, " +
+                "Q supply, ten physical objects and authored Reset restoration.");
         }
 
         [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
@@ -374,6 +418,138 @@ namespace BreakNotice.Contest.Editor
             }
         }
 
+        public static void ApplyS3FetchAndSupply(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            RemoveS3RuntimeContent(scene);
+            ValidatePreservedGameplayRoots(scene);
+
+            GameObject player = RequireRootAny(scene, "GAMEPLAY_CHR00_PLAYER", "Player");
+            GameObject ally = RequireRootAny(scene, "GAMEPLAY_CHR01_MOBILE_ALLY", "AllyProxy");
+            GameObject runnerOne = RequireRootAny(
+                scene,
+                "GAMEPLAY_ENY01_RUNNER_01",
+                "EnemyProxy_01");
+            GameObject runnerTwo = RequireRootAny(
+                scene,
+                "GAMEPLAY_ENY01_RUNNER_02",
+                "EnemyProxy_02");
+            GameObject s3Root = CreateRoot(scene, ShowcaseS3RootName);
+            Transform s3Status = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
+                .SingleOrDefault(item => string.Equals(
+                    item.name,
+                    "S3_NOT_IMPLEMENTED",
+                    StringComparison.Ordinal));
+            if (s3Status != null)
+            {
+                s3Status.name = "S3_IMPLEMENTED_FETCH_SUPPLY";
+                EditorUtility.SetDirty(s3Status);
+            }
+
+            CreateS3Target(
+                scene,
+                s3Root.transform,
+                "BINDER-DIRECT-01",
+                "GAMEPLAY_BINDER_DIRECT_02",
+                "OBJ-P-L-001",
+                "BINDER-DIRECT-02",
+                "FILE BINDER",
+                PrototypeWeightClass.Light,
+                PrototypeInteractionRole.DirectBinder,
+                new Vector3(15f, 0.16f, -11f),
+                true,
+                false,
+                false,
+                false);
+            CreateS3Target(
+                scene,
+                s3Root.transform,
+                "BINDER-ALLY-01",
+                "GAMEPLAY_BINDER_ALLY_03",
+                "OBJ-P-L-001",
+                "BINDER-ALLY-03",
+                "FILE BINDER",
+                PrototypeWeightClass.Light,
+                PrototypeInteractionRole.AllyBinder,
+                new Vector3(12f, 0.16f, 17.5f),
+                false,
+                true,
+                false,
+                false);
+            CreateS3Target(
+                scene,
+                s3Root.transform,
+                "CHAIR-DIRECT-01",
+                "GAMEPLAY_CHAIR_DIRECT_02",
+                "OBJ-P-M-001",
+                "CHAIR-DIRECT-02",
+                "OFFICE CHAIR",
+                PrototypeWeightClass.Medium,
+                PrototypeInteractionRole.DirectChair,
+                new Vector3(17f, 0.499f, -12f),
+                true,
+                false,
+                true,
+                true);
+
+            PrototypeInteractionTarget[] targets = GetInteractionTargets(scene);
+            ValidateS3GameplayTargets(targets);
+            PrototypeInteractionTarget[] supplyTargets = targets
+                .Where(target => target.Role == PrototypeInteractionRole.AllyBinder ||
+                                 target.Role == PrototypeInteractionRole.AllyChair)
+                .OrderBy(target => target.RuntimeInstanceKey, StringComparer.Ordinal)
+                .ToArray();
+
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypeInteractionController interaction =
+                player.GetComponent<PrototypeInteractionController>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                player.GetComponent<PrototypePhysicalObjectLifecycle>();
+            ThirdPersonLocomotion locomotion = player.GetComponent<ThirdPersonLocomotion>();
+            InputSystemLogicalInputAdapter input =
+                player.GetComponent<InputSystemLogicalInputAdapter>();
+            PrototypeAllyRelayController relay =
+                ally.GetComponent<PrototypeAllyRelayController>();
+            ShowcaseMobileAllyController mobile =
+                ally.GetComponent<ShowcaseMobileAllyController>();
+            AuthoredEncounterResetController reset =
+                RequireSingleSceneComponent<AuthoredEncounterResetController>(scene);
+            if (owner == null || interaction == null || lifecycle == null || locomotion == null ||
+                input == null || relay == null || mobile == null)
+            {
+                throw new InvalidOperationException(
+                    "S3 requires the preserved player, relay, mobile Ally and input composition.");
+            }
+
+            relay.enabled = true;
+            relay.ConfigureShowcaseFetch(mobile, supplyTargets, true);
+            interaction.ConfigureShowcaseS3(mobile, relay, targets);
+            reset.Configure(
+                input,
+                owner,
+                lifecycle,
+                locomotion,
+                player.transform,
+                new[] { ally.transform, runnerOne.transform, runnerTwo.transform },
+                targets,
+                relay,
+                10);
+
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(ally);
+            EditorUtility.SetDirty(interaction);
+            EditorUtility.SetDirty(relay);
+            EditorUtility.SetDirty(mobile);
+            EditorUtility.SetDirty(reset);
+            ValidateS3GameplayTargets(GetInteractionTargets(scene));
+        }
+
         private static Transform[] BuildFollowAnchorNetwork(Transform parent)
         {
             Vector2[] positions =
@@ -474,6 +650,106 @@ namespace BreakNotice.Contest.Editor
             if (previousRoot != null)
             {
                 UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+        }
+
+        private static void RemoveS3RuntimeContent(Scene scene)
+        {
+            GameObject existing = FindRoot(scene, ShowcaseS3RootName);
+            if (existing != null)
+            {
+                UnityEngine.Object.DestroyImmediate(existing);
+            }
+
+            GameObject v2Root = FindRoot(scene, ShowcaseV2RootName);
+            Transform reviewProxies = v2Root != null
+                ? v2Root.transform.Find("08_S3_NOT_IMPLEMENTED_REVIEW_PROXIES")
+                : null;
+            if (reviewProxies != null)
+            {
+                UnityEngine.Object.DestroyImmediate(reviewProxies.gameObject);
+            }
+        }
+
+        private static PrototypeInteractionTarget CreateS3Target(
+            Scene scene,
+            Transform parent,
+            string sourceKey,
+            string objectName,
+            string definitionId,
+            string instanceKey,
+            string displayName,
+            PrototypeWeightClass weightClass,
+            PrototypeInteractionRole role,
+            Vector3 position,
+            bool direct,
+            bool catchEligible,
+            bool strapEligible,
+            bool hasAnchor)
+        {
+            PrototypeInteractionTarget source = GetInteractionTargets(scene)
+                .SingleOrDefault(target => string.Equals(
+                    target.RuntimeInstanceKey,
+                    sourceKey,
+                    StringComparison.Ordinal));
+            if (source == null)
+            {
+                throw new InvalidOperationException(
+                    $"S3 source target is missing: {sourceKey}");
+            }
+
+            GameObject clone = UnityEngine.Object.Instantiate(source.gameObject, parent);
+            clone.name = objectName;
+            clone.transform.SetPositionAndRotation(position, Quaternion.identity);
+            PrototypeInteractionTarget target = clone.GetComponent<PrototypeInteractionTarget>();
+            target.Configure(
+                definitionId,
+                instanceKey,
+                displayName,
+                weightClass,
+                role,
+                direct,
+                catchEligible,
+                strapEligible,
+                hasAnchor);
+            EditorUtility.SetDirty(clone);
+            EditorUtility.SetDirty(target);
+            return target;
+        }
+
+        private static void ValidateS3GameplayTargets(
+            PrototypeInteractionTarget[] targets)
+        {
+            string[] expectedKeys =
+            {
+                "BINDER-ALLY-01",
+                "BINDER-ALLY-02",
+                "BINDER-ALLY-03",
+                "BINDER-DIRECT-01",
+                "BINDER-DIRECT-02",
+                "CHAIR-ALLY-01",
+                "CHAIR-DIRECT-01",
+                "CHAIR-DIRECT-02",
+                "COPIER-01",
+                "DRAWER-01"
+            };
+            string[] actualKeys = targets
+                .Select(target => target.RuntimeInstanceKey)
+                .OrderBy(key => key, StringComparer.Ordinal)
+                .ToArray();
+            if (!actualKeys.SequenceEqual(expectedKeys))
+            {
+                throw new InvalidOperationException(
+                    "S3 requires exactly five Binders, three Chairs, one Drawer and one Copier.");
+            }
+
+            if (targets.Count(target => target.Role == PrototypeInteractionRole.AllyBinder) != 3 ||
+                targets.Count(target => target.Role == PrototypeInteractionRole.AllyChair) != 1 ||
+                targets.Count(target => target.Role == PrototypeInteractionRole.DirectBinder) != 2 ||
+                targets.Count(target => target.Role == PrototypeInteractionRole.DirectChair) != 2)
+            {
+                throw new InvalidOperationException(
+                    "S3 player-only and Ally-fetch object pools do not match the Owner decision.");
             }
         }
 

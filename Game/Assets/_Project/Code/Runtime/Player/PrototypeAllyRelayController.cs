@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BreakNotice.Gameplay.Interaction
 {
-    [DefaultExecutionOrder(-80)]
+    [DefaultExecutionOrder(-60)]
     [DisallowMultipleComponent]
     public sealed class PrototypeAllyRelayController : MonoBehaviour
     {
@@ -18,6 +18,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         [SerializeField]
         private PrototypePhysicalObjectLifecycle physicalObjectLifecycle;
+
+        [SerializeField]
+        private ShowcaseMobileAllyController mobileAllyController;
 
         [SerializeField]
         private Transform allyTransform;
@@ -72,6 +75,9 @@ namespace BreakNotice.Gameplay.Interaction
         private float supplyApproachDistance = 0.85f;
 
         [SerializeField]
+        private bool requiresExplicitFetch;
+
+        [SerializeField]
         private Vector3 binderHoldOffset = new Vector3(0f, 1.05f, 0.6f);
 
         [SerializeField, Min(0.1f)]
@@ -108,6 +114,7 @@ namespace BreakNotice.Gameplay.Interaction
         private Vector3 chairFeedDirection;
         private bool chairFeedDestinationValid;
         private uint binderSpeedVariationSequence;
+        private float preparedGroundHeight;
 
         public PrototypeAllySupportState AllyState { get; private set; } =
             PrototypeAllySupportState.Ready;
@@ -118,6 +125,31 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeInteractionTarget ActiveTarget => activeTarget;
 
         public PrototypeInteractionTarget PreparedTarget => preparedTarget;
+
+        public IReadOnlyList<PrototypeInteractionTarget> SupplyTargets => supplyTargets;
+
+        public bool RequiresExplicitFetch => requiresExplicitFetch;
+
+        public bool IsAwaitingFetchTask =>
+            requiresExplicitFetch &&
+            RelayPhase == PrototypeRelayPhase.None &&
+            preparedTarget == null &&
+            HasAvailableFetchTarget();
+
+        public bool IsReturningWithSupply =>
+            preparedTargetAcquired &&
+            mobileAllyController != null &&
+            mobileAllyController.IsReturnTask;
+
+        public int ConsumedTargetCount => consumedTargets.Count;
+
+        public bool IsFetchTargetAvailable(PrototypeInteractionTarget target)
+        {
+            return requiresExplicitFetch &&
+                   IsKnownSupplyTarget(target) &&
+                   !consumedTargets.Contains(target) &&
+                   TryGetPhysicalTarget(target, out _, out _);
+        }
 
         public bool IsReadyForCall =>
             preparedTargetAcquired &&
@@ -189,7 +221,9 @@ namespace BreakNotice.Gameplay.Interaction
         public bool HasBaselineState =>
             RelayPhase == PrototypeRelayPhase.None &&
             activeTarget == null &&
+            preparedTarget == null &&
             consumedTargets.Count == 0 &&
+            (mobileAllyController == null || !mobileAllyController.HasTaskMovement) &&
             (interactionOwner == null ||
              interactionOwner.RelayState == PrototypeRelayReservationState.None);
 
@@ -251,6 +285,89 @@ namespace BreakNotice.Gameplay.Interaction
                 authoredMaximumBinderSpeedMultiplier,
                 1f,
                 1.5f);
+        }
+
+        public void ConfigureShowcaseFetch(
+            ShowcaseMobileAllyController mobileAlly,
+            PrototypeInteractionTarget[] authoredSupplyTargets,
+            bool explicitFetchRequired)
+        {
+            mobileAllyController = mobileAlly;
+            supplyTargets = authoredSupplyTargets ?? Array.Empty<PrototypeInteractionTarget>();
+            requiresExplicitFetch = explicitFetchRequired;
+            ClearPreparedTarget(true);
+            ClearActiveRelayState();
+            AllyState = PrototypeAllySupportState.Ready;
+        }
+
+        public bool TryRequestFetch(
+            PrototypeInteractionTarget target,
+            out PrototypeAllyRelayRejection rejection)
+        {
+            if (!requiresExplicitFetch || mobileAllyController == null)
+            {
+                rejection = PrototypeAllyRelayRejection.AllyUnavailable;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (interactionOwner == null ||
+                interactionOwner.GlobalState != PrototypeGlobalInteractionState.Playable)
+            {
+                rejection = PrototypeAllyRelayRejection.GlobalStateBlocked;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (RelayPhase != PrototypeRelayPhase.None || activeTarget != null ||
+                preparedTarget != null || mobileAllyController.HasTaskMovement)
+            {
+                rejection = PrototypeAllyRelayRejection.RelayAlreadyActive;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (!IsKnownSupplyTarget(target))
+            {
+                rejection = PrototypeAllyRelayRejection.NoValidSupply;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (consumedTargets.Contains(target))
+            {
+                rejection = PrototypeAllyRelayRejection.SupplyAlreadyConsumed;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (!TryGetPhysicalTarget(target, out Rigidbody body, out Collider targetCollider))
+            {
+                rejection = PrototypeAllyRelayRejection.InvalidPhysicalTarget;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            if (!mobileAllyController.TryBeginFetchMovement(
+                    target.transform,
+                    supplyApproachDistance))
+            {
+                rejection = PrototypeAllyRelayRejection.AllyUnavailable;
+                LastRequestRejection = rejection;
+                return false;
+            }
+
+            preparedTarget = target;
+            preparedBody = body;
+            preparedCollider = targetCollider;
+            preparedTargetAcquired = false;
+            preparedLaneOpen = false;
+            preparedBodyStateCaptured = false;
+            preparedGroundHeight = body.position.y;
+            AllyState = PrototypeAllySupportState.MovingToSupply;
+            LastRequestRejection = PrototypeAllyRelayRejection.None;
+            rejection = PrototypeAllyRelayRejection.None;
+            return true;
         }
 
         public bool TryRequestReadySupply(
@@ -477,6 +594,7 @@ namespace BreakNotice.Gameplay.Interaction
         public void ResetToAuthoredBaseline()
         {
             interactionOwner?.ClearRelayReservation();
+            mobileAllyController?.ClearTaskMovement();
             ClearPreparedTarget(true);
             consumedTargets.Clear();
             ClearActiveRelayState();
@@ -488,6 +606,7 @@ namespace BreakNotice.Gameplay.Interaction
             binderSpeedVariationSequence = 0;
             PreparationPathLength = 0f;
             AllyTravelPathLength = 0f;
+            preparedGroundHeight = 0f;
         }
 
         public bool HasValidPhysicalLane(PrototypeInteractionTarget target)
@@ -532,7 +651,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (RelayPhase == PrototypeRelayPhase.None || activeTarget == null)
             {
-                AdvanceAutonomousSupply(Time.fixedDeltaTime);
+                AdvanceSupplyPreparation(Time.fixedDeltaTime);
                 return;
             }
 
@@ -738,10 +857,18 @@ namespace BreakNotice.Gameplay.Interaction
             chairFeedDestination = Vector3.zero;
         }
 
-        private void AdvanceAutonomousSupply(float deltaTime)
+        private void AdvanceSupplyPreparation(float deltaTime)
         {
             if (preparedTarget == null)
             {
+                if (requiresExplicitFetch)
+                {
+                    AllyState = HasAvailableFetchTarget()
+                        ? PrototypeAllySupportState.Ready
+                        : PrototypeAllySupportState.Depleted;
+                    return;
+                }
+
                 preparedTarget = SelectNextSupplyTarget();
                 preparedTargetAcquired = false;
                 preparedLaneOpen = false;
@@ -758,6 +885,7 @@ namespace BreakNotice.Gameplay.Interaction
                     return;
                 }
 
+                preparedGroundHeight = preparedBody.position.y;
                 AllyState = PrototypeAllySupportState.MovingToSupply;
             }
 
@@ -775,8 +903,25 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
+            MaintainPreparedSupply(deltaTime);
+            if (requiresExplicitFetch && mobileAllyController != null)
+            {
+                if (mobileAllyController.TaskBlocked)
+                {
+                    AllyState = PrototypeAllySupportState.Blocked;
+                    preparedLaneOpen = false;
+                    return;
+                }
+
+                if (!mobileAllyController.TaskReached)
+                {
+                    AllyState = PrototypeAllySupportState.ReturningWithSupply;
+                    preparedLaneOpen = false;
+                    return;
+                }
+            }
+
             FacePlayer(deltaTime);
-            MaintainPreparedBinder(deltaTime);
             preparedLaneOpen = HasValidPhysicalLane(preparedTarget);
             AllyState = preparedLaneOpen
                 ? PrototypeAllySupportState.Ready
@@ -785,6 +930,31 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void AdvanceAllyToSupply(float deltaTime)
         {
+            if (requiresExplicitFetch && mobileAllyController != null)
+            {
+                if (!mobileAllyController.IsFetching(preparedTarget?.transform))
+                {
+                    AllyState = PrototypeAllySupportState.Blocked;
+                    return;
+                }
+
+                if (mobileAllyController.TaskBlocked)
+                {
+                    AllyState = PrototypeAllySupportState.Blocked;
+                    return;
+                }
+
+                if (mobileAllyController.TaskReached)
+                {
+                    AllyState = PrototypeAllySupportState.AcquiringSupply;
+                }
+                else
+                {
+                    AllyState = PrototypeAllySupportState.MovingToSupply;
+                }
+                return;
+            }
+
             if (allyTransform == null || preparedTarget == null)
             {
                 AllyState = PrototypeAllySupportState.Blocked;
@@ -841,10 +1011,7 @@ namespace BreakNotice.Gameplay.Interaction
             if (preparedTarget.Role == PrototypeInteractionRole.AllyChair)
             {
                 preparedTargetAcquired = true;
-                preparedLaneOpen = HasValidPhysicalLane(preparedTarget);
-                AllyState = preparedLaneOpen
-                    ? PrototypeAllySupportState.Ready
-                    : PrototypeAllySupportState.Blocked;
+                BeginPreparedReturn();
                 return;
             }
 
@@ -864,11 +1031,41 @@ namespace BreakNotice.Gameplay.Interaction
             if (Vector3.Distance(next, destination) <= AcquisitionArrivalTolerance)
             {
                 preparedTargetAcquired = true;
+                BeginPreparedReturn();
+            }
+        }
+
+        private void BeginPreparedReturn()
+        {
+            if (!requiresExplicitFetch || mobileAllyController == null)
+            {
                 preparedLaneOpen = HasValidPhysicalLane(preparedTarget);
                 AllyState = preparedLaneOpen
                     ? PrototypeAllySupportState.Ready
                     : PrototypeAllySupportState.Blocked;
+                return;
             }
+
+            float payloadClearance = preparedTarget.Role == PrototypeInteractionRole.AllyChair
+                ? Mathf.Max(preparedCollider.bounds.extents.x, preparedCollider.bounds.extents.z)
+                : 0.1f;
+            if (!mobileAllyController.TryBeginReturnMovement(
+                    preparedTarget.transform,
+                    payloadClearance))
+            {
+                preparedLaneOpen = false;
+                AllyState = PrototypeAllySupportState.Blocked;
+                return;
+            }
+
+            preparedLaneOpen = false;
+            AllyState = PrototypeAllySupportState.ReturningWithSupply;
+        }
+
+        private void MaintainPreparedSupply(float deltaTime)
+        {
+            MaintainPreparedBinder(deltaTime);
+            MaintainPreparedChair(deltaTime);
         }
 
         private void MaintainPreparedBinder(float deltaTime)
@@ -889,6 +1086,30 @@ namespace BreakNotice.Gameplay.Interaction
             preparedBody.MoveRotation(Quaternion.RotateTowards(
                 preparedBody.rotation,
                 allyTransform.rotation,
+                allyTurnSpeed * deltaTime));
+        }
+
+        private void MaintainPreparedChair(float deltaTime)
+        {
+            if (preparedTarget == null ||
+                preparedTarget.Role != PrototypeInteractionRole.AllyChair ||
+                preparedBody == null ||
+                allyTransform == null)
+            {
+                return;
+            }
+
+            Vector3 destination = allyTransform.TransformPoint(
+                new Vector3(0f, 0f, supplyApproachDistance));
+            destination.y = preparedGroundHeight;
+            preparedBody.MovePosition(Vector3.MoveTowards(
+                preparedBody.position,
+                destination,
+                supplyAcquisitionSpeed * deltaTime));
+            Quaternion yaw = Quaternion.Euler(0f, allyTransform.eulerAngles.y, 0f);
+            preparedBody.MoveRotation(Quaternion.RotateTowards(
+                preparedBody.rotation,
+                yaw,
                 allyTurnSpeed * deltaTime));
         }
 
@@ -935,6 +1156,19 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             return best;
+        }
+
+        private bool HasAvailableFetchTarget()
+        {
+            for (int index = 0; index < supplyTargets.Length; index++)
+            {
+                if (IsFetchTargetAvailable(supplyTargets[index]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private bool HasClearAllyMovementStep(
@@ -1132,6 +1366,7 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void ClearPreparedTarget(bool restoreBody)
         {
+            mobileAllyController?.ClearTaskMovement();
             if (restoreBody && preparedBodyStateCaptured && preparedBody != null)
             {
                 preparedBody.isKinematic = preparedWasKinematic;
@@ -1150,6 +1385,7 @@ namespace BreakNotice.Gameplay.Interaction
             preparedTargetAcquired = false;
             preparedLaneOpen = false;
             preparedBodyStateCaptured = false;
+            preparedGroundHeight = 0f;
         }
 
         private bool IsKnownSupplyTarget(PrototypeInteractionTarget target)

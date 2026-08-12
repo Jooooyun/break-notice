@@ -42,6 +42,9 @@ namespace BreakNotice.Gameplay.Encounter
         private PrototypeInteractionTarget[] authoredObjects =
             Array.Empty<PrototypeInteractionTarget>();
 
+        [SerializeField, Min(1)]
+        private int expectedObjectCount = 7;
+
         private TransformBaseline playerBaseline;
         private TransformBaseline[] actorBaselines = Array.Empty<TransformBaseline>();
         private ObjectBaseline[] objectBaselines = Array.Empty<ObjectBaseline>();
@@ -67,6 +70,8 @@ namespace BreakNotice.Gameplay.Encounter
         public int SubscriptionCount => 0;
 
         public int BaselineObjectCount => objectBaselines.Length;
+
+        public int ExpectedObjectCount => expectedObjectCount;
 
         public bool IsResetInProgress => completionPending;
 
@@ -108,7 +113,8 @@ namespace BreakNotice.Gameplay.Encounter
             Transform player,
             Transform[] actors,
             PrototypeInteractionTarget[] objects,
-            PrototypeAllyRelayController relayController = null)
+            PrototypeAllyRelayController relayController = null,
+            int authoredExpectedObjectCount = 7)
         {
             logicalInput = input;
             interactionOwner = owner;
@@ -118,6 +124,7 @@ namespace BreakNotice.Gameplay.Encounter
             authoredActors = actors ?? Array.Empty<Transform>();
             authoredObjects = objects ?? Array.Empty<PrototypeInteractionTarget>();
             allyRelayController = relayController;
+            expectedObjectCount = Mathf.Max(1, authoredExpectedObjectCount);
 
             if (Application.isPlaying)
             {
@@ -133,10 +140,11 @@ namespace BreakNotice.Gameplay.Encounter
                     "Player transform and interaction owner are required for authored Reset.");
             }
 
-            if (authoredObjects.Length != 7)
+            if (authoredObjects.Length != expectedObjectCount)
             {
                 throw new InvalidOperationException(
-                    $"The authored prototype Reset requires exactly seven objects, found {authoredObjects.Length}.");
+                    $"The authored Reset requires exactly {expectedObjectCount} objects, " +
+                    $"found {authoredObjects.Length}.");
             }
 
             if (authoredActors.Length != 3)
@@ -203,7 +211,7 @@ namespace BreakNotice.Gameplay.Encounter
                 authoredActors != null &&
                 authoredActors.Length == 3 &&
                 authoredObjects != null &&
-                authoredObjects.Length == 7)
+                authoredObjects.Length == expectedObjectCount)
             {
                 CaptureBaseline();
             }

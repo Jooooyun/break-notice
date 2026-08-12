@@ -7,6 +7,7 @@ namespace BreakNotice.Gameplay.Input
         Aim,
         InteractPrimary,
         Throw,
+        AllyTask,
         CallAlly,
         StrapRelease,
         ResetEncounter

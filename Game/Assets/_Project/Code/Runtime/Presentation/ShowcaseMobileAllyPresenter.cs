@@ -26,10 +26,18 @@ namespace BreakNotice.Presentation
                 return string.Empty;
             }
 
+            if (mobileAlly.State == ShowcaseMobileAllyState.Blocked &&
+                mobileAlly.HasTaskMovement)
+            {
+                return "ALLY TASK BLOCKED | CLEAR PATH OR RESET";
+            }
+
             return mobileAlly.State switch
             {
                 ShowcaseMobileAllyState.Blocked => "ALLY BLOCKED | [Q] REGROUP",
                 ShowcaseMobileAllyState.Regrouping => "ALLY REGROUPING",
+                ShowcaseMobileAllyState.Fetching => "ALLY FETCHING OBJECT",
+                ShowcaseMobileAllyState.ReturningWithSupply => "ALLY RETURNING WITH SUPPLY",
                 ShowcaseMobileAllyState.FastCatchingUp => "ALLY FAST CATCH-UP | [Q] REGROUP",
                 ShowcaseMobileAllyState.CatchingUp => "ALLY CATCH-UP | [Q] REGROUP",
                 _ => "ALLY FOLLOWING | [Q] REGROUP"
