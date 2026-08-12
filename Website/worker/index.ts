@@ -71,7 +71,15 @@ async function fetchStaticAsset(request: Request, env: Env): Promise<Response | 
 async function fetchWebGLAsset(request: Request, env: Env): Promise<Response | null> {
   const transportUrl = new URL(request.url);
   transportUrl.pathname = getWebGLTransportPath(transportUrl.pathname);
-  return fetchStaticAsset(new Request(transportUrl, request), env);
+  const transportHeaders = new Headers(request.headers);
+  transportHeaders.delete("if-match");
+  transportHeaders.delete("if-modified-since");
+  transportHeaders.delete("if-none-match");
+  transportHeaders.delete("if-range");
+  transportHeaders.delete("if-unmodified-since");
+  transportHeaders.delete("range");
+  transportHeaders.set("cache-control", "no-store");
+  return fetchStaticAsset(new Request(transportUrl, { method: request.method, headers: transportHeaders }), env);
 }
 
 async function fetchChunkedWebGLAsset(request: Request, env: Env): Promise<Response | null> {

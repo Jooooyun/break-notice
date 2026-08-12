@@ -25,7 +25,7 @@ async function render(pathname = "/") {
   );
 }
 
-async function renderWebglAsset(pathname) {
+async function renderWebglAsset(pathname, requestHeaders = {}, requestCapture = null) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("asset-test", `${process.pid}-${Date.now()}-${encodeURIComponent(pathname)}`);
   const { default: worker } = await import(workerUrl.href);
@@ -39,10 +39,11 @@ async function renderWebglAsset(pathname) {
   ]);
 
   return worker.fetch(
-    new Request(new URL(pathname, "http://localhost")),
+    new Request(new URL(pathname, "http://localhost"), { headers: requestHeaders }),
     {
       ASSETS: {
         fetch: async (assetRequest) => {
+          if (requestCapture) requestCapture.headers = new Headers(assetRequest.headers);
           const assetPath = new URL(assetRequest.url).pathname.replace(/^\//, "");
           try {
             const body = await readFile(join(distClient, assetPath));
@@ -134,6 +135,17 @@ test("sets immutable WebGL cache and exact uncompressed MIME headers", async () 
   const data = await renderWebglAsset(`${releaseRoot}Development.data`);
   assert.equal(data.headers.get("content-type"), "application/octet-stream");
   assert.equal(data.headers.get("content-encoding"), null);
+
+  const requestCapture = {};
+  const revalidatedData = await renderWebglAsset(
+    `${releaseRoot}Development.data`,
+    { "if-none-match": '"cached-etag"', range: "bytes=0-1" },
+    requestCapture,
+  );
+  assert.equal(revalidatedData.status, 200);
+  assert.equal(requestCapture.headers.get("if-none-match"), null);
+  assert.equal(requestCapture.headers.get("range"), null);
+  assert.equal(requestCapture.headers.get("cache-control"), "no-store");
 
   const loader = await renderWebglAsset(`${releaseRoot}Development.loader.js`);
   assert.equal(loader.headers.get("content-type"), "text/javascript; charset=utf-8");
