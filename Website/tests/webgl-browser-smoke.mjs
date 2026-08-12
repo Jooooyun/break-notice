@@ -67,9 +67,26 @@ for (const browserConfig of browsers) {
         renderWidth: element.width,
         renderHeight: element.height,
       }));
+      const refreshResponse = await page.reload({ waitUntil: "domcontentloaded", timeout: 120_000 });
+      const refreshedUrl = page.url();
+      await page.locator("#unity-canvas").waitFor({ state: "visible", timeout: 30_000 });
+      let refreshUnityReady = false;
+      try {
+        await page.waitForFunction(
+          () => getComputedStyle(document.querySelector("#unity-loading-bar")).display === "none",
+          undefined,
+          { timeout: 180_000 },
+        );
+        refreshUnityReady = true;
+      } catch {
+        refreshUnityReady = false;
+      }
       if (response?.status() !== 200) failures.push(`${browserConfig.name} ${viewport.width}: HTTP ${response?.status()}`);
       if (!finalUrl.includes(`/play/releases/${buildGuid}/`)) failures.push(`${browserConfig.name} ${viewport.width}: GUID URL ${finalUrl}`);
       if (!unityReady) failures.push(`${browserConfig.name} ${viewport.width}: Unity canvas not ready`);
+      if (refreshResponse?.status() !== 200) failures.push(`${browserConfig.name} ${viewport.width}: refresh HTTP ${refreshResponse?.status()}`);
+      if (refreshedUrl !== finalUrl) failures.push(`${browserConfig.name} ${viewport.width}: refresh changed GUID URL ${finalUrl} -> ${refreshedUrl}`);
+      if (!refreshUnityReady) failures.push(`${browserConfig.name} ${viewport.width}: refreshed Unity canvas not ready`);
       if (dialogs) failures.push(`${browserConfig.name} ${viewport.width}: dialogs ${dialogs}`);
       if (consoleProblems.length) failures.push(`${browserConfig.name} ${viewport.width}: console ${consoleProblems.join(" | ")}`);
       if (failedRequests.length) failures.push(`${browserConfig.name} ${viewport.width}: requests ${failedRequests.join(" | ")}`);
@@ -80,6 +97,9 @@ for (const browserConfig of browsers) {
         status: response?.status(),
         guidUrl: finalUrl.includes(buildGuid),
         unityReady,
+        refreshStatus: refreshResponse?.status(),
+        sameGuidAfterRefresh: refreshedUrl === finalUrl,
+        refreshUnityReady,
         dialogs,
         blockingConsoleProblems: consoleProblems.length,
         nonBlockingWebglWarnings: nonBlockingWebglWarnings.length,
