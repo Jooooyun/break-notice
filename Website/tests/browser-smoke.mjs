@@ -80,6 +80,17 @@ for (const browserConfig of browsers) {
         await page.locator(selector).scrollIntoViewIfNeeded();
         await page.waitForTimeout(250);
       }
+      await page.evaluate(async () => {
+        await Promise.all(
+          [...document.images].map((image) => {
+            if (image.complete) return undefined;
+            return new Promise((resolve) => {
+              image.addEventListener("load", resolve, { once: true });
+              image.addEventListener("error", resolve, { once: true });
+            });
+          }),
+        );
+      });
 
       const metrics = await page.evaluate(() => {
         const html = document.documentElement;
