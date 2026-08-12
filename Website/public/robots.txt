@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zero-defect-steveyun.chatgpt.site/sitemap.xml
+Sitemap: https://zero-defect-steveyun.stevejoyun.chatgpt.site/sitemap.xml
