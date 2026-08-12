@@ -1,12 +1,12 @@
 # CONTEST-0002 — Operations Floor 5–7 Minute Showcase
 
-- Status: `OWNER-APPROVED DESIGN AND WORK-PACKAGE AUTHORITY / S0 AUTHORITY REGISTRATION COMPLETE / S1 NOT AUTHORIZED / IMPLEMENTATION RELAY ABSENT`
+- Status: `OWNER-APPROVED DESIGN AND WORK-PACKAGE AUTHORITY / S1-S3 IMPLEMENTATION COMPLETE / S3 HUMAN OWNER APPROVED / DESIGNER A RUNTIME CHARACTER INTEGRATION VERIFIED / S4 NOT AUTHORIZED / IMPLEMENTATION RELAY ABSENT`
 - Change Control: `CR-0004`
 - Decision: `ADR-0024`
 - Branch: `contest/game-builders-2026-showcase`
 - Immutable Baseline: `15c915c4c7552113941149e84ba5cc1fea9c63f1`
 - Stable Regression Dependency: `CONTEST-0001 / C0-C4 accepted foundation`
-- Proposed S1 Scene: `Game/Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v001.unity`
+- Active Showcase Scene: `Game/Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v003.unity`
 - S0 Relay: `EAR-CONTEST-0002-S0-001 / CONSUMED / EXPIRED`
 - Active Implementation Relay: `ABSENT`
 
@@ -69,8 +69,9 @@ auto-replenishment and teleport return are prohibited.
 ## Mobile Ally Responsibilities
 
 The one approved active ally may perform Follow, Fetch, Supply, Brace, Rescue,
-Combat Tag and Finisher Partner roles. Those roles are design authority only.
-S0 implements none of them.
+Combat Tag and Finisher Partner roles. S2-S3 implement bounded Follow, Fetch
+and Supply with explicit commands and authored Reset restoration. Brace,
+Rescue, Combat Tag and Finisher Partner remain S4-S8 work and are not inferred.
 
 ## Q Context Priority
 
@@ -106,9 +107,9 @@ Drawer must also be clearable without the Finisher.
 | Package | Scope | Status |
 |---|---|---|
 | S0 | Authority registration, exact directives/hashes, records and handoffs | `COMPLETE / DOCUMENTATION ONLY` |
-| S1 | Separate 48 m × 34 m figure-eight graybox; no Production Art | `NOT AUTHORIZED` |
-| S2 | Mobile Ally Follow anchors, side switching, catch-up, blocked/regroup | `NOT AUTHORIZED` |
-| S3 | Mobile Fetch, Binder Toss, Chair Feed and Reset adaptation | `NOT AUTHORIZED` |
+| S1 | Separate 48 m × 34 m figure-eight graybox; no Production Art | `COMPLETE / VERIFIED` |
+| S2 | Mobile Ally Follow anchors, side switching, catch-up, blocked/regroup | `COMPLETE / VERIFIED` |
+| S3 | Mobile Fetch, Binder Toss, Chair Feed and Reset adaptation | `COMPLETE / HUMAN OWNER APPROVED 2026-08-13` |
 | S4 | Q arbitration, Rescue, Combat Tag, PASS/BRACE/BREAK, TEAM READY | `NOT AUTHORIZED` |
 | S5 | Bounded Cargo Strap, stabilize, attach assist, tension handoff, redirect/release | `NOT AUTHORIZED` |
 | S6 | Two Runner pressure: body check, shove, short grab, stagger, one attack token | `NOT AUTHORIZED` |
@@ -120,6 +121,36 @@ Each package requires a separate immutable baseline, clean-state check, exact
 allowlist, validation contract, commit/push authority and one-shot Human Owner
 relay. Completion or acceptance of one package does not authorize the next.
 
+## S1-S3 Acceptance and Designer A Integration Evidence
+
+- S1 foundation: `9d974d6`, with bounded playability and map revisions through
+  `d263e3e`.
+- S2 mobile Ally: `2f14a7f`.
+- S3 initial implementation: `0e842d2`.
+- S3 explicit-command and carry-continuity repair:
+  `fdc49025eefab364d8e3d92d89856fb89b1813e4`.
+- Human Owner S3 disposition: `PASS / APPROVED / 2026-08-13`.
+- Designer A corrected source: `origin/art/characters-animation` at
+  `978c66a80792632d5c4ba9ed95c477f1a6e7cc7a`.
+- Conflict-free source merge:
+  `d6c86e21b06334898a4e1a901aeff16eabd2528b`.
+- Runtime integration:
+  `527603c9a4eb182f18b8ee1cc2a746df0823357c`.
+- Runtime coverage: four textured Humanoid models, four Animator Controllers
+  and 172 Humanoid animation FBX (`CHR00 61 / CHR01 51 / ENY01 60`).
+- ENY01 Normal exposes the 54 shared, hit and melee catalog clips but none of
+  the six Elite-only clips. ENY01 Elite exposes the same 54 plus exactly six
+  Elite-only clips.
+- Unity `6000.3.20f1` compile PASS, EditMode `100/100`, PlayMode `72/72`,
+  Web Development build GUID `d07ffe2b71964dd994bba2f1cc4a8e10`, warning
+  `0`, error `0`, HTTP `19/19`, 178,528,439 verified bytes and aggregate
+  SHA-256 `513e87797121a56261af1e12f2fb911e396a37f90dc5585ea6d6b8cda7dd848c`.
+- In-app browser cold load, textured actor rendering and product console
+  warning-error `0` passed.
+- Enemy attack clips are connected as an eligible animation catalog; dynamic
+  enemy attack selection and hit resolution remain later combat work and are
+  not inferred by this integration.
+
 ## S0 Validation Boundary
 
 S0 creates documentation only. No Unity test, manual gameplay smoke, browser
@@ -128,7 +159,9 @@ for Runtime integration by S0. Graybox fallback remains active.
 
 ## Forbidden Inference
 
-This ticket does not authorize S1, historical C5 continuation, Runtime code,
-Scene/Prefab/Input/Package modification, Runtime Art, PR, merge, `main`, stable
-contest changes, new packages, external services, a second ally, a new enemy
-archetype, breakage, runtime fracture or unrestricted destruction.
+S1-S3 completion and the approved Designer A character integration do not
+authorize S4-S9, historical C5 continuation, Designer B/VFX/Audio Runtime
+integration, PR, `main`, stable contest changes, external services, a second
+ally, a new enemy archetype, breakage, runtime fracture or unrestricted
+destruction. The Unity built-in Animation module registered by the integration
+does not authorize any external package.
