@@ -22,7 +22,13 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseScenePath =
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v001.unity";
 
+        public const string ShowcaseV2ScenePath =
+            ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v002.unity";
+
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
+
+        public const string ShowcaseV2RootName =
+            "SHOWCASE_V2_PROVISIONAL_LOCAL_REVIEW_ONLY";
 
         public const string MobileAllyRootName = "SHOWCASE_S2_MOBILE_ALLY";
 
@@ -91,6 +97,44 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "S2 Showcase mobile ally prepared: 12 authored follow anchors, " +
                 "side switching, catch-up, blocked/regroup and Reset-safe restoration.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Prepare Provisional V2 Layout")]
+        public static void PrepareV2ShowcaseScene()
+        {
+            RequireSceneAsset(ShowcaseScenePath);
+            EnsureShowcaseFolder();
+
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ShowcaseV2ScenePath) == null)
+            {
+                if (!AssetDatabase.CopyAsset(ShowcaseScenePath, ShowcaseV2ScenePath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not copy the preserved v001 Scene to {ShowcaseV2ScenePath}.");
+                }
+
+                AssetDatabase.ImportAsset(
+                    ShowcaseV2ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseV2ScenePath,
+                OpenSceneMode.Single);
+            ApplyV2Layout(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseV2ScenePath))
+            {
+                throw new InvalidOperationException(
+                    $"Could not save {ShowcaseV2ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "Provisional v002 layout prepared: LOCAL_REVIEW_ONLY 64m x 44m envelope, " +
+                "eight-zone figure-eight, S2 mobile ally, 60 Designer B replacement " +
+                "sockets, zero Production Art integration and no S3 implementation.");
         }
 
         public static void ApplyS1Layout(Scene scene)
@@ -193,6 +237,68 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(browserInput);
         }
 
+        public static void ApplyV2Layout(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            ValidatePreservedGameplayRoots(scene);
+            RequireSingleSceneComponent<ShowcaseMobileAllyController>(scene);
+
+            GameObject previousV2Root = FindRoot(scene, ShowcaseV2RootName);
+            if (previousV2Root != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousV2Root);
+            }
+
+            GameObject previousV1Root = FindRoot(scene, ShowcaseRootName);
+            if (previousV1Root != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousV1Root);
+            }
+
+            GameObject previousS2Root = FindRoot(scene, MobileAllyRootName);
+            if (previousS2Root != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousS2Root);
+            }
+
+            RemoveLegacyEnvironment(scene);
+
+            GameObject root = CreateRoot(scene, ShowcaseV2RootName);
+            Transform status = CreateGroup(root.transform, "00_STATUS");
+            Transform staticCollision = CreateGroup(root.transform, "01_STATIC_COLLISION");
+            Transform zones = CreateGroup(root.transform, "02_ZONES");
+            Transform topology = CreateGroup(root.transform, "03_FIGURE_EIGHT");
+            Transform cubicleIsland = CreateGroup(root.transform, "04_CUBICLE_ISLAND");
+            Transform layoutMarkers = CreateGroup(root.transform, "05_LAYOUT_MARKERS");
+            Transform gameplayIndex = CreateGroup(root.transform, "06_GAMEPLAY_INDEX");
+            Transform s2MobileAlly = CreateGroup(root.transform, "07_S2_MOBILE_ALLY");
+            Transform reviewProxies = CreateGroup(root.transform, "08_S3_NOT_IMPLEMENTED_REVIEW_PROXIES");
+            Transform assetSockets = CreateGroup(root.transform, "09_DESIGNER_B_REPLACEMENT_SOCKETS");
+
+            BuildV2Status(status);
+            BuildV2Envelope(staticCollision);
+            BuildV2ZoneMarkers(zones);
+            BuildV2FigureEight(topology);
+            BuildV2CubicleIsland(cubicleIsland);
+            BuildV2StaticFurniture(staticCollision);
+            BuildV2LayoutMarkers(layoutMarkers);
+            RepositionV2Gameplay(scene, gameplayIndex);
+            ConfigureV2MobileAlly(scene, s2MobileAlly);
+            BuildV2FutureS3ReviewProxies(reviewProxies);
+            BuildV2AssetSockets(assetSockets);
+
+            ValidatePreservedGameplayRoots(scene);
+            if (RequireSingleSceneComponent<ShowcaseMobileAllyController>(scene).AnchorCount != 18)
+            {
+                throw new InvalidOperationException(
+                    "The provisional v002 Scene requires exactly 18 connected S2 anchors.");
+            }
+        }
+
         private static Transform[] BuildFollowAnchorNetwork(Transform parent)
         {
             Vector2[] positions =
@@ -293,6 +399,557 @@ namespace BreakNotice.Contest.Editor
             if (previousRoot != null)
             {
                 UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+        }
+
+        private static void BuildV2Status(Transform parent)
+        {
+            string[] statusMarkers =
+            {
+                "LOCAL_REVIEW_ONLY",
+                "PROVISIONAL_LAYOUT",
+                "NOT_OWNER_APPROVED",
+                "NOT_FINAL_MAP_LOCK",
+                "NOT_PRODUCTION_ART",
+                "NOT_S9_INTEGRATED",
+                "S2_INCLUDED",
+                "S3_NOT_IMPLEMENTED",
+                "DESIGNER_B_RUNTIME_INTEGRATION_0"
+            };
+
+            foreach (string marker in statusMarkers)
+            {
+                CreateMarker(parent, marker, Vector3.zero, Vector3.one);
+            }
+        }
+
+        private static void BuildV2Envelope(Transform parent)
+        {
+            Transform envelope = CreateGroup(parent, "STATIC_ENVELOPE");
+            CreateCube(envelope, "PROXY_Floor_64x44", new Vector3(0f, -0.25f, 0f),
+                new Vector3(64f, 0.5f, 44f), true);
+            CreateCube(envelope, "PROXY_Wall_South", new Vector3(0f, 2.1f, -22.25f),
+                new Vector3(64.5f, 4.2f, 0.5f), true);
+            CreateCube(envelope, "PROXY_Wall_West", new Vector3(-32.25f, 2.1f, 0f),
+                new Vector3(0.5f, 4.2f, 44.5f), true);
+            CreateCube(envelope, "PROXY_Wall_East", new Vector3(32.25f, 2.1f, 0f),
+                new Vector3(0.5f, 4.2f, 44.5f), true);
+
+            // The provisional Exit opening is 4.5 m wide at X 26.0.
+            CreateCube(envelope, "PROXY_Wall_North_West", new Vector3(-4.125f, 2.1f, 22.25f),
+                new Vector3(55.75f, 4.2f, 0.5f), true);
+            CreateCube(envelope, "PROXY_Wall_North_East", new Vector3(30.125f, 2.1f, 22.25f),
+                new Vector3(3.75f, 4.2f, 0.5f), true);
+            CreateCube(envelope, "PROXY_Exit_Frame_Lintel", new Vector3(26f, 3.6f, 22.25f),
+                new Vector3(4.5f, 1.2f, 0.5f), true);
+
+            CreateMarker(envelope, "PROXY_FlatFloorDatum_0m", Vector3.zero, Vector3.one);
+            CreateMarker(envelope, "PROXY_CeilingReference_4.2m",
+                new Vector3(0f, 4.2f, 0f), Vector3.one);
+            CreateMarker(envelope, "PROXY_ExteriorBounds_X-32_TO_32_Z-22_TO_22",
+                Vector3.zero, new Vector3(64f, 1f, 44f));
+        }
+
+        private static void BuildV2ZoneMarkers(Transform parent)
+        {
+            var zones = new Dictionary<string, Vector3>
+            {
+                { "Z0_ENTRY_STAGING", new Vector3(0f, 0f, -19f) },
+                { "Z1_DIRECT_EQUIPMENT_BAY", new Vector3(0f, 0f, -15f) },
+                { "Z2_CENTRAL_CLASH_BOWL", new Vector3(0f, 0f, -8f) },
+                { "Z3_WEST_LOGISTICS_LOOP", new Vector3(-24f, 0f, 3f) },
+                { "Z4_CENTRAL_CUBICLE_RING", new Vector3(0f, 0f, 5f) },
+                { "Z5_EAST_PHYSICS_LANE", new Vector3(23f, 0f, 3f) },
+                { "Z6_NORTH_TAG_ARENA_DRAWER_GATE", new Vector3(17f, 0f, 15f) },
+                { "Z7_EXIT_RUN_NEXT_AREA_TEASE", new Vector3(26f, 0f, 19f) }
+            };
+
+            foreach (KeyValuePair<string, Vector3> zone in zones)
+            {
+                CreateMarker(parent, zone.Key, zone.Value, Vector3.one);
+            }
+        }
+
+        private static void BuildV2FigureEight(Transform parent)
+        {
+            CreateMarker(parent, "SOUTH_BOWL_24x10", new Vector3(0f, 0f, -8f),
+                new Vector3(24f, 1f, 10f));
+            CreateMarker(parent, "WEST_LOOP_MIN_5.5m", new Vector3(-24f, 0f, 3f),
+                new Vector3(8f, 1f, 22f));
+            CreateMarker(parent, "EAST_LANE_9m", new Vector3(23f, 0f, 3f),
+                new Vector3(9f, 1f, 22f));
+            CreateMarker(parent, "NORTH_CROSS_MIN_6m", new Vector3(0f, 0f, 15f),
+                new Vector3(48f, 1f, 6f));
+            CreateMarker(parent, "CENTRAL_CUT_6m", new Vector3(0f, 0f, 6f),
+                new Vector3(6f, 1f, 18f));
+            CreateMarker(parent, "DRAWER_CONNECTOR_BLOCKED_REVIEW",
+                new Vector3(18f, 0f, 15f), new Vector3(4f, 1f, 6f));
+            CreateMarker(parent, "DRAWER_CONNECTOR_OPEN_REVIEW",
+                new Vector3(22f, 0f, 15f), new Vector3(4f, 1f, 6f));
+            CreateMarker(parent, "EXIT_RUN_MIN_4m", new Vector3(26f, 0f, 18.5f),
+                new Vector3(4.5f, 1f, 7f));
+
+            // Non-colliding route ribbons expose the two loops and shared connections.
+            CreateCube(parent, "PROXY_ROUTE_West_South", new Vector3(-12f, 0.02f, -8f),
+                new Vector3(24f, 0.04f, 6f), false);
+            CreateCube(parent, "PROXY_ROUTE_West_Outer", new Vector3(-24f, 0.02f, 3f),
+                new Vector3(8f, 0.04f, 22f), false);
+            CreateCube(parent, "PROXY_ROUTE_West_North", new Vector3(-12f, 0.02f, 15f),
+                new Vector3(24f, 0.04f, 6f), false);
+            CreateCube(parent, "PROXY_ROUTE_East_South", new Vector3(12f, 0.02f, -8f),
+                new Vector3(24f, 0.04f, 6f), false);
+            CreateCube(parent, "PROXY_ROUTE_East_Outer", new Vector3(23f, 0.02f, 3f),
+                new Vector3(9f, 0.04f, 22f), false);
+            CreateCube(parent, "PROXY_ROUTE_East_North", new Vector3(12f, 0.02f, 15f),
+                new Vector3(24f, 0.04f, 6f), false);
+            CreateCube(parent, "PROXY_ROUTE_Central_Cut", new Vector3(0f, 0.02f, 6f),
+                new Vector3(6f, 0.04f, 18f), false);
+            CreateCube(parent, "PROXY_ROUTE_Drawer_Connector", new Vector3(20f, 0.02f, 15f),
+                new Vector3(8f, 0.04f, 6f), false);
+            CreateCube(parent, "PROXY_ROUTE_Exit_Run", new Vector3(26f, 0.02f, 18.5f),
+                new Vector3(4.5f, 0.04f, 7f), false);
+        }
+
+        private static void BuildV2CubicleIsland(Transform parent)
+        {
+            Transform collision = CreateGroup(parent, "STATIC_CUBICLE_COLLISION");
+            Transform partitions = CreateGroup(collision, "PROXY_LowPartitions_16");
+            Transform desks = CreateGroup(collision, "PROXY_FixedDesks_6");
+            CreateMarker(parent, "PROXY_IslandBounds_20x12", new Vector3(0f, 0f, 5f),
+                new Vector3(20f, 1f, 12f));
+            CreateMarker(parent, "PROXY_CentralCutClear_6m", new Vector3(0f, 0f, 5f),
+                new Vector3(6f, 1f, 12f));
+
+            foreach (float z in new[] { -1f, 11f })
+            {
+                CreateCube(partitions, $"PROXY_Partition_{z:0}_West",
+                    new Vector3(-7.5f, 0.6f, z), new Vector3(5f, 1.2f, 0.2f), true);
+                CreateCube(partitions, $"PROXY_Partition_{z:0}_East",
+                    new Vector3(7.5f, 0.6f, z), new Vector3(5f, 1.2f, 0.2f), true);
+            }
+
+            foreach (float z in new[] { 1.5f, 8.5f })
+            {
+                CreateCube(partitions, $"PROXY_Partition_West_{z:0.0}",
+                    new Vector3(-10f, 0.6f, z), new Vector3(0.2f, 1.2f, 5f), true);
+                CreateCube(partitions, $"PROXY_Partition_East_{z:0.0}",
+                    new Vector3(10f, 0.6f, z), new Vector3(0.2f, 1.2f, 5f), true);
+            }
+
+            foreach (float z in new[] { 3f, 7f })
+            {
+                CreateCube(partitions, $"PROXY_Partition_Internal_West_{z:0}",
+                    new Vector3(-6.5f, 0.6f, z), new Vector3(6f, 1.2f, 0.2f), true);
+                CreateCube(partitions, $"PROXY_Partition_Internal_East_{z:0}",
+                    new Vector3(6.5f, 0.6f, z), new Vector3(6f, 1.2f, 0.2f), true);
+            }
+
+            foreach (float x in new[] { -3.5f, 3.5f })
+            {
+                CreateCube(partitions, $"PROXY_Partition_Internal_{x:0.0}_South",
+                    new Vector3(x, 0.6f, 1f), new Vector3(0.2f, 1.2f, 4f), true);
+                CreateCube(partitions, $"PROXY_Partition_Internal_{x:0.0}_North",
+                    new Vector3(x, 0.6f, 9f), new Vector3(0.2f, 1.2f, 4f), true);
+            }
+
+            foreach (float x in new[] { -6.5f, 6.5f })
+            {
+                foreach (float z in new[] { 1f, 5f, 9f })
+                {
+                    CreateCube(desks, $"PROXY_FixedDesk_{x:0.0}_{z:0}",
+                        new Vector3(x, 0.4f, z), new Vector3(2.8f, 0.8f, 1.4f), true);
+                }
+            }
+        }
+
+        private static void BuildV2StaticFurniture(Transform parent)
+        {
+            Transform furniture = CreateGroup(parent, "STATIC_FIXED_FURNITURE");
+            CreateCube(furniture, "PROXY_SupplyDesk_West", new Vector3(-28f, 0.5f, -3f),
+                new Vector3(3f, 1f, 1.2f), true);
+            CreateCube(furniture, "PROXY_PhysicsColumn", new Vector3(20f, 2.1f, 3f),
+                new Vector3(0.7f, 4.2f, 0.7f), true);
+            CreateCube(furniture, "PROXY_FixedDesk_East_Inner", new Vector3(14f, 0.5f, 5f),
+                new Vector3(3f, 1f, 1.2f), true);
+            CreateCube(furniture, "PROXY_FixedDesk_East_Outer", new Vector3(28f, 0.5f, 7f),
+                new Vector3(3f, 1f, 1.2f), true);
+            CreateCube(furniture, "PROXY_CrashDesk_North", new Vector3(-5f, 0.5f, 19f),
+                new Vector3(3f, 1f, 1.2f), true);
+        }
+
+        private static void BuildV2LayoutMarkers(Transform parent)
+        {
+            CreateMarker(parent, "APPROACH_01_WEST_NORTH", new Vector3(-12f, 0f, 15f),
+                new Vector3(8f, 1f, 6f));
+            CreateMarker(parent, "APPROACH_02_EAST_NORTH", new Vector3(12f, 0f, 15f),
+                new Vector3(8f, 1f, 6f));
+            CreateMarker(parent, "APPROACH_03_CENTRAL_CUT", new Vector3(0f, 0f, 10f),
+                new Vector3(6f, 1f, 8f));
+            CreateMarker(parent, "TURN_POCKET_WEST_8x8", new Vector3(-24f, 0f, 3f),
+                new Vector3(8f, 1f, 8f));
+            CreateMarker(parent, "TURN_POCKET_EAST_9x9", new Vector3(24f, 0f, 3f),
+                new Vector3(9f, 1f, 9f));
+            CreateMarker(parent, "TURN_POCKET_Z6_9x9", new Vector3(17f, 0f, 15f),
+                new Vector3(9f, 1f, 9f));
+            CreateMarker(parent, "PARKING_BAY_REVIEW", new Vector3(22f, 0f, 15f),
+                new Vector3(4f, 1f, 4f));
+            CreateMarker(parent, "FINISHER_POCKET_REVIEW_ONLY", new Vector3(14f, 0f, 18f),
+                new Vector3(8f, 1f, 7f));
+            CreateMarker(parent, "EXIT_TARGET", new Vector3(26f, 0f, 21f),
+                new Vector3(4.5f, 1f, 1f));
+            CreateMarker(parent, "DIRECT_ROUTE_AROUND_COLUMN", new Vector3(15f, 0f, 3f),
+                new Vector3(7f, 1f, 8f));
+            CreateMarker(parent, "REDIRECT_ROUTE_AROUND_COLUMN", new Vector3(25f, 0f, 3f),
+                new Vector3(7f, 1f, 8f));
+        }
+
+        private static void RepositionV2Gameplay(Scene scene, Transform gameplayIndex)
+        {
+            GameObject player = RequireRootAny(scene, "Player", "GAMEPLAY_CHR00_PLAYER");
+            GameObject ally = RequireRootAny(scene, "AllyProxy", "GAMEPLAY_CHR01_MOBILE_ALLY");
+            GameObject runnerOne = RequireRootAny(
+                scene,
+                "EnemyProxy_01",
+                "GAMEPLAY_ENY01_RUNNER_01");
+            GameObject runnerTwo = RequireRootAny(
+                scene,
+                "EnemyProxy_02",
+                "GAMEPLAY_ENY01_RUNNER_02");
+
+            SetActorReviewTransform(player, "GAMEPLAY_CHR00_PLAYER", new Vector2(0f, -17f));
+            SetActorReviewTransform(ally, "GAMEPLAY_CHR01_MOBILE_ALLY", new Vector2(-2.5f, -17.2f));
+            SetActorReviewTransform(runnerOne, "GAMEPLAY_ENY01_RUNNER_01", new Vector2(6f, -3.5f));
+            SetActorReviewTransform(runnerTwo, "GAMEPLAY_ENY01_RUNNER_02", new Vector2(12f, 19f));
+
+            CreateMarker(gameplayIndex, "GAMEPLAY_INDEX_CHR00_PLAYER",
+                player.transform.position, Vector3.one);
+            CreateMarker(gameplayIndex, "GAMEPLAY_INDEX_CHR01_MOBILE_ALLY",
+                ally.transform.position, Vector3.one);
+            CreateMarker(gameplayIndex, "GAMEPLAY_INDEX_ENY01_RUNNER_01",
+                runnerOne.transform.position, Vector3.one);
+            CreateMarker(gameplayIndex, "GAMEPLAY_INDEX_ENY01_RUNNER_02",
+                runnerTwo.transform.position, Vector3.one);
+
+            var specs = new Dictionary<string, GameplayReviewSpec>(StringComparer.Ordinal)
+            {
+                {
+                    "BINDER-DIRECT-01",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_BINDER_DIRECT_01",
+                        new Vector2(-5f, -15f),
+                        new Vector3(0.29f, 0.32f, 0.08f))
+                },
+                {
+                    "BINDER-ALLY-01",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_BINDER_ALLY_01",
+                        new Vector2(-28f, -5f),
+                        new Vector3(0.29f, 0.32f, 0.08f))
+                },
+                {
+                    "BINDER-ALLY-02",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_BINDER_ALLY_02",
+                        new Vector2(-12f, 18.5f),
+                        new Vector3(0.29f, 0.32f, 0.08f))
+                },
+                {
+                    "CHAIR-DIRECT-01",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_CHAIR_DIRECT_01",
+                        new Vector2(5f, -15f),
+                        new Vector3(0.729f, 0.998f, 0.697f))
+                },
+                {
+                    "CHAIR-ALLY-01",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_CHAIR_ALLY_01",
+                        new Vector2(-27f, 5f),
+                        new Vector3(0.729f, 0.998f, 0.697f))
+                },
+                {
+                    "DRAWER-01",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_DRAWER_GATE_01",
+                        new Vector2(18f, 15f),
+                        new Vector3(0.760f, 0.998f, 0.744f))
+                },
+                {
+                    "COPIER-01",
+                    new GameplayReviewSpec(
+                        "GAMEPLAY_COPIER_RECOGNITION_01",
+                        new Vector2(-29f, -14f),
+                        new Vector3(0.614f, 0.979f, 0.655f))
+                }
+            };
+
+            foreach (PrototypeInteractionTarget target in GetInteractionTargets(scene))
+            {
+                if (!specs.TryGetValue(target.RuntimeInstanceKey, out GameplayReviewSpec spec))
+                {
+                    throw new InvalidOperationException(
+                        $"Unexpected preserved gameplay target: {target.RuntimeInstanceKey}");
+                }
+
+                target.gameObject.name = spec.Name;
+                target.transform.SetPositionAndRotation(
+                    new Vector3(spec.Position.x, spec.Bounds.y * 0.5f, spec.Position.y),
+                    Quaternion.identity);
+                target.transform.localScale = spec.Bounds;
+                EditorUtility.SetDirty(target.gameObject);
+                EditorUtility.SetDirty(target.transform);
+
+                CreateMarker(
+                    gameplayIndex,
+                    $"GAMEPLAY_INDEX_{spec.Name}__{target.RuntimeInstanceKey}",
+                    target.transform.position,
+                    spec.Bounds);
+            }
+        }
+
+        private static void ConfigureV2MobileAlly(Scene scene, Transform parent)
+        {
+            ShowcaseMobileAllyController mobile =
+                RequireSingleSceneComponent<ShowcaseMobileAllyController>(scene);
+            PrototypeInteractionStateOwner owner =
+                RequireSingleSceneComponent<PrototypeInteractionStateOwner>(scene);
+            AuthoredEncounterResetController reset =
+                RequireSingleSceneComponent<AuthoredEncounterResetController>(scene);
+            PrototypeInteractionController interaction =
+                owner.GetComponent<PrototypeInteractionController>();
+            ShowcaseMobileAllyPresenter presenter =
+                RequireSingleSceneComponent<ShowcaseMobileAllyPresenter>(scene);
+            CharacterController controller = mobile.GetComponent<CharacterController>();
+
+            if (interaction == null || controller == null)
+            {
+                throw new InvalidOperationException(
+                    "The preserved S2 player interaction and ally CharacterController are required.");
+            }
+
+            Transform anchorsParent = CreateGroup(parent, "S2_FOLLOW_ANCHORS_18");
+            Vector2[] positions =
+            {
+                new Vector2(-2.5f, -17.2f),
+                new Vector2(-4f, -14f),
+                new Vector2(-6f, -8f),
+                new Vector2(0f, -8f),
+                new Vector2(-16f, -8f),
+                new Vector2(-24f, -8f),
+                new Vector2(-25f, 3f),
+                new Vector2(-24f, 14f),
+                new Vector2(-12f, 15f),
+                new Vector2(0f, 15f),
+                new Vector2(0f, 8f),
+                new Vector2(0f, 0f),
+                new Vector2(14f, -8f),
+                new Vector2(24f, -8f),
+                new Vector2(25f, 3f),
+                new Vector2(24f, 14f),
+                new Vector2(16f, 17f),
+                new Vector2(26f, 19f)
+            };
+            var anchors = new Transform[positions.Length];
+            for (int index = 0; index < positions.Length; index++)
+            {
+                anchors[index] = CreateMarker(
+                    anchorsParent,
+                    $"V2-FA-{index:00}",
+                    new Vector3(positions[index].x, 1f, positions[index].y),
+                    Vector3.one);
+            }
+
+            Vector2Int[] links =
+            {
+                new Vector2Int(0, 1),
+                new Vector2Int(1, 2),
+                new Vector2Int(2, 3),
+                new Vector2Int(3, 4),
+                new Vector2Int(4, 5),
+                new Vector2Int(5, 6),
+                new Vector2Int(6, 7),
+                new Vector2Int(7, 8),
+                new Vector2Int(8, 9),
+                new Vector2Int(3, 11),
+                new Vector2Int(11, 10),
+                new Vector2Int(10, 9),
+                new Vector2Int(3, 12),
+                new Vector2Int(12, 13),
+                new Vector2Int(13, 14),
+                new Vector2Int(14, 15),
+                new Vector2Int(15, 16),
+                new Vector2Int(16, 9),
+                new Vector2Int(16, 17),
+                new Vector2Int(8, 16)
+            };
+
+            mobile.Configure(
+                owner,
+                reset,
+                mobile.transform,
+                owner.transform,
+                controller,
+                anchors,
+                links);
+            interaction.ConfigureShowcaseMobileAlly(mobile);
+            presenter.Configure(mobile);
+            EditorUtility.SetDirty(mobile);
+            EditorUtility.SetDirty(interaction);
+            EditorUtility.SetDirty(presenter);
+        }
+
+        private static void BuildV2FutureS3ReviewProxies(Transform parent)
+        {
+            CreateCube(parent, "PROXY_S3_NOT_IMPLEMENTED_BINDER_04",
+                new Vector3(15f, 0.16f, -11f), new Vector3(0.29f, 0.32f, 0.08f), false);
+            CreateCube(parent, "PROXY_S3_NOT_IMPLEMENTED_BINDER_05",
+                new Vector3(12f, 0.16f, 17.5f), new Vector3(0.29f, 0.32f, 0.08f), false);
+            CreateCube(parent, "PROXY_S3_NOT_IMPLEMENTED_CHAIR_03",
+                new Vector3(17f, 0.499f, -12f), new Vector3(0.729f, 0.998f, 0.697f), false);
+        }
+
+        private static void BuildV2AssetSockets(Transform parent)
+        {
+            Transform architecture = CreateGroup(parent, "ARCHITECTURE_19");
+            Transform fixedDesk = CreateGroup(parent, "FIXED_DESK_3");
+            Transform gameplay = CreateGroup(parent, "GAMEPLAY_RECOGNITION_4");
+            Transform dressing = CreateGroup(parent, "DRESSING_22");
+            Transform sharedMaterial = CreateGroup(parent, "SHARED_MATERIAL_9");
+            Transform decalAtlas = CreateGroup(parent, "DECAL_ATLAS_3");
+
+            SocketSpec[] architectureSpecs =
+            {
+                MetricSocket("ENV_Wall_2m_v001", new Vector3(-31.9f, 0f, -16f), new Vector3(2f, 4.2f, 0.2f), "GROUND_CENTER"),
+                MetricSocket("ENV_Wall_4m_v001", new Vector3(-31.9f, 0f, -10f), new Vector3(4f, 4.2f, 0.2f), "GROUND_CENTER"),
+                MetricSocket("ENV_Wall_6m_v001", new Vector3(-31.9f, 0f, -3f), new Vector3(6f, 4.2f, 0.2f), "GROUND_CENTER"),
+                MetricSocket("ENV_Wall_InnerCorner_v001", new Vector3(-31.9f, 0f, -21.9f), new Vector3(0.4f, 4.2f, 0.4f), "GROUND_INNER_CORNER"),
+                MetricSocket("ENV_Wall_OuterCorner_v001", new Vector3(31.9f, 0f, -21.9f), new Vector3(0.4f, 4.2f, 0.4f), "GROUND_OUTER_CORNER"),
+                MetricSocket("ENV_Wall_DoorModule_v001", new Vector3(26f, 0f, 21.9f), new Vector3(4.5f, 4.2f, 0.3f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_1m_v001", new Vector3(-3.5f, 0f, 1f), new Vector3(0.2f, 1.2f, 1f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_2m_v001", new Vector3(-3.5f, 0f, 5f), new Vector3(0.2f, 1.2f, 2f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_3m_v001", new Vector3(-6.5f, 0f, 3f), new Vector3(3f, 1.2f, 0.2f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_Corner_v001", new Vector3(-10f, 0f, -1f), new Vector3(0.4f, 1.2f, 0.4f), "GROUND_CORNER"),
+                MetricSocket("ENV_LowPartition_TJunction_v001", new Vector3(-3.5f, 0f, 3f), new Vector3(0.6f, 1.2f, 0.6f), "GROUND_CENTER"),
+                MetricSocket("ENV_LowPartition_EndCap_v001", new Vector3(3.5f, 0f, 11f), new Vector3(0.3f, 1.2f, 0.3f), "GROUND_CENTER"),
+                MetricSocket("ENV_Floor_4m_v001", new Vector3(-28f, 0f, -18f), new Vector3(4f, 0.2f, 4f), "TOP_CENTER"),
+                MetricSocket("ENV_Ceiling_4m_v001", new Vector3(-28f, 4.2f, -18f), new Vector3(4f, 0.2f, 4f), "BOTTOM_CENTER"),
+                MetricSocket("ENV_Column_070_v001", new Vector3(20f, 0f, 3f), new Vector3(0.7f, 4.2f, 0.7f), "GROUND_CENTER"),
+                MetricSocket("ENV_ExitDoor_Frame_v001", new Vector3(26f, 0f, 21.9f), new Vector3(4.5f, 4.2f, 0.3f), "GROUND_CENTER"),
+                MetricSocket("ENV_SecurityShutter_VistaOnly_v001", new Vector3(26f, 0f, 22.1f), new Vector3(4.5f, 3f, 0.2f), "GROUND_CENTER"),
+                MetricSocket("ENV_FluorescentFixture_A_v001", new Vector3(-8f, 4.1f, 5f), new Vector3(1.2f, 0.1f, 0.3f), "CEILING_CENTER"),
+                MetricSocket("ENV_FluorescentFixture_B_v001", new Vector3(8f, 4.1f, 5f), new Vector3(1.2f, 0.1f, 0.3f), "CEILING_CENTER")
+            };
+
+            SocketSpec[] fixedDeskSpecs =
+            {
+                MetricSocket("PRP_FixedDesk_Single_v001", new Vector3(-6.5f, 0f, 1f), new Vector3(1.4f, 0.75f, 0.7f), "GROUND_CENTER"),
+                MetricSocket("PRP_FixedDesk_Double_v001", new Vector3(6.5f, 0f, 5f), new Vector3(2.8f, 0.75f, 0.7f), "GROUND_CENTER"),
+                MetricSocket("PRP_FixedDesk_LShape_v001", new Vector3(-6.5f, 0f, 9f), new Vector3(2.1f, 0.75f, 1.6f), "GROUND_INNER_CORNER")
+            };
+
+            SocketSpec[] gameplaySpecs =
+            {
+                MetricSocket("PRP_OfficeChair_Gameplay_v002", new Vector3(5f, 0f, -15f), new Vector3(0.729f, 0.998f, 0.697f), "GROUND_CENTER"),
+                MetricSocket("PRP_RollingDrawer_Gameplay_v002", new Vector3(18f, 0f, 15f), new Vector3(0.760f, 0.998f, 0.744f), "GROUND_CENTER"),
+                MetricSocket("PRP_Copier_Recognition_v002", new Vector3(-29f, 0f, -14f), new Vector3(0.614f, 0.979f, 0.655f), "GROUND_CENTER"),
+                MetricSocket("PRP_FileBinder_Gameplay_v002", new Vector3(-5f, 0f, -15f), new Vector3(0.29f, 0.32f, 0.08f), "GROUND_CENTER")
+            };
+
+            SocketSpec[] dressingSpecs =
+            {
+                MetricSocket("DEC_MonitorCluster_A_v001", new Vector3(-6.5f, 0.8f, 1f), new Vector3(0.9f, 0.55f, 0.35f), "DESK_CENTER"),
+                MetricSocket("DEC_MonitorCluster_B_v001", new Vector3(6.5f, 0.8f, 1f), new Vector3(1.1f, 0.55f, 0.35f), "DESK_CENTER"),
+                MetricSocket("DEC_MonitorCluster_C_v001", new Vector3(-6.5f, 0.8f, 5f), new Vector3(1.2f, 0.6f, 0.4f), "DESK_CENTER"),
+                MetricSocket("DEC_KeyboardPhoneCluster_v001", new Vector3(6.5f, 0.8f, 5f), new Vector3(0.8f, 0.18f, 0.45f), "DESK_CENTER"),
+                MetricSocket("DEC_PaperStack_A_v001", new Vector3(-6f, 0.8f, 9f), new Vector3(0.32f, 0.16f, 0.24f), "DESK_CENTER"),
+                MetricSocket("DEC_PaperStack_B_v001", new Vector3(6f, 0.8f, 9f), new Vector3(0.45f, 0.2f, 0.3f), "DESK_CENTER"),
+                MetricSocket("DEC_ArchiveBox_A_v001", new Vector3(-30f, 0f, 12f), new Vector3(0.45f, 0.35f, 0.35f), "GROUND_CENTER"),
+                MetricSocket("DEC_ArchiveBox_B_v001", new Vector3(-29f, 0f, 13f), new Vector3(0.55f, 0.4f, 0.4f), "GROUND_CENTER"),
+                MetricSocket("DEC_Plant_A_v001", new Vector3(-29f, 0f, 19f), new Vector3(0.7f, 1.5f, 0.7f), "GROUND_CENTER"),
+                MetricSocket("DEC_Plant_B_v001", new Vector3(29f, 0f, 18f), new Vector3(0.9f, 1.8f, 0.9f), "GROUND_CENTER"),
+                MetricSocket("DEC_WasteBin_A_v001", new Vector3(-9f, 0f, 2f), new Vector3(0.4f, 0.55f, 0.4f), "GROUND_CENTER"),
+                MetricSocket("DEC_WasteBin_B_v001", new Vector3(9f, 0f, 8f), new Vector3(0.45f, 0.6f, 0.45f), "GROUND_CENTER"),
+                MetricSocket("DEC_CableBundle_VisualOnly_v001", new Vector3(-6.5f, 0.02f, 3f), new Vector3(1.8f, 0.04f, 0.35f), "FLOOR_CENTER"),
+                MetricSocket("DEC_FloorTape_Set_v001", new Vector3(0f, 0.02f, -13f), new Vector3(8f, 0.02f, 1f), "FLOOR_CENTER"),
+                MetricSocket("DEC_AssetTag_Set_v001", new Vector3(-28f, 1.2f, -5f), new Vector3(0.5f, 0.3f, 0.02f), "SURFACE_CENTER"),
+                MetricSocket("DEC_KEEP_CLEAR_v001", new Vector3(18f, 0.02f, 15f), new Vector3(4f, 0.02f, 2f), "FLOOR_CENTER"),
+                MetricSocket("DEC_EXIT_DIRECTION_v001", new Vector3(23f, 2.1f, 21.9f), new Vector3(1.2f, 0.4f, 0.02f), "WALL_CENTER"),
+                MetricSocket("DEC_EQUIPMENT_TRANSFER_v001", new Vector3(-27f, 1.6f, -3f), new Vector3(1.5f, 0.5f, 0.02f), "WALL_CENTER"),
+                MetricSocket("DEC_MOBILE_STORAGE_PARKING_v001", new Vector3(22f, 0.02f, 15f), new Vector3(4f, 0.02f, 3f), "FLOOR_CENTER"),
+                MetricSocket("DEC_WheelMarks_v001", new Vector3(23f, 0.02f, 7f), new Vector3(6f, 0.02f, 2f), "FLOOR_CENTER"),
+                MetricSocket("DEC_WallScuffs_v001", new Vector3(-31.9f, 1.2f, 5f), new Vector3(0.02f, 1.5f, 3f), "WALL_CENTER"),
+                MetricSocket("DEC_ImpactMarks_v001", new Vector3(31.9f, 1.2f, 9f), new Vector3(0.02f, 1.8f, 3f), "WALL_CENTER")
+            };
+
+            SocketSpec[] materialSpecs =
+            {
+                CatalogSocket("MAT_PaintedGypsumWall_v001"),
+                CatalogSocket("MAT_SuspendedCeilingTile_v001"),
+                CatalogSocket("MAT_CommercialCarpet_v001"),
+                CatalogSocket("MAT_WornVinylFloor_v001"),
+                CatalogSocket("MAT_LaminateCompositeDesk_v001"),
+                CatalogSocket("MAT_PaintedSteel_v001"),
+                CatalogSocket("MAT_WornPlasticRubber_v001"),
+                CatalogSocket("MAT_PaperCardboard_v001"),
+                CatalogSocket("MAT_OfficeFabricUpholstery_v001")
+            };
+
+            SocketSpec[] decalSpecs =
+            {
+                CatalogSocket("DECAL_SignageAssetLabel_Atlas_v001"),
+                CatalogSocket("DECAL_WearScuffWheelMark_Atlas_v001"),
+                CatalogSocket("DECAL_DustTonerContactMark_Atlas_v001")
+            };
+
+            CreateMetricSockets(architecture, architectureSpecs, "SOCKET_");
+            CreateMetricSockets(fixedDesk, fixedDeskSpecs, "SOCKET_");
+            CreateMetricSockets(gameplay, gameplaySpecs, "SOCKET_");
+            CreateMetricSockets(dressing, dressingSpecs, "DRESSING_SOCKET_");
+            CreateMetricSockets(sharedMaterial, materialSpecs, "SOCKET_");
+            CreateMetricSockets(decalAtlas, decalSpecs, "SOCKET_");
+        }
+
+        private static SocketSpec MetricSocket(
+            string assetId,
+            Vector3 position,
+            Vector3 intendedBounds,
+            string pivotReference)
+        {
+            return new SocketSpec(assetId, position, intendedBounds, pivotReference, true);
+        }
+
+        private static SocketSpec CatalogSocket(string assetId)
+        {
+            return new SocketSpec(
+                assetId,
+                Vector3.zero,
+                Vector3.one,
+                "NON_SPATIAL_CATALOG_ONLY",
+                false);
+        }
+
+        private static void CreateMetricSockets(
+            Transform parent,
+            IEnumerable<SocketSpec> specs,
+            string prefix)
+        {
+            foreach (SocketSpec spec in specs)
+            {
+                Transform socket = CreateMarker(
+                    parent,
+                    prefix + spec.AssetId,
+                    spec.Position,
+                    Vector3.one);
+                Transform bounds = CreateGroup(
+                    socket,
+                    spec.IsSpatial
+                        ? "INTENDED_BOUNDS_PROVISIONAL_REVIEW_REQUIRED"
+                        : "INTENDED_BOUNDS_NON_SPATIAL_CATALOG_ONLY");
+                bounds.localPosition = Vector3.zero;
+                bounds.localScale = spec.IntendedBounds;
+                Transform pivot = CreateGroup(socket, "PIVOT_" + spec.PivotReference);
+                pivot.localPosition = Vector3.zero;
+                pivot.localScale = Vector3.one;
             }
         }
 
@@ -497,12 +1154,12 @@ namespace BreakNotice.Contest.Editor
 
         private static void ValidatePreservedGameplayRoots(Scene scene)
         {
-            RequireRoot(scene, "Player");
+            RequireRootAny(scene, "Player", "GAMEPLAY_CHR00_PLAYER");
             RequireRoot(scene, "GameplayCameraRig");
             RequireRoot(scene, "ContestBrowserInput");
-            RequireRoot(scene, "AllyProxy");
-            RequireRoot(scene, "EnemyProxy_01");
-            RequireRoot(scene, "EnemyProxy_02");
+            RequireRootAny(scene, "AllyProxy", "GAMEPLAY_CHR01_MOBILE_ALLY");
+            RequireRootAny(scene, "EnemyProxy_01", "GAMEPLAY_ENY01_RUNNER_01");
+            RequireRootAny(scene, "EnemyProxy_02", "GAMEPLAY_ENY01_RUNNER_02");
 
             PrototypeInteractionTarget[] targets = GetInteractionTargets(scene);
             string[] expectedKeys =
@@ -623,6 +1280,19 @@ namespace BreakNotice.Contest.Editor
             return cube;
         }
 
+        private static void SetActorReviewTransform(
+            GameObject actor,
+            string reviewName,
+            Vector2 position)
+        {
+            actor.name = reviewName;
+            actor.transform.SetPositionAndRotation(
+                new Vector3(position.x, 1f, position.y),
+                Quaternion.identity);
+            EditorUtility.SetDirty(actor);
+            EditorUtility.SetDirty(actor.transform);
+        }
+
         private static void SetPlanarPosition(GameObject gameObject, float x, float z)
         {
             Vector3 position = gameObject.transform.position;
@@ -641,10 +1311,82 @@ namespace BreakNotice.Contest.Editor
             return root;
         }
 
+        private static GameObject RequireRootAny(Scene scene, params string[] names)
+        {
+            foreach (string name in names)
+            {
+                GameObject root = FindRoot(scene, name);
+                if (root != null)
+                {
+                    return root;
+                }
+            }
+
+            throw new InvalidOperationException(
+                "Required Scene root is missing: " + string.Join(" or ", names));
+        }
+
+        private static T RequireSingleSceneComponent<T>(Scene scene) where T : Component
+        {
+            T[] components = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<T>(true))
+                .ToArray();
+            if (components.Length != 1)
+            {
+                throw new InvalidOperationException(
+                    $"Scene requires exactly one {typeof(T).Name}, found {components.Length}.");
+            }
+
+            return components[0];
+        }
+
         private static GameObject FindRoot(Scene scene, string name)
         {
             return scene.GetRootGameObjects()
                 .FirstOrDefault(root => string.Equals(root.name, name, StringComparison.Ordinal));
+        }
+
+        private readonly struct GameplayReviewSpec
+        {
+            public GameplayReviewSpec(string name, Vector2 position, Vector3 bounds)
+            {
+                Name = name;
+                Position = position;
+                Bounds = bounds;
+            }
+
+            public string Name { get; }
+
+            public Vector2 Position { get; }
+
+            public Vector3 Bounds { get; }
+        }
+
+        private readonly struct SocketSpec
+        {
+            public SocketSpec(
+                string assetId,
+                Vector3 position,
+                Vector3 intendedBounds,
+                string pivotReference,
+                bool isSpatial)
+            {
+                AssetId = assetId;
+                Position = position;
+                IntendedBounds = intendedBounds;
+                PivotReference = pivotReference;
+                IsSpatial = isSpatial;
+            }
+
+            public string AssetId { get; }
+
+            public Vector3 Position { get; }
+
+            public Vector3 IntendedBounds { get; }
+
+            public string PivotReference { get; }
+
+            public bool IsSpatial { get; }
         }
     }
 }
