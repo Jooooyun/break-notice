@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using NUnit.Framework;
 using UnityEditor;
@@ -242,6 +243,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(systems.All(system => system.main.loop), Is.True);
             Assert.That(systems.All(system => system.main.playOnAwake), Is.True);
             Assert.That(systems.All(system => !system.main.prewarm), Is.True);
+            Assert.That(
+                systems.All(system =>
+                    system.main.cullingMode == ParticleSystemCullingMode.AlwaysSimulate),
+                Is.True);
             Assert.That(systems.All(system => system.main.maxParticles == 1), Is.True);
             Assert.That(systems.All(system => system.main.startSpeed.constant == 0f), Is.True);
             Assert.That(systems.All(system => system.emission.burstCount == 1), Is.True);
@@ -338,9 +343,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(gameplay.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(24));
                 Assert.That(root.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(188));
                 Assert.That(root.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(140));
-                Assert.That(root.GetComponentsInChildren<MonoBehaviour>(true), Is.Empty);
+                MonoBehaviour[] reviewComponents =
+                    root.GetComponentsInChildren<MonoBehaviour>(true);
+                Assert.That(reviewComponents.Length, Is.EqualTo(1));
+                Assert.That(
+                    reviewComponents[0].GetType().FullName,
+                    Is.EqualTo("BreakNotice.ContestReview.ShowcaseVfxReviewPlayback"));
                 Assert.That(root.GetComponentsInChildren<Camera>(true).Length, Is.EqualTo(1));
-                Assert.That(root.GetComponentsInChildren<AudioListener>(true).Length, Is.EqualTo(1));
+                Assert.That(root.GetComponentsInChildren<AudioListener>(true), Is.Empty);
             }
             finally
             {
@@ -350,10 +360,184 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(EditorBuildSettings.scenes.Any(item =>
                 string.Equals(item.path, ReviewScenePath, StringComparison.OrdinalIgnoreCase)), Is.False);
             string[] dependencies = AssetDatabase.GetDependencies(ReviewScenePath, true);
-            Assert.That(dependencies.Any(path => path.Contains("/Code/Runtime/")), Is.False);
+            string[] runtimeDependencies = dependencies
+                .Where(path => path.Contains("/Code/Runtime/"))
+                .ToArray();
+            Assert.That(
+                runtimeDependencies,
+                Is.EquivalentTo(new[]
+                {
+                    "Assets/_Project/Code/Runtime/ContestReview/ShowcaseVfxReviewPlayback.cs"
+                }));
             Assert.That(dependencies.Any(path => path.StartsWith("Assets/_Project/Prefabs/", StringComparison.OrdinalIgnoreCase)), Is.False);
             Assert.That(dependencies.Any(path => path.StartsWith("Assets/_Project/Scenes/10_Prototype/", StringComparison.OrdinalIgnoreCase)), Is.False);
             Assert.That(AssetDatabase.FindAssets("t:Shader", new[] { ReviewRootPath }), Is.Empty);
+        }
+
+        [Test]
+        public void ReviewScene_UsesPositiveHandedFrontFacingTransformsAndUprightText()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
+            try
+            {
+                GameObject root = FindReviewRoot(scene);
+                Assert.That(root.transform.position, Is.EqualTo(Vector3.zero));
+                Assert.That(root.transform.rotation, Is.EqualTo(Quaternion.identity));
+                Assert.That(root.transform.localScale, Is.EqualTo(Vector3.one));
+
+                foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
+                {
+                    Assert.That(transform.localScale.x, Is.GreaterThan(0f), transform.name);
+                    Assert.That(transform.localScale.y, Is.GreaterThan(0f), transform.name);
+                    Assert.That(transform.localScale.z, Is.GreaterThan(0f), transform.name);
+                    Assert.That(
+                        transform.localToWorldMatrix.determinant,
+                        Is.GreaterThan(0f),
+                        transform.name);
+                }
+
+                Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
+                Assert.That(camera.transform.position, Is.EqualTo(new Vector3(0f, 0.65f, -19.5f)));
+                Assert.That(Vector3.Dot(camera.transform.forward, Vector3.forward), Is.GreaterThan(0.999f));
+                Assert.That(Vector3.Dot(camera.transform.up, Vector3.up), Is.GreaterThan(0.999f));
+                Assert.That(Vector3.Dot(camera.transform.right, Vector3.right), Is.GreaterThan(0.999f));
+                Assert.That(camera.fieldOfView, Is.EqualTo(40f).Within(0.001f));
+                Assert.That(camera.nearClipPlane, Is.EqualTo(0.1f).Within(0.001f));
+                Assert.That(camera.farClipPlane, Is.EqualTo(80f).Within(0.001f));
+
+                TextMesh[] labels = root.GetComponentsInChildren<TextMesh>(true);
+                Assert.That(labels.Length, Is.GreaterThan(0));
+                foreach (TextMesh label in labels)
+                {
+                    Assert.That(label.transform.localRotation, Is.EqualTo(Quaternion.identity), label.text);
+                    Assert.That(label.transform.localScale, Is.EqualTo(Vector3.one), label.text);
+                    Assert.That(
+                        Vector3.Dot(label.transform.forward, camera.transform.forward),
+                        Is.GreaterThan(0.999f),
+                        label.text);
+                    Assert.That(
+                        camera.WorldToViewportPoint(label.transform.position).z,
+                        Is.GreaterThan(0f),
+                        label.text);
+                }
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(scene, true);
+            }
+        }
+
+        [Test]
+        public void ReviewCamera_ContainsAllEightStationsAtSixteenByNine()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
+            try
+            {
+                GameObject root = FindReviewRoot(scene);
+                Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
+                camera.aspect = 16f / 9f;
+                Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
+                Transform oldNew = root.transform.Find("ZONE_01_OLD_VS_NEW");
+                Transform[] stations = oldNew.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("STATION_", StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(stations.Length, Is.EqualTo(8));
+
+                foreach (Transform station in stations)
+                {
+                    Renderer backdrop = station.GetComponentsInChildren<Renderer>(true)
+                        .Single(item => item.gameObject.name == "REVIEW_BACKDROP");
+                    Assert.That(
+                        GeometryUtility.TestPlanesAABB(frustum, backdrop.bounds),
+                        Is.True,
+                        station.name);
+                    Vector3 viewport = camera.WorldToViewportPoint(backdrop.bounds.center);
+                    Assert.That(viewport.z, Is.GreaterThan(camera.nearClipPlane), station.name);
+                    Assert.That(viewport.x, Is.InRange(0f, 1f), station.name);
+                    Assert.That(viewport.y, Is.InRange(0f, 1f), station.name);
+                }
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(scene, true);
+            }
+        }
+
+        [Test]
+        public void ReviewPlaybackBootstrap_RestartsAllActiveParticleSystems()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
+            try
+            {
+                GameObject root = FindReviewRoot(scene);
+                MonoBehaviour playback = root.GetComponents<MonoBehaviour>()
+                    .Single(item =>
+                        item.GetType().FullName ==
+                        "BreakNotice.ContestReview.ShowcaseVfxReviewPlayback");
+                MethodInfo restart = playback.GetType().GetMethod("RestartAllNow");
+                Assert.That(restart, Is.Not.Null);
+                int started = (int)restart.Invoke(playback, null);
+                Assert.That(started, Is.EqualTo(140));
+                Assert.That(
+                    root.GetComponentsInChildren<ParticleSystem>(false)
+                        .All(system => system.isPlaying),
+                    Is.True);
+
+                Transform oldNew = root.transform.Find("ZONE_01_OLD_VS_NEW");
+                Transform[] stations = oldNew.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("STATION_", StringComparison.Ordinal))
+                    .ToArray();
+                foreach (Transform station in stations)
+                {
+                    Transform composite = station.Find("NEW_PREMIUM_V002_COMPOSITE");
+                    ParticleSystem[] systems =
+                        composite.GetComponentsInChildren<ParticleSystem>(false);
+                    Assert.That(systems.Length, Is.EqualTo(3), station.name);
+                    foreach (ParticleSystem system in systems)
+                    {
+                        system.Simulate(0.42f, false, true, false);
+                        Assert.That(system.particleCount, Is.GreaterThan(0), system.name);
+                    }
+                }
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(scene, true);
+            }
+        }
+
+        [Test]
+        public void ReviewScene_RenderersHaveNoMissingMaterialTextureOrShader()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
+            try
+            {
+                GameObject root = FindReviewRoot(scene);
+                foreach (Renderer renderer in root.GetComponentsInChildren<Renderer>(true))
+                {
+                    Assert.That(renderer.sharedMaterials, Is.Not.Empty, renderer.name);
+                    foreach (Material material in renderer.sharedMaterials)
+                    {
+                        Assert.That(material, Is.Not.Null, renderer.name);
+                        Assert.That(material.shader, Is.Not.Null, material.name);
+                        Assert.That(
+                            material.shader.name,
+                            Is.Not.EqualTo("Hidden/InternalErrorShader"),
+                            material.name);
+                    }
+
+                    if (renderer is ParticleSystemRenderer)
+                    {
+                        Material material = renderer.sharedMaterial;
+                        Assert.That(material.HasProperty("_MainTex"), Is.True, material.name);
+                        Assert.That(material.GetTexture("_MainTex"), Is.Not.Null, material.name);
+                    }
+                }
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(scene, true);
+            }
         }
 
         [Test]
@@ -389,6 +573,15 @@ namespace BreakNotice.LocomotionCamera.Tests
             byte[] runtime = File.ReadAllBytes(ToPhysicalPath(candidate.TexturePath));
             Assert.That(runtime, Is.EqualTo(source));
             Assert.That(Sha256(runtime), Is.EqualTo(candidate.ExpectedSha256));
+        }
+
+        private static GameObject FindReviewRoot(Scene scene)
+        {
+            GameObject root = scene.GetRootGameObjects()
+                .SingleOrDefault(item =>
+                    item.name == "LOCAL_REVIEW_ONLY_ShowcaseVFX_ROOT");
+            Assert.That(root, Is.Not.Null);
+            return root;
         }
 
         private static Candidate C(

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BreakNotice.ContestReview;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace BreakNotice.Contest.Editor
     /// assets remain local-review-only and do not reference gameplay state,
     /// runtime hooks, shared prefabs, build settings, packages, or custom shaders.
     /// </summary>
+    [InitializeOnLoad]
     public static class ShowcaseVfxReviewAuthoring
     {
         public const string ReviewRootPath =
@@ -38,6 +40,51 @@ namespace BreakNotice.Contest.Editor
         private const string LayerZoneName = "ZONE_02_SOLO_LAYER_AND_COMPOSITE";
         private const string VariationZoneName = "ZONE_03_PHYSICAL_VARIATION_AUDITION";
         private const string GameplayZoneName = "ZONE_04_GAMEPLAY_CAMERA_EQUIVALENT";
+        private const string FixedSceneViewCaptureArgument =
+            "-showcaseVfxFixedSceneViewCapture";
+        private const string ActualPlayCaptureArgument =
+            "-showcaseVfxActualPlayCapture";
+        private const string ActualPlayCaptureCompleteKey =
+            "BreakNotice.ShowcaseVfxReview.ActualPlayCaptureComplete";
+        private const string ActualPlayCaptureExitCodeKey =
+            "BreakNotice.ShowcaseVfxReview.ActualPlayCaptureExitCode";
+        private const float ReviewCameraFieldOfView = 40f;
+        private const float ReviewCameraNearClip = 0.1f;
+        private const float ReviewCameraFarClip = 80f;
+        private const float ReviewSceneViewSize = 6.15f;
+        private const float ActualPlayCaptureDelay = 0.42f;
+
+        private static readonly Vector3 ReviewCameraPosition =
+            new Vector3(0f, 0.65f, -19.5f);
+
+        private static readonly Vector3 ReviewCameraTarget =
+            new Vector3(0f, 0.55f, 0f);
+
+        private static readonly Quaternion ReviewCameraRotation =
+            Quaternion.LookRotation(
+                ReviewCameraTarget - ReviewCameraPosition,
+                Vector3.up);
+
+        private static double actualPlayCaptureEnteredAt;
+        private static bool actualPlayCaptureScheduled;
+
+        static ShowcaseVfxReviewAuthoring()
+        {
+            EditorApplication.playModeStateChanged -= HandlePlayModeStateChanged;
+            EditorApplication.playModeStateChanged += HandlePlayModeStateChanged;
+
+            if (!string.IsNullOrWhiteSpace(ReadCommandLineValue(ActualPlayCaptureArgument)))
+            {
+                if (EditorApplication.isPlaying)
+                {
+                    ScheduleActualPlayCapture();
+                }
+                else if (SessionState.GetBool(ActualPlayCaptureCompleteKey, false))
+                {
+                    EditorApplication.delayCall += ExitAfterActualPlayCapture;
+                }
+            }
+        }
 
         private static readonly VariationDefinition[] PhysicalVariations =
         {
@@ -227,14 +274,72 @@ namespace BreakNotice.Contest.Editor
                 "M_LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumExit_v002",
                 new Color(0.28f, 0.38f, 0.32f, 1f));
 
-            CreateReviewScene(backdrop, panel, floor, prop, binder, ally, exit);
+            GameObject reviewRoot = CreateReviewScene(
+                backdrop,
+                panel,
+                floor,
+                prop,
+                binder,
+                ally,
+                exit);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            FrameSceneViewForReview(reviewRoot, true);
             Debug.Log(
                 "Premium Showcase VFX review prepared: replacementEffects=8/8, " +
                 "layerImports=24, compositeStations=8/8, physicalVariations=12, " +
-                "gameplayIntegration=0, status=REVIEW / OWNER APPROVAL PENDING.");
+                "sceneViewFrontFramed=1, playBootstrap=1, gameplayIntegration=0, " +
+                "status=REVIEW / OWNER APPROVAL PENDING.");
+        }
+
+        public static void CaptureFixedReviewSceneViewFrame()
+        {
+            string outputPath = RequireOutputPath(FixedSceneViewCaptureArgument);
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Single);
+            GameObject root = FindReviewRoot(scene);
+            SceneView sceneView = FrameSceneViewForReview(root, false);
+
+            SimulateAllParticles(root, ActualPlayCaptureDelay);
+            Camera sceneViewCamera = sceneView.camera;
+            if (sceneViewCamera == null ||
+                Vector3.Dot(sceneViewCamera.transform.forward, Vector3.forward) < 0.99f ||
+                Vector3.Dot(sceneViewCamera.transform.up, Vector3.up) < 0.99f)
+            {
+                throw new InvalidOperationException(
+                    "Scene View front/upright framing contract failed.");
+            }
+
+            Camera reviewCamera = root.GetComponentsInChildren<Camera>(true).Single();
+            ConfigureReviewCamera(reviewCamera);
+            Texture2D capture = RenderCamera(reviewCamera, 1920, 1080);
+            try
+            {
+                File.WriteAllBytes(outputPath, capture.EncodeToPNG());
+            }
+            finally
+            {
+                DestroyReviewObject(capture);
+            }
+
+            Debug.Log(
+                $"Premium Showcase VFX fixed Scene View capture written: {outputPath}; " +
+                "orientation=FRONT_UPRIGHT; stations=8/8.");
+        }
+
+        public static void CaptureFixedReviewGameFrameFromActualPlay()
+        {
+            string outputPath = RequireOutputPath(ActualPlayCaptureArgument);
+            SessionState.SetBool(ActualPlayCaptureCompleteKey, false);
+            SessionState.SetInt(ActualPlayCaptureExitCodeKey, 1);
+
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Single);
+            GameObject root = FindReviewRoot(scene);
+            Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
+            ConfigureReviewCamera(camera);
+            EditorApplication.isPlaying = true;
+            Debug.Log(
+                $"Premium Showcase VFX actual Play capture armed: {outputPath}");
         }
 
         public static void CapturePremiumReviewFrames()
@@ -515,7 +620,7 @@ namespace BreakNotice.Contest.Editor
             main.gravityModifier = 0f;
             main.maxParticles = 1;
             main.stopAction = ParticleSystemStopAction.None;
-            main.cullingMode = ParticleSystemCullingMode.Automatic;
+            main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
 
             ParticleSystem.EmissionModule emission = particleSystem.emission;
             emission.enabled = true;
@@ -652,7 +757,7 @@ namespace BreakNotice.Contest.Editor
             return material;
         }
 
-        private static void CreateReviewScene(
+        private static GameObject CreateReviewScene(
             Material backdrop,
             Material panel,
             Material floor,
@@ -664,6 +769,9 @@ namespace BreakNotice.Contest.Editor
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             GameObject root = new GameObject(SceneRootName);
             SceneManager.MoveGameObjectToScene(root, scene);
+            root.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            root.transform.localScale = Vector3.one;
+            root.AddComponent<ShowcaseVfxReviewPlayback>();
             CreateReviewCamera(root.transform);
 
             CreateOldNewZone(scene, root.transform, Vector3.zero, backdrop, panel);
@@ -688,6 +796,8 @@ namespace BreakNotice.Contest.Editor
                 throw new InvalidOperationException(
                     $"Could not save isolated premium review scene: {ReviewScenePath}");
             }
+
+            return root;
         }
 
         private static void CreateOldNewZone(
@@ -1017,6 +1127,8 @@ namespace BreakNotice.Contest.Editor
             GameObject zone = new GameObject(name);
             zone.transform.SetParent(parent, false);
             zone.transform.localPosition = position;
+            zone.transform.localRotation = Quaternion.identity;
+            zone.transform.localScale = Vector3.one;
             return zone.transform;
         }
 
@@ -1082,20 +1194,25 @@ namespace BreakNotice.Contest.Editor
         {
             GameObject cameraObject = new GameObject("LOCAL_REVIEW_ONLY_CAMERA");
             cameraObject.transform.SetParent(parent, false);
-            cameraObject.transform.position = new Vector3(0f, 0.65f, -19.5f);
-            cameraObject.transform.rotation = Quaternion.LookRotation(
-                new Vector3(0f, 0.55f, 0f) - cameraObject.transform.position,
-                Vector3.up);
+            cameraObject.tag = "MainCamera";
             Camera camera = cameraObject.AddComponent<Camera>();
+            ConfigureReviewCamera(camera);
+        }
+
+        private static void ConfigureReviewCamera(Camera camera)
+        {
+            camera.transform.SetPositionAndRotation(
+                ReviewCameraPosition,
+                ReviewCameraRotation);
+            camera.transform.localScale = Vector3.one;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.016f, 0.019f, 0.020f, 1f);
-            camera.fieldOfView = 40f;
-            camera.nearClipPlane = 0.1f;
-            camera.farClipPlane = 70f;
+            camera.fieldOfView = ReviewCameraFieldOfView;
+            camera.nearClipPlane = ReviewCameraNearClip;
+            camera.farClipPlane = ReviewCameraFarClip;
             camera.allowHDR = true;
             camera.allowMSAA = true;
             camera.depth = 0f;
-            cameraObject.AddComponent<AudioListener>();
         }
 
         private static void CreateLabel(
@@ -1109,6 +1226,8 @@ namespace BreakNotice.Contest.Editor
             GameObject labelObject = new GameObject(objectName);
             labelObject.transform.SetParent(parent, false);
             labelObject.transform.localPosition = localPosition;
+            labelObject.transform.localRotation = Quaternion.identity;
+            labelObject.transform.localScale = Vector3.one;
             TextMesh label = labelObject.AddComponent<TextMesh>();
             Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             label.font = font;
@@ -1165,7 +1284,253 @@ namespace BreakNotice.Contest.Editor
                 camera.targetTexture = null;
                 RenderTexture.active = previous;
                 renderTexture.Release();
-                UnityEngine.Object.DestroyImmediate(renderTexture);
+                DestroyReviewObject(renderTexture);
+            }
+        }
+
+        private static GameObject FindReviewRoot(Scene scene)
+        {
+            GameObject root = scene.GetRootGameObjects()
+                .SingleOrDefault(item => item.name == SceneRootName);
+            if (root == null)
+            {
+                throw new InvalidOperationException(
+                    $"Review root is unavailable in scene: {scene.path}");
+            }
+
+            return root;
+        }
+
+        private static string RequireOutputPath(string argumentName)
+        {
+            string outputPath = ReadCommandLineValue(argumentName);
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                throw new ArgumentException(
+                    $"An output path is required through {argumentName}.");
+            }
+
+            string fullPath = Path.GetFullPath(outputPath);
+            string directory = Path.GetDirectoryName(fullPath);
+            if (string.IsNullOrWhiteSpace(directory))
+            {
+                throw new InvalidOperationException(
+                    $"Capture output has no parent directory: {fullPath}");
+            }
+
+            Directory.CreateDirectory(directory);
+            return fullPath;
+        }
+
+        private static SceneView FrameSceneViewForReview(GameObject root, bool focus)
+        {
+            if (root == null)
+            {
+                throw new ArgumentNullException(nameof(root));
+            }
+
+            SceneView view = SceneView.lastActiveSceneView ?? EditorWindow.GetWindow<SceneView>();
+            if (view == null)
+            {
+                throw new InvalidOperationException("Scene View is unavailable for review framing.");
+            }
+
+            Selection.activeGameObject = root;
+            view.in2DMode = false;
+            view.orthographic = false;
+            view.sceneLighting = false;
+            view.LookAtDirect(
+                ReviewCameraTarget,
+                ReviewCameraRotation,
+                ReviewSceneViewSize);
+            view.Repaint();
+            if (focus && !Application.isBatchMode)
+            {
+                view.Focus();
+            }
+
+            return view;
+        }
+
+        private static void HandlePlayModeStateChanged(PlayModeStateChange state)
+        {
+            if (string.IsNullOrWhiteSpace(ReadCommandLineValue(ActualPlayCaptureArgument)))
+            {
+                return;
+            }
+
+            if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                ScheduleActualPlayCapture();
+            }
+            else if (
+                state == PlayModeStateChange.EnteredEditMode &&
+                SessionState.GetBool(ActualPlayCaptureCompleteKey, false))
+            {
+                EditorApplication.delayCall += ExitAfterActualPlayCapture;
+            }
+        }
+
+        private static void ScheduleActualPlayCapture()
+        {
+            if (actualPlayCaptureScheduled)
+            {
+                return;
+            }
+
+            actualPlayCaptureScheduled = true;
+            actualPlayCaptureEnteredAt = EditorApplication.timeSinceStartup;
+            EditorApplication.update -= ActualPlayCaptureTick;
+            EditorApplication.update += ActualPlayCaptureTick;
+        }
+
+        private static void ActualPlayCaptureTick()
+        {
+            if (!EditorApplication.isPlaying ||
+                EditorApplication.timeSinceStartup - actualPlayCaptureEnteredAt <
+                ActualPlayCaptureDelay)
+            {
+                return;
+            }
+
+            EditorApplication.update -= ActualPlayCaptureTick;
+            actualPlayCaptureScheduled = false;
+            int exitCode = 1;
+            try
+            {
+                CaptureAndValidateActualPlayFrame();
+                exitCode = 0;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
+            finally
+            {
+                SessionState.SetInt(ActualPlayCaptureExitCodeKey, exitCode);
+                SessionState.SetBool(ActualPlayCaptureCompleteKey, true);
+                EditorApplication.isPlaying = false;
+            }
+        }
+
+        private static void CaptureAndValidateActualPlayFrame()
+        {
+            string outputPath = RequireOutputPath(ActualPlayCaptureArgument);
+            Scene scene = SceneManager.GetActiveScene();
+            GameObject root = FindReviewRoot(scene);
+            Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
+            ConfigureReviewCamera(camera);
+
+            Transform oldNewZone = root.transform.Find(OldNewZoneName);
+            if (oldNewZone == null)
+            {
+                throw new InvalidOperationException("Old/new review zone is unavailable.");
+            }
+
+            Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
+            int stationCount = 0;
+            int playingStationCount = 0;
+            int liveStationCount = 0;
+            int visibleStationCount = 0;
+            int activeSystemCount = 0;
+            int systemsWithParticles = 0;
+            for (int index = 0; index < oldNewZone.childCount; index++)
+            {
+                Transform station = oldNewZone.GetChild(index);
+                if (!station.name.StartsWith("STATION_", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                stationCount++;
+                Transform composite = station.Find("NEW_PREMIUM_V002_COMPOSITE");
+                if (composite == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Premium composite is unavailable: {station.name}");
+                }
+
+                ParticleSystem[] systems =
+                    composite.GetComponentsInChildren<ParticleSystem>(false);
+                if (systems.Length != 3)
+                {
+                    throw new InvalidOperationException(
+                        $"Premium composite layer count is not 3: {station.name}={systems.Length}");
+                }
+
+                bool stationPlaying = true;
+                bool stationHasParticles = false;
+                foreach (ParticleSystem system in systems)
+                {
+                    bool activeAndPlaying = system.gameObject.activeInHierarchy && system.isPlaying;
+                    stationPlaying &= activeAndPlaying;
+                    activeSystemCount += activeAndPlaying ? 1 : 0;
+                    bool hasParticles = system.particleCount > 0;
+                    stationHasParticles |= hasParticles;
+                    systemsWithParticles += hasParticles ? 1 : 0;
+                }
+
+                playingStationCount += stationPlaying ? 1 : 0;
+                liveStationCount += stationHasParticles ? 1 : 0;
+                Renderer backdrop = station.GetComponentsInChildren<Renderer>(true)
+                    .Single(item => item.gameObject.name == "REVIEW_BACKDROP");
+                visibleStationCount += GeometryUtility.TestPlanesAABB(frustum, backdrop.bounds)
+                    ? 1
+                    : 0;
+            }
+
+            if (stationCount != 8 || playingStationCount != 8 ||
+                liveStationCount != 8 || activeSystemCount != 24 ||
+                systemsWithParticles < 8 || visibleStationCount != 8)
+            {
+                throw new InvalidOperationException(
+                    "Actual Play review contract failed: " +
+                    $"stations={stationCount}/8, playing={playingStationCount}/8, " +
+                    $"liveStations={liveStationCount}/8, " +
+                    $"activeSystems={activeSystemCount}/24, " +
+                    $"systemsWithParticles={systemsWithParticles}/24 (minimum 8), " +
+                    $"visible={visibleStationCount}/8.");
+            }
+
+            Texture2D capture = RenderCamera(camera, 1920, 1080);
+            try
+            {
+                File.WriteAllBytes(outputPath, capture.EncodeToPNG());
+            }
+            finally
+            {
+                DestroyReviewObject(capture);
+            }
+
+            Debug.Log(
+                "Premium Showcase VFX actual Play capture PASS: " +
+                $"{outputPath}; stations=8/8; playing=8/8; " +
+                $"liveStations=8/8; activeSystems=24/24; " +
+                $"systemsWithParticles={systemsWithParticles}/24; " +
+                "visible=8/8; gameplayIntegration=0.");
+        }
+
+        private static void ExitAfterActualPlayCapture()
+        {
+            EditorApplication.delayCall -= ExitAfterActualPlayCapture;
+            int exitCode = SessionState.GetInt(ActualPlayCaptureExitCodeKey, 1);
+            EditorApplication.Exit(exitCode);
+        }
+
+        private static void DestroyReviewObject(UnityEngine.Object target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                UnityEngine.Object.Destroy(target);
+            }
+            else
+            {
+                UnityEngine.Object.DestroyImmediate(target);
             }
         }
 
