@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Interaction;
@@ -7,6 +8,7 @@ using BreakNotice.Presentation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace BreakNotice.Contest.Editor
@@ -31,6 +33,21 @@ namespace BreakNotice.Contest.Editor
             "SHOWCASE_V2_PROVISIONAL_LOCAL_REVIEW_ONLY";
 
         public const string MobileAllyRootName = "SHOWCASE_S2_MOBILE_ALLY";
+
+        private const string V2ReviewCaptureFolderName =
+            "break-notice-showcase-v2-readability";
+
+        private static readonly Color[] V2ZoneColors =
+        {
+            new Color(0.20f, 0.82f, 1.00f, 1f),
+            new Color(0.35f, 0.95f, 0.72f, 1f),
+            new Color(1.00f, 0.77f, 0.22f, 1f),
+            new Color(0.30f, 0.62f, 1.00f, 1f),
+            new Color(0.78f, 0.50f, 1.00f, 1f),
+            new Color(1.00f, 0.46f, 0.30f, 1f),
+            new Color(1.00f, 0.32f, 0.58f, 1f),
+            new Color(0.48f, 1.00f, 0.40f, 1f)
+        };
 
         private static readonly string[] LegacyEnvironmentRootNames =
         {
@@ -135,6 +152,62 @@ namespace BreakNotice.Contest.Editor
                 "Provisional v002 layout prepared: LOCAL_REVIEW_ONLY 64m x 44m envelope, " +
                 "eight-zone figure-eight, S2 mobile ally, 60 Designer B replacement " +
                 "sockets, zero Production Art integration and no S3 implementation.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
+        public static void CaptureV2ReadabilityReview()
+        {
+            RequireSceneAsset(ShowcaseV2ScenePath);
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseV2ScenePath,
+                OpenSceneMode.Single);
+
+            string outputFolder = Path.Combine(
+                Path.GetTempPath(),
+                V2ReviewCaptureFolderName);
+            Directory.CreateDirectory(outputFolder);
+
+            string overviewPath = Path.Combine(
+                outputFolder,
+                "overview-1920x1080.png");
+            string playerCameraPath = Path.Combine(
+                outputFolder,
+                "player-camera-1920x1080.png");
+
+            GameObject player = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR00_PLAYER",
+                "Player");
+            Camera sourceCamera = RequireSingleSceneComponent<Camera>(scene);
+
+            CaptureV2ReviewFrame(
+                scene,
+                overviewPath,
+                "TEMP_REVIEW_OVERVIEW_CAMERA",
+                new Vector3(0f, 48f, -1f),
+                Quaternion.Euler(90f, 0f, 0f),
+                true,
+                24f,
+                sourceCamera.fieldOfView);
+
+            Vector3 playerReviewCameraPosition =
+                player.transform.position + new Vector3(4.2f, 2.4f, -2.8f);
+            Vector3 playerReviewFocus =
+                player.transform.position + new Vector3(0f, -0.2f, 7f);
+            CaptureV2ReviewFrame(
+                scene,
+                playerCameraPath,
+                "TEMP_REVIEW_PLAYER_CAMERA",
+                playerReviewCameraPosition,
+                Quaternion.LookRotation(
+                    playerReviewFocus - playerReviewCameraPosition,
+                    Vector3.up),
+                false,
+                0f,
+                sourceCamera.fieldOfView);
+
+            Debug.Log(
+                $"V2 readability review captures: {overviewPath} | {playerCameraPath}");
         }
 
         public static void ApplyS1Layout(Scene scene)
@@ -278,6 +351,7 @@ namespace BreakNotice.Contest.Editor
             Transform s2MobileAlly = CreateGroup(root.transform, "07_S2_MOBILE_ALLY");
             Transform reviewProxies = CreateGroup(root.transform, "08_S3_NOT_IMPLEMENTED_REVIEW_PROXIES");
             Transform assetSockets = CreateGroup(root.transform, "09_DESIGNER_B_REPLACEMENT_SOCKETS");
+            Transform visualReadability = CreateGroup(root.transform, "10_VISUAL_READABILITY");
 
             BuildV2Status(status);
             BuildV2Envelope(staticCollision);
@@ -290,6 +364,7 @@ namespace BreakNotice.Contest.Editor
             ConfigureV2MobileAlly(scene, s2MobileAlly);
             BuildV2FutureS3ReviewProxies(reviewProxies);
             BuildV2AssetSockets(assetSockets);
+            BuildV2VisualReadability(visualReadability);
 
             ValidatePreservedGameplayRoots(scene);
             if (RequireSingleSceneComponent<ShowcaseMobileAllyController>(scene).AnchorCount != 18)
@@ -575,6 +650,317 @@ namespace BreakNotice.Contest.Editor
                 new Vector3(3f, 1f, 1.2f), true);
             CreateCube(furniture, "PROXY_CrashDesk_North", new Vector3(-5f, 0.5f, 19f),
                 new Vector3(3f, 1f, 1.2f), true);
+        }
+
+        private static void BuildV2VisualReadability(Transform parent)
+        {
+            Transform boundary = CreateGroup(parent, "BOUNDARY_AND_OPENING_READABILITY");
+            Transform zoneCues = CreateGroup(parent, "ZONE_VISUAL_CUES_8");
+            Transform wayfinding = CreateGroup(parent, "DIRECTIONAL_WAYFINDING");
+            Transform density = CreateGroup(parent, "OFFICE_DENSITY_NON_COLLIDING");
+
+            BuildV2BoundaryReadability(boundary);
+            BuildV2ZoneVisualCues(zoneCues);
+            BuildV2Wayfinding(wayfinding);
+            BuildV2OfficeDensity(density);
+        }
+
+        private static void BuildV2BoundaryReadability(Transform parent)
+        {
+            Color boundaryColor = new Color(0.20f, 0.82f, 1f, 1f);
+            Color exitColor = new Color(0.48f, 1f, 0.40f, 1f);
+
+            CreateReviewLine(
+                parent,
+                "PERIMETER_CEILING_REFERENCE_4.2m",
+                new[]
+                {
+                    new Vector3(-32f, 4.18f, -22f),
+                    new Vector3(32f, 4.18f, -22f),
+                    new Vector3(32f, 4.18f, 22f),
+                    new Vector3(-32f, 4.18f, 22f)
+                },
+                boundaryColor,
+                0.16f,
+                true);
+
+            foreach (Vector3 corner in new[]
+                     {
+                         new Vector3(-32f, 0f, -22f),
+                         new Vector3(32f, 0f, -22f),
+                         new Vector3(32f, 0f, 22f),
+                         new Vector3(-32f, 0f, 22f)
+                     })
+            {
+                CreateReviewLine(
+                    parent,
+                    $"PERIMETER_CORNER_{corner.x:0}_{corner.z:0}",
+                    new[] { corner, corner + Vector3.up * 4.2f },
+                    boundaryColor,
+                    0.12f,
+                    false);
+            }
+
+            CreateReviewLine(
+                parent,
+                "AUTHORIZED_EXIT_OPENING_4.5m_OUTLINE",
+                new[]
+                {
+                    new Vector3(23.75f, 0.05f, 21.96f),
+                    new Vector3(23.75f, 3.55f, 21.96f),
+                    new Vector3(28.25f, 3.55f, 21.96f),
+                    new Vector3(28.25f, 0.05f, 21.96f)
+                },
+                exitColor,
+                0.22f,
+                false);
+
+            CreateReviewLabel(
+                parent,
+                "BOUNDARY_HEADER_SOUTH_ENTRY",
+                "ENTRY STAGING / INTERIOR START",
+                new Vector3(0f, 3.15f, -21.9f),
+                Quaternion.Euler(0f, 180f, 0f),
+                boundaryColor,
+                0.055f);
+            CreateReviewLabel(
+                parent,
+                "BOUNDARY_HEADER_NORTH_EXIT",
+                "AUTHORIZED EXIT OPENING 4.5m",
+                new Vector3(26f, 3.75f, 21.9f),
+                Quaternion.identity,
+                exitColor,
+                0.052f);
+
+            Transform ceiling = CreateGroup(parent, "CEILING_GRID_SILHOUETTES_16");
+            int ceilingIndex = 0;
+            foreach (float z in new[] { -18f, -12f, -6f, 0f, 6f, 12f, 18f })
+            {
+                CreateCube(ceiling, $"CEILING_REFERENCE_BEAM_X_{ceilingIndex:00}",
+                    new Vector3(0f, 4.12f, z), new Vector3(62f, 0.06f, 0.08f), false);
+                ceilingIndex++;
+            }
+            foreach (float x in new[] { -28f, -21f, -14f, -7f, 0f, 7f, 14f, 21f, 28f })
+            {
+                CreateCube(ceiling, $"CEILING_REFERENCE_BEAM_Z_{ceilingIndex:00}",
+                    new Vector3(x, 4.12f, 0f), new Vector3(0.08f, 0.06f, 42f), false);
+                ceilingIndex++;
+            }
+        }
+
+        private static void BuildV2ZoneVisualCues(Transform parent)
+        {
+            CreateZoneVisualCue(parent, 0, "ENTRY STAGING", new Vector3(0f, 0f, -19f),
+                new Vector2(14f, 4f), new Vector3(0f, 2.45f, -21.82f),
+                Quaternion.Euler(0f, 180f, 0f));
+            CreateZoneVisualCue(parent, 1, "DIRECT EQUIPMENT BAY", new Vector3(0f, 0f, -15f),
+                new Vector2(14f, 4f), new Vector3(-7.5f, 2.1f, -14.8f),
+                Quaternion.Euler(0f, -90f, 0f));
+            CreateZoneVisualCue(parent, 2, "CENTRAL CLASH BOWL", new Vector3(0f, 0f, -8f),
+                new Vector2(24f, 10f), new Vector3(-11.8f, 2.2f, -3.1f),
+                Quaternion.identity);
+            CreateZoneVisualCue(parent, 3, "WEST LOGISTICS LOOP", new Vector3(-24f, 0f, 3f),
+                new Vector2(8f, 22f), new Vector3(-31.82f, 2.65f, 3f),
+                Quaternion.Euler(0f, -90f, 0f));
+            CreateZoneVisualCue(parent, 4, "CENTRAL CUBICLE RING", new Vector3(0f, 0f, 5f),
+                new Vector2(20f, 12f), new Vector3(0f, 1.62f, 10.85f),
+                Quaternion.identity);
+            CreateZoneVisualCue(parent, 5, "EAST PHYSICS LANE", new Vector3(23f, 0f, 3f),
+                new Vector2(9f, 22f), new Vector3(31.82f, 2.65f, 3f),
+                Quaternion.Euler(0f, 90f, 0f));
+            CreateZoneVisualCue(parent, 6, "NORTH TAG / DRAWER", new Vector3(17f, 0f, 15f),
+                new Vector2(18f, 6f), new Vector3(15f, 2.65f, 21.82f),
+                Quaternion.identity);
+            CreateZoneVisualCue(parent, 7, "EXIT RUN", new Vector3(26f, 0f, 19f),
+                new Vector2(4.5f, 6f), new Vector3(26f, 3.25f, 21.78f),
+                Quaternion.identity);
+        }
+
+        private static void CreateZoneVisualCue(
+            Transform parent,
+            int zoneIndex,
+            string displayName,
+            Vector3 center,
+            Vector2 size,
+            Vector3 headerPosition,
+            Quaternion headerRotation)
+        {
+            Color color = V2ZoneColors[zoneIndex];
+            Transform cue = CreateGroup(
+                parent,
+                $"ZONE_CUE_Z{zoneIndex}_{displayName.Replace(' ', '_').Replace('/', '_')}");
+            float halfX = size.x * 0.5f;
+            float halfZ = size.y * 0.5f;
+            CreateReviewLine(
+                cue,
+                $"FLOOR_BAND_Z{zoneIndex}",
+                new[]
+                {
+                    center + new Vector3(-halfX, 0.055f, -halfZ),
+                    center + new Vector3(halfX, 0.055f, -halfZ),
+                    center + new Vector3(halfX, 0.055f, halfZ),
+                    center + new Vector3(-halfX, 0.055f, halfZ)
+                },
+                color,
+                0.14f,
+                true);
+            CreateReviewLabel(
+                cue,
+                $"FLOOR_HEADER_Z{zoneIndex}",
+                $"Z{zoneIndex}  {displayName}",
+                center + Vector3.up * 0.075f,
+                Quaternion.Euler(90f, 0f, 0f),
+                color,
+                0.052f);
+            CreateReviewLabel(
+                cue,
+                $"VERTICAL_HEADER_Z{zoneIndex}",
+                $"Z{zoneIndex}  {displayName}",
+                headerPosition,
+                headerRotation,
+                color,
+                0.064f);
+        }
+
+        private static void BuildV2Wayfinding(Transform parent)
+        {
+            Color routeColor = new Color(1f, 0.90f, 0.28f, 1f);
+            CreateReviewLabel(parent, "WAYFINDING_WEST", "WEST LOOP  <",
+                new Vector3(-13f, 0.08f, -9.5f), Quaternion.Euler(90f, 0f, 0f),
+                routeColor, 0.075f);
+            CreateReviewLabel(parent, "WAYFINDING_CENTRAL", "CENTRAL CUT  ^",
+                new Vector3(0f, 0.08f, 0f), Quaternion.Euler(90f, 0f, 0f),
+                routeColor, 0.075f);
+            CreateReviewLabel(parent, "WAYFINDING_EAST", ">  EAST PHYSICS",
+                new Vector3(13f, 0.08f, -9.5f), Quaternion.Euler(90f, 0f, 0f),
+                routeColor, 0.075f);
+            CreateReviewLabel(parent, "WAYFINDING_NORTH", "NORTH CROSS  /  DRAWER",
+                new Vector3(0f, 0.08f, 16.8f), Quaternion.Euler(90f, 0f, 0f),
+                routeColor, 0.065f);
+            CreateReviewLabel(parent, "WAYFINDING_EXIT", "EXIT  >>>",
+                new Vector3(25.8f, 0.08f, 19.5f), Quaternion.Euler(90f, 0f, 0f),
+                V2ZoneColors[7], 0.085f);
+        }
+
+        private static void BuildV2OfficeDensity(Transform parent)
+        {
+            Transform workstations = CreateGroup(parent, "WORKSTATION_SILHOUETTES_12");
+            foreach (float x in new[] { -6.5f, 6.5f })
+            {
+                foreach (float z in new[] { 1f, 5f, 9f })
+                {
+                    CreateCube(workstations, $"DENSITY_PROXY_MONITOR_{x:0.0}_{z:0}",
+                        new Vector3(x, 1.18f, z), new Vector3(0.9f, 0.58f, 0.16f), false);
+                    CreateCube(workstations, $"DENSITY_PROXY_TOWER_{x:0.0}_{z:0}",
+                        new Vector3(x + Mathf.Sign(x) * 0.9f, 0.43f, z),
+                        new Vector3(0.34f, 0.7f, 0.55f), false);
+                }
+            }
+
+            Transform archive = CreateGroup(parent, "ARCHIVE_STORAGE_SILHOUETTES_10");
+            int archiveIndex = 0;
+            foreach (float z in new[] { -9f, -4f, 2f, 8f, 14f })
+            {
+                CreateCube(archive, $"DENSITY_PROXY_ARCHIVE_CABINET_{archiveIndex:00}",
+                    new Vector3(-30.4f, 1.05f, z), new Vector3(1.4f, 2.1f, 1.15f), false);
+                CreateCube(archive, $"DENSITY_PROXY_ARCHIVE_BOX_{archiveIndex:00}",
+                    new Vector3(-29.8f, 0.32f, z + 1.35f),
+                    new Vector3(0.75f, 0.64f, 0.65f), false);
+                archiveIndex++;
+            }
+
+            Transform equipment = CreateGroup(parent, "EQUIPMENT_SILHOUETTES_8");
+            int equipmentIndex = 0;
+            foreach (float z in new[] { -10f, -5f, 0f, 6f, 12f, 18f })
+            {
+                CreateCube(equipment, $"DENSITY_PROXY_EQUIPMENT_{equipmentIndex:00}",
+                    new Vector3(30.4f, 0.72f, z), new Vector3(1.35f, 1.44f, 0.9f), false);
+                equipmentIndex++;
+            }
+            CreateCube(equipment, "DENSITY_PROXY_RECEIVING_BIN_WEST",
+                new Vector3(-27.5f, 0.6f, -20.4f), new Vector3(2.2f, 1.2f, 1.1f), false);
+            CreateCube(equipment, "DENSITY_PROXY_RECEIVING_BIN_EAST",
+                new Vector3(27.5f, 0.6f, -20.4f), new Vector3(2.2f, 1.2f, 1.1f), false);
+
+            Transform dressing = CreateGroup(parent, "PLANT_BIN_DRESSING_SILHOUETTES_8");
+            Vector3[] dressingPositions =
+            {
+                new Vector3(-29.5f, 0.75f, 19.5f),
+                new Vector3(29.5f, 0.75f, 19.5f),
+                new Vector3(-29.5f, 0.75f, -18.5f),
+                new Vector3(29.5f, 0.75f, -18.5f),
+                new Vector3(-11.2f, 0.35f, 11f),
+                new Vector3(11.2f, 0.35f, 11f),
+                new Vector3(-11.2f, 0.35f, -1f),
+                new Vector3(11.2f, 0.35f, -1f)
+            };
+            for (int index = 0; index < dressingPositions.Length; index++)
+            {
+                bool plant = index < 4;
+                CreateCube(
+                    dressing,
+                    plant
+                        ? $"DENSITY_PROXY_PLANT_{index:00}"
+                        : $"DENSITY_PROXY_WASTE_BIN_{index - 4:00}",
+                    dressingPositions[index],
+                    plant ? new Vector3(0.75f, 1.5f, 0.75f) : new Vector3(0.55f, 0.7f, 0.55f),
+                    false);
+            }
+
+            Transform perimeterWorkstations = CreateGroup(
+                parent,
+                "PERIMETER_WORKSTATION_SILHOUETTES_32");
+            int workstationIndex = 0;
+            foreach (float x in new[] { -28f, -24f, -20f, -16f, -12f, -8f, -4f, 4f })
+            {
+                CreateCube(
+                    perimeterWorkstations,
+                    $"DENSITY_PROXY_PERIMETER_DESK_{workstationIndex:00}",
+                    new Vector3(x, 0.4f, 20.1f),
+                    new Vector3(2.6f, 0.8f, 1.1f),
+                    false);
+                CreateCube(
+                    perimeterWorkstations,
+                    $"DENSITY_PROXY_PERIMETER_PARTITION_{workstationIndex:00}",
+                    new Vector3(x, 0.65f, 20.72f),
+                    new Vector3(2.8f, 1.3f, 0.12f),
+                    false);
+                workstationIndex++;
+            }
+            foreach (float x in new[] { -22f, -16f, -10f, 10f, 16f, 22f })
+            {
+                CreateCube(
+                    perimeterWorkstations,
+                    $"DENSITY_PROXY_PERIMETER_DESK_{workstationIndex:00}",
+                    new Vector3(x, 0.4f, -20.1f),
+                    new Vector3(2.6f, 0.8f, 1.1f),
+                    false);
+                CreateCube(
+                    perimeterWorkstations,
+                    $"DENSITY_PROXY_PERIMETER_PARTITION_{workstationIndex:00}",
+                    new Vector3(x, 0.65f, -20.72f),
+                    new Vector3(2.8f, 1.3f, 0.12f),
+                    false);
+                workstationIndex++;
+            }
+            foreach (float x in new[] { -30.4f, 30.4f })
+            {
+                GameObject desk = CreateCube(
+                    perimeterWorkstations,
+                    $"DENSITY_PROXY_PERIMETER_DESK_{workstationIndex:00}",
+                    new Vector3(x, 0.4f, -15f),
+                    new Vector3(2.6f, 0.8f, 1.1f),
+                    false);
+                GameObject partition = CreateCube(
+                    perimeterWorkstations,
+                    $"DENSITY_PROXY_PERIMETER_PARTITION_{workstationIndex:00}",
+                    new Vector3(x + Mathf.Sign(x) * 0.62f, 0.65f, -15f),
+                    new Vector3(2.8f, 1.3f, 0.12f),
+                    false);
+                desk.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                partition.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                workstationIndex++;
+            }
         }
 
         private static void BuildV2LayoutMarkers(Transform parent)
@@ -901,12 +1287,18 @@ namespace BreakNotice.Contest.Editor
                 CatalogSocket("DECAL_DustTonerContactMark_Atlas_v001")
             };
 
-            CreateMetricSockets(architecture, architectureSpecs, "SOCKET_");
-            CreateMetricSockets(fixedDesk, fixedDeskSpecs, "SOCKET_");
-            CreateMetricSockets(gameplay, gameplaySpecs, "SOCKET_");
-            CreateMetricSockets(dressing, dressingSpecs, "DRESSING_SOCKET_");
-            CreateMetricSockets(sharedMaterial, materialSpecs, "SOCKET_");
-            CreateMetricSockets(decalAtlas, decalSpecs, "SOCKET_");
+            CreateMetricSockets(architecture, architectureSpecs, "SOCKET_",
+                new Color(0.20f, 0.82f, 1f, 1f));
+            CreateMetricSockets(fixedDesk, fixedDeskSpecs, "SOCKET_",
+                new Color(0.78f, 0.50f, 1f, 1f));
+            CreateMetricSockets(gameplay, gameplaySpecs, "SOCKET_",
+                new Color(1f, 0.77f, 0.22f, 1f));
+            CreateMetricSockets(dressing, dressingSpecs, "DRESSING_SOCKET_",
+                new Color(0.48f, 1f, 0.40f, 1f));
+            CreateMetricSockets(sharedMaterial, materialSpecs, "SOCKET_",
+                new Color(0.74f, 0.78f, 0.84f, 1f));
+            CreateMetricSockets(decalAtlas, decalSpecs, "SOCKET_",
+                new Color(1f, 0.46f, 0.30f, 1f));
         }
 
         private static SocketSpec MetricSocket(
@@ -931,15 +1323,24 @@ namespace BreakNotice.Contest.Editor
         private static void CreateMetricSockets(
             Transform parent,
             IEnumerable<SocketSpec> specs,
-            string prefix)
+            string prefix,
+            Color reviewColor)
         {
+            int index = 0;
             foreach (SocketSpec spec in specs)
             {
+                Vector3 socketPosition = spec.IsSpatial
+                    ? spec.Position
+                    : GetCatalogReviewPosition(parent.name, index);
                 Transform socket = CreateMarker(
                     parent,
                     prefix + spec.AssetId,
-                    spec.Position,
+                    socketPosition,
                     Vector3.one);
+                if (!spec.IsSpatial)
+                {
+                    socket.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
                 Transform bounds = CreateGroup(
                     socket,
                     spec.IsSpatial
@@ -950,7 +1351,103 @@ namespace BreakNotice.Contest.Editor
                 Transform pivot = CreateGroup(socket, "PIVOT_" + spec.PivotReference);
                 pivot.localPosition = Vector3.zero;
                 pivot.localScale = Vector3.one;
+
+                if (spec.IsSpatial)
+                {
+                    CreateVisibleSocketProxy(socket, spec, reviewColor);
+                }
+                else
+                {
+                    CreateCatalogReviewSwatch(socket, spec.AssetId, reviewColor);
+                }
+                index++;
             }
+        }
+
+        private static Vector3 GetCatalogReviewPosition(string categoryName, int index)
+        {
+            if (categoryName == "SHARED_MATERIAL_9")
+            {
+                return new Vector3(-14f + index * 3.45f, 3.6f, -21.84f);
+            }
+
+            return new Vector3(19f + index * 3.45f, 3.6f, -21.84f);
+        }
+
+        private static void CreateVisibleSocketProxy(
+            Transform socket,
+            SocketSpec spec,
+            Color reviewColor)
+        {
+            Vector3 localCenter = Vector3.zero;
+            if (spec.PivotReference.StartsWith("GROUND", StringComparison.Ordinal))
+            {
+                localCenter.y = spec.IntendedBounds.y * 0.5f;
+            }
+            else if (spec.PivotReference == "TOP_CENTER")
+            {
+                localCenter.y = -spec.IntendedBounds.y * 0.5f;
+            }
+            else if (spec.PivotReference == "BOTTOM_CENTER")
+            {
+                localCenter.y = spec.IntendedBounds.y * 0.5f;
+            }
+
+            GameObject proxy = CreateCube(
+                socket,
+                "VISIBLE_REVIEW_PROXY_" + spec.AssetId,
+                socket.TransformPoint(localCenter),
+                spec.IntendedBounds,
+                false);
+            proxy.transform.localRotation = Quaternion.identity;
+
+            float halfX = spec.IntendedBounds.x * 0.5f;
+            float halfZ = spec.IntendedBounds.z * 0.5f;
+            float topY = localCenter.y + spec.IntendedBounds.y * 0.5f + 0.015f;
+            CreateReviewLine(
+                socket,
+                "VISIBLE_REVIEW_OUTLINE_" + spec.AssetId,
+                new[]
+                {
+                    new Vector3(-halfX, topY, -halfZ),
+                    new Vector3(halfX, topY, -halfZ),
+                    new Vector3(halfX, topY, halfZ),
+                    new Vector3(-halfX, topY, halfZ)
+                },
+                reviewColor,
+                0.055f,
+                true,
+                false);
+        }
+
+        private static void CreateCatalogReviewSwatch(
+            Transform socket,
+            string assetId,
+            Color reviewColor)
+        {
+            CreateReviewLine(
+                socket,
+                "REVIEW_SWATCH_NON_RUNTIME_OUTLINE",
+                new[]
+                {
+                    new Vector3(-1.45f, -0.3f, 0f),
+                    new Vector3(1.45f, -0.3f, 0f),
+                    new Vector3(1.45f, 0.3f, 0f),
+                    new Vector3(-1.45f, 0.3f, 0f)
+                },
+                reviewColor,
+                0.065f,
+                true,
+                false);
+            CreateReviewLabel(
+                socket,
+                "REVIEW_SWATCH_NON_RUNTIME_LABEL",
+                "REVIEW ONLY\n" + assetId,
+                Vector3.zero,
+                Quaternion.identity,
+                reviewColor,
+                0.026f,
+                false);
         }
 
         private static void BuildEnvelope(Transform parent)
@@ -1253,6 +1750,157 @@ namespace BreakNotice.Contest.Editor
             marker.position = position;
             marker.localScale = scale;
             return marker;
+        }
+
+        private static LineRenderer CreateReviewLine(
+            Transform parent,
+            string name,
+            IReadOnlyList<Vector3> points,
+            Color color,
+            float width,
+            bool loop,
+            bool worldSpace = true)
+        {
+            Transform lineTransform = CreateGroup(parent, name);
+            var line = lineTransform.gameObject.AddComponent<LineRenderer>();
+            line.useWorldSpace = worldSpace;
+            line.loop = loop;
+            line.positionCount = points.Count;
+            for (int index = 0; index < points.Count; index++)
+            {
+                line.SetPosition(index, points[index]);
+            }
+
+            line.startWidth = width;
+            line.endWidth = width;
+            line.startColor = color;
+            line.endColor = color;
+            line.numCornerVertices = 2;
+            line.numCapVertices = 2;
+            line.alignment = LineAlignment.View;
+            line.textureMode = LineTextureMode.Stretch;
+            line.shadowCastingMode = ShadowCastingMode.Off;
+            line.receiveShadows = false;
+            line.lightProbeUsage = LightProbeUsage.Off;
+            line.reflectionProbeUsage = ReflectionProbeUsage.Off;
+            Material lineMaterial = AssetDatabase.GetBuiltinExtraResource<Material>(
+                "Default-Line.mat");
+            if (lineMaterial != null)
+            {
+                line.sharedMaterial = lineMaterial;
+            }
+            return line;
+        }
+
+        private static TextMesh CreateReviewLabel(
+            Transform parent,
+            string name,
+            string text,
+            Vector3 position,
+            Quaternion rotation,
+            Color color,
+            float characterSize,
+            bool worldPosition = true)
+        {
+            Transform labelTransform = CreateGroup(parent, name);
+            if (worldPosition)
+            {
+                labelTransform.SetPositionAndRotation(position, rotation);
+            }
+            else
+            {
+                labelTransform.localPosition = position;
+                labelTransform.localRotation = rotation;
+            }
+
+            var label = labelTransform.gameObject.AddComponent<TextMesh>();
+            label.text = text;
+            label.anchor = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignment.Center;
+            label.characterSize = characterSize;
+            label.fontSize = 64;
+            label.fontStyle = FontStyle.Bold;
+            label.color = color;
+            label.richText = false;
+
+            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            if (font != null)
+            {
+                label.font = font;
+                MeshRenderer renderer = label.GetComponent<MeshRenderer>();
+                if (renderer != null)
+                {
+                    renderer.sharedMaterial = font.material;
+                    renderer.shadowCastingMode = ShadowCastingMode.Off;
+                    renderer.receiveShadows = false;
+                    renderer.lightProbeUsage = LightProbeUsage.Off;
+                    renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+                }
+            }
+            return label;
+        }
+
+        private static void CaptureV2ReviewFrame(
+            Scene scene,
+            string outputPath,
+            string cameraName,
+            Vector3 position,
+            Quaternion rotation,
+            bool orthographic,
+            float orthographicSize,
+            float fieldOfView)
+        {
+            var cameraObject = new GameObject(cameraName);
+            SceneManager.MoveGameObjectToScene(cameraObject, scene);
+            cameraObject.transform.SetPositionAndRotation(position, rotation);
+            var camera = cameraObject.AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = new Color(0.035f, 0.045f, 0.06f, 1f);
+            camera.nearClipPlane = 0.05f;
+            camera.farClipPlane = 120f;
+            camera.fieldOfView = fieldOfView;
+            camera.orthographic = orthographic;
+            camera.orthographicSize = orthographicSize;
+            camera.aspect = 16f / 9f;
+            camera.allowHDR = false;
+            camera.allowMSAA = true;
+
+            var renderTexture = new RenderTexture(
+                1920,
+                1080,
+                24,
+                RenderTextureFormat.ARGB32)
+            {
+                name = cameraName + "_1920x1080",
+                antiAliasing = 1
+            };
+            var image = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
+            RenderTexture previousActive = RenderTexture.active;
+            try
+            {
+                renderTexture.Create();
+                camera.targetTexture = renderTexture;
+                camera.Render();
+                RenderTexture.active = renderTexture;
+                image.ReadPixels(new Rect(0f, 0f, 1920f, 1080f), 0, 0, false);
+                image.Apply(false, false);
+                byte[] png = image.EncodeToPNG();
+                if (png == null || png.Length == 0)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not encode readability capture: {outputPath}");
+                }
+                File.WriteAllBytes(outputPath, png);
+            }
+            finally
+            {
+                camera.targetTexture = null;
+                RenderTexture.active = previousActive;
+                renderTexture.Release();
+                UnityEngine.Object.DestroyImmediate(image);
+                UnityEngine.Object.DestroyImmediate(renderTexture);
+                UnityEngine.Object.DestroyImmediate(cameraObject);
+            }
         }
 
         private static GameObject CreateCube(

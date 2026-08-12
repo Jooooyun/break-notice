@@ -120,6 +120,67 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void VisualReadability_HasEightZoneCuesBoundaryOpeningAndDenseOfficeSilhouettes()
+        {
+            Transform visual = RequireChild(RequireRoot(V2RootName), "10_VISUAL_READABILITY");
+            Assert.That(visual.GetComponentsInChildren<Collider>(true), Is.Empty,
+                "Readability geometry must never become decorative collision.");
+
+            Transform boundary = RequireChild(visual, "BOUNDARY_AND_OPENING_READABILITY");
+            Assert.That(
+                RequireChild(boundary, "PERIMETER_CEILING_REFERENCE_4.2m")
+                    .GetComponent<LineRenderer>(),
+                Is.Not.Null);
+            LineRenderer exitOpening = RequireChild(
+                    boundary,
+                    "AUTHORIZED_EXIT_OPENING_4.5m_OUTLINE")
+                .GetComponent<LineRenderer>();
+            Assert.That(exitOpening, Is.Not.Null);
+            Assert.That(exitOpening.positionCount, Is.EqualTo(4));
+            Assert.That(boundary.GetComponentsInChildren<LineRenderer>(true), Has.Length.EqualTo(6));
+            Assert.That(boundary.GetComponentsInChildren<TextMesh>(true), Has.Length.EqualTo(2));
+            Assert.That(
+                RequireChild(boundary, "CEILING_GRID_SILHOUETTES_16").childCount,
+                Is.EqualTo(16));
+
+            Transform zoneCues = RequireChild(visual, "ZONE_VISUAL_CUES_8");
+            Assert.That(zoneCues.childCount, Is.EqualTo(8));
+            for (int zoneIndex = 0; zoneIndex < 8; zoneIndex++)
+            {
+                Transform cue = zoneCues.Cast<Transform>().Single(child =>
+                    child.name.StartsWith($"ZONE_CUE_Z{zoneIndex}_", StringComparison.Ordinal));
+                LineRenderer[] bands = cue.GetComponentsInChildren<LineRenderer>(true);
+                TextMesh[] headers = cue.GetComponentsInChildren<TextMesh>(true);
+                Assert.That(bands, Has.Length.EqualTo(1), cue.name);
+                Assert.That(bands[0].name, Is.EqualTo($"FLOOR_BAND_Z{zoneIndex}"));
+                Assert.That(bands[0].loop, Is.True, cue.name);
+                Assert.That(headers, Has.Length.EqualTo(2), cue.name);
+                Assert.That(headers.Any(header => header.name == $"FLOOR_HEADER_Z{zoneIndex}"),
+                    Is.True, cue.name);
+                Assert.That(headers.Any(header => header.name == $"VERTICAL_HEADER_Z{zoneIndex}"),
+                    Is.True, cue.name);
+            }
+
+            Transform wayfinding = RequireChild(visual, "DIRECTIONAL_WAYFINDING");
+            Assert.That(wayfinding.GetComponentsInChildren<TextMesh>(true), Has.Length.EqualTo(5));
+
+            Transform density = RequireChild(visual, "OFFICE_DENSITY_NON_COLLIDING");
+            Assert.That(RequireChild(density, "WORKSTATION_SILHOUETTES_12").childCount,
+                Is.EqualTo(12));
+            Assert.That(RequireChild(density, "ARCHIVE_STORAGE_SILHOUETTES_10").childCount,
+                Is.EqualTo(10));
+            Assert.That(RequireChild(density, "EQUIPMENT_SILHOUETTES_8").childCount,
+                Is.EqualTo(8));
+            Assert.That(RequireChild(density, "PLANT_BIN_DRESSING_SILHOUETTES_8").childCount,
+                Is.EqualTo(8));
+            Assert.That(
+                RequireChild(density, "PERIMETER_WORKSTATION_SILHOUETTES_32").childCount,
+                Is.EqualTo(32));
+            Assert.That(density.GetComponentsInChildren<Renderer>(true), Has.Length.EqualTo(70));
+            Assert.That(density.GetComponentsInChildren<Collider>(true), Is.Empty);
+        }
+
+        [Test]
         public void FigureEight_CurrentPlayerCapsule_HasWestEastCentralAndNorthConnectivity()
         {
             CharacterController playerController = RequirePlayer()
@@ -307,7 +368,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void DesignerBSockets_HaveExact60UniqueIdsAndNoRuntimeOrCollisionAuthority()
+        public void DesignerBSockets_HaveExact60UniqueIdsVisibleCoverageAndNoRuntimeOrCollisionAuthority()
         {
             Transform root = RequireChild(
                 RequireRoot(V2RootName),
@@ -400,7 +461,6 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Assert.That(allIds.Add(id), Is.True, id);
                     Assert.That(socket.localScale, Is.EqualTo(Vector3.one));
                     Assert.That(socket.GetComponents<Component>(), Has.Length.EqualTo(1), id);
-                    Assert.That(socket.GetComponentsInChildren<Renderer>(true), Is.Empty, id);
                     Assert.That(socket.GetComponentsInChildren<Collider>(true), Is.Empty, id);
                     Assert.That(socket.GetComponentsInChildren<PrototypeInteractionTarget>(true), Is.Empty, id);
                     Assert.That(
@@ -411,6 +471,37 @@ namespace BreakNotice.LocomotionCamera.Tests
                         socket.Cast<Transform>().Count(child =>
                             child.name.StartsWith("PIVOT_", StringComparison.Ordinal)),
                         Is.EqualTo(1), id);
+
+                    bool isCatalog = category.Key == "SHARED_MATERIAL_9" ||
+                                     category.Key == "DECAL_ATLAS_3";
+                    if (isCatalog)
+                    {
+                        Assert.That(
+                            socket.Cast<Transform>().Any(child =>
+                                child.name.StartsWith("VISIBLE_REVIEW_PROXY_", StringComparison.Ordinal)),
+                            Is.False,
+                            id + " must remain a non-spatial review swatch.");
+                        Assert.That(
+                            socket.Cast<Transform>().Count(child =>
+                                child.name.StartsWith("REVIEW_SWATCH_NON_RUNTIME_", StringComparison.Ordinal)),
+                            Is.EqualTo(2),
+                            id);
+                        Assert.That(socket.GetComponentsInChildren<Renderer>(true).Length,
+                            Is.GreaterThanOrEqualTo(2), id);
+                    }
+                    else
+                    {
+                        Assert.That(
+                            socket.Find("VISIBLE_REVIEW_PROXY_" + id),
+                            Is.Not.Null,
+                            id);
+                        Assert.That(
+                            socket.Find("VISIBLE_REVIEW_OUTLINE_" + id),
+                            Is.Not.Null,
+                            id);
+                        Assert.That(socket.GetComponentsInChildren<Renderer>(true).Length,
+                            Is.GreaterThanOrEqualTo(2), id);
+                    }
                 }
 
                 CollectionAssert.AreEquivalent(category.Value, actualIds, category.Key);
