@@ -51,6 +51,57 @@ function localWebGLFallback(url: URL): Promise<Response | null> {
     });
 }
 
+async function fetchWebGLAsset(request: Request, env: Env): Promise<Response | null> {
+  const url = new URL(request.url);
+  if (env?.ASSETS) {
+    const response = await env.ASSETS.fetch(request);
+    return response.status === 404 ? null : response;
+  }
+  return localWebGLFallback(url);
+}
+
+async function fetchChunkedWebGLAsset(request: Request, env: Env): Promise<Response | null> {
+  const requestUrl = new URL(request.url);
+  const manifestUrl = new URL(requestUrl);
+  manifestUrl.pathname = `${manifestUrl.pathname}.parts.json`;
+  const manifestResponse = await fetchWebGLAsset(new Request(manifestUrl), env);
+  if (!manifestResponse) return null;
+
+  const manifest = (await manifestResponse.json()) as {
+    bytes: number;
+    parts: Array<{ path: string; bytes: number }>;
+  };
+  let partIndex = 0;
+  const stream = new ReadableStream<Uint8Array>({
+    async pull(controller) {
+      if (partIndex >= manifest.parts.length) {
+        controller.close();
+        return;
+      }
+      const part = manifest.parts[partIndex];
+      const partUrl = new URL(requestUrl);
+      partUrl.pathname = `${requestUrl.pathname.slice(0, requestUrl.pathname.lastIndexOf("/") + 1)}${part.path}`;
+      const partResponse = await fetchWebGLAsset(new Request(partUrl), env);
+      if (!partResponse) {
+        controller.error(new Error(`Missing WebGL transport part: ${part.path}`));
+        return;
+      }
+      const bytes = new Uint8Array(await partResponse.arrayBuffer());
+      if (bytes.byteLength !== part.bytes) {
+        controller.error(new Error(`WebGL transport part byte mismatch: ${part.path}`));
+        return;
+      }
+      controller.enqueue(bytes);
+      partIndex += 1;
+    },
+  });
+
+  return new Response(stream, {
+    status: 200,
+    headers: { "Content-Length": String(manifest.bytes) },
+  });
+}
+
 function withWebGLHeaders(request: Request, response: Response): Response {
   const url = new URL(request.url);
   const headers = new Headers(response.headers);
@@ -109,10 +160,9 @@ const worker = {
     }
 
     if (url.pathname.startsWith(WEBGL_RELEASE_PREFIX)) {
-      const assetResponse = env?.ASSETS
-        ? await env.ASSETS.fetch(request)
-        : await localWebGLFallback(url);
-      if (assetResponse && assetResponse.status !== 404) {
+      const assetResponse =
+        (await fetchWebGLAsset(request, env)) ?? (await fetchChunkedWebGLAsset(request, env));
+      if (assetResponse) {
         return withSecurityHeaders(withWebGLHeaders(request, assetResponse));
       }
     }

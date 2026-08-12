@@ -1,4 +1,4 @@
-import { access, cp, mkdir, rm } from "node:fs/promises";
+import { access, cp, mkdir, open, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import type { Plugin } from "vite";
 
@@ -11,6 +11,50 @@ async function exists(path: string): Promise<boolean> {
       return false;
     }
     throw error;
+  }
+}
+
+const SITES_WEBGL_CHUNK_BYTES = 24 * 1024 * 1024;
+
+async function chunkOversizedWebGLFiles(root: string): Promise<void> {
+  const entries = await readdir(root, { withFileTypes: true });
+  for (const entry of entries) {
+    const path = resolve(root, entry.name);
+    if (entry.isDirectory()) {
+      await chunkOversizedWebGLFiles(path);
+      continue;
+    }
+    if (!entry.isFile()) continue;
+
+    const file = await stat(path);
+    if (file.size <= SITES_WEBGL_CHUNK_BYTES) continue;
+
+    const source = await open(path, "r");
+    const parts: Array<{ path: string; bytes: number }> = [];
+    try {
+      let offset = 0;
+      let partIndex = 0;
+      while (offset < file.size) {
+        const length = Math.min(SITES_WEBGL_CHUNK_BYTES, file.size - offset);
+        const buffer = Buffer.allocUnsafe(length);
+        const { bytesRead } = await source.read(buffer, 0, length, offset);
+        if (bytesRead !== length) throw new Error(`Short read while chunking ${path}`);
+        const partName = `${entry.name}.part${String(partIndex).padStart(3, "0")}`;
+        await writeFile(resolve(root, partName), buffer);
+        parts.push({ path: partName, bytes: bytesRead });
+        offset += bytesRead;
+        partIndex += 1;
+      }
+    } finally {
+      await source.close();
+    }
+
+    await writeFile(
+      `${path}.parts.json`,
+      `${JSON.stringify({ schemaVersion: 1, bytes: file.size, parts })}\n`,
+      "utf8",
+    );
+    await rm(path);
   }
 }
 
@@ -59,6 +103,7 @@ export function sites(): Plugin {
                 recursive: true,
               },
             );
+            await chunkOversizedWebGLFiles(destination);
           }
         }
       }

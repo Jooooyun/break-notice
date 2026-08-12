@@ -31,7 +31,10 @@ already exists.
 1. Build the tracked Website source.
 2. Run the prepare command. Do not stage `deployment-staging/webgl/` in Git.
 3. Run the production build. The Sites build plugin copies the ignored staging
-   tree into `dist/client/` only; package and save that Sites version.
+   tree into `dist/client/` only. Files above the Sites 25 MiB individual-file
+   limit are split into deployment transport parts there; the Worker streams
+   them back from the original immutable URL with identical bytes and MIME.
+   Package and save that Sites version.
 4. Verify anonymous HTTPS for all inventory files, MIME, no compression header,
    Chrome/Edge canvas readiness and the exact GUID redirect.
 5. Only then treat the tracked `latestBuildGuid` and marketing CTA as promoted.

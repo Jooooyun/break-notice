@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { access, readFile, readdir, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -138,6 +138,33 @@ test("sets immutable WebGL cache and exact uncompressed MIME headers", async () 
   const loader = await renderWebglAsset(`${releaseRoot}Development.loader.js`);
   assert.equal(loader.headers.get("content-type"), "text/javascript; charset=utf-8");
   assert.equal(loader.headers.get("content-encoding"), null);
+});
+
+test("reassembles chunked WebGL transport files byte-identically", async () => {
+  const wasmPath = "/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/Development.wasm";
+  const response = await renderWebglAsset(wasmPath);
+  const expected = await readFile(
+    new URL(
+      "../deployment-staging/webgl/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/Development.wasm",
+      import.meta.url,
+    ),
+  );
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "application/wasm");
+  assert.equal(response.headers.get("content-encoding"), null);
+  assert.deepEqual(Buffer.from(await response.arrayBuffer()), expected);
+
+  const transportDirectory = new URL(
+    "../dist/client/play/releases/3cc7416d44c44067bc51c6474c46351d/Build/",
+    import.meta.url,
+  );
+  const transportFiles = await readdir(transportDirectory);
+  assert.equal(transportFiles.includes("Development.wasm"), false);
+  assert.equal(transportFiles.filter((file) => /^Development\.wasm\.part\d{3}$/.test(file)).length, 5);
+  assert.equal(transportFiles.includes("Development.wasm.parts.json"), true);
+  for (const file of transportFiles) {
+    assert.ok((await stat(new URL(file, transportDirectory))).size <= 26_214_400);
+  }
 });
 
 test("ships only approved public media and no source maps", async () => {
