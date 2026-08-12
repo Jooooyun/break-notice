@@ -109,6 +109,7 @@ export function sites(): Plugin {
               resolve(destination, "index.html"),
               resolve(destination, "__webgl-index.bin"),
             );
+            await rm(resolve(destination, "index.html"));
             await chunkOversizedWebGLFiles(destination);
           }
         }

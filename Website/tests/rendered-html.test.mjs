@@ -167,9 +167,15 @@ test("reassembles chunked WebGL transport files byte-identically", async () => {
   }
 
   const releaseDirectory = new URL("../", transportDirectory);
+  await assert.rejects(access(new URL("index.html", releaseDirectory)));
   assert.deepEqual(
     await readFile(new URL("__webgl-index.bin", releaseDirectory)),
-    await readFile(new URL("index.html", releaseDirectory)),
+    await readFile(
+      new URL(
+        "../deployment-staging/webgl/play/releases/3cc7416d44c44067bc51c6474c46351d/index.html",
+        import.meta.url,
+      ),
+    ),
   );
 });
 

@@ -41,7 +41,11 @@ function localWebGLFallback(url: URL): Promise<Response | null> {
   return import("node:fs/promises")
     .then(async ({ readFile }) => {
       const relativePath = url.pathname.slice(1) || "index.html";
-      const assetPath = relativePath.endsWith("/") ? `${relativePath}index.html` : relativePath;
+      const assetPath = relativePath.endsWith("/")
+        ? `${relativePath}__webgl-index.bin`
+        : relativePath.endsWith("/index.html")
+          ? `${relativePath.slice(0, -"index.html".length)}__webgl-index.bin`
+          : relativePath;
       const body = await readFile(new URL(`../client/${assetPath}`, import.meta.url));
       return new Response(body, { status: 200 });
     })
