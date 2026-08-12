@@ -7,6 +7,83 @@
 
 ---
 
+# 0A. 2026-08-10 제출분 판정 — 수정 필요
+
+원격 commit `6094b41143286b6e1710087a711707416b366c20`까지 올라온
+`0810_designerA/**` 묶음은 **검수 가능한 파일이 도착했다는 사실만
+확인**했다. 승인된 납품이나 게임 통합 가능 상태가 아니다.
+
+현재 판정:
+
+`REVISION REQUIRED / REVIEW HOLD / DO NOT INTEGRATE`
+
+주요 이유:
+
+- 현재 승인된 첫 작업은 CHR01 Blockout과 세 Pose Preview뿐이다.
+- 새 159개 파일이 모두 허용된 `ArtSource/Characters/**` 밖에 있다.
+- 다시 편집할 수 있는 CHR01 DCC 원본과 필수 Preview 3장이 없다.
+- 각 캐릭터 `DELIVERY.md`, 제작자, 원본 출처, 정확한 라이선스와 서면
+  허가 기록이 없다.
+- ENY01은 승인 전 최종 모델·elite·총기·수류탄 방향으로 진행되어
+  `일반 회사 컴플라이언스 인력 / 총기 없음 / elite 없음 / 동일 모델 2개`
+  계약과 충돌한다.
+- CHR00의 검·총·사망·점프·엄폐 clip은 현재 필수 범위가 아니다.
+- 155 FBX, 약 131 MB가 일반 Git blob으로 올라왔고 PR은 없다.
+
+지금부터는 다른 캐릭터와 animation을 더 만들지 말고 아래 A1 다섯 파일만
+완성한다.
+
+```text
+ArtSource/Characters/CHR01_Ally/Source/CHR01_Ally_Blockout_v001.blend
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Ally_Blockout_v001.png
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Supply_Binder_Pose_v001.png
+ArtSource/Characters/CHR01_Ally/Preview/CHR01_Push_Chair_Pose_v001.png
+ArtSource/Characters/CHR01_Ally/DELIVERY.md
+```
+
+`DELIVERY.md`에는 누가 무엇을 어떤 원본과 도구로 만들었는지, 정확한
+license/permission, AI 사용 여부, 승인 reference, scale/pivot/axis와 known
+issues를 기록하고 상태를 `WORK IN PROGRESS`로 둔다. 권리나 원본 출처가
+불명확하면 작업을 멈추고 질문한다.
+
+기존 `0810_designerA/**` 파일은 별도 지시 전 삭제·이동·수정하지 말고,
+history rewrite도 하지 않는다. 이 묶음으로 PR을 만들거나 Unity Runtime에
+넣지 않는다. 새 대형 binary는 Git LFS 결정 전 추가하지 않는다.
+
+CHR01 A1을 올린 뒤에는 Human Owner가 Blockout과 두 공급 Pose를 승인할
+때까지 A2, ENY01, CHR00, elite 방향으로 넘어가지 않는다.
+
+---
+
+# 0. 즉시 제작 개시 — Human Owner Direct Order
+
+- Authority baseline: `fc361a4dc42492e9b997ee42ac8bab3a6fdec2d2`
+- Start state: `AUTHORIZED / BEGIN SOURCE ART NOW`
+- First exact work package: `CHR01 editable 3D blockout and pose review batch`
+
+이 작업은 C0 또는 C1 완료를 기다리는 문서 계획 작업이 아니다. 지금 바로
+`ArtSource/Characters/CHR01_Ally/Source/` 아래에 실제로 다시 열고 편집할
+수 있는 3D Blockout 원본을 만든다. `DELIVERY.md`만 갱신하거나 2D
+Preview만 생성한 뒤 완료로 보고하면 안 된다.
+
+첫 검토 batch에는 다음 네 종류가 모두 있어야 한다.
+
+```text
+Source/CHR01_Ally_Blockout_v001.blend 또는 동등한 editable DCC source
+Preview/CHR01_Ally_Blockout_v001.png
+Preview/CHR01_Supply_Binder_Pose_v001.png
+Preview/CHR01_Push_Chair_Pose_v001.png
+DELIVERY.md — WORK IN PROGRESS
+```
+
+Human Owner 승인은 Final Sculpt, Retopology, 최종 Rig와 Animation 제작에
+들어가기 전 필요하다. Blockout 모델링 자체를 시작하기 위한 승인이 아니다.
+DCC 제작 도구가 없으면 2D 이미지로 대체하지 말고 즉시 toolchain blocker를
+보고한다. 첫 Blockout batch의 개별 binary는 `25 MiB` 미만으로 정리한다.
+초과 파일은 Stage하지 말고 Git LFS 결정을 요청한다.
+
+---
+
 # 1. 네 역할 한 줄
 
 BREAK NOTICE 공모전판에 필요한 **플레이어 1명, 고정 동료 1명, 동일 적 1종, Cargo Strap 장비**를 승인된 레퍼런스에 맞춰 실제 Unity용 자산으로 제작한다.
@@ -113,7 +190,7 @@ Unity Runtime Import, Material, Prefab, Collider, Animator 연결은 조윤성�
 
 가져갈 것:
 
-- 아웃소싱 이사·자산이동 현장 책임자 느낌
+- 평범하고 현실적인 시설·물류 직원 정체성
 - 현실적인 작업복
 - 플레이어와 다른 실루엣
 - 사무용 물체를 실제로 공급하는 사람이라는 인상
@@ -361,18 +438,15 @@ P0에서는 표정·Lip Sync·Cloth Simulation이 필요 없다.
 
 ---
 
-# 9. AI 사용 규칙
+# 9. AI·자동화 도구 사용 경계
 
-AI를 사용해도 된다. 단, AI 결과물을 그대로 최종본으로 취급하지 않는다.
+현재 권위에서는 생성형 AI로 새 Concept, Base Mesh, Texture, Rig 또는
+Animation을 생성해 이 Delivery에 포함하는 것을 허용하지 않는다. 별도의
+Human Owner 직접 승인이 없는 한 실제 납품물은 Designer가 DCC에서 직접
+제작한 원본이어야 한다.
 
-허용 예:
-
-- 레퍼런스 기반 Concept 보조
-- Base Mesh 생성
-- Retopology 보조
-- Texture 초안
-- Rig·Animation 보조
-- 작업 오류 분석
+허용되는 보조 범위는 작업 오류 분석, topology·weight·export 진단,
+파일명·해시·납품 메타데이터 검증과 같은 non-generative 검사다.
 
 반드시 사람이 확인:
 
@@ -388,7 +462,8 @@ AI를 사용해도 된다. 단, AI 결과물을 그대로 최종본으로 취급
 - 의상·장비 구조
 - 저작권·제3자 상표
 
-각 `DELIVERY.md`에 아래 항목을 추가한다.
+각 `DELIVERY.md`에는 아래 항목을 유지하고, 생성형 AI를 사용하지 않았다면
+`None`으로 명시한다.
 
 ```text
 AI Tool / Model:
@@ -474,11 +549,12 @@ PR 본문에 포함:
 
 ## Step 2
 
-`CHR01_Ally`의 제작 계획을 `ArtSource/Characters/CHR01_Ally/DELIVERY.md`에 작성한다.
+`Source/CHR01_Ally_Blockout_v001.blend` 또는 동등한 editable DCC source를
+실제로 만들고, `DELIVERY.md` 상태를 `WORK IN PROGRESS`로 갱신한다.
 
 ## Step 3
 
-다음 Preview를 먼저 만든다.
+위 editable 3D Blockout source에서 다음 Preview를 렌더한다.
 
 ```text
 Preview/CHR01_Ally_Blockout_v001.png
@@ -491,6 +567,7 @@ Preview/CHR01_Push_Chair_Pose_v001.png
 조윤성에게 Blockout·Pose 승인을 받은 후 Model/Rig/Animation으로 들어간다.
 
 처음부터 완성형 모델을 길게 만들지 않는다. **Blockout → 승인 → Production** 순서로 간다.
+문서 계획만 제출하거나 실제 source 없이 Preview만 제출하면 Step 3 미완료다.
 
 ---
 
