@@ -22,6 +22,9 @@ namespace BreakNotice.LocomotionCamera.Tests
         private const string PremiumRootPath =
             ReviewRootPath + "/Premium_v002";
 
+        private const string HitRootPath =
+            ReviewRootPath + "/HitProduction_v004";
+
         private const string ReviewScenePath =
             "Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity";
 
@@ -67,6 +70,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             P("ChairSkid", true, "A"), P("ChairSkid", true, "B"), P("ChairSkid", true, "C"),
             P("PaperBurst", true, "A"), P("PaperBurst", true, "B"), P("PaperBurst", true, "C")
         };
+
+        private static readonly string[] HitIntensities = { "Light", "Medium", "Heavy" };
+        private static readonly string[] HitVariations = { "A", "B", "C" };
+        private static readonly string[] HitLayers = { "Contact", "DirectionalBody", "HitStopEcho", "MaterialSettle" };
 
         private static IEnumerable CandidateCases => Candidates
             .Select(candidate => new TestCaseData(candidate)
@@ -324,10 +331,12 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Transform layers = root.transform.Find("ZONE_02_SOLO_LAYER_AND_COMPOSITE");
                 Transform variations = root.transform.Find("ZONE_03_PHYSICAL_VARIATION_AUDITION");
                 Transform gameplay = root.transform.Find("ZONE_04_GAMEPLAY_CAMERA_EQUIVALENT");
+                Transform hits = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
                 Assert.That(oldNew, Is.Not.Null);
                 Assert.That(layers, Is.Not.Null);
                 Assert.That(variations, Is.Not.Null);
                 Assert.That(gameplay, Is.Not.Null);
+                Assert.That(hits, Is.Not.Null);
 
                 Transform[] stations = oldNew.Cast<Transform>()
                     .Where(child => child.name.StartsWith("STATION_", StringComparison.Ordinal))
@@ -341,8 +350,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(layers.Cast<Transform>().Count(child => child.name.StartsWith("LAYER_STATION_", StringComparison.Ordinal)), Is.EqualTo(8));
                 Assert.That(variations.Cast<Transform>().Count(child => child.name.StartsWith("VARIATION_STATION_", StringComparison.Ordinal)), Is.EqualTo(4));
                 Assert.That(gameplay.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(24));
-                Assert.That(root.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(188));
-                Assert.That(root.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(140));
+                Assert.That(hits.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(84));
+                Assert.That(hits.Cast<Transform>().Count(child => child.name.StartsWith("HIT_STATION_", StringComparison.Ordinal)), Is.EqualTo(3));
+                Assert.That(root.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(272));
+                Assert.That(root.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(188));
                 MonoBehaviour[] reviewComponents =
                     root.GetComponentsInChildren<MonoBehaviour>(true);
                 Assert.That(reviewComponents.Length, Is.EqualTo(1));
@@ -397,7 +408,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 }
 
                 Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
-                Assert.That(camera.transform.position, Is.EqualTo(new Vector3(0f, 0.65f, -19.5f)));
+                Assert.That(camera.transform.position, Is.EqualTo(new Vector3(400f, 0.65f, -21.5f)));
                 Assert.That(Vector3.Dot(camera.transform.forward, Vector3.forward), Is.GreaterThan(0.999f));
                 Assert.That(Vector3.Dot(camera.transform.up, Vector3.up), Is.GreaterThan(0.999f));
                 Assert.That(Vector3.Dot(camera.transform.right, Vector3.right), Is.GreaterThan(0.999f));
@@ -428,7 +439,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void ReviewCamera_ContainsAllEightStationsAtSixteenByNine()
+        public void ReviewCamera_ContainsAllThreeHitProductionStationsAtSixteenByNine()
         {
             Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
             try
@@ -437,11 +448,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
                 camera.aspect = 16f / 9f;
                 Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
-                Transform oldNew = root.transform.Find("ZONE_01_OLD_VS_NEW");
-                Transform[] stations = oldNew.Cast<Transform>()
-                    .Where(child => child.name.StartsWith("STATION_", StringComparison.Ordinal))
+                Transform hitZone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                Transform[] stations = hitZone.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("HIT_STATION_", StringComparison.Ordinal))
                     .ToArray();
-                Assert.That(stations.Length, Is.EqualTo(8));
+                Assert.That(stations.Length, Is.EqualTo(3));
 
                 foreach (Transform station in stations)
                 {
@@ -477,11 +488,20 @@ namespace BreakNotice.LocomotionCamera.Tests
                 MethodInfo restart = playback.GetType().GetMethod("RestartAllNow");
                 Assert.That(restart, Is.Not.Null);
                 int started = (int)restart.Invoke(playback, null);
-                Assert.That(started, Is.EqualTo(140));
+                Assert.That(started, Is.EqualTo(188));
                 Assert.That(
                     root.GetComponentsInChildren<ParticleSystem>(false)
                         .All(system => system.isPlaying),
                     Is.True);
+
+                Transform hitZone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                ParticleSystem[] soloSystems = hitZone
+                    .GetComponentsInChildren<ParticleSystem>(false)
+                    .Where(system => system.transform.parent != null &&
+                        system.transform.parent.name.StartsWith("SOLO_0", StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(soloSystems.Length, Is.EqualTo(12));
+                Assert.That(soloSystems.All(system => system.particleCount > 0), Is.True);
 
                 Transform oldNew = root.transform.Find("ZONE_01_OLD_VS_NEW");
                 Transform[] stations = oldNew.Cast<Transform>()
@@ -498,6 +518,15 @@ namespace BreakNotice.LocomotionCamera.Tests
                         system.Simulate(0.42f, false, true, false);
                         Assert.That(system.particleCount, Is.GreaterThan(0), system.name);
                     }
+                }
+
+                ParticleSystem[] hitSystems =
+                    hitZone.GetComponentsInChildren<ParticleSystem>(false);
+                Assert.That(hitSystems.Length, Is.EqualTo(48));
+                foreach (ParticleSystem system in hitSystems)
+                {
+                    system.Simulate(0.14f, false, true, false);
+                    Assert.That(system.particleCount, Is.GreaterThan(0), system.name);
                 }
             }
             finally
@@ -557,6 +586,121 @@ namespace BreakNotice.LocomotionCamera.Tests
             string[] guids = paths.Select(AssetDatabase.AssetPathToGUID).ToArray();
             Assert.That(guids.All(guid => !string.IsNullOrWhiteSpace(guid)), Is.True);
             Assert.That(guids.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(guids.Length));
+        }
+
+        [Test]
+        public void HitProductionV004_HasThirtySixByteIdenticalSafeFlipbooksAndNinePrefabs()
+        {
+            var texturePaths = new List<string>();
+            var materialPaths = new List<string>();
+            var prefabPaths = new List<string>();
+            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            string repositoryRoot = Path.GetFullPath(Path.Combine(projectRoot, ".."));
+
+            foreach (string intensity in HitIntensities)
+            {
+                foreach (string variation in HitVariations)
+                {
+                    string prefabPath = HitRootPath + "/Prefabs/PF_VFX_Showcase_Hit" +
+                        intensity + "_" + variation + "_REVIEW_ONLY_v004.prefab";
+                    prefabPaths.Add(prefabPath);
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                    Assert.That(prefab, Is.Not.Null, prefabPath);
+                    Assert.That(prefab.GetComponentsInChildren<ParticleSystem>(true).Length, Is.EqualTo(4), prefabPath);
+
+                    foreach (string layer in HitLayers)
+                    {
+                        string name = "Hit" + intensity + "_" + variation + "_" + layer;
+                        string texturePath = HitRootPath + "/Flipbooks/T_VFX_Showcase_" + name + "_4x4_v004.png";
+                        string materialPath = HitRootPath + "/Materials/M_VFX_Showcase_Premium_" + name + "_v004.mat";
+                        texturePaths.Add(texturePath);
+                        materialPaths.Add(materialPath);
+
+                        string sourceRelative = texturePath.Replace(
+                            "Assets/_Project/Art/VFX/Showcase/HitProduction_v004/Flipbooks/",
+                            "ArtSource/VFX/Showcase/Flipbooks/HitProduction_v004/");
+                        string sourcePath = Path.Combine(repositoryRoot, sourceRelative.Replace('/', Path.DirectorySeparatorChar));
+                        string runtimePath = ToPhysicalPath(texturePath);
+                        Assert.That(File.Exists(sourcePath), Is.True, sourcePath);
+                        Assert.That(File.Exists(runtimePath), Is.True, runtimePath);
+                        byte[] source = File.ReadAllBytes(sourcePath);
+                        byte[] runtime = File.ReadAllBytes(runtimePath);
+                        Assert.That(runtime, Is.EqualTo(source), texturePath);
+
+                        TextureImporter importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+                        Assert.That(importer, Is.Not.Null, texturePath);
+                        Assert.That(importer.alphaSource, Is.EqualTo(TextureImporterAlphaSource.FromInput));
+                        Assert.That(importer.alphaIsTransparency, Is.True);
+                        Assert.That(importer.mipmapEnabled, Is.True);
+                        Assert.That(importer.borderMipmap, Is.True);
+                        Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp));
+                        Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Bilinear));
+                        Assert.That(importer.maxTextureSize, Is.EqualTo(2048));
+                        Assert.That(importer.textureCompression, Is.EqualTo(TextureImporterCompression.Uncompressed));
+
+                        Material material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+                        Assert.That(material, Is.Not.Null, materialPath);
+                        Assert.That(material.shader, Is.Not.Null);
+                        Assert.That(material.shader.name, Is.EqualTo(ParticleShaderName));
+                        Assert.That(AssetDatabase.GetAssetPath(material.GetTexture("_MainTex")), Is.EqualTo(texturePath));
+
+                        Texture2D decoded = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);
+                        try
+                        {
+                            Assert.That(ImageConversion.LoadImage(decoded, runtime, false), Is.True);
+                            Assert.That(decoded.width, Is.EqualTo(2048));
+                            Assert.That(decoded.height, Is.EqualTo(2048));
+                            Color32[] pixels = decoded.GetPixels32();
+                            Assert.That(pixels.Count(IsMissingTextureMagenta), Is.Zero, texturePath);
+                            Assert.That(pixels.Count(IsNeonCyan), Is.Zero, texturePath);
+                            Assert.That(pixels.Count(IsGreenSpill), Is.Zero, texturePath);
+                            Assert.That(
+                                pixels.Count(pixel => pixel.a > 8 && pixel.r < 8 && pixel.g < 8 && pixel.b < 8),
+                                Is.Zero,
+                                texturePath);
+                        }
+                        finally
+                        {
+                            UnityEngine.Object.DestroyImmediate(decoded);
+                        }
+                    }
+                }
+            }
+
+            Assert.That(texturePaths.Count, Is.EqualTo(36));
+            Assert.That(materialPaths.Count, Is.EqualTo(36));
+            Assert.That(prefabPaths.Count, Is.EqualTo(9));
+            string[] allPaths = texturePaths.Concat(materialPaths).Concat(prefabPaths).ToArray();
+            Assert.That(allPaths.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(allPaths.Length));
+            string[] guids = allPaths.Select(AssetDatabase.AssetPathToGUID).ToArray();
+            Assert.That(guids.All(guid => !string.IsNullOrWhiteSpace(guid)), Is.True);
+            Assert.That(guids.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(allPaths.Length));
+        }
+
+        [Test]
+        public void HitProductionV004_ReviewZoneHasNineCompositeAndTwelveSoloViews()
+        {
+            Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
+            try
+            {
+                GameObject root = FindReviewRoot(scene);
+                Transform zone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                Assert.That(zone, Is.Not.Null);
+                Transform[] stations = zone.Cast<Transform>()
+                    .Where(child => child.name.StartsWith("HIT_STATION_", StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(stations.Length, Is.EqualTo(3));
+                foreach (Transform station in stations)
+                {
+                    Assert.That(station.Cast<Transform>().Count(child => child.name.StartsWith("COMPOSITE_", StringComparison.Ordinal)), Is.EqualTo(3), station.name);
+                    Assert.That(station.Cast<Transform>().Count(child => child.name.StartsWith("SOLO_0", StringComparison.Ordinal)), Is.EqualTo(4), station.name);
+                    Assert.That(station.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(16), station.name);
+                }
+            }
+            finally
+            {
+                EditorSceneManager.CloseScene(scene, true);
+            }
         }
 
         [TestCaseSource(nameof(CandidateCases))]

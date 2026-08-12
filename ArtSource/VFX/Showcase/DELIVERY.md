@@ -212,3 +212,97 @@ Keep / Revise / Cut 판정하기 전까지 모든 v002 결과는
 - Gameplay Scene/Prefab 변경
 
 No new production asset blocks this work package. Graybox fallback remains active.
+
+---
+
+# Showcase Hit Production v004 Delivery
+
+Asset ID: `VFX-SHOWCASE-HIT-PRODUCTION-004`
+
+Branch: `codex/showcase-vfx-hit-production`
+
+Status: `REVIEW / OWNER APPROVAL PENDING`
+
+Gameplay/Runtime Integration Eligibility: `NONE`
+
+## 1. Owner-selected baseline preservation
+
+- 기존 선택본 7종과 `EXIT / ROUTE ACTIVATION` 신버전은 삭제·교체하지 않았다.
+- 신규 타격 pack은 기존 8종과 분리된 `HitProduction_v004` 경로와 review zone에만 추가했다.
+- Gameplay Scene, gameplay Runtime hook, shared Prefab 연결은 `0`이다.
+
+## 2. 실제 제작물
+
+- 강도: `Light / Medium / Heavy`
+- 강도별 결정론적 변주: `A / B / C`
+- 변주별 독립 layer: `Contact / DirectionalBody / HitStopEcho / MaterialSettle`
+- Unity-ready flipbook: `36`개
+- 각 flipbook: `2048x2048 RGBA`, `4x4`, `512x512/cell`, `16` unique frame
+- 총 authored frame: `576`
+- Unity 복사본: `36/36 byte-identical`
+- 총 Runtime candidate bytes: `9,447,677`
+
+모든 결과는 물리 원인을 먼저 보여 주고 상태 전달을 보조한다. 화면 전체 flash, neon ring,
+check/X sprite, fire/explosion, gameplay debris, fracture는 포함하지 않았다.
+
+## 3. Source와 provenance
+
+자체 제작 image-generation source bank 4개를 사용하고, chroma-key alpha extraction 뒤
+결정론적 Python 조립으로 36개 flipbook을 만들었다. 제3자 source는 `NONE`이다.
+
+모든 source/candidate/preview의 SHA-256, bytes, dimensions, alpha/frame audit와 권리 분류:
+
+- `Licenses/VFX_Showcase_HitProduction_Provenance_Ledger_v004.csv`
+
+분류:
+
+- source bank: `ORIGINAL_AI_GENERATED_SOURCE`
+- alpha bank: `ORIGINAL_AI_GENERATED_DERIVATIVE_SOURCE`
+- flipbook: `ORIGINAL_AI_ASSISTED_DETERMINISTIC_DERIVATIVE`
+- preview: `DETERMINISTIC_REVIEW_PREVIEW`
+
+## 4. 수동 확인 자료
+
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_ABC_ContactSheet_v004.png`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_LayerBreakdown_v004.png`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_GrayscaleAlpha_v004.png`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_TimingAudit_v004.png`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_Light_ABC_Animated_v004.gif`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_Medium_ABC_Animated_v004.gif`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_Heavy_ABC_Animated_v004.gif`
+- `Preview/HitProduction_v004/VFX_Showcase_HitProduction_UnityActualPlay_v004.png`
+
+## 5. Unity review
+
+Project:
+`C:\Users\jhbjm\Desktop\break-notice-wt-vfx-hit-production\Game`
+
+Scene:
+`Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity`
+
+Menu:
+`BREAK NOTICE > Contest > Prepare Isolated Showcase VFX Review`
+
+기본 카메라는 큰 `HIT PRODUCTION v004` zone을 연다. 세 행은 Light/Medium/Heavy이고,
+각 행에는 composite A/B/C와 solo Contact/Body/Echo/Settle가 함께 있다. Play를 누르면
+추가 입력 없이 자동 반복한다.
+
+## 6. Validation
+
+- deterministic source build: `PASS`
+- PNG signature/dimensions/RGBA/transparent margin: `36/36 PASS`
+- flipbook frame order/unique grid: `36/36`, `576/576 PASS`
+- magenta/neon-cyan/green-spill/black-halo signature: `0`
+- Unity compile/import: `PASS`
+- actual Play: station `3/3`, active system `48/48`, visible `3/3 PASS`
+- focused EditMode: `133/133 PASS`
+- full EditMode: `198/198 PASS`
+- full PlayMode: `59/59 PASS`
+- missing texture/material/shader: `0`
+- Gameplay integration: `0`
+- Web build/browser: `NOT RUN / OUT OF SCOPE`
+
+시각 품질은 자동 승인하지 않는다. Human Owner가 Light/Medium/Heavy A/B/C를
+Keep / Revise / Cut 판정하기 전까지 `REVIEW / OWNER APPROVAL PENDING`이다.
+
+No new production asset blocks this work package. Graybox fallback remains active.

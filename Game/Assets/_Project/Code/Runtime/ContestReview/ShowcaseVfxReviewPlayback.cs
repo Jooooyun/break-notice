@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace BreakNotice.ContestReview
@@ -24,6 +25,18 @@ namespace BreakNotice.ContestReview
             {
                 system.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
                 system.Play(false);
+
+                // A solo audition instance contains three inactive sibling layers.
+                // Unity can skip the first scheduled burst for the one active child
+                // when that prefab hierarchy enters Play Mode. Emit only that solo
+                // layer explicitly; composite timing and production candidates stay
+                // untouched.
+                Transform parent = system.transform.parent;
+                if (parent != null &&
+                    parent.name.StartsWith("SOLO_0", StringComparison.Ordinal))
+                {
+                    system.Emit(1);
+                }
             }
 
             LastStartedSystemCount = systems.Length;

@@ -25,6 +25,9 @@ namespace BreakNotice.Contest.Editor
         public const string PremiumRootPath =
             ReviewRootPath + "/Premium_v002";
 
+        public const string HitRootPath =
+            ReviewRootPath + "/HitProduction_v004";
+
         public const string ReviewScenePath =
             "Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity";
 
@@ -40,6 +43,7 @@ namespace BreakNotice.Contest.Editor
         private const string LayerZoneName = "ZONE_02_SOLO_LAYER_AND_COMPOSITE";
         private const string VariationZoneName = "ZONE_03_PHYSICAL_VARIATION_AUDITION";
         private const string GameplayZoneName = "ZONE_04_GAMEPLAY_CAMERA_EQUIVALENT";
+        private const string HitZoneName = "ZONE_05_HIT_PRODUCTION_v004";
         private const string FixedSceneViewCaptureArgument =
             "-showcaseVfxFixedSceneViewCapture";
         private const string ActualPlayCaptureArgument =
@@ -51,14 +55,15 @@ namespace BreakNotice.Contest.Editor
         private const float ReviewCameraFieldOfView = 40f;
         private const float ReviewCameraNearClip = 0.1f;
         private const float ReviewCameraFarClip = 80f;
-        private const float ReviewSceneViewSize = 6.15f;
-        private const float ActualPlayCaptureDelay = 0.42f;
+        private const float ReviewSceneViewSize = 7.20f;
+        private const float ActualPlayCaptureDelay = 0.14f;
+        private const float ReviewCaptureSimulationTime = 0.10f;
 
         private static readonly Vector3 ReviewCameraPosition =
-            new Vector3(0f, 0.65f, -19.5f);
+            new Vector3(400f, 0.65f, -21.5f);
 
         private static readonly Vector3 ReviewCameraTarget =
-            new Vector3(0f, 0.55f, 0f);
+            new Vector3(400f, 0.55f, 0f);
 
         private static readonly Quaternion ReviewCameraRotation =
             Quaternion.LookRotation(
@@ -91,6 +96,20 @@ namespace BreakNotice.Contest.Editor
             new VariationDefinition("A", 0f, 1.00f, 0.000f, 0.00f, 0.00f),
             new VariationDefinition("B", 14f, 0.82f, 0.035f, 0.12f, -0.06f),
             new VariationDefinition("C", -12f, 1.20f, 0.060f, -0.10f, 0.09f)
+        };
+
+        private static readonly HitVariationDefinition[] HitVariations =
+        {
+            new HitVariationDefinition("A", 0f, 1.00f),
+            new HitVariationDefinition("B", -7f, 1.00f),
+            new HitVariationDefinition("C", 8f, 1.00f)
+        };
+
+        private static readonly HitEffectDefinition[] HitEffects =
+        {
+            new HitEffectDefinition("Light", 0.42f, 3.10f),
+            new HitEffectDefinition("Medium", 0.50f, 3.65f),
+            new HitEffectDefinition("Heavy", 0.62f, 4.15f)
         };
 
         private static readonly EffectDefinition[] Effects =
@@ -216,10 +235,18 @@ namespace BreakNotice.Contest.Editor
             EnsureAssetFolder(PremiumRootPath);
             EnsureAssetFolder(PremiumRootPath + "/Materials");
             EnsureAssetFolder(PremiumRootPath + "/Prefabs");
+            EnsureAssetFolder(HitRootPath);
+            EnsureAssetFolder(HitRootPath + "/Flipbooks");
+            EnsureAssetFolder(HitRootPath + "/Materials");
+            EnsureAssetFolder(HitRootPath + "/Prefabs");
             EnsureAssetFolder("Assets/_Project/Scenes/90_Review");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
 
             foreach (LayerDefinition layer in Effects.SelectMany(effect => effect.Layers))
+            {
+                ConfigureTextureImporter(layer);
+            }
+            foreach (LayerDefinition layer in HitEffects.SelectMany(effect => effect.AllLayers))
             {
                 ConfigureTextureImporter(layer);
             }
@@ -249,6 +276,19 @@ namespace BreakNotice.Contest.Editor
                 else
                 {
                     CreateCompositePrefab(effect, VariationDefinition.Static, materials);
+                }
+            }
+
+            foreach (HitEffectDefinition effect in HitEffects)
+            {
+                foreach (HitVariationDefinition variation in HitVariations)
+                {
+                    var hitMaterials = new Dictionary<string, Material>(StringComparer.Ordinal);
+                    foreach (LayerDefinition layer in effect.Layers(variation))
+                    {
+                        hitMaterials.Add(layer.Name, CreateParticleMaterial(layer, particleShader));
+                    }
+                    CreateHitCompositePrefab(effect, variation, hitMaterials);
                 }
             }
 
@@ -289,6 +329,7 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "Premium Showcase VFX review prepared: replacementEffects=8/8, " +
                 "layerImports=24, compositeStations=8/8, physicalVariations=12, " +
+                "hitProduction=Light/Medium/Heavy, hitVariations=9, hitLayers=36, " +
                 "sceneViewFrontFramed=1, playBootstrap=1, gameplayIntegration=0, " +
                 "status=REVIEW / OWNER APPROVAL PENDING.");
         }
@@ -324,7 +365,7 @@ namespace BreakNotice.Contest.Editor
 
             Debug.Log(
                 $"Premium Showcase VFX fixed Scene View capture written: {outputPath}; " +
-                "orientation=FRONT_UPRIGHT; stations=8/8.");
+                "orientation=FRONT_UPRIGHT; hitStations=3/3; hitVariations=9/9.");
         }
 
         public static void CaptureFixedReviewGameFrameFromActualPlay()
@@ -384,7 +425,13 @@ namespace BreakNotice.Contest.Editor
                     new Vector3(300f, 4.65f, -8.6f),
                     new Vector3(300f, 1.25f, 4.8f),
                     48f,
-                    0.46f)
+                    0.46f),
+                new CaptureDefinition(
+                    "VFX_Showcase_HitProduction_UnityReview_v004.png",
+                    new Vector3(400f, 0.65f, -21.5f),
+                    new Vector3(400f, 0.55f, 0f),
+                    40f,
+                    0.14f)
             };
 
             Texture2D gameplayCapture = null;
@@ -463,6 +510,27 @@ namespace BreakNotice.Contest.Editor
                 rotation);
         }
 
+        private static LayerDefinition HitFlipbookLayer(
+            string intensity,
+            string variation,
+            string layer,
+            float lifetime,
+            float delay,
+            float startSize)
+        {
+            string name = $"Hit{intensity}_{variation}_{layer}";
+            return new LayerDefinition(
+                name,
+                $"{HitRootPath}/Flipbooks/T_VFX_Showcase_{name}_4x4_v004.png",
+                true,
+                lifetime,
+                delay,
+                startSize,
+                0f,
+                HitRootPath,
+                "v004");
+        }
+
         private static void ConfigureTextureImporter(LayerDefinition layer)
         {
             TextureImporter importer = AssetImporter.GetAtPath(layer.TexturePath) as TextureImporter;
@@ -515,7 +583,12 @@ namespace BreakNotice.Contest.Editor
             }
 
             SetTextureIfPresent(material, "_MainTex", texture);
-            SetColorIfPresent(material, "_Color", Color.white);
+            SetColorIfPresent(
+                material,
+                "_Color",
+                layer.MaterialRootPath == HitRootPath
+                    ? new Color(1.45f, 1.45f, 1.45f, 2.20f)
+                    : Color.white);
             SetFloatIfPresent(material, "_Mode", 2f);
             SetFloatIfPresent(material, "_ColorMode", 0f);
             SetFloatIfPresent(material, "_SrcBlend", (float)BlendMode.SrcAlpha);
@@ -591,6 +664,110 @@ namespace BreakNotice.Contest.Editor
             {
                 UnityEngine.Object.DestroyImmediate(temporaryRoot);
             }
+        }
+
+        private static void CreateHitCompositePrefab(
+            HitEffectDefinition effect,
+            HitVariationDefinition variation,
+            IReadOnlyDictionary<string, Material> materials)
+        {
+            GameObject temporaryRoot = new GameObject(effect.PrefabName(variation));
+            try
+            {
+                LayerDefinition[] layers = effect.Layers(variation);
+                for (int index = 0; index < layers.Length; index++)
+                {
+                    LayerDefinition layer = layers[index];
+                    GameObject layerObject = new GameObject($"LAYER_{index + 1:00}_{layer.Name}");
+                    layerObject.transform.SetParent(temporaryRoot.transform, false);
+                    layerObject.transform.localPosition = new Vector3(0f, 0f, -0.012f * index);
+                    layerObject.transform.localRotation = Quaternion.identity;
+                    layerObject.transform.localScale = Vector3.one;
+
+                    ParticleSystem particleSystem = layerObject.AddComponent<ParticleSystem>();
+                    ConfigureParticleSystem(
+                        particleSystem,
+                        effect.CycleDuration,
+                        layer,
+                        index,
+                        materials[layer.Name]);
+                }
+
+                if (PrefabUtility.SaveAsPrefabAsset(temporaryRoot, effect.PrefabPath(variation)) == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not save hit-production review prefab: {effect.PrefabPath(variation)}");
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(temporaryRoot);
+            }
+        }
+
+        private static void ConfigureParticleSystem(
+            ParticleSystem particleSystem,
+            float cycleDuration,
+            LayerDefinition layer,
+            int layerIndex,
+            Material material)
+        {
+            particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+            ParticleSystem.MainModule main = particleSystem.main;
+            main.duration = cycleDuration;
+            main.loop = true;
+            main.prewarm = false;
+            main.playOnAwake = true;
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+            main.simulationSpeed = 1f;
+            main.startLifetime = layer.Lifetime;
+            main.startSpeed = 0f;
+            main.startSize3D = false;
+            main.startSize = layer.StartSize;
+            main.startRotation = 0f;
+            main.startColor = layer.MaterialRootPath == HitRootPath
+                ? new Color(1.8f, 1.72f, 1.55f, 1f)
+                : Color.white;
+            main.gravityModifier = 0f;
+            main.maxParticles = 1;
+            main.stopAction = ParticleSystemStopAction.None;
+            main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
+
+            ParticleSystem.EmissionModule emission = particleSystem.emission;
+            emission.enabled = true;
+            emission.rateOverTime = 0f;
+            emission.rateOverDistance = 0f;
+            emission.SetBursts(new[] { new ParticleSystem.Burst(layer.Delay, 1) });
+
+            ParticleSystem.ShapeModule shape = particleSystem.shape;
+            shape.enabled = false;
+            ConfigureLifetimeCurves(particleSystem, true, layerIndex);
+            ConfigureTextureSheetAnimation(particleSystem, true);
+            ParticleSystem.NoiseModule noise = particleSystem.noise;
+            noise.enabled = false;
+            ParticleSystem.CollisionModule collision = particleSystem.collision;
+            collision.enabled = false;
+            ParticleSystem.TriggerModule trigger = particleSystem.trigger;
+            trigger.enabled = false;
+            ParticleSystem.TrailModule trails = particleSystem.trails;
+            trails.enabled = false;
+            ParticleSystem.LightsModule lights = particleSystem.lights;
+            lights.enabled = false;
+
+            ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
+            renderer.sharedMaterial = material;
+            renderer.renderMode = ParticleSystemRenderMode.Billboard;
+            renderer.alignment = ParticleSystemRenderSpace.View;
+            renderer.sortMode = ParticleSystemSortMode.Distance;
+            renderer.sortingOrder = layerIndex;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            renderer.motionVectorGenerationMode = MotionVectorGenerationMode.ForceNoMotion;
+            renderer.minParticleSize = 0f;
+            renderer.maxParticleSize = 1f;
+            renderer.enableGPUInstancing = false;
         }
 
         private static void ConfigureParticleSystem(
@@ -786,6 +963,13 @@ namespace BreakNotice.Contest.Editor
                 binder,
                 ally,
                 exit);
+            CreateHitProductionZone(
+                scene,
+                root.transform,
+                new Vector3(400f, 0f, 0f),
+                backdrop,
+                panel,
+                prop);
 
             RenderSettings.fog = false;
             RenderSettings.ambientMode = AmbientMode.Flat;
@@ -1122,6 +1306,110 @@ namespace BreakNotice.Contest.Editor
             instance.transform.localRotation = Quaternion.Euler(0f, 0f, rotation);
         }
 
+        private static void CreateHitProductionZone(
+            Scene scene,
+            Transform parent,
+            Vector3 position,
+            Material backdrop,
+            Material panel,
+            Material prop)
+        {
+            Transform zone = CreateZone(parent, HitZoneName, position);
+            CreatePrimitive(
+                zone,
+                "ZONE_BACKDROP",
+                PrimitiveType.Cube,
+                new Vector3(0f, 0f, 0.9f),
+                new Vector3(27f, 12.8f, 0.12f),
+                backdrop);
+            CreateLabel(
+                zone,
+                "HEADER",
+                "HIT PRODUCTION v004  /  LIGHT - MEDIUM - HEAVY  /  A-B-C + SOLO LAYERS  /  REVIEW",
+                new Vector3(0f, 5.82f, -0.25f),
+                0.033f,
+                new Color(0.82f, 0.80f, 0.74f, 1f));
+
+            float[] rowY = { 3.55f, 0f, -3.55f };
+            float[] variationX = { -8.6f, -5.6f, -2.6f };
+            float[] soloX = { 1.1f, 3.7f, 6.3f, 8.9f };
+            string[] shortLayerLabels = { "CONTACT", "BODY", "ECHO", "SETTLE" };
+
+            for (int effectIndex = 0; effectIndex < HitEffects.Length; effectIndex++)
+            {
+                HitEffectDefinition effect = HitEffects[effectIndex];
+                Transform row = new GameObject($"HIT_STATION_{effect.Intensity.ToUpperInvariant()}").transform;
+                row.SetParent(zone, false);
+                row.localPosition = new Vector3(0f, rowY[effectIndex], 0f);
+                row.localRotation = Quaternion.identity;
+                row.localScale = Vector3.one;
+
+                CreatePrimitive(
+                    row,
+                    "REVIEW_BACKDROP",
+                    PrimitiveType.Cube,
+                    new Vector3(0f, 0f, 0.35f),
+                    new Vector3(25.5f, 3.05f, 0.08f),
+                    panel);
+                CreateLabel(
+                    row,
+                    "INTENSITY_LABEL",
+                    effect.Intensity.ToUpperInvariant(),
+                    new Vector3(-11.9f, 1.10f, -0.30f),
+                    0.021f,
+                    new Color(0.88f, 0.79f, 0.64f, 1f));
+
+                for (int variationIndex = 0; variationIndex < HitVariations.Length; variationIndex++)
+                {
+                    HitVariationDefinition variation = HitVariations[variationIndex];
+                    GameObject instance = InstantiatePrefab(
+                        effect.PrefabPath(variation),
+                        scene,
+                        row,
+                        $"COMPOSITE_{effect.Intensity.ToUpperInvariant()}_{variation.Suffix}");
+                    instance.transform.localPosition = new Vector3(variationX[variationIndex], 0.05f, -0.20f);
+                    instance.transform.localRotation = Quaternion.identity;
+                    instance.transform.localScale = Vector3.one * effect.ReviewScale;
+                    CreateLabel(
+                        row,
+                        "VAR_LABEL_" + variation.Suffix,
+                        "COMPOSITE " + variation.Suffix,
+                        new Vector3(variationX[variationIndex], -1.13f, -0.30f),
+                        0.013f,
+                        new Color(0.65f, 0.64f, 0.59f, 1f));
+                }
+
+                for (int layerIndex = 0; layerIndex < 4; layerIndex++)
+                {
+                    HitVariationDefinition variation = HitVariations[0];
+                    GameObject solo = InstantiatePrefab(
+                        effect.PrefabPath(variation),
+                        scene,
+                        row,
+                        $"SOLO_{layerIndex + 1:00}_{shortLayerLabels[layerIndex]}");
+                    solo.transform.localPosition = new Vector3(soloX[layerIndex], 0.05f, -0.20f);
+                    solo.transform.localRotation = Quaternion.identity;
+                    solo.transform.localScale = Vector3.one * effect.ReviewScale * 0.92f;
+                    SetOnlyLayerActive(solo, layerIndex);
+                    CreateLabel(
+                        row,
+                        "SOLO_LABEL_" + layerIndex,
+                        shortLayerLabels[layerIndex],
+                        new Vector3(soloX[layerIndex], -1.13f, -0.30f),
+                        0.012f,
+                        new Color(0.58f, 0.61f, 0.58f, 1f));
+                }
+
+                CreatePrimitive(
+                    row,
+                    "CONTACT_SURFACE_PROXY",
+                    PrimitiveType.Cube,
+                    new Vector3(-10.45f, 0.05f, -0.06f),
+                    new Vector3(0.28f, 1.75f, 0.28f),
+                    prop);
+            }
+        }
+
         private static Transform CreateZone(Transform parent, string name, Vector3 position)
         {
             GameObject zone = new GameObject(name);
@@ -1421,10 +1709,10 @@ namespace BreakNotice.Contest.Editor
             Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
             ConfigureReviewCamera(camera);
 
-            Transform oldNewZone = root.transform.Find(OldNewZoneName);
-            if (oldNewZone == null)
+            Transform hitZone = root.transform.Find(HitZoneName);
+            if (hitZone == null)
             {
-                throw new InvalidOperationException("Old/new review zone is unavailable.");
+                throw new InvalidOperationException("Hit-production review zone is unavailable.");
             }
 
             Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
@@ -1434,28 +1722,32 @@ namespace BreakNotice.Contest.Editor
             int visibleStationCount = 0;
             int activeSystemCount = 0;
             int systemsWithParticles = 0;
-            for (int index = 0; index < oldNewZone.childCount; index++)
+            for (int index = 0; index < hitZone.childCount; index++)
             {
-                Transform station = oldNewZone.GetChild(index);
-                if (!station.name.StartsWith("STATION_", StringComparison.Ordinal))
+                Transform station = hitZone.GetChild(index);
+                if (!station.name.StartsWith("HIT_STATION_", StringComparison.Ordinal))
                 {
                     continue;
                 }
 
                 stationCount++;
-                Transform composite = station.Find("NEW_PREMIUM_V002_COMPOSITE");
-                if (composite == null)
+                int compositeCount = station.Cast<Transform>()
+                    .Count(child => child.name.StartsWith("COMPOSITE_", StringComparison.Ordinal));
+                int soloCount = station.Cast<Transform>()
+                    .Count(child => child.name.StartsWith("SOLO_0", StringComparison.Ordinal));
+                if (compositeCount != 3 || soloCount != 4)
                 {
                     throw new InvalidOperationException(
-                        $"Premium composite is unavailable: {station.name}");
+                        $"Hit station layout failed: {station.name}; " +
+                        $"composites={compositeCount}/3; solos={soloCount}/4.");
                 }
 
                 ParticleSystem[] systems =
-                    composite.GetComponentsInChildren<ParticleSystem>(false);
-                if (systems.Length != 3)
+                    station.GetComponentsInChildren<ParticleSystem>(false);
+                if (systems.Length != 16)
                 {
                     throw new InvalidOperationException(
-                        $"Premium composite layer count is not 3: {station.name}={systems.Length}");
+                        $"Hit station active layer count is not 16: {station.name}={systems.Length}");
                 }
 
                 bool stationPlaying = true;
@@ -1479,19 +1771,23 @@ namespace BreakNotice.Contest.Editor
                     : 0;
             }
 
-            if (stationCount != 8 || playingStationCount != 8 ||
-                liveStationCount != 8 || activeSystemCount != 24 ||
-                systemsWithParticles < 8 || visibleStationCount != 8)
+            if (stationCount != 3 || playingStationCount != 3 ||
+                liveStationCount != 3 || activeSystemCount != 48 ||
+                systemsWithParticles < 39 || visibleStationCount != 3)
             {
                 throw new InvalidOperationException(
-                    "Actual Play review contract failed: " +
-                    $"stations={stationCount}/8, playing={playingStationCount}/8, " +
-                    $"liveStations={liveStationCount}/8, " +
-                    $"activeSystems={activeSystemCount}/24, " +
-                    $"systemsWithParticles={systemsWithParticles}/24 (minimum 8), " +
-                    $"visible={visibleStationCount}/8.");
+                    "Actual Play hit-production review contract failed: " +
+                    $"stations={stationCount}/3, playing={playingStationCount}/3, " +
+                    $"liveStations={liveStationCount}/3, " +
+                    $"activeSystems={activeSystemCount}/48, " +
+                    $"systemsWithParticles={systemsWithParticles}/48 (minimum 39), " +
+                    $"visible={visibleStationCount}/3.");
             }
 
+            // Validation above observes actual Play state. The review still uses
+            // a deterministic peak frame so all nine alternatives remain legible
+            // in one static owner-inspection capture.
+            SimulateAllParticles(root, ReviewCaptureSimulationTime);
             Texture2D capture = RenderCamera(camera, 1920, 1080);
             try
             {
@@ -1503,11 +1799,12 @@ namespace BreakNotice.Contest.Editor
             }
 
             Debug.Log(
-                "Premium Showcase VFX actual Play capture PASS: " +
-                $"{outputPath}; stations=8/8; playing=8/8; " +
-                $"liveStations=8/8; activeSystems=24/24; " +
-                $"systemsWithParticles={systemsWithParticles}/24; " +
-                "visible=8/8; gameplayIntegration=0.");
+                "Showcase hit-production VFX actual Play capture PASS: " +
+                $"{outputPath}; stations=3/3; playing=3/3; " +
+                $"liveStations=3/3; activeSystems=48/48; " +
+                $"systemsWithParticles={systemsWithParticles}/48; " +
+                "visible=3/3; gameplayIntegration=0; " +
+                "status=REVIEW / OWNER APPROVAL PENDING.");
         }
 
         private static void ExitAfterActualPlayCapture()
@@ -1621,7 +1918,9 @@ namespace BreakNotice.Contest.Editor
                 float lifetime,
                 float delay,
                 float startSize,
-                float rotation)
+                float rotation,
+                string materialRootPath = null,
+                string versionSuffix = "v002")
             {
                 Name = name;
                 TexturePath = texturePath;
@@ -1630,6 +1929,8 @@ namespace BreakNotice.Contest.Editor
                 Delay = delay;
                 StartSize = startSize;
                 Rotation = rotation;
+                MaterialRootPath = materialRootPath ?? PremiumRootPath;
+                VersionSuffix = versionSuffix;
             }
 
             public string Name { get; }
@@ -1639,8 +1940,63 @@ namespace BreakNotice.Contest.Editor
             public float Delay { get; }
             public float StartSize { get; }
             public float Rotation { get; }
-            public string MaterialName => "M_VFX_Showcase_Premium_" + Name + "_v002";
-            public string MaterialPath => PremiumRootPath + "/Materials/" + MaterialName + ".mat";
+            public string MaterialRootPath { get; }
+            public string VersionSuffix { get; }
+            public string MaterialName => "M_VFX_Showcase_Premium_" + Name + "_" + VersionSuffix;
+            public string MaterialPath => MaterialRootPath + "/Materials/" + MaterialName + ".mat";
+        }
+
+        private sealed class HitEffectDefinition
+        {
+            public HitEffectDefinition(
+                string intensity,
+                float cycleDuration,
+                float reviewScale)
+            {
+                Intensity = intensity;
+                CycleDuration = cycleDuration;
+                ReviewScale = reviewScale;
+            }
+
+            public string Intensity { get; }
+            public float CycleDuration { get; }
+            public float ReviewScale { get; }
+
+            public IEnumerable<LayerDefinition> AllLayers =>
+                HitVariations.SelectMany(Layers);
+
+            public LayerDefinition[] Layers(HitVariationDefinition variation)
+            {
+                float baseLifetime = Intensity == "Light" ? 0.31f :
+                    Intensity == "Medium" ? 0.39f : 0.49f;
+                return new[]
+                {
+                    HitFlipbookLayer(Intensity, variation.Suffix, "Contact", baseLifetime * 0.70f, 0.000f, 1.00f),
+                    HitFlipbookLayer(Intensity, variation.Suffix, "DirectionalBody", baseLifetime, 0.008f, 1.00f),
+                    HitFlipbookLayer(Intensity, variation.Suffix, "HitStopEcho", baseLifetime * 1.06f, 0.018f, 1.00f),
+                    HitFlipbookLayer(Intensity, variation.Suffix, "MaterialSettle", baseLifetime * 1.22f, 0.028f, 1.00f)
+                };
+            }
+
+            public string PrefabName(HitVariationDefinition variation) =>
+                $"PF_VFX_Showcase_Hit{Intensity}_{variation.Suffix}_REVIEW_ONLY_v004";
+
+            public string PrefabPath(HitVariationDefinition variation) =>
+                HitRootPath + "/Prefabs/" + PrefabName(variation) + ".prefab";
+        }
+
+        private readonly struct HitVariationDefinition
+        {
+            public HitVariationDefinition(string suffix, float rotation, float scale)
+            {
+                Suffix = suffix;
+                Rotation = rotation;
+                Scale = scale;
+            }
+
+            public string Suffix { get; }
+            public float Rotation { get; }
+            public float Scale { get; }
         }
 
         private sealed class EffectDefinition
