@@ -1,0 +1,1020 @@
+{
+  "status": "PASS",
+  "cue_count": 75,
+  "required_cue_count": 67,
+  "conditional_cue_count": 8,
+  "export_count": 196,
+  "family_counts": {
+    "AMB": 7,
+    "PLY": 38,
+    "BND": 21,
+    "CHR": 20,
+    "ALY": 15,
+    "STR": 15,
+    "TAG": 8,
+    "RUN": 35,
+    "DRW": 10,
+    "FIN": 13,
+    "RST": 2,
+    "EXT": 5,
+    "UI": 7
+  },
+  "decode_pass": 196,
+  "sample_rate_pass": 196,
+  "bit_depth_pass": 196,
+  "clipped_file_count": 0,
+  "full_scale_file_count": 0,
+  "silent_or_corrupt_count": 0,
+  "duplicate_export_hash_count": 0,
+  "duplicate_destination_count": 0,
+  "loop_count": 20,
+  "loop_seam_pass": 20,
+  "worst_loop_jump_ratio": 0.08967973047728792,
+  "worst_loop_edge_rms_delta_db": 0.016408989933091873,
+  "max_dc": 9.888916634596311e-05,
+  "max_peak": 0.676082968711853,
+  "minimum_rms_dbfs": -41.17650941820261,
+  "worst_variation_aligned_correlation": 0.9697361931507332,
+  "export_bytes": 29208374,
+  "raw_source_count": 26,
+  "license_evidence_count": 28,
+  "approved_reference_count": 4,
+  "reel_count": 5,
+  "reels": [
+    {
+      "path": "Preview/ProductionV002/AUDITION_A_PLAYER_BINDER_CHAIR_v002.wav",
+      "duration": 88.55789583333333,
+      "bytes": 25504718,
+      "sha256": "3a24ec7534eaec370fb5663927f3d8696c790c08c3b833fd4665f4c94e9137a4"
+    },
+    {
+      "path": "Preview/ProductionV002/AUDITION_B_ALLY_STRAP_TAGS_v002.wav",
+      "duration": 41.4929375,
+      "bytes": 11950010,
+      "sha256": "c1341683130aababe7754fa826119e910d86214a13c0e12d1337be470369528c"
+    },
+    {
+      "path": "Preview/ProductionV002/AUDITION_C_RUNNER_PRESSURE_v002.wav",
+      "duration": 41.929520833333335,
+      "bytes": 12075746,
+      "sha256": "c2951d26ffba4c94a5d3f0882acfca5f32484080b533be5ba04cbcfd931e76b0"
+    },
+    {
+      "path": "Preview/ProductionV002/AUDITION_D_DRAWER_RESET_EXIT_UI_AMBIENCE_v002.wav",
+      "duration": 48.0009375,
+      "bytes": 13824314,
+      "sha256": "fb5c2528078e4720ae874229545eafc84a410ca83c1a911692eb0e56ca4b1096"
+    },
+    {
+      "path": "Preview/ProductionV002/AUDITION_E_HANDOVER_CRASH_CONDITIONAL_v002.wav",
+      "duration": 20.8189375,
+      "bytes": 5995898,
+      "sha256": "678824fca69511379012fbda013292f8e6ee79ac49b18e12f29a1ed18ea008e2"
+    }
+  ],
+  "approved_references": [
+    {
+      "path": "Source/ApprovedReferences/AUDITION_01_FOOTSTEPS_WEIGHTED_v002_48k24.wav",
+      "bytes": 1696364,
+      "sha256": "dd6fcaf66e9ef4f26c7744379600b0da71b96a210f54e28cbdf23e0271bfae94"
+    },
+    {
+      "path": "Source/ApprovedReferences/AUDITION_02_PUNCH_WEIGHTED_v002_48k24.wav",
+      "bytes": 1886444,
+      "sha256": "853ce15e701370b4180d7ec852f2e5f1860703cdaba77b28b3659381911c8791"
+    },
+    {
+      "path": "Source/ApprovedReferences/AUDITION_BINDER_PHYSICAL_v003_48k24.wav",
+      "bytes": 1923884,
+      "sha256": "21c53a4b6d6878e527f81d04da07ee9ce1a209bc8fd6eeed7381ecb845099dd9"
+    },
+    {
+      "path": "Source/ApprovedReferences/AUDITION_CHAIR_PHYSICAL_v003_48k24.wav",
+      "bytes": 2692844,
+      "sha256": "c314a2fcb601ed9d814921f4d06b04518e0a46ac526b6e3f5d4ebd87df51f8e8"
+    }
+  ],
+  "raw_sources": [
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_0516_Chair_Fall_Carpet.wav",
+      "bytes": 2634538,
+      "sha256": "8e6ab6dd50d04e61efe82e21e54c6946eb0da4d1ea0baa22b2926c799677a89b"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_0666_Chair_Move_Tile.wav",
+      "bytes": 5318298,
+      "sha256": "13abaf29fc0e189d760b9307a465a2f2f59ac898efa3693561d2bd1d65512988"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_0786_Workbook_Handling.wav",
+      "bytes": 1382596,
+      "sha256": "6902ebf86fbd7897dfabb8b551fb18d0a142adf6b16536e01853d4fc197997c6"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_1226_Notebook_ThrowGround.wav",
+      "bytes": 542162,
+      "sha256": "3ba178525bc6a4242a3872ebbc0014d7caa3b818ed178fd428c322dd32fa5f10"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_1316_Wheeled_Load_Roll.wav",
+      "bytes": 2645940,
+      "sha256": "e3ef464cd3c71cd32b78cdbe7d683547a9b99c12c8bfe962d1598f43ac63568a"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_1318_FastSteps_Concrete.wav",
+      "bytes": 8863310,
+      "sha256": "2bf4901cf4e2e1352f34246fbaaed1bdec8b8362ae9dd36022abbeea35267b55"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_1773_SteelBar_Fall_03.wav",
+      "bytes": 229166,
+      "sha256": "43931bf9e038e30a6d00d404660a44fba6d171fc39faefaf51578453f6640f00"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_1798_Whoosh_Bamboo_10.wav",
+      "bytes": 133974,
+      "sha256": "4fe8240ba612cd613f04a646169198bb3c1458238237d4f4398a47e97c3c9bcb"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_1802_Whoosh_WoodSheet_09.wav",
+      "bytes": 112682,
+      "sha256": "581566e4d9781c54191dbe97eb59c87ff4fe3df96d76c3acda6beefa96166576"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2244_MetalBall_Tile_03.wav",
+      "bytes": 455514,
+      "sha256": "7a4a7f461b0c0521923c79769cca5db55e591f914027b2f042cc05f350f3f3a3"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2359_MetalBarrier_Close_02.wav",
+      "bytes": 590984,
+      "sha256": "b362a0df65470433348b531701b1dd56557035074d437d3e8394461345e6d296"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2452_BodyFall_01.wav",
+      "bytes": 222032,
+      "sha256": "4770f7b32fcab7437c5b1ce79b80df592f3ff76885c49c62fb367d74a4f3430c"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2453_BodyFall_02.wav",
+      "bytes": 221794,
+      "sha256": "852d68dbf84df1399182dbb938594203a80eea24a681ac4ffe473dc0dca3b3ad"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2454_BodyFall_03.wav",
+      "bytes": 213650,
+      "sha256": "5fb4940962fcfd5f00c516c204f46036ae8046ddb201a2913e1eac557d8c2a08"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2455_BodyFall_04.wav",
+      "bytes": 168478,
+      "sha256": "a3ae2782efe4668afeaa3597afecc6d60df7ad5baa5c0e2ef46ae6dc1e8f8f67"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2459_Punch_04.wav",
+      "bytes": 123806,
+      "sha256": "140e2b97f610d3b5035d17b70fbdd39e207da7dc289dda89417d4c13eff2f851"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2460_Punch_05.wav",
+      "bytes": 123770,
+      "sha256": "2c40a361dbaa2f01971448215df2e5ff2925d4b7ccfd8d390e5ed073610e3db3"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2461_Punch_06.wav",
+      "bytes": 128938,
+      "sha256": "3ce4c0be524362ec90d6a5591dba940ed88c3b5e5f392f0783031246f48389dd"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2462_Punch_07.wav",
+      "bytes": 98510,
+      "sha256": "37d4ffe3a9c953b6eb5a8318b5783f3a40a149117be181efb7a2a79c85659c53"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2463_Punch_08.wav",
+      "bytes": 137518,
+      "sha256": "338c14568c0e8e49a34f20c826d2260bce38c67b1bfbe74a4b73c68f07933c90"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2464_Punch_09.wav",
+      "bytes": 106856,
+      "sha256": "519e58c2f719fd80bd67b85b50fcbed88ce710e8248c44dca2515ad3c6eed85d"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2803_LargePaper_Handle_08.wav",
+      "bytes": 323190,
+      "sha256": "26f86c9c4657cd70b83399977fa4085b609d14827f855dc541e5c16528adc91d"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2808_LargePaper_Handle_13.wav",
+      "bytes": 591320,
+      "sha256": "0670c579e8a298441ea032d8cea79aef33588598e99adfe6a638ff7aa781e9b9"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_2902_Plastic_Cover_Impact.wav",
+      "bytes": 148064,
+      "sha256": "0603a05280d81ca3403dacda8339bb6d24acce5f4fe37ad9763390a2e2337f36"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_3296_Dumbbell_Wood_02.wav",
+      "bytes": 104536,
+      "sha256": "dd06c945b86f67138854c7e5c24ff75a58957796bc6692a7ce8d9099e6fcfb2e"
+    },
+    {
+      "path": "Source/ProductionV002/RawCC0/LaSonotheque/BSB_3441_Steps_PlasticFloor.wav",
+      "bytes": 10498278,
+      "sha256": "c618a90db5135d3801fe7bbdb5cd8a549777246a4d4d29474a50336c0bf2371e"
+    }
+  ],
+  "license_evidence": [
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_CC0_1.0_LegalCode_20260812.html",
+      "bytes": 32451,
+      "sha256": "001e3d1c905c18b1d034b34200cc952026abb38457c2294c23eaef7f6bda64df"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_0516_ChaiseTombeMoquette_20260812.html",
+      "bytes": 38788,
+      "sha256": "343214b8736a62ab9aa93b3f372ea95341a10f3d68dd498847713e7c8b301d64"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_0666_ChaiseDeplacement_20260812.html",
+      "bytes": 39223,
+      "sha256": "e50f32fc0aa46b90053f7a0c5184ceb32028e8a843035b3406d33e78a72cac9b"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_0786_Classeur_20260812.html",
+      "bytes": 37142,
+      "sha256": "5edb8b5483c0f6bc7dfdcdeba69df8f88ed16435f340fad2c301976af8e5e659"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_1226_PageDechireeFroissee2_20260812.html",
+      "bytes": 40238,
+      "sha256": "35303abe84380dcf070045b8015cfb638d682883f4c26af9289ca73a878d873b"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_1316_DiableManutention1_20260812.html",
+      "bytes": 39169,
+      "sha256": "6d2de8a7e15c064928395e75b0a2025167e389781da70e46d4f67947e1fdcf2e"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_1318_PasRapidesBeton_20260812.html",
+      "bytes": 56358,
+      "sha256": "2414773792b20b3a979b5d45afaa212eb0e4b214e9655d0f0106418adcbcede0"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_1773_ChuteBarreAcier3_20260812.html",
+      "bytes": 39323,
+      "sha256": "2c088a67afa7021acd801667aeac3f701c6c4b2ef356934d2b440ef99d309f82"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_1798_Whoosh10_20260812.html",
+      "bytes": 43445,
+      "sha256": "ab1dcbc26119160cb078d63e4051214b2debb4a51ad9ce4ed68fd3780935f32c"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_1802_Whoosh9_20260812.html",
+      "bytes": 42364,
+      "sha256": "9d210533eeb55ab41e26a0f10dcb617a3f72a2a2c235a87b15ecf3630273eabf"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2244_BilleMetalRebond3_20260812.html",
+      "bytes": 39842,
+      "sha256": "bc4e027bdc4a847099e47028642a931e034e86a8d729a256edd86d408e383ea7"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2359_BarriereMetalFermeture2_20260812.html",
+      "bytes": 40792,
+      "sha256": "14b893836821500fb4207bb7f5a845594146280f871128be64869e1d57cc1c87"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2452_ChuteCorps1_20260812.html",
+      "bytes": 40950,
+      "sha256": "6f23b32d387c765edd125f0a5d01fdaced564f941116a90fee9f1baa70da20bd"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2453_ChuteCorps2_20260812.html",
+      "bytes": 42715,
+      "sha256": "13f9cf9f534a56fe407afa80d4b339ae016d170cab8a815f02d66dd24edc4fdb"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2454_ChuteCorps3_20260812.html",
+      "bytes": 39320,
+      "sha256": "dd6e01f41156dd9b914025af39afe095236172aee269d469770468b2778acc05"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2455_ChuteCorps4_20260812.html",
+      "bytes": 40871,
+      "sha256": "0abba53294af9434012bb3fdfb25c0dc0bee64baca29d80624bb98ceb02f8d42"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2459_Punch4_20260812.html",
+      "bytes": 39835,
+      "sha256": "bf9c3fb661d23edbbf8f6a82b73de9e32093959e7f119c5d205545cdacdedc8b"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2460_Punch5_20260812.html",
+      "bytes": 40889,
+      "sha256": "23f660ae6634164f63b82d754fea03cb6aa414bc265e9e7551724f28229383a0"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2461_Punch6_20260812.html",
+      "bytes": 41478,
+      "sha256": "1933ce57b0dd5520ef693337722d5f014ff7bc16297d1437a5c360dc3e8cbf27"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2462_Punch7_20260812.html",
+      "bytes": 39793,
+      "sha256": "e71ea4c9fc38bd613d727b9ad19002106f63844fa6db3fdde240defb2c870c2e"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2463_Punch8_20260812.html",
+      "bytes": 40789,
+      "sha256": "b8438b8c1c60ef4e2601ba7095f684b926d43e0f9b12d0a2bae790ce73d90c17"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2464_Punch9_20260812.html",
+      "bytes": 39920,
+      "sha256": "46ee34e6c36d693bd307ef73ecb02a2d723d4f53bdd83229809cf056e81dbd81"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2803_CarteRoutiere8_20260812.html",
+      "bytes": 39286,
+      "sha256": "0e6bd0df253d660b030cecc349c6cc01f153c49e352ff16628fbe791b7fdfa6a"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2808_CarteRoutiere13_20260812.html",
+      "bytes": 39342,
+      "sha256": "2c42b9d01f95c1b069dcdd84600061d36de6dbbe3cb0d61fdc65527fd65c4d6e"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_2902_CouverclePlastique8_20260812.html",
+      "bytes": 38754,
+      "sha256": "aa6ac499e9ab6163e9c447d5e55648b8aaf83e334fc303448b9b9eaea5ba26ed"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_3296_HalterePose2_20260812.html",
+      "bytes": 39101,
+      "sha256": "902b37b12a332cf58069739f1ccd105badea836c5c936f315d4ed325e7b4a517"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_3441_PasGrincent2_20260812.html",
+      "bytes": 38942,
+      "sha256": "e1dcd3927201111c4ed57a48eed78282cce7ce43c079c1d51a61bd1543fe089d"
+    },
+    {
+      "path": "Licenses/ProductionV002/Evidence/LIC_LASONOTHEQUE_Rights_20260812.html",
+      "bytes": 21351,
+      "sha256": "198803931853489b1338bf024585c9b63af89b5065ee0c482e558c9dcd57a414"
+    }
+  ],
+  "loop_metrics": [
+    {
+      "path": "Export/ProductionV002/Ambience/AUD_AMB_OperationsFloor_RoomTone_Loop_v002.wav",
+      "jump": 3.695487976074219e-05,
+      "jump_dbfs": -88.6465641287459,
+      "ordinary_p99_step": 0.005842986106872561,
+      "jump_ratio": 0.006324656448742126,
+      "edge_rms_delta_db": -0.0055486896077188525
+    },
+    {
+      "path": "Export/ProductionV002/Ambience/AUD_AMB_FluorescentHum_01_Loop_v002.wav",
+      "jump": 0.0012496709823608398,
+      "jump_dbfs": -58.06408628950032,
+      "ordinary_p99_step": 0.031590008735656726,
+      "jump_ratio": 0.03955905782799906,
+      "edge_rms_delta_db": 0.00603976084411211
+    },
+    {
+      "path": "Export/ProductionV002/Ambience/AUD_AMB_FluorescentHum_02_Loop_v002.wav",
+      "jump": 0.00010228157043457031,
+      "jump_dbfs": -79.80405224845724,
+      "ordinary_p99_step": 0.03732589483261106,
+      "jump_ratio": 0.0027402309011814625,
+      "edge_rms_delta_db": -0.004572340735315165
+    },
+    {
+      "path": "Export/ProductionV002/Ambience/AUD_AMB_LockdownAlarm_Distant_PreClear_Loop_v002.wav",
+      "jump": 0.00011432170867919922,
+      "jump_dbfs": -78.83742586201808,
+      "ordinary_p99_step": 0.008410942554473888,
+      "jump_ratio": 0.013592021100939518,
+      "edge_rms_delta_db": -0.0012449455427345326
+    },
+    {
+      "path": "Export/ProductionV002/Ambience/AUD_AMB_LockdownAlarm_Distant_PostClearReduced_Loop_v002.wav",
+      "jump": 0.00030791759490966797,
+      "jump_dbfs": -70.231309881965,
+      "ordinary_p99_step": 0.007146122455596926,
+      "jump_ratio": 0.04308876552605159,
+      "edge_rms_delta_db": 0.0016229660362421098
+    },
+    {
+      "path": "Export/ProductionV002/Player/AUD_PLY_ThrowCharge_Build_Light_Loop_v002.wav",
+      "jump": 6.771087646484375e-05,
+      "jump_dbfs": -83.38683129121097,
+      "ordinary_p99_step": 0.014527714252471919,
+      "jump_ratio": 0.004660807287927116,
+      "edge_rms_delta_db": 0.00014804285445208193
+    },
+    {
+      "path": "Export/ProductionV002/Player/AUD_PLY_ThrowCharge_Build_Medium_Loop_v002.wav",
+      "jump": 0.0009149312973022461,
+      "jump_dbfs": -60.77223032244687,
+      "ordinary_p99_step": 0.020890381336212155,
+      "jump_ratio": 0.04379677338470938,
+      "edge_rms_delta_db": 0.002419681537379998
+    },
+    {
+      "path": "Export/ProductionV002/Binder/AUD_BND_AirborneFlutter_01_Loop_v002.wav",
+      "jump": 0.00040280818939208984,
+      "jump_dbfs": -67.89803416993342,
+      "ordinary_p99_step": 0.015451710224151644,
+      "jump_ratio": 0.02606884180124505,
+      "edge_rms_delta_db": -0.0009768878242744751
+    },
+    {
+      "path": "Export/ProductionV002/Binder/AUD_BND_AirborneFlutter_02_Loop_v002.wav",
+      "jump": 0.0006783008575439453,
+      "jump_dbfs": -63.37155267752992,
+      "ordinary_p99_step": 0.024817690849304293,
+      "jump_ratio": 0.027331344469663257,
+      "edge_rms_delta_db": -0.016408989933091873
+    },
+    {
+      "path": "Export/ProductionV002/Chair/AUD_CHR_CasterRoll_Slow_Loop_v002.wav",
+      "jump": 0.0005359649658203125,
+      "jump_dbfs": -65.41727195421126,
+      "ordinary_p99_step": 0.022952628135681167,
+      "jump_ratio": 0.023350919234696458,
+      "edge_rms_delta_db": -0.0011197541729871326
+    },
+    {
+      "path": "Export/ProductionV002/Chair/AUD_CHR_CasterRoll_Fast_Loop_v002.wav",
+      "jump": 9.02414321899414e-05,
+      "jump_dbfs": -80.8918804154299,
+      "ordinary_p99_step": 0.033163135051727306,
+      "jump_ratio": 0.0027211369506888994,
+      "edge_rms_delta_db": -0.002006916882198258
+    },
+    {
+      "path": "Export/ProductionV002/Chair/AUD_CHR_AllyFeed_Push_01_Loop_v002.wav",
+      "jump": 0.0011469125747680664,
+      "jump_dbfs": -58.80939371246929,
+      "ordinary_p99_step": 0.039675776958465615,
+      "jump_ratio": 0.028907123254793624,
+      "edge_rms_delta_db": 0.005730219840594676
+    },
+    {
+      "path": "Export/ProductionV002/Chair/AUD_CHR_AllyFeed_Push_02_Loop_v002.wav",
+      "jump": 0.0008738040924072266,
+      "jump_dbfs": -61.17171851260879,
+      "ordinary_p99_step": 0.035131950378418195,
+      "jump_ratio": 0.024872063264213495,
+      "edge_rms_delta_db": -0.0013320427986263494
+    },
+    {
+      "path": "Export/ProductionV002/Strap/AUD_STR_Tension_Light_Loop_v002.wav",
+      "jump": 0.0003330707550048828,
+      "jump_dbfs": -69.54926996986809,
+      "ordinary_p99_step": 0.0343425250053406,
+      "jump_ratio": 0.009698493484479868,
+      "edge_rms_delta_db": 0.0033195654346751882
+    },
+    {
+      "path": "Export/ProductionV002/Strap/AUD_STR_Tension_Loaded_Loop_v002.wav",
+      "jump": 0.0013011693954467773,
+      "jump_dbfs": -57.713323204528194,
+      "ordinary_p99_step": 0.04312004566192647,
+      "jump_ratio": 0.030175510611661193,
+      "edge_rms_delta_db": 0.004042498799412443
+    },
+    {
+      "path": "Export/ProductionV002/Strap/AUD_STR_Redirect_Load_Left_Loop_v002.wav",
+      "jump": 0.0016665458679199219,
+      "jump_dbfs": -55.5636545772381,
+      "ordinary_p99_step": 0.041852700710296654,
+      "jump_ratio": 0.039819314874223063,
+      "edge_rms_delta_db": -0.0009274978196475454
+    },
+    {
+      "path": "Export/ProductionV002/Strap/AUD_STR_Redirect_Load_Right_Loop_v002.wav",
+      "jump": 0.002720355987548828,
+      "jump_dbfs": -51.30748520378744,
+      "ordinary_p99_step": 0.047475714683532816,
+      "jump_ratio": 0.05729994810362269,
+      "edge_rms_delta_db": 0.005006415592193595
+    },
+    {
+      "path": "Export/ProductionV002/Runner/AUD_RUN_Grab_Hold_Loop_v002.wav",
+      "jump": 0.0016847848892211914,
+      "jump_dbfs": -55.46911082627343,
+      "ordinary_p99_step": 0.018786685466766387,
+      "jump_ratio": 0.08967973047728792,
+      "edge_rms_delta_db": -0.006009614934031495
+    },
+    {
+      "path": "Export/ProductionV002/Drawer/AUD_DRW_MoveScrape_Slow_Loop_v002.wav",
+      "jump": 5.900859832763672e-05,
+      "jump_dbfs": -84.58169402675998,
+      "ordinary_p99_step": 0.0293891572952272,
+      "jump_ratio": 0.002007835669967295,
+      "edge_rms_delta_db": -0.009386397398666868
+    },
+    {
+      "path": "Export/ProductionV002/Drawer/AUD_DRW_MoveScrape_Fast_Loop_v002.wav",
+      "jump": 0.001017928123474121,
+      "jump_dbfs": -59.845657734299884,
+      "ordinary_p99_step": 0.04546558141708376,
+      "jump_ratio": 0.022388982868953987,
+      "edge_rms_delta_db": 0.0037616535419560814
+    }
+  ],
+  "variation_correlation": [
+    {
+      "cue_id": "AUD-AMB-002",
+      "maximum_aligned_correlation": 0.41648219256969893,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-AMB-003",
+      "maximum_aligned_correlation": 0.03764291617187559,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-AMB-004",
+      "maximum_aligned_correlation": 0.06082599888310236,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-001",
+      "maximum_aligned_correlation": 0.4925659089866108,
+      "pair": [
+        2,
+        6
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-002",
+      "maximum_aligned_correlation": 0.2877594104462445,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-003",
+      "maximum_aligned_correlation": 0.09827832399593497,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-004",
+      "maximum_aligned_correlation": 0.025773619884928316,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-005",
+      "maximum_aligned_correlation": 0.07631211839486417,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-006",
+      "maximum_aligned_correlation": 0.33204233284035767,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-008",
+      "maximum_aligned_correlation": 0.0021540960273025924,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-010",
+      "maximum_aligned_correlation": 0.6354999107013432,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-011",
+      "maximum_aligned_correlation": 0.15382449270997148,
+      "pair": [
+        2,
+        4
+      ]
+    },
+    {
+      "cue_id": "AUD-PLY-012",
+      "maximum_aligned_correlation": 0.29350816980286015,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-BND-001",
+      "maximum_aligned_correlation": 0.00016898526554096194,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-BND-002",
+      "maximum_aligned_correlation": 0.27947360068263005,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-BND-003",
+      "maximum_aligned_correlation": 0.0829417594058664,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-BND-004",
+      "maximum_aligned_correlation": 0.8879150582176343,
+      "pair": [
+        3,
+        4
+      ]
+    },
+    {
+      "cue_id": "AUD-BND-005",
+      "maximum_aligned_correlation": 0.3246178076726701,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-BND-006",
+      "maximum_aligned_correlation": 0.815860151115261,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-CHR-001",
+      "maximum_aligned_correlation": 0.012493589843570768,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-CHR-002",
+      "maximum_aligned_correlation": 0.006714682107660297,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-CHR-003",
+      "maximum_aligned_correlation": 0.09237048343267891,
+      "pair": [
+        1,
+        4
+      ]
+    },
+    {
+      "cue_id": "AUD-CHR-004",
+      "maximum_aligned_correlation": 0.3872206674888647,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-CHR-005",
+      "maximum_aligned_correlation": 0.32497799649502185,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-CHR-006",
+      "maximum_aligned_correlation": 0.29762823326275356,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-001",
+      "maximum_aligned_correlation": 0.09914325140872388,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-002",
+      "maximum_aligned_correlation": 0.2023103803931235,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-003",
+      "maximum_aligned_correlation": 0.579360693027479,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-004",
+      "maximum_aligned_correlation": 0.1358993909289134,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-005",
+      "maximum_aligned_correlation": 0.8413730392395449,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-006",
+      "maximum_aligned_correlation": 0.8958972416203732,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-ALY-007",
+      "maximum_aligned_correlation": 0.26764402495960155,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-STR-001",
+      "maximum_aligned_correlation": 0.021173753202077327,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-STR-002",
+      "maximum_aligned_correlation": 0.5242543094104382,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-STR-003",
+      "maximum_aligned_correlation": 0.008256290200759832,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-STR-004",
+      "maximum_aligned_correlation": 0.0037885678558290488,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-STR-005",
+      "maximum_aligned_correlation": 0.528728958444376,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-STR-006",
+      "maximum_aligned_correlation": 0.7208841163866455,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-TAG-001",
+      "maximum_aligned_correlation": 0.07454265277263727,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-TAG-002",
+      "maximum_aligned_correlation": 0.03641475227798953,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-TAG-003",
+      "maximum_aligned_correlation": 0.01706224294649922,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-001",
+      "maximum_aligned_correlation": 0.35389856836359995,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-002",
+      "maximum_aligned_correlation": 0.19587851383330995,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-003",
+      "maximum_aligned_correlation": 0.8288383390832571,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-004",
+      "maximum_aligned_correlation": 0.22149642371501188,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-005",
+      "maximum_aligned_correlation": 0.2574296801682867,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-006",
+      "maximum_aligned_correlation": 0.12334085645919458,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-008",
+      "maximum_aligned_correlation": 0.4065671035832541,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-009",
+      "maximum_aligned_correlation": 0.41057804448704277,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-RUN-010",
+      "maximum_aligned_correlation": 0.2151082394745627,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-DRW-001",
+      "maximum_aligned_correlation": 0.9367326040420171,
+      "pair": [
+        1,
+        4
+      ]
+    },
+    {
+      "cue_id": "AUD-DRW-002",
+      "maximum_aligned_correlation": 0.04228417034180043,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-DRW-004",
+      "maximum_aligned_correlation": 0.9686199377421061,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-FIN-002",
+      "maximum_aligned_correlation": 0.06249553917240971,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-FIN-003",
+      "maximum_aligned_correlation": 0.3361554731372062,
+      "pair": [
+        2,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-FIN-004",
+      "maximum_aligned_correlation": 0.9697361931507332,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-FIN-005",
+      "maximum_aligned_correlation": 0.4755582274689855,
+      "pair": [
+        1,
+        3
+      ]
+    },
+    {
+      "cue_id": "AUD-EXT-002",
+      "maximum_aligned_correlation": 0.31355228046973777,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-UI-001",
+      "maximum_aligned_correlation": 0.6807955354859719,
+      "pair": [
+        1,
+        2
+      ]
+    },
+    {
+      "cue_id": "AUD-UI-002",
+      "maximum_aligned_correlation": 0.6269014202445464,
+      "pair": [
+        1,
+        3
+      ]
+    }
+  ],
+  "v001_export_count_preserved": 23,
+  "production_v002_file_count": 292,
+  "production_v002_bytes": 139179201,
+  "showcase_total_bytes": 164212273,
+  "runtime_integration": "NOT_PERFORMED"
+}

@@ -1,0 +1,1439 @@
+[
+  {
+    "filename": "AUDITION_A_PLAYER_BINDER_CHAIR_v002.wav",
+    "path": "Preview/ProductionV002/AUDITION_A_PLAYER_BINDER_CHAIR_v002.wav",
+    "duration": 88.55789583333333,
+    "channels": 2,
+    "sample_rate": 48000,
+    "bit_depth": 24,
+    "bytes": 25504718,
+    "sha256": "3a24ec7534eaec370fb5663927f3d8696c790c08c3b833fd4665f4c94e9137a4",
+    "peak_dbfs": -3.1999999999999993,
+    "index": [
+      {
+        "start": 0.5,
+        "end": 0.9705833333333334,
+        "cue_id": "AUD-PLY-001",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_01_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 1.3505833333333332,
+        "end": 1.8208541666666667,
+        "cue_id": "AUD-PLY-001",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_02_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 2.200854166666667,
+        "end": 2.6712708333333333,
+        "cue_id": "AUD-PLY-001",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_03_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 3.051270833333333,
+        "end": 3.5218333333333334,
+        "cue_id": "AUD-PLY-001",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_04_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 3.9018333333333333,
+        "end": 4.3720625,
+        "cue_id": "AUD-PLY-001",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_05_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 4.7520625,
+        "end": 5.222666666666667,
+        "cue_id": "AUD-PLY-001",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_06_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 5.602666666666667,
+        "end": 6.073229166666667,
+        "cue_id": "AUD-PLY-002",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_Fast_01_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 6.453229166666667,
+        "end": 6.9234583333333335,
+        "cue_id": "AUD-PLY-002",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_Fast_02_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 7.303458333333333,
+        "end": 7.772333333333333,
+        "cue_id": "AUD-PLY-002",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_Fast_03_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 8.152333333333333,
+        "end": 8.6205,
+        "cue_id": "AUD-PLY-002",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_Fast_04_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 9.0005,
+        "end": 9.420583333333333,
+        "cue_id": "AUD-PLY-002",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_Fast_05_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 9.800583333333334,
+        "end": 10.271166666666668,
+        "cue_id": "AUD-PLY-002",
+        "filename": "AUD_PLY_Footstep_OfficeFloor_Fast_06_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 10.651166666666668,
+        "end": 11.298812500000002,
+        "cue_id": "AUD-PLY-003",
+        "filename": "AUD_PLY_Binder_Acquire_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 11.678812500000003,
+        "end": 12.242458333333337,
+        "cue_id": "AUD-PLY-003",
+        "filename": "AUD_PLY_Binder_Acquire_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 12.622458333333338,
+        "end": 13.198395833333338,
+        "cue_id": "AUD-PLY-003",
+        "filename": "AUD_PLY_Binder_Acquire_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 13.578395833333339,
+        "end": 14.15814583333334,
+        "cue_id": "AUD-PLY-004",
+        "filename": "AUD_PLY_Chair_Acquire_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 14.53814583333334,
+        "end": 15.14158333333334,
+        "cue_id": "AUD-PLY-004",
+        "filename": "AUD_PLY_Chair_Acquire_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 15.521583333333341,
+        "end": 16.131791666666675,
+        "cue_id": "AUD-PLY-004",
+        "filename": "AUD_PLY_Chair_Acquire_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 16.511791666666674,
+        "end": 17.159437500000006,
+        "cue_id": "AUD-PLY-005",
+        "filename": "AUD_PLY_Binder_CarrySettle_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 17.539437500000005,
+        "end": 18.103083333333338,
+        "cue_id": "AUD-PLY-005",
+        "filename": "AUD_PLY_Binder_CarrySettle_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 18.483083333333337,
+        "end": 19.058875000000004,
+        "cue_id": "AUD-PLY-005",
+        "filename": "AUD_PLY_Binder_CarrySettle_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 19.438875000000003,
+        "end": 20.03972916666667,
+        "cue_id": "AUD-PLY-006",
+        "filename": "AUD_PLY_Chair_CarrySettle_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 20.41972916666667,
+        "end": 21.045895833333336,
+        "cue_id": "AUD-PLY-006",
+        "filename": "AUD_PLY_Chair_CarrySettle_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 21.425895833333335,
+        "end": 22.078333333333337,
+        "cue_id": "AUD-PLY-006",
+        "filename": "AUD_PLY_Chair_CarrySettle_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 22.458333333333336,
+        "end": 22.828437500000003,
+        "cue_id": "AUD-PLY-007",
+        "filename": "AUD_PLY_ThrowCharge_Start_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 23.208437500000002,
+        "end": 24.4084375,
+        "cue_id": "AUD-PLY-008",
+        "filename": "AUD_PLY_ThrowCharge_Build_Light_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 24.7884375,
+        "end": 25.9884375,
+        "cue_id": "AUD-PLY-008",
+        "filename": "AUD_PLY_ThrowCharge_Build_Medium_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 26.3684375,
+        "end": 26.785416666666666,
+        "cue_id": "AUD-PLY-009",
+        "filename": "AUD_PLY_ThrowCharge_Full_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 27.165416666666665,
+        "end": 27.743125,
+        "cue_id": "AUD-PLY-010",
+        "filename": "AUD_PLY_Binder_ThrowRelease_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 28.123124999999998,
+        "end": 28.69114583333333,
+        "cue_id": "AUD-PLY-010",
+        "filename": "AUD_PLY_Binder_ThrowRelease_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 29.07114583333333,
+        "end": 29.634729166666663,
+        "cue_id": "AUD-PLY-010",
+        "filename": "AUD_PLY_Binder_ThrowRelease_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 30.014729166666662,
+        "end": 30.586791666666663,
+        "cue_id": "AUD-PLY-010",
+        "filename": "AUD_PLY_Binder_ThrowRelease_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 30.966791666666662,
+        "end": 31.619416666666663,
+        "cue_id": "AUD-PLY-011",
+        "filename": "AUD_PLY_Chair_ThrowRelease_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 31.99941666666666,
+        "end": 32.59360416666666,
+        "cue_id": "AUD-PLY-011",
+        "filename": "AUD_PLY_Chair_ThrowRelease_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 32.97360416666666,
+        "end": 33.62356249999999,
+        "cue_id": "AUD-PLY-011",
+        "filename": "AUD_PLY_Chair_ThrowRelease_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 34.003562499999994,
+        "end": 34.646020833333324,
+        "cue_id": "AUD-PLY-011",
+        "filename": "AUD_PLY_Chair_ThrowRelease_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 35.02602083333333,
+        "end": 35.39762499999999,
+        "cue_id": "AUD-PLY-012",
+        "filename": "AUD_PLY_ThrowCharge_Cancel_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 35.77762499999999,
+        "end": 36.129145833333325,
+        "cue_id": "AUD-PLY-012",
+        "filename": "AUD_PLY_ThrowCharge_Cancel_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 36.50914583333333,
+        "end": 37.95914583333333,
+        "cue_id": "AUD-BND-001",
+        "filename": "AUD_BND_AirborneFlutter_01_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 38.33914583333333,
+        "end": 39.789145833333336,
+        "cue_id": "AUD-BND-001",
+        "filename": "AUD_BND_AirborneFlutter_02_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 40.16914583333334,
+        "end": 40.73104166666667,
+        "cue_id": "AUD-BND-002",
+        "filename": "AUD_BND_Impact_OfficeSurface_01_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 41.11104166666667,
+        "end": 41.67902083333334,
+        "cue_id": "AUD-BND-002",
+        "filename": "AUD_BND_Impact_OfficeSurface_02_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 42.05902083333334,
+        "end": 42.70666666666668,
+        "cue_id": "AUD-BND-002",
+        "filename": "AUD_BND_Impact_OfficeSurface_03_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 43.08666666666668,
+        "end": 43.65066666666668,
+        "cue_id": "AUD-BND-002",
+        "filename": "AUD_BND_Impact_OfficeSurface_04_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 44.03066666666668,
+        "end": 44.606604166666685,
+        "cue_id": "AUD-BND-002",
+        "filename": "AUD_BND_Impact_OfficeSurface_05_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 44.98660416666669,
+        "end": 45.829604166666684,
+        "cue_id": "AUD-BND-003",
+        "filename": "AUD_BND_Impact_Runner_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 46.209604166666686,
+        "end": 47.182000000000016,
+        "cue_id": "AUD-BND-003",
+        "filename": "AUD_BND_Impact_Runner_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 47.56200000000002,
+        "end": 48.16456250000002,
+        "cue_id": "AUD-BND-003",
+        "filename": "AUD_BND_Impact_Runner_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 48.54456250000002,
+        "end": 49.62591666666668,
+        "cue_id": "AUD-BND-003",
+        "filename": "AUD_BND_Impact_Runner_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 50.005916666666685,
+        "end": 50.61583333333335,
+        "cue_id": "AUD-BND-004",
+        "filename": "AUD_BND_Impact_StaticOffice_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 50.99583333333335,
+        "end": 51.60579166666668,
+        "cue_id": "AUD-BND-004",
+        "filename": "AUD_BND_Impact_StaticOffice_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 51.985791666666685,
+        "end": 52.595729166666686,
+        "cue_id": "AUD-BND-004",
+        "filename": "AUD_BND_Impact_StaticOffice_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 52.97572916666669,
+        "end": 53.58566666666669,
+        "cue_id": "AUD-BND-004",
+        "filename": "AUD_BND_Impact_StaticOffice_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 53.96566666666669,
+        "end": 54.52227083333336,
+        "cue_id": "AUD-BND-005",
+        "filename": "AUD_BND_Catch_Secure_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 54.90227083333336,
+        "end": 55.466187500000025,
+        "cue_id": "AUD-BND-005",
+        "filename": "AUD_BND_Catch_Secure_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 55.84618750000003,
+        "end": 56.53118750000003,
+        "cue_id": "AUD-BND-005",
+        "filename": "AUD_BND_Catch_Secure_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 56.91118750000003,
+        "end": 58.111187500000035,
+        "cue_id": "AUD-BND-006",
+        "filename": "AUD_BND_CatchMiss_Land_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 58.49118750000004,
+        "end": 59.69118750000004,
+        "cue_id": "AUD-BND-006",
+        "filename": "AUD_BND_CatchMiss_Land_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 60.07118750000004,
+        "end": 61.271187500000046,
+        "cue_id": "AUD-BND-006",
+        "filename": "AUD_BND_CatchMiss_Land_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 61.65118750000005,
+        "end": 64.05118750000005,
+        "cue_id": "AUD-CHR-001",
+        "filename": "AUD_CHR_CasterRoll_Slow_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 64.43118750000005,
+        "end": 66.43118750000005,
+        "cue_id": "AUD-CHR-001",
+        "filename": "AUD_CHR_CasterRoll_Fast_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 66.81118750000005,
+        "end": 68.61118750000004,
+        "cue_id": "AUD-CHR-002",
+        "filename": "AUD_CHR_AllyFeed_Push_01_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 68.99118750000004,
+        "end": 70.79118750000004,
+        "cue_id": "AUD-CHR-002",
+        "filename": "AUD_CHR_AllyFeed_Push_02_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 71.17118750000003,
+        "end": 71.89118750000003,
+        "cue_id": "AUD-CHR-003",
+        "filename": "AUD_CHR_WheelSkid_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 72.27118750000002,
+        "end": 72.99118750000002,
+        "cue_id": "AUD-CHR-003",
+        "filename": "AUD_CHR_WheelSkid_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 73.37118750000002,
+        "end": 73.96458333333335,
+        "cue_id": "AUD-CHR-003",
+        "filename": "AUD_CHR_WheelSkid_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 74.34458333333335,
+        "end": 75.06458333333335,
+        "cue_id": "AUD-CHR-003",
+        "filename": "AUD_CHR_WheelSkid_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 75.44458333333334,
+        "end": 76.09358333333334,
+        "cue_id": "AUD-CHR-004",
+        "filename": "AUD_CHR_Impact_StaticOffice_01_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 76.47358333333334,
+        "end": 77.11427083333334,
+        "cue_id": "AUD-CHR-004",
+        "filename": "AUD_CHR_Impact_StaticOffice_02_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 77.49427083333333,
+        "end": 78.09508333333333,
+        "cue_id": "AUD-CHR-004",
+        "filename": "AUD_CHR_Impact_StaticOffice_03_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 78.47508333333333,
+        "end": 79.10125,
+        "cue_id": "AUD-CHR-004",
+        "filename": "AUD_CHR_Impact_StaticOffice_04_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 79.48124999999999,
+        "end": 80.13254166666665,
+        "cue_id": "AUD-CHR-004",
+        "filename": "AUD_CHR_Impact_StaticOffice_05_v002.wav",
+        "variation_count": 5
+      },
+      {
+        "start": 80.51254166666665,
+        "end": 81.50985416666666,
+        "cue_id": "AUD-CHR-005",
+        "filename": "AUD_CHR_Impact_Runner_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 81.88985416666665,
+        "end": 82.53402083333332,
+        "cue_id": "AUD-CHR-005",
+        "filename": "AUD_CHR_Impact_Runner_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 82.91402083333331,
+        "end": 84.02508333333331,
+        "cue_id": "AUD-CHR-005",
+        "filename": "AUD_CHR_Impact_Runner_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 84.40508333333331,
+        "end": 85.27752083333331,
+        "cue_id": "AUD-CHR-005",
+        "filename": "AUD_CHR_Impact_Runner_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 85.65752083333331,
+        "end": 86.23268749999997,
+        "cue_id": "AUD-CHR-006",
+        "filename": "AUD_CHR_AllyFeed_Release_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 86.61268749999996,
+        "end": 87.19774999999997,
+        "cue_id": "AUD-CHR-006",
+        "filename": "AUD_CHR_AllyFeed_Release_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 87.57774999999997,
+        "end": 88.1778958333333,
+        "cue_id": "AUD-CHR-006",
+        "filename": "AUD_CHR_AllyFeed_Release_03_v002.wav",
+        "variation_count": 3
+      }
+    ]
+  },
+  {
+    "filename": "AUDITION_B_ALLY_STRAP_TAGS_v002.wav",
+    "path": "Preview/ProductionV002/AUDITION_B_ALLY_STRAP_TAGS_v002.wav",
+    "duration": 41.4929375,
+    "channels": 2,
+    "sample_rate": 48000,
+    "bit_depth": 24,
+    "bytes": 11950010,
+    "sha256": "c1341683130aababe7754fa826119e910d86214a13c0e12d1337be470369528c",
+    "peak_dbfs": -3.1999999999999993,
+    "index": [
+      {
+        "start": 0.5,
+        "end": 1.0673333333333335,
+        "cue_id": "AUD-ALY-001",
+        "filename": "AUD_ALY_Ready_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 1.4473333333333334,
+        "end": 2.048541666666667,
+        "cue_id": "AUD-ALY-001",
+        "filename": "AUD_ALY_Ready_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 2.428541666666667,
+        "end": 2.8083333333333336,
+        "cue_id": "AUD-ALY-002",
+        "filename": "AUD_ALY_QSupply_Accept_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 3.1883333333333335,
+        "end": 3.6368125,
+        "cue_id": "AUD-ALY-002",
+        "filename": "AUD_ALY_QSupply_Accept_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 4.0168125,
+        "end": 4.584791666666667,
+        "cue_id": "AUD-ALY-003",
+        "filename": "AUD_ALY_BinderSupply_Release_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 4.964791666666667,
+        "end": 5.610895833333333,
+        "cue_id": "AUD-ALY-003",
+        "filename": "AUD_ALY_BinderSupply_Release_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 5.990895833333333,
+        "end": 6.554895833333333,
+        "cue_id": "AUD-ALY-003",
+        "filename": "AUD_ALY_BinderSupply_Release_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 6.934895833333333,
+        "end": 7.5179374999999995,
+        "cue_id": "AUD-ALY-004",
+        "filename": "AUD_ALY_ChairFeed_Start_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 7.897937499999999,
+        "end": 8.491479166666666,
+        "cue_id": "AUD-ALY-004",
+        "filename": "AUD_ALY_ChairFeed_Start_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 8.871479166666667,
+        "end": 9.250770833333334,
+        "cue_id": "AUD-ALY-005",
+        "filename": "AUD_ALY_SupplyReject_NoCandidate_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 9.630770833333335,
+        "end": 9.9808125,
+        "cue_id": "AUD-ALY-005",
+        "filename": "AUD_ALY_SupplyReject_NoCandidate_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 10.360812500000002,
+        "end": 10.7405,
+        "cue_id": "AUD-ALY-006",
+        "filename": "AUD_ALY_SupplyReject_PathBlocked_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 11.120500000000002,
+        "end": 11.476500000000001,
+        "cue_id": "AUD-ALY-006",
+        "filename": "AUD_ALY_SupplyReject_PathBlocked_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 11.856500000000002,
+        "end": 12.326729166666668,
+        "cue_id": "AUD-ALY-007",
+        "filename": "AUD_ALY_Regroup_Accept_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 12.706729166666669,
+        "end": 13.175333333333336,
+        "cue_id": "AUD-ALY-007",
+        "filename": "AUD_ALY_Regroup_Accept_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 13.555333333333337,
+        "end": 13.97360416666667,
+        "cue_id": "AUD-STR-001",
+        "filename": "AUD_STR_Deploy_CarabinerOpen_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 14.35360416666667,
+        "end": 14.736208333333337,
+        "cue_id": "AUD-STR-001",
+        "filename": "AUD_STR_Deploy_CarabinerOpen_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 15.116208333333338,
+        "end": 15.531208333333337,
+        "cue_id": "AUD-STR-001",
+        "filename": "AUD_STR_Deploy_CarabinerOpen_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 15.911208333333338,
+        "end": 17.111208333333337,
+        "cue_id": "AUD-STR-002",
+        "filename": "AUD_STR_AssistAttach_Lock_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 17.491208333333336,
+        "end": 18.691208333333336,
+        "cue_id": "AUD-STR-002",
+        "filename": "AUD_STR_AssistAttach_Lock_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 19.071208333333335,
+        "end": 20.271208333333334,
+        "cue_id": "AUD-STR-002",
+        "filename": "AUD_STR_AssistAttach_Lock_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 20.651208333333333,
+        "end": 22.201208333333334,
+        "cue_id": "AUD-STR-003",
+        "filename": "AUD_STR_Tension_Light_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 22.581208333333333,
+        "end": 24.131208333333333,
+        "cue_id": "AUD-STR-003",
+        "filename": "AUD_STR_Tension_Loaded_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 24.511208333333332,
+        "end": 26.061208333333333,
+        "cue_id": "AUD-STR-004",
+        "filename": "AUD_STR_Redirect_Load_Left_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 26.441208333333332,
+        "end": 27.991208333333333,
+        "cue_id": "AUD-STR-004",
+        "filename": "AUD_STR_Redirect_Load_Right_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 28.371208333333332,
+        "end": 29.02120833333333,
+        "cue_id": "AUD-STR-005",
+        "filename": "AUD_STR_Release_Retract_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 29.40120833333333,
+        "end": 30.051208333333328,
+        "cue_id": "AUD-STR-005",
+        "filename": "AUD_STR_Release_Retract_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 30.431208333333327,
+        "end": 31.081208333333326,
+        "cue_id": "AUD-STR-005",
+        "filename": "AUD_STR_Release_Retract_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 31.461208333333325,
+        "end": 32.069062499999994,
+        "cue_id": "AUD-STR-006",
+        "filename": "AUD_STR_Attach_Reject_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 32.4490625,
+        "end": 33.167125,
+        "cue_id": "AUD-STR-006",
+        "filename": "AUD_STR_Attach_Reject_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 33.547125,
+        "end": 34.110104166666666,
+        "cue_id": "AUD-TAG-001",
+        "filename": "AUD_TAG_PASS_Award_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 34.49010416666667,
+        "end": 35.04054166666667,
+        "cue_id": "AUD-TAG-001",
+        "filename": "AUD_TAG_PASS_Award_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 35.42054166666667,
+        "end": 35.94554166666667,
+        "cue_id": "AUD-TAG-002",
+        "filename": "AUD_TAG_BRACE_Award_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 36.32554166666667,
+        "end": 36.85054166666667,
+        "cue_id": "AUD-TAG-002",
+        "filename": "AUD_TAG_BRACE_Award_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 37.230541666666674,
+        "end": 38.18804166666668,
+        "cue_id": "AUD-TAG-003",
+        "filename": "AUD_TAG_BREAK_Award_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 38.56804166666668,
+        "end": 39.25525000000001,
+        "cue_id": "AUD-TAG-003",
+        "filename": "AUD_TAG_BREAK_Award_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 39.63525000000001,
+        "end": 40.32525000000001,
+        "cue_id": "AUD-TAG-004",
+        "filename": "AUD_TAG_TeamReady_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 40.705250000000014,
+        "end": 41.112937500000015,
+        "cue_id": "AUD-TAG-005",
+        "filename": "AUD_TAG_TeamFinish_Eligible_v002.wav",
+        "variation_count": 1
+      }
+    ]
+  },
+  {
+    "filename": "AUDITION_C_RUNNER_PRESSURE_v002.wav",
+    "path": "Preview/ProductionV002/AUDITION_C_RUNNER_PRESSURE_v002.wav",
+    "duration": 41.929520833333335,
+    "channels": 2,
+    "sample_rate": 48000,
+    "bit_depth": 24,
+    "bytes": 12075746,
+    "sha256": "c2951d26ffba4c94a5d3f0882acfca5f32484080b533be5ba04cbcfd931e76b0",
+    "peak_dbfs": -3.1999999999999993,
+    "index": [
+      {
+        "start": 0.5,
+        "end": 0.96,
+        "cue_id": "AUD-RUN-001",
+        "filename": "AUD_RUN_Footstep_OfficeFloor_01_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 1.3399999999999999,
+        "end": 1.8105833333333332,
+        "cue_id": "AUD-RUN-001",
+        "filename": "AUD_RUN_Footstep_OfficeFloor_02_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 2.190583333333333,
+        "end": 2.6608541666666663,
+        "cue_id": "AUD-RUN-001",
+        "filename": "AUD_RUN_Footstep_OfficeFloor_03_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 3.040854166666666,
+        "end": 3.5114583333333327,
+        "cue_id": "AUD-RUN-001",
+        "filename": "AUD_RUN_Footstep_OfficeFloor_04_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 3.8914583333333326,
+        "end": 4.361458333333332,
+        "cue_id": "AUD-RUN-001",
+        "filename": "AUD_RUN_Footstep_OfficeFloor_05_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 4.741458333333332,
+        "end": 5.155874999999999,
+        "cue_id": "AUD-RUN-001",
+        "filename": "AUD_RUN_Footstep_OfficeFloor_06_v002.wav",
+        "variation_count": 6
+      },
+      {
+        "start": 5.535874999999999,
+        "end": 6.6246874999999985,
+        "cue_id": "AUD-RUN-002",
+        "filename": "AUD_RUN_BodyCheck_Telegraph_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 7.004687499999998,
+        "end": 7.825854166666665,
+        "cue_id": "AUD-RUN-002",
+        "filename": "AUD_RUN_BodyCheck_Telegraph_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 8.205854166666665,
+        "end": 8.911812499999998,
+        "cue_id": "AUD-RUN-002",
+        "filename": "AUD_RUN_BodyCheck_Telegraph_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 9.291812499999999,
+        "end": 9.774,
+        "cue_id": "AUD-RUN-003",
+        "filename": "AUD_RUN_BodyCheck_Miss_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 10.154,
+        "end": 10.706625,
+        "cue_id": "AUD-RUN-003",
+        "filename": "AUD_RUN_BodyCheck_Miss_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 11.086625000000002,
+        "end": 11.568625,
+        "cue_id": "AUD-RUN-003",
+        "filename": "AUD_RUN_BodyCheck_Miss_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 11.948625000000002,
+        "end": 13.248625000000002,
+        "cue_id": "AUD-RUN-004",
+        "filename": "AUD_RUN_BodyCheck_Hit_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 13.628625000000003,
+        "end": 14.571312500000003,
+        "cue_id": "AUD-RUN-004",
+        "filename": "AUD_RUN_BodyCheck_Hit_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 14.951312500000004,
+        "end": 15.996145833333337,
+        "cue_id": "AUD-RUN-004",
+        "filename": "AUD_RUN_BodyCheck_Hit_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 16.376145833333336,
+        "end": 17.071125000000002,
+        "cue_id": "AUD-RUN-004",
+        "filename": "AUD_RUN_BodyCheck_Hit_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 17.451125,
+        "end": 18.301562500000003,
+        "cue_id": "AUD-RUN-005",
+        "filename": "AUD_RUN_Shove_Hit_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 18.681562500000002,
+        "end": 19.65685416666667,
+        "cue_id": "AUD-RUN-005",
+        "filename": "AUD_RUN_Shove_Hit_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 20.036854166666668,
+        "end": 20.6960625,
+        "cue_id": "AUD-RUN-005",
+        "filename": "AUD_RUN_Shove_Hit_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 21.0760625,
+        "end": 22.165104166666666,
+        "cue_id": "AUD-RUN-005",
+        "filename": "AUD_RUN_Shove_Hit_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 22.545104166666665,
+        "end": 23.378562499999997,
+        "cue_id": "AUD-RUN-006",
+        "filename": "AUD_RUN_Grab_Start_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 23.758562499999996,
+        "end": 24.719479166666662,
+        "cue_id": "AUD-RUN-006",
+        "filename": "AUD_RUN_Grab_Start_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 25.09947916666666,
+        "end": 25.723583333333327,
+        "cue_id": "AUD-RUN-006",
+        "filename": "AUD_RUN_Grab_Start_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 26.103583333333326,
+        "end": 27.503583333333324,
+        "cue_id": "AUD-RUN-007",
+        "filename": "AUD_RUN_Grab_Hold_Loop_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 27.883583333333323,
+        "end": 28.485458333333323,
+        "cue_id": "AUD-RUN-008",
+        "filename": "AUD_RUN_GrabRescue_Release_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 28.865458333333322,
+        "end": 29.929437499999988,
+        "cue_id": "AUD-RUN-008",
+        "filename": "AUD_RUN_GrabRescue_Release_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 30.309437499999987,
+        "end": 31.134479166666654,
+        "cue_id": "AUD-RUN-008",
+        "filename": "AUD_RUN_GrabRescue_Release_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 31.514479166666653,
+        "end": 32.33952083333332,
+        "cue_id": "AUD-RUN-009",
+        "filename": "AUD_RUN_OffBalance_Light_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 32.71952083333332,
+        "end": 33.67418749999999,
+        "cue_id": "AUD-RUN-009",
+        "filename": "AUD_RUN_OffBalance_Light_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 34.05418749999999,
+        "end": 34.77599999999999,
+        "cue_id": "AUD-RUN-009",
+        "filename": "AUD_RUN_OffBalance_Light_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 35.15599999999999,
+        "end": 36.21997916666666,
+        "cue_id": "AUD-RUN-009",
+        "filename": "AUD_RUN_OffBalance_Light_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 36.599979166666664,
+        "end": 37.60327083333333,
+        "cue_id": "AUD-RUN-010",
+        "filename": "AUD_RUN_Stagger_Medium_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 37.983270833333336,
+        "end": 38.738708333333335,
+        "cue_id": "AUD-RUN-010",
+        "filename": "AUD_RUN_Stagger_Medium_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 39.11870833333334,
+        "end": 40.2730625,
+        "cue_id": "AUD-RUN-010",
+        "filename": "AUD_RUN_Stagger_Medium_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 40.653062500000004,
+        "end": 41.54952083333334,
+        "cue_id": "AUD-RUN-010",
+        "filename": "AUD_RUN_Stagger_Medium_04_v002.wav",
+        "variation_count": 4
+      }
+    ]
+  },
+  {
+    "filename": "AUDITION_D_DRAWER_RESET_EXIT_UI_AMBIENCE_v002.wav",
+    "path": "Preview/ProductionV002/AUDITION_D_DRAWER_RESET_EXIT_UI_AMBIENCE_v002.wav",
+    "duration": 48.0009375,
+    "channels": 2,
+    "sample_rate": 48000,
+    "bit_depth": 24,
+    "bytes": 13824314,
+    "sha256": "fb5c2528078e4720ae874229545eafc84a410ca83c1a911692eb0e56ca4b1096",
+    "peak_dbfs": -3.1999999999999993,
+    "index": [
+      {
+        "start": 0.5,
+        "end": 3.1,
+        "cue_id": "AUD-AMB-001",
+        "filename": "AUD_AMB_OperationsFloor_RoomTone_Loop_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 3.48,
+        "end": 6.08,
+        "cue_id": "AUD-AMB-002",
+        "filename": "AUD_AMB_FluorescentHum_01_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 6.46,
+        "end": 9.06,
+        "cue_id": "AUD-AMB-002",
+        "filename": "AUD_AMB_FluorescentHum_02_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 9.440000000000001,
+        "end": 12.040000000000001,
+        "cue_id": "AUD-AMB-003",
+        "filename": "AUD_AMB_LockdownAlarm_Distant_PreClear_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 12.420000000000002,
+        "end": 15.020000000000001,
+        "cue_id": "AUD-AMB-003",
+        "filename": "AUD_AMB_LockdownAlarm_Distant_PostClearReduced_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 15.400000000000002,
+        "end": 16.395166666666668,
+        "cue_id": "AUD-AMB-004",
+        "filename": "AUD_AMB_ExitTease_Distant_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 16.775166666666667,
+        "end": 17.766041666666666,
+        "cue_id": "AUD-AMB-004",
+        "filename": "AUD_AMB_ExitTease_Distant_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 18.146041666666665,
+        "end": 19.546041666666664,
+        "cue_id": "AUD-DRW-001",
+        "filename": "AUD_DRW_AttributedImpact_01_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 19.926041666666663,
+        "end": 21.32604166666666,
+        "cue_id": "AUD-DRW-001",
+        "filename": "AUD_DRW_AttributedImpact_02_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 21.70604166666666,
+        "end": 23.10604166666666,
+        "cue_id": "AUD-DRW-001",
+        "filename": "AUD_DRW_AttributedImpact_03_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 23.486041666666658,
+        "end": 24.886041666666657,
+        "cue_id": "AUD-DRW-001",
+        "filename": "AUD_DRW_AttributedImpact_04_v002.wav",
+        "variation_count": 4
+      },
+      {
+        "start": 25.266041666666656,
+        "end": 27.566041666666656,
+        "cue_id": "AUD-DRW-002",
+        "filename": "AUD_DRW_MoveScrape_Slow_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 27.946041666666655,
+        "end": 29.846041666666654,
+        "cue_id": "AUD-DRW-002",
+        "filename": "AUD_DRW_MoveScrape_Fast_Loop_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 30.226041666666653,
+        "end": 31.05604166666665,
+        "cue_id": "AUD-DRW-003",
+        "filename": "AUD_DRW_RouteOpen_Confirm_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 31.43604166666665,
+        "end": 32.13877083333332,
+        "cue_id": "AUD-DRW-004",
+        "filename": "AUD_DRW_ParkingBay_Settle_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 32.51877083333332,
+        "end": 32.95424999999999,
+        "cue_id": "AUD-DRW-004",
+        "filename": "AUD_DRW_ParkingBay_Settle_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 33.33424999999999,
+        "end": 33.786979166666654,
+        "cue_id": "AUD-DRW-004",
+        "filename": "AUD_DRW_ParkingBay_Settle_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 34.16697916666666,
+        "end": 34.66718749999999,
+        "cue_id": "AUD-RST-001",
+        "filename": "AUD_RST_Reset_Accept_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 35.04718749999999,
+        "end": 35.49504166666666,
+        "cue_id": "AUD-RST-002",
+        "filename": "AUD_RST_Baseline_Restored_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 35.87504166666666,
+        "end": 37.17504166666666,
+        "cue_id": "AUD-EXT-001",
+        "filename": "AUD_EXT_Exit_Activated_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 37.55504166666666,
+        "end": 38.85504166666666,
+        "cue_id": "AUD-EXT-002",
+        "filename": "AUD_EXT_ExitRun_Start_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 39.23504166666666,
+        "end": 40.53504166666666,
+        "cue_id": "AUD-EXT-002",
+        "filename": "AUD_EXT_ExitRun_Start_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 40.91504166666666,
+        "end": 41.63504166666666,
+        "cue_id": "AUD-EXT-003",
+        "filename": "AUD_EXT_Clear_Confirm_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 42.01504166666666,
+        "end": 42.60083333333333,
+        "cue_id": "AUD-EXT-004",
+        "filename": "AUD_EXT_ResultCard_Show_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 42.98083333333333,
+        "end": 43.295229166666665,
+        "cue_id": "AUD-UI-001",
+        "filename": "AUD_UI_Confirm_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 43.67522916666667,
+        "end": 44.044041666666665,
+        "cue_id": "AUD-UI-001",
+        "filename": "AUD_UI_Confirm_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 44.42404166666667,
+        "end": 44.76677083333333,
+        "cue_id": "AUD-UI-001",
+        "filename": "AUD_UI_Confirm_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 45.146770833333335,
+        "end": 45.48639583333333,
+        "cue_id": "AUD-UI-002",
+        "filename": "AUD_UI_Reject_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 45.866395833333335,
+        "end": 46.18291666666667,
+        "cue_id": "AUD-UI-002",
+        "filename": "AUD_UI_Reject_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 46.56291666666667,
+        "end": 46.92875000000001,
+        "cue_id": "AUD-UI-002",
+        "filename": "AUD_UI_Reject_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 47.30875000000001,
+        "end": 47.62093750000001,
+        "cue_id": "AUD-UI-003",
+        "filename": "AUD_UI_QContext_Changed_v002.wav",
+        "variation_count": 1
+      }
+    ]
+  },
+  {
+    "filename": "AUDITION_E_HANDOVER_CRASH_CONDITIONAL_v002.wav",
+    "path": "Preview/ProductionV002/AUDITION_E_HANDOVER_CRASH_CONDITIONAL_v002.wav",
+    "duration": 20.8189375,
+    "channels": 2,
+    "sample_rate": 48000,
+    "bit_depth": 24,
+    "bytes": 5995898,
+    "sha256": "678824fca69511379012fbda013292f8e6ee79ac49b18e12f29a1ed18ea008e2",
+    "peak_dbfs": -3.2000000000000006,
+    "index": [
+      {
+        "start": 0.5,
+        "end": 2.0,
+        "cue_id": "AUD-FIN-001",
+        "filename": "AUD_FIN_HandoverCrash_Commit_v002.wav",
+        "variation_count": 1
+      },
+      {
+        "start": 2.38,
+        "end": 3.0811041666666665,
+        "cue_id": "AUD-FIN-002",
+        "filename": "AUD_FIN_HandoverCrash_Setup_01_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 3.4611041666666664,
+        "end": 4.1145625,
+        "cue_id": "AUD-FIN-002",
+        "filename": "AUD_FIN_HandoverCrash_Setup_02_v002.wav",
+        "variation_count": 2
+      },
+      {
+        "start": 4.4945625,
+        "end": 5.179729166666666,
+        "cue_id": "AUD-FIN-003",
+        "filename": "AUD_FIN_HandoverCrash_ChairRunner_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 5.559729166666666,
+        "end": 6.686333333333333,
+        "cue_id": "AUD-FIN-003",
+        "filename": "AUD_FIN_HandoverCrash_ChairRunner_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 7.066333333333333,
+        "end": 7.958937499999999,
+        "cue_id": "AUD-FIN-003",
+        "filename": "AUD_FIN_HandoverCrash_ChairRunner_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 8.3389375,
+        "end": 9.8389375,
+        "cue_id": "AUD-FIN-004",
+        "filename": "AUD_FIN_HandoverCrash_DrawerCrash_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 10.218937500000001,
+        "end": 11.718937500000001,
+        "cue_id": "AUD-FIN-004",
+        "filename": "AUD_FIN_HandoverCrash_DrawerCrash_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 12.098937500000002,
+        "end": 13.598937500000002,
+        "cue_id": "AUD-FIN-004",
+        "filename": "AUD_FIN_HandoverCrash_DrawerCrash_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 13.978937500000002,
+        "end": 15.478937500000002,
+        "cue_id": "AUD-FIN-005",
+        "filename": "AUD_FIN_HandoverCrash_Aftermath_01_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 15.858937500000003,
+        "end": 17.358937500000003,
+        "cue_id": "AUD-FIN-005",
+        "filename": "AUD_FIN_HandoverCrash_Aftermath_02_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 17.738937500000002,
+        "end": 19.238937500000002,
+        "cue_id": "AUD-FIN-005",
+        "filename": "AUD_FIN_HandoverCrash_Aftermath_03_v002.wav",
+        "variation_count": 3
+      },
+      {
+        "start": 19.6189375,
+        "end": 20.4389375,
+        "cue_id": "AUD-FIN-006",
+        "filename": "AUD_FIN_HandoverCrash_ControlReturn_v002.wav",
+        "variation_count": 1
+      }
+    ]
+  }
+]

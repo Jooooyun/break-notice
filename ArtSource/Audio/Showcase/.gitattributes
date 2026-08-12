@@ -1,0 +1,6 @@
+Source/ApprovedReferences/*.wav filter=lfs diff=lfs merge=lfs -text
+Source/ProductionV002/**/*.wav filter=lfs diff=lfs merge=lfs -text
+Export/ProductionV002/**/*.wav filter=lfs diff=lfs merge=lfs -text
+Preview/ProductionV002/**/*.wav filter=lfs diff=lfs merge=lfs -text
+Licenses/ProductionV002/Evidence/*.html text eol=lf
+Preview/ProductionV002/*.json text eol=lf
