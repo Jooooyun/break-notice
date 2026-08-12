@@ -11,7 +11,8 @@ const failures = [];
 const rows = [];
 
 for (const file of inventory.files) {
-  const requestedUrl = new URL(file.path === "index.html" ? "" : file.path, releaseBase);
+  const publicPath = file.publicPath ?? file.path;
+  const requestedUrl = new URL(publicPath, releaseBase);
   const response = await fetch(requestedUrl, {
     headers: { "Accept-Encoding": "identity" },
     redirect: "follow",
@@ -40,7 +41,7 @@ for (const file of inventory.files) {
   }
   if (contentEncoding) failures.push(`${file.path}: unexpected Content-Encoding ${contentEncoding}`);
 
-  rows.push({ path: file.path, status: response.status, bytes: body.byteLength, sha256: hash, contentType, contentEncoding });
+  rows.push({ path: file.path, publicPath, status: response.status, bytes: body.byteLength, sha256: hash, contentType, contentEncoding });
 }
 
 const totalBytes = rows.reduce((total, row) => total + row.bytes, 0);
@@ -52,6 +53,17 @@ const latest = await latestResponse.json();
 if (latest.buildGuid !== buildGuid) failures.push(`latest GUID ${latest.buildGuid}`);
 if (latest.sourceSha !== inventory.sourceSha) failures.push(`latest source SHA ${latest.sourceSha}`);
 
+const launcherResponse = await fetch(releaseBase, {
+  headers: { "Accept-Encoding": "identity" },
+  redirect: "error",
+});
+const launcherHtml = await launcherResponse.text();
+if (launcherResponse.status !== 200) failures.push(`launcher HTTP ${launcherResponse.status}`);
+if (!launcherResponse.headers.get("content-type")?.toLowerCase().includes("text/html")) {
+  failures.push(`launcher MIME ${launcherResponse.headers.get("content-type")}`);
+}
+if (!launcherHtml.includes('id="unity-canvas"')) failures.push("launcher Unity canvas missing");
+
 console.table(rows);
 console.log(
   JSON.stringify(
@@ -61,6 +73,12 @@ console.log(
       totalBytes,
       recordedAggregateSha256: inventory.aggregateSha256,
       perFileIdentity: failures.length === 0,
+      launcher: {
+        status: launcherResponse.status,
+        contentType: launcherResponse.headers.get("content-type"),
+        edgeHtmlBytes: Buffer.byteLength(launcherHtml),
+        unityCanvas: launcherHtml.includes('id="unity-canvas"'),
+      },
       latest,
       failures,
     },

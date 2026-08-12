@@ -11,7 +11,7 @@
     {"path":"Build/Development.loader.js","bytes":58349,"sha256":"41cd49630a1e2492b795e80b24a99a0a1bbf1cfd2a99af2a6dcf54606d13f5b9"},
     {"path":"Build/Development.wasm","bytes":102433114,"sha256":"ed25ae1c477d3f8bb1800d0db96f8f52e6f759e8de56c96494724e67e9f5ecc6"},
     {"path":"BuildMetadata.json","bytes":181,"sha256":"1735723abb6f5caee6614f8d355d6229cfba569d620890039646497a0e8c1098"},
-    {"path":"index.html","bytes":7876,"sha256":"fb67c6d47cc5b6c408e71ddf1304a22e936f154fa9c2e3805acc23cea63b0271"},
+    {"path":"index.html","publicPath":"__webgl-index.bin","bytes":7876,"sha256":"fb67c6d47cc5b6c408e71ddf1304a22e936f154fa9c2e3805acc23cea63b0271"},
     {"path":"TemplateData/favicon.ico","bytes":2305,"sha256":"9c13beb90ee8f70580d52a21d5233970d1c89e71e4a34a462c22610941c3c77f"},
     {"path":"TemplateData/fullscreen-button.png","bytes":175,"sha256":"21221581673a54b8139d408d4a3f8d2b879e86827d4b6fc53b995ff7a99ee3e9"},
     {"path":"TemplateData/MemoryProfiler.png","bytes":665,"sha256":"0ce87be20d0c24ab6cb73b57de2004da261cc2a641e69319c6ae3fe11fc85483"},

@@ -38,6 +38,10 @@ already exists.
    deployment-only `__webgl-index.bin`도 만들고, Worker가 release directory
    요청에 그 원본 바이트를 반환한다. 배포 패키지에서는 Sites가 변환할
    `index.html`만 제외한다. 별칭은 source artifact와 Git에 없다.
+   공개 HTML 응답에는 Sites/Cloudflare가 보안 검사 스크립트를 덧붙일 수
+   있으므로 `index.html`의 원본 바이트 검증은 inventory의 `publicPath`
+   (`__webgl-index.bin`)에서 수행한다. 실제 GUID directory는 별도로 HTML
+   200, Unity canvas, 브라우저 준비 상태를 검증한다.
    Package and save that Sites version.
 4. Verify anonymous HTTPS for all inventory files, MIME, no compression header,
    Chrome/Edge canvas readiness and the exact GUID redirect.
