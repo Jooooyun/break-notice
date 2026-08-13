@@ -47,6 +47,17 @@ namespace BreakNotice.Presentation
                 return "INTERACTIONS BLOCKED | FAILURE PENDING";
             }
 
+            ShowcaseCargoStrapController cargoStrap =
+                interactionController.ShowcaseCargoStrapController;
+            if (cargoStrap != null && cargoStrap.IsAttached)
+            {
+                string state = cargoStrap.IsTensioned ? "TENSIONED REDIRECT" : "ATTACHED";
+                string warning = cargoStrap.IsWarning ? " | LIMIT WARNING" : string.Empty;
+                return $"GEAR01 {state}: {cargoStrap.ActiveTarget.DisplayName} | " +
+                       $"{cargoStrap.CurrentStrapLength:0.0}/{cargoStrap.MaximumStrapLength:0.0} M" +
+                       $"{warning} | MOVE TO REDIRECT | [R] RELEASE";
+            }
+
             if (owner.HandState == PrototypeHandOwnershipState.Carrying && owner.CarriedTarget != null)
             {
                 string throwPrompt = interactionController.HasThrowCharge

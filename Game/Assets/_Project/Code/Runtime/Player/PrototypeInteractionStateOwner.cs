@@ -207,6 +207,20 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        public bool TryBeginStrapTension(PrototypeInteractionTarget target)
+        {
+            if (BlocksNewInteraction ||
+                StrapState != PrototypeStrapOwnershipState.Attached ||
+                StrapTarget == null ||
+                StrapTarget != target)
+            {
+                return false;
+            }
+
+            StrapState = PrototypeStrapOwnershipState.Tensioned;
+            return true;
+        }
+
         public bool TryBeginFailurePending()
         {
             if (GlobalState != PrototypeGlobalInteractionState.Playable)

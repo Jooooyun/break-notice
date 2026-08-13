@@ -128,6 +128,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private AuthoredEncounterResetController resetController;
 
+        [SerializeField]
+        private ShowcaseCargoStrapController cargoStrapController;
+
         private PrototypeAllyRelayController subscribedRelay;
         private int observedResetCount;
         private bool playerGrabbedAvailable;
@@ -185,6 +188,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public ShowcaseMobileAllyController MobileAllyController => mobileAllyController;
 
+        public ShowcaseCargoStrapController CargoStrapController => cargoStrapController;
+
         private void OnEnable()
         {
             RefreshRelaySubscription();
@@ -222,6 +227,12 @@ namespace BreakNotice.Gameplay.Interaction
             ResolveCurrentQContext();
         }
 
+        public void ConfigureCargoStrap(ShowcaseCargoStrapController cargoStrap)
+        {
+            cargoStrapController = cargoStrap;
+            ResolveCurrentQContext();
+        }
+
         public ShowcaseQContext ResolveCurrentQContext()
         {
             bool supplyContext = allyRelayController != null &&
@@ -234,7 +245,9 @@ namespace BreakNotice.Gameplay.Interaction
                     interactionOwner == null || interactionOwner.BlocksNewInteraction,
                     playerGrabbedAvailable,
                     finisherWindowAvailable,
-                    attachAssistAvailable,
+                    attachAssistAvailable ||
+                        (cargoStrapController != null &&
+                         cargoStrapController.CanAssistAttach()),
                     combatTagAvailable,
                     supplyContext,
                     followContext));
@@ -256,7 +269,10 @@ namespace BreakNotice.Gameplay.Interaction
                     mobileAllyController != null && mobileAllyController.OwnsRegroupFallback,
                 ShowcaseQContext.BreakGrab => playerGrabbedAvailable,
                 ShowcaseQContext.TeamFinish => finisherWindowAvailable,
-                ShowcaseQContext.AssistAttach => attachAssistAvailable,
+                ShowcaseQContext.AssistAttach =>
+                    attachAssistAvailable ||
+                    (cargoStrapController != null &&
+                     cargoStrapController.CanAssistAttach()),
                 ShowcaseQContext.CombatTag => combatTagAvailable,
                 _ => false
             };
@@ -268,6 +284,19 @@ namespace BreakNotice.Gameplay.Interaction
             LastQContext = context;
             LastQAccepted = accepted;
             ResolveCurrentQContext();
+        }
+
+        public bool TryExecuteAssistAttach()
+        {
+            if (ResolveCurrentQContext() != ShowcaseQContext.AssistAttach ||
+                cargoStrapController == null ||
+                !cargoStrapController.TryAssistAttach(out _))
+            {
+                return false;
+            }
+
+            RecordBraceSuccess();
+            return true;
         }
 
         public void SetFutureContextAvailability(
@@ -314,6 +343,8 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 ReadinessRevision++;
             }
+
+            cargoStrapController?.ResetToRunBaseline();
 
             ResolveCurrentQContext();
         }

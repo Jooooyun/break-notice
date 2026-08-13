@@ -166,7 +166,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void ApprovedInteractionActions_HaveBoundedConsumersAndStrapReleaseRemainsPassive()
+        public void ApprovedInteractionActions_HaveBoundedConsumersIncludingS5StrapRelease()
         {
             InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
             Assert.That(map.FindAction("CallAlly", true).type, Is.EqualTo(InputActionType.Button));
@@ -183,10 +183,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             StringAssert.Contains("Snapshot.RegroupAlly", consumerSource);
             StringAssert.Contains("Snapshot.Sprint", consumerSource);
             StringAssert.Contains("Snapshot.Jump", consumerSource);
+            StringAssert.Contains("Snapshot.StrapRelease", consumerSource);
             string resetSource = File.ReadAllText(
                 "Assets/_Project/Code/Runtime/Player/AuthoredEncounterResetController.cs");
             StringAssert.Contains("Snapshot.ResetEncounter", resetSource);
-            StringAssert.DoesNotContain("StrapRelease", consumerSource);
         }
 
         [Test]

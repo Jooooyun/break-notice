@@ -58,6 +58,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private ShowcaseTeamContextController showcaseTeamContextController;
 
+        [SerializeField]
+        private ShowcaseCargoStrapController showcaseCargoStrapController;
+
         [SerializeField, Min(0.1f)]
         private float fullThrowChargeDuration = 1.2f;
 
@@ -117,6 +120,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         public ShowcaseTeamContextController ShowcaseTeamContextController =>
             showcaseTeamContextController;
+
+        public ShowcaseCargoStrapController ShowcaseCargoStrapController =>
+            showcaseCargoStrapController;
 
         public Transform ViewTransform => viewTransform;
 
@@ -205,6 +211,11 @@ namespace BreakNotice.Gameplay.Interaction
             if (logicalInput.Snapshot.Throw && pointerActionAvailable)
             {
                 BeginThrowCharge();
+            }
+
+            if (logicalInput.Snapshot.StrapRelease)
+            {
+                ProcessStrapRelease();
             }
 
             if (logicalInput.Snapshot.AllyTask)
@@ -316,6 +327,12 @@ namespace BreakNotice.Gameplay.Interaction
             showcaseTeamContextController = teamContextController;
         }
 
+        public void ConfigureShowcaseS5(ShowcaseCargoStrapController cargoStrapController)
+        {
+            showcaseCargoStrapController = cargoStrapController;
+            strapContextEnabled = cargoStrapController != null;
+        }
+
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
         {
             // The centre reticle ray remains the first-priority selector. When it
@@ -364,7 +381,10 @@ namespace BreakNotice.Gameplay.Interaction
                 strapContextEnabled &&
                 isAiming &&
                 CurrentTarget != null &&
-                CurrentTarget.HasLoadBearingMetalAnchor;
+                CurrentTarget.HasLoadBearingMetalAnchor &&
+                interactionOwner.RelayState == PrototypeRelayReservationState.None &&
+                (showcaseCargoStrapController == null ||
+                 showcaseCargoStrapController.CanDirectAttach(CurrentTarget));
 
             if (interactionOwner.RelayState == PrototypeRelayReservationState.Active &&
                 (allyRelayController == null || !allyRelayController.CanCatch(CurrentTarget)))
@@ -447,6 +467,18 @@ namespace BreakNotice.Gameplay.Interaction
                 else if (decision.Outcome == PrototypeInteractionOutcome.Catch)
                 {
                     allyRelayController?.CompleteCatch(decision.Target, false);
+                }
+            }
+
+            else if (decision.IsAccepted &&
+                     decision.Outcome == PrototypeInteractionOutcome.AttachStrap)
+            {
+                if (showcaseCargoStrapController != null &&
+                    !showcaseCargoStrapController.NotifyDirectAttachment(decision.Target))
+                {
+                    decision = PrototypeInteractionDecision.Reject(
+                        PrototypeInteractionRejection.OwnershipConflict,
+                        CurrentTarget);
                 }
             }
 
@@ -586,10 +618,18 @@ namespace BreakNotice.Gameplay.Interaction
                 ShowcaseQContext.ToggleFollow =>
                     showcaseTeamContextController.IsContextAvailable(context) &&
                     ProcessToggleAllyFollow(),
+                ShowcaseQContext.AssistAttach =>
+                    showcaseTeamContextController.TryExecuteAssistAttach(),
                 _ => false
             };
             showcaseTeamContextController.RecordQAttempt(context, accepted);
             return accepted;
+        }
+
+        public bool ProcessStrapRelease()
+        {
+            return showcaseCargoStrapController != null &&
+                showcaseCargoStrapController.TryExplicitRelease();
         }
 
         public bool ProcessToggleAllyFollow()

@@ -35,6 +35,9 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS4ScenePath =
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v004.unity";
 
+        public const string ShowcaseS5ScenePath =
+            ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v005.unity";
+
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
 
         public const string ShowcaseV2RootName =
@@ -45,6 +48,8 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS3RootName = "SHOWCASE_S3_FETCH_SUPPLY";
 
         public const string ShowcaseS4RootName = "SHOWCASE_S4_TEAM_CONTEXT";
+
+        public const string ShowcaseS5RootName = "SHOWCASE_S5_CARGO_STRAP";
 
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
@@ -238,6 +243,43 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "S4 Showcase prepared: singular Q arbitration, live PASS badge, " +
                 "TEAM READY ownership and bounded S5-S6 readiness hooks.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Prepare S5 Cargo Strap")]
+        public static void PrepareS5ShowcaseScene()
+        {
+            RequireSceneAsset(ShowcaseS4ScenePath);
+            EnsureShowcaseFolder();
+
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ShowcaseS5ScenePath) == null)
+            {
+                if (!AssetDatabase.CopyAsset(ShowcaseS4ScenePath, ShowcaseS5ScenePath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not copy the accepted S4 Scene to {ShowcaseS5ScenePath}.");
+                }
+
+                AssetDatabase.ImportAsset(
+                    ShowcaseS5ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseS5ScenePath,
+                OpenSceneMode.Single);
+            ApplyS5CargoStrap(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseS5ScenePath))
+            {
+                throw new InvalidOperationException(
+                    $"Could not save {ShowcaseS5ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "S5 Showcase prepared: grounded Medium attach assist, bounded redirect, " +
+                "tension warning, explicit R release and BRACE readiness.");
         }
 
         [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
@@ -661,6 +703,78 @@ namespace BreakNotice.Contest.Editor
             {
                 EditorUtility.SetDirty(mobilePresenter);
             }
+        }
+
+        public static void ApplyS5CargoStrap(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            GameObject previousRoot = FindRoot(scene, ShowcaseS5RootName);
+            if (previousRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+
+            GameObject s5Root = CreateRoot(scene, ShowcaseS5RootName);
+            LineRenderer strapLine = CreateReviewLine(
+                s5Root.transform,
+                "GEAR01_SEGMENTED_STRAP_GRAYBOX",
+                new[] { Vector3.zero, Vector3.zero },
+                new Color(1f, 0.78f, 0.08f, 1f),
+                0.055f,
+                false);
+
+            GameObject player = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR00_PLAYER",
+                "Player");
+            GameObject ally = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR01_MOBILE_ALLY",
+                "GAMEPLAY_CHR01_ALLY",
+                "AllyProxy");
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            InputSystemLogicalInputAdapter input =
+                player.GetComponent<InputSystemLogicalInputAdapter>();
+            PrototypeInteractionController interaction =
+                player.GetComponent<PrototypeInteractionController>();
+            ShowcaseTeamContextController team =
+                player.GetComponent<ShowcaseTeamContextController>();
+            if (owner == null || input == null || interaction == null || team == null)
+            {
+                throw new InvalidOperationException(
+                    "S5 requires the accepted S4 player and team context composition.");
+            }
+
+            ShowcaseCargoStrapController cargo =
+                player.GetComponent<ShowcaseCargoStrapController>();
+            if (cargo == null)
+            {
+                cargo = player.AddComponent<ShowcaseCargoStrapController>();
+            }
+
+            PrototypeInteractionTarget[] targets = GetInteractionTargets(scene);
+            cargo.Configure(
+                owner,
+                input,
+                player.transform,
+                player.GetComponent<Collider>(),
+                ally.transform,
+                targets,
+                strapLine);
+            interaction.ConfigureShowcaseS5(cargo);
+            team.ConfigureCargoStrap(cargo);
+
+            EditorUtility.SetDirty(s5Root);
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(interaction);
+            EditorUtility.SetDirty(team);
+            EditorUtility.SetDirty(cargo);
+            EditorUtility.SetDirty(strapLine);
         }
 
         private static Transform[] BuildFollowAnchorNetwork(Transform parent)
