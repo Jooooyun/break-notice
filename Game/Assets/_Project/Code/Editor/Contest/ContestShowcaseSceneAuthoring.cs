@@ -38,6 +38,9 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS5ScenePath =
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v005.unity";
 
+        public const string ShowcaseS6ScenePath =
+            ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v006.unity";
+
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
 
         public const string ShowcaseV2RootName =
@@ -50,6 +53,8 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS4RootName = "SHOWCASE_S4_TEAM_CONTEXT";
 
         public const string ShowcaseS5RootName = "SHOWCASE_S5_CARGO_STRAP";
+
+        public const string ShowcaseS6RootName = "SHOWCASE_S6_RUNNER_PRESSURE";
 
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
@@ -280,6 +285,41 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "S5 Showcase prepared: grounded Medium attach assist, bounded redirect, " +
                 "tension warning, explicit R release and BRACE readiness.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Prepare S6 Runner Pressure")]
+        public static void PrepareS6ShowcaseScene()
+        {
+            RequireSceneAsset(ShowcaseS5ScenePath);
+            EnsureShowcaseFolder();
+
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ShowcaseS6ScenePath) == null)
+            {
+                if (!AssetDatabase.CopyAsset(ShowcaseS5ScenePath, ShowcaseS6ScenePath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not copy the accepted S5 Scene to {ShowcaseS6ScenePath}.");
+                }
+                AssetDatabase.ImportAsset(
+                    ShowcaseS6ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseS6ScenePath,
+                OpenSceneMode.Single);
+            ApplyS6RunnerPressure(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseS6ScenePath))
+            {
+                throw new InvalidOperationException($"Could not save {ShowcaseS6ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "S6 Showcase prepared: two Runner pressure, one attack token, " +
+                "Body Check/Shove/Short Grab, LMB melee, Rescue and Combat Tag.");
         }
 
         [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
@@ -775,6 +815,115 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(team);
             EditorUtility.SetDirty(cargo);
             EditorUtility.SetDirty(strapLine);
+        }
+
+        public static void ApplyS6RunnerPressure(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            GameObject previousRoot = FindRoot(scene, ShowcaseS6RootName);
+            if (previousRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+
+            GameObject s6Root = CreateRoot(scene, ShowcaseS6RootName);
+            ShowcaseRunnerPressureController pressure =
+                s6Root.AddComponent<ShowcaseRunnerPressureController>();
+            GameObject player = RequireRootAny(scene, "GAMEPLAY_CHR00_PLAYER", "Player");
+            GameObject ally = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR01_MOBILE_ALLY",
+                "GAMEPLAY_CHR01_ALLY",
+                "AllyProxy");
+            GameObject[] runnerObjects =
+            {
+                RequireRootAny(scene, "GAMEPLAY_ENY01_RUNNER_01", "EnemyProxy_01"),
+                RequireRootAny(scene, "GAMEPLAY_ENY01_RUNNER_02", "EnemyProxy_02")
+            };
+
+            var agents = new ShowcaseRunnerAgent[runnerObjects.Length];
+            for (int index = 0; index < runnerObjects.Length; index++)
+            {
+                GameObject runner = runnerObjects[index];
+                runner.isStatic = false;
+                GameObjectUtility.SetStaticEditorFlags(runner, (StaticEditorFlags)0);
+                Rigidbody body = runner.GetComponent<Rigidbody>();
+                if (body == null)
+                {
+                    body = runner.AddComponent<Rigidbody>();
+                }
+                body.isKinematic = true;
+                body.useGravity = false;
+                body.interpolation = RigidbodyInterpolation.Interpolate;
+                body.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                body.constraints = RigidbodyConstraints.FreezePositionY |
+                    RigidbodyConstraints.FreezeRotationX |
+                    RigidbodyConstraints.FreezeRotationZ;
+
+                foreach (ShowcaseRunnerAgent existingAgent in
+                    runner.GetComponents<ShowcaseRunnerAgent>())
+                {
+                    UnityEngine.Object.DestroyImmediate(existingAgent);
+                }
+                GameObjectUtility.RemoveMonoBehavioursWithMissingScript(runner);
+                ShowcaseRunnerAgent agent = runner.AddComponent<ShowcaseRunnerAgent>();
+                agent.Configure($"RUNNER {index + 1}", pressure, body, player.transform);
+                agents[index] = agent;
+                EditorUtility.SetDirty(runner);
+                EditorUtility.SetDirty(body);
+                EditorUtility.SetDirty(agent);
+            }
+
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypeInteractionController interaction =
+                player.GetComponent<PrototypeInteractionController>();
+            ThirdPersonLocomotion locomotion = player.GetComponent<ThirdPersonLocomotion>();
+            ShowcaseMobileAllyController mobile =
+                ally.GetComponent<ShowcaseMobileAllyController>();
+            ShowcaseTeamContextController team =
+                player.GetComponent<ShowcaseTeamContextController>();
+            AuthoredEncounterResetController reset =
+                RequireSingleSceneComponent<AuthoredEncounterResetController>(scene);
+            if (owner == null || interaction == null || locomotion == null ||
+                mobile == null || team == null)
+            {
+                throw new InvalidOperationException(
+                    "S6 requires the accepted S5 player, Ally and team composition.");
+            }
+
+            pressure.Configure(
+                owner,
+                player.transform,
+                locomotion,
+                ally.transform,
+                mobile,
+                team,
+                reset,
+                agents);
+            team.ConfigureRunnerPressure(pressure);
+            interaction.ConfigureShowcaseS6(pressure);
+
+            GameObject browserInput = RequireRoot(scene, "ContestBrowserInput");
+            ShowcaseRunnerPressurePresenter presenter =
+                browserInput.GetComponent<ShowcaseRunnerPressurePresenter>();
+            if (presenter == null)
+            {
+                presenter = browserInput.AddComponent<ShowcaseRunnerPressurePresenter>();
+            }
+            presenter.Configure(pressure);
+
+            EditorUtility.SetDirty(s6Root);
+            EditorUtility.SetDirty(pressure);
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(interaction);
+            EditorUtility.SetDirty(team);
+            EditorUtility.SetDirty(browserInput);
+            EditorUtility.SetDirty(presenter);
         }
 
         private static Transform[] BuildFollowAnchorNetwork(Transform parent)

@@ -131,6 +131,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private ShowcaseCargoStrapController cargoStrapController;
 
+        [SerializeField]
+        private ShowcaseRunnerPressureController runnerPressureController;
+
         private PrototypeAllyRelayController subscribedRelay;
         private int observedResetCount;
         private bool playerGrabbedAvailable;
@@ -190,6 +193,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         public ShowcaseCargoStrapController CargoStrapController => cargoStrapController;
 
+        public ShowcaseRunnerPressureController RunnerPressureController =>
+            runnerPressureController;
+
         private void OnEnable()
         {
             RefreshRelaySubscription();
@@ -233,6 +239,12 @@ namespace BreakNotice.Gameplay.Interaction
             ResolveCurrentQContext();
         }
 
+        public void ConfigureRunnerPressure(ShowcaseRunnerPressureController runnerPressure)
+        {
+            runnerPressureController = runnerPressure;
+            ResolveCurrentQContext();
+        }
+
         public ShowcaseQContext ResolveCurrentQContext()
         {
             bool supplyContext = allyRelayController != null &&
@@ -243,12 +255,16 @@ namespace BreakNotice.Gameplay.Interaction
             CurrentQContext = ShowcaseQContextArbitrator.Resolve(
                 new ShowcaseQContextSnapshot(
                     interactionOwner == null || interactionOwner.BlocksNewInteraction,
-                    playerGrabbedAvailable,
+                    playerGrabbedAvailable ||
+                        (runnerPressureController != null &&
+                         runnerPressureController.PlayerGrabbed),
                     finisherWindowAvailable,
                     attachAssistAvailable ||
                         (cargoStrapController != null &&
                          cargoStrapController.CanAssistAttach()),
-                    combatTagAvailable,
+                    combatTagAvailable ||
+                        (runnerPressureController != null &&
+                         runnerPressureController.HasCombatTagTarget),
                     supplyContext,
                     followContext));
             return CurrentQContext;
@@ -267,13 +283,17 @@ namespace BreakNotice.Gameplay.Interaction
                     allyRelayController != null && allyRelayController.IsReadyForCall,
                 ShowcaseQContext.ToggleFollow =>
                     mobileAllyController != null && mobileAllyController.OwnsRegroupFallback,
-                ShowcaseQContext.BreakGrab => playerGrabbedAvailable,
+                ShowcaseQContext.BreakGrab => playerGrabbedAvailable ||
+                    (runnerPressureController != null &&
+                     runnerPressureController.PlayerGrabbed),
                 ShowcaseQContext.TeamFinish => finisherWindowAvailable,
                 ShowcaseQContext.AssistAttach =>
                     attachAssistAvailable ||
                     (cargoStrapController != null &&
                      cargoStrapController.CanAssistAttach()),
-                ShowcaseQContext.CombatTag => combatTagAvailable,
+                ShowcaseQContext.CombatTag => combatTagAvailable ||
+                    (runnerPressureController != null &&
+                     runnerPressureController.HasCombatTagTarget),
                 _ => false
             };
         }
@@ -296,6 +316,32 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             RecordBraceSuccess();
+            return true;
+        }
+
+        public bool TryExecuteBreakGrab()
+        {
+            if (ResolveCurrentQContext() != ShowcaseQContext.BreakGrab ||
+                runnerPressureController == null ||
+                !runnerPressureController.TryRescuePlayer())
+            {
+                return false;
+            }
+
+            RecordBreakSuccess();
+            return true;
+        }
+
+        public bool TryExecuteCombatTag()
+        {
+            if (ResolveCurrentQContext() != ShowcaseQContext.CombatTag ||
+                runnerPressureController == null ||
+                !runnerPressureController.TryCombatTag())
+            {
+                return false;
+            }
+
+            RecordBreakSuccess();
             return true;
         }
 

@@ -43,6 +43,8 @@ namespace BreakNotice.Gameplay
         private float jumpBufferTimeRemaining;
         private bool jumpConsumed;
         private CollisionFlags lastCollisionFlags;
+        private bool externalMovementBlocked;
+        private Vector3 externalPlanarVelocity;
 
         public float MoveSpeed => moveSpeed;
 
@@ -68,6 +70,8 @@ namespace BreakNotice.Gameplay
 
         public float CurrentHorizontalSpeed { get; private set; }
 
+        public bool IsMovementExternallyBlocked => externalMovementBlocked;
+
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
@@ -83,6 +87,7 @@ namespace BreakNotice.Gameplay
         {
             Vector2 moveInput = logicalInput.Snapshot.Move;
             bool mobilityBlocked = logicalInput.Snapshot.ResetEncounter ||
+                externalMovementBlocked ||
                 (interactionOwner != null && interactionOwner.BlocksNewInteraction);
             bool mediumCarry = IsCarryingMedium();
             bool hasMoveInput = moveInput.sqrMagnitude > 0.0001f;
@@ -161,6 +166,7 @@ namespace BreakNotice.Gameplay
             }
 
             Vector3 velocity = desiredDirection * CurrentHorizontalSpeed +
+                externalPlanarVelocity +
                 Vector3.up * verticalVelocity;
             CollisionFlags collisionFlags = controller.Move(velocity * Time.deltaTime);
             lastCollisionFlags = collisionFlags;
@@ -176,6 +182,11 @@ namespace BreakNotice.Gameplay
                 coyoteTimeRemaining = coyoteTime;
                 jumpConsumed = false;
             }
+
+            externalPlanarVelocity = Vector3.MoveTowards(
+                externalPlanarVelocity,
+                Vector3.zero,
+                14f * Time.deltaTime);
         }
 
         public void ConfigureCamera(Transform value)
@@ -188,6 +199,21 @@ namespace BreakNotice.Gameplay
             interactionOwner = value;
         }
 
+        public void SetExternalMovementBlocked(bool blocked)
+        {
+            externalMovementBlocked = blocked;
+            if (blocked)
+            {
+                IsSprinting = false;
+                jumpBufferTimeRemaining = 0f;
+            }
+        }
+
+        public void AddExternalPlanarImpulse(Vector3 velocity)
+        {
+            externalPlanarVelocity += Vector3.ProjectOnPlane(velocity, Vector3.up);
+        }
+
         public void ResetMotionState()
         {
             verticalVelocity = -2f;
@@ -196,6 +222,8 @@ namespace BreakNotice.Gameplay
             jumpConsumed = false;
             IsSprinting = false;
             CurrentHorizontalSpeed = moveSpeed;
+            externalMovementBlocked = false;
+            externalPlanarVelocity = Vector3.zero;
         }
 
         private bool IsCarryingMedium()

@@ -61,6 +61,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private ShowcaseCargoStrapController showcaseCargoStrapController;
 
+        [SerializeField]
+        private ShowcaseRunnerPressureController showcaseRunnerPressureController;
+
         [SerializeField, Min(0.1f)]
         private float fullThrowChargeDuration = 1.2f;
 
@@ -123,6 +126,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         public ShowcaseCargoStrapController ShowcaseCargoStrapController =>
             showcaseCargoStrapController;
+
+        public ShowcaseRunnerPressureController ShowcaseRunnerPressureController =>
+            showcaseRunnerPressureController;
 
         public Transform ViewTransform => viewTransform;
 
@@ -210,7 +216,11 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (logicalInput.Snapshot.Throw && pointerActionAvailable)
             {
-                BeginThrowCharge();
+                if (showcaseRunnerPressureController == null ||
+                    !showcaseRunnerPressureController.TryPlayerShove())
+                {
+                    BeginThrowCharge();
+                }
             }
 
             if (logicalInput.Snapshot.StrapRelease)
@@ -331,6 +341,11 @@ namespace BreakNotice.Gameplay.Interaction
         {
             showcaseCargoStrapController = cargoStrapController;
             strapContextEnabled = cargoStrapController != null;
+        }
+
+        public void ConfigureShowcaseS6(ShowcaseRunnerPressureController runnerPressureController)
+        {
+            showcaseRunnerPressureController = runnerPressureController;
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
@@ -620,6 +635,10 @@ namespace BreakNotice.Gameplay.Interaction
                     ProcessToggleAllyFollow(),
                 ShowcaseQContext.AssistAttach =>
                     showcaseTeamContextController.TryExecuteAssistAttach(),
+                ShowcaseQContext.BreakGrab =>
+                    showcaseTeamContextController.TryExecuteBreakGrab(),
+                ShowcaseQContext.CombatTag =>
+                    showcaseTeamContextController.TryExecuteCombatTag(),
                 _ => false
             };
             showcaseTeamContextController.RecordQAttempt(context, accepted);
