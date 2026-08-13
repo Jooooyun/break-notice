@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay;
 using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Interaction;
@@ -133,7 +134,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator FiveRunnerHits_EnterFailureAndResetRestoresPlayableState()
+        public IEnumerator PlayerHealthDepletion_EntersFailureAndResetRestoresPlayableState()
         {
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode(
                 S7ScenePath,
@@ -147,10 +148,21 @@ namespace BreakNotice.LocomotionCamera.Tests
             AuthoredEncounterResetController reset =
                 SceneComponents<AuthoredEncounterResetController>().Single();
             ShowcaseRunnerAgent runner = pressure.Runners.First();
+            ShowcaseCombatHealth playerHealth =
+                SceneComponents<ShowcaseCombatHealth>()
+                    .Single(candidate => candidate.Team == ShowcaseCombatTeam.Player);
 
-            for (int index = 0; index < objective.MaximumPlayerHits; index++)
+            for (int index = 0; index < 5; index++)
             {
-                pressure.ApplyPlayerPressure(runner, 0f);
+                Assert.That(playerHealth.TryApplyDamage(
+                    new ShowcaseDamageRequest(
+                        ShowcaseCombatTeam.Enemy,
+                        runner.RunnerId,
+                        (uint)(index + 1),
+                        20,
+                        ShowcaseHitReaction.Body,
+                        Vector3.back),
+                    index), Is.True);
             }
             objective.EvaluateObjectiveState();
             Assert.That(objective.FailureTriggered, Is.True);
@@ -164,6 +176,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(objective.FailureTriggered, Is.False);
             Assert.That(owner.GlobalState, Is.EqualTo(PrototypeGlobalInteractionState.Playable));
             Assert.That(pressure.IsExternallySuspended, Is.False);
+            Assert.That(playerHealth.CurrentHealth, Is.EqualTo(100));
         }
 
         private static void MoveBody(Rigidbody body, Vector3 position)

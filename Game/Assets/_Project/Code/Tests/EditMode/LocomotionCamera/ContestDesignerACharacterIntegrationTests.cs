@@ -107,7 +107,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void RuntimeControllers_UseWalkOnlyLocomotionWithoutFootIk()
+        public void RuntimeControllers_UsePlayerSprintAndBoundedWalkLocomotionWithoutFootIk()
         {
             foreach (string fileName in new[]
                      {
@@ -125,7 +125,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 AnimatorState idle = states.Single(state => state.name == "Idle");
                 AnimatorState walk = states.Single(state => state.name == "Walk");
 
-                Assert.That(states.Any(state => state.name == "Run"), Is.False, fileName);
+                Assert.That(states.Any(state => state.name == "Run"),
+                    Is.EqualTo(fileName == "CHR00_Player.controller"), fileName);
                 Assert.That(idle.iKOnFeet, Is.False, fileName);
                 Assert.That(walk.iKOnFeet, Is.False, fileName);
                 Assert.That(walk.speedParameterActive, Is.True, fileName);
@@ -147,6 +148,50 @@ namespace BreakNotice.LocomotionCamera.Tests
                     transition.destinationState == idle ||
                     transition.destinationState == walk), Is.True, fileName);
             }
+        }
+
+        [Test]
+        public void PlayerAndEnemyControllers_ExposeApprovedCombatStateContracts()
+        {
+            AnimatorController player = LoadController("CHR00_Player.controller");
+            string[] playerStates = StateNames(player);
+            foreach (string state in new[]
+                     {
+                         "Run", "JumpAction", "MeleeJabAction", "MeleeCrossAction",
+                         "MeleeHookAction", "HitBodyAction", "KnockdownBackAction",
+                         "KnockdownFrontAction", "GetupBackAction", "GetupFrontAction",
+                         "Death1Action", "Death2Action"
+                     })
+            {
+                Assert.That(playerStates, Does.Contain(state));
+            }
+
+            foreach (string fileName in new[]
+                     {
+                         "ENY01_Normal.controller", "ENY01_Elite.controller"
+                     })
+            {
+                string[] states = StateNames(LoadController(fileName));
+                foreach (string state in new[]
+                         {
+                             "AttackBoxingAction", "AttackBoxing2Action",
+                             "AttackKickingAction", "AttackKicking2Action",
+                             "HitBodyAction", "HitRibAction", "HitStomachAction",
+                             "HitBigHeadAction", "Death1Action", "Death2Action"
+                         })
+                {
+                    Assert.That(states, Does.Contain(state), fileName);
+                }
+            }
+
+            string[] normalStates = StateNames(LoadController("ENY01_Normal.controller"));
+            string[] eliteStates = StateNames(LoadController("ENY01_Elite.controller"));
+            Assert.That(normalStates, Does.Not.Contain("EliteMutantPunchAction"));
+            Assert.That(normalStates, Does.Not.Contain("EliteMutantSwipingAction"));
+            Assert.That(normalStates, Does.Not.Contain("EliteJumpAttackAction"));
+            Assert.That(eliteStates, Does.Contain("EliteMutantPunchAction"));
+            Assert.That(eliteStates, Does.Contain("EliteMutantSwipingAction"));
+            Assert.That(eliteStates, Does.Contain("EliteJumpAttackAction"));
         }
 
         [Test]

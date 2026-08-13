@@ -38,7 +38,7 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             InputActionMap map = asset.actionMaps[0];
             Assert.That(map.name, Is.EqualTo("PrototypePlayer"));
-            Assert.That(map.actions.Count, Is.EqualTo(12));
+            Assert.That(map.actions.Count, Is.EqualTo(13));
             Assert.That(
                 map.actions.Select(action => action.name),
                 Is.EquivalentTo(Enum.GetNames(typeof(PrototypeLogicalAction))));
@@ -117,7 +117,22 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(mobility.Jump, Is.True);
             Assert.That(
                 LoadInputAsset().FindActionMap("PrototypePlayer", true).actions.Count,
-                Is.EqualTo(12));
+                Is.EqualTo(13));
+        }
+
+        [Test]
+        public void Restart_UsesEnterWhileBackspaceRemainsDevelopmentOnly()
+        {
+            InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
+            InputAction restart = map.FindAction("Restart", true);
+            Assert.That(
+                restart.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Keyboard>/enter"));
+
+            string adapterSource = File.ReadAllText(
+                "Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs");
+            StringAssert.Contains("#if UNITY_EDITOR || DEVELOPMENT_BUILD", adapterSource);
+            StringAssert.Contains("restartAction.WasPressedThisFrame()", adapterSource);
         }
 
         [Test]

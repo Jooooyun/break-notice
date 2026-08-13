@@ -13,6 +13,7 @@ namespace BreakNotice.Gameplay.Input
         CallAlly,
         RegroupAlly,
         StrapRelease,
-        ResetEncounter
+        ResetEncounter,
+        Restart
     }
 }

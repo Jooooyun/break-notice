@@ -18,7 +18,8 @@ namespace BreakNotice.Gameplay.Input
             bool allyTask = false,
             bool regroupAlly = false,
             bool sprint = false,
-            bool jump = false)
+            bool jump = false,
+            bool restart = false)
         {
             Move = move;
             Look = look;
@@ -34,6 +35,7 @@ namespace BreakNotice.Gameplay.Input
             RegroupAlly = regroupAlly;
             Sprint = sprint;
             Jump = jump;
+            Restart = restart;
         }
 
         public Vector2 Move { get; }
@@ -63,5 +65,7 @@ namespace BreakNotice.Gameplay.Input
         public bool StrapRelease { get; }
 
         public bool ResetEncounter { get; }
+
+        public bool Restart { get; }
     }
 }

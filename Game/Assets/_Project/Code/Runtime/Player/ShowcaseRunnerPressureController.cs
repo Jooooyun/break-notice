@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay.Encounter;
 using UnityEngine;
 
@@ -15,7 +16,9 @@ namespace BreakNotice.Gameplay.Interaction
         GrabCommitted,
         OffBalance,
         Staggered,
-        Recovering
+        Recovering,
+        KnockedDown,
+        Dead
     }
 
     public enum ShowcaseRunnerAttackKind
@@ -74,6 +77,9 @@ namespace BreakNotice.Gameplay.Interaction
         private int observedResetCount;
         private float nextPlayerMeleeTime;
         private bool externallySuspended;
+
+        [SerializeField]
+        private ShowcasePlayerCombatController playerCombat;
 
         public ShowcaseRunnerAgent[] Runners => runners;
 
@@ -159,6 +165,14 @@ namespace BreakNotice.Gameplay.Interaction
             playerMeleeRange = Mathf.Max(0.5f, authoredMeleeRange);
             observedResetCount = resetController != null ? resetController.ResetCount : 0;
             nextPlayerMeleeTime = 0f;
+            playerCombat = player != null
+                ? player.GetComponent<ShowcasePlayerCombatController>()
+                : null;
+        }
+
+        public void ConfigurePlayerCombat(ShowcasePlayerCombatController combat)
+        {
+            playerCombat = combat;
         }
 
         public bool CanSimulatePressure()
@@ -255,16 +269,20 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool TryPlayerShove()
         {
-            if (!CanSimulatePressure() || PlayerGrabbed || Time.time < nextPlayerMeleeTime ||
-                interactionOwner.HandState != PrototypeHandOwnershipState.Free ||
-                interactionOwner.StrapState != PrototypeStrapOwnershipState.Stored ||
-                interactionOwner.RelayState != PrototypeRelayReservationState.None)
+            if (!CanSimulatePressure() || PlayerGrabbed)
             {
                 return false;
             }
 
             ShowcaseRunnerAgent target = ResolvePlayerMeleeTarget();
-            if (target == null)
+            if (playerCombat != null)
+            {
+                return playerCombat.TryRequestMelee(target);
+            }
+            if (Time.time < nextPlayerMeleeTime || target == null ||
+                interactionOwner.HandState != PrototypeHandOwnershipState.Free ||
+                interactionOwner.StrapState != PrototypeStrapOwnershipState.Stored ||
+                interactionOwner.RelayState != PrototypeRelayReservationState.None)
             {
                 return false;
             }
@@ -309,6 +327,68 @@ namespace BreakNotice.Gameplay.Interaction
                 Vector3.up).normalized;
             playerLocomotion?.AddExternalPlanarImpulse(direction * Mathf.Max(0f, impulseSpeed));
             PlayerHitCount++;
+        }
+
+        public void ApplyPlayerAttack(
+            ShowcaseRunnerAgent runner,
+            int damage,
+            bool knockdown,
+            float impulseSpeed,
+            uint attackSequence)
+        {
+            if (runner == null || playerTransform == null)
+            {
+                return;
+            }
+
+            Vector3 direction = Vector3.ProjectOnPlane(
+                playerTransform.position - runner.transform.position,
+                Vector3.up).normalized;
+            bool accepted = playerCombat != null && playerCombat.ReceiveDamage(
+                new ShowcaseDamageRequest(
+                    ShowcaseCombatTeam.Enemy,
+                    runner.RunnerId,
+                    attackSequence,
+                    damage,
+                    knockdown ? ShowcaseHitReaction.Knockdown : ShowcaseHitReaction.Body,
+                    direction));
+            if (!accepted && playerCombat != null)
+            {
+                return;
+            }
+
+            playerLocomotion?.AddExternalPlanarImpulse(
+                direction * Mathf.Max(0f, impulseSpeed));
+            PlayerHitCount++;
+        }
+
+        public bool CommitPlayerMeleeHit(
+            ShowcaseRunnerAgent target,
+            int comboStep,
+            uint attackSequence,
+            int damage)
+        {
+            if (target == null || target.IsDead || playerTransform == null ||
+                target != ResolvePlayerMeleeTarget())
+            {
+                return false;
+            }
+
+            bool accepted = target.ReceivePlayerMeleeHit(
+                comboStep,
+                attackSequence,
+                damage,
+                playerTransform.position);
+            if (accepted)
+            {
+                PlayerMeleeCount++;
+            }
+            return accepted;
+        }
+
+        public ShowcaseRunnerAgent ResolvePlayerMeleeTargetForCombo()
+        {
+            return ResolvePlayerMeleeTarget();
         }
 
         public void ResetToRunBaseline()
@@ -393,7 +473,8 @@ namespace BreakNotice.Gameplay.Interaction
             for (int index = 0; index < runners.Length; index++)
             {
                 ShowcaseRunnerAgent runner = runners[index];
-                if (runner == null || runner.IsIncapacitated)
+                if (runner == null || runner.IsDead ||
+                    runner.State == ShowcaseRunnerState.GrabCommitted)
                 {
                     continue;
                 }

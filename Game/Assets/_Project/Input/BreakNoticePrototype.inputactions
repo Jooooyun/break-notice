@@ -112,6 +112,15 @@
           "processors": "",
           "interactions": "",
           "initialStateCheck": false
+        },
+        {
+          "name": "Restart",
+          "type": "Button",
+          "id": "f86c8515-bc2f-4dc4-aa5c-284c94735e40",
+          "expectedControlType": "Button",
+          "processors": "",
+          "interactions": "",
+          "initialStateCheck": false
         }
       ],
       "bindings": [
@@ -420,6 +429,17 @@
           "processors": "",
           "groups": "Gamepad",
           "action": "ResetEncounter",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "92fb9bc1-e7ee-4ced-b9fd-7ded2c7db76c",
+          "path": "<Keyboard>/enter",
+          "interactions": "",
+          "processors": "",
+          "groups": "Keyboard&Mouse",
+          "action": "Restart",
           "isComposite": false,
           "isPartOfComposite": false
         }

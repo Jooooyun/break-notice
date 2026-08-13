@@ -1,4 +1,5 @@
 using System;
+using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay.Encounter;
 using UnityEngine;
 
@@ -44,6 +45,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         [SerializeField]
         private ShowcaseRunnerPressureController runnerPressureController;
+
+        [SerializeField]
+        private ShowcaseCombatHealth playerHealth;
 
         [SerializeField]
         private PrototypeInteractionTarget drawerTarget;
@@ -267,9 +271,36 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool TryTriggerFailureIfThresholdReached()
         {
-            if (FailureTriggered || RunComplete || runnerPressureController == null ||
-                runnerPressureController.PlayerHitCount < maximumPlayerHits ||
+            bool thresholdReached = playerHealth != null
+                ? playerHealth.IsDead
+                : runnerPressureController != null &&
+                  runnerPressureController.PlayerHitCount >= maximumPlayerHits;
+            if (FailureTriggered || RunComplete || !thresholdReached ||
                 interactionOwner == null || !interactionOwner.TryBeginFailurePending())
+            {
+                return false;
+            }
+
+            FailureTriggered = true;
+            SuspendGameplay(true);
+            return true;
+        }
+
+        public void ConfigurePlayerHealth(ShowcaseCombatHealth health)
+        {
+            playerHealth = health;
+        }
+
+        public bool NotifyPlayerDeath()
+        {
+            if (FailureTriggered || RunComplete)
+            {
+                return false;
+            }
+
+            if (interactionOwner != null &&
+                interactionOwner.GlobalState == PrototypeGlobalInteractionState.Playable &&
+                !interactionOwner.TryBeginFailurePending())
             {
                 return false;
             }

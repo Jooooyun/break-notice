@@ -1,7 +1,31 @@
+using BreakNotice.Gameplay.Combat;
 using UnityEngine;
 
 namespace BreakNotice.Gameplay.Interaction
 {
+    public enum ShowcaseRunnerAnimationCue
+    {
+        None,
+        Boxing,
+        Boxing2,
+        Kicking,
+        Kicking2,
+        EliteMutantPunch,
+        EliteMutantSwiping,
+        EliteJumpAttack,
+        HitLight,
+        HitBody,
+        HitRib,
+        HitStomach,
+        HitBigHead,
+        KnockdownBack,
+        KnockdownFront,
+        GetupBack,
+        GetupFront,
+        Death1,
+        Death2
+    }
+
     [DefaultExecutionOrder(-20)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Rigidbody))]
@@ -19,6 +43,12 @@ namespace BreakNotice.Gameplay.Interaction
 
         [SerializeField]
         private Transform playerTransform;
+
+        [SerializeField]
+        private ShowcaseCombatHealth health;
+
+        [SerializeField]
+        private bool elite;
 
         [SerializeField, Min(0.1f)]
         private float approachSpeed = 2.7f;
@@ -41,6 +71,9 @@ namespace BreakNotice.Gameplay.Interaction
         private float cooldownRemaining;
         private int attackSequence;
         private bool hitApplied;
+        private uint activeAttackSequence;
+        private int attackAnimationVariant;
+        private Collider runnerCollider;
 
         public string RunnerId => runnerId;
 
@@ -53,7 +86,21 @@ namespace BreakNotice.Gameplay.Interaction
             State == ShowcaseRunnerState.Staggered;
 
         public bool IsIncapacitated => CanReceiveCombatTag ||
-            State == ShowcaseRunnerState.GrabCommitted;
+            State == ShowcaseRunnerState.GrabCommitted ||
+            State == ShowcaseRunnerState.KnockedDown ||
+            State == ShowcaseRunnerState.Dead;
+
+        public bool IsDead => health != null && health.IsDead;
+
+        public bool IsElite => elite;
+
+        public ShowcaseCombatHealth Health => health;
+
+        public ShowcaseRunnerAnimationCue AnimationCue { get; private set; }
+
+        public uint AnimationCueRevision { get; private set; }
+
+        public uint ActiveAttackSequence => activeAttackSequence;
 
         public float StateElapsed => stateElapsed;
 
@@ -64,12 +111,13 @@ namespace BreakNotice.Gameplay.Interaction
         private void Awake()
         {
             body ??= GetComponent<Rigidbody>();
+            runnerCollider = GetComponent<Collider>();
             CaptureBaseline();
         }
 
         private void FixedUpdate()
         {
-            if (coordinator == null || playerTransform == null || body == null ||
+            if (coordinator == null || playerTransform == null || body == null || IsDead ||
                 !coordinator.CanSimulatePressure())
             {
                 return;
@@ -98,6 +146,17 @@ namespace BreakNotice.Gameplay.Interaction
                         EnterState(ShowcaseRunnerState.Patrol);
                     }
                     return;
+                case ShowcaseRunnerState.KnockedDown:
+                    if (stateElapsed >= 1.35f)
+                    {
+                        SetAnimationCue(LastAttackKind == ShowcaseRunnerAttackKind.BodyCheck
+                            ? ShowcaseRunnerAnimationCue.GetupBack
+                            : ShowcaseRunnerAnimationCue.GetupFront);
+                        EnterState(ShowcaseRunnerState.Recovering);
+                    }
+                    return;
+                case ShowcaseRunnerState.Dead:
+                    return;
                 case ShowcaseRunnerState.Telegraph:
                     FacePlayer(deltaTime);
                     if (stateElapsed >= 0.45f)
@@ -107,24 +166,22 @@ namespace BreakNotice.Gameplay.Interaction
                     return;
                 case ShowcaseRunnerState.BodyCheck:
                     AdvanceTowardPlayer(bodyCheckSpeed, deltaTime);
-                    if (!hitApplied && DistanceToPlayer() <= 1.25f)
+                    if (!hitApplied && stateElapsed >= 0.82f && DistanceToPlayer() <= 1.45f)
                     {
-                        hitApplied = true;
-                        coordinator.ApplyPlayerPressure(this, 4.2f);
+                        CommitAnimationAttackHit();
                     }
-                    if (stateElapsed >= 0.42f)
+                    if (stateElapsed >= 1.15f)
                     {
                         CompleteAttack();
                     }
                     return;
                 case ShowcaseRunnerState.Shove:
                     FacePlayer(deltaTime);
-                    if (!hitApplied && stateElapsed >= 0.14f && DistanceToPlayer() <= 1.7f)
+                    if (!hitApplied && stateElapsed >= 0.62f && DistanceToPlayer() <= 1.7f)
                     {
-                        hitApplied = true;
-                        coordinator.ApplyPlayerPressure(this, 3.2f);
+                        CommitAnimationAttackHit();
                     }
-                    if (stateElapsed >= 0.34f)
+                    if (stateElapsed >= 1.0f)
                     {
                         CompleteAttack();
                     }
@@ -164,7 +221,9 @@ namespace BreakNotice.Gameplay.Interaction
             Rigidbody authoredBody,
             Transform player,
             float authoredApproachSpeed = 2.7f,
-            float authoredBodyCheckSpeed = 6.5f)
+            float authoredBodyCheckSpeed = 6.5f,
+            ShowcaseCombatHealth authoredHealth = null,
+            bool authoredElite = false)
         {
             runnerId = string.IsNullOrWhiteSpace(authoredRunnerId)
                 ? name
@@ -174,6 +233,9 @@ namespace BreakNotice.Gameplay.Interaction
             playerTransform = player;
             approachSpeed = Mathf.Max(0.1f, authoredApproachSpeed);
             bodyCheckSpeed = Mathf.Max(0.1f, authoredBodyCheckSpeed);
+            health = authoredHealth;
+            elite = authoredElite;
+            runnerCollider = GetComponent<Collider>();
             CaptureBaseline();
             ResetToRunBaseline();
         }
@@ -193,7 +255,14 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void ReceivePhysicalStagger(bool medium)
         {
+            if (IsDead)
+            {
+                return;
+            }
             InterruptAttack();
+            SetAnimationCue(medium
+                ? ShowcaseRunnerAnimationCue.HitBody
+                : ShowcaseRunnerAnimationCue.HitLight);
             EnterState(medium
                 ? ShowcaseRunnerState.Staggered
                 : ShowcaseRunnerState.OffBalance);
@@ -201,6 +270,10 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void ReceivePlayerShove(Vector3 playerForward)
         {
+            if (IsDead)
+            {
+                return;
+            }
             InterruptAttack();
             Vector3 direction = Vector3.ProjectOnPlane(playerForward, Vector3.up).normalized;
             MoveBy(direction * 0.7f);
@@ -220,6 +293,10 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void ReceiveRescueStagger()
         {
+            if (IsDead)
+            {
+                return;
+            }
             InterruptAttack();
             EnterState(ShowcaseRunnerState.Staggered);
         }
@@ -257,11 +334,122 @@ namespace BreakNotice.Gameplay.Interaction
             cooldownRemaining = 0.3f;
             attackSequence = 0;
             hitApplied = false;
+            activeAttackSequence = 0;
+            attackAnimationVariant = 0;
             AttackCommitCount = 0;
+            AnimationCue = ShowcaseRunnerAnimationCue.None;
+            AnimationCueRevision++;
+            health?.ResetToBaseline();
+            if (runnerCollider != null)
+            {
+                runnerCollider.enabled = true;
+            }
+        }
+
+        public bool ReceivePlayerMeleeHit(
+            int comboStep,
+            uint authoredAttackSequence,
+            int damage,
+            Vector3 playerPosition)
+        {
+            if (health == null || IsDead)
+            {
+                return false;
+            }
+
+            Vector3 impactDirection = Vector3.ProjectOnPlane(
+                transform.position - playerPosition,
+                Vector3.up).normalized;
+            ShowcaseHitReaction reaction = comboStep switch
+            {
+                1 => ShowcaseHitReaction.Light,
+                2 => (authoredAttackSequence % 3) switch
+                {
+                    0 => ShowcaseHitReaction.Body,
+                    1 => ShowcaseHitReaction.Rib,
+                    _ => ShowcaseHitReaction.Stomach
+                },
+                _ => ShowcaseHitReaction.BigHead
+            };
+            bool accepted = health.TryApplyDamage(new ShowcaseDamageRequest(
+                ShowcaseCombatTeam.Player,
+                "CHR00",
+                authoredAttackSequence,
+                damage,
+                reaction,
+                impactDirection));
+            if (!accepted)
+            {
+                return false;
+            }
+
+            InterruptAttack();
+            if (health.IsDead)
+            {
+                EnterDeath();
+                return true;
+            }
+
+            switch (reaction)
+            {
+                case ShowcaseHitReaction.Light:
+                    SetAnimationCue(ShowcaseRunnerAnimationCue.HitLight);
+                    EnterState(ShowcaseRunnerState.OffBalance);
+                    break;
+                case ShowcaseHitReaction.Body:
+                    SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
+                    EnterState(ShowcaseRunnerState.Staggered);
+                    break;
+                case ShowcaseHitReaction.Rib:
+                    SetAnimationCue(ShowcaseRunnerAnimationCue.HitRib);
+                    EnterState(ShowcaseRunnerState.Staggered);
+                    break;
+                case ShowcaseHitReaction.Stomach:
+                    SetAnimationCue(ShowcaseRunnerAnimationCue.HitStomach);
+                    EnterState(ShowcaseRunnerState.Staggered);
+                    break;
+                default:
+                    SetAnimationCue(ShowcaseRunnerAnimationCue.HitBigHead);
+                    MoveBy(impactDirection * 0.85f);
+                    EnterState(ShowcaseRunnerState.KnockedDown);
+                    break;
+            }
+            return true;
+        }
+
+        public void CommitAnimationAttackHit()
+        {
+            if (hitApplied || IsDead || coordinator == null)
+            {
+                return;
+            }
+
+            float allowedRange = State == ShowcaseRunnerState.BodyCheck ? 1.55f : 1.75f;
+            if (DistanceToPlayer() > allowedRange)
+            {
+                return;
+            }
+
+            hitApplied = true;
+            bool heavy = AnimationCue == ShowcaseRunnerAnimationCue.Kicking ||
+                AnimationCue == ShowcaseRunnerAnimationCue.Kicking2 ||
+                AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantPunch ||
+                AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantSwiping ||
+                AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack;
+            coordinator.ApplyPlayerAttack(
+                this,
+                heavy ? 30 : 20,
+                heavy,
+                heavy ? 4.2f : 3.2f,
+                activeAttackSequence);
         }
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (IsDead)
+            {
+                return;
+            }
             PrototypeInteractionTarget source =
                 collision.collider.GetComponentInParent<PrototypeInteractionTarget>();
             if (source != null)
@@ -278,14 +466,17 @@ namespace BreakNotice.Gameplay.Interaction
             LastAttackKind = (ShowcaseRunnerAttackKind)(attackSequence % 3);
             attackSequence++;
             hitApplied = false;
+            activeAttackSequence++;
             switch (LastAttackKind)
             {
                 case ShowcaseRunnerAttackKind.BodyCheck:
                     AttackCommitCount++;
+                    SetAnimationCue(ResolveBodyCheckAnimation());
                     EnterState(ShowcaseRunnerState.BodyCheck);
                     break;
                 case ShowcaseRunnerAttackKind.Shove:
                     AttackCommitCount++;
+                    SetAnimationCue(ResolveShoveAnimation());
                     EnterState(ShowcaseRunnerState.Shove);
                     break;
                 default:
@@ -378,6 +569,56 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 stateElapsed = 0f;
             }
+        }
+
+        private ShowcaseRunnerAnimationCue ResolveBodyCheckAnimation()
+        {
+            attackAnimationVariant++;
+            if (elite)
+            {
+                return attackAnimationVariant % 2 == 0
+                    ? ShowcaseRunnerAnimationCue.EliteMutantSwiping
+                    : ShowcaseRunnerAnimationCue.EliteJumpAttack;
+            }
+            return attackAnimationVariant % 2 == 0
+                ? ShowcaseRunnerAnimationCue.Kicking2
+                : ShowcaseRunnerAnimationCue.Kicking;
+        }
+
+        private ShowcaseRunnerAnimationCue ResolveShoveAnimation()
+        {
+            attackAnimationVariant++;
+            if (elite && attackAnimationVariant % 2 != 0)
+            {
+                return ShowcaseRunnerAnimationCue.EliteMutantPunch;
+            }
+            return attackAnimationVariant % 2 == 0
+                ? ShowcaseRunnerAnimationCue.Boxing2
+                : ShowcaseRunnerAnimationCue.Boxing;
+        }
+
+        private void EnterDeath()
+        {
+            InterruptAttack();
+            SetAnimationCue(health.AcceptedDamageCount % 2 == 0
+                ? ShowcaseRunnerAnimationCue.Death2
+                : ShowcaseRunnerAnimationCue.Death1);
+            EnterState(ShowcaseRunnerState.Dead);
+            if (runnerCollider != null)
+            {
+                runnerCollider.enabled = false;
+            }
+            if (body != null)
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+            }
+        }
+
+        private void SetAnimationCue(ShowcaseRunnerAnimationCue cue)
+        {
+            AnimationCue = cue;
+            AnimationCueRevision++;
         }
 
         private void CaptureBaseline()

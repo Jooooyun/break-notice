@@ -1,4 +1,5 @@
 using BreakNotice.Gameplay;
+using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
 using UnityEngine;
@@ -26,6 +27,10 @@ namespace BreakNotice.Presentation
         private static readonly int ThrowLightTrigger = Animator.StringToHash("ThrowLight");
         private static readonly int ThrowMediumTrigger = Animator.StringToHash("ThrowMedium");
         private static readonly int SupplyReleaseTrigger = Animator.StringToHash("SupplyRelease");
+        private static readonly int SprintParameter = Animator.StringToHash("Sprint");
+        private static readonly int JumpTrigger = Animator.StringToHash("Jump");
+        private static readonly int RunStopTrigger = Animator.StringToHash("RunStop");
+        private static readonly int IdleVariantTrigger = Animator.StringToHash("IdleVariant");
 
         [SerializeField]
         private ShowcaseCharacterAnimationRole role;
@@ -44,6 +49,15 @@ namespace BreakNotice.Presentation
 
         [SerializeField]
         private PrototypeAllyRelayController allyRelay;
+
+        [SerializeField]
+        private ShowcasePlayerCombatController playerCombat;
+
+        [SerializeField]
+        private ShowcaseRunnerAgent runnerAgent;
+
+        [SerializeField]
+        private ThirdPersonLocomotion locomotion;
 
         [SerializeField, Min(0.1f)]
         private float walkReferenceSpeed = 2.8f;
@@ -66,6 +80,13 @@ namespace BreakNotice.Presentation
         private int observedAllyReleaseCount;
         private readonly RaycastHit[] groundingHits = new RaycastHit[16];
         private Renderer[] animatedRenderers;
+        private uint observedPlayerCueRevision;
+        private uint observedRunnerCueRevision;
+        private bool observedGrounded = true;
+        private bool observedSprinting;
+        private float inactiveDuration;
+        private bool idleVariantPlayed;
+        private Vector3 previousWorldPosition;
 
         public ShowcaseCharacterAnimationRole Role => role;
 
@@ -108,8 +129,19 @@ namespace BreakNotice.Presentation
             {
                 allyRelay ??= GetComponent<PrototypeAllyRelayController>();
             }
+            else
+            {
+                runnerAgent ??= GetComponent<ShowcaseRunnerAgent>();
+            }
+
+            if (role == ShowcaseCharacterAnimationRole.Player)
+            {
+                playerCombat ??= GetComponent<ShowcasePlayerCombatController>();
+                locomotion ??= GetComponent<ThirdPersonLocomotion>();
+            }
 
             CaptureCurrentGameplayState();
+            previousWorldPosition = transform.position;
         }
 
         private void Update()
@@ -121,7 +153,9 @@ namespace BreakNotice.Presentation
 
             Vector3 velocity = movementController != null
                 ? movementController.velocity
-                : Vector3.zero;
+                : (transform.position - previousWorldPosition) /
+                  Mathf.Max(0.0001f, Time.deltaTime);
+            previousWorldPosition = transform.position;
             float planarSpeed = new Vector2(velocity.x, velocity.z).magnitude;
             float normalizedSpeed = Mathf.Clamp01(planarSpeed / 4.5f);
             LastPlanarSpeed = planarSpeed;
@@ -136,6 +170,10 @@ namespace BreakNotice.Presentation
                     break;
                 case ShowcaseCharacterAnimationRole.Ally:
                     UpdateAllyAnimation();
+                    break;
+                case ShowcaseCharacterAnimationRole.EnemyNormal:
+                case ShowcaseCharacterAnimationRole.EnemyElite:
+                    UpdateRunnerAnimation();
                     break;
             }
         }
@@ -159,6 +197,16 @@ namespace BreakNotice.Presentation
             logicalInput = authoredLogicalInput;
             physicalLifecycle = authoredPhysicalLifecycle;
             allyRelay = authoredAllyRelay;
+            playerCombat = animationRole == ShowcaseCharacterAnimationRole.Player
+                ? GetComponent<ShowcasePlayerCombatController>()
+                : null;
+            locomotion = animationRole == ShowcaseCharacterAnimationRole.Player
+                ? GetComponent<ThirdPersonLocomotion>()
+                : null;
+            runnerAgent = animationRole == ShowcaseCharacterAnimationRole.EnemyNormal ||
+                          animationRole == ShowcaseCharacterAnimationRole.EnemyElite
+                ? GetComponent<ShowcaseRunnerAgent>()
+                : null;
             if (animator != null)
             {
                 animator.applyRootMotion = false;
@@ -168,6 +216,19 @@ namespace BreakNotice.Presentation
             }
 
             CaptureCurrentGameplayState();
+            previousWorldPosition = transform.position;
+        }
+
+        public void ConfigureCombat(
+            ShowcasePlayerCombatController authoredPlayerCombat,
+            ShowcaseRunnerAgent authoredRunnerAgent,
+            ThirdPersonLocomotion authoredLocomotion)
+        {
+            playerCombat = authoredPlayerCombat;
+            runnerAgent = authoredRunnerAgent;
+            locomotion = authoredLocomotion;
+            observedPlayerCueRevision = playerCombat?.AnimationCueRevision ?? 0;
+            observedRunnerCueRevision = runnerAgent?.AnimationCueRevision ?? 0;
         }
 
         public float CalculateLocomotionPlaybackRate(float planarSpeed)
@@ -268,8 +329,50 @@ namespace BreakNotice.Presentation
 
         private void UpdatePlayerAnimation()
         {
-            bool aiming = logicalInput != null && logicalInput.Snapshot.Aim;
+            bool aiming = logicalInput != null && logicalInput.Snapshot.Aim &&
+                (playerCombat == null || !playerCombat.IsDead);
             animator.SetBool(AimParameter, aiming);
+
+            bool sprinting = locomotion != null && locomotion.IsSprinting;
+            animator.SetBool(SprintParameter, sprinting);
+            bool grounded = locomotion == null || locomotion.IsGrounded;
+            if (observedGrounded && !grounded && locomotion != null &&
+                locomotion.VerticalVelocity > 0f)
+            {
+                animator.SetTrigger(JumpTrigger);
+            }
+            if (observedSprinting && !sprinting && LastPlanarSpeed <= 0.25f)
+            {
+                animator.SetTrigger(RunStopTrigger);
+            }
+            observedGrounded = grounded;
+            observedSprinting = sprinting;
+
+            bool inactive = LastPlanarSpeed <= 0.05f && !aiming &&
+                (playerCombat == null || !playerCombat.IsActionLocked) &&
+                physicalLifecycle?.CarriedTarget == null;
+            inactiveDuration = inactive ? inactiveDuration + Time.deltaTime : 0f;
+            if (!inactive)
+            {
+                idleVariantPlayed = false;
+            }
+            else if (!idleVariantPlayed && inactiveDuration >= 8f)
+            {
+                animator.SetTrigger(IdleVariantTrigger);
+                idleVariantPlayed = true;
+            }
+
+            if (playerCombat != null)
+            {
+                if (playerCombat.AnimationCueRevision != observedPlayerCueRevision)
+                {
+                    observedPlayerCueRevision = playerCombat.AnimationCueRevision;
+                    TriggerPlayerCue(playerCombat.AnimationCue);
+                }
+                observedCarriedTarget = physicalLifecycle?.CarriedTarget;
+                observedThrowOriginCount = physicalLifecycle?.ThrowOriginCount ?? 0;
+                return;
+            }
 
             PrototypeInteractionTarget carried = physicalLifecycle?.CarriedTarget;
             if (carried != null && observedCarriedTarget == null)
@@ -313,6 +416,70 @@ namespace BreakNotice.Presentation
             }
         }
 
+        private void UpdateRunnerAnimation()
+        {
+            if (runnerAgent == null ||
+                runnerAgent.AnimationCueRevision == observedRunnerCueRevision)
+            {
+                return;
+            }
+            observedRunnerCueRevision = runnerAgent.AnimationCueRevision;
+            string trigger = runnerAgent.AnimationCue switch
+            {
+                ShowcaseRunnerAnimationCue.Boxing => "AttackBoxing",
+                ShowcaseRunnerAnimationCue.Boxing2 => "AttackBoxing2",
+                ShowcaseRunnerAnimationCue.Kicking => "AttackKicking",
+                ShowcaseRunnerAnimationCue.Kicking2 => "AttackKicking2",
+                ShowcaseRunnerAnimationCue.EliteMutantPunch => "EliteMutantPunch",
+                ShowcaseRunnerAnimationCue.EliteMutantSwiping => "EliteMutantSwiping",
+                ShowcaseRunnerAnimationCue.EliteJumpAttack => "EliteJumpAttack",
+                ShowcaseRunnerAnimationCue.HitLight => "HitLight",
+                ShowcaseRunnerAnimationCue.HitBody => "HitBody",
+                ShowcaseRunnerAnimationCue.HitRib => "HitRib",
+                ShowcaseRunnerAnimationCue.HitStomach => "HitStomach",
+                ShowcaseRunnerAnimationCue.HitBigHead => "HitBigHead",
+                ShowcaseRunnerAnimationCue.KnockdownBack => "KnockdownBack",
+                ShowcaseRunnerAnimationCue.KnockdownFront => "KnockdownFront",
+                ShowcaseRunnerAnimationCue.GetupBack => "GetupBack",
+                ShowcaseRunnerAnimationCue.GetupFront => "GetupFront",
+                ShowcaseRunnerAnimationCue.Death1 => "Death1",
+                ShowcaseRunnerAnimationCue.Death2 => "Death2",
+                _ => string.Empty
+            };
+            if (!string.IsNullOrEmpty(trigger))
+            {
+                animator.SetTrigger(trigger);
+            }
+        }
+
+        private void TriggerPlayerCue(ShowcasePlayerAnimationCue cue)
+        {
+            string trigger = cue switch
+            {
+                ShowcasePlayerAnimationCue.MeleeJab => "MeleeJab",
+                ShowcasePlayerAnimationCue.MeleeCross => "MeleeCross",
+                ShowcasePlayerAnimationCue.MeleeHook => "MeleeHook",
+                ShowcasePlayerAnimationCue.CatchSmallCenter => "CatchLight",
+                ShowcasePlayerAnimationCue.CatchSmallLeft => "CatchSmallLeft",
+                ShowcasePlayerAnimationCue.CatchSmallRight => "CatchSmallRight",
+                ShowcasePlayerAnimationCue.CatchMedium => "CatchMedium",
+                ShowcasePlayerAnimationCue.ThrowSmall => "ThrowLight",
+                ShowcasePlayerAnimationCue.ThrowMedium => "ThrowMedium",
+                ShowcasePlayerAnimationCue.HitBody => "HitBody",
+                ShowcasePlayerAnimationCue.KnockdownBack => "KnockdownBack",
+                ShowcasePlayerAnimationCue.KnockdownFront => "KnockdownFront",
+                ShowcasePlayerAnimationCue.GetupBack => "GetupBack",
+                ShowcasePlayerAnimationCue.GetupFront => "GetupFront",
+                ShowcasePlayerAnimationCue.Death1 => "Death1",
+                ShowcasePlayerAnimationCue.Death2 => "Death2",
+                _ => string.Empty
+            };
+            if (!string.IsNullOrEmpty(trigger))
+            {
+                animator.SetTrigger(trigger);
+            }
+        }
+
         private void CaptureCurrentGameplayState()
         {
             observedCarriedTarget = physicalLifecycle?.CarriedTarget;
@@ -323,6 +490,8 @@ namespace BreakNotice.Presentation
 
             observedThrowOriginCount = physicalLifecycle?.ThrowOriginCount ?? 0;
             observedAllyReleaseCount = allyRelay?.ReleaseCount ?? 0;
+            observedPlayerCueRevision = playerCombat?.AnimationCueRevision ?? 0;
+            observedRunnerCueRevision = runnerAgent?.AnimationCueRevision ?? 0;
         }
     }
 }

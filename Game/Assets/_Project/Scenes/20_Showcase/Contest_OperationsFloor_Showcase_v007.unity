@@ -17963,6 +17963,7 @@ MonoBehaviour:
   resetController: {fileID: 824956724}
   teamContextController: {fileID: 1121842310}
   runnerPressureController: {fileID: 912828966}
+  playerHealth: {fileID: 1121842312}
   drawerTarget: {fileID: 498601002}
   drawerBody: {fileID: 498601003}
   parkingBayCenter: {fileID: 151847823}
@@ -18126,6 +18127,7 @@ MonoBehaviour:
   combatTagRange: 7
   playerMeleeRange: 2.1
   playerMeleeCooldown: 0.45
+  playerCombat: {fileID: 1121842313}
 --- !u!4 &912828967
 Transform:
   m_ObjectHideFlags: 0
@@ -19012,6 +19014,7 @@ GameObject:
   - component: {fileID: 944753668}
   - component: {fileID: 944753670}
   - component: {fileID: 944753671}
+  - component: {fileID: 944753672}
   m_Layer: 0
   m_Name: GAMEPLAY_ENY01_RUNNER_02
   m_TagString: Untagged
@@ -19133,6 +19136,9 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   physicalLifecycle: {fileID: 0}
   allyRelay: {fileID: 0}
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 944753671}
+  locomotion: {fileID: 0}
   walkReferenceSpeed: 2.8
   minimumPlaybackRate: 0.85
   maximumPlaybackRate: 1.15
@@ -19181,11 +19187,28 @@ MonoBehaviour:
   coordinator: {fileID: 912828966}
   body: {fileID: 944753670}
   playerTransform: {fileID: 1121842304}
+  health: {fileID: 944753672}
+  elite: 1
   approachSpeed: 2.7
   bodyCheckSpeed: 6.5
   activationRange: 11
   attackRange: 1.8
   attackCooldown: 1.25
+--- !u!114 &944753672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944753663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea88e613f902355429a854813b41b044, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseCombatHealth
+  team: 2
+  maximumHealth: 180
+  invulnerabilitySeconds: 0.12
 --- !u!1 &952531030
 GameObject:
   m_ObjectHideFlags: 0
@@ -22431,6 +22454,7 @@ GameObject:
   - component: {fileID: 1081471122}
   - component: {fileID: 1081471124}
   - component: {fileID: 1081471125}
+  - component: {fileID: 1081471126}
   m_Layer: 0
   m_Name: GAMEPLAY_ENY01_RUNNER_01
   m_TagString: Untagged
@@ -22552,6 +22576,9 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   physicalLifecycle: {fileID: 0}
   allyRelay: {fileID: 0}
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 1081471125}
+  locomotion: {fileID: 0}
   walkReferenceSpeed: 2.8
   minimumPlaybackRate: 0.85
   maximumPlaybackRate: 1.15
@@ -22600,11 +22627,28 @@ MonoBehaviour:
   coordinator: {fileID: 912828966}
   body: {fileID: 1081471124}
   playerTransform: {fileID: 1121842304}
+  health: {fileID: 1081471126}
+  elite: 0
   approachSpeed: 2.7
   bodyCheckSpeed: 6.5
   activationRange: 11
   attackRange: 1.8
   attackCooldown: 1.25
+--- !u!114 &1081471126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081471117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea88e613f902355429a854813b41b044, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseCombatHealth
+  team: 2
+  maximumHealth: 100
+  invulnerabilitySeconds: 0.2
 --- !u!1 &1082374561
 GameObject:
   m_ObjectHideFlags: 0
@@ -23161,6 +23205,9 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   physicalLifecycle: {fileID: 0}
   allyRelay: {fileID: 1119083204}
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 0}
+  locomotion: {fileID: 0}
   walkReferenceSpeed: 2.8
   minimumPlaybackRate: 0.85
   maximumPlaybackRate: 1.15
@@ -23497,6 +23544,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6927649074730488262, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1121842311}
+    - targetCorrespondingSourceObject: {fileID: 6927649074730488262, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1121842312}
+    - targetCorrespondingSourceObject: {fileID: 6927649074730488262, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1121842313}
   m_SourcePrefab: {fileID: 100100000, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
 --- !u!114 &1121842303 stripped
 MonoBehaviour:
@@ -23556,6 +23609,7 @@ MonoBehaviour:
   showcaseTeamContextController: {fileID: 1121842310}
   showcaseCargoStrapController: {fileID: 1121842311}
   showcaseRunnerPressureController: {fileID: 912828966}
+  showcasePlayerCombatController: {fileID: 1121842313}
   fullThrowChargeDuration: 1.2
 --- !u!114 &1121842307
 MonoBehaviour:
@@ -23607,6 +23661,9 @@ MonoBehaviour:
   logicalInput: {fileID: 1121842303}
   physicalLifecycle: {fileID: 1121842308}
   allyRelay: {fileID: 0}
+  playerCombat: {fileID: 1121842313}
+  runnerAgent: {fileID: 0}
+  locomotion: {fileID: 443728495}
   walkReferenceSpeed: 2.8
   minimumPlaybackRate: 0.85
   maximumPlaybackRate: 1.15
@@ -23664,6 +23721,42 @@ MonoBehaviour:
   redirectSpeed: 4.5
   maximumStrapLength: 7
   warningDistance: 6.2
+--- !u!114 &1121842312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121842305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea88e613f902355429a854813b41b044, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseCombatHealth
+  team: 0
+  maximumHealth: 100
+  invulnerabilitySeconds: 0.6
+--- !u!114 &1121842313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121842305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94e67ecf8353860449fcc31592577551, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcasePlayerCombatController
+  health: {fileID: 1121842312}
+  interactionOwner: {fileID: 1121842307}
+  logicalInput: {fileID: 1121842303}
+  locomotion: {fileID: 443728495}
+  physicalLifecycle: {fileID: 1121842308}
+  allyRelay: {fileID: 0}
+  runnerPressure: {fileID: 912828966}
+  resetController: {fileID: 824956724}
+  objectiveController: {fileID: 905197541}
 --- !u!1 &1127415624
 GameObject:
   m_ObjectHideFlags: 0
@@ -37978,7 +38071,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: befa90831ac691f4980f09b8b5d5656a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1811649991}
   m_SourcePrefab: {fileID: 100100000, guid: befa90831ac691f4980f09b8b5d5656a, type: 3}
 --- !u!4 &1811649988 stripped
 Transform:
@@ -37990,6 +38086,25 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: befa90831ac691f4980f09b8b5d5656a, type: 3}
   m_PrefabInstance: {fileID: 1811649987}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1811649990 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: befa90831ac691f4980f09b8b5d5656a, type: 3}
+  m_PrefabInstance: {fileID: 1811649987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1811649991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811649990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588a7f5452829064dadefe62abb42338, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 1081471125}
 --- !u!1 &1814100372
 GameObject:
   m_ObjectHideFlags: 0
@@ -42526,7 +42641,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2030125095}
   m_SourcePrefab: {fileID: 100100000, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
 --- !u!4 &2030125092 stripped
 Transform:
@@ -42538,6 +42656,25 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
   m_PrefabInstance: {fileID: 2030125091}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2030125094 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
+  m_PrefabInstance: {fileID: 2030125091}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2030125095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030125094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588a7f5452829064dadefe62abb42338, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
+  playerCombat: {fileID: 1121842313}
+  runnerAgent: {fileID: 0}
 --- !u!1001 &2032645717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42621,7 +42758,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 59ea457267e821d41bd2ead5597129c3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2032645721}
   m_SourcePrefab: {fileID: 100100000, guid: 59ea457267e821d41bd2ead5597129c3, type: 3}
 --- !u!4 &2032645718 stripped
 Transform:
@@ -42633,6 +42773,25 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 59ea457267e821d41bd2ead5597129c3, type: 3}
   m_PrefabInstance: {fileID: 2032645717}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2032645720 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 59ea457267e821d41bd2ead5597129c3, type: 3}
+  m_PrefabInstance: {fileID: 2032645717}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2032645721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032645720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588a7f5452829064dadefe62abb42338, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 944753671}
 --- !u!1 &2034521197
 GameObject:
   m_ObjectHideFlags: 0

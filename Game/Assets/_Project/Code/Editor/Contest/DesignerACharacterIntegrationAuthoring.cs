@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BreakNotice.Gameplay;
+using BreakNotice.Gameplay.Combat;
+using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
 using BreakNotice.Presentation;
@@ -108,6 +110,135 @@ namespace BreakNotice.Contest.Editor
                 OpenSceneMode.Single);
             ValidateScene(scene);
             Debug.Log("DESIGNER A RUNTIME INTEGRATION VALIDATION PASS.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Integrate Character Combat And Health")]
+        public static void IntegrateShowcaseCombatAndHealth()
+        {
+            CreateCombatControllers();
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ContestShowcaseSceneAuthoring.ShowcaseS7ScenePath,
+                OpenSceneMode.Single);
+
+            GameObject player = FindRootAny(
+                scene,
+                Characters[0].PrimaryRoot,
+                Characters[0].LegacyRoot);
+            ShowcaseRunnerPressureController pressure = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<ShowcaseRunnerPressureController>(true))
+                .Single();
+            AuthoredEncounterResetController reset = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<AuthoredEncounterResetController>(true))
+                .Single();
+            ShowcaseObjectiveController objective = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<ShowcaseObjectiveController>(true))
+                .Single();
+
+            ShowcaseCombatHealth playerHealth =
+                player.GetComponent<ShowcaseCombatHealth>() ??
+                player.AddComponent<ShowcaseCombatHealth>();
+            playerHealth.Configure(ShowcaseCombatTeam.Player, 100, 0.6f);
+            ShowcasePlayerCombatController playerCombat =
+                player.GetComponent<ShowcasePlayerCombatController>() ??
+                player.AddComponent<ShowcasePlayerCombatController>();
+            playerCombat.Configure(
+                playerHealth,
+                player.GetComponent<PrototypeInteractionStateOwner>(),
+                player.GetComponent<InputSystemLogicalInputAdapter>(),
+                player.GetComponent<ThirdPersonLocomotion>(),
+                player.GetComponent<PrototypePhysicalObjectLifecycle>(),
+                player.GetComponent<PrototypeAllyRelayController>(),
+                pressure,
+                reset,
+                objective);
+            player.GetComponent<PrototypeInteractionController>()
+                .ConfigureShowcaseCombat(playerCombat);
+            pressure.ConfigurePlayerCombat(playerCombat);
+            objective.ConfigurePlayerHealth(playerHealth);
+
+            ShowcaseCharacterAnimationDriver playerDriver =
+                player.GetComponent<ShowcaseCharacterAnimationDriver>();
+            playerDriver.ConfigureCombat(
+                playerCombat,
+                null,
+                player.GetComponent<ThirdPersonLocomotion>());
+            ConfigureAnimationReceiver(playerDriver.Animator, playerCombat, null);
+
+            for (int index = 0; index < 2; index++)
+            {
+                CharacterDefinition definition = Characters[index + 2];
+                GameObject runnerObject = FindRootAny(
+                    scene,
+                    definition.PrimaryRoot,
+                    definition.LegacyRoot);
+                ShowcaseRunnerAgent runner = runnerObject.GetComponent<ShowcaseRunnerAgent>();
+                ShowcaseCombatHealth runnerHealth =
+                    runnerObject.GetComponent<ShowcaseCombatHealth>() ??
+                    runnerObject.AddComponent<ShowcaseCombatHealth>();
+                bool elite = index == 1;
+                runnerHealth.Configure(
+                    ShowcaseCombatTeam.Enemy,
+                    elite ? 180 : 100,
+                    elite ? 0.12f : 0.2f);
+                runner.Configure(
+                    $"RUNNER {index + 1}",
+                    pressure,
+                    runnerObject.GetComponent<Rigidbody>(),
+                    player.transform,
+                    2.7f,
+                    6.5f,
+                    runnerHealth,
+                    elite);
+                ShowcaseCharacterAnimationDriver driver =
+                    runnerObject.GetComponent<ShowcaseCharacterAnimationDriver>();
+                driver.ConfigureCombat(null, runner, null);
+                ConfigureAnimationReceiver(driver.Animator, null, runner);
+                EditorUtility.SetDirty(runnerObject);
+                EditorUtility.SetDirty(runner);
+                EditorUtility.SetDirty(runnerHealth);
+                EditorUtility.SetDirty(driver);
+            }
+
+            ValidateScene(scene);
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(playerHealth);
+            EditorUtility.SetDirty(playerCombat);
+            EditorUtility.SetDirty(playerDriver);
+            EditorUtility.SetDirty(pressure);
+            EditorUtility.SetDirty(objective);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(
+                    scene,
+                    ContestShowcaseSceneAuthoring.ShowcaseS7ScenePath))
+            {
+                throw new InvalidOperationException(
+                    "Could not save the character combat Showcase Scene.");
+            }
+            AssetDatabase.SaveAssets();
+            Debug.Log(
+                "SHOWCASE CHARACTER COMBAT + HEALTH INTEGRATION PASS: CHR00 combo, " +
+                "animation-event carry/throw release, Player 100 HP, Normal 100 HP, " +
+                "Elite 180 HP and deterministic failure/reset contracts connected.");
+        }
+
+        private static void ConfigureAnimationReceiver(
+            Animator animator,
+            ShowcasePlayerCombatController playerCombat,
+            ShowcaseRunnerAgent runner)
+        {
+            if (animator == null)
+            {
+                throw new InvalidOperationException("Runtime Animator is required.");
+            }
+            ShowcaseAnimationEventReceiver receiver =
+                animator.GetComponent<ShowcaseAnimationEventReceiver>() ??
+                animator.gameObject.AddComponent<ShowcaseAnimationEventReceiver>();
+            receiver.Configure(playerCombat, runner);
+            EditorUtility.SetDirty(receiver);
         }
 
         [MenuItem("BREAK NOTICE/Contest/Repair Designer A Walk-Only Locomotion")]
@@ -582,11 +713,95 @@ namespace BreakNotice.Contest.Editor
         private static void CreateControllers()
         {
             EnsureFolder(ControllerRoot);
+            ConfigureCombatAnimationEvents();
             CreatePlayerController();
             CreateAllyController();
             CreateEnemyController(false);
             CreateEnemyController(true);
             AssetDatabase.SaveAssets();
+        }
+
+        private static void CreateCombatControllers()
+        {
+            EnsureFolder(ControllerRoot);
+            ConfigureCombatAnimationEvents();
+            CreatePlayerController();
+            CreateEnemyController(false);
+            CreateEnemyController(true);
+            AssetDatabase.SaveAssets();
+        }
+
+        private static void ConfigureCombatAnimationEvents()
+        {
+            foreach (string path in new[]
+            {
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx",
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx",
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx",
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx",
+                EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx",
+                EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx",
+                EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx",
+                Chr00AnimationRoot + "/Legacy/Hook Punch.fbx"
+            })
+            {
+                ConfigureAnimationEvent(path, "ShowcaseCombatHit", 0.46f);
+            }
+
+            foreach (string path in new[]
+            {
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx"
+            })
+            {
+                ConfigureAnimationEvent(path, "ShowcaseCarryContact", 0.52f);
+            }
+
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx",
+                "ShowcaseThrowRelease",
+                0.48f);
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx",
+                "ShowcaseThrowRelease",
+                0.52f);
+        }
+
+        private static void ConfigureAnimationEvent(
+            string assetPath,
+            string functionName,
+            float normalizedTime)
+        {
+            ModelImporter importer = AssetImporter.GetAtPath(assetPath) as ModelImporter;
+            if (importer == null)
+            {
+                throw new InvalidOperationException(
+                    $"Combat animation importer is missing: {assetPath}");
+            }
+
+            ModelImporterClipAnimation[] clips = importer.clipAnimations;
+            if (clips == null || clips.Length == 0)
+            {
+                clips = importer.defaultClipAnimations;
+            }
+            AnimationClip runtimeClip = LoadClip(assetPath);
+            float eventTime = runtimeClip.length * Mathf.Clamp01(normalizedTime);
+            for (int index = 0; index < clips.Length; index++)
+            {
+                clips[index].events = new[]
+                {
+                    new AnimationEvent
+                    {
+                        functionName = functionName,
+                        time = eventTime
+                    }
+                };
+            }
+
+            importer.clipAnimations = clips;
+            importer.SaveAndReimport();
         }
 
         private static void CreatePlayerController()
@@ -599,19 +814,57 @@ namespace BreakNotice.Contest.Editor
             AnimatorState walk = AddState(machine, "Walk", LoadClip(
                 Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"));
             ConfigureLocomotion(machine, idle, walk);
+            AnimatorState run = AddState(machine, "Run", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx"));
+            run.speedParameterActive = true;
+            run.speedParameter = "LocomotionPlayback";
+            AddBoolTransition(walk, run, "Sprint", true);
+            AddBoolTransition(run, walk, "Sprint", false);
+            AddOneShot(machine, idle, "RunStop", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Run_Stop.fbx"));
+            AddOneShot(machine, idle, "Jump", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Jump.fbx"));
+            AddOneShot(machine, idle, "IdleVariant", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Idle_Variant_Stretch.fbx"));
 
             AnimatorState aim = AddState(machine, "AimIdle", LoadClip(
                 Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx"));
             AddBoolAnyState(machine, aim, "Aim");
             AddBoolExit(aim, idle, "Aim");
             AddOneShot(machine, idle, "CatchLight", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx"));
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx"), true, 1.5f);
+            AddOneShot(machine, idle, "CatchSmallLeft", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx"), true, 2.2f);
+            AddOneShot(machine, idle, "CatchSmallRight", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx"), true, 2.2f);
             AddOneShot(machine, idle, "CatchMedium", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx"));
+                Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx"), true, 1.2f);
             AddOneShot(machine, idle, "ThrowLight", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx"));
+                Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx"), true, 2.25f);
             AddOneShot(machine, idle, "ThrowMedium", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx"));
+                Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx"), true, 2.2f);
+            // Temporary Humanoid-retarget fallbacks until the approved CHR00 Jab/Cross
+            // source pair arrives. Fist Fight A remains intentionally excluded.
+            AddOneShot(machine, idle, "MeleeJab", LoadClip(
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx"), true, 2.2f);
+            AddOneShot(machine, idle, "MeleeCross", LoadClip(
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx"), true, 2.35f);
+            AddOneShot(machine, idle, "MeleeHook", LoadClip(
+                Chr00AnimationRoot + "/Legacy/Hook Punch.fbx"), true, 1.9f);
+            AddOneShot(machine, idle, "HitBody", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx"));
+            AddOneShot(machine, idle, "KnockdownBack", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"));
+            AddOneShot(machine, idle, "KnockdownFront", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"));
+            AddOneShot(machine, idle, "GetupBack", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"));
+            AddOneShot(machine, idle, "GetupFront", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"));
+            AddOneShot(machine, idle, "Death1", LoadClip(
+                Chr00AnimationRoot + "/Legacy/Dying1.fbx"), false);
+            AddOneShot(machine, idle, "Death2", LoadClip(
+                Chr00AnimationRoot + "/Legacy/Dying2.fbx"), false);
             AddCatalogStates(machine, new[]
             {
                 Chr00AnimationRoot + "/Approved",
@@ -649,8 +902,16 @@ namespace BreakNotice.Contest.Editor
             CharacterDefinition definition = Characters[elite ? 3 : 2];
             AnimatorController controller = CreateController(definition.ControllerPath);
             AddCoreParameters(controller, false, false);
-            controller.AddParameter("HitLight", AnimatorControllerParameterType.Trigger);
-            controller.AddParameter("MeleePrimary", AnimatorControllerParameterType.Trigger);
+            foreach (string trigger in new[]
+            {
+                "HitLight", "HitBody", "HitRib", "HitStomach", "HitBigHead",
+                "AttackBoxing", "AttackBoxing2", "AttackKicking", "AttackKicking2",
+                "KnockdownBack", "KnockdownFront", "GetupBack", "GetupFront",
+                "Death1", "Death2"
+            })
+            {
+                controller.AddParameter(trigger, AnimatorControllerParameterType.Trigger);
+            }
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
             AnimatorState idle = AddState(machine, "Idle", LoadClip(
                 EnyAnimationRoot + "/Shared/idle.fbx"));
@@ -658,9 +919,37 @@ namespace BreakNotice.Contest.Editor
                 EnyAnimationRoot + "/Shared/walking.fbx"));
             ConfigureLocomotion(machine, idle, walk);
             AddOneShot(machine, idle, "HitLight", LoadClip(
+                EnyAnimationRoot + "/Shared/hit reaction.fbx"));
+            AddOneShot(machine, idle, "HitBody", LoadClip(
                 EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx"));
-            AddOneShot(machine, idle, "MeleePrimary", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx"));
+            AddOneShot(machine, idle, "HitRib", LoadClip(
+                EnyAnimationRoot + "/ApprovedHit/Hit_Rib.fbx"));
+            AddOneShot(machine, idle, "HitStomach", LoadClip(
+                EnyAnimationRoot + "/ApprovedHit/Hit_Stomach.fbx"));
+            AddOneShot(machine, idle, "HitBigHead", LoadClip(
+                EnyAnimationRoot + "/ApprovedHit/Hit_BigHeadHit.fbx"));
+            AddOneShot(machine, idle, "AttackBoxing", LoadClip(
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx"), true, 2.2f);
+            AddOneShot(machine, idle, "AttackBoxing2", LoadClip(
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx"), true, 2.35f);
+            AddOneShot(machine, idle, "AttackKicking", LoadClip(
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx"), true, 2.15f);
+            AddOneShot(machine, idle, "AttackKicking2", LoadClip(
+                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx"), true, 2.15f);
+            // Shared temporary fallbacks. They are replaced when the eight ENY01
+            // knockdown/getup/death sources arrive.
+            AddOneShot(machine, idle, "KnockdownBack", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"));
+            AddOneShot(machine, idle, "KnockdownFront", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"));
+            AddOneShot(machine, idle, "GetupBack", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"));
+            AddOneShot(machine, idle, "GetupFront", LoadClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"));
+            AddOneShot(machine, idle, "Death1", LoadClip(
+                Chr00AnimationRoot + "/Legacy/Dying1.fbx"), false);
+            AddOneShot(machine, idle, "Death2", LoadClip(
+                Chr00AnimationRoot + "/Legacy/Dying2.fbx"), false);
             AddCatalogStates(machine, new[]
             {
                 EnyAnimationRoot + "/Shared",
@@ -670,6 +959,19 @@ namespace BreakNotice.Contest.Editor
 
             if (elite)
             {
+                foreach (string trigger in new[]
+                {
+                    "EliteMutantPunch", "EliteMutantSwiping", "EliteJumpAttack"
+                })
+                {
+                    controller.AddParameter(trigger, AnimatorControllerParameterType.Trigger);
+                }
+                AddOneShot(machine, idle, "EliteMutantPunch", LoadClip(
+                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx"), true, 1.5f);
+                AddOneShot(machine, idle, "EliteMutantSwiping", LoadClip(
+                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx"), true, 2.1f);
+                AddOneShot(machine, idle, "EliteJumpAttack", LoadClip(
+                    EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx"), true, 2.4f);
                 string[] elitePaths = GetAnimationPaths(
                     EnyAnimationRoot + "/EliteOnly");
                 for (int index = 0; index < elitePaths.Length; index++)
@@ -692,9 +994,26 @@ namespace BreakNotice.Contest.Editor
 
         private static AnimatorController CreateController(string path)
         {
-            if (AssetDatabase.LoadMainAssetAtPath(path) != null)
+            AnimatorController existing =
+                AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+            if (existing != null)
             {
-                AssetDatabase.DeleteAsset(path);
+                existing.parameters = Array.Empty<AnimatorControllerParameter>();
+                AnimatorStateMachine machine = existing.layers[0].stateMachine;
+                foreach (ChildAnimatorState child in machine.states.ToArray())
+                {
+                    machine.RemoveState(child.state);
+                }
+                foreach (ChildAnimatorStateMachine child in machine.stateMachines.ToArray())
+                {
+                    machine.RemoveStateMachine(child.stateMachine);
+                }
+                foreach (AnimatorStateTransition transition in
+                         machine.anyStateTransitions.ToArray())
+                {
+                    machine.RemoveAnyStateTransition(transition);
+                }
+                return existing;
             }
 
             AnimatorController controller =
@@ -719,6 +1038,21 @@ namespace BreakNotice.Contest.Editor
                 controller.AddParameter("CatchMedium", AnimatorControllerParameterType.Trigger);
                 controller.AddParameter("ThrowLight", AnimatorControllerParameterType.Trigger);
                 controller.AddParameter("ThrowMedium", AnimatorControllerParameterType.Trigger);
+                foreach (string trigger in new[]
+                {
+                    "Sprint", "Jump", "RunStop", "IdleVariant",
+                    "CatchSmallLeft", "CatchSmallRight",
+                    "MeleeJab", "MeleeCross", "MeleeHook", "HitBody",
+                    "KnockdownBack", "KnockdownFront", "GetupBack", "GetupFront",
+                    "Death1", "Death2"
+                })
+                {
+                    controller.AddParameter(
+                        trigger,
+                        trigger == "Sprint"
+                            ? AnimatorControllerParameterType.Bool
+                            : AnimatorControllerParameterType.Trigger);
+                }
             }
 
             if (ally)
@@ -824,6 +1158,21 @@ namespace BreakNotice.Contest.Editor
             transition.AddCondition(mode, threshold, "Speed");
         }
 
+        private static void AddBoolTransition(
+            AnimatorState source,
+            AnimatorState destination,
+            string parameter,
+            bool expected)
+        {
+            AnimatorStateTransition transition = source.AddTransition(destination);
+            transition.hasExitTime = false;
+            transition.duration = 0.08f;
+            transition.AddCondition(
+                expected ? AnimatorConditionMode.If : AnimatorConditionMode.IfNot,
+                0f,
+                parameter);
+        }
+
         private static void EnsureLocomotionParameter(AnimatorController controller)
         {
             if (!controller.parameters.Any(parameter =>
@@ -859,22 +1208,29 @@ namespace BreakNotice.Contest.Editor
             transition.AddCondition(AnimatorConditionMode.IfNot, 0f, parameter);
         }
 
-        private static void AddOneShot(
+        private static AnimatorState AddOneShot(
             AnimatorStateMachine machine,
             AnimatorState idle,
             string trigger,
-            AnimationClip clip)
+            AnimationClip clip,
+            bool returnToIdle = true,
+            float playbackSpeed = 1f)
         {
             AnimatorState state = AddState(machine, trigger + "Action", clip);
+            state.speed = Mathf.Max(0.05f, playbackSpeed);
             AnimatorStateTransition enter = machine.AddAnyStateTransition(state);
             enter.hasExitTime = false;
             enter.duration = 0.08f;
             enter.canTransitionToSelf = false;
             enter.AddCondition(AnimatorConditionMode.If, 0f, trigger);
-            AnimatorStateTransition exit = state.AddTransition(idle);
-            exit.hasExitTime = true;
-            exit.exitTime = 0.9f;
-            exit.duration = 0.1f;
+            if (returnToIdle)
+            {
+                AnimatorStateTransition exit = state.AddTransition(idle);
+                exit.hasExitTime = true;
+                exit.exitTime = 0.9f;
+                exit.duration = 0.1f;
+            }
+            return state;
         }
 
         private static void AddCatalogStates(

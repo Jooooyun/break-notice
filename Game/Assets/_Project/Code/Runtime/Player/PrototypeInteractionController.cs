@@ -1,4 +1,5 @@
 using System;
+using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay.Input;
 using UnityEngine;
 
@@ -63,6 +64,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         [SerializeField]
         private ShowcaseRunnerPressureController showcaseRunnerPressureController;
+
+        [SerializeField]
+        private ShowcasePlayerCombatController showcasePlayerCombatController;
 
         [SerializeField, Min(0.1f)]
         private float fullThrowChargeDuration = 1.2f;
@@ -166,6 +170,8 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 showcaseTeamContextController = GetComponent<ShowcaseTeamContextController>();
             }
+
+            showcasePlayerCombatController ??= GetComponent<ShowcasePlayerCombatController>();
         }
 
         private void LateUpdate()
@@ -208,6 +214,18 @@ namespace BreakNotice.Gameplay.Interaction
             pointerWasLocked = pointerCaptured;
             pointerActionAvailable = pointerCaptured && !pointerJustCaptured;
 #endif
+
+            if (showcasePlayerCombatController != null &&
+                showcasePlayerCombatController.BlocksInteraction)
+            {
+                if (pointerActionAvailable && logicalInput.Snapshot.Throw &&
+                    showcasePlayerCombatController.CanBufferMelee)
+                {
+                    showcaseRunnerPressureController?.TryPlayerShove();
+                }
+                ClearThrowCharge();
+                return;
+            }
 
             if (!pointerActionAvailable && HasThrowCharge)
             {
@@ -348,6 +366,11 @@ namespace BreakNotice.Gameplay.Interaction
             showcaseRunnerPressureController = runnerPressureController;
         }
 
+        public void ConfigureShowcaseCombat(ShowcasePlayerCombatController playerCombat)
+        {
+            showcasePlayerCombatController = playerCombat;
+        }
+
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
         {
             // The centre reticle ray remains the first-priority selector. When it
@@ -430,11 +453,16 @@ namespace BreakNotice.Gameplay.Interaction
                 Vector3 direction = viewTransform != null
                     ? viewTransform.forward
                     : transform.forward;
-                bool physicalThrowSucceeded = physicalObjectLifecycle != null &&
-                    physicalObjectLifecycle.TryThrowCommittedRelayTarget(
+                bool physicalThrowSucceeded = showcasePlayerCombatController != null
+                    ? showcasePlayerCombatController.TryBeginQueuedRelayThrow(
                         decision.Target,
                         direction,
-                        IsQueuedThrowCharge ? ThrowCharge01 : 0f);
+                        IsQueuedThrowCharge ? ThrowCharge01 : 0f)
+                    : physicalObjectLifecycle != null &&
+                      physicalObjectLifecycle.TryThrowCommittedRelayTarget(
+                          decision.Target,
+                          direction,
+                          IsQueuedThrowCharge ? ThrowCharge01 : 0f);
                 if (!physicalThrowSucceeded)
                 {
                     interactionOwner.CompleteThrow(decision.Target);
@@ -443,7 +471,7 @@ namespace BreakNotice.Gameplay.Interaction
                         PrototypeInteractionRejection.OwnershipConflict,
                         CurrentTarget);
                 }
-                else
+                else if (showcasePlayerCombatController == null)
                 {
                     allyRelayController?.CompleteCatch(decision.Target, true);
                 }
@@ -467,7 +495,12 @@ namespace BreakNotice.Gameplay.Interaction
                       decision.Outcome == PrototypeInteractionOutcome.Catch) &&
                      physicalObjectLifecycle != null)
             {
-                if (!physicalObjectLifecycle.BeginCarry(decision.Target))
+                bool acquisitionStarted = showcasePlayerCombatController != null
+                    ? showcasePlayerCombatController.TryBeginAcquisition(
+                        decision.Target,
+                        decision.Outcome)
+                    : physicalObjectLifecycle.BeginCarry(decision.Target);
+                if (!acquisitionStarted)
                 {
                     interactionOwner.CancelCarry(decision.Target);
                     if (decision.Outcome == PrototypeInteractionOutcome.Catch)
@@ -479,7 +512,8 @@ namespace BreakNotice.Gameplay.Interaction
                         PrototypeInteractionRejection.OwnershipConflict,
                         CurrentTarget);
                 }
-                else if (decision.Outcome == PrototypeInteractionOutcome.Catch)
+                else if (showcasePlayerCombatController == null &&
+                         decision.Outcome == PrototypeInteractionOutcome.Catch)
                 {
                     allyRelayController?.CompleteCatch(decision.Target, false);
                 }
@@ -528,7 +562,12 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 direction = viewTransform != null
                 ? viewTransform.forward
                 : transform.forward;
-            bool released = physicalObjectLifecycle.TryThrow(direction, charge01);
+            bool released = showcasePlayerCombatController != null
+                ? showcasePlayerCombatController.TryBeginDirectThrow(
+                    physicalObjectLifecycle.CarriedTarget,
+                    direction,
+                    charge01)
+                : physicalObjectLifecycle.TryThrow(direction, charge01);
             if (released)
             {
                 ClearThrowCharge();

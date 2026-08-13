@@ -26,6 +26,7 @@ namespace BreakNotice.Gameplay.Input
         private InputAction regroupAllyAction;
         private InputAction strapReleaseAction;
         private InputAction resetEncounterAction;
+        private InputAction restartAction;
 
         public LogicalInputSnapshot Snapshot { get; private set; }
 
@@ -88,6 +89,7 @@ namespace BreakNotice.Gameplay.Input
             regroupAllyAction = actionMap.FindAction(nameof(PrototypeLogicalAction.RegroupAlly), true);
             strapReleaseAction = actionMap.FindAction(nameof(PrototypeLogicalAction.StrapRelease), true);
             resetEncounterAction = actionMap.FindAction(nameof(PrototypeLogicalAction.ResetEncounter), true);
+            restartAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Restart), true);
         }
 
         private void CaptureSnapshot()
@@ -98,6 +100,11 @@ namespace BreakNotice.Gameplay.Input
                 return;
             }
 
+            bool debugResetRequested = false;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            debugResetRequested = resetEncounterAction.WasPressedThisFrame();
+#endif
+
             Snapshot = new LogicalInputSnapshot(
                 moveAction.ReadValue<Vector2>(),
                 lookAction.ReadValue<Vector2>(),
@@ -106,13 +113,14 @@ namespace BreakNotice.Gameplay.Input
                 throwAction.WasPressedThisFrame(),
                 callAllyAction.WasPressedThisFrame(),
                 strapReleaseAction.WasPressedThisFrame(),
-                resetEncounterAction.WasPressedThisFrame(),
+                debugResetRequested,
                 throwAction.IsPressed(),
                 throwAction.WasReleasedThisFrame(),
                 allyTaskAction.WasPressedThisFrame(),
                 regroupAllyAction.WasPressedThisFrame(),
                 sprintAction.IsPressed(),
-                jumpAction.WasPressedThisFrame());
+                jumpAction.WasPressedThisFrame(),
+                restartAction.WasPressedThisFrame());
         }
 
         public void SetWebPointerState(
