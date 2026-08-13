@@ -89,7 +89,9 @@ namespace BreakNotice.Presentation
             if (relay != null && relay.IsReadyForCall)
             {
                 return $"ALLY READY: {relay.PreparedTarget?.DisplayName ?? "OBJECT"} " +
-                       "| [Q] SUPPLY";
+                       (interactionController.ShowcaseTeamContextController != null
+                           ? "| AWAITING TEAM COMMAND"
+                           : "| [Q] SUPPLY");
             }
 
             if (relay != null && relay.IsSupplyLaneBlocked)
@@ -378,6 +380,11 @@ namespace BreakNotice.Presentation
 
         private string BuildAllyMovementPrompt()
         {
+            if (interactionController?.ShowcaseTeamContextController != null)
+            {
+                return "[G] REGROUP";
+            }
+
             ShowcaseMobileAllyController mobile =
                 interactionController?.ShowcaseMobileAllyController;
             return mobile != null && mobile.IsFollowCommanded

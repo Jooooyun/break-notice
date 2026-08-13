@@ -10,13 +10,21 @@ namespace BreakNotice.Presentation
         [SerializeField]
         private ShowcaseMobileAllyController mobileAlly;
 
+        [SerializeField]
+        private ShowcaseTeamContextController teamContext;
+
         private GUIStyle statusStyle;
 
         public ShowcaseMobileAllyController MobileAlly => mobileAlly;
 
-        public void Configure(ShowcaseMobileAllyController controller)
+        public ShowcaseTeamContextController TeamContext => teamContext;
+
+        public void Configure(
+            ShowcaseMobileAllyController controller,
+            ShowcaseTeamContextController teamController = null)
         {
             mobileAlly = controller;
+            teamContext = teamController;
         }
 
         public string BuildStatusText()
@@ -35,16 +43,26 @@ namespace BreakNotice.Presentation
             return mobileAlly.State switch
             {
                 ShowcaseMobileAllyState.HoldingPosition =>
-                    "ALLY HOLDING POSITION | [Q] FOLLOW | [G] REGROUP",
+                    teamContext != null
+                        ? "ALLY HOLDING POSITION | [G] REGROUP"
+                        : "ALLY HOLDING POSITION | [Q] FOLLOW | [G] REGROUP",
                 ShowcaseMobileAllyState.Blocked => "ALLY BLOCKED | [G] REGROUP",
-                ShowcaseMobileAllyState.Regrouping => "ALLY REGROUPING | [Q] HOLD",
+                ShowcaseMobileAllyState.Regrouping => teamContext != null
+                    ? "ALLY REGROUPING"
+                    : "ALLY REGROUPING | [Q] HOLD",
                 ShowcaseMobileAllyState.Fetching => "ALLY FETCHING OBJECT",
                 ShowcaseMobileAllyState.ReturningWithSupply => "ALLY RETURNING WITH SUPPLY",
                 ShowcaseMobileAllyState.FastCatchingUp =>
-                    "ALLY FAST CATCH-UP | [Q] HOLD | [G] REGROUP",
+                    teamContext != null
+                        ? "ALLY FAST CATCH-UP | [G] REGROUP"
+                        : "ALLY FAST CATCH-UP | [Q] HOLD | [G] REGROUP",
                 ShowcaseMobileAllyState.CatchingUp =>
-                    "ALLY CATCH-UP | [Q] HOLD | [G] REGROUP",
-                _ => "ALLY FOLLOWING | [Q] HOLD | [G] REGROUP"
+                    teamContext != null
+                        ? "ALLY CATCH-UP | [G] REGROUP"
+                        : "ALLY CATCH-UP | [Q] HOLD | [G] REGROUP",
+                _ => teamContext != null
+                    ? "ALLY FOLLOWING | [G] REGROUP"
+                    : "ALLY FOLLOWING | [Q] HOLD | [G] REGROUP"
             };
         }
 

@@ -142,6 +142,9 @@ namespace BreakNotice.LocomotionCamera.Tests
             RelayFixture fixture = new RelayFixture();
             try
             {
+                ShowcaseTeamContextController teamContext =
+                    fixture.Player.AddComponent<ShowcaseTeamContextController>();
+                teamContext.Configure(fixture.Owner, fixture.Relay, null, null);
                 Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderOne, out _), Is.True);
                 yield return fixture.WaitForRelease();
                 yield return new WaitForFixedUpdate();
@@ -172,6 +175,9 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(fixture.BinderOne));
                 Assert.That(fixture.Lifecycle.CarriedTarget, Is.SameAs(fixture.BinderOne));
                 Assert.That(fixture.Relay.CatchCount, Is.EqualTo(1));
+                Assert.That(teamContext.HasPass, Is.True);
+                Assert.That(teamContext.BadgeCount, Is.EqualTo(1));
+                Assert.That(teamContext.IsTeamReady, Is.False);
             }
             finally
             {

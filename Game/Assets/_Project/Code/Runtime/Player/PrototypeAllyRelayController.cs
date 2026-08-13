@@ -236,6 +236,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public int CatchCount { get; private set; }
 
+        public event Action<PrototypeInteractionTarget> CatchCompleted;
+
         public int QueuedThrowCount { get; private set; }
 
         public int PhysicalResolutionCount { get; private set; }
@@ -683,6 +685,7 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             ClearActiveRelayState();
+            CatchCompleted?.Invoke(target);
             return true;
         }
 

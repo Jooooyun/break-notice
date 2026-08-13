@@ -55,6 +55,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private ShowcaseMobileAllyController showcaseMobileAllyController;
 
+        [SerializeField]
+        private ShowcaseTeamContextController showcaseTeamContextController;
+
         [SerializeField, Min(0.1f)]
         private float fullThrowChargeDuration = 1.2f;
 
@@ -112,6 +115,9 @@ namespace BreakNotice.Gameplay.Interaction
         public ShowcaseMobileAllyController ShowcaseMobileAllyController =>
             showcaseMobileAllyController;
 
+        public ShowcaseTeamContextController ShowcaseTeamContextController =>
+            showcaseTeamContextController;
+
         public Transform ViewTransform => viewTransform;
 
         public bool HasThrowCharge => throwChargeMode != ThrowChargeMode.None;
@@ -142,6 +148,11 @@ namespace BreakNotice.Gameplay.Interaction
             if (interactionOwner == null)
             {
                 interactionOwner = GetComponent<PrototypeInteractionStateOwner>();
+            }
+
+            if (showcaseTeamContextController == null)
+            {
+                showcaseTeamContextController = GetComponent<ShowcaseTeamContextController>();
             }
         }
 
@@ -203,21 +214,28 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (logicalInput.Snapshot.CallAlly)
             {
-                bool relayOwnsContext = allyRelayController != null &&
-                    (allyRelayController.PreparedTarget != null ||
-                     allyRelayController.RelayPhase != PrototypeRelayPhase.None);
-                if (relayOwnsContext)
+                if (showcaseTeamContextController != null)
                 {
-                    ProcessCallAlly();
-                }
-                else if (showcaseMobileAllyController != null &&
-                         showcaseMobileAllyController.OwnsRegroupFallback)
-                {
-                    ProcessToggleAllyFollow();
+                    ProcessTeamContextQ();
                 }
                 else
                 {
-                    ProcessCallAlly();
+                    bool relayOwnsContext = allyRelayController != null &&
+                        (allyRelayController.PreparedTarget != null ||
+                         allyRelayController.RelayPhase != PrototypeRelayPhase.None);
+                    if (relayOwnsContext)
+                    {
+                        ProcessCallAlly();
+                    }
+                    else if (showcaseMobileAllyController != null &&
+                             showcaseMobileAllyController.OwnsRegroupFallback)
+                    {
+                        ProcessToggleAllyFollow();
+                    }
+                    else
+                    {
+                        ProcessCallAlly();
+                    }
                 }
             }
 
@@ -291,6 +309,11 @@ namespace BreakNotice.Gameplay.Interaction
             showcaseMobileAllyController = mobileController;
             allyRelayController = relayController;
             targets = authoredTargets ?? Array.Empty<PrototypeInteractionTarget>();
+        }
+
+        public void ConfigureShowcaseS4(ShowcaseTeamContextController teamContextController)
+        {
+            showcaseTeamContextController = teamContextController;
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
@@ -545,6 +568,27 @@ namespace BreakNotice.Gameplay.Interaction
                 ? PrototypeAllyRelayRejection.None
                 : rejection;
             LastAllyCallTarget = candidate;
+            return accepted;
+        }
+
+        public bool ProcessTeamContextQ()
+        {
+            if (showcaseTeamContextController == null)
+            {
+                return false;
+            }
+
+            ShowcaseQContext context =
+                showcaseTeamContextController.ResolveCurrentQContext();
+            bool accepted = context switch
+            {
+                ShowcaseQContext.SendSupply => ProcessCallAlly(),
+                ShowcaseQContext.ToggleFollow =>
+                    showcaseTeamContextController.IsContextAvailable(context) &&
+                    ProcessToggleAllyFollow(),
+                _ => false
+            };
+            showcaseTeamContextController.RecordQAttempt(context, accepted);
             return accepted;
         }
 

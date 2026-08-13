@@ -32,6 +32,9 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS3ScenePath =
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v003.unity";
 
+        public const string ShowcaseS4ScenePath =
+            ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v004.unity";
+
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
 
         public const string ShowcaseV2RootName =
@@ -40,6 +43,8 @@ namespace BreakNotice.Contest.Editor
         public const string MobileAllyRootName = "SHOWCASE_S2_MOBILE_ALLY";
 
         public const string ShowcaseS3RootName = "SHOWCASE_S3_FETCH_SUPPLY";
+
+        public const string ShowcaseS4RootName = "SHOWCASE_S4_TEAM_CONTEXT";
 
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
@@ -196,6 +201,43 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "S3 Showcase prepared: explicit F fetch, mobile Binder/Chair return, " +
                 "Q supply, ten physical objects and authored Reset restoration.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Prepare S4 Team Context")]
+        public static void PrepareS4ShowcaseScene()
+        {
+            RequireSceneAsset(ShowcaseS3ScenePath);
+            EnsureShowcaseFolder();
+
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ShowcaseS4ScenePath) == null)
+            {
+                if (!AssetDatabase.CopyAsset(ShowcaseS3ScenePath, ShowcaseS4ScenePath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not copy the accepted S3 Scene to {ShowcaseS4ScenePath}.");
+                }
+
+                AssetDatabase.ImportAsset(
+                    ShowcaseS4ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseS4ScenePath,
+                OpenSceneMode.Single);
+            ApplyS4TeamContext(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseS4ScenePath))
+            {
+                throw new InvalidOperationException(
+                    $"Could not save {ShowcaseS4ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "S4 Showcase prepared: singular Q arbitration, live PASS badge, " +
+                "TEAM READY ownership and bounded S5-S6 readiness hooks.");
         }
 
         [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
@@ -548,6 +590,77 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(mobile);
             EditorUtility.SetDirty(reset);
             ValidateS3GameplayTargets(GetInteractionTargets(scene));
+        }
+
+        public static void ApplyS4TeamContext(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            GameObject previousRoot = FindRoot(scene, ShowcaseS4RootName);
+            if (previousRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+            CreateRoot(scene, ShowcaseS4RootName);
+
+            GameObject player = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR00_PLAYER",
+                "Player");
+            GameObject ally = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR01_MOBILE_ALLY",
+                "GAMEPLAY_CHR01_ALLY",
+                "AllyProxy");
+            GameObject browserInput = RequireRoot(scene, "ContestBrowserInput");
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypeInteractionController interaction =
+                player.GetComponent<PrototypeInteractionController>();
+            PrototypeAllyRelayController relay =
+                ally.GetComponent<PrototypeAllyRelayController>();
+            ShowcaseMobileAllyController mobile =
+                ally.GetComponent<ShowcaseMobileAllyController>();
+            AuthoredEncounterResetController reset =
+                RequireSingleSceneComponent<AuthoredEncounterResetController>(scene);
+            if (owner == null || interaction == null || relay == null || mobile == null)
+            {
+                throw new InvalidOperationException(
+                    "S4 requires the accepted S3 player, relay and mobile Ally composition.");
+            }
+
+            ShowcaseTeamContextController teamContext =
+                player.GetComponent<ShowcaseTeamContextController>();
+            if (teamContext == null)
+            {
+                teamContext = player.AddComponent<ShowcaseTeamContextController>();
+            }
+            teamContext.Configure(owner, relay, mobile, reset);
+            interaction.ConfigureShowcaseS4(teamContext);
+
+            ShowcaseTeamContextPresenter teamPresenter =
+                browserInput.GetComponent<ShowcaseTeamContextPresenter>();
+            if (teamPresenter == null)
+            {
+                teamPresenter = browserInput.AddComponent<ShowcaseTeamContextPresenter>();
+            }
+            teamPresenter.Configure(teamContext);
+            ShowcaseMobileAllyPresenter mobilePresenter =
+                browserInput.GetComponent<ShowcaseMobileAllyPresenter>();
+            mobilePresenter?.Configure(mobile, teamContext);
+
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(browserInput);
+            EditorUtility.SetDirty(interaction);
+            EditorUtility.SetDirty(teamContext);
+            EditorUtility.SetDirty(teamPresenter);
+            if (mobilePresenter != null)
+            {
+                EditorUtility.SetDirty(mobilePresenter);
+            }
         }
 
         private static Transform[] BuildFollowAnchorNetwork(Transform parent)
