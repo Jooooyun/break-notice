@@ -1,0 +1,47 @@
+POLY HAVEN ASSET NOTICE
+
+License: Creative Commons Zero (CC0 1.0 Universal)
+Official license: https://polyhaven.com/license
+API source credit: Powered by Poly Haven — https://polyhaven.com/
+Downloaded: 2026-08-13
+Resolution selected: 1K
+
+Included assets:
+
+1. Metal Office Desk
+   Asset page: https://polyhaven.com/a/metal_office_desk
+   Files:
+   - metal_office_desk_1k.fbx
+     API MD5: 0ed604020aaacc89c65eddb27d3354bc
+     SHA-256: 858D23FE96547B3C5D0D5D29DB858598554B3D06E5AF1E45F2F9C3E6BE19CD91
+   - metal_office_desk_diff_1k.jpg
+     API MD5: 6a27263c95811fa902ddea6476d610e9
+     SHA-256: 1F02E3E77E8F82A3600664C991BD45C1C187452D61E9EDE4336C6F90F7FA3139
+   - metal_office_desk_nor_gl_1k.jpg
+     SHA-256: F57EB004937E46392151B803E0CB1D88983958D01AD11D93DF78A82CFCC6C407
+
+2. Office Notepads
+   Asset page: https://polyhaven.com/a/office_notepads
+   Files:
+   - office_notepads_1k.fbx
+     API MD5: a0bcf3644e111813a0013db8fb0bb930
+     SHA-256: F59605849D17E497F68AE724678C7698A9B048D3C7CEB88B9E7C6C4DFE7DE3F0
+   - office_notepads_diff_1k.jpg
+     API MD5: 8e0b41ecab0c337761582b50499b465c
+     SHA-256: 6CCE5F76748A73954A9158904B6D26319F028F796166C140B3CBF0BBB7C62727
+   - office_notepads_nor_gl_1k.jpg
+     SHA-256: D6BE173E3C16755E3C163724B205114F0DC93FF2D6A746B819815F4100432018
+
+3. Smooth Concrete Floor
+   Asset page: https://polyhaven.com/a/smooth_concrete_floor
+   Files:
+   - smooth_concrete_floor_diff_1k.jpg
+     API MD5: 321efe0af2d0809ab958b78a008fa116
+     SHA-256: 079587AE48FB3E2BFB0D0F9209EB75DC26EE30E213403D96377A30F6F6955092
+   - smooth_concrete_floor_nor_gl_1k.jpg
+     API MD5: 92b8f007ff471cecb2ef581615989a9d
+     SHA-256: 588BDBCC16B8DFA2869A2C154C076A419ABB8ED83284691C2DFFDDDFCF20CC0C
+
+Poly Haven publishes these assets under CC0. Attribution is not required by
+the asset license. The source credit above is retained because the official
+Poly Haven API was used to obtain the selected files.

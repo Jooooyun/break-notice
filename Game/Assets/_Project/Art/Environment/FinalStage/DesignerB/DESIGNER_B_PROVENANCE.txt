@@ -1,0 +1,36 @@
+BREAK NOTICE DESIGNER B INTERNAL ASSET PROVENANCE
+
+Human Owner directed project use: 2026-08-13
+Source Git commit: 7536f551fca146e225794219bc219d7f07dd5314
+Source classification: project-internal Designer B delivery
+Runtime scope: final map visual mesh integration only
+Gameplay authority: none; existing gameplay colliders and identities remain authoritative
+
+Source and export records:
+
+- PRP_Copier/Source/Copier.blend
+  Source SHA-256: 4F6F18259F78CA4D53021AA46143784ED8B99B87C960639533F30A3F3A0889E7
+  Export: DesignerB_Copier.fbx
+  Export SHA-256: AA219266803DA515646BF492C6556E4FEFD4E4EBB113004C31F181AA3C75B9D8
+
+- PRP_DrawerCabinet/Source/DrawerCabinet.blend
+  Source SHA-256: CA2CB78BE565F9E92AB8F363BB872FA29FD4D8FDE871A85B390618ED1D93E08C
+  Export: DesignerB_DrawerCabinet.fbx
+  Export SHA-256: F7DE801FFB2CC9D81F1408E85BF659DA848D8E04ECFEF5BBBA213BE96FDF69CB
+
+- PRP_FileBinder/Source/Untitled.blend
+  Source SHA-256: D3F4FAC0FE1AC11E342B6F719C675B6F36E91E9558B5DBA8DBB89CE8557203F7
+  Export: DesignerB_FileBinder.fbx
+  Export SHA-256: A0BC3998E71C7AF55947914E8A21D2AA4453421CB72F7E6E872F8847EC48C2DC
+
+- PRP_OfficeChair/Source/officeChair.blend
+  Source SHA-256: 87B15EF2CCB75A835BC635BC001E197B1ADB1017F8034473230EEE6D24D742E4
+  Export: DesignerB_OfficeChair.fbx
+  Export SHA-256: D468D3DEC897D90C9EBDE8E075DC61D951BA5619C7C72213FFAB39A67BB5910B
+
+Conversion tool: official Blender 4.5.12 LTS portable
+Conversion method: mesh-only FBX export; -Z forward, Y up, apply unit scale
+
+The source Binder and Office Chair dimensions were not accepted as runtime
+scale authority. The final Unity Scene fits every mesh to the existing gameplay
+collider bounds. No imported mesh supplies gameplay collision.
