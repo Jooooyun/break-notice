@@ -110,6 +110,78 @@ namespace BreakNotice.Contest.Editor
             Debug.Log("DESIGNER A RUNTIME INTEGRATION VALIDATION PASS.");
         }
 
+        [MenuItem("BREAK NOTICE/Contest/Repair Designer A Walk-Only Locomotion")]
+        public static void RepairRuntimeFacingAndLocomotion()
+        {
+            foreach (CharacterDefinition definition in Characters)
+            {
+                AnimatorController controller =
+                    AssetDatabase.LoadAssetAtPath<AnimatorController>(
+                        definition.ControllerPath);
+                if (controller == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Designer A controller is missing: {definition.ControllerPath}");
+                }
+
+                EnsureLocomotionParameter(controller);
+                AnimatorStateMachine machine = controller.layers[0].stateMachine;
+                RemovePrimaryRunState(machine);
+                AnimatorState[] states = machine.states
+                    .Select(child => child.state)
+                    .ToArray();
+                ConfigureLocomotion(
+                    machine,
+                    states.Single(state => state.name == "Idle"),
+                    states.Single(state => state.name == "Walk"));
+                EditorUtility.SetDirty(controller);
+            }
+
+            AssetDatabase.SaveAssets();
+            Scene scene = EditorSceneManager.OpenScene(
+                ContestShowcaseSceneAuthoring.ShowcaseS3ScenePath,
+                OpenSceneMode.Single);
+            foreach (CharacterDefinition definition in Characters)
+            {
+                GameObject actor = FindRootAny(
+                    scene,
+                    definition.PrimaryRoot,
+                    definition.LegacyRoot);
+                Transform visual = actor.transform.Find(RuntimeVisualName);
+                if (visual == null || visual.childCount != 1)
+                {
+                    throw new InvalidOperationException(
+                        $"Designer A runtime visual hierarchy is invalid: {definition.Key}");
+                }
+
+                Transform model = visual.GetChild(0);
+                model.localRotation = Quaternion.identity;
+                NormalizeVisual(actor.transform, model.gameObject);
+                Animator animator = model.GetComponent<Animator>() ??
+                    model.GetComponentInChildren<Animator>(true);
+                if (animator == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Designer A runtime animator is missing: {definition.Key}");
+                }
+                animator.applyRootMotion = false;
+                animator.stabilizeFeet = false;
+                EditorUtility.SetDirty(model);
+                EditorUtility.SetDirty(animator);
+            }
+
+            ValidateScene(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(
+                scene,
+                ContestShowcaseSceneAuthoring.ShowcaseS3ScenePath);
+            AssetDatabase.SaveAssets();
+            Debug.Log(
+                "DESIGNER A WALK-ONLY LOCOMOTION REPAIR PASS: +Z forward, " +
+                "Idle-Walk runtime path, physical support-plane grounding and bounded natural " +
+                "walk cadence applied to all four roles; Run and Foot IK are inactive.");
+        }
+
         private static void ConfigureImports()
         {
             EnsureFolder(ControllerRoot);
@@ -526,9 +598,7 @@ namespace BreakNotice.Contest.Editor
                 Chr00AnimationRoot + "/Approved/CHR00_Idle.fbx"));
             AnimatorState walk = AddState(machine, "Walk", LoadClip(
                 Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"));
-            AnimatorState run = AddState(machine, "Run", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx"));
-            ConfigureLocomotion(machine, idle, walk, run);
+            ConfigureLocomotion(machine, idle, walk);
 
             AnimatorState aim = AddState(machine, "AimIdle", LoadClip(
                 Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx"));
@@ -558,9 +628,7 @@ namespace BreakNotice.Contest.Editor
                 Chr01AnimationRoot + "/SharedLocomotion/CHR00_Idle.fbx"));
             AnimatorState walk = AddState(machine, "Walk", LoadClip(
                 Chr01AnimationRoot + "/SharedLocomotion/CHR00_Walk_F.fbx"));
-            AnimatorState run = AddState(machine, "Run", LoadClip(
-                Chr01AnimationRoot + "/SharedLocomotion/CHR00_Run_F.fbx"));
-            ConfigureLocomotion(machine, idle, walk, run);
+            ConfigureLocomotion(machine, idle, walk);
 
             AnimatorState ready = AddState(machine, "SupplyReady", LoadClip(
                 Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Windup.fbx"));
@@ -588,9 +656,7 @@ namespace BreakNotice.Contest.Editor
                 EnyAnimationRoot + "/Shared/idle.fbx"));
             AnimatorState walk = AddState(machine, "Walk", LoadClip(
                 EnyAnimationRoot + "/Shared/walking.fbx"));
-            AnimatorState run = AddState(machine, "Run", LoadClip(
-                EnyAnimationRoot + "/Shared/standard run.fbx"));
-            ConfigureLocomotion(machine, idle, walk, run);
+            ConfigureLocomotion(machine, idle, walk);
             AddOneShot(machine, idle, "HitLight", LoadClip(
                 EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx"));
             AddOneShot(machine, idle, "MeleePrimary", LoadClip(
@@ -643,6 +709,9 @@ namespace BreakNotice.Contest.Editor
             bool ally)
         {
             controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
+            controller.AddParameter(
+                "LocomotionPlayback",
+                AnimatorControllerParameterType.Float);
             if (player)
             {
                 controller.AddParameter("Aim", AnimatorControllerParameterType.Bool);
@@ -673,14 +742,74 @@ namespace BreakNotice.Contest.Editor
         private static void ConfigureLocomotion(
             AnimatorStateMachine machine,
             AnimatorState idle,
-            AnimatorState walk,
-            AnimatorState run)
+            AnimatorState walk)
         {
             machine.defaultState = idle;
+            RemoveSpeedTransitions(idle);
+            RemoveSpeedTransitions(walk);
             AddFloatTransition(idle, walk, AnimatorConditionMode.Greater, 0.05f);
             AddFloatTransition(walk, idle, AnimatorConditionMode.Less, 0.05f);
-            AddFloatTransition(walk, run, AnimatorConditionMode.Greater, 0.65f);
-            AddFloatTransition(run, walk, AnimatorConditionMode.Less, 0.65f);
+            ConfigureLocomotionQuality(idle, walk);
+        }
+
+        private static void ConfigureLocomotionQuality(
+            AnimatorState idle,
+            AnimatorState walk)
+        {
+            idle.iKOnFeet = false;
+            walk.iKOnFeet = false;
+            walk.speedParameterActive = true;
+            walk.speedParameter = "LocomotionPlayback";
+
+            foreach (AnimatorStateTransition transition in new[] { idle, walk }
+                         .SelectMany(state => state.transitions)
+                         .Where(candidate => candidate.conditions.Any(condition =>
+                             condition.parameter == "Speed")))
+            {
+                transition.hasExitTime = false;
+                transition.duration = 0.08f;
+            }
+        }
+
+        private static void RemovePrimaryRunState(AnimatorStateMachine machine)
+        {
+            AnimatorState run = machine.states
+                .Select(child => child.state)
+                .SingleOrDefault(state => state.name == "Run");
+            if (run == null)
+            {
+                return;
+            }
+
+            foreach (AnimatorState state in machine.states.Select(child => child.state))
+            {
+                foreach (AnimatorStateTransition transition in state.transitions
+                             .Where(candidate => candidate.destinationState == run)
+                             .ToArray())
+                {
+                    state.RemoveTransition(transition);
+                }
+            }
+
+            foreach (AnimatorStateTransition transition in machine.anyStateTransitions
+                         .Where(candidate => candidate.destinationState == run)
+                         .ToArray())
+            {
+                machine.RemoveAnyStateTransition(transition);
+            }
+
+            machine.RemoveState(run);
+        }
+
+        private static void RemoveSpeedTransitions(AnimatorState state)
+        {
+            foreach (AnimatorStateTransition transition in state.transitions
+                         .Where(candidate => candidate.conditions.Any(condition =>
+                             condition.parameter == "Speed"))
+                         .ToArray())
+            {
+                state.RemoveTransition(transition);
+            }
         }
 
         private static void AddFloatTransition(
@@ -691,8 +820,20 @@ namespace BreakNotice.Contest.Editor
         {
             AnimatorStateTransition transition = source.AddTransition(destination);
             transition.hasExitTime = false;
-            transition.duration = 0.12f;
+            transition.duration = 0.08f;
             transition.AddCondition(mode, threshold, "Speed");
+        }
+
+        private static void EnsureLocomotionParameter(AnimatorController controller)
+        {
+            if (!controller.parameters.Any(parameter =>
+                    parameter.name == "LocomotionPlayback" &&
+                    parameter.type == AnimatorControllerParameterType.Float))
+            {
+                controller.AddParameter(
+                    "LocomotionPlayback",
+                    AnimatorControllerParameterType.Float);
+            }
         }
 
         private static void AddBoolAnyState(
@@ -822,7 +963,7 @@ namespace BreakNotice.Contest.Editor
             instance.name = definition.Key + "_MODEL";
             instance.transform.SetParent(visualRoot.transform, false);
             instance.transform.localPosition = Vector3.zero;
-            instance.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            instance.transform.localRotation = Quaternion.identity;
             instance.transform.localScale = Vector3.one;
             NormalizeVisual(actor.transform, instance);
 
@@ -842,6 +983,7 @@ namespace BreakNotice.Contest.Editor
                     definition.ControllerPath);
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+            animator.stabilizeFeet = false;
 
             ShowcaseCharacterAnimationDriver driver =
                 actor.GetComponent<ShowcaseCharacterAnimationDriver>() ??
@@ -871,10 +1013,39 @@ namespace BreakNotice.Contest.Editor
 
             instance.transform.localScale *= 1.8f / bounds.size.y;
             bounds = CalculateBounds(instance);
+            float supportY = CalculateSupportPlaneY(actor);
             instance.transform.position += new Vector3(
                 actor.position.x - bounds.center.x,
-                actor.position.y - bounds.min.y,
+                supportY - bounds.min.y,
                 actor.position.z - bounds.center.z);
+        }
+
+        private static float CalculateSupportPlaneY(Transform actor)
+        {
+            Physics.SyncTransforms();
+            RaycastHit groundHit = Physics.RaycastAll(
+                    actor.position + Vector3.up * 2f,
+                    Vector3.down,
+                    8f,
+                    Physics.DefaultRaycastLayers,
+                    QueryTriggerInteraction.Ignore)
+                .Where(hit => !hit.collider.transform.IsChildOf(actor))
+                .OrderBy(hit => hit.distance)
+                .FirstOrDefault();
+            if (groundHit.collider != null)
+            {
+                return groundHit.point.y;
+            }
+
+            Collider[] supportColliders = actor.GetComponents<Collider>()
+                .Where(collider => collider.enabled && !collider.isTrigger)
+                .ToArray();
+            if (supportColliders.Length == 0)
+            {
+                return actor.position.y;
+            }
+
+            return supportColliders.Min(collider => collider.bounds.min.y);
         }
 
         private static Bounds CalculateBounds(GameObject root)

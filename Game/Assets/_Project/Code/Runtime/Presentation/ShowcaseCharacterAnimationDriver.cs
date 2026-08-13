@@ -17,6 +17,8 @@ namespace BreakNotice.Presentation
     public sealed class ShowcaseCharacterAnimationDriver : MonoBehaviour
     {
         private static readonly int SpeedParameter = Animator.StringToHash("Speed");
+        private static readonly int LocomotionPlaybackParameter =
+            Animator.StringToHash("LocomotionPlayback");
         private static readonly int AimParameter = Animator.StringToHash("Aim");
         private static readonly int SupplyReadyParameter = Animator.StringToHash("SupplyReady");
         private static readonly int CatchLightTrigger = Animator.StringToHash("CatchLight");
@@ -43,13 +45,27 @@ namespace BreakNotice.Presentation
         [SerializeField]
         private PrototypeAllyRelayController allyRelay;
 
-        [SerializeField]
-        private float runThreshold = 0.65f;
+        [SerializeField, Min(0.1f)]
+        private float walkReferenceSpeed = 2.8f;
+
+        [SerializeField, Range(0.25f, 1f)]
+        private float minimumPlaybackRate = 0.85f;
+
+        [SerializeField, Range(1f, 2f)]
+        private float maximumPlaybackRate = 1.15f;
+
+        [SerializeField, Range(0.02f, 0.25f)]
+        private float maximumVisualGroundingCorrection = 0.12f;
+
+        [SerializeField, Min(0.5f)]
+        private float maximumGroundDistanceFromActor = 1.25f;
 
         private PrototypeInteractionTarget observedCarriedTarget;
         private PrototypeWeightClass observedCarriedWeight = PrototypeWeightClass.Light;
         private uint observedThrowOriginCount;
         private int observedAllyReleaseCount;
+        private readonly RaycastHit[] groundingHits = new RaycastHit[16];
+        private Renderer[] animatedRenderers;
 
         public ShowcaseCharacterAnimationRole Role => role;
 
@@ -59,13 +75,23 @@ namespace BreakNotice.Presentation
 
         public bool IsRuntimeConfigured => animator != null && animator.runtimeAnimatorController != null;
 
-        public float RunThreshold => runThreshold;
+        public float LastPlanarSpeed { get; private set; }
+
+        public float LastPlaybackRate { get; private set; } = 1f;
+
+        public float LastVisualGroundingCorrection { get; private set; }
 
         private void Awake()
         {
             if (animator == null)
             {
                 animator = GetComponentInChildren<Animator>(true);
+            }
+            if (animator != null)
+            {
+                animator.applyRootMotion = false;
+                animator.stabilizeFeet = false;
+                CacheAnimatedRenderers();
             }
 
             if (movementController == null)
@@ -98,7 +124,10 @@ namespace BreakNotice.Presentation
                 : Vector3.zero;
             float planarSpeed = new Vector2(velocity.x, velocity.z).magnitude;
             float normalizedSpeed = Mathf.Clamp01(planarSpeed / 4.5f);
-            animator.SetFloat(SpeedParameter, normalizedSpeed, 0.08f, Time.deltaTime);
+            LastPlanarSpeed = planarSpeed;
+            LastPlaybackRate = CalculateLocomotionPlaybackRate(planarSpeed);
+            animator.SetFloat(SpeedParameter, normalizedSpeed);
+            animator.SetFloat(LocomotionPlaybackParameter, LastPlaybackRate);
 
             switch (role)
             {
@@ -111,14 +140,18 @@ namespace BreakNotice.Presentation
             }
         }
 
+        private void LateUpdate()
+        {
+            ApplyVisualGroundingCorrection();
+        }
+
         public void Configure(
             ShowcaseCharacterAnimationRole animationRole,
             Animator authoredAnimator,
             CharacterController authoredMovementController = null,
             InputSystemLogicalInputAdapter authoredLogicalInput = null,
             PrototypePhysicalObjectLifecycle authoredPhysicalLifecycle = null,
-            PrototypeAllyRelayController authoredAllyRelay = null,
-            float authoredRunThreshold = 0.65f)
+            PrototypeAllyRelayController authoredAllyRelay = null)
         {
             role = animationRole;
             animator = authoredAnimator;
@@ -126,14 +159,111 @@ namespace BreakNotice.Presentation
             logicalInput = authoredLogicalInput;
             physicalLifecycle = authoredPhysicalLifecycle;
             allyRelay = authoredAllyRelay;
-            runThreshold = Mathf.Clamp01(authoredRunThreshold);
             if (animator != null)
             {
                 animator.applyRootMotion = false;
                 animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+                animator.stabilizeFeet = false;
+                CacheAnimatedRenderers();
             }
 
             CaptureCurrentGameplayState();
+        }
+
+        public float CalculateLocomotionPlaybackRate(float planarSpeed)
+        {
+            float clampedSpeed = Mathf.Max(0f, planarSpeed);
+            if (clampedSpeed <= 0.05f)
+            {
+                return 1f;
+            }
+
+            return Mathf.Clamp(
+                clampedSpeed / Mathf.Max(0.1f, walkReferenceSpeed),
+                minimumPlaybackRate,
+                maximumPlaybackRate);
+        }
+
+        public bool ApplyVisualGroundingCorrection()
+        {
+            LastVisualGroundingCorrection = 0f;
+            if (animator == null)
+            {
+                return false;
+            }
+
+            if (animatedRenderers == null || animatedRenderers.Length == 0)
+            {
+                CacheAnimatedRenderers();
+            }
+            if (animatedRenderers == null || animatedRenderers.Length == 0)
+            {
+                return false;
+            }
+
+            int hitCount = Physics.RaycastNonAlloc(
+                transform.position + Vector3.up * 2f,
+                Vector3.down,
+                groundingHits,
+                8f,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            float nearestDistance = float.PositiveInfinity;
+            float groundY = 0f;
+            bool foundGround = false;
+            for (int index = 0; index < hitCount; index++)
+            {
+                Collider collider = groundingHits[index].collider;
+                if (collider == null ||
+                    collider.transform == transform ||
+                    collider.transform.IsChildOf(transform))
+                {
+                    continue;
+                }
+
+                if (groundingHits[index].distance < nearestDistance)
+                {
+                    nearestDistance = groundingHits[index].distance;
+                    groundY = groundingHits[index].point.y;
+                    foundGround = true;
+                }
+            }
+
+            if (!foundGround ||
+                transform.position.y - groundY > maximumGroundDistanceFromActor)
+            {
+                return false;
+            }
+
+            float visualBottomY = float.PositiveInfinity;
+            foreach (Renderer renderer in animatedRenderers)
+            {
+                if (renderer != null && renderer.enabled)
+                {
+                    visualBottomY = Mathf.Min(visualBottomY, renderer.bounds.min.y);
+                }
+            }
+            if (float.IsPositiveInfinity(visualBottomY))
+            {
+                return false;
+            }
+
+            float correction = groundY - visualBottomY;
+            if (Mathf.Abs(correction) > maximumVisualGroundingCorrection)
+            {
+                return false;
+            }
+
+            animator.transform.position += Vector3.up * correction;
+            LastVisualGroundingCorrection = correction;
+            return true;
+        }
+
+        private void CacheAnimatedRenderers()
+        {
+            animatedRenderers = animator != null
+                ? animator.GetComponentsInChildren<Renderer>(true)
+                : null;
         }
 
         private void UpdatePlayerAnimation()

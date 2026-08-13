@@ -59,8 +59,15 @@ namespace BreakNotice.LocomotionCamera.Tests
             {
                 Transform visual = driver.transform.Find(VisualName);
                 Assert.That(visual, Is.Not.Null, driver.Role.ToString());
+                Assert.That(visual.childCount, Is.EqualTo(1), driver.Role.ToString());
+                Transform model = visual.GetChild(0);
+                Assert.That(Quaternion.Angle(model.localRotation, Quaternion.identity),
+                    Is.LessThan(0.01f), driver.Role.ToString());
+                Assert.That(Vector3.Dot(model.forward, driver.transform.forward),
+                    Is.GreaterThan(0.999f), driver.Role.ToString());
                 Assert.That(driver.IsRuntimeConfigured, Is.True, driver.Role.ToString());
                 Assert.That(driver.Animator.applyRootMotion, Is.False, driver.Role.ToString());
+                Assert.That(driver.Animator.stabilizeFeet, Is.False, driver.Role.ToString());
                 Assert.That(driver.Animator.avatar, Is.Not.Null, driver.Role.ToString());
                 Assert.That(driver.Animator.avatar.isValid, Is.True, driver.Role.ToString());
                 Assert.That(driver.Animator.avatar.isHuman, Is.True, driver.Role.ToString());
@@ -74,12 +81,89 @@ namespace BreakNotice.LocomotionCamera.Tests
                     .All(material => material.mainTexture != null), Is.True,
                     driver.Role.ToString());
 
+                Physics.SyncTransforms();
+                RaycastHit groundHit = Physics.RaycastAll(
+                        driver.transform.position + Vector3.up * 2f,
+                        Vector3.down,
+                        8f,
+                        Physics.DefaultRaycastLayers,
+                        QueryTriggerInteraction.Ignore)
+                    .Where(hit => !hit.collider.transform.IsChildOf(driver.transform))
+                    .OrderBy(hit => hit.distance)
+                    .FirstOrDefault();
+                Assert.That(groundHit.collider, Is.Not.Null, driver.Role.ToString());
+                float visualBottomY = productionRenderers.Min(renderer => renderer.bounds.min.y);
+                float authoredPrecompensation = visualBottomY - groundHit.point.y;
+                Assert.That(authoredPrecompensation,
+                    Is.InRange(-0.02f, 0.02f),
+                    driver.Role + " authored visual must start on the floor.");
+
                 Renderer[] grayboxRenderers = driver.GetComponentsInChildren<Renderer>(true)
                     .Where(renderer => !renderer.transform.IsChildOf(visual))
                     .ToArray();
                 Assert.That(grayboxRenderers.All(renderer => !renderer.enabled), Is.True,
                     driver.Role.ToString());
             }
+        }
+
+        [Test]
+        public void RuntimeControllers_UseWalkOnlyLocomotionWithoutFootIk()
+        {
+            foreach (string fileName in new[]
+                     {
+                         "CHR00_Player.controller",
+                         "CHR01_Ally.controller",
+                         "ENY01_Normal.controller",
+                         "ENY01_Elite.controller"
+                     })
+            {
+                AnimatorController controller = LoadController(fileName);
+                AnimatorState[] states = controller.layers
+                    .SelectMany(layer => layer.stateMachine.states)
+                    .Select(child => child.state)
+                    .ToArray();
+                AnimatorState idle = states.Single(state => state.name == "Idle");
+                AnimatorState walk = states.Single(state => state.name == "Walk");
+
+                Assert.That(states.Any(state => state.name == "Run"), Is.False, fileName);
+                Assert.That(idle.iKOnFeet, Is.False, fileName);
+                Assert.That(walk.iKOnFeet, Is.False, fileName);
+                Assert.That(walk.speedParameterActive, Is.True, fileName);
+                Assert.That(walk.speedParameter, Is.EqualTo("LocomotionPlayback"), fileName);
+                Assert.That(controller.parameters.Any(parameter =>
+                    parameter.name == "LocomotionPlayback" &&
+                    parameter.type == AnimatorControllerParameterType.Float), Is.True, fileName);
+
+                AnimatorStateTransition[] speedTransitions = new[] { idle, walk }
+                    .SelectMany(state => state.transitions)
+                    .Where(transition => transition.conditions.Any(condition =>
+                        condition.parameter == "Speed"))
+                    .ToArray();
+                Assert.That(speedTransitions, Has.Length.EqualTo(2), fileName);
+                Assert.That(speedTransitions.All(transition =>
+                    !transition.hasExitTime &&
+                    Mathf.Approximately(transition.duration, 0.08f)), Is.True, fileName);
+                Assert.That(speedTransitions.All(transition =>
+                    transition.destinationState == idle ||
+                    transition.destinationState == walk), Is.True, fileName);
+            }
+        }
+
+        [Test]
+        public void LocomotionPlayback_PreservesNaturalWalkCadenceAtAllMovementSpeeds()
+        {
+            ShowcaseCharacterAnimationDriver driver = Components<
+                    ShowcaseCharacterAnimationDriver>()
+                .Single(candidate =>
+                    candidate.Role == ShowcaseCharacterAnimationRole.Player);
+
+            Assert.That(driver.CalculateLocomotionPlaybackRate(0f), Is.EqualTo(1f));
+            Assert.That(driver.CalculateLocomotionPlaybackRate(2.8f),
+                Is.EqualTo(1f).Within(0.001f));
+            Assert.That(driver.CalculateLocomotionPlaybackRate(4.5f),
+                Is.EqualTo(1.15f).Within(0.001f));
+            Assert.That(driver.CalculateLocomotionPlaybackRate(6f),
+                Is.EqualTo(1.15f).Within(0.001f));
         }
 
         [Test]
