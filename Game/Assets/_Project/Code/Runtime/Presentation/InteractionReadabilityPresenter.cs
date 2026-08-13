@@ -50,7 +50,9 @@ namespace BreakNotice.Presentation
             if (owner.HandState == PrototypeHandOwnershipState.Carrying && owner.CarriedTarget != null)
             {
                 string throwPrompt = interactionController.HasThrowCharge
-                    ? $"THROW CHARGE {GetThrowChargePercent()}% | RELEASE LMB"
+                    ? ShowcaseHudPresenter.Active != null
+                        ? "RELEASE LMB"
+                        : $"THROW CHARGE {GetThrowChargePercent()}% | RELEASE LMB"
                     : "HOLD LMB TO CHARGE THROW";
                 return $"CARRYING {owner.CarriedTarget.DisplayName} " +
                        $"[{GetWeightLabel(owner.CarriedTarget)}] | {throwPrompt}";
@@ -67,7 +69,8 @@ namespace BreakNotice.Presentation
             {
                 if (owner.QueuedThrowArmed)
                 {
-                    string charge = interactionController.IsQueuedThrowCharge
+                    string charge = interactionController.IsQueuedThrowCharge &&
+                                    ShowcaseHudPresenter.Active == null
                         ? $" {GetThrowChargePercent()}%"
                         : string.Empty;
                     string state = interactionController.IsThrowCharging
@@ -422,8 +425,15 @@ namespace BreakNotice.Presentation
 
             EnsureStyles();
             DrawAllyReadyIndicator();
+            bool showcaseHudActive = ShowcaseHudPresenter.Active != null;
             GUI.Label(
-                new Rect(0f, Screen.height - 78f, Screen.width, 42f),
+                showcaseHudActive
+                    ? new Rect(
+                        Screen.width * 0.35f,
+                        Screen.height - 78f,
+                        Screen.width * 0.63f,
+                        42f)
+                    : new Rect(0f, Screen.height - 78f, Screen.width, 42f),
                 status,
                 promptStyle);
 
