@@ -15,6 +15,8 @@ namespace BreakNotice.Gameplay.Input
 
         private InputActionMap actionMap;
         private InputAction moveAction;
+        private InputAction sprintAction;
+        private InputAction jumpAction;
         private InputAction lookAction;
         private InputAction aimAction;
         private InputAction interactPrimaryAction;
@@ -75,6 +77,8 @@ namespace BreakNotice.Gameplay.Input
 
             actionMap = inputActions.FindActionMap(ActionMapName, true);
             moveAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Move), true);
+            sprintAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Sprint), true);
+            jumpAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Jump), true);
             lookAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Look), true);
             aimAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Aim), true);
             interactPrimaryAction = actionMap.FindAction(nameof(PrototypeLogicalAction.InteractPrimary), true);
@@ -106,7 +110,9 @@ namespace BreakNotice.Gameplay.Input
                 throwAction.IsPressed(),
                 throwAction.WasReleasedThisFrame(),
                 allyTaskAction.WasPressedThisFrame(),
-                regroupAllyAction.WasPressedThisFrame());
+                regroupAllyAction.WasPressedThisFrame(),
+                sprintAction.IsPressed(),
+                jumpAction.WasPressedThisFrame());
         }
 
         public void SetWebPointerState(

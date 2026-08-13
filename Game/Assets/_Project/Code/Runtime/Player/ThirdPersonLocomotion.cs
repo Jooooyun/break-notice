@@ -1,4 +1,5 @@
 using BreakNotice.Gameplay.Input;
+using BreakNotice.Gameplay.Interaction;
 using UnityEngine;
 
 namespace BreakNotice.Gameplay
@@ -18,23 +19,54 @@ namespace BreakNotice.Gameplay
         private float moveSpeed = 4.5f;
 
         [SerializeField]
+        private float sprintSpeed = 6.5f;
+
+        [SerializeField]
         private float rotationResponse = 12f;
 
         [SerializeField]
         private float gravity = -25f;
 
+        [SerializeField]
+        private float jumpHeight = 1.15f;
+
+        [SerializeField]
+        private float coyoteTime = 0.1f;
+
+        [SerializeField]
+        private float jumpBufferTime = 0.1f;
+
         private CharacterController controller;
+        private PrototypeInteractionStateOwner interactionOwner;
         private float verticalVelocity;
+        private float coyoteTimeRemaining;
+        private float jumpBufferTimeRemaining;
+        private bool jumpConsumed;
+        private CollisionFlags lastCollisionFlags;
 
         public float MoveSpeed => moveSpeed;
+
+        public float SprintSpeed => sprintSpeed;
 
         public float RotationResponse => rotationResponse;
 
         public float Gravity => gravity;
 
+        public float JumpHeight => jumpHeight;
+
+        public float CoyoteTime => coyoteTime;
+
+        public float JumpBufferTime => jumpBufferTime;
+
         public float VerticalVelocity => verticalVelocity;
 
-        public bool IsGrounded => controller != null && controller.isGrounded;
+        public bool IsGrounded => controller != null &&
+            (controller.isGrounded ||
+             (lastCollisionFlags & CollisionFlags.Below) != 0);
+
+        public bool IsSprinting { get; private set; }
+
+        public float CurrentHorizontalSpeed { get; private set; }
 
         private void Awake()
         {
@@ -43,11 +75,42 @@ namespace BreakNotice.Gameplay
             {
                 logicalInput = GetComponent<InputSystemLogicalInputAdapter>();
             }
+
+            interactionOwner = GetComponent<PrototypeInteractionStateOwner>();
         }
 
         private void Update()
         {
             Vector2 moveInput = logicalInput.Snapshot.Move;
+            bool mobilityBlocked = logicalInput.Snapshot.ResetEncounter ||
+                (interactionOwner != null && interactionOwner.BlocksNewInteraction);
+            bool mediumCarry = IsCarryingMedium();
+            bool hasMoveInput = moveInput.sqrMagnitude > 0.0001f;
+            IsSprinting = !mobilityBlocked &&
+                !mediumCarry &&
+                !logicalInput.Snapshot.Aim &&
+                logicalInput.Snapshot.Sprint &&
+                hasMoveInput;
+            CurrentHorizontalSpeed = IsSprinting ? sprintSpeed : moveSpeed;
+
+            if (logicalInput.Snapshot.Jump && !mobilityBlocked && !mediumCarry)
+            {
+                jumpBufferTimeRemaining = jumpBufferTime;
+            }
+            else
+            {
+                jumpBufferTimeRemaining = Mathf.Max(
+                    0f,
+                    jumpBufferTimeRemaining - Time.deltaTime);
+            }
+
+            if (mobilityBlocked || mediumCarry)
+            {
+                jumpBufferTimeRemaining = 0f;
+                IsSprinting = false;
+                CurrentHorizontalSpeed = moveSpeed;
+            }
+
             Vector3 forward = cameraTransform != null ? cameraTransform.forward : Vector3.forward;
             Vector3 right = cameraTransform != null ? cameraTransform.right : Vector3.right;
 
@@ -69,21 +132,49 @@ namespace BreakNotice.Gameplay
                     1f - Mathf.Exp(-rotationResponse * Time.deltaTime));
             }
 
-            if (controller.isGrounded && verticalVelocity < 0f)
+            bool groundedBeforeMove = IsGrounded;
+            if (groundedBeforeMove && verticalVelocity <= 0f)
             {
                 verticalVelocity = -2f;
+                coyoteTimeRemaining = coyoteTime;
+                jumpConsumed = false;
+            }
+            else
+            {
+                coyoteTimeRemaining = Mathf.Max(0f, coyoteTimeRemaining - Time.deltaTime);
+            }
+
+            if (!jumpConsumed &&
+                jumpBufferTimeRemaining > 0f &&
+                coyoteTimeRemaining > 0f &&
+                !mobilityBlocked &&
+                !mediumCarry)
+            {
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                jumpBufferTimeRemaining = 0f;
+                coyoteTimeRemaining = 0f;
+                jumpConsumed = true;
             }
             else
             {
                 verticalVelocity += gravity * Time.deltaTime;
             }
 
-            Vector3 velocity = desiredDirection * moveSpeed + Vector3.up * verticalVelocity;
-            controller.Move(velocity * Time.deltaTime);
+            Vector3 velocity = desiredDirection * CurrentHorizontalSpeed +
+                Vector3.up * verticalVelocity;
+            CollisionFlags collisionFlags = controller.Move(velocity * Time.deltaTime);
+            lastCollisionFlags = collisionFlags;
 
-            if (controller.isGrounded && verticalVelocity < 0f)
+            if ((collisionFlags & CollisionFlags.Above) != 0 && verticalVelocity > 0f)
+            {
+                verticalVelocity = 0f;
+            }
+
+            if (IsGrounded && verticalVelocity < 0f)
             {
                 verticalVelocity = -2f;
+                coyoteTimeRemaining = coyoteTime;
+                jumpConsumed = false;
             }
         }
 
@@ -92,9 +183,27 @@ namespace BreakNotice.Gameplay
             cameraTransform = value;
         }
 
+        public void ConfigureInteractionOwner(PrototypeInteractionStateOwner value)
+        {
+            interactionOwner = value;
+        }
+
         public void ResetMotionState()
         {
             verticalVelocity = -2f;
+            coyoteTimeRemaining = 0f;
+            jumpBufferTimeRemaining = 0f;
+            jumpConsumed = false;
+            IsSprinting = false;
+            CurrentHorizontalSpeed = moveSpeed;
+        }
+
+        private bool IsCarryingMedium()
+        {
+            return interactionOwner != null &&
+                interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                interactionOwner.CarriedTarget != null &&
+                interactionOwner.CarriedTarget.WeightClass == PrototypeWeightClass.Medium;
         }
     }
 }

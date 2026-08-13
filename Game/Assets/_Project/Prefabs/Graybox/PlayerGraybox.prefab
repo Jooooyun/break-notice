@@ -147,8 +147,12 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   cameraTransform: {fileID: 0}
   moveSpeed: 4.5
+  sprintSpeed: 6.5
   rotationResponse: 12
   gravity: -25
+  jumpHeight: 1.15
+  coyoteTime: 0.1
+  jumpBufferTime: 0.1
 --- !u!1 &8627305654181040784
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,14 +31,14 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void LogicalActionInventory_IncludesDistinctFetchCallAndRegroupActions()
+        public void LogicalActionInventory_IncludesMobilityAndDistinctAllyActions()
         {
             InputActionAsset asset = LoadInputAsset();
             Assert.That(asset.actionMaps.Count, Is.EqualTo(1));
 
             InputActionMap map = asset.actionMaps[0];
             Assert.That(map.name, Is.EqualTo("PrototypePlayer"));
-            Assert.That(map.actions.Count, Is.EqualTo(10));
+            Assert.That(map.actions.Count, Is.EqualTo(12));
             Assert.That(
                 map.actions.Select(action => action.name),
                 Is.EquivalentTo(Enum.GetNames(typeof(PrototypeLogicalAction))));
@@ -55,6 +55,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(map.FindAction("Look", true).expectedControlType, Is.EqualTo("Vector2"));
             Assert.That(map.FindAction("Aim", true).type, Is.EqualTo(InputActionType.Button));
             Assert.That(map.FindAction("Aim", true).expectedControlType, Is.EqualTo("Button"));
+            Assert.That(map.FindAction("Sprint", true).type, Is.EqualTo(InputActionType.Button));
+            Assert.That(map.FindAction("Jump", true).type, Is.EqualTo(InputActionType.Button));
         }
 
         [Test]
@@ -92,6 +94,17 @@ namespace BreakNotice.LocomotionCamera.Tests
                 false,
                 false,
                 regroupAlly: true);
+            var mobility = new LogicalInputSnapshot(
+                Vector2.up,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                sprint: true,
+                jump: true);
 
             Assert.That(held.Throw, Is.True);
             Assert.That(held.ThrowHeld, Is.True);
@@ -100,9 +113,33 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(released.ThrowHeld, Is.False);
             Assert.That(released.ThrowReleased, Is.True);
             Assert.That(regroup.RegroupAlly, Is.True);
+            Assert.That(mobility.Sprint, Is.True);
+            Assert.That(mobility.Jump, Is.True);
             Assert.That(
                 LoadInputAsset().FindActionMap("PrototypePlayer", true).actions.Count,
-                Is.EqualTo(10));
+                Is.EqualTo(12));
+        }
+
+        [Test]
+        public void SprintAndJump_UseOwnerApprovedShiftAndSpaceBindings()
+        {
+            InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
+            InputAction sprint = map.FindAction("Sprint", true);
+            InputAction jump = map.FindAction("Jump", true);
+
+            Assert.That(sprint.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(
+                sprint.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Keyboard>/leftShift"));
+            Assert.That(jump.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(
+                jump.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Keyboard>/space"));
+
+            string adapterSource = File.ReadAllText(
+                "Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs");
+            StringAssert.Contains("sprintAction.IsPressed()", adapterSource);
+            StringAssert.Contains("jumpAction.WasPressedThisFrame()", adapterSource);
         }
 
         [Test]
@@ -144,6 +181,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             StringAssert.Contains("Snapshot.AllyTask", consumerSource);
             StringAssert.Contains("Snapshot.CallAlly", consumerSource);
             StringAssert.Contains("Snapshot.RegroupAlly", consumerSource);
+            StringAssert.Contains("Snapshot.Sprint", consumerSource);
+            StringAssert.Contains("Snapshot.Jump", consumerSource);
             string resetSource = File.ReadAllText(
                 "Assets/_Project/Code/Runtime/Player/AuthoredEncounterResetController.cs");
             StringAssert.Contains("Snapshot.ResetEncounter", resetSource);
@@ -153,7 +192,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         [Test]
         public void DeferredAndVerticalSliceActions_AreAbsent()
         {
-            string[] absentActions = { "Sprint", "Evade", "Vault", "Shove", "HeavyAction" };
+            string[] absentActions = { "Evade", "Vault", "Shove", "HeavyAction" };
             InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
 
             foreach (string actionName in absentActions)

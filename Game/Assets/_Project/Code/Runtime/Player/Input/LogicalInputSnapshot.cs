@@ -16,7 +16,9 @@ namespace BreakNotice.Gameplay.Input
             bool throwHeld = false,
             bool throwReleased = false,
             bool allyTask = false,
-            bool regroupAlly = false)
+            bool regroupAlly = false,
+            bool sprint = false,
+            bool jump = false)
         {
             Move = move;
             Look = look;
@@ -30,6 +32,8 @@ namespace BreakNotice.Gameplay.Input
             ThrowReleased = throwReleased;
             AllyTask = allyTask;
             RegroupAlly = regroupAlly;
+            Sprint = sprint;
+            Jump = jump;
         }
 
         public Vector2 Move { get; }
@@ -51,6 +55,10 @@ namespace BreakNotice.Gameplay.Input
         public bool CallAlly { get; }
 
         public bool RegroupAlly { get; }
+
+        public bool Sprint { get; }
+
+        public bool Jump { get; }
 
         public bool StrapRelease { get; }
 
