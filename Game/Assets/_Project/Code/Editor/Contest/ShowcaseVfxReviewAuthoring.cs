@@ -26,7 +26,7 @@ namespace BreakNotice.Contest.Editor
             ReviewRootPath + "/Premium_v002";
 
         public const string HitRootPath =
-            ReviewRootPath + "/HitProduction_v004";
+            ReviewRootPath + "/HitProduction_v005";
 
         public const string ReviewScenePath =
             "Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity";
@@ -43,7 +43,7 @@ namespace BreakNotice.Contest.Editor
         private const string LayerZoneName = "ZONE_02_SOLO_LAYER_AND_COMPOSITE";
         private const string VariationZoneName = "ZONE_03_PHYSICAL_VARIATION_AUDITION";
         private const string GameplayZoneName = "ZONE_04_GAMEPLAY_CAMERA_EQUIVALENT";
-        private const string HitZoneName = "ZONE_05_HIT_PRODUCTION_v004";
+        private const string HitZoneName = "ZONE_05_HIT_PRODUCTION_v005";
         private const string FixedSceneViewCaptureArgument =
             "-showcaseVfxFixedSceneViewCapture";
         private const string ActualPlayCaptureArgument =
@@ -56,8 +56,8 @@ namespace BreakNotice.Contest.Editor
         private const float ReviewCameraNearClip = 0.1f;
         private const float ReviewCameraFarClip = 80f;
         private const float ReviewSceneViewSize = 7.20f;
-        private const float ActualPlayCaptureDelay = 0.14f;
-        private const float ReviewCaptureSimulationTime = 0.10f;
+        private const float ActualPlayCaptureDelay = 0.08f;
+        private const float ReviewCaptureSimulationTime = 0.08f;
 
         private static readonly Vector3 ReviewCameraPosition =
             new Vector3(400f, 0.65f, -21.5f);
@@ -107,9 +107,9 @@ namespace BreakNotice.Contest.Editor
 
         private static readonly HitEffectDefinition[] HitEffects =
         {
-            new HitEffectDefinition("Light", 0.42f, 3.10f),
-            new HitEffectDefinition("Medium", 0.50f, 3.65f),
-            new HitEffectDefinition("Heavy", 0.62f, 4.15f)
+            new HitEffectDefinition("Light", 0.42f, 2.65f),
+            new HitEffectDefinition("Medium", 0.50f, 3.05f),
+            new HitEffectDefinition("Heavy", 0.62f, 3.45f)
         };
 
         private static readonly EffectDefinition[] Effects =
@@ -427,11 +427,11 @@ namespace BreakNotice.Contest.Editor
                     48f,
                     0.46f),
                 new CaptureDefinition(
-                    "VFX_Showcase_HitProduction_UnityReview_v004.png",
+                    "VFX_Showcase_HitProduction_UnityReview_v005.png",
                     new Vector3(400f, 0.65f, -21.5f),
                     new Vector3(400f, 0.55f, 0f),
                     40f,
-                    0.14f)
+                    0.08f)
             };
 
             Texture2D gameplayCapture = null;
@@ -521,14 +521,14 @@ namespace BreakNotice.Contest.Editor
             string name = $"Hit{intensity}_{variation}_{layer}";
             return new LayerDefinition(
                 name,
-                $"{HitRootPath}/Flipbooks/T_VFX_Showcase_{name}_4x4_v004.png",
+                $"{HitRootPath}/Flipbooks/T_VFX_Showcase_{name}_4x4_v005.png",
                 true,
                 lifetime,
                 delay,
                 startSize,
                 0f,
                 HitRootPath,
-                "v004");
+                "v005");
         }
 
         private static void ConfigureTextureImporter(LayerDefinition layer)
@@ -586,9 +586,7 @@ namespace BreakNotice.Contest.Editor
             SetColorIfPresent(
                 material,
                 "_Color",
-                layer.MaterialRootPath == HitRootPath
-                    ? new Color(1.45f, 1.45f, 1.45f, 2.20f)
-                    : Color.white);
+                Color.white);
             SetFloatIfPresent(material, "_Mode", 2f);
             SetFloatIfPresent(material, "_ColorMode", 0f);
             SetFloatIfPresent(material, "_SrcBlend", (float)BlendMode.SrcAlpha);
@@ -727,9 +725,7 @@ namespace BreakNotice.Contest.Editor
             main.startSize3D = false;
             main.startSize = layer.StartSize;
             main.startRotation = 0f;
-            main.startColor = layer.MaterialRootPath == HitRootPath
-                ? new Color(1.8f, 1.72f, 1.55f, 1f)
-                : Color.white;
+            main.startColor = Color.white;
             main.gravityModifier = 0f;
             main.maxParticles = 1;
             main.stopAction = ParticleSystemStopAction.None;
@@ -743,7 +739,7 @@ namespace BreakNotice.Contest.Editor
 
             ParticleSystem.ShapeModule shape = particleSystem.shape;
             shape.enabled = false;
-            ConfigureLifetimeCurves(particleSystem, true, layerIndex);
+            ConfigureHitLifetimeCurves(particleSystem);
             ConfigureTextureSheetAnimation(particleSystem, true);
             ParticleSystem.NoiseModule noise = particleSystem.noise;
             noise.enabled = false;
@@ -880,6 +876,30 @@ namespace BreakNotice.Contest.Editor
             size.enabled = true;
             size.separateAxes = false;
             size.size = new ParticleSystem.MinMaxCurve(1f, curve);
+        }
+
+        private static void ConfigureHitLifetimeCurves(ParticleSystem particleSystem)
+        {
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(Color.white, 0f),
+                    new GradientColorKey(Color.white, 1f)
+                },
+                new[]
+                {
+                    new GradientAlphaKey(1f, 0f),
+                    new GradientAlphaKey(1f, 0.86f),
+                    new GradientAlphaKey(0f, 1f)
+                });
+
+            ParticleSystem.ColorOverLifetimeModule color = particleSystem.colorOverLifetime;
+            color.enabled = true;
+            color.color = new ParticleSystem.MinMaxGradient(gradient);
+
+            ParticleSystem.SizeOverLifetimeModule size = particleSystem.sizeOverLifetime;
+            size.enabled = false;
         }
 
         private static void ConfigureTextureSheetAnimation(
@@ -1325,7 +1345,7 @@ namespace BreakNotice.Contest.Editor
             CreateLabel(
                 zone,
                 "HEADER",
-                "HIT PRODUCTION v004  /  LIGHT - MEDIUM - HEAVY  /  A-B-C + SOLO LAYERS  /  REVIEW",
+                "HIT PRODUCTION v005  /  CONCEPT-FIDELITY REVISION  /  A-B-C + SOLO LAYERS  /  REVIEW",
                 new Vector3(0f, 5.82f, -0.25f),
                 0.033f,
                 new Color(0.82f, 0.80f, 0.74f, 1f));
@@ -1370,6 +1390,14 @@ namespace BreakNotice.Contest.Editor
                     instance.transform.localPosition = new Vector3(variationX[variationIndex], 0.05f, -0.20f);
                     instance.transform.localRotation = Quaternion.identity;
                     instance.transform.localScale = Vector3.one * effect.ReviewScale;
+                    float proxyX = variationX[variationIndex] - effect.ReviewScale * 0.34f - 0.14f;
+                    CreatePrimitive(
+                        row,
+                        "CONTACT_SURFACE_PROXY_" + variation.Suffix,
+                        PrimitiveType.Cube,
+                        new Vector3(proxyX, 0.05f, -0.06f),
+                        new Vector3(0.28f, 1.75f, 0.28f),
+                        prop);
                     CreateLabel(
                         row,
                         "VAR_LABEL_" + variation.Suffix,
@@ -1400,13 +1428,6 @@ namespace BreakNotice.Contest.Editor
                         new Color(0.58f, 0.61f, 0.58f, 1f));
                 }
 
-                CreatePrimitive(
-                    row,
-                    "CONTACT_SURFACE_PROXY",
-                    PrimitiveType.Cube,
-                    new Vector3(-10.45f, 0.05f, -0.06f),
-                    new Vector3(0.28f, 1.75f, 0.28f),
-                    prop);
             }
         }
 
@@ -1550,7 +1571,8 @@ namespace BreakNotice.Contest.Editor
                 width,
                 height,
                 24,
-                RenderTextureFormat.ARGB32)
+                RenderTextureFormat.ARGB32,
+                RenderTextureReadWrite.sRGB)
             {
                 name = "LOCAL_REVIEW_ONLY_ShowcaseVFX_PremiumCapture",
                 antiAliasing = 1
@@ -1979,7 +2001,7 @@ namespace BreakNotice.Contest.Editor
             }
 
             public string PrefabName(HitVariationDefinition variation) =>
-                $"PF_VFX_Showcase_Hit{Intensity}_{variation.Suffix}_REVIEW_ONLY_v004";
+                $"PF_VFX_Showcase_Hit{Intensity}_{variation.Suffix}_REVIEW_ONLY_v005";
 
             public string PrefabPath(HitVariationDefinition variation) =>
                 HitRootPath + "/Prefabs/" + PrefabName(variation) + ".prefab";

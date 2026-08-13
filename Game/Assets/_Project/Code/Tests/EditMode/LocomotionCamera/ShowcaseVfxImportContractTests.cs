@@ -23,7 +23,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             ReviewRootPath + "/Premium_v002";
 
         private const string HitRootPath =
-            ReviewRootPath + "/HitProduction_v004";
+            ReviewRootPath + "/HitProduction_v005";
 
         private const string ReviewScenePath =
             "Assets/_Project/Scenes/90_Review/LOCAL_REVIEW_ONLY_ShowcaseVFX.unity";
@@ -331,7 +331,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Transform layers = root.transform.Find("ZONE_02_SOLO_LAYER_AND_COMPOSITE");
                 Transform variations = root.transform.Find("ZONE_03_PHYSICAL_VARIATION_AUDITION");
                 Transform gameplay = root.transform.Find("ZONE_04_GAMEPLAY_CAMERA_EQUIVALENT");
-                Transform hits = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                Transform hits = root.transform.Find("ZONE_05_HIT_PRODUCTION_v005");
                 Assert.That(oldNew, Is.Not.Null);
                 Assert.That(layers, Is.Not.Null);
                 Assert.That(variations, Is.Not.Null);
@@ -448,7 +448,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Camera camera = root.GetComponentsInChildren<Camera>(true).Single();
                 camera.aspect = 16f / 9f;
                 Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(camera);
-                Transform hitZone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                Transform hitZone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v005");
                 Transform[] stations = hitZone.Cast<Transform>()
                     .Where(child => child.name.StartsWith("HIT_STATION_", StringComparison.Ordinal))
                     .ToArray();
@@ -494,7 +494,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                         .All(system => system.isPlaying),
                     Is.True);
 
-                Transform hitZone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                Transform hitZone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v005");
                 ParticleSystem[] soloSystems = hitZone
                     .GetComponentsInChildren<ParticleSystem>(false)
                     .Where(system => system.transform.parent != null &&
@@ -589,7 +589,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void HitProductionV004_HasThirtySixByteIdenticalSafeFlipbooksAndNinePrefabs()
+        public void HitProductionV005_HasThirtySixByteIdenticalSafeFlipbooksAndNinePrefabs()
         {
             var texturePaths = new List<string>();
             var materialPaths = new List<string>();
@@ -602,7 +602,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 foreach (string variation in HitVariations)
                 {
                     string prefabPath = HitRootPath + "/Prefabs/PF_VFX_Showcase_Hit" +
-                        intensity + "_" + variation + "_REVIEW_ONLY_v004.prefab";
+                        intensity + "_" + variation + "_REVIEW_ONLY_v005.prefab";
                     prefabPaths.Add(prefabPath);
                     GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                     Assert.That(prefab, Is.Not.Null, prefabPath);
@@ -611,14 +611,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                     foreach (string layer in HitLayers)
                     {
                         string name = "Hit" + intensity + "_" + variation + "_" + layer;
-                        string texturePath = HitRootPath + "/Flipbooks/T_VFX_Showcase_" + name + "_4x4_v004.png";
-                        string materialPath = HitRootPath + "/Materials/M_VFX_Showcase_Premium_" + name + "_v004.mat";
+                        string texturePath = HitRootPath + "/Flipbooks/T_VFX_Showcase_" + name + "_4x4_v005.png";
+                        string materialPath = HitRootPath + "/Materials/M_VFX_Showcase_Premium_" + name + "_v005.mat";
                         texturePaths.Add(texturePath);
                         materialPaths.Add(materialPath);
 
                         string sourceRelative = texturePath.Replace(
-                            "Assets/_Project/Art/VFX/Showcase/HitProduction_v004/Flipbooks/",
-                            "ArtSource/VFX/Showcase/Flipbooks/HitProduction_v004/");
+                            "Assets/_Project/Art/VFX/Showcase/HitProduction_v005/Flipbooks/",
+                            "ArtSource/VFX/Showcase/Flipbooks/HitProduction_v005/");
                         string sourcePath = Path.Combine(repositoryRoot, sourceRelative.Replace('/', Path.DirectorySeparatorChar));
                         string runtimePath = ToPhysicalPath(texturePath);
                         Assert.That(File.Exists(sourcePath), Is.True, sourcePath);
@@ -678,13 +678,13 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void HitProductionV004_ReviewZoneHasNineCompositeAndTwelveSoloViews()
+        public void HitProductionV005_ReviewZoneHasNineCompositeAndTwelveSoloViews()
         {
             Scene scene = EditorSceneManager.OpenScene(ReviewScenePath, OpenSceneMode.Additive);
             try
             {
                 GameObject root = FindReviewRoot(scene);
-                Transform zone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v004");
+                Transform zone = root.transform.Find("ZONE_05_HIT_PRODUCTION_v005");
                 Assert.That(zone, Is.Not.Null);
                 Transform[] stations = zone.Cast<Transform>()
                     .Where(child => child.name.StartsWith("HIT_STATION_", StringComparison.Ordinal))
@@ -694,6 +694,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 {
                     Assert.That(station.Cast<Transform>().Count(child => child.name.StartsWith("COMPOSITE_", StringComparison.Ordinal)), Is.EqualTo(3), station.name);
                     Assert.That(station.Cast<Transform>().Count(child => child.name.StartsWith("SOLO_0", StringComparison.Ordinal)), Is.EqualTo(4), station.name);
+                    Assert.That(station.Cast<Transform>().Count(child => child.name.StartsWith("CONTACT_SURFACE_PROXY_", StringComparison.Ordinal)), Is.EqualTo(3), station.name);
                     Assert.That(station.GetComponentsInChildren<ParticleSystem>(false).Length, Is.EqualTo(16), station.name);
                 }
             }
