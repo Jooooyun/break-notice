@@ -235,11 +235,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.55, y: 0.15, z: 0}
-  VerticalArmLength: 0.4
+  Damping: {x: 0.08, y: 0.15, z: 0.12}
+  ShoulderOffset: {x: 0.9, y: 0, z: 0}
+  VerticalArmLength: 0.1
   CameraSide: 1
-  CameraDistance: 4.5
+  CameraDistance: 2.5
   AvoidObstacles:
     Enabled: 1
     CollisionFilter:
@@ -302,15 +302,23 @@ MonoBehaviour:
   outputCamera: {fileID: 5031173097902738475}
   virtualCamera: {fileID: 1509362377840532696}
   thirdPersonFollow: {fileID: 4200797656890452524}
-  targetHeight: 1.45
-  lookSensitivity: 1.5
-  minimumPitch: -30
-  maximumPitch: 60
-  normalDistance: 4.5
-  aimDistance: 3.1
-  normalShoulderOffset: 0.55
+  targetHeight: 0.95
+  aimTargetHeight: 1.1
+  lookSensitivity: 0.25
+  aimLookSpeedMultiplier: 0.78
+  minimumPitch: -12
+  maximumPitch: 35
+  normalDistance: 2.5
+  aimDistance: 1.85
+  normalShoulderOffset: 0.9
   aimShoulderOffset: 0.78
-  shoulderHeight: 0.15
-  normalFieldOfView: 68
-  aimFieldOfView: 55
+  normalShoulderHeight: 0
+  aimShoulderHeight: 0.04
+  normalVerticalArmLength: 0.1
+  aimVerticalArmLength: 0.08
+  normalFieldOfView: 52
+  aimFieldOfView: 45
+  normalDamping: {x: 0.08, y: 0.15, z: 0.12}
+  aimDamping: {x: 0.05, y: 0.08, z: 0.08}
+  aimTransitionDuration: 0.2
   cameraCollisionRadius: 0.25

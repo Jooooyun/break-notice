@@ -221,6 +221,47 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void CameraPrefab_UsesOwnerApprovedRightShoulderComposition()
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(CameraPrefabPath);
+            Assert.That(prefab, Is.Not.Null);
+
+            ThirdPersonCameraRig rig = prefab.GetComponent<ThirdPersonCameraRig>();
+            CinemachineThirdPersonFollow follow =
+                prefab.GetComponentInChildren<CinemachineThirdPersonFollow>();
+            Assert.That(rig, Is.Not.Null);
+            Assert.That(follow, Is.Not.Null);
+
+            SerializedObject settings = new SerializedObject(rig);
+            Assert.That(settings.FindProperty("targetHeight").floatValue,
+                Is.EqualTo(0.95f).Within(0.001f));
+            Assert.That(settings.FindProperty("aimTargetHeight").floatValue,
+                Is.EqualTo(1.1f).Within(0.001f));
+            Assert.That(settings.FindProperty("lookSensitivity").floatValue,
+                Is.EqualTo(0.25f).Within(0.001f));
+            Assert.That(settings.FindProperty("minimumPitch").floatValue,
+                Is.EqualTo(-12f).Within(0.001f));
+            Assert.That(settings.FindProperty("maximumPitch").floatValue,
+                Is.EqualTo(35f).Within(0.001f));
+            Assert.That(settings.FindProperty("normalDistance").floatValue,
+                Is.EqualTo(2.5f).Within(0.001f));
+            Assert.That(settings.FindProperty("aimDistance").floatValue,
+                Is.EqualTo(1.85f).Within(0.001f));
+            Assert.That(settings.FindProperty("normalShoulderOffset").floatValue,
+                Is.EqualTo(0.9f).Within(0.001f));
+            Assert.That(settings.FindProperty("aimShoulderOffset").floatValue,
+                Is.EqualTo(0.78f).Within(0.001f));
+            Assert.That(settings.FindProperty("normalFieldOfView").floatValue,
+                Is.EqualTo(52f).Within(0.001f));
+            Assert.That(settings.FindProperty("aimFieldOfView").floatValue,
+                Is.EqualTo(45f).Within(0.001f));
+            Assert.That(follow.CameraSide, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(follow.CameraDistance, Is.EqualTo(2.5f).Within(0.001f));
+            Assert.That(follow.ShoulderOffset.x, Is.GreaterThan(0f));
+            Assert.That(follow.VerticalArmLength, Is.EqualTo(0.1f).Within(0.001f));
+        }
+
+        [Test]
         public void GrayboxScene_LoadsAndContainsExactContractObjects()
         {
             Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
@@ -340,8 +381,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             CinemachineThirdPersonFollow thirdPersonFollow =
                 virtualCameraObject.AddComponent<CinemachineThirdPersonFollow>();
             virtualCamera.Follow = orbitTarget;
-            thirdPersonFollow.CameraDistance = 4.5f;
-            thirdPersonFollow.ShoulderOffset = new Vector3(0.55f, 0.15f, 0f);
+            thirdPersonFollow.CameraDistance = 2.5f;
+            thirdPersonFollow.ShoulderOffset = new Vector3(0.9f, 0f, 0f);
+            thirdPersonFollow.VerticalArmLength = 0.1f;
+            thirdPersonFollow.CameraSide = 1f;
+            thirdPersonFollow.Damping = new Vector3(0.08f, 0.15f, 0.12f);
             CinemachineThirdPersonFollow.ObstacleSettings obstacleSettings =
                 thirdPersonFollow.AvoidObstacles;
             obstacleSettings.Enabled = true;
