@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Designer A의 캐릭터·애니메이션 원본 승인과 Import/Catalog 검증은 유지하되, Unity Runtime 모션 적용은 Human Owner 수동 설정 대상으로 보류했다. 체크포인트 `94932aabac091d08ef2ae733d68e115b9e66ff6b`의 EditMode `102/102`, PlayMode `73/73`, Web GUID `4413a8ac1dc148998c31ee466955414d`, warning/error `0/0`, HTTP `19/19` 자동 PASS는 기록하되 애니메이션 승인으로 해석하지 않는다. 열린 결함은 부자연스러운 이동 모션, Ally의 물체 탐색·획득 중 지면 매몰, 물리 투척이 모션보다 먼저 발생하는 release-animation 비동기화 세 가지다. S3 게임플레이 승인은 유지하며 S4 권한은 별도다.
+
 ### Changed
 
 - Human Owner가 2026-08-13 S3 명령·Fetch·Supply 수정과 Designer A의 전체 캐릭터·애니메이션 납품을 승인했다. S3는 `fdc49025eefab364d8e3d92d89856fb89b1813e4`에서 기본 정지, 명시적 Follow/Stop/Supply Q, 자율 범위 Fetch F, 별도 Regroup, NPC-물체 운반 연속성과 Reset을 교정했다. Designer A 원격 `978c66a80792632d5c4ba9ed95c477f1a6e7cc7a`는 `d6c86e21b06334898a4e1a901aeff16eabd2528b`로 충돌 없이 병합하고 `527603c9a4eb182f18b8ee1cc2a746df0823357c`에서 텍스처 적용 Humanoid 모델 4개, Animator Controller 4개와 애니메이션 FBX 172개를 Showcase v003에 연결했다. Normal ENY01은 공통·피격·근접 54개만, Elite ENY01은 동일 54개와 Elite 전용 6개를 사용한다. Unity `6000.3.20f1` compile, EditMode `100/100`, PlayMode `72/72`, Web Development GUID `d07ffe2b71964dd994bba2f1cc4a8e10`, warning/error `0/0`, HTTP `19/19`, 178,528,439 bytes, aggregate SHA-256 `513e87797121a56261af1e12f2fb911e396a37f90dc5585ea6d6b8cda7dd848c`, in-app browser cold load와 product console `0`을 확인했다. S4와 다른 제작 에셋 통합은 승인하지 않는다.

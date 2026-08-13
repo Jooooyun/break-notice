@@ -1,6 +1,6 @@
 # CONTEST-0002 — Operations Floor 5–7 Minute Showcase
 
-- Status: `OWNER-APPROVED DESIGN AND WORK-PACKAGE AUTHORITY / S1-S3 IMPLEMENTATION COMPLETE / S3 HUMAN OWNER APPROVED / DESIGNER A RUNTIME CHARACTER INTEGRATION VERIFIED / S4 NOT AUTHORIZED / IMPLEMENTATION RELAY ABSENT`
+- Status: `OWNER-APPROVED DESIGN AND WORK-PACKAGE AUTHORITY / S1-S3 IMPLEMENTATION COMPLETE / S3 HUMAN OWNER APPROVED / DESIGNER A SOURCE AND IMPORT VERIFIED / RUNTIME ANIMATION PRESENTATION MANUAL REFINEMENT DEFERRED / S4 NOT AUTHORIZED / IMPLEMENTATION RELAY ABSENT`
 - Change Control: `CR-0004`
 - Decision: `ADR-0024`
 - Branch: `contest/game-builders-2026-showcase`
@@ -150,6 +150,27 @@ relay. Completion or acceptance of one package does not authorize the next.
 - Enemy attack clips are connected as an eligible animation catalog; dynamic
   enemy attack selection and hit resolution remain later combat work and are
   not inferred by this integration.
+
+## Deferred Runtime Animation Presentation Issues
+
+The Human Owner preserves approval of the delivered character models and
+animation source files but defers the current Unity runtime motion application
+for manual setup. Checkpoint
+`94932aabac091d08ef2ae733d68e115b9e66ff6b` is evidence only and is not a
+runtime animation acceptance claim.
+
+Open issues recorded on 2026-08-13:
+
+1. Character locomotion remains visually unnatural.
+2. The Ally sinks into the floor while seeking and acquiring an object.
+3. Physical throw release occurs before the authored throw motion, so the
+   object leaves before the animation reads.
+
+The checkpoint passed EditMode `102/102`, PlayMode `73/73`, Web Development
+build GUID `4413a8ac1dc148998c31ee466955414d`, Unity warning-error `0/0` and HTTP
+`19/19`. These automated results do not close the three Human Owner-observed
+presentation defects. Manual Unity animation configuration is deferred and the
+defects do not revoke the separate S3 gameplay acceptance.
 
 ## S0 Validation Boundary
 
