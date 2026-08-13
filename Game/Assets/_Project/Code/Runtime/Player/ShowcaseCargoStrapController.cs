@@ -62,6 +62,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public PrototypeInteractionTarget ActiveTarget => activeTarget;
 
+        public PrototypeInteractionTarget LastRedirectedTarget { get; private set; }
+
         public PrototypeInteractionTarget AssistCandidate { get; private set; }
 
         public bool IsAttached => interactionOwner != null &&
@@ -188,6 +190,7 @@ namespace BreakNotice.Gameplay.Interaction
             velocity.y = Mathf.Min(activeBody.linearVelocity.y, 0f);
             activeBody.linearVelocity = velocity;
             activeBody.angularVelocity = Vector3.zero;
+            LastRedirectedTarget = activeTarget;
             RedirectStepCount++;
         }
 
@@ -330,6 +333,11 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        public bool WasRedirected(PrototypeInteractionTarget target)
+        {
+            return target != null && LastRedirectedTarget == target;
+        }
+
         public void ResetToRunBaseline()
         {
             ClearPhysicalAttachment();
@@ -338,6 +346,7 @@ namespace BreakNotice.Gameplay.Interaction
             DirectAttachCount = 0;
             ReleaseCount = 0;
             RedirectStepCount = 0;
+            LastRedirectedTarget = null;
             FaultCount = 0;
             LastFault = string.Empty;
             RefreshAssistCandidate();

@@ -73,6 +73,7 @@ namespace BreakNotice.Gameplay.Interaction
         private ShowcaseRunnerAgent grabbingRunner;
         private int observedResetCount;
         private float nextPlayerMeleeTime;
+        private bool externallySuspended;
 
         public ShowcaseRunnerAgent[] Runners => runners;
 
@@ -105,6 +106,8 @@ namespace BreakNotice.Gameplay.Interaction
         public float CombatTagRange => combatTagRange;
 
         public float PlayerMeleeRange => playerMeleeRange;
+
+        public bool IsExternallySuspended => externallySuspended;
 
         private void Update()
         {
@@ -160,8 +163,17 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool CanSimulatePressure()
         {
-            return interactionOwner != null &&
+            return !externallySuspended && interactionOwner != null &&
                 interactionOwner.GlobalState == PrototypeGlobalInteractionState.Playable;
+        }
+
+        public void SetExternalSuspended(bool suspended)
+        {
+            externallySuspended = suspended;
+            if (suspended)
+            {
+                attackTokenOwner = null;
+            }
         }
 
         public bool TryAcquireAttackToken(ShowcaseRunnerAgent runner)
@@ -311,6 +323,7 @@ namespace BreakNotice.Gameplay.Interaction
             PlayerMeleeCount = 0;
             PhysicalImpactCount = 0;
             nextPlayerMeleeTime = 0f;
+            externallySuspended = false;
             foreach (ShowcaseRunnerAgent runner in runners)
             {
                 runner?.ResetToRunBaseline();

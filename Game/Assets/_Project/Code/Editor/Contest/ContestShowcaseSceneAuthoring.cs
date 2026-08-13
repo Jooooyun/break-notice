@@ -41,6 +41,9 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS6ScenePath =
             ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v006.unity";
 
+        public const string ShowcaseS7ScenePath =
+            ShowcaseSceneFolder + "/Contest_OperationsFloor_Showcase_v007.unity";
+
         public const string ShowcaseRootName = "SHOWCASE_S1_GRAYBOX";
 
         public const string ShowcaseV2RootName =
@@ -55,6 +58,8 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS5RootName = "SHOWCASE_S5_CARGO_STRAP";
 
         public const string ShowcaseS6RootName = "SHOWCASE_S6_RUNNER_PRESSURE";
+
+        public const string ShowcaseS7RootName = "SHOWCASE_S7_OBJECTIVE_EXIT";
 
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
@@ -320,6 +325,41 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "S6 Showcase prepared: two Runner pressure, one attack token, " +
                 "Body Check/Shove/Short Grab, LMB melee, Rescue and Combat Tag.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Prepare S7 Objective And Exit")]
+        public static void PrepareS7ShowcaseScene()
+        {
+            RequireSceneAsset(ShowcaseS6ScenePath);
+            EnsureShowcaseFolder();
+
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ShowcaseS7ScenePath) == null)
+            {
+                if (!AssetDatabase.CopyAsset(ShowcaseS6ScenePath, ShowcaseS7ScenePath))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not copy the accepted S6 Scene to {ShowcaseS7ScenePath}.");
+                }
+                AssetDatabase.ImportAsset(
+                    ShowcaseS7ScenePath,
+                    ImportAssetOptions.ForceSynchronousImport);
+            }
+
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseS7ScenePath,
+                OpenSceneMode.Single);
+            ApplyS7ObjectiveAndExit(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseS7ScenePath))
+            {
+                throw new InvalidOperationException($"Could not save {ShowcaseS7ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "S7 Showcase prepared: four Drawer solution contracts, physical Parking Bay, " +
+                "pressure failure, EXIT completion and replay result card.");
         }
 
         [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
@@ -922,6 +962,148 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(player);
             EditorUtility.SetDirty(interaction);
             EditorUtility.SetDirty(team);
+            EditorUtility.SetDirty(browserInput);
+            EditorUtility.SetDirty(presenter);
+        }
+
+        public static void ApplyS7ObjectiveAndExit(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException("A valid loaded Scene is required.", nameof(scene));
+            }
+
+            GameObject previousRoot = FindRoot(scene, ShowcaseS7RootName);
+            if (previousRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+
+            GameObject s7Root = CreateRoot(scene, ShowcaseS7RootName);
+            ShowcaseObjectiveController objective =
+                s7Root.AddComponent<ShowcaseObjectiveController>();
+
+            Transform parkingCenter = CreateMarker(
+                s7Root.transform,
+                "PARKING_BAY_OBJECTIVE_CENTER",
+                new Vector3(22f, 0f, 15f),
+                new Vector3(3.3f, 0.1f, 3.3f));
+            CreateReviewLine(
+                s7Root.transform,
+                "PARKING_BAY_OBJECTIVE_OUTLINE",
+                new[]
+                {
+                    new Vector3(20.35f, 0.05f, 13.35f),
+                    new Vector3(23.65f, 0.05f, 13.35f),
+                    new Vector3(23.65f, 0.05f, 16.65f),
+                    new Vector3(20.35f, 0.05f, 16.65f)
+                },
+                new Color(1f, 0.78f, 0.08f, 1f),
+                0.12f,
+                true);
+            CreateReviewLabel(
+                s7Root.transform,
+                "PARKING_BAY_OBJECTIVE_LABEL",
+                "PARKING BAY",
+                new Vector3(22f, 0.08f, 13.05f),
+                Quaternion.Euler(90f, 0f, 0f),
+                new Color(1f, 0.82f, 0.18f, 1f),
+                0.12f);
+
+            Transform exitCenter = CreateMarker(
+                s7Root.transform,
+                "EXIT_OBJECTIVE_CENTER",
+                new Vector3(26f, 0f, 21f),
+                new Vector3(2.3f, 0.1f, 2.3f));
+            GameObject exitSign = CreateCube(
+                s7Root.transform,
+                "EXIT_OBJECTIVE_SIGN",
+                new Vector3(26f, 3.1f, 21.65f),
+                new Vector3(3.4f, 0.62f, 0.12f),
+                false);
+            CreateReviewLabel(
+                s7Root.transform,
+                "EXIT_OBJECTIVE_LABEL",
+                "EXIT",
+                new Vector3(26f, 3.1f, 21.55f),
+                Quaternion.Euler(0f, 180f, 0f),
+                Color.white,
+                0.16f);
+
+            GameObject player = RequireRootAny(scene, "GAMEPLAY_CHR00_PLAYER", "Player");
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            ThirdPersonLocomotion locomotion = player.GetComponent<ThirdPersonLocomotion>();
+            ShowcaseTeamContextController team =
+                player.GetComponent<ShowcaseTeamContextController>();
+            AuthoredEncounterResetController reset =
+                RequireSingleSceneComponent<AuthoredEncounterResetController>(scene);
+            ShowcaseCargoStrapController cargo =
+                RequireSingleSceneComponent<ShowcaseCargoStrapController>(scene);
+            ShowcaseRunnerPressureController pressure =
+                RequireSingleSceneComponent<ShowcaseRunnerPressureController>(scene);
+            PrototypeInteractionTarget drawer = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<PrototypeInteractionTarget>(true))
+                .SingleOrDefault(target =>
+                    string.Equals(target.RuntimeInstanceKey, "DRAWER-01",
+                        StringComparison.Ordinal));
+            if (owner == null || locomotion == null || team == null || drawer == null)
+            {
+                throw new InvalidOperationException(
+                    "S7 requires the accepted S6 player, team and DRAWER-01 composition.");
+            }
+
+            drawer.gameObject.isStatic = false;
+            GameObjectUtility.SetStaticEditorFlags(drawer.gameObject, (StaticEditorFlags)0);
+            Rigidbody drawerBody = drawer.GetComponent<Rigidbody>();
+            if (drawerBody == null)
+            {
+                drawerBody = drawer.gameObject.AddComponent<Rigidbody>();
+            }
+            drawerBody.mass = 18f;
+            drawerBody.isKinematic = false;
+            drawerBody.useGravity = true;
+            drawerBody.interpolation = RigidbodyInterpolation.Interpolate;
+            drawerBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            drawerBody.constraints = RigidbodyConstraints.FreezeRotationX |
+                RigidbodyConstraints.FreezeRotationZ;
+
+            ShowcaseDrawerObjectiveReceiver receiver =
+                drawer.GetComponent<ShowcaseDrawerObjectiveReceiver>();
+            if (receiver == null)
+            {
+                receiver = drawer.gameObject.AddComponent<ShowcaseDrawerObjectiveReceiver>();
+            }
+
+            objective.Configure(
+                owner,
+                locomotion,
+                player.transform,
+                reset,
+                team,
+                pressure,
+                drawer,
+                drawerBody,
+                parkingCenter,
+                exitCenter,
+                exitSign.GetComponent<Renderer>());
+            receiver.Configure(objective, cargo);
+
+            GameObject browserInput = RequireRoot(scene, "ContestBrowserInput");
+            ShowcaseObjectivePresenter presenter =
+                browserInput.GetComponent<ShowcaseObjectivePresenter>();
+            if (presenter == null)
+            {
+                presenter = browserInput.AddComponent<ShowcaseObjectivePresenter>();
+            }
+            presenter.Configure(objective);
+
+            EditorUtility.SetDirty(s7Root);
+            EditorUtility.SetDirty(objective);
+            EditorUtility.SetDirty(drawer);
+            EditorUtility.SetDirty(drawerBody);
+            EditorUtility.SetDirty(receiver);
             EditorUtility.SetDirty(browserInput);
             EditorUtility.SetDirty(presenter);
         }

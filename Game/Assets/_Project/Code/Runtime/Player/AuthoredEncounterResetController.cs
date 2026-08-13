@@ -69,6 +69,8 @@ namespace BreakNotice.Gameplay.Encounter
 
         public int SubscriptionCount => 0;
 
+        public event Action<EncounterResetCause> ResetPerformed;
+
         public int BaselineObjectCount => objectBaselines.Length;
 
         public int ExpectedObjectCount => expectedObjectCount;
@@ -201,6 +203,7 @@ namespace BreakNotice.Gameplay.Encounter
             physicalObjectLifecycle?.ClearThrowOriginForReset();
             Physics.SyncTransforms();
             AuditRestoredBaseline();
+            ResetPerformed?.Invoke(cause);
             return true;
         }
 
