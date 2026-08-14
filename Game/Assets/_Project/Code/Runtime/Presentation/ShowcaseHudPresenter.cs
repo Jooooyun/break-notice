@@ -19,6 +19,8 @@ namespace BreakNotice.Presentation
         private static readonly Color AgedIvory = new Color(0.86f, 0.83f, 0.73f, 0.96f);
         private static readonly Color BlueGray = new Color(0.43f, 0.54f, 0.60f, 0.96f);
         private static readonly Color MutedRust = new Color(0.62f, 0.25f, 0.17f, 0.98f);
+        private static readonly Color ChargeRed = new Color(0.56f, 0.10f, 0.075f, 0.97f);
+        private static readonly Color ChargePeakRed = new Color(0.74f, 0.16f, 0.09f, 0.99f);
         private static readonly Color DamageTrail = new Color(0.82f, 0.73f, 0.57f, 0.82f);
 
         [SerializeField]
@@ -477,7 +479,10 @@ namespace BreakNotice.Presentation
                         {
                             bool active = segment < activeSegments;
                             color = active
-                                ? (segment >= 9 ? MutedRust : AgedIvory)
+                                ? Color.Lerp(
+                                    ChargeRed,
+                                    ChargePeakRed,
+                                    segment / (float)(ChargeSegmentCount - 1))
                                 : new Color(Graphite.r, Graphite.g, Graphite.b, 0.42f);
                             float edge = Mathf.Min(radius - 42f, 47f - radius);
                             color.a *= Mathf.Clamp01(edge / 1.15f);
@@ -485,7 +490,7 @@ namespace BreakNotice.Presentation
                     }
                     else if (radius <= 2.1f)
                     {
-                        color = new Color(AgedIvory.r, AgedIvory.g, AgedIvory.b, 0.72f);
+                        color = new Color(ChargeRed.r, ChargeRed.g, ChargeRed.b, 0.78f);
                     }
 
                     pixels[(y * ChargeTextureSize) + x] = color;
