@@ -16,9 +16,10 @@ namespace BreakNotice.Presentation
 
         private static readonly Color Graphite = new Color(0.075f, 0.082f, 0.085f, 0.84f);
         private static readonly Color EmptyGraphite = new Color(0.19f, 0.20f, 0.20f, 0.72f);
-        private static readonly Color AgedIvory = new Color(0.86f, 0.83f, 0.73f, 0.96f);
-        private static readonly Color BlueGray = new Color(0.43f, 0.54f, 0.60f, 0.96f);
-        private static readonly Color MutedRust = new Color(0.62f, 0.25f, 0.17f, 0.98f);
+        private static readonly Color PlayerHealthRed = new Color(0.72f, 0.20f, 0.15f, 0.98f);
+        private static readonly Color PlayerHealthDeepRed = new Color(0.52f, 0.10f, 0.08f, 0.98f);
+        private static readonly Color EnemyHealthRed = new Color(0.62f, 0.15f, 0.11f, 0.96f);
+        private static readonly Color CriticalHealthRed = new Color(0.82f, 0.08f, 0.05f, 0.99f);
         private static readonly Color ChargeRed = new Color(0.56f, 0.10f, 0.075f, 0.97f);
         private static readonly Color ChargePeakRed = new Color(0.74f, 0.16f, 0.09f, 0.99f);
         private static readonly Color DamageTrail = new Color(0.82f, 0.73f, 0.57f, 0.82f);
@@ -362,18 +363,21 @@ namespace BreakNotice.Presentation
         {
             if (normalizedHealth <= 0.28f)
             {
-                return MutedRust;
+                return CriticalHealthRed;
             }
 
             float t = segmentCount <= 1 ? 0f : index / (float)(segmentCount - 1);
-            return Color.Lerp(AgedIvory, BlueGray, Mathf.Clamp01(t * 1.35f));
+            return Color.Lerp(
+                PlayerHealthRed,
+                PlayerHealthDeepRed,
+                Mathf.Clamp01(t * 1.15f));
         }
 
         private static Color GetEnemyHealthColor(float normalizedHealth)
         {
             return normalizedHealth <= 0.28f
-                ? MutedRust
-                : new Color(0.78f, 0.76f, 0.67f, 0.94f);
+                ? CriticalHealthRed
+                : EnemyHealthRed;
         }
 
         private void ResolveReferences()
