@@ -776,6 +776,11 @@ namespace BreakNotice.Presentation
 
         private float ResolvePlanarSpeed()
         {
+            if (role == ShowcaseCharacterAnimationRole.Ally && mobileAlly != null)
+            {
+                return Mathf.Max(0f, mobileAlly.ActualPlanarSpeed);
+            }
+
             if (runnerAgent != null)
             {
                 return Mathf.Max(0f, runnerAgent.CommandedPlanarSpeed);

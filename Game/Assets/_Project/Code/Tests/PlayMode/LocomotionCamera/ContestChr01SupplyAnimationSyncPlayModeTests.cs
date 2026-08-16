@@ -25,6 +25,8 @@ namespace BreakNotice.LocomotionCamera.Tests
         private const float GripStabilityTolerance = 0.002f;
         private const float PenetrationTolerance = 0.001f;
         private const float GroundTolerance = 0.01f;
+        private const int LongHoldMinimumAppliedFrames = 250;
+        private const float LongHoldTimeoutSeconds = 15f;
         private static readonly Vector3 OpenRouteAllyPlanarPosition =
             new Vector3(0f, 0f, -12f);
         private static readonly Vector3 OpenRouteChairPlanarPosition =
@@ -227,34 +229,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                 () => relay.IsReadyForCall,
                 3f,
                 "Prepared Chair did not enter the Ready state.");
-            yield return WaitForStableBodyPose(body, 1f);
-            Vector3 heldPosition = body.position;
-            Quaternion heldRotation = body.rotation;
-            int appliedFrame = chairGrip.LastAppliedFrame;
-            for (int sample = 0; sample < 3; sample++)
-            {
-                int previousAppliedFrame = appliedFrame;
-                yield return WaitUntilOrFail(
-                    () => chairGrip.LastAppliedFrame != previousAppliedFrame,
-                    1f,
-                    "Chair grip did not publish a new post-IK diagnostic frame.");
-                appliedFrame = chairGrip.LastAppliedFrame;
-                Assert.That(Vector3.Distance(body.position, heldPosition),
-                    Is.LessThanOrEqualTo(0.001f),
-                    "The presentation rig must not move the physical Chair.");
-                Assert.That(Quaternion.Angle(body.rotation, heldRotation),
-                    Is.LessThanOrEqualTo(0.1f),
-                    "The presentation rig must not rotate the physical Chair.");
-                Assert.That(chairGrip.LeftHandError,
-                    Is.LessThanOrEqualTo(RawHandResidualTolerance));
-                Assert.That(chairGrip.RightHandError,
-                    Is.LessThanOrEqualTo(RawHandResidualTolerance));
-                Assert.That(chairGrip.HasRenderedGripContact, Is.True);
-                Assert.That(chairGrip.LeftRenderedGripContactError,
-                    Is.LessThanOrEqualTo(HandPositionTolerance));
-                Assert.That(chairGrip.RightRenderedGripContactError,
-                    Is.LessThanOrEqualTo(HandPositionTolerance));
-            }
+            yield return AssertChairLongHold(
+                chair,
+                chairCollider,
+                body,
+                blendCountBefore + 1);
 
             AssertActorDoesNotPenetrateChair(chairCollider);
             AssertChairIsGroundSupported(chairCollider);
@@ -637,20 +616,8 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             Transform leftHand = driver.Animator.GetBoneTransform(HumanBodyBones.LeftHand);
             Transform rightHand = driver.Animator.GetBoneTransform(HumanBodyBones.RightHand);
-            Transform leftUpperArm =
-                driver.Animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
-            Transform leftLowerArm =
-                driver.Animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
-            Transform rightUpperArm =
-                driver.Animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
-            Transform rightLowerArm =
-                driver.Animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
             Assert.That(leftHand, Is.Not.Null);
             Assert.That(rightHand, Is.Not.Null);
-            Assert.That(leftUpperArm, Is.Not.Null);
-            Assert.That(leftLowerArm, Is.Not.Null);
-            Assert.That(rightUpperArm, Is.Not.Null);
-            Assert.That(rightLowerArm, Is.Not.Null);
 
             yield return WaitUntilOrFail(
                 () => chairGrip.Phase == ShowcaseChairGripPhase.Holding &&
@@ -690,24 +657,6 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Vector3.Distance(leftHand.position, leftContact);
                 float rightRenderedDelta =
                     Vector3.Distance(rightHand.position, rightContact);
-                float leftUpperSegment =
-                    Vector3.Distance(leftUpperArm.position, leftLowerArm.position);
-                float leftLowerSegment =
-                    Vector3.Distance(leftLowerArm.position, leftHand.position);
-                float leftChainLength = leftUpperSegment + leftLowerSegment;
-                float leftTargetDistance =
-                    Vector3.Distance(leftUpperArm.position, leftTarget);
-                float leftActualReach =
-                    Vector3.Distance(leftUpperArm.position, leftHand.position);
-                float rightUpperSegment =
-                    Vector3.Distance(rightUpperArm.position, rightLowerArm.position);
-                float rightLowerSegment =
-                    Vector3.Distance(rightLowerArm.position, rightHand.position);
-                float rightChainLength = rightUpperSegment + rightLowerSegment;
-                float rightTargetDistance =
-                    Vector3.Distance(rightUpperArm.position, rightTarget);
-                float rightActualReach =
-                    Vector3.Distance(rightUpperArm.position, rightHand.position);
                 leftErrors.Add(leftDelta);
                 rightErrors.Add(rightDelta);
                 leftRenderedErrors.Add(leftRenderedDelta);
@@ -718,42 +667,6 @@ namespace BreakNotice.LocomotionCamera.Tests
                     chairCollider.transform.InverseTransformPoint(leftContact));
                 localRightContacts.Add(
                     chairCollider.transform.InverseTransformPoint(rightContact));
-
-                Assert.That(ShowcaseOrientedBoxGeometry.TryCreate(
-                    chairCollider,
-                    out var geometry), Is.True);
-                Debug.Log(
-                    $"CHR01 CHAIR HOLDING TRACE {leftErrors.Count}/3: " +
-                    $"Frame={observedFrame}, Phase={chairGrip.Phase}, " +
-                    $"Weight={chairGrip.CurrentWeight:F6}, " +
-                    $"LeftTarget={leftTarget.ToString("F6")}, " +
-                    $"LeftHand={leftHand.position.ToString("F6")}, " +
-                    $"LeftDelta={leftDelta:F9}, LeftDiagnostic={chairGrip.LeftHandError:F9}, " +
-                    $"RightTarget={rightTarget.ToString("F6")}, " +
-                    $"RightHand={rightHand.position.ToString("F6")}, " +
-                    $"RightDelta={rightDelta:F9}, RightDiagnostic={chairGrip.RightHandError:F9}, " +
-                    $"LeftRenderedContact={leftContact.ToString("F6")}, " +
-                    $"LeftRenderedDelta={leftRenderedDelta:F9}, " +
-                    $"RightRenderedContact={rightContact.ToString("F6")}, " +
-                    $"RightRenderedDelta={rightRenderedDelta:F9}, " +
-                    $"ChairPosition={chairCollider.transform.position.ToString("F6")}, " +
-                    $"ChairRotation={chairCollider.transform.rotation.eulerAngles.ToString("F6")}, " +
-                    $"ObbCenter={geometry.Center.ToString("F6")}, " +
-                    $"AllyLocalChair={relay.transform.InverseTransformPoint(chairCollider.transform.position).ToString("F6")}, " +
-                    $"AllyLocalLeftTarget={relay.transform.InverseTransformPoint(leftTarget).ToString("F6")}, " +
-                    $"AllyLocalRightTarget={relay.transform.InverseTransformPoint(rightTarget).ToString("F6")}, " +
-                    $"LeftUpperArm={leftUpperArm.position.ToString("F6")}, " +
-                    $"LeftLowerArm={leftLowerArm.position.ToString("F6")}, " +
-                    $"LeftSegments={leftUpperSegment:F9}+{leftLowerSegment:F9}={leftChainLength:F9}, " +
-                    $"LeftUpperToTarget={leftTargetDistance:F9}, " +
-                    $"LeftTargetExcess={leftTargetDistance - leftChainLength:F9}, " +
-                    $"LeftActualReach={leftActualReach:F9}, " +
-                    $"RightUpperArm={rightUpperArm.position.ToString("F6")}, " +
-                    $"RightLowerArm={rightLowerArm.position.ToString("F6")}, " +
-                    $"RightSegments={rightUpperSegment:F9}+{rightLowerSegment:F9}={rightChainLength:F9}, " +
-                    $"RightUpperToTarget={rightTargetDistance:F9}, " +
-                    $"RightTargetExcess={rightTargetDistance - rightChainLength:F9}, " +
-                    $"RightActualReach={rightActualReach:F9}." );
             }
 
             Assert.That(leftErrors.Count, Is.EqualTo(3),
@@ -805,6 +718,154 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.LessThanOrEqualTo(GripStabilityTolerance),
                     "The rendered right contact was not Chair-local stable.");
             }
+
+            Debug.Log(
+                $"CHR01 CHAIR HOLDING SUMMARY: Samples={leftErrors.Count}, " +
+                $"RawL={leftErrors.Max():F6}, RawR={rightErrors.Max():F6}, " +
+                $"ContactL={leftRenderedErrors.Max():F6}, " +
+                $"ContactR={rightRenderedErrors.Max():F6}.");
+        }
+
+        private IEnumerator AssertChairLongHold(
+            PrototypeInteractionTarget chair,
+            BoxCollider chairCollider,
+            Rigidbody body,
+            int expectedBlendStartCount)
+        {
+            const string idleStatePath = "Base Layer.Idle";
+            int idleStateHash = Animator.StringToHash(idleStatePath);
+            yield return WaitUntilOrFail(
+                () => !driver.Animator.IsInTransition(0) &&
+                      driver.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash ==
+                          idleStateHash,
+                2f,
+                () => "CHR01 did not settle into its authored Idle loop while " +
+                    $"holding Chair. Driver={driver.CurrentBaseStateName}, " +
+                    $"Transition={driver.Animator.IsInTransition(0)}, " +
+                    $"CurrentHash={driver.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash}, " +
+                    $"ExpectedHash={idleStateHash}, " +
+                    $"CurrentNormalized=" +
+                    $"{driver.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime:F3}, " +
+                    $"NextHash={driver.Animator.GetNextAnimatorStateInfo(0).fullPathHash}.");
+            yield return WaitForStableBodyPose(body, 1f);
+            Vector3 heldPosition = body.position;
+            Quaternion heldRotation = body.rotation;
+
+            AnimatorStateInfo initialState =
+                driver.Animator.GetCurrentAnimatorStateInfo(0);
+            int initialLoop = Mathf.FloorToInt(initialState.normalizedTime);
+            float initialNormalizedTime = initialState.normalizedTime;
+            int observedAppliedFrame = chairGrip.LastAppliedFrame;
+            int appliedFrameCount = 0;
+            bool crossedLoopSeam = false;
+            Vector3 previousLeftGoalLocal = chairCollider.transform.InverseTransformPoint(
+                chairGrip.LeftGripTarget);
+            Vector3 previousRightGoalLocal = chairCollider.transform.InverseTransformPoint(
+                chairGrip.RightGripTarget);
+            Vector3 previousLeftContactLocal = chairCollider.transform.InverseTransformPoint(
+                chairGrip.LeftRenderedGripContact);
+            Vector3 previousRightContactLocal = chairCollider.transform.InverseTransformPoint(
+                chairGrip.RightRenderedGripContact);
+            float maximumGoalStep = 0f;
+            float maximumContactStep = 0f;
+            float maximumRawResidual = 0f;
+            float maximumRenderedContactError = 0f;
+            float deadline = Time.realtimeSinceStartup + LongHoldTimeoutSeconds;
+
+            while ((appliedFrameCount < LongHoldMinimumAppliedFrames ||
+                    !crossedLoopSeam) &&
+                   Time.realtimeSinceStartup < deadline)
+            {
+                yield return null;
+
+                Assert.That(chairGrip.Phase,
+                    Is.EqualTo(ShowcaseChairGripPhase.Holding),
+                    "Chair grip phase changed during the full Idle hold cycle.");
+                Assert.That(chairGrip.CurrentWeight, Is.EqualTo(1f).Within(0.01f));
+                Assert.That(chairGrip.TargetCollider, Is.SameAs(chairCollider));
+                Assert.That(chairGrip.BlendStartCount,
+                    Is.EqualTo(expectedBlendStartCount),
+                    "Chair grip restarted during the full Idle hold cycle.");
+                Assert.That(relay.PreparedTarget, Is.SameAs(chair));
+                Assert.That(relay.IsReadyForCall, Is.True);
+                Assert.That(Vector3.Distance(body.position, heldPosition),
+                    Is.LessThanOrEqualTo(0.001f),
+                    "The presentation rig moved the physical Chair during Idle hold.");
+                Assert.That(Quaternion.Angle(body.rotation, heldRotation),
+                    Is.LessThanOrEqualTo(0.1f),
+                    "The presentation rig rotated the physical Chair during Idle hold.");
+
+                AnimatorStateInfo state = driver.Animator.GetCurrentAnimatorStateInfo(0);
+                Assert.That(driver.Animator.IsInTransition(0), Is.False);
+                Assert.That(state.fullPathHash, Is.EqualTo(idleStateHash));
+                crossedLoopSeam |= Mathf.FloorToInt(state.normalizedTime) > initialLoop;
+
+                if (chairGrip.LastAppliedFrame < 0 ||
+                    chairGrip.LastAppliedFrame == observedAppliedFrame)
+                {
+                    continue;
+                }
+
+                observedAppliedFrame = chairGrip.LastAppliedFrame;
+                appliedFrameCount++;
+                Assert.That(chairGrip.HasRenderedGripContact, Is.True);
+                Assert.That(chairGrip.LeftHandError,
+                    Is.LessThanOrEqualTo(RawHandResidualTolerance));
+                Assert.That(chairGrip.RightHandError,
+                    Is.LessThanOrEqualTo(RawHandResidualTolerance));
+                Assert.That(chairGrip.LeftRenderedGripContactError,
+                    Is.LessThanOrEqualTo(HandPositionTolerance));
+                Assert.That(chairGrip.RightRenderedGripContactError,
+                    Is.LessThanOrEqualTo(HandPositionTolerance));
+
+                Vector3 leftGoalLocal = chairCollider.transform.InverseTransformPoint(
+                    chairGrip.LeftGripTarget);
+                Vector3 rightGoalLocal = chairCollider.transform.InverseTransformPoint(
+                    chairGrip.RightGripTarget);
+                Vector3 leftContactLocal = chairCollider.transform.InverseTransformPoint(
+                    chairGrip.LeftRenderedGripContact);
+                Vector3 rightContactLocal = chairCollider.transform.InverseTransformPoint(
+                    chairGrip.RightRenderedGripContact);
+                float goalStep = Mathf.Max(
+                    Vector3.Distance(previousLeftGoalLocal, leftGoalLocal),
+                    Vector3.Distance(previousRightGoalLocal, rightGoalLocal));
+                float contactStep = Mathf.Max(
+                    Vector3.Distance(previousLeftContactLocal, leftContactLocal),
+                    Vector3.Distance(previousRightContactLocal, rightContactLocal));
+                Assert.That(goalStep, Is.LessThanOrEqualTo(GripStabilityTolerance),
+                    "Analytic Chair-local IK goal drifted during Idle hold.");
+                Assert.That(contactStep, Is.LessThanOrEqualTo(GripStabilityTolerance),
+                    "Rendered Chair-local contact drifted during Idle hold.");
+
+                maximumGoalStep = Mathf.Max(maximumGoalStep, goalStep);
+                maximumContactStep = Mathf.Max(maximumContactStep, contactStep);
+                maximumRawResidual = Mathf.Max(
+                    maximumRawResidual,
+                    chairGrip.LeftHandError,
+                    chairGrip.RightHandError);
+                maximumRenderedContactError = Mathf.Max(
+                    maximumRenderedContactError,
+                    chairGrip.LeftRenderedGripContactError,
+                    chairGrip.RightRenderedGripContactError);
+                previousLeftGoalLocal = leftGoalLocal;
+                previousRightGoalLocal = rightGoalLocal;
+                previousLeftContactLocal = leftContactLocal;
+                previousRightContactLocal = rightContactLocal;
+            }
+
+            Assert.That(appliedFrameCount,
+                Is.GreaterThanOrEqualTo(LongHoldMinimumAppliedFrames),
+                "Chair hold did not publish 250 distinct applied IK frames.");
+            Assert.That(crossedLoopSeam, Is.True,
+                "Chair hold did not cross one complete authored Idle loop seam.");
+            Debug.Log(
+                $"CHR01 CHAIR LONG HOLD SUMMARY: AppliedFrames={appliedFrameCount}, " +
+                $"IdleNormalized={initialNormalizedTime:F3}->" +
+                $"{driver.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime:F3}, " +
+                $"GoalStepMax={maximumGoalStep:F6}, " +
+                $"ContactStepMax={maximumContactStep:F6}, " +
+                $"RawResidualMax={maximumRawResidual:F6}, " +
+                $"RenderedContactErrorMax={maximumRenderedContactError:F6}.");
         }
 
         private string DescribeChairState()
@@ -836,7 +897,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             float deadline = Time.realtimeSinceStartup + timeoutSeconds;
             while (stableFrames < 4 && Time.realtimeSinceStartup < deadline)
             {
-                yield return null;
+                yield return new WaitForFixedUpdate();
                 bool stable = Vector3.Distance(body.position, previousPosition) <= 0.0001f &&
                     Quaternion.Angle(body.rotation, previousRotation) <= 0.01f;
                 stableFrames = stable ? stableFrames + 1 : 0;

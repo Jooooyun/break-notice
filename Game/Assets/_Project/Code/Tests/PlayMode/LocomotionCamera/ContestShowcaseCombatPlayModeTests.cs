@@ -359,6 +359,16 @@ namespace BreakNotice.LocomotionCamera.Tests
                 () => relay.IsReadyForCall,
                 12f,
                 "Ally did not prepare a supply target.");
+            yield return WaitUntilOrFail(
+                () => relay.PreparedTarget != null &&
+                      gripSocket.TryGetWorldPose(
+                          out Vector3 currentGripPosition,
+                          out _) &&
+                      Vector3.Distance(
+                          relay.PreparedTarget.transform.position,
+                          currentGripPosition) <= 0.03f,
+                1f,
+                "Ready Binder did not converge to the current-frame CHR01 grip pose.");
             Assert.That(gripSocket.TryGetWorldPose(
                 out Vector3 readyGripPosition,
                 out _), Is.True);

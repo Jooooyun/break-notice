@@ -43,6 +43,10 @@ namespace BreakNotice.Gameplay.Interaction
         private Transform rightLowerArm;
         private float leftArmLength;
         private float rightArmLength;
+        private BoxCollider controlGoalChairCollider;
+        private Vector3 controlLeftLocal;
+        private Vector3 controlRightLocal;
+        private bool controlGoalLatched;
         private BoxCollider plantedChairCollider;
         private Vector3 plantedLeftLocal;
         private Vector3 plantedRightLocal;
@@ -222,7 +226,7 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             trackedChairCollider = authoredChair;
-            ClearRenderedContactState();
+            ClearGripAnchorState();
             releaseChairCollider = null;
             releasePose = default;
             if (requestedPhase == ShowcaseChairGripPhase.None)
@@ -253,7 +257,7 @@ namespace BreakNotice.Gameplay.Interaction
                 out releaseRenderedContact);
             releaseChairCollider = trackedChairCollider;
             trackedChairCollider = null;
-            ClearActiveRenderedContact();
+            ClearActiveGripAnchors();
             requestedPhase = ShowcaseChairGripPhase.BlendOut;
             requestedBlendStartCount++;
         }
@@ -389,6 +393,18 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
+            if (controlGoalLatched)
+            {
+                if (controlGoalChairCollider != chair)
+                {
+                    return false;
+                }
+
+                left = chair.transform.TransformPoint(controlLeftLocal);
+                right = chair.transform.TransformPoint(controlRightLocal);
+                return IsFinite(left) && IsFinite(right);
+            }
+
             left = ProjectToArmReach(
                 leftUpperArm.position,
                 idealLeft,
@@ -402,7 +418,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            if (!allowPlant || plantedPoseLatched)
+            if (!allowPlant)
             {
                 return true;
             }
@@ -450,7 +466,17 @@ namespace BreakNotice.Gameplay.Interaction
                 contactCalibrationReady = false;
             }
 
-            contactCalibrationReady = plantEvidenceCount >= PlantEvidenceFrames;
+            if (plantEvidenceCount >= PlantEvidenceFrames)
+            {
+                // Latch only the stable analytic candidate. The observed hand
+                // pose is captured separately for rendered-contact diagnostics
+                // and never becomes an IK control input.
+                controlGoalChairCollider = chair;
+                controlLeftLocal = leftLocal;
+                controlRightLocal = rightLocal;
+                controlGoalLatched = true;
+                contactCalibrationReady = true;
+            }
             return true;
         }
 
@@ -460,7 +486,9 @@ namespace BreakNotice.Gameplay.Interaction
             BoxCollider chair,
             GripPose requestedGoal)
         {
-            if (plantedPoseLatched || !contactCalibrationReady ||
+            if (plantedPoseLatched || !controlGoalLatched ||
+                controlGoalChairCollider != chair ||
+                !contactCalibrationReady ||
                 phase != ShowcaseChairGripPhase.Holding ||
                 requestedPhase != ShowcaseChairGripPhase.Holding ||
                 weight < 1f - WeightEpsilon ||
@@ -618,20 +646,24 @@ namespace BreakNotice.Gameplay.Interaction
             trackedChairCollider = null;
             releaseChairCollider = null;
             releasePose = default;
-            ClearRenderedContactState();
+            ClearGripAnchorState();
             requestedPhase = ShowcaseChairGripPhase.None;
             requestedWeight = 0f;
         }
 
-        private void ClearRenderedContactState()
+        private void ClearGripAnchorState()
         {
-            ClearActiveRenderedContact();
+            ClearActiveGripAnchors();
             releaseRenderedContact = default;
             releaseRenderedContactValid = false;
         }
 
-        private void ClearActiveRenderedContact()
+        private void ClearActiveGripAnchors()
         {
+            controlGoalChairCollider = null;
+            controlLeftLocal = Vector3.zero;
+            controlRightLocal = Vector3.zero;
+            controlGoalLatched = false;
             plantedChairCollider = null;
             plantedLeftLocal = Vector3.zero;
             plantedRightLocal = Vector3.zero;

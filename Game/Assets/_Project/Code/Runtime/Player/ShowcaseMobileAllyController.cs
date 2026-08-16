@@ -168,6 +168,10 @@ namespace BreakNotice.Gameplay.Interaction
 
         public float LastStepDistance { get; private set; }
 
+        public float ActualPlanarSpeed => isActiveAndEnabled
+            ? LastStepDistance / Mathf.Max(0.0001f, Time.fixedDeltaTime)
+            : 0f;
+
         public float MaximumObservedStepDistance { get; private set; }
 
         public float FollowDistance => followDistance;
@@ -471,6 +475,7 @@ namespace BreakNotice.Gameplay.Interaction
             taskReached = false;
             taskBlocked = false;
             blockedElapsed = 0f;
+            LastStepDistance = 0f;
             CurrentAnchorIndex = -1;
             if (State == ShowcaseMobileAllyState.Fetching ||
                 State == ShowcaseMobileAllyState.ReturningWithSupply ||
