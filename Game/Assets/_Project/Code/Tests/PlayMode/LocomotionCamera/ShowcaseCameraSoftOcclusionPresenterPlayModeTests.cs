@@ -8,7 +8,7 @@ namespace BreakNotice.LocomotionCamera.Tests
     public sealed class ShowcaseCameraSoftOcclusionPresenterPlayModeTests
     {
         [Test]
-        public void Resolve_HidesAndRestoresWholeRootWithoutChangingPhysicsTopology()
+        public void Resolve_HidesOnlyHitPanelWithoutChangingPhysicsTopology()
         {
             int softLayer = LayerMask.NameToLayer("CameraSoftOccluder");
             Assert.That(softLayer, Is.GreaterThanOrEqualTo(0));
@@ -32,14 +32,29 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Renderer hitRenderer = hitChild.GetComponent<Renderer>();
                 Collider hitCollider = hitChild.GetComponent<Collider>();
 
+                GameObject preHiddenDetail =
+                    GameObject.CreatePrimitive(PrimitiveType.Cube);
+                preHiddenDetail.name = "PreHiddenDetailOwnedByHitPanel";
+                preHiddenDetail.layer = softLayer;
+                preHiddenDetail.transform.SetParent(hitChild.transform, false);
+                preHiddenDetail.transform.localPosition =
+                    new Vector3(0.2f, 0f, 0f);
+                preHiddenDetail.transform.localScale =
+                    new Vector3(0.2f, 0.2f, 0.2f);
+                UnityEngine.Object.DestroyImmediate(
+                    preHiddenDetail.GetComponent<Collider>());
+                Renderer preHiddenRenderer =
+                    preHiddenDetail.GetComponent<Renderer>();
+                preHiddenRenderer.forceRenderingOff = true;
+
                 GameObject siblingChild = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                siblingChild.name = "SiblingRendererWithOriginalForceOff";
+                siblingChild.name = "AdjacentPanelMustRemainVisible";
                 siblingChild.layer = softLayer;
                 siblingChild.transform.SetParent(softRootObject.transform, false);
-                siblingChild.transform.localPosition = new Vector3(0.75f, 0f, 2f);
-                siblingChild.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                siblingChild.transform.localPosition = new Vector3(1.5f, 0f, 2f);
+                siblingChild.transform.localScale = new Vector3(1f, 1f, 0.2f);
                 Renderer siblingRenderer = siblingChild.GetComponent<Renderer>();
-                siblingRenderer.forceRenderingOff = true;
+                Collider siblingCollider = siblingChild.GetComponent<Collider>();
 
                 presenterObject = new GameObject("SoftOcclusionPresenterTest");
                 ShowcaseCameraSoftOcclusionPresenter presenter =
@@ -61,16 +76,23 @@ namespace BreakNotice.LocomotionCamera.Tests
                 presenter.Resolve(subjectPosition, blockedCameraPosition);
 
                 Assert.That(presenter.ActiveOccluderCount, Is.EqualTo(1));
+                Assert.That(presenter.CachedPanelCount, Is.EqualTo(2));
+                Assert.That(presenter.CachedColliderCount, Is.EqualTo(2));
                 Assert.That(hitRenderer.forceRenderingOff, Is.True);
-                Assert.That(siblingRenderer.forceRenderingOff, Is.True);
+                Assert.That(preHiddenRenderer.forceRenderingOff, Is.True);
+                Assert.That(
+                    siblingRenderer.forceRenderingOff,
+                    Is.False,
+                    "A hit on one partition panel must not hide its sibling panels.");
                 Assert.That(presenter.CacheRefreshCount, Is.EqualTo(refreshCount));
 
                 presenter.RefreshCache();
                 Assert.That(
                     hitRenderer.forceRenderingOff,
                     Is.True,
-                    "Atomic refresh must preserve an already hidden root.");
-                Assert.That(siblingRenderer.forceRenderingOff, Is.True);
+                    "Atomic refresh must preserve an already hidden panel.");
+                Assert.That(preHiddenRenderer.forceRenderingOff, Is.True);
+                Assert.That(siblingRenderer.forceRenderingOff, Is.False);
                 Assert.That(presenter.ActiveOccluderCount, Is.EqualTo(1));
 
                 Vector3 clearSubjectPosition = origin + Vector3.right * 10f;
@@ -81,14 +103,17 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(presenter.ActiveOccluderCount, Is.Zero);
                 Assert.That(hitRenderer.forceRenderingOff, Is.False);
                 Assert.That(
-                    siblingRenderer.forceRenderingOff,
+                    preHiddenRenderer.forceRenderingOff,
                     Is.True,
                     "Presenter must restore the exact pre-hide forceRenderingOff state.");
+                Assert.That(siblingRenderer.forceRenderingOff, Is.False);
                 Assert.That(softRootObject.activeSelf, Is.EqualTo(rootActive));
                 Assert.That(softRootObject.activeInHierarchy, Is.True);
                 Assert.That(hitChild.activeSelf, Is.EqualTo(hitActive));
                 Assert.That(hitCollider.enabled, Is.EqualTo(colliderEnabled));
                 Assert.That(hitCollider.isTrigger, Is.EqualTo(colliderTrigger));
+                Assert.That(siblingCollider.enabled, Is.True);
+                Assert.That(siblingCollider.isTrigger, Is.False);
                 Assert.That(hitRenderer.enabled, Is.EqualTo(rendererEnabled));
                 Assert.That(softRootObject.layer, Is.EqualTo(rootLayer));
                 Assert.That(hitChild.layer, Is.EqualTo(hitLayer));

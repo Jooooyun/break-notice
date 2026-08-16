@@ -145,6 +145,22 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Is.True,
                 "Soft camera occluders must keep their gameplay collision enabled.");
             Assert.That(renderers, Has.Length.EqualTo(26));
+            Assert.That(
+                colliders.Select(collider => collider.gameObject).Distinct(),
+                Is.EquivalentTo(
+                    renderers.Select(renderer => renderer.gameObject).Distinct()),
+                "Every v007 soft panel must own its collider and renderer on " +
+                "the same GameObject so one hit can hide only that panel.");
+            Assert.That(
+                colliders.All(collider =>
+                    collider.GetComponents<Renderer>().Length == 1),
+                Is.True,
+                "Soft panels must not fall back to a shared root renderer.");
+            Assert.That(
+                renderers.All(renderer =>
+                    renderer.GetComponents<Collider>().Length == 1),
+                Is.True,
+                "Each soft panel renderer must have one matching collider.");
             Assert.That(renderers.All(renderer =>
                     renderer.enabled && renderer.gameObject.activeInHierarchy),
                 Is.True,

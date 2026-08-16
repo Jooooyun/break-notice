@@ -15,18 +15,18 @@ namespace BreakNotice.Presentation
         private const int HitCapacity = 64;
         private const float ProbeRadius = 0.04f;
 
-        private sealed class SoftRootCache
+        private sealed class SoftPanelCache
         {
-            public SoftRootCache(
-                ShowcaseCameraSoftOccluderRoot root,
+            public SoftPanelCache(
+                int panelId,
                 Renderer[] renderers)
             {
-                Root = root;
+                PanelId = panelId;
                 Renderers = renderers;
                 ForceRenderingOffBeforeHide = new bool[renderers.Length];
             }
 
-            public ShowcaseCameraSoftOccluderRoot Root { get; }
+            public int PanelId { get; }
             public Renderer[] Renderers { get; }
             public bool[] ForceRenderingOffBeforeHide { get; }
             public int LastSeenGeneration { get; set; }
@@ -34,13 +34,13 @@ namespace BreakNotice.Presentation
         }
 
         private readonly RaycastHit[] hits = new RaycastHit[HitCapacity];
-        private List<SoftRootCache> rootCaches = new();
-        private Dictionary<int, SoftRootCache> colliderCaches = new();
+        private List<SoftPanelCache> panelCaches = new();
+        private Dictionary<int, SoftPanelCache> colliderCaches = new();
         private int softLayerMask;
         private int resolveGeneration;
 
         public int ActiveOccluderCount { get; private set; }
-        public int CachedRootCount => rootCaches.Count;
+        public int CachedPanelCount => panelCaches.Count;
         public int CachedColliderCount => colliderCaches.Count;
         public int CacheRefreshCount { get; private set; }
 
@@ -61,21 +61,20 @@ namespace BreakNotice.Presentation
         }
 
         /// <summary>
-        /// Rebuilds the root-to-renderer and collider-to-root snapshots. The
+        /// Rebuilds the panel-to-renderer and collider-to-panel snapshots. The
         /// completed snapshots replace the previous cache together, so Resolve
         /// can remain traversal- and allocation-free between topology changes.
         /// Call this after adding or removing renderers/colliders at runtime.
         /// </summary>
         public void RefreshCache()
         {
-            var rootsHiddenBeforeRefresh = new HashSet<int>();
-            for (int index = 0; index < rootCaches.Count; index++)
+            var panelsHiddenBeforeRefresh = new HashSet<int>();
+            for (int index = 0; index < panelCaches.Count; index++)
             {
-                SoftRootCache existingCache = rootCaches[index];
-                if (existingCache.IsHidden && existingCache.Root != null)
+                SoftPanelCache existingCache = panelCaches[index];
+                if (existingCache.IsHidden)
                 {
-                    rootsHiddenBeforeRefresh.Add(
-                        existingCache.Root.GetInstanceID());
+                    panelsHiddenBeforeRefresh.Add(existingCache.PanelId);
                 }
             }
 
@@ -83,8 +82,9 @@ namespace BreakNotice.Presentation
                 Object.FindObjectsByType<ShowcaseCameraSoftOccluderRoot>(
                     FindObjectsInactive.Include,
                     FindObjectsSortMode.InstanceID);
-            var rebuiltRoots = new List<SoftRootCache>(roots.Length);
-            var rebuiltColliders = new Dictionary<int, SoftRootCache>();
+            var rebuiltPanels = new List<SoftPanelCache>();
+            var rebuiltColliders = new Dictionary<int, SoftPanelCache>();
+            var panelsByTransform = new Dictionary<int, SoftPanelCache>();
 
             for (int rootIndex = 0; rootIndex < roots.Length; rootIndex++)
             {
@@ -93,10 +93,6 @@ namespace BreakNotice.Presentation
                 {
                     continue;
                 }
-
-                Renderer[] renderers = CollectOwnedRenderers(root);
-                var rootCache = new SoftRootCache(root, renderers);
-                rebuiltRoots.Add(rootCache);
 
                 Collider[] colliders = root.GetComponentsInChildren<Collider>(true);
                 for (int colliderIndex = 0;
@@ -111,30 +107,41 @@ namespace BreakNotice.Presentation
                         continue;
                     }
 
-                    rebuiltColliders[collider.GetInstanceID()] = rootCache;
+                    int panelId = collider.transform.GetInstanceID();
+                    if (!panelsByTransform.TryGetValue(
+                            panelId,
+                            out SoftPanelCache panelCache))
+                    {
+                        Renderer[] renderers = CollectPanelRenderers(
+                            collider.transform,
+                            root);
+                        panelCache = new SoftPanelCache(panelId, renderers);
+                        panelsByTransform.Add(panelId, panelCache);
+                        rebuiltPanels.Add(panelCache);
+                    }
+
+                    rebuiltColliders[collider.GetInstanceID()] = panelCache;
                 }
             }
 
             // The new snapshot is complete before the active snapshot changes.
             // Restore presentation state through the old cache, then swap both
             // collections as one logical operation.
-            RestoreAllHiddenRoots();
-            rootCaches = rebuiltRoots;
+            RestoreAllHiddenPanels();
+            panelCaches = rebuiltPanels;
             colliderCaches = rebuiltColliders;
             resolveGeneration = 0;
-            int rehiddenRootCount = 0;
-            for (int index = 0; index < rootCaches.Count; index++)
+            int rehiddenPanelCount = 0;
+            for (int index = 0; index < panelCaches.Count; index++)
             {
-                SoftRootCache rootCache = rootCaches[index];
-                if (rootCache.Root != null &&
-                    rootsHiddenBeforeRefresh.Contains(
-                        rootCache.Root.GetInstanceID()))
+                SoftPanelCache panelCache = panelCaches[index];
+                if (panelsHiddenBeforeRefresh.Contains(panelCache.PanelId))
                 {
-                    HideRoot(rootCache);
-                    rehiddenRootCount++;
+                    HidePanel(panelCache);
+                    rehiddenPanelCount++;
                 }
             }
-            ActiveOccluderCount = rehiddenRootCount;
+            ActiveOccluderCount = rehiddenPanelCount;
             CacheRefreshCount++;
         }
 
@@ -147,7 +154,7 @@ namespace BreakNotice.Presentation
             }
 
             int generation = NextGeneration();
-            int activeRootCount = 0;
+            int activePanelCount = 0;
             Vector3 delta = cameraPosition - subjectPosition;
             float distance = delta.magnitude;
             if (distance > 0.0001f)
@@ -171,7 +178,7 @@ namespace BreakNotice.Presentation
 
                     if (!colliderCaches.TryGetValue(
                             collider.GetInstanceID(),
-                            out SoftRootCache rootCache))
+                            out SoftPanelCache panelCache))
                     {
                         // Topology changes are explicit cache boundaries. Do
                         // not turn an unexpected collider into a per-frame
@@ -179,49 +186,53 @@ namespace BreakNotice.Presentation
                         continue;
                     }
 
-                    if (rootCache.LastSeenGeneration == generation)
+                    if (panelCache.LastSeenGeneration == generation)
                     {
                         continue;
                     }
 
-                    rootCache.LastSeenGeneration = generation;
-                    activeRootCount++;
+                    panelCache.LastSeenGeneration = generation;
+                    activePanelCount++;
                 }
             }
 
-            for (int index = 0; index < rootCaches.Count; index++)
+            for (int index = 0; index < panelCaches.Count; index++)
             {
-                SoftRootCache rootCache = rootCaches[index];
-                if (rootCache.LastSeenGeneration == generation)
+                SoftPanelCache panelCache = panelCaches[index];
+                if (panelCache.LastSeenGeneration == generation)
                 {
-                    HideRoot(rootCache);
+                    HidePanel(panelCache);
                 }
                 else
                 {
-                    RestoreRoot(rootCache);
+                    RestorePanel(panelCache);
                 }
             }
 
-            ActiveOccluderCount = activeRootCount;
+            ActiveOccluderCount = activePanelCount;
         }
 
         public void ResetVisibility()
         {
-            RestoreAllHiddenRoots();
+            RestoreAllHiddenPanels();
             ActiveOccluderCount = 0;
         }
 
-        private static Renderer[] CollectOwnedRenderers(
+        private static Renderer[] CollectPanelRenderers(
+            Transform panelTransform,
             ShowcaseCameraSoftOccluderRoot root)
         {
-            Renderer[] candidates = root.GetComponentsInChildren<Renderer>(true);
+            Renderer[] candidates =
+                panelTransform.GetComponentsInChildren<Renderer>(true);
             var ownedRenderers = new List<Renderer>(candidates.Length);
             for (int index = 0; index < candidates.Length; index++)
             {
                 Renderer renderer = candidates[index];
                 if (renderer != null &&
                     renderer.GetComponentInParent<
-                        ShowcaseCameraSoftOccluderRoot>() == root)
+                        ShowcaseCameraSoftOccluderRoot>() == root &&
+                    FindNearestColliderTransform(renderer.transform, root) ==
+                        panelTransform)
                 {
                     ownedRenderers.Add(renderer);
                 }
@@ -230,11 +241,33 @@ namespace BreakNotice.Presentation
             return ownedRenderers.ToArray();
         }
 
-        private static void HideRoot(SoftRootCache rootCache)
+        private static Transform FindNearestColliderTransform(
+            Transform rendererTransform,
+            ShowcaseCameraSoftOccluderRoot root)
         {
-            Renderer[] renderers = rootCache.Renderers;
-            bool[] originalStates = rootCache.ForceRenderingOffBeforeHide;
-            if (!rootCache.IsHidden)
+            Transform current = rendererTransform;
+            Transform rootTransform = root.transform;
+            while (current != null)
+            {
+                if (current.GetComponent<Collider>() != null)
+                {
+                    return current;
+                }
+                if (current == rootTransform)
+                {
+                    break;
+                }
+                current = current.parent;
+            }
+
+            return null;
+        }
+
+        private static void HidePanel(SoftPanelCache panelCache)
+        {
+            Renderer[] renderers = panelCache.Renderers;
+            bool[] originalStates = panelCache.ForceRenderingOffBeforeHide;
+            if (!panelCache.IsHidden)
             {
                 for (int index = 0; index < renderers.Length; index++)
                 {
@@ -244,7 +277,7 @@ namespace BreakNotice.Presentation
                         originalStates[index] = renderer.forceRenderingOff;
                     }
                 }
-                rootCache.IsHidden = true;
+                panelCache.IsHidden = true;
             }
 
             for (int index = 0; index < renderers.Length; index++)
@@ -257,15 +290,15 @@ namespace BreakNotice.Presentation
             }
         }
 
-        private static void RestoreRoot(SoftRootCache rootCache)
+        private static void RestorePanel(SoftPanelCache panelCache)
         {
-            if (!rootCache.IsHidden)
+            if (!panelCache.IsHidden)
             {
                 return;
             }
 
-            Renderer[] renderers = rootCache.Renderers;
-            bool[] originalStates = rootCache.ForceRenderingOffBeforeHide;
+            Renderer[] renderers = panelCache.Renderers;
+            bool[] originalStates = panelCache.ForceRenderingOffBeforeHide;
             for (int index = 0; index < renderers.Length; index++)
             {
                 Renderer renderer = renderers[index];
@@ -274,14 +307,14 @@ namespace BreakNotice.Presentation
                     renderer.forceRenderingOff = originalStates[index];
                 }
             }
-            rootCache.IsHidden = false;
+            panelCache.IsHidden = false;
         }
 
-        private void RestoreAllHiddenRoots()
+        private void RestoreAllHiddenPanels()
         {
-            for (int index = 0; index < rootCaches.Count; index++)
+            for (int index = 0; index < panelCaches.Count; index++)
             {
-                RestoreRoot(rootCaches[index]);
+                RestorePanel(panelCaches[index]);
             }
         }
 
@@ -289,9 +322,9 @@ namespace BreakNotice.Presentation
         {
             if (resolveGeneration == int.MaxValue)
             {
-                for (int index = 0; index < rootCaches.Count; index++)
+                for (int index = 0; index < panelCaches.Count; index++)
                 {
-                    rootCaches[index].LastSeenGeneration = 0;
+                    panelCaches[index].LastSeenGeneration = 0;
                 }
                 resolveGeneration = 0;
             }
