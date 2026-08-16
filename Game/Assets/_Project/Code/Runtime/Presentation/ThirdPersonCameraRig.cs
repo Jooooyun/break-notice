@@ -388,6 +388,39 @@ namespace BreakNotice.Presentation
         public bool HardConstraintActiveThisFrame => constraintSolver != null &&
             constraintSolver.HardConstraintActiveThisFrame;
 
+        public ShowcaseStaticCameraContactPhase StaticContactPhase =>
+            constraintSolver != null
+                ? constraintSolver.StaticContactPhase
+                : ShowcaseStaticCameraContactPhase.Clear;
+
+        public int ContactEpisodeId => constraintSolver != null
+            ? constraintSolver.ContactEpisodeId
+            : 0;
+
+        public int RestoreStartCount => constraintSolver != null
+            ? constraintSolver.RestoreStartCount
+            : 0;
+
+        public float RequestedBoomDistance => constraintSolver != null
+            ? constraintSolver.RequestedBoomDistance
+            : CurrentDistance;
+
+        public bool EmergencyShoulderLatched => constraintSolver != null &&
+            constraintSolver.EmergencyShoulderLatched;
+
+        public Collider ActiveHardBlocker => constraintSolver != null
+            ? constraintSolver.ActiveHardBlocker
+            : null;
+
+        public int ActiveSoftOccluderCount => constraintSolver != null
+            ? constraintSolver.ActiveSoftOccluderCount
+            : 0;
+
+        public Vector3 FinalStableAnchorLocalCameraOffset =>
+            constraintSolver != null
+                ? constraintSolver.FinalStableAnchorLocalCameraOffset
+                : Vector3.zero;
+
         public int ConstraintEvaluationsThisFrame => constraintSolver != null
             ? constraintSolver.EvaluationsThisFrame
             : 0;
@@ -482,7 +515,7 @@ namespace BreakNotice.Presentation
             systemGateActive = resetRequested;
             if (resetRequested && !resetWasRequested)
             {
-                HardResetCameraState();
+                HardResetCameraStateForSystemReset();
             }
             resetWasRequested = resetRequested;
 
@@ -585,6 +618,16 @@ namespace BreakNotice.Presentation
 
         public void HardResetCameraState()
         {
+            HardResetCameraState(preserveCurrentSemanticState: true);
+        }
+
+        private void HardResetCameraStateForSystemReset()
+        {
+            HardResetCameraState(preserveCurrentSemanticState: false);
+        }
+
+        private void HardResetCameraState(bool preserveCurrentSemanticState)
+        {
             unchecked
             {
                 cameraResetRevision++;
@@ -594,9 +637,26 @@ namespace BreakNotice.Presentation
                 yaw = playerTarget.eulerAngles.y;
             }
             pitch = Mathf.Clamp(neutralPitch, minimumPitch, maximumPitch);
-            InitializeProfile(CameraCoreMode.Normal);
+            CameraCoreMode resetMode = CameraCoreMode.Normal;
+            CameraCarryMode resetCarryMode = CameraCarryMode.None;
+            bool resetThrowWindup = false;
+            if (preserveCurrentSemanticState && playerTarget != null)
+            {
+                resetMode = ResolveDesiredMode();
+                ResolveDesiredGameplayOverride(
+                    out resetCarryMode,
+                    out resetThrowWindup);
+            }
+            else
+            {
+                // ResetEncounter is a system gate, not a teleport.  Do not
+                // preserve the previous frame's Aim flag while simultaneously
+                // dropping Carry through the gate; that creates a mixed semantic
+                // profile and immediately restarts an Aim->Normal blend.
+                IsAiming = false;
+            }
+            InitializeProfile(resetMode, resetCarryMode, resetThrowWindup);
             subjectSafetyCorrectionApplied = false;
-            activePresentationProfile = evaluatedProfile;
             ApplyStableAnchorPose(activePresentationProfile);
             ApplyPresentation(activePresentationProfile);
             EnsureConstraintSolver();
@@ -777,17 +837,24 @@ namespace BreakNotice.Presentation
             return Mathf.Max(MinimumTransitionDuration, sprintTransitionDuration);
         }
 
-        private void InitializeProfile(CameraCoreMode mode)
+        private void InitializeProfile(
+            CameraCoreMode mode,
+            CameraCarryMode carryMode = CameraCarryMode.None,
+            bool throwWindup = false)
         {
             requestedMode = mode;
-            requestedCarryMode = CameraCarryMode.None;
-            requestedThrowWindup = false;
+            requestedCarryMode = carryMode;
+            requestedThrowWindup = throwWindup;
             evaluatedProfile = GetCoreProfile(mode);
             transitionSource = evaluatedProfile;
             transitionTarget = evaluatedProfile;
-            evaluatedGameplayOffset = Vector4.zero;
-            transitionSourceGameplayOffset = Vector4.zero;
-            transitionTargetGameplayOffset = Vector4.zero;
+            evaluatedGameplayOffset = GetGameplayOffsets(
+                carryMode,
+                throwWindup,
+                1f,
+                1f);
+            transitionSourceGameplayOffset = evaluatedGameplayOffset;
+            transitionTargetGameplayOffset = evaluatedGameplayOffset;
             transitionElapsed = 0f;
             transitionDuration = 0f;
             aimBlend = mode == CameraCoreMode.Aim ? 1f : 0f;
@@ -796,13 +863,17 @@ namespace BreakNotice.Presentation
             transitionTargetAimBlend = aimBlend;
             transitionSourceSprintBlend = sprintBlend;
             transitionTargetSprintBlend = sprintBlend;
-            CarryBlend = 0f;
-            ThrowWindupBlend = 0f;
-            transitionSourceCarryBlend = 0f;
-            transitionTargetCarryBlend = 0f;
-            transitionSourceThrowWindupBlend = 0f;
-            transitionTargetThrowWindupBlend = 0f;
-            activePresentationProfile = evaluatedProfile;
+            CarryBlend = carryMode == CameraCarryMode.None ? 0f : 1f;
+            ThrowWindupBlend = throwWindup ? 1f : 0f;
+            transitionSourceCarryBlend = CarryBlend;
+            transitionTargetCarryBlend = CarryBlend;
+            transitionSourceThrowWindupBlend = ThrowWindupBlend;
+            transitionTargetThrowWindupBlend = ThrowWindupBlend;
+            activePresentationProfile = evaluatedProfile.WithOffsets(
+                evaluatedGameplayOffset.x,
+                evaluatedGameplayOffset.y,
+                evaluatedGameplayOffset.z,
+                evaluatedGameplayOffset.w);
             profileInitialized = true;
         }
 
@@ -1120,7 +1191,11 @@ namespace BreakNotice.Presentation
                     0f);
                 thirdPersonFollow.VerticalArmLength = profile.VerticalArmLength;
                 thirdPersonFollow.CameraSide = 1f;
-                thirdPersonFollow.Damping = profile.Damping;
+                // The Stable Anchor/profile blend is the sole positional
+                // authority.  Follow damping would create a second position
+                // source that diverges whenever the constraint solver becomes
+                // active and then hands control back in open space.
+                thirdPersonFollow.Damping = Vector3.zero;
             }
 
             if (virtualCamera != null)

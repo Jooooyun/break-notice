@@ -127,8 +127,16 @@ namespace BreakNotice.Presentation
         private const float ContactPlaneQuantization = 0.02f;
         private const int MaximumPhysicsQueriesPerFrame = 24;
         private const int MaximumPhysicsQueriesPerCandidate = 12;
+        // Ordinary solving remains bounded by MaximumPhysicsQueriesPerFrame.
+        // This reserve is reachable only after ordinary solving has failed and
+        // exists so fail-closed validation cannot be defeated by the budget
+        // exhaustion that triggered it.
+        private const int FailClosedSafetyQueryReserve = 40;
         private const float ConstrainedRefinementInterval = 0.05f;
         private const float CornerProbeInterval = 0.04f;
+        private const float StaticReleaseEvidenceDuration = 0.18f;
+        private const float StaticReleaseSpatialMargin = 0.075f;
+        private const float SubjectReleaseEvidenceDuration = 0.10f;
 
         private static readonly ProfilerMarker FinalizeMarker =
             new("BreakNotice.CameraConstraint.Finalize");
@@ -168,15 +176,16 @@ namespace BreakNotice.Presentation
         private int lastEvaluationFrame = -1;
         private int evaluationsThisFrame;
         private int physicsQueriesThisFrame;
+        private int failClosedSafetyQueriesThisFrame;
         private int fullSolvesThisFrame;
         private int tupleCommitsThisFrame;
         private int cornerCandidateEvaluationsThisFrame;
         private int queryBudgetExceededCount;
         private int fastPathFrameCount;
         private bool queryBudgetExceededThisFrame;
+        private bool failClosedSafetyPass;
         private bool fastSafetySucceededThisFrame;
         private bool collectGeometrySignatureThisPass = true;
-        private float constrainedRefinementElapsed;
         private float cornerProbeElapsed;
         private ShowcaseContextualCornerMode nextCornerProbeMode =
             ShowcaseContextualCornerMode.RightDefault;
@@ -185,9 +194,6 @@ namespace BreakNotice.Presentation
         private ShowcaseContextualCornerCandidate cachedTemporaryLeftCandidate;
         private float cachedSubjectForwardSightlineClearance =
             CornerSightlineProbeDistance;
-        private int observedSemanticStateHash;
-        private bool hasObservedSemanticState;
-        private int observedCornerTransitionCount;
         private Collider currentHardBlocker;
         private Transform currentActorProxy;
         private Pose lastSolvedPose;
@@ -201,7 +207,26 @@ namespace BreakNotice.Presentation
         private PrototypeInteractionTarget cachedCarriedTarget;
         private Collider[] cachedCarryColliders = System.Array.Empty<Collider>();
         private readonly ShowcaseContextualCornerAimResolver cornerResolver = new();
+        private readonly ShowcaseCameraContactLatch staticContactLatch = new();
+        private readonly ShowcaseCameraContactLatch subjectContactLatch = new();
         private float cornerShoulderIntentFactor =
+            ShowcaseContextualCornerAimResolver.RightDefaultShoulderFactor;
+        private bool contactLatchInitialized;
+        private bool subjectLatchInitialized;
+        private bool emergencyShoulderLatched;
+        private float emergencyHorizontalShoulderFactor = 1f;
+        private int emergencyShoulderEpisodeId;
+        private Collider latchedHardBlocker;
+        private Transform latchedSubjectActorProxy;
+        private float requestedBoomDistance;
+        private Vector3 finalStableAnchorLocalCameraOffset;
+        private int activeSoftOccluderCount;
+        private ShowcaseCameraSoftOcclusionPresenter softOcclusionPresenter;
+        private int lastContactAdvanceFrame = -1;
+        private int lastSubjectAdvanceFrame = -1;
+        private int cornerContactEpisodeId;
+        private bool cornerContactDecisionLatched;
+        private float cornerContactShoulderFactor =
             ShowcaseContextualCornerAimResolver.RightDefaultShoulderFactor;
 
         public ShowcaseCameraConstraintStatus Status { get; private set; }
@@ -224,9 +249,13 @@ namespace BreakNotice.Presentation
 
         public float SafeBoomFraction { get; private set; } = 1f;
 
-        public Collider CurrentHardBlocker => currentHardBlocker;
+        public Collider CurrentHardBlocker => currentHardBlocker != null
+            ? currentHardBlocker
+            : null;
 
-        public Transform CurrentActorProxy => currentActorProxy;
+        public Transform CurrentActorProxy => currentActorProxy != null
+            ? currentActorProxy
+            : null;
 
         public Pose LastSolvedPose => lastSolvedPose;
 
@@ -274,6 +303,9 @@ namespace BreakNotice.Presentation
 
         public int PhysicsQueriesThisFrame => physicsQueriesThisFrame;
 
+        public int FailClosedSafetyQueriesThisFrame =>
+            failClosedSafetyQueriesThisFrame;
+
         public int PhysicsQueryBudgetPerFrame => MaximumPhysicsQueriesPerFrame;
 
         public int FullSolvesThisFrame => fullSolvesThisFrame;
@@ -291,10 +323,46 @@ namespace BreakNotice.Presentation
 
         public int FastPathFrameCount => fastPathFrameCount;
 
+        public ShowcaseStaticCameraContactPhase StaticContactPhase =>
+            staticContactLatch.Phase;
+
+        public int ContactEpisodeId => staticContactLatch.ContactEpisodeId;
+
+        public int RestoreStartCount => staticContactLatch.RestoreStartCount;
+
+        public float RequestedBoomDistance => requestedBoomDistance;
+
+        public bool EmergencyShoulderLatched => emergencyShoulderLatched;
+
+        public Collider ActiveHardBlocker => latchedHardBlocker != null
+            ? latchedHardBlocker
+            : null;
+
+        public int ActiveSoftOccluderCount => activeSoftOccluderCount;
+
+        public Vector3 FinalStableAnchorLocalCameraOffset =>
+            finalStableAnchorLocalCameraOffset;
+
+        public ShowcaseStaticCameraContactPhase SubjectContactPhase =>
+            subjectContactLatch.Phase;
+
+        public int SubjectContactEpisodeId => subjectContactLatch.ContactEpisodeId;
+
+        public int SubjectRestoreStartCount => subjectContactLatch.RestoreStartCount;
+
+        public float SubjectResolvedBoomDistance => subjectContactLatch.CurrentBoom;
+
         protected override void Awake()
         {
             base.Awake();
             ResolveLayerMasks();
+            softOcclusionPresenter =
+                GetComponent<ShowcaseCameraSoftOcclusionPresenter>();
+            if (softOcclusionPresenter == null)
+            {
+                softOcclusionPresenter = gameObject.AddComponent<
+                    ShowcaseCameraSoftOcclusionPresenter>();
+            }
             RefreshHardWorldColliders();
             RefreshActorProxies();
             cachedRightDefaultCandidate = CreateUnavailableCornerCandidate(
@@ -347,15 +415,16 @@ namespace BreakNotice.Presentation
             SubjectConstraintApplied = false;
             QuerySaturationCount = 0;
             physicsQueriesThisFrame = 0;
+            failClosedSafetyQueriesThisFrame = 0;
             fullSolvesThisFrame = 0;
             tupleCommitsThisFrame = 0;
             cornerCandidateEvaluationsThisFrame = 0;
             queryBudgetExceededCount = 0;
             fastPathFrameCount = 0;
             queryBudgetExceededThisFrame = false;
+            failClosedSafetyPass = false;
             fastSafetySucceededThisFrame = false;
             collectGeometrySignatureThisPass = true;
-            constrainedRefinementElapsed = 0f;
             cornerProbeElapsed = CornerProbeInterval;
             nextCornerProbeMode = ShowcaseContextualCornerMode.RightDefault;
             cachedRightDefaultCandidate = CreateUnavailableCornerCandidate(
@@ -370,12 +439,30 @@ namespace BreakNotice.Presentation
             cachedCarryColliders = cachedCarriedTarget != null
                 ? cachedCarriedTarget.GetComponentsInChildren<Collider>(true)
                 : System.Array.Empty<Collider>();
-            observedSemanticStateHash = 0;
-            hasObservedSemanticState = false;
-            observedCornerTransitionCount = 0;
             cornerShoulderIntentFactor =
                 ShowcaseContextualCornerAimResolver.RightDefaultShoulderFactor;
             cornerResolver.Reset(frameInput.CornerSnapshot.ResetRevision);
+            requestedBoomDistance = Mathf.Max(
+                MinimumBoomDistance,
+                ComposeProfile(1f).Distance);
+            staticContactLatch.Reset(requestedBoomDistance);
+            contactLatchInitialized = hasFrameInput;
+            subjectContactLatch.Reset(requestedBoomDistance);
+            subjectLatchInitialized = hasFrameInput;
+            emergencyShoulderLatched = false;
+            emergencyHorizontalShoulderFactor = 1f;
+            emergencyShoulderEpisodeId = 0;
+            latchedHardBlocker = null;
+            latchedSubjectActorProxy = null;
+            finalStableAnchorLocalCameraOffset = Vector3.zero;
+            activeSoftOccluderCount = 0;
+            softOcclusionPresenter?.ResetVisibility();
+            lastContactAdvanceFrame = -1;
+            lastSubjectAdvanceFrame = -1;
+            cornerContactEpisodeId = 0;
+            cornerContactDecisionLatched = false;
+            cornerContactShoulderFactor =
+                ShowcaseContextualCornerAimResolver.RightDefaultShoulderFactor;
             Status = ShowcaseCameraConstraintStatus.Uninitialized;
             NoValidPoseReason = ShowcaseCameraNoValidPoseReason.None;
             RefreshHardWorldColliders();
@@ -400,10 +487,12 @@ namespace BreakNotice.Presentation
                 lastEvaluationFrame = Time.frameCount;
                 evaluationsThisFrame = 0;
                 physicsQueriesThisFrame = 0;
+                failClosedSafetyQueriesThisFrame = 0;
                 fullSolvesThisFrame = 0;
                 tupleCommitsThisFrame = 0;
                 cornerCandidateEvaluationsThisFrame = 0;
                 queryBudgetExceededThisFrame = false;
+                failClosedSafetyPass = false;
                 fastSafetySucceededThisFrame = false;
             }
             evaluationsThisFrame++;
@@ -421,327 +510,799 @@ namespace BreakNotice.Presentation
             LensSettings lens,
             float deltaTime)
         {
-            Vector3 unconstrainedRigPosition = state.GetFinalPosition();
+            if (evaluationsThisFrame > 1 && hasLastSolvedPose)
+            {
+                ApplySolvedPosition(
+                    ref state,
+                    lastSolvedPose.position,
+                    cameraOrientation,
+                    Status);
+                return;
+            }
+
             bool forceImmediate = deltaTime < 0f;
             float safeDeltaTime = Mathf.Max(0f, deltaTime);
+            bool advanceContactState = lastContactAdvanceFrame != Time.frameCount;
+            bool advanceSubjectState = lastSubjectAdvanceFrame != Time.frameCount;
             SubjectConstraintApplied = false;
             NoValidPoseReason = ShowcaseCameraNoValidPoseReason.None;
             currentHardBlocker = null;
             currentActorProxy = null;
             hardConstraintActiveThisFrame = false;
+            activeSoftOccluderCount = 0;
 
-            constrainedRefinementElapsed += safeDeltaTime;
             ResolveContextualCornerIntent(cameraOrientation, lens, safeDeltaTime);
             requestedTuple = BuildRequestedTuple();
-            int semanticStateHash = BuildSemanticStateHash(lens);
-            bool semanticStateChanged = !hasObservedSemanticState ||
-                semanticStateHash != observedSemanticStateHash;
-            observedSemanticStateHash = semanticStateHash;
-            hasObservedSemanticState = true;
-            bool cornerTransitionChanged =
-                observedCornerTransitionCount != cornerResolver.TransitionCount;
-            observedCornerTransitionCount = cornerResolver.TransitionCount;
+            requestedBoomDistance = requestedTuple.BoomDistance;
+            if (!contactLatchInitialized || forceImmediate)
+            {
+                staticContactLatch.Reset(requestedBoomDistance);
+                contactLatchInitialized = true;
+                emergencyShoulderLatched = false;
+                emergencyHorizontalShoulderFactor = 1f;
+                emergencyShoulderEpisodeId = 0;
+                cornerContactEpisodeId = 0;
+                cornerContactDecisionLatched = false;
+                latchedHardBlocker = null;
+            }
+            if (!subjectLatchInitialized || forceImmediate)
+            {
+                subjectContactLatch.Reset(requestedBoomDistance);
+                subjectLatchInitialized = true;
+                latchedSubjectActorProxy = null;
+            }
 
-            SpatialTuple fastTuple = !hasResolvedTuple ||
-                    (!constraintRecoveryRequired &&
-                     activeSolutionFamily == ShowcaseCameraSolutionFamily.Requested)
-                ? requestedTuple
-                : resolvedTuple;
-            bool fastSafe;
-            CameraCandidate fastCandidate;
+            float contactShoulderFactor = emergencyShoulderLatched &&
+                    staticContactLatch.Phase !=
+                        ShowcaseStaticCameraContactPhase.Clear
+                ? emergencyHorizontalShoulderFactor
+                : 1f;
+            SpatialTuple fullRequestedTuple = new SpatialTuple(
+                1f,
+                1f,
+                requestedBoomDistance);
+            bool requestedStaticSafe;
+            CameraCandidate requestedStaticCandidate;
+            ConstraintFailure requestedStaticFailure;
             using (FastSafetyMarker.Auto())
             {
-                collectGeometrySignatureThisPass = false;
-                try
-                {
-                    fastSafe = EvaluateFastSafetyTuple(
-                        fastTuple,
-                        cameraOrientation,
-                        lens,
-                        out fastCandidate,
-                        out _);
-                }
-                finally
-                {
-                    collectGeometrySignatureThisPass = true;
-                }
-            }
-            fastSafetySucceededThisFrame = fastSafe;
-
-            if (fastSafe &&
-                (!hasResolvedTuple ||
-                 (!constraintRecoveryRequired &&
-                  activeSolutionFamily == ShowcaseCameraSolutionFamily.Requested)))
-            {
-                RecordTupleCommit(resolvedTuple, requestedTuple);
-                resolvedTuple = requestedTuple;
-                safeTargetTuple = requestedTuple;
-                hasResolvedTuple = true;
-                activeSolutionFamily = ShowcaseCameraSolutionFamily.Requested;
-                activeGeometrySignature = default;
-                constraintRecoveryRequired = false;
-                recoveryActive = false;
-                constrainedRefinementElapsed = 0f;
-                ApplyFastSolvedCandidate(
-                    ref state,
-                    fastCandidate,
-                    unconstrainedRigPosition,
-                    cameraOrientation,
-                    lens);
-                fastPathFrameCount++;
-                return;
-            }
-
-            bool recoveryProbeDue = fastSafe && constraintRecoveryRequired &&
-                constrainedRefinementElapsed >= ConstrainedRefinementInterval &&
-                cornerCandidateEvaluationsThisFrame == 0;
-            bool hasPrevalidatedRequestedTarget = false;
-            CameraCandidate safeTargetCandidate = default;
-            ConstraintFailure limitingFailure = default;
-            float resolutionDeltaTime = safeDeltaTime;
-            if (recoveryProbeDue)
-            {
-                resolutionDeltaTime = constrainedRefinementElapsed;
-                constrainedRefinementElapsed = 0f;
-                collectGeometrySignatureThisPass = false;
-                try
-                {
-                    hasPrevalidatedRequestedTarget = EvaluateFastSafetyTuple(
-                        requestedTuple,
-                        cameraOrientation,
-                        lens,
-                        out safeTargetCandidate,
-                        out limitingFailure);
-                }
-                finally
-                {
-                    collectGeometrySignatureThisPass = true;
-                }
-                if (hasPrevalidatedRequestedTarget)
-                {
-                    safeTargetTuple = requestedTuple;
-                }
-            }
-
-            bool fullSolveRequired = !hasPrevalidatedRequestedTarget &&
-                (!fastSafe || semanticStateChanged || cornerTransitionChanged);
-            if (fastSafe &&
-                !hasPrevalidatedRequestedTarget &&
-                !fullSolveRequired)
-            {
-                ApplyFastSolvedCandidate(
-                    ref state,
-                    fastCandidate,
-                    unconstrainedRigPosition,
-                    cameraOrientation,
-                    lens);
-                fastPathFrameCount++;
-                return;
-            }
-
-            SpatialTuple tupleBeforeFullSolve = resolvedTuple;
-            if (!hasPrevalidatedRequestedTarget)
-            {
-                constrainedRefinementElapsed = 0f;
-                if (!TryRunFullSolve(
-                        requestedTuple,
-                        cameraOrientation,
-                        lens,
-                        out safeTargetTuple,
-                        out safeTargetCandidate,
-                        out limitingFailure))
-                {
-                    if (fastSafe)
-                    {
-                        ApplyFastSolvedCandidate(
-                            ref state,
-                            fastCandidate,
-                            unconstrainedRigPosition,
-                            cameraOrientation,
-                            lens);
-                        fastPathFrameCount++;
-                        return;
-                    }
-                    if (queryBudgetExceededThisFrame &&
-                        TryUseStableEmergencyPoseWithoutWorldQueries(
-                            out Vector3 stableEmergency))
-                    {
-                        activeSolutionFamily =
-                            ShowcaseCameraSolutionFamily.EmergencyCentered;
-                        ApplySolvedPosition(
-                            ref state,
-                            stableEmergency,
-                            cameraOrientation,
-                            ShowcaseCameraConstraintStatus.PreviousPoseRevalidated);
-                        return;
-                    }
-                    if (TryUseRevalidatedPreviousPose(
-                            cameraOrientation,
-                            lens,
-                            out Vector3 previous))
-                    {
-                        ApplySolvedPosition(
-                            ref state,
-                            previous,
-                            cameraOrientation,
-                            ShowcaseCameraConstraintStatus.PreviousPoseRevalidated);
-                        return;
-                    }
-
-                    Status = limitingFailure.Reason ==
-                            ShowcaseCameraNoValidPoseReason.DynamicActor
-                        ? ShowcaseCameraConstraintStatus.DynamicActorNoSolution
-                        : ShowcaseCameraConstraintStatus.NoValidPose;
-                    NoValidPoseReason = limitingFailure.Reason ==
-                            ShowcaseCameraNoValidPoseReason.None
-                        ? ShowcaseCameraNoValidPoseReason.MultipleConstraints
-                        : limitingFailure.Reason;
-                    currentHardBlocker = limitingFailure.Blocker;
-                    currentActorProxy = limitingFailure.ActorRoot;
-                    return;
-                }
-            }
-
-            bool safeTargetIsConstraintLimited =
-                !SpatialTuple.Approximately(safeTargetTuple, requestedTuple);
-            ShowcaseCameraSolutionFamily safeTargetFamily =
-                ClassifySolutionFamily(safeTargetTuple, requestedTuple);
-            GeometrySignature safeTargetGeometry = limitingFailure.GeometrySignature;
-            if (safeTargetIsConstraintLimited &&
-                safeTargetGeometry.IsEmpty &&
-                !queryBudgetExceededThisFrame)
-            {
-                TryFindRequestedStaticBlocker(
-                    requestedTuple,
-                    out _,
-                    out safeTargetGeometry);
-            }
-
-            AdvanceResolvedTuple(
-                safeTargetTuple,
-                safeTargetIsConstraintLimited,
-                safeTargetFamily,
-                safeTargetGeometry,
-                cameraOrientation,
-                lens,
-                resolutionDeltaTime,
-                forceImmediate);
-            RecordTupleCommit(tupleBeforeFullSolve, resolvedTuple);
-
-            CameraCandidate finalCandidate;
-            ConstraintFailure resolvedFailure;
-            bool reusedValidatedTarget = queryBudgetExceededThisFrame &&
-                SpatialTuple.Approximately(resolvedTuple, safeTargetTuple);
-            if (reusedValidatedTarget)
-            {
-                finalCandidate = safeTargetCandidate;
-                resolvedFailure = default;
-            }
-            else if (!EvaluateTuple(
-                         resolvedTuple,
-                         cameraOrientation,
-                         lens,
-                         out finalCandidate,
-                         out resolvedFailure))
-            {
-                // Geometry may move between the target solve and the final commit.
-                // Never assemble a partial fallback: commit the already validated
-                // atomic target once, then re-evaluate it as a whole.
-                resolvedTuple = safeTargetTuple;
-                activeSolutionFamily = safeTargetFamily;
-                activeGeometrySignature = safeTargetGeometry;
-                recoveryActive = false;
-                staticReleaseClearTimer = 0f;
-                bool canReuseAtomicTarget = queryBudgetExceededThisFrame &&
-                    SpatialTuple.Approximately(resolvedTuple, safeTargetTuple);
-                if (canReuseAtomicTarget)
-                {
-                    finalCandidate = safeTargetCandidate;
-                    resolvedFailure = default;
-                }
-                else if (!EvaluateTuple(
-                             resolvedTuple,
-                             cameraOrientation,
-                             lens,
-                             out finalCandidate,
-                             out resolvedFailure))
-                {
-                    Status = ShowcaseCameraConstraintStatus.NoValidPose;
-                    NoValidPoseReason = resolvedFailure.Reason;
-                    currentHardBlocker = resolvedFailure.Blocker;
-                    currentActorProxy = resolvedFailure.ActorRoot;
-                    return;
-                }
-            }
-
-            bool fullRequestedTupleResolved =
-                SpatialTuple.Approximately(resolvedTuple, requestedTuple) &&
-                SpatialTuple.Approximately(safeTargetTuple, requestedTuple);
-            if (fullRequestedTupleResolved &&
-                Mathf.Abs(
-                    cornerShoulderIntentFactor -
-                    ShowcaseContextualCornerAimResolver.RightDefaultShoulderFactor) <=
-                ScalarTolerance &&
-                HasFrameQueryCapacity(3) &&
-                TryUseUnconstrainedRigPosition(
-                    finalCandidate,
-                    unconstrainedRigPosition,
+                requestedStaticSafe = EvaluateStaticTuple(
+                    fullRequestedTuple,
                     cameraOrientation,
                     lens,
-                    out CameraCandidate unconstrainedCandidate))
+                    out requestedStaticCandidate,
+                    out requestedStaticFailure);
+            }
+            fastSafetySucceededThisFrame = requestedStaticSafe;
+
+            bool requestedBlockedForLatch = !requestedStaticSafe;
+            float safeStaticBoom = staticContactLatch.CurrentBoom;
+            SpatialTuple validatedStaticTuple = fullRequestedTuple;
+            CameraCandidate validatedStaticCandidate = requestedStaticCandidate;
+            ConstraintFailure limitingFailure = requestedStaticFailure;
+
+            if (!requestedStaticSafe)
             {
-                // Checkpoint A owns open-space follow damping.  The constraint
-                // solver only replaces its position when a constraint exists.
-                finalCandidate = unconstrainedCandidate;
-                resolvedTuple = new SpatialTuple(
-                    resolvedTuple.GameplayWeight,
-                    resolvedTuple.ShoulderScale,
-                    finalCandidate.Distance);
+                fullSolvesThisFrame = 1;
+                bool foundStaticSolution = TrySolveMaximumStaticBoom(
+                    contactShoulderFactor,
+                    cameraOrientation,
+                    lens,
+                    out validatedStaticTuple,
+                    out validatedStaticCandidate,
+                    out ConstraintFailure boomFailure);
+                limitingFailure = ConstraintFailure.Prefer(
+                    limitingFailure,
+                    boomFailure);
+
+                if (!foundStaticSolution && !emergencyShoulderLatched)
+                {
+                    foundStaticSolution = TryFindMaximumStaticHorizontalShoulder(
+                        cameraOrientation,
+                        lens,
+                        out validatedStaticTuple,
+                        out validatedStaticCandidate,
+                        out ConstraintFailure shoulderFailure);
+                    limitingFailure = ConstraintFailure.Prefer(
+                        limitingFailure,
+                        shoulderFailure);
+                    if (foundStaticSolution)
+                    {
+                        emergencyShoulderLatched = true;
+                        emergencyHorizontalShoulderFactor =
+                            validatedStaticTuple.ShoulderScale;
+                        contactShoulderFactor =
+                            emergencyHorizontalShoulderFactor;
+                    }
+                }
+
+                if (!foundStaticSolution)
+                {
+                    ApplyFailClosedPreviousPose(
+                        ref state,
+                        cameraOrientation,
+                        lens,
+                        limitingFailure);
+                    return;
+                }
+
+                safeStaticBoom = validatedStaticTuple.BoomDistance;
+                Collider observedBlocker = requestedStaticFailure.Blocker ??
+                    limitingFailure.Blocker;
+                if (observedBlocker != null)
+                {
+                    latchedHardBlocker = observedBlocker;
+                }
+            }
+            else if (staticContactLatch.Phase !=
+                     ShowcaseStaticCameraContactPhase.Clear)
+            {
+                bool clearWithMargin = IsRequestedStaticPoseClearWithMargin(
+                    cameraOrientation,
+                    lens,
+                    out Collider marginBlocker);
+                requestedBlockedForLatch = !clearWithMargin;
+                if (marginBlocker != null)
+                {
+                    latchedHardBlocker = marginBlocker;
+                }
             }
 
-            bool gameplayLimited = frameInput.HasGameplayOverride &&
-                resolvedTuple.GameplayWeight < requestedTuple.GameplayWeight - ScalarTolerance;
-            bool shoulderLimited =
-                resolvedTuple.ShoulderScale < requestedTuple.ShoulderScale - ScalarTolerance;
-            bool boomLimited =
-                resolvedTuple.BoomDistance < requestedTuple.BoomDistance - BoomTolerance;
-            hardConstraintActiveThisFrame = gameplayLimited || shoulderLimited || boomLimited;
-            currentHardBlocker = limitingFailure.Blocker ?? safeTargetCandidate.Blocker;
-            currentActorProxy = limitingFailure.ActorRoot;
-            if (hardConstraintActiveThisFrame &&
-                currentActorProxy == null &&
-                currentHardBlocker == null)
+            int previousEpisode = staticContactLatch.ContactEpisodeId;
+            if (advanceContactState)
             {
-                TryFindRequestedStaticBlocker(requestedTuple, out currentHardBlocker);
+                staticContactLatch.Advance(
+                    requestedBlockedForLatch,
+                    safeStaticBoom,
+                    requestedBoomDistance,
+                    safeDeltaTime,
+                    StaticReleaseEvidenceDuration,
+                    Mathf.Max(0.01f, frameInput.CollisionReturnDuration));
+                lastContactAdvanceFrame = Time.frameCount;
             }
 
-            ShowcaseCameraConstraintStatus targetStatus;
-            if (currentActorProxy != null && hardConstraintActiveThisFrame)
+            if (staticContactLatch.ContactEpisodeId != previousEpisode)
             {
-                targetStatus = ShowcaseCameraConstraintStatus.SolvedActorCompression;
-            }
-            else if (gameplayLimited)
-            {
-                targetStatus = ShowcaseCameraConstraintStatus.SolvedGameplayOverrideReduced;
-            }
-            else if (shoulderLimited || boomLimited)
-            {
-                targetStatus = ShowcaseCameraConstraintStatus.SolvedStaticCompression;
-            }
-            else
-            {
-                targetStatus = ShowcaseCameraConstraintStatus.SolvedOpenSpace;
+                cornerContactEpisodeId = staticContactLatch.ContactEpisodeId;
+                cornerContactDecisionLatched = false;
+                cornerContactShoulderFactor = cornerShoulderIntentFactor;
+                if (emergencyShoulderLatched)
+                {
+                    emergencyShoulderEpisodeId =
+                        staticContactLatch.ContactEpisodeId;
+                }
             }
 
-            NoValidPoseReason = ShowcaseCameraNoValidPoseReason.None;
-            SafeBoomFraction = requestedTuple.BoomDistance <= 0.0001f
+            if (staticContactLatch.Phase ==
+                ShowcaseStaticCameraContactPhase.Clear)
+            {
+                emergencyShoulderLatched = false;
+                emergencyHorizontalShoulderFactor = 1f;
+                emergencyShoulderEpisodeId = 0;
+                cornerContactEpisodeId = 0;
+                cornerContactDecisionLatched = false;
+                latchedHardBlocker = null;
+            }
+
+            float resolvedShoulderFactor = 1f;
+            if (emergencyShoulderLatched)
+            {
+                resolvedShoulderFactor = staticContactLatch.Phase ==
+                        ShowcaseStaticCameraContactPhase.Restoring
+                    ? Mathf.Lerp(
+                        emergencyHorizontalShoulderFactor,
+                        1f,
+                        staticContactLatch.RestoreProgress)
+                    : emergencyHorizontalShoulderFactor;
+            }
+
+            SpatialTuple staticResolvedTuple = new SpatialTuple(
+                1f,
+                resolvedShoulderFactor,
+                staticContactLatch.CurrentBoom);
+            ConstraintFailure finalFailure;
+            bool requestedSubjectSafe = IsSubjectTupleSafe(
+                staticResolvedTuple,
+                out finalFailure);
+            float safeSubjectBoom = staticResolvedTuple.BoomDistance;
+            if (!requestedSubjectSafe)
+            {
+                if (!TrySolveMaximumSubjectSafeBoom(
+                    staticResolvedTuple.BoomDistance,
+                    resolvedShoulderFactor,
+                    out SpatialTuple subjectSafeTuple,
+                    out _,
+                    out ConstraintFailure subjectFailure))
+                {
+                    finalFailure = ConstraintFailure.Prefer(
+                        finalFailure,
+                        subjectFailure);
+                    ApplyFailClosedPreviousPose(
+                        ref state,
+                        cameraOrientation,
+                        lens,
+                        finalFailure);
+                    return;
+                }
+
+                safeSubjectBoom = subjectSafeTuple.BoomDistance;
+                finalFailure = ConstraintFailure.Prefer(finalFailure, subjectFailure);
+                if (finalFailure.ActorRoot != null)
+                {
+                    latchedSubjectActorProxy = finalFailure.ActorRoot;
+                }
+            }
+
+            if (advanceSubjectState)
+            {
+                subjectContactLatch.Advance(
+                    !requestedSubjectSafe,
+                    safeSubjectBoom,
+                    staticResolvedTuple.BoomDistance,
+                    safeDeltaTime,
+                    SubjectReleaseEvidenceDuration,
+                    Mathf.Max(0.01f, frameInput.CollisionReturnDuration));
+                lastSubjectAdvanceFrame = Time.frameCount;
+            }
+
+            if (subjectContactLatch.Phase ==
+                ShowcaseStaticCameraContactPhase.Clear)
+            {
+                latchedSubjectActorProxy = null;
+            }
+
+            SpatialTuple outputTuple = new SpatialTuple(
+                1f,
+                resolvedShoulderFactor,
+                Mathf.Min(
+                    staticResolvedTuple.BoomDistance,
+                    subjectContactLatch.CurrentBoom));
+            CameraCandidate finalCandidate = BuildAnalyticCandidate(outputTuple);
+            bool finalSafe = IsSubjectTupleSafe(outputTuple, out ConstraintFailure outputFailure);
+            if (!finalSafe)
+            {
+                if (!TrySolveMaximumSubjectSafeBoom(
+                        outputTuple.BoomDistance,
+                        resolvedShoulderFactor,
+                        out SpatialTuple emergencySubjectTuple,
+                        out finalCandidate,
+                        out ConstraintFailure emergencySubjectFailure))
+                {
+                    finalFailure = ConstraintFailure.Prefer(
+                        finalFailure,
+                        ConstraintFailure.Prefer(
+                            outputFailure,
+                            emergencySubjectFailure));
+                    ApplyFailClosedPreviousPose(
+                        ref state,
+                        cameraOrientation,
+                        lens,
+                        finalFailure);
+                    return;
+                }
+
+                outputTuple = emergencySubjectTuple;
+                if (advanceSubjectState)
+                {
+                    subjectContactLatch.Advance(
+                        true,
+                        emergencySubjectTuple.BoomDistance,
+                        staticResolvedTuple.BoomDistance,
+                        0f,
+                        SubjectReleaseEvidenceDuration,
+                        Mathf.Max(0.01f, frameInput.CollisionReturnDuration));
+                }
+                finalFailure = ConstraintFailure.Prefer(
+                    finalFailure,
+                    ConstraintFailure.Prefer(outputFailure, emergencySubjectFailure));
+                if (finalFailure.ActorRoot != null)
+                {
+                    latchedSubjectActorProxy = finalFailure.ActorRoot;
+                }
+            }
+
+            bool subjectCompressionActive = subjectContactLatch.Phase !=
+                    ShowcaseStaticCameraContactPhase.Clear ||
+                outputTuple.BoomDistance <
+                    staticResolvedTuple.BoomDistance - BoomTolerance;
+            SubjectConstraintApplied = subjectCompressionActive;
+
+            SpatialTuple previousResolved = resolvedTuple;
+            resolvedTuple = outputTuple;
+            safeTargetTuple = validatedStaticTuple;
+            hasResolvedTuple = true;
+            constraintRecoveryRequired = staticContactLatch.Phase !=
+                ShowcaseStaticCameraContactPhase.Clear;
+            hardConstraintActiveThisFrame = constraintRecoveryRequired;
+            currentHardBlocker = hardConstraintActiveThisFrame
+                ? latchedHardBlocker
+                : null;
+            currentActorProxy = subjectCompressionActive
+                ? latchedSubjectActorProxy
+                : null;
+            activeGeometrySignature = limitingFailure.GeometrySignature;
+            activeSolutionFamily = resolvedShoulderFactor < 1f - ScalarTolerance
+                ? ShowcaseCameraSolutionFamily.EmergencyCentered
+                : staticContactLatch.CurrentBoom <
+                    requestedBoomDistance - BoomTolerance
+                    ? ShowcaseCameraSolutionFamily.BoomCompressed
+                    : ShowcaseCameraSolutionFamily.Requested;
+            RecordTupleCommit(previousResolved, resolvedTuple);
+            fastPathFrameCount += activeSolutionFamily ==
+                ShowcaseCameraSolutionFamily.Requested ? 1 : 0;
+
+            SafeBoomFraction = requestedBoomDistance <= 0.0001f
                 ? 1f
-                : Mathf.Clamp01(resolvedTuple.BoomDistance / requestedTuple.BoomDistance);
+                : Mathf.Clamp01(
+                    resolvedTuple.BoomDistance / requestedBoomDistance);
+            NoValidPoseReason = ShowcaseCameraNoValidPoseReason.None;
+            ShowcaseCameraConstraintStatus targetStatus = subjectCompressionActive
+                ? ShowcaseCameraConstraintStatus.SolvedActorCompression
+                : hardConstraintActiveThisFrame
+                    ? ShowcaseCameraConstraintStatus.SolvedStaticCompression
+                    : ShowcaseCameraConstraintStatus.SolvedOpenSpace;
             ApplySolvedPosition(
                 ref state,
                 finalCandidate.Position,
                 cameraOrientation,
                 targetStatus);
+        }
+
+        private bool TrySolveMaximumSubjectSafeBoom(
+            float maximumBoom,
+            float horizontalShoulderFactor,
+            out SpatialTuple solved,
+            out CameraCandidate candidate,
+            out ConstraintFailure failure)
+        {
+            maximumBoom = Mathf.Clamp(
+                maximumBoom,
+                MinimumBoomDistance,
+                requestedBoomDistance);
+            float range = Mathf.Max(0f, maximumBoom - MinimumBoomDistance);
+            failure = default;
+            for (int bracket = 0; bracket <= BoomSearchSteps; bracket++)
+            {
+                float distance = maximumBoom -
+                    range * bracket / Mathf.Max(1, BoomSearchSteps);
+                SpatialTuple probe = new SpatialTuple(
+                    1f,
+                    horizontalShoulderFactor,
+                    distance);
+                if (!IsSubjectTupleSafe(probe, out ConstraintFailure subjectFailure))
+                {
+                    failure = ConstraintFailure.Prefer(failure, subjectFailure);
+                    continue;
+                }
+
+                solved = probe;
+                candidate = BuildAnalyticCandidate(probe);
+                return true;
+            }
+
+            solved = default;
+            candidate = default;
+            return false;
+        }
+
+        private CameraCandidate BuildAnalyticCandidate(SpatialTuple tuple)
+        {
+            CameraProfileValues profile = ComposeProfile(tuple.GameplayWeight);
+            GetRigPoints(
+                tuple.GameplayWeight,
+                tuple.ShoulderScale,
+                out Vector3 root,
+                out Vector3 shoulder,
+                out Vector3 hand,
+                out Vector3 boomDirection);
+            float distance = Mathf.Clamp(
+                tuple.BoomDistance,
+                MinimumBoomDistance,
+                Mathf.Max(MinimumBoomDistance, profile.Distance));
+            return new CameraCandidate
+            {
+                Root = root,
+                Shoulder = shoulder,
+                Hand = hand,
+                Position = hand + boomDirection * distance,
+                Distance = distance,
+                ShoulderScale = tuple.ShoulderScale,
+                GameplayWeight = tuple.GameplayWeight,
+                Blocker = null,
+                WasBoomCompressed = distance < profile.Distance - BoomTolerance
+            };
+        }
+
+        private bool IsSubjectTupleSafe(
+            SpatialTuple tuple,
+            out ConstraintFailure failure)
+        {
+            GetRigPoints(
+                1f,
+                tuple.ShoulderScale,
+                out _,
+                out _,
+                out Vector3 hand,
+                out Vector3 boomDirection);
+            Vector3 position = hand + boomDirection * tuple.BoomDistance;
+            if (!IsOutsidePlayerEnvelope(position))
+            {
+                failure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.PlayerEnvelope,
+                    null,
+                    null);
+                return false;
+            }
+            if (!IsOutsideCarryEnvelope(position))
+            {
+                failure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.CarryEnvelope,
+                    null,
+                    null);
+                return false;
+            }
+            if (TryFindBlockingActor(position, out ActorProxy actor, out _))
+            {
+                failure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.DynamicActor,
+                    null,
+                    actor.Root);
+                return false;
+            }
+
+            failure = default;
+            return true;
+        }
+
+        private void ApplyFailClosedPreviousPose(
+            ref CameraState state,
+            Quaternion orientation,
+            LensSettings lens,
+            ConstraintFailure failure)
+        {
+            ShowcaseCameraNoValidPoseReason originalReason = failure.Reason ==
+                    ShowcaseCameraNoValidPoseReason.None
+                ? ShowcaseCameraNoValidPoseReason.MultipleConstraints
+                : failure.Reason;
+            Collider originalBlocker = failure.Blocker ?? latchedHardBlocker;
+            Transform originalActor = failure.ActorRoot ?? latchedSubjectActorProxy;
+            bool budgetWasExceeded = queryBudgetExceededThisFrame ||
+                failure.QuerySaturated;
+            bool staticFailure = originalBlocker != null ||
+                failure.QuerySaturated ||
+                originalReason == ShowcaseCameraNoValidPoseReason.StaticWorld ||
+                originalReason == ShowcaseCameraNoValidPoseReason.NearPlane ||
+                originalReason == ShowcaseCameraNoValidPoseReason.MultipleConstraints;
+
+            // The ordinary solver may have consumed its entire per-frame query
+            // budget.  Safety validation must still execute: otherwise the
+            // extension silently leaves Cinemachine's unconstrained position in
+            // CameraState.  The emergency reserve is separately observable and
+            // can never be consumed by the normal solve.
+            bool queryBudgetExceededDuringFailClosed = false;
+            failClosedSafetyPass = true;
+            queryBudgetExceededThisFrame = false;
+            try
+            {
+                if (TryUseRevalidatedPreviousPose(
+                        orientation,
+                        lens,
+                        out Vector3 previous))
+                {
+                    ApplyFailClosedDiagnostics(
+                        originalReason,
+                        originalBlocker,
+                        originalActor,
+                        staticFailure,
+                        failure.GeometrySignature);
+                    ApplySolvedPosition(
+                        ref state,
+                        previous,
+                        orientation,
+                        ShowcaseCameraConstraintStatus.PreviousPoseRevalidated);
+                    return;
+                }
+
+                float preferredShoulder = hasResolvedTuple
+                    ? resolvedTuple.ShoulderScale
+                    : emergencyShoulderLatched
+                        ? emergencyHorizontalShoulderFactor
+                        : 1f;
+                if (TrySolveMaximumSafeBoom(
+                        1f,
+                        preferredShoulder,
+                        orientation,
+                        lens,
+                        out SpatialTuple safeTuple,
+                        out CameraCandidate safeCandidate,
+                        out ConstraintFailure fallbackFailure))
+                {
+                    CommitFailClosedFallback(
+                        ref state,
+                        orientation,
+                        safeTuple,
+                        safeCandidate,
+                        ConstraintFailure.Prefer(failure, fallbackFailure),
+                        originalReason,
+                        originalBlocker,
+                        originalActor,
+                        staticFailure,
+                        fullySafe: true);
+                    return;
+                }
+
+                ConstraintFailure combinedFailure = ConstraintFailure.Prefer(
+                    failure,
+                    fallbackFailure);
+
+                if (!staticFailure)
+                {
+                    float subjectSearchMaximum = Mathf.Min(
+                        requestedBoomDistance,
+                        staticContactLatch.CurrentBoom);
+                    bool foundSubjectSafeTuple = TrySolveMaximumSubjectSafeBoom(
+                            subjectSearchMaximum,
+                            preferredShoulder,
+                            out SpatialTuple subjectSafeTuple,
+                            out _,
+                            out ConstraintFailure subjectSearchFailure);
+                    ConstraintFailure subjectStaticFailure = default;
+                    if (foundSubjectSafeTuple && EvaluateStaticTuple(
+                            subjectSafeTuple,
+                            orientation,
+                            lens,
+                            out CameraCandidate subjectSafeCandidate,
+                            out subjectStaticFailure))
+                    {
+                        CommitFailClosedFallback(
+                            ref state,
+                            orientation,
+                            subjectSafeTuple,
+                            subjectSafeCandidate,
+                            ConstraintFailure.Prefer(
+                                combinedFailure,
+                                subjectSearchFailure),
+                            originalReason,
+                            originalBlocker,
+                            originalActor,
+                            staticFailure: false,
+                            fullySafe: true);
+                        return;
+                    }
+
+                    combinedFailure = ConstraintFailure.Prefer(
+                        combinedFailure,
+                        subjectSearchFailure);
+                    combinedFailure = ConstraintFailure.Prefer(
+                        combinedFailure,
+                        subjectStaticFailure);
+                    SpatialTuple subjectNoSolutionTuple = new SpatialTuple(
+                        1f,
+                        preferredShoulder,
+                        Mathf.Min(
+                            requestedBoomDistance,
+                            staticContactLatch.CurrentBoom));
+                    if (EvaluateStaticTuple(
+                            subjectNoSolutionTuple,
+                            orientation,
+                            lens,
+                            out CameraCandidate subjectNoSolutionCandidate,
+                            out ConstraintFailure newlyObservedStaticFailure))
+                    {
+                        // There is no subject-safe boom at the current shoulder,
+                        // but this pose is still proven non-penetrating.  Keep
+                        // the horizontal shoulder unchanged and report the
+                        // subject no-solution instead of inventing a static-wall
+                        // emergency shoulder transition.
+                        CommitFailClosedFallback(
+                            ref state,
+                            orientation,
+                            subjectNoSolutionTuple,
+                            subjectNoSolutionCandidate,
+                            combinedFailure,
+                            originalReason,
+                            originalBlocker,
+                            originalActor,
+                            staticFailure: false,
+                            fullySafe: false);
+                        return;
+                    }
+
+                    combinedFailure = ConstraintFailure.Prefer(
+                        combinedFailure,
+                        newlyObservedStaticFailure);
+                    staticFailure = true;
+                }
+
+                // If the current horizontal shoulder has no solution, a
+                // centered solver candidate is the final static-world fallback.
+                // It is still built from StableAnchor/profile authority; the raw
+                // Cinemachine pose is never adopted.
+                if (TrySolveMaximumStaticBoom(
+                        0f,
+                        orientation,
+                        lens,
+                        out SpatialTuple staticTuple,
+                        out CameraCandidate staticCandidate,
+                        out ConstraintFailure staticFallbackFailure))
+                {
+                    combinedFailure = ConstraintFailure.Prefer(
+                        combinedFailure,
+                        staticFallbackFailure);
+                    bool subjectSafe = IsSubjectTupleSafe(
+                        staticTuple,
+                        out ConstraintFailure subjectFailure);
+                    combinedFailure = ConstraintFailure.Prefer(
+                        combinedFailure,
+                        subjectFailure);
+
+                    CommitFailClosedFallback(
+                        ref state,
+                        orientation,
+                        staticTuple,
+                        staticCandidate,
+                        combinedFailure,
+                        subjectSafe ? originalReason : subjectFailure.Reason,
+                        originalBlocker,
+                        subjectSafe ? originalActor : subjectFailure.ActorRoot,
+                        staticFailure: true,
+                        fullySafe: subjectSafe);
+                    return;
+                }
+
+                combinedFailure = ConstraintFailure.Prefer(
+                    combinedFailure,
+                    staticFallbackFailure);
+
+                // A physically impossible layout (or exhausted emergency
+                // reserve) has no provably valid output.  Still overwrite the
+                // CameraState with a deterministic StableAnchor-derived pose so
+                // an unconstrained Cinemachine position can never escape.  The
+                // NoValidPose diagnostics deliberately do not claim safety.
+                SpatialTuple deterministicTuple = new SpatialTuple(
+                    1f,
+                    0f,
+                    MinimumBoomDistance);
+                CameraCandidate deterministicCandidate =
+                    BuildAnalyticCandidate(deterministicTuple);
+                CommitFailClosedFallback(
+                    ref state,
+                    orientation,
+                    deterministicTuple,
+                    deterministicCandidate,
+                    combinedFailure,
+                    combinedFailure.Reason == ShowcaseCameraNoValidPoseReason.None
+                        ? ShowcaseCameraNoValidPoseReason.MultipleConstraints
+                        : combinedFailure.Reason,
+                    combinedFailure.Blocker ?? originalBlocker,
+                    combinedFailure.ActorRoot ?? originalActor,
+                    staticFailure: true,
+                    fullySafe: false);
+            }
+            finally
+            {
+                queryBudgetExceededDuringFailClosed = queryBudgetExceededThisFrame;
+                failClosedSafetyPass = false;
+                queryBudgetExceededThisFrame = budgetWasExceeded ||
+                    queryBudgetExceededDuringFailClosed;
+            }
+        }
+
+        private void CommitFailClosedFallback(
+            ref CameraState state,
+            Quaternion orientation,
+            SpatialTuple tuple,
+            CameraCandidate candidate,
+            ConstraintFailure failure,
+            ShowcaseCameraNoValidPoseReason diagnosticReason,
+            Collider diagnosticBlocker,
+            Transform diagnosticActor,
+            bool staticFailure,
+            bool fullySafe)
+        {
+            SpatialTuple previousResolved = resolvedTuple;
+            resolvedTuple = tuple;
+            safeTargetTuple = tuple;
+            hasResolvedTuple = true;
+            constraintRecoveryRequired = staticFailure ||
+                tuple.BoomDistance < requestedBoomDistance - BoomTolerance ||
+                tuple.ShoulderScale < 1f - ScalarTolerance;
+            activeSolutionFamily = tuple.ShoulderScale < 1f - ScalarTolerance
+                ? ShowcaseCameraSolutionFamily.EmergencyCentered
+                : tuple.BoomDistance < requestedBoomDistance - BoomTolerance
+                    ? ShowcaseCameraSolutionFamily.BoomCompressed
+                    : ShowcaseCameraSolutionFamily.Requested;
+            activeGeometrySignature = failure.GeometrySignature;
+            SafeBoomFraction = requestedBoomDistance <= 0.0001f
+                ? 1f
+                : Mathf.Clamp01(tuple.BoomDistance / requestedBoomDistance);
+            RecordTupleCommit(previousResolved, tuple);
+
+            if (staticFailure)
+            {
+                int previousEpisode = staticContactLatch.ContactEpisodeId;
+                staticContactLatch.Advance(
+                    true,
+                    tuple.BoomDistance,
+                    requestedBoomDistance,
+                    0f,
+                    StaticReleaseEvidenceDuration,
+                    Mathf.Max(0.01f, frameInput.CollisionReturnDuration));
+                lastContactAdvanceFrame = Time.frameCount;
+                contactLatchInitialized = true;
+                if (staticContactLatch.ContactEpisodeId != previousEpisode)
+                {
+                    cornerContactEpisodeId = staticContactLatch.ContactEpisodeId;
+                    cornerContactDecisionLatched = false;
+                    cornerContactShoulderFactor = cornerShoulderIntentFactor;
+                }
+                if (tuple.ShoulderScale < 1f - ScalarTolerance)
+                {
+                    emergencyShoulderLatched = true;
+                    emergencyHorizontalShoulderFactor = tuple.ShoulderScale;
+                    emergencyShoulderEpisodeId =
+                        staticContactLatch.ContactEpisodeId;
+                }
+            }
+
+            ApplyFailClosedDiagnostics(
+                diagnosticReason,
+                diagnosticBlocker,
+                diagnosticActor,
+                staticFailure,
+                failure.GeometrySignature);
+            SubjectConstraintApplied = !fullySafe &&
+                (diagnosticReason == ShowcaseCameraNoValidPoseReason.PlayerEnvelope ||
+                 diagnosticReason == ShowcaseCameraNoValidPoseReason.CarryEnvelope ||
+                 diagnosticReason == ShowcaseCameraNoValidPoseReason.DynamicActor ||
+                 diagnosticActor != null);
+
+            ShowcaseCameraConstraintStatus fallbackStatus;
+            if (!fullySafe)
+            {
+                fallbackStatus = diagnosticReason ==
+                        ShowcaseCameraNoValidPoseReason.DynamicActor
+                    ? ShowcaseCameraConstraintStatus.DynamicActorNoSolution
+                    : ShowcaseCameraConstraintStatus.NoValidPose;
+            }
+            else if (staticFailure)
+            {
+                fallbackStatus = ShowcaseCameraConstraintStatus.SolvedStaticCompression;
+            }
+            else
+            {
+                fallbackStatus = ShowcaseCameraConstraintStatus.SolvedActorCompression;
+            }
+
+            ApplySolvedPosition(
+                ref state,
+                candidate.Position,
+                orientation,
+                fallbackStatus);
+        }
+
+        private void ApplyFailClosedDiagnostics(
+            ShowcaseCameraNoValidPoseReason reason,
+            Collider blocker,
+            Transform actor,
+            bool staticFailure,
+            GeometrySignature geometrySignature)
+        {
+            NoValidPoseReason = reason == ShowcaseCameraNoValidPoseReason.None
+                ? ShowcaseCameraNoValidPoseReason.MultipleConstraints
+                : reason;
+            currentHardBlocker = blocker;
+            if (blocker != null)
+            {
+                latchedHardBlocker = blocker;
+            }
+            currentActorProxy = actor;
+            if (actor != null)
+            {
+                latchedSubjectActorProxy = actor;
+            }
+            hardConstraintActiveThisFrame = staticFailure;
+            activeGeometrySignature = geometrySignature;
         }
 
         private void ApplySolvedPosition(
@@ -754,6 +1315,17 @@ namespace BreakNotice.Presentation
             state.PositionCorrection += solvedPosition - original;
             lastSolvedPose = new Pose(solvedPosition, orientation);
             hasLastSolvedPose = true;
+            finalStableAnchorLocalCameraOffset = frameInput.StableAnchor != null
+                ? frameInput.StableAnchor.InverseTransformPoint(solvedPosition)
+                : Vector3.zero;
+            if (softOcclusionPresenter != null && frameInput.StableAnchor != null)
+            {
+                softOcclusionPresenter.Resolve(
+                    frameInput.StableAnchor.position,
+                    solvedPosition);
+                activeSoftOccluderCount =
+                    softOcclusionPresenter.ActiveOccluderCount;
+            }
             Status = status;
         }
 
@@ -813,59 +1385,6 @@ namespace BreakNotice.Presentation
             }
         }
 
-        private void ApplyFastSolvedCandidate(
-            ref CameraState state,
-            CameraCandidate candidate,
-            Vector3 unconstrainedRigPosition,
-            Quaternion orientation,
-            LensSettings lens)
-        {
-            bool fullRequestedTupleResolved =
-                SpatialTuple.Approximately(resolvedTuple, requestedTuple);
-            if (fullRequestedTupleResolved &&
-                Mathf.Abs(
-                    cornerShoulderIntentFactor -
-                    ShowcaseContextualCornerAimResolver.RightDefaultShoulderFactor) <=
-                ScalarTolerance &&
-                !queryBudgetExceededThisFrame &&
-                HasFrameQueryCapacity(3) &&
-                TryUseUnconstrainedRigPosition(
-                    candidate,
-                    unconstrainedRigPosition,
-                    orientation,
-                    lens,
-                    out CameraCandidate unconstrainedCandidate))
-            {
-                candidate = unconstrainedCandidate;
-                resolvedTuple = new SpatialTuple(
-                    resolvedTuple.GameplayWeight,
-                    resolvedTuple.ShoulderScale,
-                    candidate.Distance);
-            }
-
-            bool gameplayLimited = frameInput.HasGameplayOverride &&
-                resolvedTuple.GameplayWeight < requestedTuple.GameplayWeight -
-                ScalarTolerance;
-            bool shoulderLimited = resolvedTuple.ShoulderScale <
-                requestedTuple.ShoulderScale - ScalarTolerance;
-            bool boomLimited = resolvedTuple.BoomDistance <
-                requestedTuple.BoomDistance - BoomTolerance;
-            hardConstraintActiveThisFrame =
-                gameplayLimited || shoulderLimited || boomLimited;
-            SafeBoomFraction = requestedTuple.BoomDistance <= 0.0001f
-                ? 1f
-                : Mathf.Clamp01(
-                    resolvedTuple.BoomDistance / requestedTuple.BoomDistance);
-
-            ShowcaseCameraConstraintStatus status = gameplayLimited
-                ? ShowcaseCameraConstraintStatus.SolvedGameplayOverrideReduced
-                : shoulderLimited || boomLimited
-                    ? ShowcaseCameraConstraintStatus.SolvedStaticCompression
-                    : ShowcaseCameraConstraintStatus.SolvedOpenSpace;
-            NoValidPoseReason = ShowcaseCameraNoValidPoseReason.None;
-            ApplySolvedPosition(ref state, candidate.Position, orientation, status);
-        }
-
         private void RecordTupleCommit(SpatialTuple previous, SpatialTuple next)
         {
             if (!hasResolvedTuple || !SpatialTuple.Approximately(previous, next))
@@ -902,6 +1421,19 @@ namespace BreakNotice.Presentation
             LensSettings lens,
             float deltaTime)
         {
+            if (staticContactLatch.Phase ==
+                    ShowcaseStaticCameraContactPhase.Contact &&
+                cornerContactEpisodeId == staticContactLatch.ContactEpisodeId &&
+                cornerContactEpisodeId != 0 &&
+                cornerContactDecisionLatched)
+            {
+                // After one non-default side decision completes, the contact
+                // episode owns it until full clear. Collider seams and plane
+                // changes may update diagnostics, but cannot restart arbitration.
+                cornerShoulderIntentFactor = cornerContactShoulderFactor;
+                return;
+            }
+
             cornerProbeElapsed += Mathf.Max(0f, deltaTime);
             ShowcaseContextualCornerFrameSnapshot snapshot =
                 BuildCurrentCornerSnapshot(orientation, lens);
@@ -936,6 +1468,16 @@ namespace BreakNotice.Presentation
                 cachedRightLeanCandidate,
                 cachedTemporaryLeftCandidate);
             cornerShoulderIntentFactor = selection.ShoulderIntentFactor;
+            if (staticContactLatch.Phase ==
+                    ShowcaseStaticCameraContactPhase.Contact &&
+                cornerContactEpisodeId == staticContactLatch.ContactEpisodeId &&
+                cornerContactEpisodeId != 0 &&
+                !cornerResolver.IsTransitioning &&
+                selection.Mode != ShowcaseContextualCornerMode.RightDefault)
+            {
+                cornerContactDecisionLatched = true;
+                cornerContactShoulderFactor = selection.ShoulderIntentFactor;
+            }
         }
 
         private void ProbeNextContextualCornerCandidate(
@@ -987,14 +1529,16 @@ namespace BreakNotice.Presentation
             LensSettings lens)
         {
             ShowcaseContextualCornerFrameSnapshot source = frameInput.CornerSnapshot;
+            bool restoringStaticBoom = staticContactLatch.Phase ==
+                ShowcaseStaticCameraContactPhase.Restoring;
             return new ShowcaseContextualCornerFrameSnapshot(
                 source.FrameId,
                 source.DeltaTime,
                 source.ResetRevision,
                 source.LogicalYaw,
                 source.LogicalPitch,
-                source.IsAim,
-                source.IsDirectCarryThrowWindup,
+                source.IsAim && !restoringStaticBoom,
+                source.IsDirectCarryThrowWindup && !restoringStaticBoom,
                 source.CarryMode,
                 source.ThrowPhase,
                 source.CarryTargetRuntimeId,
@@ -1391,7 +1935,7 @@ namespace BreakNotice.Presentation
             out CameraCandidate candidate,
             out ConstraintFailure limitingFailure)
         {
-            int candidateQueryStart = physicsQueriesThisFrame;
+            int candidateQueryStart = TotalPhysicsQueriesThisFrame;
             if (!HasCandidateQueryCapacity(candidateQueryStart, 4))
             {
                 solved = default;
@@ -1441,6 +1985,7 @@ namespace BreakNotice.Presentation
                     orientation,
                     lens,
                     validatePivotChain: false,
+                    validateSubjectConstraints: true,
                     out candidate,
                     out limitingFailure))
             {
@@ -1487,6 +2032,7 @@ namespace BreakNotice.Presentation
                         orientation,
                         lens,
                         validatePivotChain: false,
+                        validateSubjectConstraints: true,
                         out candidate,
                         out ConstraintFailure boundaryFailure))
                 {
@@ -1518,6 +2064,7 @@ namespace BreakNotice.Presentation
                         orientation,
                         lens,
                         validatePivotChain: false,
+                        validateSubjectConstraints: true,
                         out CameraCandidate probeCandidate,
                         out ConstraintFailure probeFailure))
                 {
@@ -1550,6 +2097,7 @@ namespace BreakNotice.Presentation
                             orientation,
                             lens,
                             validatePivotChain: false,
+                            validateSubjectConstraints: true,
                             out CameraCandidate middleCandidate,
                             out ConstraintFailure middleFailure))
                     {
@@ -1577,22 +2125,266 @@ namespace BreakNotice.Presentation
             return false;
         }
 
+        private bool TrySolveMaximumStaticBoom(
+            float horizontalShoulderFactor,
+            Quaternion orientation,
+            LensSettings lens,
+            out SpatialTuple solved,
+            out CameraCandidate candidate,
+            out ConstraintFailure limitingFailure)
+        {
+            int candidateQueryStart = TotalPhysicsQueriesThisFrame;
+            horizontalShoulderFactor = Mathf.Clamp01(horizontalShoulderFactor);
+            if (!HasCandidateQueryCapacity(candidateQueryStart, 4))
+            {
+                solved = default;
+                candidate = default;
+                limitingFailure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.MultipleConstraints,
+                    null,
+                    null,
+                    GeometrySignature.BudgetExceeded,
+                    true);
+                return false;
+            }
+            if (!IsPivotChainSafe(
+                    1f,
+                    horizontalShoulderFactor,
+                    out Collider pivotBlocker,
+                    out GeometrySignature pivotGeometry))
+            {
+                solved = default;
+                candidate = default;
+                limitingFailure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.StaticWorld,
+                    pivotBlocker,
+                    null,
+                    pivotGeometry,
+                    queryBudgetExceededThisFrame);
+                return false;
+            }
+
+            float requestedDistance = Mathf.Max(
+                MinimumBoomDistance,
+                ComposeProfile(1f).Distance);
+            SpatialTuple requested = new SpatialTuple(
+                1f,
+                horizontalShoulderFactor,
+                requestedDistance);
+            if (EvaluateTupleInternal(
+                    requested,
+                    orientation,
+                    lens,
+                    validatePivotChain: false,
+                    validateSubjectConstraints: false,
+                    out candidate,
+                    out limitingFailure))
+            {
+                solved = requested;
+                return true;
+            }
+
+            GetRigPoints(
+                1f,
+                horizontalShoulderFactor,
+                out _,
+                out _,
+                out Vector3 hand,
+                out Vector3 boomDirection);
+            float searchMaximum = requestedDistance;
+            if (HasCandidateQueryCapacity(candidateQueryStart, 1) &&
+                TryFindHardBlocker(
+                    hand,
+                    hand + boomDirection * requestedDistance,
+                    Mathf.Max(0.01f, frameInput.CameraRadius),
+                    HardQueryRole.HandToCamera,
+                    out RaycastHit hit,
+                    out Collider boomBlocker,
+                    out GeometrySignature boomGeometry))
+            {
+                if (boomBlocker == null)
+                {
+                    solved = default;
+                    candidate = default;
+                    limitingFailure = new ConstraintFailure(
+                        ShowcaseCameraNoValidPoseReason.MultipleConstraints,
+                        null,
+                        null,
+                        GeometrySignature.BudgetExceeded,
+                        true);
+                    return false;
+                }
+                else
+                {
+                    limitingFailure = ConstraintFailure.Prefer(
+                        limitingFailure,
+                        new ConstraintFailure(
+                            ShowcaseCameraNoValidPoseReason.StaticWorld,
+                            boomBlocker,
+                            null,
+                            boomGeometry));
+                }
+                searchMaximum = Mathf.Clamp(
+                    hit.distance - Mathf.Max(0.001f, frameInput.ClearanceMargin),
+                    MinimumBoomDistance,
+                    requestedDistance);
+            }
+
+            float previousDistance = searchMaximum;
+            float range = Mathf.Max(0f, searchMaximum - MinimumBoomDistance);
+            int remainingProbeBudget = Mathf.Max(
+                1,
+                (MaximumPhysicsQueriesPerCandidate -
+                    (TotalPhysicsQueriesThisFrame - candidateQueryStart)) / 3);
+            int bracketCount = Mathf.Min(BoomSearchSteps, remainingProbeBudget);
+            for (int bracket = 0; bracket <= bracketCount; bracket++)
+            {
+                if (queryBudgetExceededThisFrame ||
+                    !HasCandidateQueryCapacity(candidateQueryStart, 3))
+                {
+                    break;
+                }
+                float distance = bracket == 0
+                    ? searchMaximum
+                    : searchMaximum - range * bracket / Mathf.Max(1, bracketCount);
+                SpatialTuple probe = new SpatialTuple(
+                    1f,
+                    horizontalShoulderFactor,
+                    distance);
+                if (!EvaluateTupleInternal(
+                        probe,
+                        orientation,
+                        lens,
+                        validatePivotChain: false,
+                        validateSubjectConstraints: false,
+                        out CameraCandidate probeCandidate,
+                        out ConstraintFailure probeFailure))
+                {
+                    limitingFailure = ConstraintFailure.Prefer(
+                        limitingFailure,
+                        probeFailure);
+                    previousDistance = distance;
+                    continue;
+                }
+
+                solved = probe;
+                candidate = probeCandidate;
+                float low = distance;
+                float high = previousDistance;
+                while (high - low > BoomTolerance &&
+                       HasCandidateQueryCapacity(candidateQueryStart, 3))
+                {
+                    float middle = (low + high) * 0.5f;
+                    SpatialTuple middleTuple = new SpatialTuple(
+                        1f,
+                        horizontalShoulderFactor,
+                        middle);
+                    if (EvaluateTupleInternal(
+                            middleTuple,
+                            orientation,
+                            lens,
+                            validatePivotChain: false,
+                            validateSubjectConstraints: false,
+                            out CameraCandidate middleCandidate,
+                            out ConstraintFailure middleFailure))
+                    {
+                        low = middle;
+                        solved = middleTuple;
+                        candidate = middleCandidate;
+                    }
+                    else
+                    {
+                        high = middle;
+                        limitingFailure = ConstraintFailure.Prefer(
+                            limitingFailure,
+                            middleFailure);
+                    }
+                }
+                return true;
+            }
+
+            solved = default;
+            candidate = default;
+            return false;
+        }
+
+        private bool TryFindMaximumStaticHorizontalShoulder(
+            Quaternion orientation,
+            LensSettings lens,
+            out SpatialTuple solved,
+            out CameraCandidate candidate,
+            out ConstraintFailure limitingFailure)
+        {
+            if (!TrySolveMaximumStaticBoom(
+                    0f,
+                    orientation,
+                    lens,
+                    out solved,
+                    out candidate,
+                    out limitingFailure))
+            {
+                return false;
+            }
+
+            float low = 0f;
+            float high = 1f;
+            for (int iteration = 0;
+                 iteration < ScalarSearchIterations &&
+                 high - low > ScalarTolerance &&
+                 !queryBudgetExceededThisFrame;
+                 iteration++)
+            {
+                float middle = (low + high) * 0.5f;
+                if (TrySolveMaximumStaticBoom(
+                        middle,
+                        orientation,
+                        lens,
+                        out SpatialTuple middleTuple,
+                        out CameraCandidate middleCandidate,
+                        out ConstraintFailure middleFailure))
+                {
+                    low = middle;
+                    solved = middleTuple;
+                    candidate = middleCandidate;
+                }
+                else
+                {
+                    high = middle;
+                    limitingFailure = ConstraintFailure.Prefer(
+                        limitingFailure,
+                        middleFailure);
+                }
+            }
+            return true;
+        }
+
         private bool HasCandidateQueryCapacity(
             int candidateQueryStart,
             int estimatedQueryCount)
         {
+            int frameLimit = failClosedSafetyPass
+                ? MaximumPhysicsQueriesPerFrame + FailClosedSafetyQueryReserve
+                : MaximumPhysicsQueriesPerFrame;
             int candidateLimit = Mathf.Min(
-                MaximumPhysicsQueriesPerFrame,
+                frameLimit,
                 candidateQueryStart + MaximumPhysicsQueriesPerCandidate);
-            return physicsQueriesThisFrame + Mathf.Max(0, estimatedQueryCount) <=
+            return TotalPhysicsQueriesThisFrame +
+                    Mathf.Max(0, estimatedQueryCount) <=
                 candidateLimit;
         }
 
         private bool HasFrameQueryCapacity(int estimatedQueryCount)
         {
-            return physicsQueriesThisFrame + Mathf.Max(0, estimatedQueryCount) <=
-                MaximumPhysicsQueriesPerFrame;
+            int frameLimit = failClosedSafetyPass
+                ? MaximumPhysicsQueriesPerFrame + FailClosedSafetyQueryReserve
+                : MaximumPhysicsQueriesPerFrame;
+            return TotalPhysicsQueriesThisFrame +
+                    Mathf.Max(0, estimatedQueryCount) <=
+                frameLimit;
         }
+
+        private int TotalPhysicsQueriesThisFrame =>
+            physicsQueriesThisFrame + failClosedSafetyQueriesThisFrame;
 
         private bool EvaluateTuple(
             SpatialTuple tuple,
@@ -1606,6 +2398,7 @@ namespace BreakNotice.Presentation
                 orientation,
                 lens,
                 validatePivotChain: true,
+                validateSubjectConstraints: true,
                 out candidate,
                 out failure);
         }
@@ -1639,6 +2432,24 @@ namespace BreakNotice.Presentation
                 orientation,
                 lens,
                 validatePivotChain: false,
+                validateSubjectConstraints: true,
+                out candidate,
+                out failure);
+        }
+
+        private bool EvaluateStaticTuple(
+            SpatialTuple tuple,
+            Quaternion orientation,
+            LensSettings lens,
+            out CameraCandidate candidate,
+            out ConstraintFailure failure)
+        {
+            return EvaluateTupleInternal(
+                tuple,
+                orientation,
+                lens,
+                validatePivotChain: true,
+                validateSubjectConstraints: false,
                 out candidate,
                 out failure);
         }
@@ -1648,6 +2459,7 @@ namespace BreakNotice.Presentation
             Quaternion orientation,
             LensSettings lens,
             bool validatePivotChain,
+            bool validateSubjectConstraints,
             out CameraCandidate candidate,
             out ConstraintFailure failure)
         {
@@ -1676,14 +2488,13 @@ namespace BreakNotice.Presentation
                 Mathf.Max(MinimumBoomDistance, profile.Distance));
             Quaternion targetRotation = Quaternion.Euler(frameInput.Pitch, frameInput.Yaw, 0f);
             Quaternion heading = Quaternion.Euler(0f, frameInput.Yaw, 0f);
-            Vector3 root = frameInput.CornerSnapshot.PlayerRootPose.position +
-                Vector3.up * profile.TargetHeight;
+            Vector3 root = frameInput.StableAnchor.position;
             Vector3 shoulder = root + heading * new Vector3(
                 profile.ShoulderOffset * shoulderScale,
                 profile.ShoulderHeight,
                 0f);
             Vector3 hand = shoulder + targetRotation *
-                new Vector3(0f, profile.VerticalArmLength * shoulderScale, 0f);
+                new Vector3(0f, profile.VerticalArmLength, 0f);
             Vector3 boomDirection = -(targetRotation * Vector3.forward).normalized;
             Vector3 position = hand + boomDirection * distance;
             if (TryFindHardBlocker(
@@ -1703,7 +2514,7 @@ namespace BreakNotice.Presentation
                 return false;
             }
 
-            if (!IsCandidatePositionValid(
+            if (!IsCandidateStaticPositionValid(
                     position,
                     orientation,
                     lens,
@@ -1721,7 +2532,27 @@ namespace BreakNotice.Presentation
                 return false;
             }
 
-            if (TryFindBlockingActor(position, out ActorProxy actor, out _))
+            if (validateSubjectConstraints && !IsOutsidePlayerEnvelope(position))
+            {
+                SubjectConstraintApplied = true;
+                failure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.PlayerEnvelope,
+                    null,
+                    null);
+                return false;
+            }
+
+            if (validateSubjectConstraints && !IsOutsideCarryEnvelope(position))
+            {
+                failure = new ConstraintFailure(
+                    ShowcaseCameraNoValidPoseReason.CarryEnvelope,
+                    null,
+                    null);
+                return false;
+            }
+
+            if (validateSubjectConstraints &&
+                TryFindBlockingActor(position, out ActorProxy actor, out _))
             {
                 failure = new ConstraintFailure(
                     ShowcaseCameraNoValidPoseReason.DynamicActor,
@@ -1757,14 +2588,13 @@ namespace BreakNotice.Presentation
             CameraProfileValues profile = ComposeProfile(gameplayWeight);
             Quaternion targetRotation = Quaternion.Euler(frameInput.Pitch, frameInput.Yaw, 0f);
             Quaternion heading = Quaternion.Euler(0f, frameInput.Yaw, 0f);
-            root = frameInput.CornerSnapshot.PlayerRootPose.position +
-                Vector3.up * profile.TargetHeight;
+            root = frameInput.StableAnchor.position;
             shoulder = root + heading * new Vector3(
                 profile.ShoulderOffset * shoulderScale,
                 profile.ShoulderHeight,
                 0f);
             hand = shoulder + targetRotation *
-                new Vector3(0f, profile.VerticalArmLength * shoulderScale, 0f);
+                new Vector3(0f, profile.VerticalArmLength, 0f);
             boomDirection = -(targetRotation * Vector3.forward).normalized;
         }
 
@@ -2128,35 +2958,6 @@ namespace BreakNotice.Presentation
             return ShowcaseCameraSolutionFamily.BoomCompressed;
         }
 
-        private bool TryUseUnconstrainedRigPosition(
-            CameraCandidate source,
-            Vector3 unconstrainedPosition,
-            Quaternion orientation,
-            LensSettings lens,
-            out CameraCandidate candidate)
-        {
-            candidate = source;
-            if (!IsFinite(unconstrainedPosition) ||
-                !IsCandidatePositionValid(unconstrainedPosition, orientation, lens) ||
-                TryFindHardBlocker(
-                    source.Hand,
-                    unconstrainedPosition,
-                    Mathf.Max(0.01f, frameInput.CameraRadius),
-                    out _,
-                    out _) ||
-                TryFindBlockingActor(unconstrainedPosition, out _, out _))
-            {
-                return false;
-            }
-
-            candidate.Position = unconstrainedPosition;
-            candidate.Distance = Vector3.Distance(source.Hand, unconstrainedPosition);
-            candidate.Blocker = null;
-            candidate.WasBoomCompressed = false;
-            NoValidPoseReason = ShowcaseCameraNoValidPoseReason.None;
-            return true;
-        }
-
         private bool IsPivotChainSafe(
             float gameplayWeight,
             float shoulderScale,
@@ -2214,14 +3015,13 @@ namespace BreakNotice.Presentation
             CameraProfileValues profile = ComposeProfile(gameplayWeight);
             Quaternion targetRotation = Quaternion.Euler(frameInput.Pitch, frameInput.Yaw, 0f);
             Quaternion heading = Quaternion.Euler(0f, frameInput.Yaw, 0f);
-            Vector3 root = frameInput.CornerSnapshot.PlayerRootPose.position +
-                Vector3.up * profile.TargetHeight;
+            Vector3 root = frameInput.StableAnchor.position;
             Vector3 shoulder = root + heading * new Vector3(
                 profile.ShoulderOffset * shoulderScale,
                 profile.ShoulderHeight,
                 0f);
             Vector3 hand = shoulder + targetRotation *
-                new Vector3(0f, profile.VerticalArmLength * shoulderScale, 0f);
+                new Vector3(0f, profile.VerticalArmLength, 0f);
             float pivotRadius = Mathf.Max(0.04f, frameInput.CameraRadius * 0.42f);
             blocker = null;
             geometrySignature = default;
@@ -2273,14 +3073,13 @@ namespace BreakNotice.Presentation
             CameraProfileValues profile = ComposeProfile(gameplayWeight);
             Quaternion targetRotation = Quaternion.Euler(frameInput.Pitch, frameInput.Yaw, 0f);
             Quaternion heading = Quaternion.Euler(0f, frameInput.Yaw, 0f);
-            Vector3 root = frameInput.CornerSnapshot.PlayerRootPose.position +
-                Vector3.up * profile.TargetHeight;
+            Vector3 root = frameInput.StableAnchor.position;
             Vector3 shoulder = root + heading * new Vector3(
                 profile.ShoulderOffset * shoulderScale,
                 profile.ShoulderHeight,
                 0f);
             Vector3 hand = shoulder + targetRotation *
-                new Vector3(0f, profile.VerticalArmLength * shoulderScale, 0f);
+                new Vector3(0f, profile.VerticalArmLength, 0f);
             Vector3 boomDirection = -(targetRotation * Vector3.forward).normalized;
             Vector3 camera = hand + boomDirection * Mathf.Max(
                 MinimumBoomDistance,
@@ -2423,6 +3222,34 @@ namespace BreakNotice.Presentation
             LensSettings lens,
             out GeometrySignature geometrySignature)
         {
+            if (!IsCandidateStaticPositionValid(
+                    position,
+                    orientation,
+                    lens,
+                    out geometrySignature))
+            {
+                return false;
+            }
+            if (!IsOutsidePlayerEnvelope(position))
+            {
+                SubjectConstraintApplied = true;
+                NoValidPoseReason = ShowcaseCameraNoValidPoseReason.PlayerEnvelope;
+                return false;
+            }
+            if (!IsOutsideCarryEnvelope(position))
+            {
+                NoValidPoseReason = ShowcaseCameraNoValidPoseReason.CarryEnvelope;
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsCandidateStaticPositionValid(
+            Vector3 position,
+            Quaternion orientation,
+            LensSettings lens,
+            out GeometrySignature geometrySignature)
+        {
             geometrySignature = default;
             if (TryFindHardOverlap(
                     position,
@@ -2443,17 +3270,6 @@ namespace BreakNotice.Presentation
             {
                 geometrySignature = nearPlaneGeometry;
                 NoValidPoseReason = ShowcaseCameraNoValidPoseReason.NearPlane;
-                return false;
-            }
-            if (!IsOutsidePlayerEnvelope(position))
-            {
-                SubjectConstraintApplied = true;
-                NoValidPoseReason = ShowcaseCameraNoValidPoseReason.PlayerEnvelope;
-                return false;
-            }
-            if (!IsOutsideCarryEnvelope(position))
-            {
-                NoValidPoseReason = ShowcaseCameraNoValidPoseReason.CarryEnvelope;
                 return false;
             }
             return true;
@@ -2495,6 +3311,90 @@ namespace BreakNotice.Presentation
                 HardQueryRole.NearPlane,
                 out _,
                 out geometrySignature);
+        }
+
+        private bool IsRequestedStaticPoseClearWithMargin(
+            Quaternion orientation,
+            LensSettings lens,
+            out Collider blocker)
+        {
+            GetRigPoints(
+                1f,
+                1f,
+                out Vector3 root,
+                out Vector3 shoulder,
+                out Vector3 hand,
+                out Vector3 boomDirection);
+            Vector3 camera = hand + boomDirection * requestedBoomDistance;
+            float pivotRadius = Mathf.Max(
+                0.04f,
+                frameInput.CameraRadius * 0.42f) + StaticReleaseSpatialMargin;
+            float cameraRadius = Mathf.Max(
+                0.01f,
+                frameInput.CameraRadius) + StaticReleaseSpatialMargin;
+
+            if (TryFindHardBlocker(
+                    root,
+                    shoulder,
+                    pivotRadius,
+                    out _,
+                    out blocker) ||
+                TryFindHardOverlap(shoulder, pivotRadius, out blocker) ||
+                TryFindHardBlocker(
+                    shoulder,
+                    hand,
+                    pivotRadius,
+                    out _,
+                    out blocker) ||
+                TryFindHardOverlap(hand, pivotRadius, out blocker) ||
+                TryFindHardBlocker(
+                    hand,
+                    camera,
+                    cameraRadius,
+                    out _,
+                    out blocker) ||
+                TryFindHardOverlap(camera, cameraRadius, out blocker) ||
+                !IsNearPlaneSafeWithMargin(
+                    camera,
+                    orientation,
+                    lens,
+                    StaticReleaseSpatialMargin,
+                    out blocker))
+            {
+                return false;
+            }
+
+            return !queryBudgetExceededThisFrame;
+        }
+
+        private bool IsNearPlaneSafeWithMargin(
+            Vector3 cameraPosition,
+            Quaternion orientation,
+            LensSettings lens,
+            float margin,
+            out Collider blocker)
+        {
+            float near = Mathf.Max(0.01f, lens.NearClipPlane);
+            float aspect = lens.Aspect > 0f ? lens.Aspect : 16f / 9f;
+            float halfHeight = near * Mathf.Tan(
+                Mathf.Clamp(lens.FieldOfView, 1f, 179f) *
+                0.5f * Mathf.Deg2Rad);
+            float halfWidth = halfHeight * aspect;
+            float thickness = Mathf.Max(
+                0.01f,
+                frameInput.ClearanceMargin * 0.5f);
+            float safeMargin = Mathf.Max(0f, margin);
+            Vector3 center = cameraPosition +
+                orientation * Vector3.forward * (near * 0.5f);
+            Vector3 halfExtents = new Vector3(
+                halfWidth + thickness + safeMargin,
+                halfHeight + thickness + safeMargin,
+                near * 0.5f + thickness + safeMargin);
+            return !TryFindHardBoxOverlap(
+                center,
+                halfExtents,
+                orientation,
+                out blocker);
         }
 
         private bool IsOutsidePlayerEnvelope(Vector3 position)
@@ -2594,6 +3494,7 @@ namespace BreakNotice.Presentation
         {
             previous = hasLastSolvedPose ? lastSolvedPose.position : Vector3.zero;
             return hasLastSolvedPose &&
+                IsFinite(previous) &&
                 IsCandidatePositionValid(previous, orientation, lens) &&
                 !TryFindBlockingActor(previous, out _, out _);
         }
@@ -2840,18 +3741,25 @@ namespace BreakNotice.Presentation
 
         private bool TryConsumePhysicsQuery()
         {
-            if (physicsQueriesThisFrame >= MaximumPhysicsQueriesPerFrame)
+            if (physicsQueriesThisFrame < MaximumPhysicsQueriesPerFrame)
             {
-                if (!queryBudgetExceededThisFrame)
-                {
-                    queryBudgetExceededThisFrame = true;
-                    queryBudgetExceededCount++;
-                }
-                return false;
+                physicsQueriesThisFrame++;
+                return true;
             }
 
-            physicsQueriesThisFrame++;
-            return true;
+            if (failClosedSafetyPass &&
+                failClosedSafetyQueriesThisFrame < FailClosedSafetyQueryReserve)
+            {
+                failClosedSafetyQueriesThisFrame++;
+                return true;
+            }
+
+            if (!queryBudgetExceededThisFrame)
+            {
+                queryBudgetExceededThisFrame = true;
+                queryBudgetExceededCount++;
+            }
+            return false;
         }
 
         private static HardContact BuildOverlapContact(
@@ -3011,6 +3919,7 @@ namespace BreakNotice.Presentation
             if (IsInHierarchy(colliderTransform, frameInput.PlayerRoot) ||
                 (frameInput.CarriedTarget != null &&
                  IsInHierarchy(colliderTransform, frameInput.CarriedTarget.transform)) ||
+                collider.GetComponentInParent<ShowcaseCameraSoftOccluderRoot>() != null ||
                 collider.GetComponentInParent<PrototypeInteractionTarget>() != null ||
                 collider.GetComponentInParent<ShowcaseRunnerAgent>() != null ||
                 collider.GetComponentInParent<ShowcaseMobileAllyController>() != null)
@@ -3041,10 +3950,17 @@ namespace BreakNotice.Presentation
                 Collider[] colliders = root.GetComponentsInChildren<Collider>(true);
                 foreach (Collider collider in colliders)
                 {
-                    if (collider != null && !collider.isTrigger)
+                    if (collider == null || collider.isTrigger ||
+                        collider.GetComponentInParent<
+                            ShowcaseCameraSoftOccluderRoot>() != null)
+                    {
+                        continue;
+                    }
+
+                    int layerBit = 1 << collider.gameObject.layer;
+                    if ((hardWorldLayers.value & layerBit) != 0)
                     {
                         hardWorldColliderIds.Add(collider.GetInstanceID());
-                        hardWorldQueryMask |= 1 << collider.gameObject.layer;
                     }
                 }
             }

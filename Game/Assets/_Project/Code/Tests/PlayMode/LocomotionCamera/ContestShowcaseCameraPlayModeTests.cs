@@ -370,9 +370,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(partition, Is.Not.Null,
                     "The actual v007 authored partition fixture was not found.");
                 Assert.That(
-                    partition.GetComponentInParent<ShowcaseCameraWorldBlockerRoot>(),
+                    partition.GetComponentInParent<ShowcaseCameraSoftOccluderRoot>(),
                     Is.Not.Null,
-                    "Authored partition geometry must enter the explicit camera-world allow-list.");
+                    "Authored partition geometry must remain a gameplay collider but be " +
+                    "classified as a soft camera occluder.");
+                Assert.That(
+                    partition.GetComponentInParent<ShowcaseCameraWorldBlockerRoot>(),
+                    Is.Null,
+                    "Soft partition geometry must not enter the hard camera-world allow-list.");
                 Vector3 openPlayerPosition = owner.transform.position;
                 Quaternion openPlayerRotation = owner.transform.rotation;
                 PlacePlayerBesidePartition(owner, partition, cameraRig);
@@ -514,7 +519,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator V007AdjacentPartitionSeam_NormalAndAimShuttleRemainContinuous()
+        public IEnumerator V007ActualWASDRoomEntryExit_SoftPartitionRemainsCameraTransparent()
         {
             yield return EnsureShowcaseSceneUnloaded();
             AsyncOperation load = EditorSceneManager.LoadSceneAsyncInPlayMode(
@@ -561,35 +566,35 @@ namespace BreakNotice.LocomotionCamera.Tests
                         scene,
                         owner.transform.position,
                         out Vector3 seam,
-                        out Vector3 tangent,
+                        out _,
                         out Vector3 outward),
                     Is.True,
                     "No adjacent authored partition seam fixture was found in v007.");
                 CharacterController controller = owner.GetComponent<CharacterController>();
                 Assert.That(controller, Is.Not.Null);
-                Vector3 center = seam + outward *
-                    (controller.radius + controller.skinWidth + 0.18f);
-                center.y = owner.transform.position.y;
+                float passageOffset =
+                    controller.radius + controller.skinWidth + 0.18f;
+                Vector3 pointA = seam + outward * passageOffset;
+                Vector3 pointB = seam - outward * passageOffset;
+                pointA.y = owner.transform.position.y;
+                pointB.y = owner.transform.position.y;
                 Quaternion facing = Quaternion.LookRotation(outward, Vector3.up);
                 bool controllerEnabled = controller.enabled;
                 controller.enabled = false;
-                owner.transform.SetPositionAndRotation(center, facing);
+                owner.transform.SetPositionAndRotation(pointA, facing);
                 controller.enabled = controllerEnabled;
                 Physics.SyncTransforms();
                 cameraRig.HardResetCameraState();
                 yield return new WaitForSecondsRealtime(0.35f);
-
-                Vector3 pointA = center - tangent * 0.18f;
-                Vector3 pointB = center + tangent * 0.18f;
                 int normalTransitionBaseline = cameraRig.ContextualCornerTransitionCount;
                 yield return ShuttleAcrossSeam(
                     owner,
                     cameraRig,
                     solver,
+                    logicalInput,
                     pointA,
                     pointB,
-                    facing,
-                    20,
+                    4,
                     expectContextualCorner: false);
                 Assert.That(
                     cameraRig.ContextualCornerTransitionCount,
@@ -616,11 +621,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                     owner,
                     cameraRig,
                     solver,
+                    logicalInput,
                     pointA,
                     pointB,
-                    facing,
-                    20,
-                    expectContextualCorner: true);
+                    4,
+                    expectContextualCorner: false);
                 yield return AssertCameraRemainsStable(
                     cameraRig,
                     120,
@@ -634,6 +639,22 @@ namespace BreakNotice.LocomotionCamera.Tests
                     PrototypeInteractionDecision.Accept(
                         PrototypeInteractionOutcome.Scoop,
                         binder);
+                ShowcaseBinderGripSocket gripSocket =
+                    owner.GetComponent<ShowcaseBinderGripSocket>();
+                Assert.That(gripSocket, Is.Not.Null);
+                Assert.That(
+                    gripSocket.TryGetWorldPose(
+                        out Vector3 gripPosition,
+                        out Quaternion gripRotation),
+                    Is.True);
+                binder.transform.SetPositionAndRotation(gripPosition, gripRotation);
+                Rigidbody binderBody = binder.GetComponent<Rigidbody>();
+                Assert.That(binderBody, Is.Not.Null);
+                binderBody.position = gripPosition;
+                binderBody.rotation = gripRotation;
+                binderBody.linearVelocity = Vector3.zero;
+                binderBody.angularVelocity = Vector3.zero;
+                Physics.SyncTransforms();
                 Assert.That(owner.TryCommit(carryDecision), Is.True);
                 Assert.That(owner.TryCompleteAcquisition(binder), Is.True);
                 Assert.That(lifecycle.BeginCarry(binder), Is.True);
@@ -643,10 +664,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                     owner,
                     cameraRig,
                     solver,
+                    logicalInput,
                     pointA,
                     pointB,
-                    facing,
-                    10,
+                    3,
                     expectContextualCorner: false);
 
                 SetLogicalSnapshot(logicalInput, new LogicalInputSnapshot(
@@ -668,11 +689,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                     owner,
                     cameraRig,
                     solver,
+                    logicalInput,
                     pointA,
                     pointB,
-                    facing,
-                    10,
-                    expectContextualCorner: true);
+                    3,
+                    expectContextualCorner: false);
                 yield return AssertCameraRemainsStable(
                     cameraRig,
                     120,
@@ -691,7 +712,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator V007NormalEliteAndAlly_CloseCameraCrossing_UseSoftStableProxies()
+        public IEnumerator V007ActualWASD_CarryMediumRightHardWallContactAndReleaseAreBoomOnly()
         {
             yield return EnsureShowcaseSceneUnloaded();
             AsyncOperation load = EditorSceneManager.LoadSceneAsyncInPlayMode(
@@ -710,15 +731,267 @@ namespace BreakNotice.LocomotionCamera.Tests
                 DisablePointerCapture(scene);
                 ThirdPersonCameraRig cameraRig =
                     GetSceneComponents<ThirdPersonCameraRig>(scene).Single();
+                ShowcaseCameraConstraintSolver solver =
+                    GetSceneComponents<ShowcaseCameraConstraintSolver>(scene).Single();
+                PrototypeInteractionStateOwner owner =
+                    GetSceneComponents<PrototypeInteractionStateOwner>(scene).Single();
+                PrototypePhysicalObjectLifecycle lifecycle =
+                    GetSceneComponents<PrototypePhysicalObjectLifecycle>(scene).Single();
+                InputSystemLogicalInputAdapter logicalInput =
+                    GetSceneComponents<InputSystemLogicalInputAdapter>(scene).Single();
+                PrototypeInteractionTarget chair =
+                    GetSceneComponents<PrototypeInteractionTarget>(scene)
+                        .Single(target => target.RuntimeInstanceKey == "CHAIR-DIRECT-01");
+                foreach (ShowcaseRunnerAgent runner in
+                         GetSceneComponents<ShowcaseRunnerAgent>(scene))
+                {
+                    runner.enabled = false;
+                }
+                GetSceneComponents<ShowcaseMobileAllyController>(scene).Single().enabled = false;
+                logicalInput.enabled = false;
+                cameraRig.OutputCamera.aspect = 16f / 9f;
+
+                yield return CarryAndAssert(
+                    cameraRig,
+                    owner,
+                    lifecycle,
+                    chair,
+                    CameraCarryMode.Medium,
+                    3.00f,
+                    assertCentralSafeArea: false);
+
+                Collider eastWall = GetSceneComponents<Collider>(scene).Single(collider =>
+                    collider.name == "PROXY_Wall_East");
+                Assert.That(eastWall.GetComponentInParent<ShowcaseCameraWorldBlockerRoot>(),
+                    Is.Not.Null);
+                Assert.That(eastWall.GetComponentInParent<ShowcaseCameraSoftOccluderRoot>(),
+                    Is.Null);
+                CharacterController controller = owner.GetComponent<CharacterController>();
+                Assert.That(controller, Is.Not.Null);
+
+                Bounds wallBounds = eastWall.bounds;
+                float startZ = Mathf.Clamp(
+                    -2f,
+                    wallBounds.min.z + 3f,
+                    wallBounds.max.z - 7f);
+                Vector3 wallStart = new Vector3(
+                    wallBounds.min.x -
+                    (controller.radius + controller.skinWidth + 0.06f),
+                    owner.transform.position.y,
+                    startZ);
+                PlacePlayerForCameraRoute(
+                    owner,
+                    controller,
+                    wallStart,
+                    Quaternion.LookRotation(Vector3.forward, Vector3.up),
+                    cameraRig);
+
+                // A hard reset must atomically preserve the current semantic camera
+                // state; restarting Normal->Carry here reintroduces perpendicular
+                // drift that is unrelated to the wall contact.
+                yield return null;
+                AssertSingleAuthorityFrame(cameraRig, solver);
+                Assert.That(cameraRig.IsTransitioning, Is.False,
+                    "Hard reset restarted a CarryMedium camera transition.");
+                Assert.That(cameraRig.CarryBlend, Is.EqualTo(1f).Within(0.001f));
+                Assert.That(cameraRig.CurrentDistance, Is.EqualTo(3f).Within(0.001f));
+
+                float contactDeadline = Time.realtimeSinceStartup + 1f;
+                while (solver.StaticContactPhase !=
+                           ShowcaseStaticCameraContactPhase.Contact &&
+                       Time.realtimeSinceStartup < contactDeadline)
+                {
+                    yield return null;
+                    AssertSingleAuthorityFrame(cameraRig, solver);
+                }
+                Assert.That(
+                    solver.StaticContactPhase,
+                    Is.EqualTo(ShowcaseStaticCameraContactPhase.Contact),
+                    DescribeSolverFrame(cameraRig, solver));
+
+                int contactEpisode = solver.ContactEpisodeId;
+                int restoreStartBaseline = solver.RestoreStartCount;
+                float previousBoom = solver.ResolvedBoomDistance;
+                Vector3 contactPerpendicular = BoomPerpendicularOffset(
+                    solver.FinalStableAnchorLocalCameraOffset);
+                bool emergencyShoulder = solver.EmergencyShoulderLatched;
+                System.Action sampleHardContact = () =>
+                {
+                    string context = DescribeSolverFrame(cameraRig, solver);
+                    AssertSingleAuthorityFrame(cameraRig, solver);
+                    Assert.That(solver.StaticContactPhase,
+                        Is.EqualTo(ShowcaseStaticCameraContactPhase.Contact), context);
+                    Assert.That(solver.HardConstraintActiveThisFrame, Is.True, context);
+                    Assert.That(solver.ActiveHardBlocker, Is.Not.Null, context);
+                    Assert.That(
+                        IsInHierarchy(solver.ActiveHardBlocker.transform, eastWall.transform) ||
+                        IsInHierarchy(eastWall.transform, solver.ActiveHardBlocker.transform),
+                        Is.True,
+                        context);
+                    Assert.That(solver.ContactEpisodeId, Is.EqualTo(contactEpisode), context);
+                    Assert.That(solver.RestoreStartCount,
+                        Is.EqualTo(restoreStartBaseline), context);
+                    Assert.That(solver.ResolvedGameplayWeight,
+                        Is.EqualTo(1f).Within(0.001f), context);
+                    if (!emergencyShoulder)
+                    {
+                        Assert.That(solver.ResolvedShoulderScale,
+                            Is.EqualTo(1f).Within(0.001f), context);
+                    }
+                    Assert.That(solver.ResolvedBoomDistance,
+                        Is.LessThanOrEqualTo(previousBoom + 0.002f), context);
+                    Assert.That(
+                        Vector3.Distance(
+                            BoomPerpendicularOffset(
+                                solver.FinalStableAnchorLocalCameraOffset),
+                            contactPerpendicular),
+                        Is.LessThanOrEqualTo(0.005f),
+                        context);
+                    previousBoom = solver.ResolvedBoomDistance;
+                };
+
+                Vector3 firstLegEnd = wallStart + Vector3.forward * 2f;
+                yield return WalkByLogicalWASD(
+                    owner,
+                    cameraRig,
+                    logicalInput,
+                    firstLegEnd,
+                    4f,
+                    sampleHardContact);
+
+                Renderer[] wallRenderers = eastWall.GetComponentsInChildren<Renderer>(true);
+                Assert.That(wallRenderers, Is.Not.Empty,
+                    "The hard-wall renderer-hide continuity fixture is missing.");
+                bool[] rendererStates = wallRenderers
+                    .Select(renderer => renderer.enabled)
+                    .ToArray();
+                try
+                {
+                    foreach (Renderer renderer in wallRenderers)
+                    {
+                        renderer.enabled = false;
+                    }
+                    Assert.That(eastWall.enabled, Is.True,
+                        "Renderer-only visibility changes must preserve the hard collider.");
+                    Vector3 secondLegEnd = wallStart + Vector3.forward * 4f;
+                    yield return WalkByLogicalWASD(
+                        owner,
+                        cameraRig,
+                        logicalInput,
+                        secondLegEnd,
+                        4f,
+                        sampleHardContact);
+                }
+                finally
+                {
+                    for (int index = 0; index < wallRenderers.Length; index++)
+                    {
+                        if (wallRenderers[index] != null)
+                        {
+                            wallRenderers[index].enabled = rendererStates[index];
+                        }
+                    }
+                }
+
+                Assert.That(
+                    PlanarDistance(owner.transform.position, wallStart),
+                    Is.GreaterThanOrEqualTo(3.8f),
+                    "Actual CarryMedium WASD traversal did not cover the required hard-wall distance.");
+
+                bool sawRestoring = false;
+                bool sawClearAfterRestoring = false;
+                bool reenteredContactAfterRestoring = false;
+                float previousReleaseBoom = solver.ResolvedBoomDistance;
+                System.Action sampleRelease = () =>
+                {
+                    AssertSingleAuthorityFrame(cameraRig, solver);
+                    string context = DescribeSolverFrame(cameraRig, solver);
+                    ShowcaseStaticCameraContactPhase phase = solver.StaticContactPhase;
+                    if (phase == ShowcaseStaticCameraContactPhase.Restoring)
+                    {
+                        sawRestoring = true;
+                        Assert.That(solver.ResolvedBoomDistance,
+                            Is.GreaterThanOrEqualTo(previousReleaseBoom - 0.002f), context);
+                        Assert.That(solver.ResolvedBoomDistance,
+                            Is.LessThanOrEqualTo(solver.RequestedBoomDistance + 0.002f), context);
+                    }
+                    else if (phase == ShowcaseStaticCameraContactPhase.Clear && sawRestoring)
+                    {
+                        sawClearAfterRestoring = true;
+                    }
+                    else if (phase == ShowcaseStaticCameraContactPhase.Contact && sawRestoring)
+                    {
+                        reenteredContactAfterRestoring = true;
+                    }
+                    previousReleaseBoom = solver.ResolvedBoomDistance;
+                };
+
+                Vector3 releaseDestination = owner.transform.position + Vector3.left * 1.5f;
+                yield return WalkByLogicalWASD(
+                    owner,
+                    cameraRig,
+                    logicalInput,
+                    releaseDestination,
+                    4f,
+                    sampleRelease);
+                float releaseDeadline = Time.realtimeSinceStartup + 1.5f;
+                while (solver.StaticContactPhase != ShowcaseStaticCameraContactPhase.Clear &&
+                       Time.realtimeSinceStartup < releaseDeadline)
+                {
+                    yield return null;
+                    sampleRelease();
+                }
+
+                string releaseContext = DescribeSolverFrame(cameraRig, solver);
+                Assert.That(sawRestoring, Is.True, releaseContext);
+                Assert.That(sawClearAfterRestoring, Is.True, releaseContext);
+                Assert.That(reenteredContactAfterRestoring, Is.False, releaseContext);
+                Assert.That(solver.RestoreStartCount - restoreStartBaseline,
+                    Is.EqualTo(1), releaseContext);
+                Assert.That(solver.StaticContactPhase,
+                    Is.EqualTo(ShowcaseStaticCameraContactPhase.Clear), releaseContext);
+                Assert.That(solver.ResolvedBoomDistance,
+                    Is.EqualTo(solver.RequestedBoomDistance).Within(0.002f),
+                    releaseContext);
+            }
+            finally
+            {
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator V007AllyNormalElite_CrossCameraBoundary_SubjectBoomLatchIsMonotonic()
+        {
+            yield return EnsureShowcaseSceneUnloaded();
+            AsyncOperation load = EditorSceneManager.LoadSceneAsyncInPlayMode(
+                ScenePath,
+                new LoadSceneParameters(LoadSceneMode.Additive));
+            Assert.That(load, Is.Not.Null);
+            while (!load.isDone)
+            {
+                yield return null;
+            }
+
+            Scene scene = SceneManager.GetSceneByPath(ScenePath);
+            Assert.That(scene.IsValid() && scene.isLoaded, Is.True);
+            try
+            {
+                DisablePointerCapture(scene);
+                ThirdPersonCameraRig cameraRig =
+                    GetSceneComponents<ThirdPersonCameraRig>(scene).Single();
+                ShowcaseCameraConstraintSolver solver =
+                    GetSceneComponents<ShowcaseCameraConstraintSolver>(scene).Single();
                 PrototypeInteractionStateOwner owner =
                     GetSceneComponents<PrototypeInteractionStateOwner>(scene).Single();
                 InputSystemLogicalInputAdapter logicalInput =
                     GetSceneComponents<InputSystemLogicalInputAdapter>(scene).Single();
                 logicalInput.enabled = false;
                 ShowcaseRunnerAgent[] runners =
-                    GetSceneComponents<ShowcaseRunnerAgent>(scene)
-                        .OrderBy(runner => runner.name)
-                        .ToArray();
+                    GetSceneComponents<ShowcaseRunnerAgent>(scene);
                 ShowcaseMobileAllyController ally =
                     GetSceneComponents<ShowcaseMobileAllyController>(scene).Single();
                 Assert.That(runners.Length, Is.EqualTo(2));
@@ -733,70 +1006,150 @@ namespace BreakNotice.LocomotionCamera.Tests
                 SetLogicalSnapshot(logicalInput, default);
                 yield return new WaitForSecondsRealtime(0.2f);
                 Vector3 stationaryPlayerPosition = owner.transform.position;
+                Assert.That(solver.StaticContactPhase,
+                    Is.EqualTo(ShowcaseStaticCameraContactPhase.Clear),
+                    DescribeSolverFrame(cameraRig, solver));
+                Assert.That(solver.SubjectContactPhase,
+                    Is.EqualTo(ShowcaseStaticCameraContactPhase.Clear),
+                    DescribeSolverFrame(cameraRig, solver));
 
                 Transform[] actorRoots =
                 {
-                    runners[0].transform,
-                    runners[1].transform,
+                    runners.Single(runner => !runner.IsElite).transform,
+                    runners.Single(runner => runner.IsElite).transform,
                     ally.transform
                 };
                 foreach (Transform actorRoot in actorRoots)
                 {
                     Vector3 originalPosition = actorRoot.position;
                     Quaternion originalRotation = actorRoot.rotation;
-                    Vector3 boomPoint = Vector3.Lerp(
-                        cameraRig.StableAnchor.position,
-                        cameraRig.OutputCamera.transform.position,
-                        0.72f);
-                    actorRoot.SetPositionAndRotation(
-                        new Vector3(boomPoint.x, originalPosition.y, boomPoint.z),
-                        originalRotation);
-                    Physics.SyncTransforms();
-                    for (int frame = 0; frame < 12; frame++)
+                    Vector3 right = cameraRig.StableAnchor.right;
+                    right.y = 0f;
+                    right.Normalize();
+                    Vector3 crossingCenter = cameraRig.OutputCamera.transform.position;
+                    crossingCenter.y = originalPosition.y;
+                    Vector3 crossingStart = crossingCenter + right * 1.5f;
+                    Vector3 crossingEnd = crossingCenter - right * 1.5f;
+                    MoveActorToPosition(actorRoot, crossingStart, originalRotation);
+                    yield return null;
+                    yield return null;
+
+                    Assert.That(solver.StaticContactPhase,
+                        Is.EqualTo(ShowcaseStaticCameraContactPhase.Clear),
+                        DescribeSolverFrame(cameraRig, solver));
+                    Assert.That(solver.SubjectContactPhase,
+                        Is.EqualTo(ShowcaseStaticCameraContactPhase.Clear),
+                        DescribeSolverFrame(cameraRig, solver));
+
+                    ShowcaseStaticCameraContactPhase staticPhase =
+                        solver.StaticContactPhase;
+                    int staticEpisode = solver.ContactEpisodeId;
+                    int staticRestores = solver.RestoreStartCount;
+                    int subjectEpisode = solver.SubjectContactEpisodeId;
+                    int subjectRestores = solver.SubjectRestoreStartCount;
+                    float previousSubjectBoom = solver.SubjectResolvedBoomDistance;
+                    Vector3 perpendicularBaseline = BoomPerpendicularOffset(
+                        solver.FinalStableAnchorLocalCameraOffset);
+                    bool sawContact = false;
+                    bool sawRestoring = false;
+                    bool sawClearAfterRestoring = false;
+                    bool reenteredContactAfterRestoring = false;
+
+                    System.Action sampleSubjectFrame = () =>
                     {
+                        AssertSingleAuthorityFrame(cameraRig, solver);
+                        string context = DescribeSolverFrame(cameraRig, solver);
+                        Assert.That(solver.StaticContactPhase,
+                            Is.EqualTo(staticPhase), context);
+                        Assert.That(solver.ContactEpisodeId,
+                            Is.EqualTo(staticEpisode), context);
+                        Assert.That(solver.RestoreStartCount,
+                            Is.EqualTo(staticRestores), context);
+                        Assert.That(solver.HardConstraintActiveThisFrame,
+                            Is.False, context);
+                        Assert.That(solver.ResolvedGameplayWeight,
+                            Is.EqualTo(1f).Within(0.001f), context);
+                        Assert.That(solver.ResolvedShoulderScale,
+                            Is.EqualTo(1f).Within(0.001f), context);
+                        Assert.That(
+                            Vector3.Distance(
+                                BoomPerpendicularOffset(
+                                    solver.FinalStableAnchorLocalCameraOffset),
+                                perpendicularBaseline),
+                            Is.LessThanOrEqualTo(0.005f),
+                            context);
+
+                        if (solver.SubjectContactPhase ==
+                            ShowcaseStaticCameraContactPhase.Contact)
+                        {
+                            if (sawRestoring)
+                            {
+                                reenteredContactAfterRestoring = true;
+                            }
+                            sawContact = true;
+                            Assert.That(solver.SubjectResolvedBoomDistance,
+                                Is.LessThanOrEqualTo(previousSubjectBoom + 0.002f),
+                                context);
+                            Assert.That(solver.CurrentActorProxy,
+                                Is.SameAs(actorRoot), context);
+                        }
+                        else if (solver.SubjectContactPhase ==
+                                 ShowcaseStaticCameraContactPhase.Restoring)
+                        {
+                            sawRestoring = true;
+                            Assert.That(solver.SubjectResolvedBoomDistance,
+                                Is.GreaterThanOrEqualTo(previousSubjectBoom - 0.002f),
+                                context);
+                            Assert.That(solver.SubjectResolvedBoomDistance,
+                                Is.LessThanOrEqualTo(
+                                    solver.RequestedBoomDistance + 0.002f),
+                                context);
+                        }
+                        else if (sawRestoring)
+                        {
+                            sawClearAfterRestoring = true;
+                        }
+                        previousSubjectBoom = solver.SubjectResolvedBoomDistance;
+                    };
+
+                    const int crossingSteps = 60;
+                    for (int step = 1; step <= crossingSteps; step++)
+                    {
+                        MoveActorToPosition(
+                            actorRoot,
+                            Vector3.Lerp(
+                                crossingStart,
+                                crossingEnd,
+                                step / (float)crossingSteps),
+                            originalRotation);
                         yield return null;
-                        AssertSingleAuthorityFrame(cameraRig);
+                        sampleSubjectFrame();
                     }
 
-                    Collider actorCollider = actorRoot
-                        .GetComponentsInChildren<Collider>(true)
-                        .FirstOrDefault(collider =>
-                            collider.enabled &&
-                            !collider.isTrigger &&
-                            collider.bounds.size.sqrMagnitude > 0.0001f);
-                    Assert.That(actorCollider, Is.Not.Null);
-                    Assert.That(
-                        cameraRig.CurrentBlockingCollider == null ||
-                        !IsInHierarchy(
-                            cameraRig.CurrentBlockingCollider.transform,
-                            actorRoot),
-                        Is.True,
-                        $"{actorRoot.name} gameplay collider became a hard camera blocker.");
-                    string proxyName = cameraRig.CurrentActorProxy != null
-                        ? cameraRig.CurrentActorProxy.name
-                        : "<none>";
-                    Assert.That(
-                        Vector3.Distance(
-                            cameraRig.OutputCamera.transform.position,
-                            actorCollider.ClosestPoint(
-                                cameraRig.OutputCamera.transform.position)),
-                        Is.GreaterThan(0.01f),
-                        $"The output camera remained inside {actorRoot.name}. " +
-                        $"status={cameraRig.ConstraintStatus}, " +
-                        $"reason={cameraRig.NoValidPoseReason}, " +
-                        $"proxy={proxyName}, " +
-                        $"camera={cameraRig.OutputCamera.transform.position}, " +
-                        $"actor={actorRoot.position}, bounds={actorCollider.bounds}.");
-                    yield return AssertCameraRemainsStable(
-                        cameraRig,
-                        45,
-                        0.025f,
-                        0.12f);
+                    float clearDeadline = Time.realtimeSinceStartup + 1.5f;
+                    while (solver.SubjectContactPhase !=
+                               ShowcaseStaticCameraContactPhase.Clear &&
+                           Time.realtimeSinceStartup < clearDeadline)
+                    {
+                        yield return null;
+                        sampleSubjectFrame();
+                    }
 
-                    actorRoot.SetPositionAndRotation(originalPosition, originalRotation);
-                    Physics.SyncTransforms();
-                    yield return WaitForOpenCameraRecovery(cameraRig, 1.5f);
-                    Assert.That(cameraRig.CurrentActorProxy, Is.Null);
+                    string actorContext = DescribeSolverFrame(cameraRig, solver);
+                    Assert.That(sawContact, Is.True, actorContext);
+                    Assert.That(sawRestoring, Is.True, actorContext);
+                    Assert.That(sawClearAfterRestoring, Is.True, actorContext);
+                    Assert.That(reenteredContactAfterRestoring, Is.False, actorContext);
+                    Assert.That(solver.SubjectContactEpisodeId - subjectEpisode,
+                        Is.EqualTo(1), actorContext);
+                    Assert.That(solver.SubjectRestoreStartCount - subjectRestores,
+                        Is.EqualTo(1), actorContext);
+                    Assert.That(solver.SubjectContactPhase,
+                        Is.EqualTo(ShowcaseStaticCameraContactPhase.Clear), actorContext);
+                    Assert.That(solver.CurrentActorProxy, Is.Null, actorContext);
+
+                    MoveActorToPosition(actorRoot, originalPosition, originalRotation);
+                    yield return null;
                 }
 
                 Assert.That(
@@ -817,9 +1170,9 @@ namespace BreakNotice.LocomotionCamera.Tests
             PrototypeInteractionStateOwner owner,
             ThirdPersonCameraRig cameraRig,
             ShowcaseCameraConstraintSolver solver,
+            InputSystemLogicalInputAdapter logicalInput,
             Vector3 pointA,
             Vector3 pointB,
-            Quaternion facing,
             int cycles,
             bool expectContextualCorner)
         {
@@ -828,29 +1181,26 @@ namespace BreakNotice.LocomotionCamera.Tests
             int contextualTransitions = cameraRig.ContextualCornerTransitionCount;
             yield return MoveAcrossSeamHalf(
                 owner,
-                controller,
                 cameraRig,
                 solver,
+                logicalInput,
                 pointA,
-                facing,
                 expectContextualCorner);
             for (int cycle = 0; cycle < cycles; cycle++)
             {
                 yield return MoveAcrossSeamHalf(
                     owner,
-                    controller,
                     cameraRig,
                     solver,
+                    logicalInput,
                     pointB,
-                    facing,
                     expectContextualCorner);
                 yield return MoveAcrossSeamHalf(
                     owner,
-                    controller,
                     cameraRig,
                     solver,
+                    logicalInput,
                     pointA,
-                    facing,
                     expectContextualCorner);
             }
 
@@ -864,50 +1214,85 @@ namespace BreakNotice.LocomotionCamera.Tests
 
         private static IEnumerator MoveAcrossSeamHalf(
             PrototypeInteractionStateOwner owner,
-            CharacterController controller,
             ThirdPersonCameraRig cameraRig,
             ShowcaseCameraConstraintSolver solver,
+            InputSystemLogicalInputAdapter logicalInput,
             Vector3 destination,
-            Quaternion facing,
             bool expectContextualCorner)
         {
-            Vector3 source = owner.transform.position;
-            int steps = Mathf.Max(
-                1,
-                Mathf.CeilToInt(Vector3.Distance(source, destination) / 0.06f));
-            ShowcaseCameraSolutionFamily previousFamily = solver.ActiveSolutionFamily;
-            int familySwitches = 0;
-            string familyTrace = previousFamily.ToString();
-            bool wasEnabled = controller.enabled;
-            for (int step = 1; step <= steps; step++)
+            Vector3 routeStart = owner.transform.position;
+            Vector3 travelDirection = destination - routeStart;
+            travelDirection.y = 0f;
+            float routeLength = travelDirection.magnitude;
+            if (routeLength > 0.0001f)
             {
-                controller.enabled = false;
-                owner.transform.SetPositionAndRotation(
-                    Vector3.Lerp(source, destination, step / (float)steps),
-                    facing);
-                controller.enabled = wasEnabled;
-                Physics.SyncTransforms();
+                travelDirection /= routeLength;
+            }
+            float deadline = Time.realtimeSinceStartup + 3f;
+            Vector3 minimumLocalOffset = solver.FinalStableAnchorLocalCameraOffset;
+            Vector3 maximumLocalOffset = minimumLocalOffset;
+            while (Vector3.Dot(
+                       destination - owner.transform.position,
+                       travelDirection) > 0f &&
+                   Time.realtimeSinceStartup < deadline)
+            {
+                Vector3 direction = destination - owner.transform.position;
+                direction.y = 0f;
+                direction.Normalize();
+                Vector2 move = WorldDirectionToMoveInput(
+                    direction,
+                    cameraRig.GameplayMovementReference);
+                SetLogicalSnapshot(
+                    logicalInput,
+                    WithMove(logicalInput.Snapshot, move));
                 yield return null;
                 AssertSingleAuthorityFrame(cameraRig, solver);
                 Assert.That(solver.QuerySaturationCount, Is.Zero);
-                if (solver.ActiveSolutionFamily != previousFamily)
-                {
-                    familySwitches++;
-                    previousFamily = solver.ActiveSolutionFamily;
-                    familyTrace += $"->{previousFamily}";
-                }
+                string context = DescribeSolverFrame(cameraRig, solver);
+                Assert.That(solver.HardConstraintActiveThisFrame, Is.False, context);
+                Assert.That(solver.ActiveHardBlocker, Is.Null, context);
+                Assert.That(
+                    solver.ResolvedBoomDistance,
+                    Is.EqualTo(solver.RequestedBoomDistance).Within(0.005f),
+                    context);
+                Assert.That(solver.ResolvedGameplayWeight,
+                    Is.EqualTo(1f).Within(0.001f), context);
+                Assert.That(solver.ResolvedShoulderScale,
+                    Is.EqualTo(1f).Within(0.001f), context);
+                Vector3 localOffset = solver.FinalStableAnchorLocalCameraOffset;
+                minimumLocalOffset = Vector3.Min(minimumLocalOffset, localOffset);
+                maximumLocalOffset = Vector3.Max(maximumLocalOffset, localOffset);
                 if (!expectContextualCorner)
                 {
                     Assert.That(
                         cameraRig.ContextualCornerMode,
-                        Is.EqualTo(ShowcaseContextualCornerMode.RightDefault));
+                        Is.EqualTo(ShowcaseContextualCornerMode.RightDefault),
+                        context);
                 }
             }
+            SetLogicalSnapshot(logicalInput, WithMove(logicalInput.Snapshot, Vector2.zero));
+            float routeProgress = Vector3.Dot(
+                owner.transform.position - routeStart,
+                travelDirection);
             Assert.That(
-                familySwitches,
-                Is.LessThanOrEqualTo(1),
-                "A single-direction seam traversal switched camera solution family " +
-                $"repeatedly: {familyTrace}.");
+                routeProgress,
+                Is.GreaterThanOrEqualTo(routeLength - 0.2f),
+                "Actual locomotion did not complete the authored soft-partition passage. " +
+                $"start={routeStart}, destination={destination}, " +
+                $"player={owner.transform.position}, core={cameraRig.CoreMode}, " +
+                $"carry={cameraRig.CarryMode}, throw={cameraRig.IsThrowWindup}, " +
+                $"move={logicalInput.Snapshot.Move}, " +
+                $"mobilityLocks={owner.GetComponent<ThirdPersonLocomotion>().MobilityLocks}.");
+            Assert.That(
+                routeProgress,
+                Is.LessThanOrEqualTo(routeLength + 1f),
+                "A single rendered frame overshot the soft-partition passage by more " +
+                "than the bounded full-speed WASD allowance.");
+            Assert.That(
+                (maximumLocalOffset - minimumLocalOffset).magnitude,
+                Is.LessThanOrEqualTo(0.005f),
+                "Soft partition movement changed the StableAnchor-local camera pose: " +
+                $"min={minimumLocalOffset}, max={maximumLocalOffset}.");
         }
 
         private static bool TryFindAdjacentPartitionSeam(
@@ -923,7 +1308,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                     collider.gameObject.isStatic &&
                     collider.bounds.size.y >= 1f &&
                     collider.name.ToUpperInvariant().Contains("PARTITION") &&
-                    collider.GetComponentInParent<ShowcaseCameraWorldBlockerRoot>() != null)
+                    collider.GetComponentInParent<ShowcaseCameraSoftOccluderRoot>() != null &&
+                    collider.GetComponentInParent<ShowcaseCameraWorldBlockerRoot>() == null)
                 .ToArray();
             seamSurface = default;
             tangent = default;
@@ -966,7 +1352,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                     // between the west/east modules.  This is the real v007
                     // seam where the right-shoulder boom can alternate between
                     // the two coplanar collider edges.
-                    if (Mathf.Abs(edgeGap) > 2.05f ||
+                    if (edgeGap < 1.9f || edgeGap > 2.05f ||
                         centerSeparation < Mathf.Max(aExtent, bExtent) * 0.75f)
                     {
                         continue;
@@ -986,14 +1372,15 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Vector3 candidateSurface = basePoint + candidateOutward *
                         (Mathf.Max(aThickness, bThickness) * 0.5f);
                     float score = Vector3.SqrMagnitude(
-                        playerPosition - candidateSurface) + Mathf.Abs(edgeGap);
+                        playerPosition - candidateSurface) +
+                        Mathf.Abs(edgeGap - 2f);
                     if (score >= bestScore)
                     {
                         continue;
                     }
 
                     bestScore = score;
-                    seamSurface = candidateSurface;
+                    seamSurface = basePoint;
                     tangent = aThinX ? Vector3.forward : Vector3.right;
                     outward = candidateOutward;
                 }
@@ -1032,6 +1419,136 @@ namespace BreakNotice.LocomotionCamera.Tests
             controller.enabled = wasEnabled;
             Physics.SyncTransforms();
             cameraRig.HardResetCameraState();
+        }
+
+        private static void PlacePlayerForCameraRoute(
+            PrototypeInteractionStateOwner owner,
+            CharacterController controller,
+            Vector3 position,
+            Quaternion rotation,
+            ThirdPersonCameraRig cameraRig)
+        {
+            bool controllerWasEnabled = controller.enabled;
+            controller.enabled = false;
+            owner.transform.SetPositionAndRotation(position, rotation);
+            controller.enabled = controllerWasEnabled;
+            Physics.SyncTransforms();
+            cameraRig.HardResetCameraState();
+        }
+
+        private static void MoveActorToPosition(
+            Transform actor,
+            Vector3 position,
+            Quaternion rotation)
+        {
+            CharacterController controller =
+                actor.GetComponentInChildren<CharacterController>(true);
+            CapsuleCollider capsule =
+                actor.GetComponentInChildren<CapsuleCollider>(true);
+            bool controllerWasEnabled = controller != null && controller.enabled;
+            bool capsuleWasEnabled = capsule != null && capsule.enabled;
+            if (controller != null)
+            {
+                controller.enabled = false;
+            }
+            if (capsule != null)
+            {
+                capsule.enabled = false;
+            }
+            actor.SetPositionAndRotation(position, rotation);
+            if (controller != null)
+            {
+                controller.enabled = controllerWasEnabled;
+            }
+            if (capsule != null)
+            {
+                capsule.enabled = capsuleWasEnabled;
+            }
+            Physics.SyncTransforms();
+        }
+
+        private static IEnumerator WalkByLogicalWASD(
+            PrototypeInteractionStateOwner owner,
+            ThirdPersonCameraRig cameraRig,
+            InputSystemLogicalInputAdapter logicalInput,
+            Vector3 destination,
+            float timeoutSeconds,
+            System.Action sampleFrame)
+        {
+            float deadline = Time.realtimeSinceStartup + timeoutSeconds;
+            while (PlanarDistance(owner.transform.position, destination) > 0.12f &&
+                   Time.realtimeSinceStartup < deadline)
+            {
+                Vector3 direction = destination - owner.transform.position;
+                direction.y = 0f;
+                direction.Normalize();
+                Vector2 move = WorldDirectionToMoveInput(
+                    direction,
+                    cameraRig.GameplayMovementReference);
+                SetLogicalSnapshot(logicalInput, WithMove(logicalInput.Snapshot, move));
+                yield return null;
+                sampleFrame?.Invoke();
+            }
+
+            SetLogicalSnapshot(logicalInput, WithMove(logicalInput.Snapshot, Vector2.zero));
+            Assert.That(
+                PlanarDistance(owner.transform.position, destination),
+                Is.LessThanOrEqualTo(0.2f),
+                $"Actual logical WASD route timed out before {destination}; " +
+                $"player={owner.transform.position}.");
+        }
+
+        private static Vector2 WorldDirectionToMoveInput(
+            Vector3 worldDirection,
+            Transform movementReference)
+        {
+            Assert.That(movementReference, Is.Not.Null);
+            Vector3 forward = movementReference.forward;
+            Vector3 right = movementReference.right;
+            forward.y = 0f;
+            right.y = 0f;
+            forward.Normalize();
+            right.Normalize();
+            Vector2 move = new Vector2(
+                Vector3.Dot(worldDirection, right),
+                Vector3.Dot(worldDirection, forward));
+            return move.sqrMagnitude > 1f ? move.normalized : move;
+        }
+
+        private static LogicalInputSnapshot WithMove(
+            LogicalInputSnapshot source,
+            Vector2 move)
+        {
+            return new LogicalInputSnapshot(
+                move,
+                source.Look,
+                source.Aim,
+                source.InteractPrimary,
+                source.Throw,
+                source.CallAlly,
+                source.StrapRelease,
+                source.ResetEncounter,
+                source.ThrowHeld,
+                source.ThrowReleased,
+                source.AllyTask,
+                source.RegroupAlly,
+                source.Sprint,
+                source.Jump,
+                source.Restart);
+        }
+
+        private static float PlanarDistance(Vector3 first, Vector3 second)
+        {
+            first.y = 0f;
+            second.y = 0f;
+            return Vector3.Distance(first, second);
+        }
+
+        private static Vector3 BoomPerpendicularOffset(Vector3 localCameraOffset)
+        {
+            Vector3 boomAxis = Vector3.back;
+            return localCameraOffset -
+                Vector3.Dot(localCameraOffset, boomAxis) * boomAxis;
         }
 
         private static bool IsInHierarchy(Transform candidate, Transform root)
@@ -1157,46 +1674,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             float rotationPeakToPeakTolerance,
             ShowcaseCameraConstraintSolver solver = null)
         {
-            const float minimumSettleSeconds = 0.55f;
-            const float maximumSettleSeconds = 1.5f;
-            const int requiredStableFrames = 12;
-            float settleStartedAt = Time.realtimeSinceStartup;
-            int stableFrames = 0;
-            Vector3 previousSettlePosition =
-                cameraRig.OutputCamera.transform.position;
-            Quaternion previousSettleRotation =
-                cameraRig.OutputCamera.transform.rotation;
-            while (Time.realtimeSinceStartup - settleStartedAt <
-                       maximumSettleSeconds &&
-                   (Time.realtimeSinceStartup - settleStartedAt <
-                        minimumSettleSeconds ||
-                    stableFrames < requiredStableFrames))
-            {
-                yield return null;
-                AssertSingleAuthorityFrame(cameraRig, solver);
-                Vector3 currentPosition =
-                    cameraRig.OutputCamera.transform.position;
-                Quaternion currentRotation =
-                    cameraRig.OutputCamera.transform.rotation;
-                bool frameStable = Vector3.Distance(
-                        previousSettlePosition,
-                        currentPosition) <= 0.001f &&
-                    Quaternion.Angle(
-                        previousSettleRotation,
-                        currentRotation) <= 0.02f &&
-                    cameraRig.ContextualCornerBlendProgress >= 0.999f &&
-                    (solver == null ||
-                     (solver.FullSolvesThisFrame == 0 &&
-                      solver.TupleCommitsThisFrame == 0));
-                stableFrames = frameStable ? stableFrames + 1 : 0;
-                previousSettlePosition = currentPosition;
-                previousSettleRotation = currentRotation;
-            }
-            Assert.That(
-                stableFrames,
-                Is.GreaterThanOrEqualTo(requiredStableFrames),
-                "Camera did not reach a stable branch before sampling.");
-
+            // Deliberately sample the very next rendered frame. Waiting for a
+            // settled branch hid entry, exit, seam and recovery oscillation.
             Vector3 minimum = cameraRig.OutputCamera.transform.position;
             Vector3 maximum = minimum;
             Quaternion baselineRotation = cameraRig.OutputCamera.transform.rotation;
@@ -1269,19 +1748,19 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(
                 maximumAngularDelta,
                 Is.LessThanOrEqualTo(rotationPeakToPeakTolerance),
-                "Camera rotation oscillated after settling.");
+                "Camera rotation oscillated during immediate per-frame sampling.");
             Assert.That(
                 maximumGameplayWeight - minimumGameplayWeight,
                 Is.LessThanOrEqualTo(0.005f),
-                "Atomic camera gameplay weight oscillated after settling.");
+                "Atomic camera gameplay weight oscillated during sampling.");
             Assert.That(
                 maximumShoulderScale - minimumShoulderScale,
                 Is.LessThanOrEqualTo(0.005f),
-                "Atomic camera shoulder scale oscillated after settling.");
+                "Atomic camera shoulder scale oscillated during sampling.");
             Assert.That(
                 maximumBoomDistance - minimumBoomDistance,
                 Is.LessThanOrEqualTo(0.01f),
-                "Atomic camera boom distance oscillated after settling.");
+                "Atomic camera boom distance oscillated during sampling.");
         }
 
         private static void AssertAllCarryPairsIgnored(
@@ -1492,6 +1971,30 @@ namespace BreakNotice.LocomotionCamera.Tests
                 $"distance={cameraRig.CurrentDistance:0.000}, " +
                 $"blocker={(blocker != null ? blocker.name : "<none>")}, " +
                 $"blockerLayer={(blocker != null ? blocker.gameObject.layer : -1)}.";
+        }
+
+        private static string DescribeSolverFrame(
+            ThirdPersonCameraRig cameraRig,
+            ShowcaseCameraConstraintSolver solver)
+        {
+            Collider blocker = solver.ActiveHardBlocker;
+            return
+                $"frame={Time.frameCount}, mode={cameraRig.CoreMode}/{cameraRig.CarryMode}, " +
+                $"throw={cameraRig.IsThrowWindup}, phase={solver.StaticContactPhase}, " +
+                $"episode={solver.ContactEpisodeId}, restores={solver.RestoreStartCount}, " +
+                $"subjectPhase={solver.SubjectContactPhase}, " +
+                $"subjectEpisode={solver.SubjectContactEpisodeId}, " +
+                $"subjectRestores={solver.SubjectRestoreStartCount}, " +
+                $"subjectBoom={solver.SubjectResolvedBoomDistance:0.000}, " +
+                $"requestedBoom={solver.RequestedBoomDistance:0.000}, " +
+                $"resolvedBoom={solver.ResolvedBoomDistance:0.000}, " +
+                $"gameplayWeight={solver.ResolvedGameplayWeight:0.000}, " +
+                $"shoulderScale={solver.ResolvedShoulderScale:0.000}, " +
+                $"emergencyShoulder={solver.EmergencyShoulderLatched}, " +
+                $"hard={solver.HardConstraintActiveThisFrame}, " +
+                $"hardBlocker={(blocker != null ? blocker.name : "<none>")}, " +
+                $"softCount={solver.ActiveSoftOccluderCount}, " +
+                $"stableLocal={solver.FinalStableAnchorLocalCameraOffset}.";
         }
 
         private static string DescribeLandmarks(

@@ -4580,12 +4580,12 @@ GameObject:
   - component: {fileID: 224864561}
   - component: {fileID: 224864560}
   - component: {fileID: 224864559}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_6.5_9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &224864558
 Transform:
@@ -6026,7 +6026,7 @@ GameObject:
   - component: {fileID: 273282671}
   - component: {fileID: 273282670}
   - component: {fileID: 273282669}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Wall_South
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6452,12 +6452,13 @@ GameObject:
   - component: {fileID: 289495160}
   - component: {fileID: 289495159}
   - component: {fileID: 289495158}
-  m_Layer: 0
+  - component: {fileID: 2147000012}
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_East_Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &289495157
 Transform:
@@ -6847,7 +6848,7 @@ GameObject:
   - component: {fileID: 311831142}
   - component: {fileID: 311831141}
   - component: {fileID: 311831140}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Floor_64x44
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6956,7 +6957,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 316620709}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_ExteriorBounds_X-32_TO_32_Z-22_TO_22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8505,12 +8506,12 @@ GameObject:
   - component: {fileID: 406569026}
   - component: {fileID: 406569025}
   - component: {fileID: 406569024}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_3.5_South
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &406569023
 Transform:
@@ -8816,7 +8817,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 427830787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_FlatFloorDatum_0m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9165,12 +9166,12 @@ GameObject:
   - component: {fileID: 468487373}
   - component: {fileID: 468487372}
   - component: {fileID: 468487371}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_-6.5_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &468487370
 Transform:
@@ -9367,12 +9368,12 @@ GameObject:
   - component: {fileID: 479828757}
   - component: {fileID: 479828756}
   - component: {fileID: 479828755}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_-1_West
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &479828754
 Transform:
@@ -11742,7 +11743,7 @@ GameObject:
   - component: {fileID: 576524266}
   - component: {fileID: 576524265}
   - component: {fileID: 576524264}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Exit_Frame_Lintel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12502,12 +12503,12 @@ GameObject:
   - component: {fileID: 620408356}
   - component: {fileID: 620408355}
   - component: {fileID: 620408354}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_-1_East
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &620408353
 Transform:
@@ -13391,12 +13392,12 @@ GameObject:
   - component: {fileID: 678983679}
   - component: {fileID: 678983678}
   - component: {fileID: 678983677}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_6.5_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &678983676
 Transform:
@@ -13752,7 +13753,7 @@ GameObject:
   - component: {fileID: 704977671}
   - component: {fileID: 704977670}
   - component: {fileID: 704977669}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Wall_North_West
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14153,12 +14154,12 @@ GameObject:
   - component: {fileID: 726136953}
   - component: {fileID: 726136952}
   - component: {fileID: 726136951}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_11_West
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &726136950
 Transform:
@@ -15375,7 +15376,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 757803608}
-  m_Layer: 0
+  - component: {fileID: 2147000010}
+  m_Layer: 11
   m_Name: STATIC_CUBICLE_COLLISION
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16080,12 +16082,12 @@ GameObject:
   - component: {fileID: 799444370}
   - component: {fileID: 799444369}
   - component: {fileID: 799444368}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_East_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &799444367
 Transform:
@@ -17337,7 +17339,7 @@ GameObject:
   - component: {fileID: 854446211}
   - component: {fileID: 854446210}
   - component: {fileID: 854446209}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Wall_East
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18495,12 +18497,12 @@ GameObject:
   - component: {fileID: 921861797}
   - component: {fileID: 921861796}
   - component: {fileID: 921861795}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_11_East
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &921861794
 Transform:
@@ -19556,7 +19558,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 960231766}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_LowPartitions_16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20620,12 +20622,12 @@ GameObject:
   - component: {fileID: 1007845385}
   - component: {fileID: 1007845384}
   - component: {fileID: 1007845383}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_West_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1007845382
 Transform:
@@ -22056,7 +22058,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1068876374}
-  - component: {fileID: 1068876399}
   m_Layer: 0
   m_Name: SHOWCASE_V2_PROVISIONAL_LOCAL_REVIEW_ONLY
   m_TagString: Untagged
@@ -22089,18 +22090,6 @@ Transform:
   - {fileID: 85955954}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1068876399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068876373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d0d25c98e34e73b5576bbf2734d54a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraWorldBlockerRoot
 --- !u!1 &1070009068
 GameObject:
   m_ObjectHideFlags: 0
@@ -24546,12 +24535,12 @@ GameObject:
   - component: {fileID: 1155173750}
   - component: {fileID: 1155173749}
   - component: {fileID: 1155173748}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_-6.5_9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1155173747
 Transform:
@@ -25316,12 +25305,13 @@ GameObject:
   - component: {fileID: 1187251951}
   - component: {fileID: 1187251950}
   - component: {fileID: 1187251949}
-  m_Layer: 0
+  - component: {fileID: 2147000013}
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_East_Outer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1187251948
 Transform:
@@ -25468,7 +25458,8 @@ GameObject:
   - component: {fileID: 1192728140}
   - component: {fileID: 1192728139}
   - component: {fileID: 1192728138}
-  m_Layer: 0
+  - component: {fileID: 2147000002}
+  m_Layer: 8
   m_Name: PROXY_PhysicsColumn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26335,7 +26326,7 @@ GameObject:
   - component: {fileID: 1226061338}
   - component: {fileID: 1226061337}
   - component: {fileID: 1226061336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Wall_North_East
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28594,7 +28585,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1319399016}
-  m_Layer: 0
+  - component: {fileID: 2147000001}
+  m_Layer: 8
   m_Name: STATIC_ENVELOPE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31055,12 +31047,12 @@ GameObject:
   - component: {fileID: 1430618347}
   - component: {fileID: 1430618346}
   - component: {fileID: 1430618345}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_-3.5_South
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1430618344
 Transform:
@@ -31288,12 +31280,12 @@ GameObject:
   - component: {fileID: 1452137176}
   - component: {fileID: 1452137175}
   - component: {fileID: 1452137174}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_West_1.5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1452137173
 Transform:
@@ -31400,12 +31392,12 @@ GameObject:
   - component: {fileID: 1453158953}
   - component: {fileID: 1453158952}
   - component: {fileID: 1453158951}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_West_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1453158950
 Transform:
@@ -31786,12 +31778,12 @@ GameObject:
   - component: {fileID: 1490491673}
   - component: {fileID: 1490491672}
   - component: {fileID: 1490491671}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_East_8.5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1490491670
 Transform:
@@ -36377,12 +36369,12 @@ GameObject:
   - component: {fileID: 1741593912}
   - component: {fileID: 1741593911}
   - component: {fileID: 1741593910}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_-3.5_North
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1741593909
 Transform:
@@ -37044,7 +37036,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1770085986}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_CeilingReference_4.2m
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38058,12 +38050,12 @@ GameObject:
   - component: {fileID: 1799131600}
   - component: {fileID: 1799131599}
   - component: {fileID: 1799131598}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_East_1.5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1799131597
 Transform:
@@ -39654,12 +39646,13 @@ GameObject:
   - component: {fileID: 1876161635}
   - component: {fileID: 1876161634}
   - component: {fileID: 1876161633}
-  m_Layer: 0
+  - component: {fileID: 2147000011}
+  m_Layer: 11
   m_Name: PROXY_SupplyDesk_West
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1876161632
 Transform:
@@ -39766,12 +39759,12 @@ GameObject:
   - component: {fileID: 1876429718}
   - component: {fileID: 1876429717}
   - component: {fileID: 1876429716}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_3.5_North
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1876429715
 Transform:
@@ -40076,12 +40069,12 @@ GameObject:
   - component: {fileID: 1891695241}
   - component: {fileID: 1891695240}
   - component: {fileID: 1891695239}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_-6.5_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1891695238
 Transform:
@@ -40188,12 +40181,12 @@ GameObject:
   - component: {fileID: 1894627494}
   - component: {fileID: 1894627493}
   - component: {fileID: 1894627492}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_West_8.5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1894627491
 Transform:
@@ -41042,12 +41035,13 @@ GameObject:
   - component: {fileID: 1956355831}
   - component: {fileID: 1956355830}
   - component: {fileID: 1956355829}
-  m_Layer: 0
+  - component: {fileID: 2147000014}
+  m_Layer: 11
   m_Name: PROXY_CrashDesk_North
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1956355828
 Transform:
@@ -41538,12 +41532,12 @@ GameObject:
   - component: {fileID: 1984058996}
   - component: {fileID: 1984058995}
   - component: {fileID: 1984058994}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesk_6.5_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &1984058993
 Transform:
@@ -42220,7 +42214,7 @@ GameObject:
   - component: {fileID: 2013645823}
   - component: {fileID: 2013645822}
   - component: {fileID: 2013645821}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PROXY_Wall_West
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43673,12 +43667,12 @@ GameObject:
   - component: {fileID: 2054067530}
   - component: {fileID: 2054067529}
   - component: {fileID: 2054067528}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_Partition_Internal_East_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 22
+  m_StaticEditorFlags: 20
   m_IsActive: 1
 --- !u!4 &2054067527
 Transform:
@@ -46028,7 +46022,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2138679315}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PROXY_FixedDesks_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46087,6 +46081,90 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2022959607}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2147000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319399015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d0d25c98e34e73b5576bbf2734d54a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraWorldBlockerRoot
+--- !u!114 &2147000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192728136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d0d25c98e34e73b5576bbf2734d54a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraWorldBlockerRoot
+--- !u!114 &2147000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757803607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1c00d9fa0b4b2cb2d1c73bd387a1ee, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraSoftOccluderRoot
+--- !u!114 &2147000011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876161631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1c00d9fa0b4b2cb2d1c73bd387a1ee, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraSoftOccluderRoot
+--- !u!114 &2147000012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289495156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1c00d9fa0b4b2cb2d1c73bd387a1ee, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraSoftOccluderRoot
+--- !u!114 &2147000013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187251947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1c00d9fa0b4b2cb2d1c73bd387a1ee, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraSoftOccluderRoot
+--- !u!114 &2147000014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956355827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1c00d9fa0b4b2cb2d1c73bd387a1ee, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraSoftOccluderRoot
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

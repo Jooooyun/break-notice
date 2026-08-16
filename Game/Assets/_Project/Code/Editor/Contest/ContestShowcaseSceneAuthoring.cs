@@ -64,6 +64,10 @@ namespace BreakNotice.Contest.Editor
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
 
+        private const string CameraHardLayerName = "CameraStaticWorld";
+
+        private const string CameraSoftLayerName = "CameraSoftOccluder";
+
         private static readonly Color[] V2ZoneColors =
         {
             new Color(0.20f, 0.82f, 1.00f, 1f),
@@ -1357,6 +1361,8 @@ namespace BreakNotice.Contest.Editor
                 new Vector3(0f, 4.2f, 0f), Vector3.one);
             CreateMarker(envelope, "PROXY_ExteriorBounds_X-32_TO_32_Z-22_TO_22",
                 Vector3.zero, new Vector3(64f, 1f, 44f));
+
+            ConfigureHardCameraBlocker(envelope.gameObject);
         }
 
         private static void BuildV2ZoneMarkers(Transform parent)
@@ -1469,21 +1475,49 @@ namespace BreakNotice.Contest.Editor
                         new Vector3(x, 0.4f, z), new Vector3(2.8f, 0.8f, 1.4f), true);
                 }
             }
+
+            ConfigureSoftCameraOccluder(collision.gameObject);
         }
 
         private static void BuildV2StaticFurniture(Transform parent)
         {
             Transform furniture = CreateGroup(parent, "STATIC_FIXED_FURNITURE");
-            CreateCube(furniture, "PROXY_SupplyDesk_West", new Vector3(-28f, 0.5f, -3f),
-                new Vector3(3f, 1f, 1.2f), true);
-            CreateCube(furniture, "PROXY_PhysicsColumn", new Vector3(20f, 2.1f, 3f),
-                new Vector3(0.7f, 4.2f, 0.7f), true);
-            CreateCube(furniture, "PROXY_FixedDesk_East_Inner", new Vector3(14f, 0.5f, 5f),
-                new Vector3(3f, 1f, 1.2f), true);
-            CreateCube(furniture, "PROXY_FixedDesk_East_Outer", new Vector3(28f, 0.5f, 7f),
-                new Vector3(3f, 1f, 1.2f), true);
-            CreateCube(furniture, "PROXY_CrashDesk_North", new Vector3(-5f, 0.5f, 19f),
-                new Vector3(3f, 1f, 1.2f), true);
+            GameObject supplyDesk = CreateCube(
+                furniture,
+                "PROXY_SupplyDesk_West",
+                new Vector3(-28f, 0.5f, -3f),
+                new Vector3(3f, 1f, 1.2f),
+                true);
+            GameObject physicsColumn = CreateCube(
+                furniture,
+                "PROXY_PhysicsColumn",
+                new Vector3(20f, 2.1f, 3f),
+                new Vector3(0.7f, 4.2f, 0.7f),
+                true);
+            GameObject innerDesk = CreateCube(
+                furniture,
+                "PROXY_FixedDesk_East_Inner",
+                new Vector3(14f, 0.5f, 5f),
+                new Vector3(3f, 1f, 1.2f),
+                true);
+            GameObject outerDesk = CreateCube(
+                furniture,
+                "PROXY_FixedDesk_East_Outer",
+                new Vector3(28f, 0.5f, 7f),
+                new Vector3(3f, 1f, 1.2f),
+                true);
+            GameObject crashDesk = CreateCube(
+                furniture,
+                "PROXY_CrashDesk_North",
+                new Vector3(-5f, 0.5f, 19f),
+                new Vector3(3f, 1f, 1.2f),
+                true);
+
+            ConfigureHardCameraBlocker(physicsColumn);
+            ConfigureSoftCameraOccluder(supplyDesk);
+            ConfigureSoftCameraOccluder(innerDesk);
+            ConfigureSoftCameraOccluder(outerDesk);
+            ConfigureSoftCameraOccluder(crashDesk);
         }
 
         private static void BuildV2VisualReadability(Transform parent)
@@ -2572,6 +2606,51 @@ namespace BreakNotice.Contest.Editor
             var group = new GameObject(name).transform;
             group.SetParent(parent, false);
             return group;
+        }
+
+        private static void ConfigureHardCameraBlocker(GameObject root)
+        {
+            SetLayerRecursively(root, RequireLayer(CameraHardLayerName));
+            if (root.GetComponent<ShowcaseCameraWorldBlockerRoot>() == null)
+            {
+                root.AddComponent<ShowcaseCameraWorldBlockerRoot>();
+            }
+        }
+
+        private static void ConfigureSoftCameraOccluder(GameObject root)
+        {
+            SetLayerRecursively(root, RequireLayer(CameraSoftLayerName));
+            foreach (Transform item in root.GetComponentsInChildren<Transform>(true))
+            {
+                StaticEditorFlags flags = GameObjectUtility.GetStaticEditorFlags(item.gameObject);
+                GameObjectUtility.SetStaticEditorFlags(
+                    item.gameObject,
+                    flags & ~StaticEditorFlags.OccluderStatic);
+            }
+            if (root.GetComponent<ShowcaseCameraSoftOccluderRoot>() == null)
+            {
+                root.AddComponent<ShowcaseCameraSoftOccluderRoot>();
+            }
+        }
+
+        private static int RequireLayer(string layerName)
+        {
+            int layer = LayerMask.NameToLayer(layerName);
+            if (layer < 0)
+            {
+                throw new InvalidOperationException(
+                    $"Required camera geometry layer is missing: {layerName}");
+            }
+
+            return layer;
+        }
+
+        private static void SetLayerRecursively(GameObject root, int layer)
+        {
+            foreach (Transform item in root.GetComponentsInChildren<Transform>(true))
+            {
+                item.gameObject.layer = layer;
+            }
         }
 
         private static Transform CreateMarker(

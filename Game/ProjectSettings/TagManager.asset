@@ -16,7 +16,7 @@ TagManager:
   - CameraStaticWorld
   - CameraKinematicWorld
   - CameraActorProxy
-  - 
+  - CameraSoftOccluder
   - 
   - 
   - 

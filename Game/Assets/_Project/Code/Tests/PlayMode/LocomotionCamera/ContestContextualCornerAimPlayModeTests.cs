@@ -77,6 +77,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Physics.SyncTransforms();
 
                 // Static geometry alone must not activate C in Normal.
+                int contactTransitionBaseline =
+                    cameraRig.ContextualCornerTransitionCount;
                 for (int frame = 0; frame < 16; frame++)
                 {
                     yield return null;
@@ -107,6 +109,21 @@ namespace BreakNotice.LocomotionCamera.Tests
                     cameraRig.ContextualCornerShoulderFactor,
                     Is.GreaterThanOrEqualTo(0f),
                     "RightLean must never cross to the left shoulder.");
+                Assert.That(
+                    cameraRig.ContextualCornerTransitionCount -
+                    contactTransitionBaseline,
+                    Is.LessThanOrEqualTo(1),
+                    "One hard-wall contact may choose a contextual side at most once.");
+
+                for (int frame = 0; frame < 60; frame++)
+                {
+                    yield return null;
+                    Assert.That(
+                        cameraRig.ContextualCornerTransitionCount -
+                        contactTransitionBaseline,
+                        Is.LessThanOrEqualTo(1),
+                        "RightLean and TemporaryLeft alternated during one contact episode.");
+                }
 
                 float aimSettleDeadline = Time.realtimeSinceStartup + 0.5f;
                 while (cameraRig.IsTransitioning &&
@@ -119,14 +136,18 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.EqualTo(48f).Within(0.01f),
                     "Checkpoint C must not change the Checkpoint A Aim lens.");
 
+                int releaseTransitionBaseline =
+                    cameraRig.ContextualCornerTransitionCount;
                 Object.Destroy(wall);
                 wall = null;
                 Physics.SyncTransforms();
                 float returnStarted = Time.realtimeSinceStartup;
-                float returnDeadline = returnStarted + 0.40f;
+                float returnDeadline = returnStarted + 0.50f;
                 while ((cameraRig.ContextualCornerMode !=
                             ShowcaseContextualCornerMode.RightDefault ||
-                        cameraRig.ContextualCornerShoulderFactor < 0.999f) &&
+                        cameraRig.ContextualCornerShoulderFactor < 0.999f ||
+                        cameraRig.StaticContactPhase !=
+                            ShowcaseStaticCameraContactPhase.Clear) &&
                        Time.realtimeSinceStartup < returnDeadline)
                 {
                     yield return null;
@@ -143,8 +164,13 @@ namespace BreakNotice.LocomotionCamera.Tests
                     returnContext);
                 Assert.That(
                     Time.realtimeSinceStartup - returnStarted,
-                    Is.LessThanOrEqualTo(0.40f),
+                    Is.LessThanOrEqualTo(0.50f),
                     returnContext);
+                Assert.That(
+                    cameraRig.ContextualCornerTransitionCount -
+                    releaseTransitionBaseline,
+                    Is.LessThanOrEqualTo(1),
+                    "Full clearance may return to RightDefault at most once.");
 
                 yield return AssertSettledCameraStability(cameraRig, 120);
             }
@@ -259,10 +285,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             ThirdPersonCameraRig cameraRig,
             int frames)
         {
-            for (int frame = 0; frame < 24; frame++)
-            {
-                yield return null;
-            }
+            // Start with the next frame; a pre-sampling settle window hid
+            // contextual return/recovery jitter.
             Vector3 minimum = cameraRig.OutputCamera.transform.position;
             Vector3 maximum = minimum;
             Quaternion rotation = cameraRig.OutputCamera.transform.rotation;
