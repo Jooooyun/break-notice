@@ -18,6 +18,29 @@ namespace BreakNotice.Contest.Editor
 {
     public static class DesignerACharacterIntegrationAuthoring
     {
+        private readonly struct RuntimeStateContract
+        {
+            public RuntimeStateContract(
+                string name,
+                string assetPath,
+                float playbackSpeed = 1f,
+                bool locomotionDriven = false,
+                string clipName = null)
+            {
+                Name = name;
+                AssetPath = assetPath;
+                PlaybackSpeed = playbackSpeed;
+                LocomotionDriven = locomotionDriven;
+                ClipName = clipName;
+            }
+
+            public string Name { get; }
+            public string AssetPath { get; }
+            public float PlaybackSpeed { get; }
+            public bool LocomotionDriven { get; }
+            public string ClipName { get; }
+        }
+
         public const string RuntimeVisualName = "RUNTIME_DESIGNER_A_VISUAL";
         public const string ControllerRoot =
             "Assets/_Project/Art/Animation/DesignerAControllers";
@@ -141,6 +164,18 @@ namespace BreakNotice.Contest.Editor
             ShowcaseCombatHealth playerHealth =
                 player.GetComponent<ShowcaseCombatHealth>() ??
                 player.AddComponent<ShowcaseCombatHealth>();
+            GameObject ally = FindRootAny(
+                scene,
+                Characters[1].PrimaryRoot,
+                Characters[1].LegacyRoot);
+            PrototypeAllyRelayController allyRelay =
+                ally.GetComponent<PrototypeAllyRelayController>();
+            if (allyRelay == null)
+            {
+                throw new InvalidOperationException(
+                    "The authored CHR01 relay owner is required for animation sync.");
+            }
+            allyRelay.ConfigureAnimationSync(true);
             playerHealth.Configure(ShowcaseCombatTeam.Player, 100, 0.6f);
             ShowcasePlayerCombatController playerCombat =
                 player.GetComponent<ShowcasePlayerCombatController>() ??
@@ -151,7 +186,7 @@ namespace BreakNotice.Contest.Editor
                 player.GetComponent<InputSystemLogicalInputAdapter>(),
                 player.GetComponent<ThirdPersonLocomotion>(),
                 player.GetComponent<PrototypePhysicalObjectLifecycle>(),
-                player.GetComponent<PrototypeAllyRelayController>(),
+                allyRelay,
                 pressure,
                 reset,
                 objective);
@@ -162,11 +197,61 @@ namespace BreakNotice.Contest.Editor
 
             ShowcaseCharacterAnimationDriver playerDriver =
                 player.GetComponent<ShowcaseCharacterAnimationDriver>();
+            ShowcaseBinderGripSocket playerGrip =
+                player.GetComponent<ShowcaseBinderGripSocket>() ??
+                player.AddComponent<ShowcaseBinderGripSocket>();
+            playerGrip.Configure(
+                playerDriver.Animator,
+                player.transform,
+                new Vector3(0f, -0.12f, 0.04f),
+                new Vector3(0f, 90f, 0f));
+            player.GetComponent<PrototypePhysicalObjectLifecycle>()
+                .ConfigureLightBinderGrip(playerGrip, 0.18f);
+            ShowcaseBoneCombatRig playerBoneRig =
+                player.GetComponent<ShowcaseBoneCombatRig>() ??
+                player.AddComponent<ShowcaseBoneCombatRig>();
+            playerBoneRig.Configure(
+                playerDriver.Animator,
+                ShowcaseCombatTeam.Player,
+                playerCombat,
+                null);
+            playerCombat.ConfigureBoneCombatRig(playerBoneRig);
             playerDriver.ConfigureCombat(
                 playerCombat,
                 null,
                 player.GetComponent<ThirdPersonLocomotion>());
-            ConfigureAnimationReceiver(playerDriver.Animator, playerCombat, null);
+            ConfigureAnimationReceiver(playerDriver.Animator, playerCombat, null, null);
+
+            ShowcaseCharacterAnimationDriver allyDriver =
+                ally.GetComponent<ShowcaseCharacterAnimationDriver>();
+            ShowcaseBinderGripSocket allyGrip =
+                ally.GetComponent<ShowcaseBinderGripSocket>() ??
+                ally.AddComponent<ShowcaseBinderGripSocket>();
+            allyGrip.Configure(
+                allyDriver.Animator,
+                ally.transform,
+                new Vector3(0f, -0.11f, 0.035f),
+                new Vector3(0f, 90f, 0f));
+            allyRelay.ConfigureBinderGrip(allyGrip);
+            ShowcaseChairGripRig chairGrip =
+                allyDriver.Animator.GetComponent<ShowcaseChairGripRig>() ??
+                allyDriver.Animator.gameObject.AddComponent<ShowcaseChairGripRig>();
+            chairGrip.Configure(allyDriver.Animator);
+            allyRelay.ConfigureChairGrip(chairGrip);
+            ShowcaseBoneCombatRig allyBoneRig =
+                ally.GetComponent<ShowcaseBoneCombatRig>() ??
+                ally.AddComponent<ShowcaseBoneCombatRig>();
+            allyBoneRig.Configure(
+                allyDriver.Animator,
+                ShowcaseCombatTeam.Ally,
+                null,
+                null);
+            ConfigureAnimationReceiver(
+                allyDriver.Animator,
+                null,
+                null,
+                allyRelay);
+            EditorUtility.SetDirty(allyRelay);
 
             for (int index = 0; index < 2; index++)
             {
@@ -195,12 +280,22 @@ namespace BreakNotice.Contest.Editor
                     elite);
                 ShowcaseCharacterAnimationDriver driver =
                     runnerObject.GetComponent<ShowcaseCharacterAnimationDriver>();
+                ShowcaseBoneCombatRig runnerBoneRig =
+                    runnerObject.GetComponent<ShowcaseBoneCombatRig>() ??
+                    runnerObject.AddComponent<ShowcaseBoneCombatRig>();
+                runnerBoneRig.Configure(
+                    driver.Animator,
+                    ShowcaseCombatTeam.Enemy,
+                    null,
+                    runner);
+                runner.ConfigureBoneCombatRig(runnerBoneRig);
                 driver.ConfigureCombat(null, runner, null);
-                ConfigureAnimationReceiver(driver.Animator, null, runner);
+                ConfigureAnimationReceiver(driver.Animator, null, runner, null);
                 EditorUtility.SetDirty(runnerObject);
                 EditorUtility.SetDirty(runner);
                 EditorUtility.SetDirty(runnerHealth);
                 EditorUtility.SetDirty(driver);
+                EditorUtility.SetDirty(runnerBoneRig);
             }
 
             ValidateScene(scene);
@@ -208,6 +303,10 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(playerHealth);
             EditorUtility.SetDirty(playerCombat);
             EditorUtility.SetDirty(playerDriver);
+            EditorUtility.SetDirty(playerBoneRig);
+            EditorUtility.SetDirty(playerGrip);
+            EditorUtility.SetDirty(allyBoneRig);
+            EditorUtility.SetDirty(allyGrip);
             EditorUtility.SetDirty(pressure);
             EditorUtility.SetDirty(objective);
             EditorSceneManager.MarkSceneDirty(scene);
@@ -228,7 +327,8 @@ namespace BreakNotice.Contest.Editor
         private static void ConfigureAnimationReceiver(
             Animator animator,
             ShowcasePlayerCombatController playerCombat,
-            ShowcaseRunnerAgent runner)
+            ShowcaseRunnerAgent runner,
+            PrototypeAllyRelayController allyRelay)
         {
             if (animator == null)
             {
@@ -237,38 +337,14 @@ namespace BreakNotice.Contest.Editor
             ShowcaseAnimationEventReceiver receiver =
                 animator.GetComponent<ShowcaseAnimationEventReceiver>() ??
                 animator.gameObject.AddComponent<ShowcaseAnimationEventReceiver>();
-            receiver.Configure(playerCombat, runner);
+            receiver.Configure(playerCombat, runner, allyRelay);
             EditorUtility.SetDirty(receiver);
         }
 
-        [MenuItem("BREAK NOTICE/Contest/Repair Designer A Walk-Only Locomotion")]
+        [MenuItem("BREAK NOTICE/Contest/Repair Designer A Runtime Locomotion")]
         public static void RepairRuntimeFacingAndLocomotion()
         {
-            foreach (CharacterDefinition definition in Characters)
-            {
-                AnimatorController controller =
-                    AssetDatabase.LoadAssetAtPath<AnimatorController>(
-                        definition.ControllerPath);
-                if (controller == null)
-                {
-                    throw new InvalidOperationException(
-                        $"Designer A controller is missing: {definition.ControllerPath}");
-                }
-
-                EnsureLocomotionParameter(controller);
-                AnimatorStateMachine machine = controller.layers[0].stateMachine;
-                RemovePrimaryRunState(machine);
-                AnimatorState[] states = machine.states
-                    .Select(child => child.state)
-                    .ToArray();
-                ConfigureLocomotion(
-                    machine,
-                    states.Single(state => state.name == "Idle"),
-                    states.Single(state => state.name == "Walk"));
-                EditorUtility.SetDirty(controller);
-            }
-
-            AssetDatabase.SaveAssets();
+            CreateControllers();
             Scene scene = EditorSceneManager.OpenScene(
                 ContestShowcaseSceneAuthoring.ShowcaseS3ScenePath,
                 OpenSceneMode.Single);
@@ -308,9 +384,9 @@ namespace BreakNotice.Contest.Editor
                 ContestShowcaseSceneAuthoring.ShowcaseS3ScenePath);
             AssetDatabase.SaveAssets();
             Debug.Log(
-                "DESIGNER A WALK-ONLY LOCOMOTION REPAIR PASS: +Z forward, " +
-                "Idle-Walk runtime path, physical support-plane grounding and bounded natural " +
-                "walk cadence applied to all four roles; Run and Foot IK are inactive.");
+                "DESIGNER A RUNTIME LOCOMOTION REPAIR PASS: +Z forward, " +
+                "state-specific Idle-Walk-Run cadence, immutable visual-root baseline and " +
+                "physical actor grounding applied; Foot IK remains inactive.");
         }
 
         private static void ConfigureImports()
@@ -386,6 +462,14 @@ namespace BreakNotice.Contest.Editor
                         $"Animation importer is missing: {path}");
                 }
 
+                bool changed =
+                    !importer.importAnimation ||
+                    importer.animationType != ModelImporterAnimationType.Human ||
+                    importer.avatarSetup != ModelImporterAvatarSetup.CreateFromThisModel ||
+                    importer.sourceAvatar != null ||
+                    importer.importCameras ||
+                    importer.importLights ||
+                    importer.materialImportMode != ModelImporterMaterialImportMode.None;
                 importer.importAnimation = true;
                 importer.animationType = ModelImporterAnimationType.Human;
                 importer.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
@@ -393,13 +477,27 @@ namespace BreakNotice.Contest.Editor
                 importer.importCameras = false;
                 importer.importLights = false;
                 importer.materialImportMode = ModelImporterMaterialImportMode.None;
-                importer.SaveAndReimport();
 
-                ModelImporterClipAnimation[] clips = importer.defaultClipAnimations;
+                ModelImporterClipAnimation[] clips = importer.clipAnimations;
+                if (clips == null || clips.Length == 0)
+                {
+                    clips = importer.defaultClipAnimations;
+                    changed = true;
+                }
                 foreach (ModelImporterClipAnimation clip in clips)
                 {
-                    clip.loopTime = IsLoopingClip(path);
-                    clip.loopPose = clip.loopTime;
+                    bool loop = IsLoopingClip(path);
+                    changed |= clip.loopTime != loop ||
+                               clip.loopPose != loop ||
+                               !clip.lockRootRotation ||
+                               clip.keepOriginalOrientation ||
+                               !clip.lockRootHeightY ||
+                               clip.keepOriginalPositionY ||
+                               !clip.lockRootPositionXZ ||
+                               clip.keepOriginalPositionXZ ||
+                               !clip.heightFromFeet;
+                    clip.loopTime = loop;
+                    clip.loopPose = loop;
                     clip.lockRootRotation = true;
                     clip.keepOriginalOrientation = false;
                     clip.lockRootHeightY = true;
@@ -409,8 +507,11 @@ namespace BreakNotice.Contest.Editor
                     clip.heightFromFeet = true;
                 }
 
-                importer.clipAnimations = clips;
-                importer.SaveAndReimport();
+                if (changed)
+                {
+                    importer.clipAnimations = clips;
+                    importer.SaveAndReimport();
+                }
             }
         }
 
@@ -713,6 +814,7 @@ namespace BreakNotice.Contest.Editor
         private static void CreateControllers()
         {
             EnsureFolder(ControllerRoot);
+            ConfigurePlayerMeleeSubclips();
             ConfigureCombatAnimationEvents();
             CreatePlayerController();
             CreateAllyController();
@@ -724,55 +826,250 @@ namespace BreakNotice.Contest.Editor
         private static void CreateCombatControllers()
         {
             EnsureFolder(ControllerRoot);
+            ConfigurePlayerMeleeSubclips();
             ConfigureCombatAnimationEvents();
             CreatePlayerController();
+            CreateAllyController();
             CreateEnemyController(false);
             CreateEnemyController(true);
             AssetDatabase.SaveAssets();
         }
 
-        private static void ConfigureCombatAnimationEvents()
+        private static bool ControllerContainsState(string path, string stateName)
         {
-            foreach (string path in new[]
+            AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+            return controller != null && controller.layers
+                .SelectMany(layer => layer.stateMachine.states)
+                .Any(child => child.state.name == stateName);
+        }
+
+        private static void EnsureAllyRunState()
+        {
+            AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(
+                Characters[1].ControllerPath);
+            if (controller == null)
             {
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx",
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx",
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx",
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx",
-                EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx",
-                EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx",
-                EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx",
-                Chr00AnimationRoot + "/Legacy/Hook Punch.fbx"
-            })
-            {
-                ConfigureAnimationEvent(path, "ShowcaseCombatHit", 0.46f);
+                CreateAllyController();
+                return;
             }
 
-            foreach (string path in new[]
+            if (!controller.parameters.Any(parameter =>
+                    parameter.name == "Sprint" &&
+                    parameter.type == AnimatorControllerParameterType.Bool))
+            {
+                controller.AddParameter("Sprint", AnimatorControllerParameterType.Bool);
+            }
+
+            AnimatorStateMachine machine = controller.layers[0].stateMachine;
+            AnimatorState run = machine.states
+                .Select(child => child.state)
+                .SingleOrDefault(state => state.name == "Run");
+            if (run != null)
+            {
+                return;
+            }
+
+            AnimatorState walk = machine.states
+                .Select(child => child.state)
+                .Single(state => state.name == "Walk");
+            run = AddState(machine, "Run", LoadClip(
+                Chr01AnimationRoot + "/SharedLocomotion/CHR00_Run_F.fbx"));
+            run.speedParameterActive = true;
+            run.speedParameter = "LocomotionPlayback";
+            AddBoolTransition(walk, run, "Sprint", true);
+            AddBoolTransition(run, walk, "Sprint", false);
+            EditorUtility.SetDirty(controller);
+        }
+
+        private static void ConfigureCombatAnimationEvents()
+        {
+            (string path, string clipName, float openTime, float closeTime)[] attacks =
+            {
+                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
+                    "CHR00_Melee_Jab_Runtime", 0.42f, 0.82f),
+                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
+                    "CHR00_Melee_Cross_Runtime", 0.42f, 0.68f),
+                (Chr00AnimationRoot + "/Legacy/Hook Punch.fbx", null, 0.38f, 0.58f),
+                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx", null, 0.36f, 0.56f),
+                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx", null, 0.36f, 0.58f),
+                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx", null, 0.48f, 0.68f),
+                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx", null, 0.34f, 0.52f),
+                (EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx", null, 0.34f, 0.54f),
+                (EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx", null, 0.42f, 0.64f),
+                (EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx", null, 0.40f, 0.60f)
+            };
+            foreach ((string path, string clipName, float openTime, float closeTime) in attacks)
+            {
+                RemoveAnimationEvent(path, clipName, "ShowcaseCombatHit");
+                ConfigureAnimationEvent(
+                    path,
+                    "ShowcaseAttackWindowOpen",
+                    openTime,
+                    clipName);
+                ConfigureAnimationEvent(
+                    path,
+                    "ShowcaseAttackWindowClose",
+                    closeTime,
+                    clipName);
+                ConfigureAnimationEvent(
+                    path,
+                    "ShowcaseActionComplete",
+                    0.88f,
+                    clipName);
+            }
+
+            foreach ((string path, string clipName, float openTime, float closeTime) in new[]
+            {
+                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
+                    "CHR00_Melee_Jab_Runtime", 0.52f, 0.78f),
+                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
+                    "CHR00_Melee_Cross_Runtime", 0.50f, 0.76f)
+            })
+            {
+                ConfigureAnimationEvent(path, "ShowcaseComboBufferOpen", openTime, clipName);
+                ConfigureAnimationEvent(path, "ShowcaseComboBufferClose", closeTime, clipName);
+            }
+
+            string eliteJump = EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx";
+            ConfigureAnimationEvent(eliteJump, "ShowcaseLungeStart", 0.24f);
+            ConfigureAnimationEvent(eliteJump, "ShowcaseLungeEnd", 0.62f);
+
+            string[] catches =
             {
                 Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx",
                 Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx",
                 Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx",
                 Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx"
-            })
+            };
+            foreach (string path in catches)
             {
                 ConfigureAnimationEvent(path, "ShowcaseCarryContact", 0.52f);
+                ConfigureAnimationEvent(path, "ShowcaseActionComplete", 0.88f);
+            }
+
+            foreach ((string path, float releaseTime) in new[]
+            {
+                (Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx", 0.48f),
+                (Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx", 0.52f)
+            })
+            {
+                ConfigureAnimationEvent(path, "ShowcaseThrowRelease", releaseTime);
+                ConfigureAnimationEvent(path, "ShowcaseActionComplete", 0.88f);
+            }
+
+            foreach (string path in new[]
+            {
+                Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx",
+                Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx",
+                EnyAnimationRoot + "/Shared/hit reaction.fbx",
+                EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx",
+                EnyAnimationRoot + "/ApprovedHit/Hit_Rib.fbx",
+                EnyAnimationRoot + "/ApprovedHit/Hit_Stomach.fbx",
+                EnyAnimationRoot + "/ApprovedHit/Hit_BigHeadHit.fbx"
+            })
+            {
+                ConfigureAnimationEvent(path, "ShowcaseActionComplete", 0.88f);
             }
 
             ConfigureAnimationEvent(
-                Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx",
-                "ShowcaseThrowRelease",
+                Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx",
+                "ShowcaseAllySupplyRelease",
                 0.48f);
             ConfigureAnimationEvent(
-                Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx",
-                "ShowcaseThrowRelease",
-                0.52f);
+                Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx",
+                "ShowcaseActionComplete",
+                0.88f);
+        }
+
+        private static void ConfigurePlayerMeleeSubclips()
+        {
+            string path = Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx";
+            ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+            if (importer == null)
+            {
+                throw new InvalidOperationException(
+                    $"CHR00 melee source importer is missing: {path}");
+            }
+
+            ModelImporterClipAnimation[] existing = importer.clipAnimations;
+            ModelImporterClipAnimation source = importer.defaultClipAnimations
+                .FirstOrDefault();
+            if (source == null)
+            {
+                throw new InvalidOperationException(
+                    $"CHR00 melee source has no default take: {path}");
+            }
+
+            ModelImporterClipAnimation jab = CreateRuntimeSubclip(
+                "CHR00_Melee_Jab_Runtime",
+                source,
+                0f,
+                36f,
+                existing);
+            ModelImporterClipAnimation cross = CreateRuntimeSubclip(
+                "CHR00_Melee_Cross_Runtime",
+                source,
+                37f,
+                70f,
+                existing);
+            ModelImporterClipAnimation[] desired = { jab, cross };
+
+            bool same = existing != null && existing.Length == desired.Length;
+            if (same)
+            {
+                for (int index = 0; index < desired.Length; index++)
+                {
+                    same &= existing[index].name == desired[index].name &&
+                            Mathf.Approximately(existing[index].firstFrame,
+                                desired[index].firstFrame) &&
+                            Mathf.Approximately(existing[index].lastFrame,
+                                desired[index].lastFrame);
+                }
+            }
+            if (!same)
+            {
+                importer.clipAnimations = desired;
+                importer.SaveAndReimport();
+            }
+        }
+
+        private static ModelImporterClipAnimation CreateRuntimeSubclip(
+            string name,
+            ModelImporterClipAnimation source,
+            float firstFrame,
+            float lastFrame,
+            ModelImporterClipAnimation[] existing)
+        {
+            AnimationEvent[] preserved = existing?
+                .FirstOrDefault(candidate => candidate.name == name)?.events ??
+                Array.Empty<AnimationEvent>();
+            return new ModelImporterClipAnimation
+            {
+                name = name,
+                takeName = source.takeName,
+                firstFrame = Mathf.Max(source.firstFrame, firstFrame),
+                lastFrame = Mathf.Min(source.lastFrame, lastFrame),
+                loopTime = false,
+                loopPose = false,
+                lockRootRotation = true,
+                keepOriginalOrientation = false,
+                lockRootHeightY = true,
+                keepOriginalPositionY = false,
+                lockRootPositionXZ = true,
+                keepOriginalPositionXZ = false,
+                heightFromFeet = true,
+                events = preserved
+            };
         }
 
         private static void ConfigureAnimationEvent(
             string assetPath,
             string functionName,
-            float normalizedTime)
+            float normalizedTime,
+            string clipName = null)
         {
             ModelImporter importer = AssetImporter.GetAtPath(assetPath) as ModelImporter;
             if (importer == null)
@@ -786,210 +1083,352 @@ namespace BreakNotice.Contest.Editor
             {
                 clips = importer.defaultClipAnimations;
             }
-            AnimationClip runtimeClip = LoadClip(assetPath);
-            float eventTime = runtimeClip.length * Mathf.Clamp01(normalizedTime);
-            for (int index = 0; index < clips.Length; index++)
+            if (clips == null || clips.Length == 0)
             {
-                clips[index].events = new[]
-                {
-                    new AnimationEvent
-                    {
-                        functionName = functionName,
-                        time = eventTime
-                    }
-                };
+                throw new InvalidOperationException(
+                    $"Owned animation events require a clip: {assetPath}");
+            }
+            int clipIndex = string.IsNullOrEmpty(clipName)
+                ? clips.Length == 1 ? 0 : -1
+                : Array.FindIndex(clips, candidate => candidate.name == clipName);
+            if (clipIndex < 0)
+            {
+                throw new InvalidOperationException(
+                    $"Owned animation event clip is ambiguous or missing: " +
+                    $"{assetPath} / {clipName ?? "<default>"}");
+            }
+            AnimationClip runtimeClip = LoadClip(assetPath, clips[clipIndex].name);
+            float sourceDuration = Mathf.Max(
+                0f,
+                clips[clipIndex].lastFrame - clips[clipIndex].firstFrame) /
+                Mathf.Max(1f, runtimeClip.frameRate);
+            float normalizedEventTime = Mathf.Clamp01(normalizedTime);
+            float runtimeEventTime = sourceDuration * normalizedEventTime;
+            AnimationEvent[] preserved =
+                (clips[clipIndex].events ?? Array.Empty<AnimationEvent>())
+                .Where(candidate => candidate.functionName != functionName)
+                .ToArray();
+            var desired = new AnimationEvent
+            {
+                functionName = functionName,
+                // ModelImporterClipAnimation stores event time normalized (0..1).
+                // AnimationUtility exposes the imported runtime event in seconds.
+                time = normalizedEventTime
+            };
+            AnimationEvent[] reconciled = preserved
+                .Append(desired)
+                .OrderBy(candidate => candidate.time)
+                .ThenBy(candidate => candidate.functionName, StringComparer.Ordinal)
+                .ToArray();
+
+            if (AnimationEventsEqual(clips[clipIndex].events, reconciled))
+            {
+                ValidateOwnedAnimationEvent(
+                    assetPath,
+                    clips[clipIndex].name,
+                    functionName,
+                    runtimeEventTime);
+                return;
             }
 
+            clips[clipIndex].events = reconciled;
             importer.clipAnimations = clips;
             importer.SaveAndReimport();
+            ValidateOwnedAnimationEvent(
+                assetPath,
+                clips[clipIndex].name,
+                functionName,
+                runtimeEventTime);
+        }
+
+        private static void RemoveAnimationEvent(
+            string assetPath,
+            string clipName,
+            string functionName)
+        {
+            ModelImporter importer = AssetImporter.GetAtPath(assetPath) as ModelImporter;
+            if (importer == null)
+            {
+                return;
+            }
+            ModelImporterClipAnimation[] clips = importer.clipAnimations;
+            if (clips == null || clips.Length == 0)
+            {
+                clips = importer.defaultClipAnimations;
+            }
+            bool changed = false;
+            for (int index = 0; index < clips.Length; index++)
+            {
+                if (!string.IsNullOrEmpty(clipName) && clips[index].name != clipName)
+                {
+                    continue;
+                }
+                AnimationEvent[] events = clips[index].events ?? Array.Empty<AnimationEvent>();
+                AnimationEvent[] filtered = events
+                    .Where(candidate => candidate.functionName != functionName)
+                    .ToArray();
+                if (filtered.Length != events.Length)
+                {
+                    clips[index].events = filtered;
+                    changed = true;
+                }
+            }
+            if (changed)
+            {
+                importer.clipAnimations = clips;
+                importer.SaveAndReimport();
+            }
+        }
+
+        private static bool AnimationEventsEqual(
+            AnimationEvent[] left,
+            AnimationEvent[] right)
+        {
+            left ??= Array.Empty<AnimationEvent>();
+            right ??= Array.Empty<AnimationEvent>();
+            if (left.Length != right.Length)
+            {
+                return false;
+            }
+
+            for (int index = 0; index < left.Length; index++)
+            {
+                AnimationEvent a = left[index];
+                AnimationEvent b = right[index];
+                if (a.functionName != b.functionName ||
+                    !Mathf.Approximately(a.time, b.time) ||
+                    a.stringParameter != b.stringParameter ||
+                    !Mathf.Approximately(a.floatParameter, b.floatParameter) ||
+                    a.intParameter != b.intParameter ||
+                    a.objectReferenceParameter != b.objectReferenceParameter ||
+                    a.messageOptions != b.messageOptions)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static void ValidateOwnedAnimationEvent(
+            string assetPath,
+            string clipName,
+            string functionName,
+            float expectedTime)
+        {
+            AnimationClip clip = LoadClip(assetPath, clipName);
+            AnimationEvent[] matches = AnimationUtility.GetAnimationEvents(clip)
+                .Where(candidate => candidate.functionName == functionName)
+                .ToArray();
+            float tolerance = Mathf.Max(0.001f, 1f / Mathf.Max(1f, clip.frameRate));
+            if (matches.Length != 1 ||
+                Mathf.Abs(matches[0].time - expectedTime) > tolerance ||
+                matches[0].time > clip.length + tolerance)
+            {
+                throw new InvalidOperationException(
+                    $"Owned animation event validation failed: {assetPath} / {functionName}");
+            }
         }
 
         private static void CreatePlayerController()
         {
+            RuntimeStateContract[] states =
+            {
+                new("Idle", Chr00AnimationRoot + "/Approved/CHR00_Idle.fbx", 1f, true),
+                new("Walk", Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx", 1f, true),
+                new("Run", Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx", 1f, true),
+                new("AimIdle", Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx"),
+                new("RunStopAction", Chr00AnimationRoot + "/Approved/CHR00_Run_Stop.fbx"),
+                new("JumpAction", Chr00AnimationRoot + "/Approved/CHR00_Jump.fbx"),
+                new("IdleVariantAction", Chr00AnimationRoot + "/Approved/CHR00_Idle_Variant_Stretch.fbx"),
+                new("CatchLightAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx", 1.5f),
+                new("CatchSmallLeftAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx", 2.2f),
+                new("CatchSmallRightAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx", 2.2f),
+                new("CatchMediumAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx", 1.2f),
+                new("ThrowLightAction", Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx", 1.6f),
+                new("ThrowMediumAction", Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx", 1.5f),
+                new("MeleeJabAction", Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx", 1.25f, false, "CHR00_Melee_Jab_Runtime"),
+                new("MeleeCrossAction", Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx", 1.25f, false, "CHR00_Melee_Cross_Runtime"),
+                new("MeleeHookAction", Chr00AnimationRoot + "/Legacy/Hook Punch.fbx", 1.4f),
+                new("HitBodyAction", Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx"),
+                new("KnockdownBackAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"),
+                new("KnockdownFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"),
+                new("GetupBackAction", Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"),
+                new("GetupFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"),
+                new("Death1Action", Chr00AnimationRoot + "/Legacy/Dying1.fbx"),
+                new("Death2Action", Chr00AnimationRoot + "/Legacy/Dying2.fbx")
+            };
+            if (ControllerMatchesRuntimeContract(Characters[0].ControllerPath, states))
+            {
+                return;
+            }
+
             AnimatorController controller = CreateController(Characters[0].ControllerPath);
             AddCoreParameters(controller, true, false);
-            AnimatorStateMachine machine = controller.layers[0].stateMachine;
-            AnimatorState idle = AddState(machine, "Idle", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Idle.fbx"));
-            AnimatorState walk = AddState(machine, "Walk", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"));
-            ConfigureLocomotion(machine, idle, walk);
-            AnimatorState run = AddState(machine, "Run", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx"));
-            run.speedParameterActive = true;
-            run.speedParameter = "LocomotionPlayback";
-            AddBoolTransition(walk, run, "Sprint", true);
-            AddBoolTransition(run, walk, "Sprint", false);
-            AddOneShot(machine, idle, "RunStop", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Run_Stop.fbx"));
-            AddOneShot(machine, idle, "Jump", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Jump.fbx"));
-            AddOneShot(machine, idle, "IdleVariant", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Idle_Variant_Stretch.fbx"));
-
-            AnimatorState aim = AddState(machine, "AimIdle", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx"));
-            AddBoolAnyState(machine, aim, "Aim");
-            AddBoolExit(aim, idle, "Aim");
-            AddOneShot(machine, idle, "CatchLight", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx"), true, 1.5f);
-            AddOneShot(machine, idle, "CatchSmallLeft", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx"), true, 2.2f);
-            AddOneShot(machine, idle, "CatchSmallRight", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx"), true, 2.2f);
-            AddOneShot(machine, idle, "CatchMedium", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx"), true, 1.2f);
-            AddOneShot(machine, idle, "ThrowLight", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx"), true, 2.25f);
-            AddOneShot(machine, idle, "ThrowMedium", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx"), true, 2.2f);
-            // Temporary Humanoid-retarget fallbacks until the approved CHR00 Jab/Cross
-            // source pair arrives. Fist Fight A remains intentionally excluded.
-            AddOneShot(machine, idle, "MeleeJab", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx"), true, 2.2f);
-            AddOneShot(machine, idle, "MeleeCross", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx"), true, 2.35f);
-            AddOneShot(machine, idle, "MeleeHook", LoadClip(
-                Chr00AnimationRoot + "/Legacy/Hook Punch.fbx"), true, 1.9f);
-            AddOneShot(machine, idle, "HitBody", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx"));
-            AddOneShot(machine, idle, "KnockdownBack", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"));
-            AddOneShot(machine, idle, "KnockdownFront", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"));
-            AddOneShot(machine, idle, "GetupBack", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"));
-            AddOneShot(machine, idle, "GetupFront", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"));
-            AddOneShot(machine, idle, "Death1", LoadClip(
-                Chr00AnimationRoot + "/Legacy/Dying1.fbx"), false);
-            AddOneShot(machine, idle, "Death2", LoadClip(
-                Chr00AnimationRoot + "/Legacy/Dying2.fbx"), false);
-            AddCatalogStates(machine, new[]
-            {
-                Chr00AnimationRoot + "/Approved",
-                Chr00AnimationRoot + "/Legacy"
-            }, "CHR00");
+            BuildRuntimeStates(controller.layers[0].stateMachine, states);
         }
 
         private static void CreateAllyController()
         {
+            RuntimeStateContract[] states =
+            {
+                new("Idle", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Idle.fbx", 1f, true),
+                new("Walk", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Walk_F.fbx", 1f, true),
+                new("Run", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Run_F.fbx", 1f, true),
+                new("AcquireAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx", 1.5f),
+                new("SupplyReleaseAction", Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx")
+            };
+            if (ControllerMatchesRuntimeContract(Characters[1].ControllerPath, states))
+            {
+                EnsureAnimatorLayerIkPass(Characters[1].ControllerPath);
+                return;
+            }
+
             AnimatorController controller = CreateController(Characters[1].ControllerPath);
             AddCoreParameters(controller, false, true);
-            AnimatorStateMachine machine = controller.layers[0].stateMachine;
-            AnimatorState idle = AddState(machine, "Idle", LoadClip(
-                Chr01AnimationRoot + "/SharedLocomotion/CHR00_Idle.fbx"));
-            AnimatorState walk = AddState(machine, "Walk", LoadClip(
-                Chr01AnimationRoot + "/SharedLocomotion/CHR00_Walk_F.fbx"));
-            ConfigureLocomotion(machine, idle, walk);
-
-            AnimatorState ready = AddState(machine, "SupplyReady", LoadClip(
-                Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Windup.fbx"));
-            AddBoolAnyState(machine, ready, "SupplyReady");
-            AddBoolExit(ready, idle, "SupplyReady");
-            AddOneShot(machine, idle, "SupplyRelease", LoadClip(
-                Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx"));
-            AddCatalogStates(machine, new[]
-            {
-                Chr01AnimationRoot + "/SharedLocomotion",
-                Chr01AnimationRoot + "/Approved",
-                Chr01AnimationRoot + "/Legacy"
-            }, "CHR01");
+            BuildRuntimeStates(controller.layers[0].stateMachine, states);
+            EnsureAnimatorLayerIkPass(Characters[1].ControllerPath);
         }
 
         private static void CreateEnemyController(bool elite)
         {
             CharacterDefinition definition = Characters[elite ? 3 : 2];
-            AnimatorController controller = CreateController(definition.ControllerPath);
-            AddCoreParameters(controller, false, false);
-            foreach (string trigger in new[]
+            var states = new List<RuntimeStateContract>
             {
-                "HitLight", "HitBody", "HitRib", "HitStomach", "HitBigHead",
-                "AttackBoxing", "AttackBoxing2", "AttackKicking", "AttackKicking2",
-                "KnockdownBack", "KnockdownFront", "GetupBack", "GetupFront",
-                "Death1", "Death2"
-            })
-            {
-                controller.AddParameter(trigger, AnimatorControllerParameterType.Trigger);
-            }
-            AnimatorStateMachine machine = controller.layers[0].stateMachine;
-            AnimatorState idle = AddState(machine, "Idle", LoadClip(
-                EnyAnimationRoot + "/Shared/idle.fbx"));
-            AnimatorState walk = AddState(machine, "Walk", LoadClip(
-                EnyAnimationRoot + "/Shared/walking.fbx"));
-            ConfigureLocomotion(machine, idle, walk);
-            AddOneShot(machine, idle, "HitLight", LoadClip(
-                EnyAnimationRoot + "/Shared/hit reaction.fbx"));
-            AddOneShot(machine, idle, "HitBody", LoadClip(
-                EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx"));
-            AddOneShot(machine, idle, "HitRib", LoadClip(
-                EnyAnimationRoot + "/ApprovedHit/Hit_Rib.fbx"));
-            AddOneShot(machine, idle, "HitStomach", LoadClip(
-                EnyAnimationRoot + "/ApprovedHit/Hit_Stomach.fbx"));
-            AddOneShot(machine, idle, "HitBigHead", LoadClip(
-                EnyAnimationRoot + "/ApprovedHit/Hit_BigHeadHit.fbx"));
-            AddOneShot(machine, idle, "AttackBoxing", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx"), true, 2.2f);
-            AddOneShot(machine, idle, "AttackBoxing2", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx"), true, 2.35f);
-            AddOneShot(machine, idle, "AttackKicking", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx"), true, 2.15f);
-            AddOneShot(machine, idle, "AttackKicking2", LoadClip(
-                EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx"), true, 2.15f);
-            // Shared temporary fallbacks. They are replaced when the eight ENY01
-            // knockdown/getup/death sources arrive.
-            AddOneShot(machine, idle, "KnockdownBack", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"));
-            AddOneShot(machine, idle, "KnockdownFront", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"));
-            AddOneShot(machine, idle, "GetupBack", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"));
-            AddOneShot(machine, idle, "GetupFront", LoadClip(
-                Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"));
-            AddOneShot(machine, idle, "Death1", LoadClip(
-                Chr00AnimationRoot + "/Legacy/Dying1.fbx"), false);
-            AddOneShot(machine, idle, "Death2", LoadClip(
-                Chr00AnimationRoot + "/Legacy/Dying2.fbx"), false);
-            AddCatalogStates(machine, new[]
-            {
-                EnyAnimationRoot + "/Shared",
-                EnyAnimationRoot + "/ApprovedHit",
-                EnyAnimationRoot + "/MeleeCandidates"
-            }, "ENY01_SHARED");
-
+                new("Idle", EnyAnimationRoot + "/Shared/idle.fbx", 1f, true),
+                new("Walk", EnyAnimationRoot + "/Shared/walking.fbx", 1f, true),
+                new("HitLightAction", EnyAnimationRoot + "/Shared/hit reaction.fbx"),
+                new("HitBodyAction", EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx"),
+                new("HitRibAction", EnyAnimationRoot + "/ApprovedHit/Hit_Rib.fbx"),
+                new("HitStomachAction", EnyAnimationRoot + "/ApprovedHit/Hit_Stomach.fbx"),
+                new("HitBigHeadAction", EnyAnimationRoot + "/ApprovedHit/Hit_BigHeadHit.fbx"),
+                new("AttackBoxingAction", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx", 1.25f),
+                new("AttackBoxing2Action", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx", 1.3f),
+                new("AttackKickingAction", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx", 1.2f),
+                new("AttackKicking2Action", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx", 1.2f),
+                new("KnockdownBackAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"),
+                new("KnockdownFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"),
+                new("GetupBackAction", Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"),
+                new("GetupFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"),
+                new("Death1Action", Chr00AnimationRoot + "/Legacy/Dying1.fbx"),
+                new("Death2Action", Chr00AnimationRoot + "/Legacy/Dying2.fbx")
+            };
             if (elite)
             {
-                foreach (string trigger in new[]
-                {
-                    "EliteMutantPunch", "EliteMutantSwiping", "EliteJumpAttack"
-                })
-                {
-                    controller.AddParameter(trigger, AnimatorControllerParameterType.Trigger);
-                }
-                AddOneShot(machine, idle, "EliteMutantPunch", LoadClip(
-                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx"), true, 1.5f);
-                AddOneShot(machine, idle, "EliteMutantSwiping", LoadClip(
-                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx"), true, 2.1f);
-                AddOneShot(machine, idle, "EliteJumpAttack", LoadClip(
-                    EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx"), true, 2.4f);
-                string[] elitePaths = GetAnimationPaths(
-                    EnyAnimationRoot + "/EliteOnly");
-                for (int index = 0; index < elitePaths.Length; index++)
-                {
-                    string parameter = "EliteAttack" + (index + 1);
-                    controller.AddParameter(parameter, AnimatorControllerParameterType.Trigger);
-                    AddOneShot(
-                        machine,
-                        idle,
-                        parameter,
-                        LoadClip(elitePaths[index]));
-                }
-
-                AddCatalogStates(
-                    machine,
-                    new[] { EnyAnimationRoot + "/EliteOnly" },
-                    "ENY01_ELITE_ONLY");
+                states.Add(new RuntimeStateContract(
+                    "EliteMutantPunchAction",
+                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx",
+                    1f));
+                states.Add(new RuntimeStateContract(
+                    "EliteMutantSwipingAction",
+                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx",
+                    1f));
+                states.Add(new RuntimeStateContract(
+                    "EliteJumpAttackAction",
+                    EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx",
+                    1f));
             }
+            if (ControllerMatchesRuntimeContract(definition.ControllerPath, states))
+            {
+                return;
+            }
+
+            AnimatorController controller = CreateController(definition.ControllerPath);
+            AddCoreParameters(controller, false, false);
+            BuildRuntimeStates(controller.layers[0].stateMachine, states);
+        }
+
+        private static void BuildRuntimeStates(
+            AnimatorStateMachine machine,
+            IEnumerable<RuntimeStateContract> contracts)
+        {
+            AnimatorState idle = null;
+            foreach (RuntimeStateContract contract in contracts)
+            {
+                AnimatorState state = AddRuntimeState(
+                    machine,
+                    contract.Name,
+                    LoadContractClip(contract),
+                    contract.PlaybackSpeed,
+                    contract.LocomotionDriven);
+                if (contract.Name == "Idle")
+                {
+                    idle = state;
+                }
+            }
+            machine.defaultState = idle ?? throw new InvalidOperationException(
+                "Runtime Animator contract must contain an Idle state.");
+        }
+
+        private static void EnsureAnimatorLayerIkPass(string controllerPath)
+        {
+            AnimatorController controller =
+                AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath);
+            if (controller == null || controller.layers.Length == 0 ||
+                controller.layers[0].iKPass)
+            {
+                return;
+            }
+
+            AnimatorControllerLayer[] layers = controller.layers;
+            layers[0].iKPass = true;
+            controller.layers = layers;
+            EditorUtility.SetDirty(controller);
+        }
+
+        private static bool ControllerMatchesRuntimeContract(
+            string path,
+            IEnumerable<RuntimeStateContract> authoredContracts)
+        {
+            AnimatorController controller =
+                AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+            RuntimeStateContract[] contracts = authoredContracts.ToArray();
+            if (controller == null || controller.layers.Length != 1 ||
+                controller.parameters.Length != 2 ||
+                !controller.parameters.All(parameter =>
+                    parameter.type == AnimatorControllerParameterType.Float &&
+                    (parameter.name == "Speed" ||
+                     parameter.name == "LocomotionPlayback")))
+            {
+                return false;
+            }
+
+            AnimatorStateMachine machine = controller.layers[0].stateMachine;
+            ChildAnimatorState[] children = machine.states;
+            if (machine.defaultState == null || machine.defaultState.name != "Idle" ||
+                children.Length != contracts.Length ||
+                machine.stateMachines.Length != 0 ||
+                machine.anyStateTransitions.Length != 0)
+            {
+                return false;
+            }
+
+            foreach (RuntimeStateContract contract in contracts)
+            {
+                AnimatorState state = children
+                    .Select(child => child.state)
+                    .SingleOrDefault(candidate => candidate.name == contract.Name);
+                if (state == null || state.motion != LoadContractClip(contract) ||
+                    Mathf.Abs(state.speed - Mathf.Max(0.05f, contract.PlaybackSpeed)) >
+                    0.0001f ||
+                    state.iKOnFeet || !state.writeDefaultValues ||
+                    state.speedParameterActive != contract.LocomotionDriven ||
+                    (contract.LocomotionDriven &&
+                     state.speedParameter != "LocomotionPlayback") ||
+                    state.transitions.Length != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static AnimationClip LoadContractClip(RuntimeStateContract contract)
+        {
+            return string.IsNullOrEmpty(contract.ClipName)
+                ? LoadClip(contract.AssetPath)
+                : LoadClip(contract.AssetPath, contract.ClipName);
         }
 
         private static AnimatorController CreateController(string path)
@@ -1031,35 +1470,6 @@ namespace BreakNotice.Contest.Editor
             controller.AddParameter(
                 "LocomotionPlayback",
                 AnimatorControllerParameterType.Float);
-            if (player)
-            {
-                controller.AddParameter("Aim", AnimatorControllerParameterType.Bool);
-                controller.AddParameter("CatchLight", AnimatorControllerParameterType.Trigger);
-                controller.AddParameter("CatchMedium", AnimatorControllerParameterType.Trigger);
-                controller.AddParameter("ThrowLight", AnimatorControllerParameterType.Trigger);
-                controller.AddParameter("ThrowMedium", AnimatorControllerParameterType.Trigger);
-                foreach (string trigger in new[]
-                {
-                    "Sprint", "Jump", "RunStop", "IdleVariant",
-                    "CatchSmallLeft", "CatchSmallRight",
-                    "MeleeJab", "MeleeCross", "MeleeHook", "HitBody",
-                    "KnockdownBack", "KnockdownFront", "GetupBack", "GetupFront",
-                    "Death1", "Death2"
-                })
-                {
-                    controller.AddParameter(
-                        trigger,
-                        trigger == "Sprint"
-                            ? AnimatorControllerParameterType.Bool
-                            : AnimatorControllerParameterType.Trigger);
-                }
-            }
-
-            if (ally)
-            {
-                controller.AddParameter("SupplyReady", AnimatorControllerParameterType.Bool);
-                controller.AddParameter("SupplyRelease", AnimatorControllerParameterType.Trigger);
-            }
         }
 
         private static AnimatorState AddState(
@@ -1070,6 +1480,24 @@ namespace BreakNotice.Contest.Editor
             AnimatorState state = machine.AddState(name);
             state.motion = motion;
             state.writeDefaultValues = true;
+            return state;
+        }
+
+        private static AnimatorState AddRuntimeState(
+            AnimatorStateMachine machine,
+            string name,
+            AnimationClip clip,
+            float playbackSpeed = 1f,
+            bool locomotionDriven = false)
+        {
+            AnimatorState state = AddState(machine, name, clip);
+            state.speed = Mathf.Max(0.05f, playbackSpeed);
+            state.iKOnFeet = false;
+            if (locomotionDriven)
+            {
+                state.speedParameterActive = true;
+                state.speedParameter = "LocomotionPlayback";
+            }
             return state;
         }
 
@@ -1289,6 +1717,19 @@ namespace BreakNotice.Contest.Editor
             return clip;
         }
 
+        private static AnimationClip LoadClip(string assetPath, string clipName)
+        {
+            AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(assetPath)
+                .OfType<AnimationClip>()
+                .FirstOrDefault(candidate => candidate.name == clipName);
+            if (clip == null)
+            {
+                throw new InvalidOperationException(
+                    $"Animation clip could not be loaded: {assetPath} / {clipName}");
+            }
+            return clip;
+        }
+
         private static void IntegrateCharacter(
             Scene scene,
             CharacterDefinition definition)
@@ -1351,11 +1792,26 @@ namespace BreakNotice.Contest.Editor
                 actor.GetComponent<InputSystemLogicalInputAdapter>(),
                 actor.GetComponent<PrototypePhysicalObjectLifecycle>(),
                 actor.GetComponent<PrototypeAllyRelayController>());
+            ShowcaseBoneCombatRig boneRig =
+                actor.GetComponent<ShowcaseBoneCombatRig>() ??
+                actor.AddComponent<ShowcaseBoneCombatRig>();
+            ShowcaseCombatTeam team = definition.Role switch
+            {
+                ShowcaseCharacterAnimationRole.Player => ShowcaseCombatTeam.Player,
+                ShowcaseCharacterAnimationRole.Ally => ShowcaseCombatTeam.Ally,
+                _ => ShowcaseCombatTeam.Enemy
+            };
+            boneRig.Configure(
+                animator,
+                team,
+                actor.GetComponent<ShowcasePlayerCombatController>(),
+                actor.GetComponent<ShowcaseRunnerAgent>());
 
             EditorUtility.SetDirty(actor);
             EditorUtility.SetDirty(instance);
             EditorUtility.SetDirty(animator);
             EditorUtility.SetDirty(driver);
+            EditorUtility.SetDirty(boneRig);
         }
 
         private static void NormalizeVisual(Transform actor, GameObject instance)
@@ -1451,14 +1907,49 @@ namespace BreakNotice.Contest.Editor
                 Characters[2].ControllerPath);
             AnimatorController elite = AssetDatabase.LoadAssetAtPath<AnimatorController>(
                 Characters[3].ControllerPath);
-            int normalEliteStates = CountStatesWithPrefix(normal, "ENY01_ELITE_ONLY__");
-            int eliteOnlyStates = CountStatesWithPrefix(elite, "ENY01_ELITE_ONLY__");
-            if (normalEliteStates != 0 || eliteOnlyStates != 6)
+            string[] selectedEliteStates =
+            {
+                "EliteMutantPunchAction",
+                "EliteMutantSwipingAction",
+                "EliteJumpAttackAction"
+            };
+            string[] reviewOnlyEliteStates =
+            {
+                "EliteMutantWalkingAction",
+                "EliteClubComboAction",
+                "EliteStabbingAction"
+            };
+            if (selectedEliteStates.Any(name => ControllerHasState(normal, name)) ||
+                selectedEliteStates.Any(name => !ControllerHasState(elite, name)) ||
+                reviewOnlyEliteStates.Any(name => ControllerHasState(normal, name) ||
+                                                   ControllerHasState(elite, name)))
             {
                 throw new InvalidOperationException(
-                    "ENY01 eligibility mismatch: Normal must exclude and Elite must include " +
-                    "all six Elite-only clips.");
+                    "ENY01 runtime eligibility mismatch: Normal must exclude all " +
+                    "Elite-only attacks; Elite must include only the three selected " +
+                    "unarmed attacks. Review-only sources must remain unreferenced.");
             }
+
+            ShowcaseBoneCombatRig[] combatRigs = scene.GetRootGameObjects()
+                .SelectMany(root =>
+                    root.GetComponentsInChildren<ShowcaseBoneCombatRig>(true))
+                .ToArray();
+            if (combatRigs.Length != 4 ||
+                combatRigs.Any(rig => rig.Animator == null ||
+                                      !rig.Animator.isHuman))
+            {
+                throw new InvalidOperationException(
+                    "Exactly four humanoid bone combat rigs are required.");
+            }
+        }
+
+        private static bool ControllerHasState(
+            AnimatorController controller,
+            string stateName)
+        {
+            return controller != null && controller.layers
+                .SelectMany(layer => layer.stateMachine.states)
+                .Any(child => child.state.name == stateName);
         }
 
         private static int CountStatesWithPrefix(

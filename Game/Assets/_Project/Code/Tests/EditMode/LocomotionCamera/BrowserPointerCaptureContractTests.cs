@@ -1,4 +1,5 @@
 using System.IO;
+using System;
 using BreakNotice.Contest;
 using NUnit.Framework;
 using UnityEngine;
@@ -70,6 +71,32 @@ namespace BreakNotice.LocomotionCamera.Tests
             StringAssert.Contains("state.failIntoFallback();", source);
             StringAssert.Contains("canvas.addEventListener('mousemove', state.onMouseMove, false);", source);
             StringAssert.DoesNotContain("addEventListener('pointerdown'", source);
+        }
+
+        [Test]
+        public void DesktopCapture_RunsBeforeLogicalInputAndSuppressesCaptureClick()
+        {
+            DefaultExecutionOrder executionOrder =
+                (DefaultExecutionOrder)Attribute.GetCustomAttribute(
+                    typeof(BrowserPointerCapture),
+                    typeof(DefaultExecutionOrder));
+            Assert.That(executionOrder, Is.Not.Null);
+            Assert.That(executionOrder.order, Is.EqualTo(-400));
+
+            string captureSource = File.ReadAllText(
+                "Assets/_Project/Code/Runtime/Contest/BrowserPointerCapture.cs");
+            StringAssert.Contains("CursorLockMode.Locked", captureSource);
+            StringAssert.Contains("Keyboard.current.escapeKey.wasPressedThisFrame", captureSource);
+            StringAssert.Contains("Mouse.current.leftButton.wasPressedThisFrame", captureSource);
+            StringAssert.Contains("ReleasePointer();", captureSource);
+
+            string adapterSource = File.ReadAllText(
+                "Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs");
+            StringAssert.Contains("PointerJustCapturedThisFrame", adapterSource);
+            StringAssert.Contains("IsPointerInputAllowed", adapterSource);
+            StringAssert.Contains(
+                "pointerInputAllowed && throwAction.WasPressedThisFrame()",
+                adapterSource);
         }
     }
 }

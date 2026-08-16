@@ -14,23 +14,21 @@ namespace BreakNotice.Presentation
         EnemyElite = 3
     }
 
+    [DefaultExecutionOrder(120)]
     [DisallowMultipleComponent]
     public sealed class ShowcaseCharacterAnimationDriver : MonoBehaviour
     {
         private static readonly int SpeedParameter = Animator.StringToHash("Speed");
         private static readonly int LocomotionPlaybackParameter =
             Animator.StringToHash("LocomotionPlayback");
-        private static readonly int AimParameter = Animator.StringToHash("Aim");
-        private static readonly int SupplyReadyParameter = Animator.StringToHash("SupplyReady");
-        private static readonly int CatchLightTrigger = Animator.StringToHash("CatchLight");
-        private static readonly int CatchMediumTrigger = Animator.StringToHash("CatchMedium");
-        private static readonly int ThrowLightTrigger = Animator.StringToHash("ThrowLight");
-        private static readonly int ThrowMediumTrigger = Animator.StringToHash("ThrowMedium");
-        private static readonly int SupplyReleaseTrigger = Animator.StringToHash("SupplyRelease");
-        private static readonly int SprintParameter = Animator.StringToHash("Sprint");
-        private static readonly int JumpTrigger = Animator.StringToHash("Jump");
-        private static readonly int RunStopTrigger = Animator.StringToHash("RunStop");
-        private static readonly int IdleVariantTrigger = Animator.StringToHash("IdleVariant");
+
+        private const float MinimumPlaybackRate = 0.75f;
+        private const float MaximumPlaybackRate = 1.5f;
+        private const float LocomotionBlendSeconds = 0.12f;
+        private const float LocomotionToActionBlendSeconds = 0.08f;
+        private const float ComboBlendSeconds = 0.06f;
+        private const float HitReactionBlendSeconds = 0.06f;
+        private const float KnockdownBlendSeconds = 0.04f;
 
         [SerializeField]
         private ShowcaseCharacterAnimationRole role;
@@ -51,6 +49,9 @@ namespace BreakNotice.Presentation
         private PrototypeAllyRelayController allyRelay;
 
         [SerializeField]
+        private ShowcaseMobileAllyController mobileAlly;
+
+        [SerializeField]
         private ShowcasePlayerCombatController playerCombat;
 
         [SerializeField]
@@ -62,84 +63,40 @@ namespace BreakNotice.Presentation
         [SerializeField, Min(0.1f)]
         private float walkReferenceSpeed = 2.8f;
 
-        [SerializeField, Range(0.25f, 1f)]
-        private float minimumPlaybackRate = 0.85f;
-
-        [SerializeField, Range(1f, 2f)]
-        private float maximumPlaybackRate = 1.15f;
-
-        [SerializeField, Range(0.02f, 0.25f)]
-        private float maximumVisualGroundingCorrection = 0.12f;
-
-        [SerializeField, Min(0.5f)]
-        private float maximumGroundDistanceFromActor = 1.25f;
-
-        private PrototypeInteractionTarget observedCarriedTarget;
-        private PrototypeWeightClass observedCarriedWeight = PrototypeWeightClass.Light;
-        private uint observedThrowOriginCount;
-        private int observedAllyReleaseCount;
-        private readonly RaycastHit[] groundingHits = new RaycastHit[16];
-        private Renderer[] animatedRenderers;
         private uint observedPlayerCueRevision;
         private uint observedRunnerCueRevision;
+        private PrototypeRelayPhase observedRelayPhase;
+        private Vector3 previousWorldPosition;
         private bool observedGrounded = true;
         private bool observedSprinting;
+        private bool decorativePlaybackActive;
+        private bool jumpPlaybackActive;
+        private bool allyReleasePlaybackActive;
+        private bool allyAcquisitionPlaybackActive;
         private float inactiveDuration;
         private bool idleVariantPlayed;
-        private Vector3 previousWorldPosition;
+        private int currentStateHash;
+        private int pendingActionStateHash;
+        private uint pendingActionCueRevision;
+        private bool pendingAllyAcquisitionAcknowledgement;
+        private float localHitStopUntil;
+        private bool localHitStopActive;
 
         public ShowcaseCharacterAnimationRole Role => role;
-
         public Animator Animator => animator;
-
         public CharacterController MovementController => movementController;
-
-        public bool IsRuntimeConfigured => animator != null && animator.runtimeAnimatorController != null;
-
+        public bool IsRuntimeConfigured =>
+            animator != null && animator.runtimeAnimatorController != null;
         public float LastPlanarSpeed { get; private set; }
-
         public float LastPlaybackRate { get; private set; } = 1f;
-
-        public float LastVisualGroundingCorrection { get; private set; }
+        public int CurrentStateHash => currentStateHash;
 
         private void Awake()
         {
-            if (animator == null)
-            {
-                animator = GetComponentInChildren<Animator>(true);
-            }
-            if (animator != null)
-            {
-                animator.applyRootMotion = false;
-                animator.stabilizeFeet = false;
-                CacheAnimatedRenderers();
-            }
-
-            if (movementController == null)
-            {
-                movementController = GetComponent<CharacterController>();
-            }
-
-            if (role == ShowcaseCharacterAnimationRole.Player)
-            {
-                logicalInput ??= GetComponent<InputSystemLogicalInputAdapter>();
-                physicalLifecycle ??= GetComponent<PrototypePhysicalObjectLifecycle>();
-            }
-            else if (role == ShowcaseCharacterAnimationRole.Ally)
-            {
-                allyRelay ??= GetComponent<PrototypeAllyRelayController>();
-            }
-            else
-            {
-                runnerAgent ??= GetComponent<ShowcaseRunnerAgent>();
-            }
-
-            if (role == ShowcaseCharacterAnimationRole.Player)
-            {
-                playerCombat ??= GetComponent<ShowcasePlayerCombatController>();
-                locomotion ??= GetComponent<ThirdPersonLocomotion>();
-            }
-
+            animator ??= GetComponentInChildren<Animator>(true);
+            movementController ??= GetComponent<CharacterController>();
+            ResolveRoleDependencies();
+            ConfigureAnimatorRuntime();
             CaptureCurrentGameplayState();
             previousWorldPosition = transform.position;
         }
@@ -151,16 +108,24 @@ namespace BreakNotice.Presentation
                 return;
             }
 
-            Vector3 velocity = movementController != null
-                ? movementController.velocity
-                : (transform.position - previousWorldPosition) /
-                  Mathf.Max(0.0001f, Time.deltaTime);
-            previousWorldPosition = transform.position;
-            float planarSpeed = new Vector2(velocity.x, velocity.z).magnitude;
-            float normalizedSpeed = Mathf.Clamp01(planarSpeed / 4.5f);
-            LastPlanarSpeed = planarSpeed;
-            LastPlaybackRate = CalculateLocomotionPlaybackRate(planarSpeed);
-            animator.SetFloat(SpeedParameter, normalizedSpeed);
+            if (localHitStopActive)
+            {
+                if (Time.unscaledTime < localHitStopUntil)
+                {
+                    animator.speed = 0f;
+                    return;
+                }
+                animator.speed = 1f;
+                localHitStopActive = false;
+            }
+
+            LastPlanarSpeed = ResolvePlanarSpeed();
+            LastPlaybackRate = CalculateLocomotionPlaybackRate(
+                LastPlanarSpeed,
+                ResolveNaturalReferenceSpeed());
+            animator.SetFloat(
+                SpeedParameter,
+                Mathf.Clamp01(LastPlanarSpeed / 4.5f));
             animator.SetFloat(LocomotionPlaybackParameter, LastPlaybackRate);
 
             switch (role)
@@ -176,11 +141,49 @@ namespace BreakNotice.Presentation
                     UpdateRunnerAnimation();
                     break;
             }
+
+            previousWorldPosition = transform.position;
+        }
+
+        public void ApplyLocalHitStop(float duration)
+        {
+            if (!IsRuntimeConfigured || duration <= 0f)
+            {
+                return;
+            }
+            localHitStopUntil = Mathf.Max(
+                localHitStopUntil,
+                Time.unscaledTime + duration);
+            localHitStopActive = true;
+            animator.speed = 0f;
         }
 
         private void LateUpdate()
         {
-            ApplyVisualGroundingCorrection();
+            if (pendingActionStateHash == 0 || animator == null ||
+                !IsAnimatorInState(pendingActionStateHash))
+            {
+                return;
+            }
+
+            if (role == ShowcaseCharacterAnimationRole.Player)
+            {
+                playerCombat?.NotifyAnimationStateEntered(pendingActionCueRevision);
+            }
+            else if (role == ShowcaseCharacterAnimationRole.EnemyNormal ||
+                     role == ShowcaseCharacterAnimationRole.EnemyElite)
+            {
+                runnerAgent?.NotifyAnimationStateEntered(pendingActionCueRevision);
+            }
+            else if (role == ShowcaseCharacterAnimationRole.Ally &&
+                     pendingAllyAcquisitionAcknowledgement)
+            {
+                allyRelay?.NotifyAnimationAcquisitionStateEntered();
+            }
+
+            pendingActionStateHash = 0;
+            pendingActionCueRevision = 0;
+            pendingAllyAcquisitionAcknowledgement = false;
         }
 
         public void Configure(
@@ -197,24 +200,8 @@ namespace BreakNotice.Presentation
             logicalInput = authoredLogicalInput;
             physicalLifecycle = authoredPhysicalLifecycle;
             allyRelay = authoredAllyRelay;
-            playerCombat = animationRole == ShowcaseCharacterAnimationRole.Player
-                ? GetComponent<ShowcasePlayerCombatController>()
-                : null;
-            locomotion = animationRole == ShowcaseCharacterAnimationRole.Player
-                ? GetComponent<ThirdPersonLocomotion>()
-                : null;
-            runnerAgent = animationRole == ShowcaseCharacterAnimationRole.EnemyNormal ||
-                          animationRole == ShowcaseCharacterAnimationRole.EnemyElite
-                ? GetComponent<ShowcaseRunnerAgent>()
-                : null;
-            if (animator != null)
-            {
-                animator.applyRootMotion = false;
-                animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
-                animator.stabilizeFeet = false;
-                CacheAnimatedRenderers();
-            }
-
+            ResolveRoleDependencies();
+            ConfigureAnimatorRuntime();
             CaptureCurrentGameplayState();
             previousWorldPosition = transform.position;
         }
@@ -233,6 +220,15 @@ namespace BreakNotice.Presentation
 
         public float CalculateLocomotionPlaybackRate(float planarSpeed)
         {
+            return CalculateLocomotionPlaybackRate(
+                planarSpeed,
+                ResolveNaturalReferenceSpeed());
+        }
+
+        public float CalculateLocomotionPlaybackRate(
+            float planarSpeed,
+            float naturalReferenceSpeed)
+        {
             float clampedSpeed = Mathf.Max(0f, planarSpeed);
             if (clampedSpeed <= 0.05f)
             {
@@ -240,116 +236,84 @@ namespace BreakNotice.Presentation
             }
 
             return Mathf.Clamp(
-                clampedSpeed / Mathf.Max(0.1f, walkReferenceSpeed),
-                minimumPlaybackRate,
-                maximumPlaybackRate);
-        }
-
-        public bool ApplyVisualGroundingCorrection()
-        {
-            LastVisualGroundingCorrection = 0f;
-            if (animator == null)
-            {
-                return false;
-            }
-
-            if (animatedRenderers == null || animatedRenderers.Length == 0)
-            {
-                CacheAnimatedRenderers();
-            }
-            if (animatedRenderers == null || animatedRenderers.Length == 0)
-            {
-                return false;
-            }
-
-            int hitCount = Physics.RaycastNonAlloc(
-                transform.position + Vector3.up * 2f,
-                Vector3.down,
-                groundingHits,
-                8f,
-                Physics.DefaultRaycastLayers,
-                QueryTriggerInteraction.Ignore);
-            float nearestDistance = float.PositiveInfinity;
-            float groundY = 0f;
-            bool foundGround = false;
-            for (int index = 0; index < hitCount; index++)
-            {
-                Collider collider = groundingHits[index].collider;
-                if (collider == null ||
-                    collider.transform == transform ||
-                    collider.transform.IsChildOf(transform))
-                {
-                    continue;
-                }
-
-                if (groundingHits[index].distance < nearestDistance)
-                {
-                    nearestDistance = groundingHits[index].distance;
-                    groundY = groundingHits[index].point.y;
-                    foundGround = true;
-                }
-            }
-
-            if (!foundGround ||
-                transform.position.y - groundY > maximumGroundDistanceFromActor)
-            {
-                return false;
-            }
-
-            float visualBottomY = float.PositiveInfinity;
-            foreach (Renderer renderer in animatedRenderers)
-            {
-                if (renderer != null && renderer.enabled)
-                {
-                    visualBottomY = Mathf.Min(visualBottomY, renderer.bounds.min.y);
-                }
-            }
-            if (float.IsPositiveInfinity(visualBottomY))
-            {
-                return false;
-            }
-
-            float correction = groundY - visualBottomY;
-            if (Mathf.Abs(correction) > maximumVisualGroundingCorrection)
-            {
-                return false;
-            }
-
-            animator.transform.position += Vector3.up * correction;
-            LastVisualGroundingCorrection = correction;
-            return true;
-        }
-
-        private void CacheAnimatedRenderers()
-        {
-            animatedRenderers = animator != null
-                ? animator.GetComponentsInChildren<Renderer>(true)
-                : null;
+                clampedSpeed / Mathf.Max(0.1f, naturalReferenceSpeed),
+                MinimumPlaybackRate,
+                MaximumPlaybackRate);
         }
 
         private void UpdatePlayerAnimation()
         {
-            bool aiming = logicalInput != null && logicalInput.Snapshot.Aim &&
-                (playerCombat == null || !playerCombat.IsDead);
-            animator.SetBool(AimParameter, aiming);
+            if (playerCombat != null &&
+                playerCombat.AnimationCueRevision != observedPlayerCueRevision)
+            {
+                observedPlayerCueRevision = playerCombat.AnimationCueRevision;
+                if (TryResolvePlayerCueState(playerCombat.AnimationCue, out string state))
+                {
+                    PlayState(
+                        state,
+                        ResolvePlayerActionBlend(playerCombat.AnimationCue),
+                        true);
+                    QueueActionStateAcknowledgement(
+                        state,
+                        playerCombat.AnimationCueRevision);
+                    decorativePlaybackActive = false;
+                    jumpPlaybackActive = false;
+                }
+            }
 
-            bool sprinting = locomotion != null && locomotion.IsSprinting;
-            animator.SetBool(SprintParameter, sprinting);
+            if (playerCombat != null && playerCombat.IsActionLocked)
+            {
+                return;
+            }
+
             bool grounded = locomotion == null || locomotion.IsGrounded;
             if (observedGrounded && !grounded && locomotion != null &&
                 locomotion.VerticalVelocity > 0f)
             {
-                animator.SetTrigger(JumpTrigger);
-            }
-            if (observedSprinting && !sprinting && LastPlanarSpeed <= 0.25f)
-            {
-                animator.SetTrigger(RunStopTrigger);
+                PlayState("JumpAction", LocomotionToActionBlendSeconds, true);
+                jumpPlaybackActive = true;
+                decorativePlaybackActive = false;
             }
             observedGrounded = grounded;
+
+            if (jumpPlaybackActive)
+            {
+                if (!grounded)
+                {
+                    return;
+                }
+                jumpPlaybackActive = false;
+            }
+
+            bool aiming = logicalInput != null && logicalInput.Snapshot.Aim &&
+                (playerCombat == null || playerCombat.AllowsAim);
+            bool sprinting = locomotion != null && locomotion.IsSprinting;
+            bool moving = LastPlanarSpeed > 0.05f;
+
+            if (observedSprinting && !sprinting && LastPlanarSpeed <= 0.25f)
+            {
+                PlayState("RunStopAction", LocomotionToActionBlendSeconds, true);
+                decorativePlaybackActive = true;
+            }
             observedSprinting = sprinting;
 
-            bool inactive = LastPlanarSpeed <= 0.05f && !aiming &&
-                (playerCombat == null || !playerCombat.IsActionLocked) &&
+            if (decorativePlaybackActive)
+            {
+                if (moving || aiming)
+                {
+                    decorativePlaybackActive = false;
+                }
+                else if (!CurrentStateFinished())
+                {
+                    return;
+                }
+                else
+                {
+                    decorativePlaybackActive = false;
+                }
+            }
+
+            bool inactive = !moving && !aiming &&
                 physicalLifecycle?.CarriedTarget == null;
             inactiveDuration = inactive ? inactiveDuration + Time.deltaTime : 0f;
             if (!inactive)
@@ -358,140 +322,334 @@ namespace BreakNotice.Presentation
             }
             else if (!idleVariantPlayed && inactiveDuration >= 8f)
             {
-                animator.SetTrigger(IdleVariantTrigger);
+                PlayState("IdleVariantAction", LocomotionToActionBlendSeconds, true);
                 idleVariantPlayed = true;
-            }
-
-            if (playerCombat != null)
-            {
-                if (playerCombat.AnimationCueRevision != observedPlayerCueRevision)
-                {
-                    observedPlayerCueRevision = playerCombat.AnimationCueRevision;
-                    TriggerPlayerCue(playerCombat.AnimationCue);
-                }
-                observedCarriedTarget = physicalLifecycle?.CarriedTarget;
-                observedThrowOriginCount = physicalLifecycle?.ThrowOriginCount ?? 0;
+                decorativePlaybackActive = true;
                 return;
             }
 
-            PrototypeInteractionTarget carried = physicalLifecycle?.CarriedTarget;
-            if (carried != null && observedCarriedTarget == null)
-            {
-                observedCarriedWeight = carried.WeightClass;
-                animator.SetTrigger(
-                    carried.WeightClass == PrototypeWeightClass.Light
-                        ? CatchLightTrigger
-                        : CatchMediumTrigger);
-            }
-
-            if (physicalLifecycle != null &&
-                physicalLifecycle.ThrowOriginCount != observedThrowOriginCount)
-            {
-                animator.SetTrigger(
-                    observedCarriedWeight == PrototypeWeightClass.Light
-                        ? ThrowLightTrigger
-                        : ThrowMediumTrigger);
-                observedThrowOriginCount = physicalLifecycle.ThrowOriginCount;
-            }
-
-            if (carried != null)
-            {
-                observedCarriedWeight = carried.WeightClass;
-            }
-
-            observedCarriedTarget = carried;
+            string locomotionState = sprinting && moving
+                ? "Run"
+                : moving
+                    ? "Walk"
+                    : aiming
+                        ? "AimIdle"
+                        : "Idle";
+            PlayState(locomotionState, LocomotionBlendSeconds, false);
         }
 
         private void UpdateAllyAnimation()
         {
-            bool supplyReady = allyRelay?.PreparedTarget != null &&
-                (allyRelay.AllyState == PrototypeAllySupportState.Ready ||
-                 allyRelay.AllyState == PrototypeAllySupportState.Blocked);
-            animator.SetBool(SupplyReadyParameter, supplyReady);
-
-            if (allyRelay != null && allyRelay.ReleaseCount != observedAllyReleaseCount)
+            if (allyRelay != null && allyRelay.IsAwaitingAnimationAcquisition)
             {
-                animator.SetTrigger(SupplyReleaseTrigger);
-                observedAllyReleaseCount = allyRelay.ReleaseCount;
+                if (!allyAcquisitionPlaybackActive)
+                {
+                    PlayState("AcquireAction", LocomotionToActionBlendSeconds, true);
+                    pendingActionStateHash = Animator.StringToHash(
+                        "Base Layer.AcquireAction");
+                    pendingActionCueRevision = 0;
+                    pendingAllyAcquisitionAcknowledgement = true;
+                    allyAcquisitionPlaybackActive = true;
+                }
+                return;
             }
+            allyAcquisitionPlaybackActive = false;
+
+            PrototypeRelayPhase relayPhase =
+                allyRelay?.RelayPhase ?? PrototypeRelayPhase.None;
+            if (relayPhase == PrototypeRelayPhase.PreRelease &&
+                observedRelayPhase != PrototypeRelayPhase.PreRelease)
+            {
+                bool binderRelease = allyRelay.ActiveTarget != null &&
+                    allyRelay.ActiveTarget.Role == PrototypeInteractionRole.AllyBinder;
+                if (binderRelease)
+                {
+                    PlayState(
+                        "SupplyReleaseAction",
+                        LocomotionToActionBlendSeconds,
+                        true);
+                }
+                allyReleasePlaybackActive = binderRelease;
+                observedRelayPhase = relayPhase;
+                // Animator evaluates the requested cross-fade after Update.
+                // Reading normalized time now would inspect the previous Idle
+                // state and cancel the release before its first frame.
+                return;
+            }
+            observedRelayPhase = relayPhase;
+
+            if (allyReleasePlaybackActive)
+            {
+                if (!CurrentStateFinished())
+                {
+                    return;
+                }
+                allyReleasePlaybackActive = false;
+            }
+
+            bool running = mobileAlly != null &&
+                LastPlanarSpeed > mobileAlly.NormalSpeed + 0.1f;
+            string state = LastPlanarSpeed <= 0.05f
+                ? "Idle"
+                : running
+                    ? "Run"
+                    : "Walk";
+            // Ready uses the stable Idle. The one-frame Windup source is excluded.
+            PlayState(state, LocomotionBlendSeconds, false);
         }
 
         private void UpdateRunnerAnimation()
         {
-            if (runnerAgent == null ||
-                runnerAgent.AnimationCueRevision == observedRunnerCueRevision)
+            if (runnerAgent == null)
+            {
+                PlayState("Idle", LocomotionBlendSeconds, false);
+                return;
+            }
+
+            if (runnerAgent.AnimationCueRevision != observedRunnerCueRevision)
+            {
+                observedRunnerCueRevision = runnerAgent.AnimationCueRevision;
+                if (TryResolveRunnerCueState(runnerAgent.AnimationCue, out string state))
+                {
+                    PlayState(
+                        state,
+                        ResolveRunnerActionBlend(runnerAgent.AnimationCue),
+                        true);
+                    QueueActionStateAcknowledgement(
+                        state,
+                        runnerAgent.AnimationCueRevision);
+                }
+            }
+
+            if (runnerAgent.State == ShowcaseRunnerState.BodyCheck ||
+                runnerAgent.State == ShowcaseRunnerState.Shove ||
+                runnerAgent.State == ShowcaseRunnerState.OffBalance ||
+                runnerAgent.State == ShowcaseRunnerState.Staggered ||
+                runnerAgent.State == ShowcaseRunnerState.KnockedDown ||
+                runnerAgent.State == ShowcaseRunnerState.GettingUp ||
+                runnerAgent.State == ShowcaseRunnerState.Dead)
             {
                 return;
             }
-            observedRunnerCueRevision = runnerAgent.AnimationCueRevision;
-            string trigger = runnerAgent.AnimationCue switch
+
+            PlayState(
+                runnerAgent.CommandedPlanarSpeed > 0.05f ? "Walk" : "Idle",
+                LocomotionBlendSeconds,
+                false);
+        }
+
+        private void PlayState(string stateName, float blendSeconds, bool restart)
+        {
+            int stateHash = Animator.StringToHash("Base Layer." + stateName);
+            if (!animator.HasState(0, stateHash))
             {
-                ShowcaseRunnerAnimationCue.Boxing => "AttackBoxing",
-                ShowcaseRunnerAnimationCue.Boxing2 => "AttackBoxing2",
-                ShowcaseRunnerAnimationCue.Kicking => "AttackKicking",
-                ShowcaseRunnerAnimationCue.Kicking2 => "AttackKicking2",
-                ShowcaseRunnerAnimationCue.EliteMutantPunch => "EliteMutantPunch",
-                ShowcaseRunnerAnimationCue.EliteMutantSwiping => "EliteMutantSwiping",
-                ShowcaseRunnerAnimationCue.EliteJumpAttack => "EliteJumpAttack",
-                ShowcaseRunnerAnimationCue.HitLight => "HitLight",
-                ShowcaseRunnerAnimationCue.HitBody => "HitBody",
-                ShowcaseRunnerAnimationCue.HitRib => "HitRib",
-                ShowcaseRunnerAnimationCue.HitStomach => "HitStomach",
-                ShowcaseRunnerAnimationCue.HitBigHead => "HitBigHead",
-                ShowcaseRunnerAnimationCue.KnockdownBack => "KnockdownBack",
-                ShowcaseRunnerAnimationCue.KnockdownFront => "KnockdownFront",
-                ShowcaseRunnerAnimationCue.GetupBack => "GetupBack",
-                ShowcaseRunnerAnimationCue.GetupFront => "GetupFront",
-                ShowcaseRunnerAnimationCue.Death1 => "Death1",
-                ShowcaseRunnerAnimationCue.Death2 => "Death2",
-                _ => string.Empty
+                Debug.LogError($"SHOWCASE RUNTIME ANIMATION STATE MISSING: {stateName}", this);
+                return;
+            }
+            if (!restart && currentStateHash == stateHash)
+            {
+                return;
+            }
+
+            animator.CrossFadeInFixedTime(stateHash, blendSeconds, 0, 0f);
+            currentStateHash = stateHash;
+        }
+
+        private float ResolvePlayerActionBlend(ShowcasePlayerAnimationCue cue)
+        {
+            return cue switch
+            {
+                ShowcasePlayerAnimationCue.MeleeCross or
+                ShowcasePlayerAnimationCue.MeleeHook => ComboBlendSeconds,
+                ShowcasePlayerAnimationCue.HitBody => HitReactionBlendSeconds,
+                ShowcasePlayerAnimationCue.KnockdownBack or
+                ShowcasePlayerAnimationCue.KnockdownFront or
+                ShowcasePlayerAnimationCue.Death1 or
+                ShowcasePlayerAnimationCue.Death2 => KnockdownBlendSeconds,
+                _ => LocomotionToActionBlendSeconds
             };
-            if (!string.IsNullOrEmpty(trigger))
+        }
+
+        private float ResolveRunnerActionBlend(ShowcaseRunnerAnimationCue cue)
+        {
+            return cue switch
             {
-                animator.SetTrigger(trigger);
+                ShowcaseRunnerAnimationCue.HitLight or
+                ShowcaseRunnerAnimationCue.HitBody or
+                ShowcaseRunnerAnimationCue.HitRib or
+                ShowcaseRunnerAnimationCue.HitStomach or
+                ShowcaseRunnerAnimationCue.HitBigHead => HitReactionBlendSeconds,
+                ShowcaseRunnerAnimationCue.KnockdownBack or
+                ShowcaseRunnerAnimationCue.KnockdownFront or
+                ShowcaseRunnerAnimationCue.Death1 or
+                ShowcaseRunnerAnimationCue.Death2 => KnockdownBlendSeconds,
+                _ => LocomotionToActionBlendSeconds
+            };
+        }
+
+        private bool CurrentStateFinished()
+        {
+            if (animator.IsInTransition(0))
+            {
+                return false;
+            }
+            return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98f;
+        }
+
+        private void QueueActionStateAcknowledgement(string stateName, uint cueRevision)
+        {
+            pendingActionStateHash = Animator.StringToHash("Base Layer." + stateName);
+            pendingActionCueRevision = cueRevision;
+        }
+
+        private bool IsAnimatorInState(int stateHash)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == stateHash)
+            {
+                return true;
+            }
+
+            return animator.IsInTransition(0) &&
+                animator.GetNextAnimatorStateInfo(0).fullPathHash == stateHash;
+        }
+
+        private float ResolvePlanarSpeed()
+        {
+            if (runnerAgent != null)
+            {
+                return Mathf.Max(0f, runnerAgent.CommandedPlanarSpeed);
+            }
+
+            Vector3 velocity = movementController != null
+                ? movementController.velocity
+                : (transform.position - previousWorldPosition) /
+                  Mathf.Max(0.0001f, Time.deltaTime);
+            return new Vector2(velocity.x, velocity.z).magnitude;
+        }
+
+        private float ResolveNaturalReferenceSpeed()
+        {
+            switch (role)
+            {
+                case ShowcaseCharacterAnimationRole.Player:
+                    if (locomotion != null)
+                    {
+                        return locomotion.IsSprinting
+                            ? locomotion.SprintSpeed
+                            : locomotion.MoveSpeed;
+                    }
+                    return walkReferenceSpeed;
+                case ShowcaseCharacterAnimationRole.Ally:
+                    if (mobileAlly == null)
+                    {
+                        return walkReferenceSpeed;
+                    }
+                    return LastPlanarSpeed > mobileAlly.NormalSpeed + 0.1f
+                        ? mobileAlly.CatchUpSpeed
+                        : mobileAlly.NormalSpeed;
+                default:
+                    return 2.7f;
             }
         }
 
-        private void TriggerPlayerCue(ShowcasePlayerAnimationCue cue)
+        private static bool TryResolvePlayerCueState(
+            ShowcasePlayerAnimationCue cue,
+            out string state)
         {
-            string trigger = cue switch
+            state = cue switch
             {
-                ShowcasePlayerAnimationCue.MeleeJab => "MeleeJab",
-                ShowcasePlayerAnimationCue.MeleeCross => "MeleeCross",
-                ShowcasePlayerAnimationCue.MeleeHook => "MeleeHook",
-                ShowcasePlayerAnimationCue.CatchSmallCenter => "CatchLight",
-                ShowcasePlayerAnimationCue.CatchSmallLeft => "CatchSmallLeft",
-                ShowcasePlayerAnimationCue.CatchSmallRight => "CatchSmallRight",
-                ShowcasePlayerAnimationCue.CatchMedium => "CatchMedium",
-                ShowcasePlayerAnimationCue.ThrowSmall => "ThrowLight",
-                ShowcasePlayerAnimationCue.ThrowMedium => "ThrowMedium",
-                ShowcasePlayerAnimationCue.HitBody => "HitBody",
-                ShowcasePlayerAnimationCue.KnockdownBack => "KnockdownBack",
-                ShowcasePlayerAnimationCue.KnockdownFront => "KnockdownFront",
-                ShowcasePlayerAnimationCue.GetupBack => "GetupBack",
-                ShowcasePlayerAnimationCue.GetupFront => "GetupFront",
-                ShowcasePlayerAnimationCue.Death1 => "Death1",
-                ShowcasePlayerAnimationCue.Death2 => "Death2",
+                ShowcasePlayerAnimationCue.MeleeJab => "MeleeJabAction",
+                ShowcasePlayerAnimationCue.MeleeCross => "MeleeCrossAction",
+                ShowcasePlayerAnimationCue.MeleeHook => "MeleeHookAction",
+                ShowcasePlayerAnimationCue.CatchSmallCenter => "CatchLightAction",
+                ShowcasePlayerAnimationCue.CatchSmallLeft => "CatchSmallLeftAction",
+                ShowcasePlayerAnimationCue.CatchSmallRight => "CatchSmallRightAction",
+                ShowcasePlayerAnimationCue.CatchMedium => "CatchMediumAction",
+                ShowcasePlayerAnimationCue.ThrowSmall => "ThrowLightAction",
+                ShowcasePlayerAnimationCue.ThrowMedium => "ThrowMediumAction",
+                ShowcasePlayerAnimationCue.HitBody => "HitBodyAction",
+                ShowcasePlayerAnimationCue.KnockdownBack => "KnockdownBackAction",
+                ShowcasePlayerAnimationCue.KnockdownFront => "KnockdownFrontAction",
+                ShowcasePlayerAnimationCue.GetupBack => "GetupBackAction",
+                ShowcasePlayerAnimationCue.GetupFront => "GetupFrontAction",
+                ShowcasePlayerAnimationCue.Death1 => "Death1Action",
+                ShowcasePlayerAnimationCue.Death2 => "Death2Action",
                 _ => string.Empty
             };
-            if (!string.IsNullOrEmpty(trigger))
+            return !string.IsNullOrEmpty(state);
+        }
+
+        private static bool TryResolveRunnerCueState(
+            ShowcaseRunnerAnimationCue cue,
+            out string state)
+        {
+            state = cue switch
             {
-                animator.SetTrigger(trigger);
+                ShowcaseRunnerAnimationCue.Boxing => "AttackBoxingAction",
+                ShowcaseRunnerAnimationCue.Boxing2 => "AttackBoxing2Action",
+                ShowcaseRunnerAnimationCue.Kicking => "AttackKickingAction",
+                ShowcaseRunnerAnimationCue.Kicking2 => "AttackKicking2Action",
+                ShowcaseRunnerAnimationCue.EliteMutantPunch => "EliteMutantPunchAction",
+                ShowcaseRunnerAnimationCue.EliteMutantSwiping => "EliteMutantSwipingAction",
+                ShowcaseRunnerAnimationCue.EliteJumpAttack => "EliteJumpAttackAction",
+                ShowcaseRunnerAnimationCue.HitLight => "HitLightAction",
+                ShowcaseRunnerAnimationCue.HitBody => "HitBodyAction",
+                ShowcaseRunnerAnimationCue.HitRib => "HitRibAction",
+                ShowcaseRunnerAnimationCue.HitStomach => "HitStomachAction",
+                ShowcaseRunnerAnimationCue.HitBigHead => "HitBigHeadAction",
+                ShowcaseRunnerAnimationCue.KnockdownBack => "KnockdownBackAction",
+                ShowcaseRunnerAnimationCue.KnockdownFront => "KnockdownFrontAction",
+                ShowcaseRunnerAnimationCue.GetupBack => "GetupBackAction",
+                ShowcaseRunnerAnimationCue.GetupFront => "GetupFrontAction",
+                ShowcaseRunnerAnimationCue.Death1 => "Death1Action",
+                ShowcaseRunnerAnimationCue.Death2 => "Death2Action",
+                _ => string.Empty
+            };
+            return !string.IsNullOrEmpty(state);
+        }
+
+        private void ResolveRoleDependencies()
+        {
+            if (role == ShowcaseCharacterAnimationRole.Player)
+            {
+                logicalInput ??= GetComponent<InputSystemLogicalInputAdapter>();
+                physicalLifecycle ??= GetComponent<PrototypePhysicalObjectLifecycle>();
+                playerCombat ??= GetComponent<ShowcasePlayerCombatController>();
+                locomotion ??= GetComponent<ThirdPersonLocomotion>();
             }
+            else if (role == ShowcaseCharacterAnimationRole.Ally)
+            {
+                allyRelay ??= GetComponent<PrototypeAllyRelayController>();
+                mobileAlly ??= GetComponent<ShowcaseMobileAllyController>();
+            }
+            else
+            {
+                runnerAgent ??= GetComponent<ShowcaseRunnerAgent>();
+            }
+        }
+
+        private void ConfigureAnimatorRuntime()
+        {
+            if (animator == null)
+            {
+                return;
+            }
+            animator.applyRootMotion = false;
+            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            animator.stabilizeFeet = false;
         }
 
         private void CaptureCurrentGameplayState()
         {
-            observedCarriedTarget = physicalLifecycle?.CarriedTarget;
-            if (observedCarriedTarget != null)
-            {
-                observedCarriedWeight = observedCarriedTarget.WeightClass;
-            }
-
-            observedThrowOriginCount = physicalLifecycle?.ThrowOriginCount ?? 0;
-            observedAllyReleaseCount = allyRelay?.ReleaseCount ?? 0;
+            observedRelayPhase = allyRelay?.RelayPhase ?? PrototypeRelayPhase.None;
             observedPlayerCueRevision = playerCombat?.AnimationCueRevision ?? 0;
             observedRunnerCueRevision = runnerAgent?.AnimationCueRevision ?? 0;
+            observedGrounded = locomotion == null || locomotion.IsGrounded;
+            observedSprinting = locomotion != null && locomotion.IsSprinting;
+            currentStateHash = 0;
+            pendingActionStateHash = 0;
+            pendingActionCueRevision = 0;
+            pendingAllyAcquisitionAcknowledgement = false;
         }
     }
 }

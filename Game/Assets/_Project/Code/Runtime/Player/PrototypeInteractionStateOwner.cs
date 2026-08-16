@@ -19,6 +19,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public PrototypeInteractionTarget CarriedTarget { get; private set; }
 
+        public PrototypeInteractionTarget AcquisitionCommittedTarget { get; private set; }
+
         public PrototypeInteractionTarget ThrowCommittedTarget { get; private set; }
 
         public PrototypeInteractionTarget StrapTarget { get; private set; }
@@ -66,8 +68,8 @@ namespace BreakNotice.Gameplay.Interaction
                         return false;
                     }
 
-                    CarriedTarget = decision.Target;
-                    HandState = PrototypeHandOwnershipState.Carrying;
+                    AcquisitionCommittedTarget = decision.Target;
+                    HandState = PrototypeHandOwnershipState.AcquisitionCommitted;
                     return true;
 
                 case PrototypeInteractionOutcome.Catch:
@@ -87,8 +89,8 @@ namespace BreakNotice.Gameplay.Interaction
                     }
                     else
                     {
-                        CarriedTarget = decision.Target;
-                        HandState = PrototypeHandOwnershipState.Carrying;
+                        AcquisitionCommittedTarget = decision.Target;
+                        HandState = PrototypeHandOwnershipState.AcquisitionCommitted;
                     }
 
                     return true;
@@ -137,6 +139,35 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             CarriedTarget = null;
+            HandState = PrototypeHandOwnershipState.Free;
+            return true;
+        }
+
+        public bool TryCompleteAcquisition(PrototypeInteractionTarget target)
+        {
+            if (BlocksNewInteraction ||
+                HandState != PrototypeHandOwnershipState.AcquisitionCommitted ||
+                AcquisitionCommittedTarget != target ||
+                target == null)
+            {
+                return false;
+            }
+
+            AcquisitionCommittedTarget = null;
+            CarriedTarget = target;
+            HandState = PrototypeHandOwnershipState.Carrying;
+            return true;
+        }
+
+        public bool CancelAcquisition(PrototypeInteractionTarget target)
+        {
+            if (HandState != PrototypeHandOwnershipState.AcquisitionCommitted ||
+                AcquisitionCommittedTarget != target)
+            {
+                return false;
+            }
+
+            AcquisitionCommittedTarget = null;
             HandState = PrototypeHandOwnershipState.Free;
             return true;
         }
@@ -254,6 +285,7 @@ namespace BreakNotice.Gameplay.Interaction
             StrapState = PrototypeStrapOwnershipState.Stored;
             RelayState = PrototypeRelayReservationState.None;
             CarriedTarget = null;
+            AcquisitionCommittedTarget = null;
             ThrowCommittedTarget = null;
             StrapTarget = null;
             RelayReservedTarget = null;

@@ -6,6 +6,26 @@ using UnityEngine;
 
 namespace BreakNotice.Gameplay.Interaction
 {
+    public readonly struct ShowcaseCombatContactResult
+    {
+        public ShowcaseCombatContactResult(
+            Transform attacker,
+            Transform victim,
+            bool accepted,
+            Vector3 worldPoint)
+        {
+            Attacker = attacker;
+            Victim = victim;
+            Accepted = accepted;
+            WorldPoint = worldPoint;
+        }
+
+        public Transform Attacker { get; }
+        public Transform Victim { get; }
+        public bool Accepted { get; }
+        public Vector3 WorldPoint { get; }
+    }
+
     public enum ShowcaseRunnerState
     {
         Patrol,
@@ -18,6 +38,7 @@ namespace BreakNotice.Gameplay.Interaction
         Staggered,
         Recovering,
         KnockedDown,
+        GettingUp,
         Dead
     }
 
@@ -33,6 +54,8 @@ namespace BreakNotice.Gameplay.Interaction
     public sealed class ShowcaseRunnerPressureController : MonoBehaviour
     {
         private const int VisibilityHitCapacity = 32;
+        private const float PlayerMeleeFacingDot = 0.7f;
+        private const float TeamAttackGapSeconds = 0.4f;
 
         [SerializeField]
         private PrototypeInteractionStateOwner interactionOwner;
@@ -65,7 +88,7 @@ namespace BreakNotice.Gameplay.Interaction
         private float combatTagRange = 7f;
 
         [SerializeField, Min(0.5f)]
-        private float playerMeleeRange = 2.1f;
+        private float playerMeleeRange = 0.9f;
 
         [SerializeField, Min(0.1f)]
         private float playerMeleeCooldown = 0.45f;
@@ -77,6 +100,7 @@ namespace BreakNotice.Gameplay.Interaction
         private int observedResetCount;
         private float nextPlayerMeleeTime;
         private bool externallySuspended;
+        private float nextTeamAttackTime;
 
         [SerializeField]
         private ShowcasePlayerCombatController playerCombat;
@@ -114,6 +138,11 @@ namespace BreakNotice.Gameplay.Interaction
         public float PlayerMeleeRange => playerMeleeRange;
 
         public bool IsExternallySuspended => externallySuspended;
+        public Transform PlayerTransform => playerTransform;
+        public ShowcaseCombatHealth PlayerHealth => playerCombat?.Health;
+
+        public event Action<ShowcaseCombatContactResult> CombatContactResolved;
+        public event Action BaselineReset;
 
         private void Update()
         {
@@ -162,9 +191,10 @@ namespace BreakNotice.Gameplay.Interaction
             }
             rescueRange = Mathf.Max(1f, authoredRescueRange);
             combatTagRange = Mathf.Max(1f, authoredCombatTagRange);
-            playerMeleeRange = Mathf.Max(0.5f, authoredMeleeRange);
+            playerMeleeRange = Mathf.Min(0.9f, Mathf.Max(0.5f, authoredMeleeRange));
             observedResetCount = resetController != null ? resetController.ResetCount : 0;
             nextPlayerMeleeTime = 0f;
+            nextTeamAttackTime = 0f;
             playerCombat = player != null
                 ? player.GetComponent<ShowcasePlayerCombatController>()
                 : null;
@@ -193,6 +223,7 @@ namespace BreakNotice.Gameplay.Interaction
         public bool TryAcquireAttackToken(ShowcaseRunnerAgent runner)
         {
             if (!CanSimulatePressure() || runner == null ||
+                Time.time < nextTeamAttackTime ||
                 (attackTokenOwner != null && attackTokenOwner != runner))
             {
                 return false;
@@ -207,6 +238,7 @@ namespace BreakNotice.Gameplay.Interaction
             if (attackTokenOwner == runner)
             {
                 attackTokenOwner = null;
+                nextTeamAttackTime = Time.time + TeamAttackGapSeconds;
             }
         }
 
@@ -222,7 +254,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             grabbingRunner = runner;
             GrabCount++;
-            playerLocomotion?.SetExternalMovementBlocked(true);
+            playerLocomotion?.SetMobilityLock(PlayerMobilityLockReason.Grab, true);
             return true;
         }
 
@@ -357,9 +389,54 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
-            playerLocomotion?.AddExternalPlanarImpulse(
-                direction * Mathf.Max(0f, impulseSpeed));
+            playerCombat?.QueueReactionDisplacement(
+                direction,
+                knockdown ? 0.65f : 0.3f,
+                knockdown ? 0.24f : 0.2f);
             PlayerHitCount++;
+        }
+
+        public bool ApplyPlayerAttackFromBoneContact(
+            ShowcaseRunnerAgent runner,
+            ShowcasePlayerCombatController actualVictim,
+            int damage,
+            bool knockdown,
+            float impulseSpeed,
+            uint attackSequence)
+        {
+            if (runner == null || actualVictim == null ||
+                actualVictim != playerCombat || playerTransform == null)
+            {
+                return false;
+            }
+
+            Vector3 direction = Vector3.ProjectOnPlane(
+                playerTransform.position - runner.transform.position,
+                Vector3.up).normalized;
+            bool accepted = actualVictim.ReceiveDamage(
+                new ShowcaseDamageRequest(
+                    ShowcaseCombatTeam.Enemy,
+                    runner.RunnerId,
+                    attackSequence,
+                    damage,
+                    knockdown ? ShowcaseHitReaction.Knockdown : ShowcaseHitReaction.Body,
+                    direction));
+            CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                runner.transform,
+                playerTransform,
+                accepted,
+                playerTransform.position + Vector3.up));
+            if (!accepted)
+            {
+                return false;
+            }
+
+            actualVictim.QueueReactionDisplacement(
+                direction,
+                knockdown ? 0.65f : 0.3f,
+                knockdown ? 0.24f : 0.2f);
+            PlayerHitCount++;
+            return true;
         }
 
         public bool CommitPlayerMeleeHit(
@@ -379,6 +456,39 @@ namespace BreakNotice.Gameplay.Interaction
                 attackSequence,
                 damage,
                 playerTransform.position);
+            CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                playerTransform,
+                target.transform,
+                accepted,
+                target.transform.position + Vector3.up));
+            if (accepted)
+            {
+                PlayerMeleeCount++;
+            }
+            return accepted;
+        }
+
+        public bool CommitPlayerMeleeHitFromBoneContact(
+            ShowcaseRunnerAgent target,
+            int comboStep,
+            uint attackSequence,
+            int damage)
+        {
+            if (!IsValidMeleeContactTarget(target))
+            {
+                return false;
+            }
+
+            bool accepted = target.ReceivePlayerMeleeHit(
+                comboStep,
+                attackSequence,
+                damage,
+                playerTransform.position);
+            CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                playerTransform,
+                target.transform,
+                accepted,
+                target.transform.position + Vector3.up));
             if (accepted)
             {
                 PlayerMeleeCount++;
@@ -393,7 +503,7 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void ResetToRunBaseline()
         {
-            playerLocomotion?.SetExternalMovementBlocked(false);
+            playerLocomotion?.SetMobilityLock(PlayerMobilityLockReason.Grab, false);
             attackTokenOwner = null;
             grabbingRunner = null;
             PlayerHitCount = 0;
@@ -403,18 +513,20 @@ namespace BreakNotice.Gameplay.Interaction
             PlayerMeleeCount = 0;
             PhysicalImpactCount = 0;
             nextPlayerMeleeTime = 0f;
+            nextTeamAttackTime = 0f;
             externallySuspended = false;
             foreach (ShowcaseRunnerAgent runner in runners)
             {
                 runner?.ResetToRunBaseline();
             }
+            BaselineReset?.Invoke();
         }
 
         private void ReleaseGrab(bool rescued)
         {
             ShowcaseRunnerAgent previous = grabbingRunner;
             grabbingRunner = null;
-            playerLocomotion?.SetExternalMovementBlocked(false);
+            playerLocomotion?.SetMobilityLock(PlayerMobilityLockReason.Grab, false);
             ReleaseAttackToken(previous);
             if (!rescued)
             {
@@ -484,7 +596,7 @@ namespace BreakNotice.Gameplay.Interaction
                     Vector3.up);
                 float distance = offset.magnitude;
                 if (distance > playerMeleeRange || offset.sqrMagnitude <= 0.001f ||
-                    Vector3.Dot(forward, offset.normalized) < 0.35f ||
+                    Vector3.Dot(forward, offset.normalized) < PlayerMeleeFacingDot ||
                     !HasClearLane(
                         playerTransform.position + Vector3.up,
                         runner.transform.position + Vector3.up))
@@ -501,6 +613,28 @@ namespace BreakNotice.Gameplay.Interaction
                 }
             }
             return best;
+        }
+
+        private bool IsValidMeleeContactTarget(ShowcaseRunnerAgent target)
+        {
+            if (target == null || target.IsDead || playerTransform == null ||
+                !CanSimulatePressure() || playerCombat == null ||
+                target != playerCombat.ActiveMeleeTarget)
+            {
+                return false;
+            }
+
+            Vector3 offset = Vector3.ProjectOnPlane(
+                target.transform.position - playerTransform.position,
+                Vector3.up);
+            Vector3 forward = Vector3.ProjectOnPlane(
+                playerTransform.forward,
+                Vector3.up).normalized;
+            return offset.sqrMagnitude > 0.001f &&
+                Vector3.Dot(forward, offset.normalized) >= PlayerMeleeFacingDot &&
+                HasClearLane(
+                    playerTransform.position + Vector3.up,
+                    target.transform.position + Vector3.up);
         }
 
         private bool HasClearLane(Vector3 start, Vector3 end)

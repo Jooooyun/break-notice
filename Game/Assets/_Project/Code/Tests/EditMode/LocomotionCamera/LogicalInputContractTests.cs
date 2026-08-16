@@ -62,6 +62,9 @@ namespace BreakNotice.LocomotionCamera.Tests
         [Test]
         public void ThrowSnapshot_ExposesPressHoldAndReleaseAlongsideS3AllyTask()
         {
+            InputAction throwAction = LoadInputAsset()
+                .FindActionMap("PrototypePlayer", true)
+                .FindAction("Throw", true);
             var held = new LogicalInputSnapshot(
                 Vector2.zero,
                 Vector2.zero,
@@ -112,6 +115,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(released.Throw, Is.False);
             Assert.That(released.ThrowHeld, Is.False);
             Assert.That(released.ThrowReleased, Is.True);
+            Assert.That(throwAction.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(
+                throwAction.bindings.Select(binding => binding.effectivePath),
+                Does.Contain("<Mouse>/leftButton"));
             Assert.That(regroup.RegroupAlly, Is.True);
             Assert.That(mobility.Sprint, Is.True);
             Assert.That(mobility.Jump, Is.True);
@@ -236,44 +243,95 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void CameraPrefab_UsesOwnerApprovedRightShoulderComposition()
+        public void CameraPrefab_UsesApprovedLeonCoreAndFinalCollisionContract()
         {
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(CameraPrefabPath);
             Assert.That(prefab, Is.Not.Null);
 
             ThirdPersonCameraRig rig = prefab.GetComponent<ThirdPersonCameraRig>();
+            Camera outputCamera = prefab.GetComponentInChildren<Camera>();
+            CinemachineCamera virtualCamera =
+                prefab.GetComponentInChildren<CinemachineCamera>();
             CinemachineThirdPersonFollow follow =
                 prefab.GetComponentInChildren<CinemachineThirdPersonFollow>();
             Assert.That(rig, Is.Not.Null);
+            Assert.That(outputCamera, Is.Not.Null);
+            Assert.That(virtualCamera, Is.Not.Null);
             Assert.That(follow, Is.Not.Null);
 
             SerializedObject settings = new SerializedObject(rig);
             Assert.That(settings.FindProperty("targetHeight").floatValue,
-                Is.EqualTo(0.95f).Within(0.001f));
+                Is.EqualTo(0.16f).Within(0.001f));
+            Assert.That(settings.FindProperty("sprintTargetHeight").floatValue,
+                Is.EqualTo(0.16f).Within(0.001f));
             Assert.That(settings.FindProperty("aimTargetHeight").floatValue,
-                Is.EqualTo(1.1f).Within(0.001f));
+                Is.EqualTo(0.25f).Within(0.001f));
             Assert.That(settings.FindProperty("lookSensitivity").floatValue,
                 Is.EqualTo(0.25f).Within(0.001f));
             Assert.That(settings.FindProperty("minimumPitch").floatValue,
-                Is.EqualTo(-12f).Within(0.001f));
+                Is.EqualTo(-40f).Within(0.001f));
             Assert.That(settings.FindProperty("maximumPitch").floatValue,
-                Is.EqualTo(35f).Within(0.001f));
+                Is.EqualTo(55f).Within(0.001f));
             Assert.That(settings.FindProperty("normalDistance").floatValue,
-                Is.EqualTo(2.5f).Within(0.001f));
+                Is.EqualTo(2.55f).Within(0.001f));
+            Assert.That(settings.FindProperty("sprintDistance").floatValue,
+                Is.EqualTo(2.7f).Within(0.001f));
             Assert.That(settings.FindProperty("aimDistance").floatValue,
-                Is.EqualTo(1.85f).Within(0.001f));
+                Is.EqualTo(1.75f).Within(0.001f));
             Assert.That(settings.FindProperty("normalShoulderOffset").floatValue,
-                Is.EqualTo(0.9f).Within(0.001f));
+                Is.EqualTo(0.85f).Within(0.001f));
+            Assert.That(settings.FindProperty("sprintShoulderOffset").floatValue,
+                Is.EqualTo(0.85f).Within(0.001f));
             Assert.That(settings.FindProperty("aimShoulderOffset").floatValue,
-                Is.EqualTo(0.78f).Within(0.001f));
+                Is.EqualTo(0.75f).Within(0.001f));
             Assert.That(settings.FindProperty("normalFieldOfView").floatValue,
-                Is.EqualTo(52f).Within(0.001f));
+                Is.EqualTo(50f).Within(0.001f));
             Assert.That(settings.FindProperty("aimFieldOfView").floatValue,
-                Is.EqualTo(45f).Within(0.001f));
+                Is.EqualTo(48f).Within(0.001f));
+            Assert.That(settings.FindProperty("aimTransitionDuration").floatValue,
+                Is.EqualTo(0.18f).Within(0.001f));
+            Assert.That(settings.FindProperty("sprintTransitionDuration").floatValue,
+                Is.EqualTo(0.2f).Within(0.001f));
+            Assert.That(settings.FindProperty("carryLightDistanceOffset").floatValue,
+                Is.EqualTo(0.15f).Within(0.001f));
+            Assert.That(settings.FindProperty("carryLightShoulderOffset").floatValue,
+                Is.EqualTo(0.12f).Within(0.001f));
+            Assert.That(settings.FindProperty("carryMediumDistanceOffset").floatValue,
+                Is.EqualTo(0.45f).Within(0.001f));
+            Assert.That(settings.FindProperty("carryMediumShoulderOffset").floatValue,
+                Is.EqualTo(0.32f).Within(0.001f));
+            Assert.That(settings.FindProperty("throwWindupDistanceOffset").floatValue,
+                Is.EqualTo(0.18f).Within(0.001f));
+            Assert.That(settings.FindProperty("throwWindupShoulderOffset").floatValue,
+                Is.EqualTo(0.12f).Within(0.001f));
+            Assert.That(settings.FindProperty("carryTransitionDuration").floatValue,
+                Is.EqualTo(0.2f).Within(0.001f));
+            Assert.That(settings.FindProperty("throwWindupTransitionDuration").floatValue,
+                Is.EqualTo(0.12f).Within(0.001f));
+            Assert.That(settings.FindProperty("collisionReturnDamping").floatValue,
+                Is.InRange(0.2f, 0.3f));
             Assert.That(follow.CameraSide, Is.EqualTo(1f).Within(0.001f));
-            Assert.That(follow.CameraDistance, Is.EqualTo(2.5f).Within(0.001f));
+            Assert.That(follow.CameraDistance, Is.EqualTo(2.55f).Within(0.001f));
             Assert.That(follow.ShoulderOffset.x, Is.GreaterThan(0f));
             Assert.That(follow.VerticalArmLength, Is.EqualTo(0.1f).Within(0.001f));
+            Assert.That(follow.AvoidObstacles.Enabled, Is.False,
+                "ThirdPersonFollow must remain an unconstrained base rig.");
+            Assert.That(follow.AvoidObstacles.CollisionFilter.value, Is.Zero);
+            Assert.That(follow.AvoidObstacles.DampingIntoCollision, Is.Zero);
+            Assert.That(follow.AvoidObstacles.DampingFromCollision, Is.Zero);
+            Assert.That(
+                prefab.GetComponentInChildren<ShowcaseCameraConstraintSolver>(true),
+                Is.Not.Null,
+                "Exactly one pre-Brain CameraState constraint solver must own collision.");
+            Assert.That(virtualCamera.Lens.ModeOverride,
+                Is.EqualTo(LensSettings.OverrideModes.Perspective));
+            Assert.That(virtualCamera.Lens.FieldOfView, Is.InRange(38f, 55f));
+            Assert.That(virtualCamera.Lens.Dutch, Is.Zero);
+            Assert.That(virtualCamera.Lens.PhysicalProperties.LensShift,
+                Is.EqualTo(Vector2.zero));
+            Assert.That(outputCamera.orthographic, Is.False);
+            Assert.That(outputCamera.usePhysicalProperties, Is.False);
+            Assert.That(outputCamera.lensShift, Is.EqualTo(Vector2.zero));
         }
 
         [Test]
@@ -395,6 +453,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             CinemachineCamera virtualCamera = virtualCameraObject.AddComponent<CinemachineCamera>();
             CinemachineThirdPersonFollow thirdPersonFollow =
                 virtualCameraObject.AddComponent<CinemachineThirdPersonFollow>();
+            ShowcaseCameraConstraintSolver constraintSolver =
+                virtualCameraObject.AddComponent<ShowcaseCameraConstraintSolver>();
             virtualCamera.Follow = orbitTarget;
             thirdPersonFollow.CameraDistance = 2.5f;
             thirdPersonFollow.ShoulderOffset = new Vector3(0.9f, 0f, 0f);
@@ -403,12 +463,12 @@ namespace BreakNotice.LocomotionCamera.Tests
             thirdPersonFollow.Damping = new Vector3(0.08f, 0.15f, 0.12f);
             CinemachineThirdPersonFollow.ObstacleSettings obstacleSettings =
                 thirdPersonFollow.AvoidObstacles;
-            obstacleSettings.Enabled = true;
-            obstacleSettings.CollisionFilter = ~0;
+            obstacleSettings.Enabled = false;
+            obstacleSettings.CollisionFilter = 0;
             obstacleSettings.IgnoreTag = string.Empty;
             obstacleSettings.CameraRadius = 0.25f;
             obstacleSettings.DampingIntoCollision = 0f;
-            obstacleSettings.DampingFromCollision = 0.5f;
+            obstacleSettings.DampingFromCollision = 0f;
             thirdPersonFollow.AvoidObstacles = obstacleSettings;
 
             SerializedObject rigObject = new SerializedObject(rig);
@@ -416,6 +476,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             rigObject.FindProperty("outputCamera").objectReferenceValue = outputCamera;
             rigObject.FindProperty("virtualCamera").objectReferenceValue = virtualCamera;
             rigObject.FindProperty("thirdPersonFollow").objectReferenceValue = thirdPersonFollow;
+            rigObject.FindProperty("constraintSolver").objectReferenceValue = constraintSolver;
             rigObject.ApplyModifiedPropertiesWithoutUndo();
 
             PrefabUtility.SaveAsPrefabAsset(root, CameraPrefabPath);
@@ -449,7 +510,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             ThirdPersonCameraRig cameraRig = cameraRigObject.GetComponent<ThirdPersonCameraRig>();
             InputSystemLogicalInputAdapter logicalInput = player.GetComponent<InputSystemLogicalInputAdapter>();
             cameraRig.Configure(player.transform, logicalInput);
-            player.GetComponent<ThirdPersonLocomotion>().ConfigureCamera(cameraRig.OutputCamera.transform);
+            player.GetComponent<ThirdPersonLocomotion>()
+                .ConfigureCamera(cameraRig.GameplayMovementReference);
 
             CreateProxy("AllyProxy", PrimitiveType.Capsule, new Vector3(-5f, 1f, 5f), new Vector3(0.85f, 1f, 0.85f));
             CreateProxy("EnemyProxy_01", PrimitiveType.Cylinder, new Vector3(3f, 1f, 6f), new Vector3(0.75f, 1f, 0.75f));
@@ -477,6 +539,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             item.transform.position = position;
             item.transform.localScale = scale;
             item.isStatic = true;
+            int cameraWorldLayer = LayerMask.NameToLayer("CameraStaticWorld");
+            if (cameraWorldLayer >= 0)
+            {
+                item.layer = cameraWorldLayer;
+            }
             return item;
         }
 
@@ -486,7 +553,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             Vector3 position,
             Vector3 scale)
         {
-            return CreateStaticPrimitive(name, primitiveType, position, scale);
+            GameObject item = GameObject.CreatePrimitive(primitiveType);
+            item.name = name;
+            item.transform.position = position;
+            item.transform.localScale = scale;
+            return item;
         }
 
         private static IReadOnlyList<GameObject> GetSceneObjects(Scene scene)

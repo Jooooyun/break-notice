@@ -392,7 +392,9 @@ namespace BreakNotice.Gameplay.Interaction
         private void SuspendGameplay(bool suspended)
         {
             runnerPressureController?.SetExternalSuspended(suspended);
-            playerLocomotion?.SetExternalMovementBlocked(suspended);
+            playerLocomotion?.SetMobilityLock(
+                PlayerMobilityLockReason.Objective,
+                suspended);
         }
 
         private void SetExitSignOpen(bool open)

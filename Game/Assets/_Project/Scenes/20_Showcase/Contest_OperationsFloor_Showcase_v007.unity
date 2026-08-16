@@ -19015,6 +19015,7 @@ GameObject:
   - component: {fileID: 944753670}
   - component: {fileID: 944753671}
   - component: {fileID: 944753672}
+  - component: {fileID: 944753673}
   m_Layer: 0
   m_Name: GAMEPLAY_ENY01_RUNNER_02
   m_TagString: Untagged
@@ -19136,14 +19137,11 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   physicalLifecycle: {fileID: 0}
   allyRelay: {fileID: 0}
+  mobileAlly: {fileID: 0}
   playerCombat: {fileID: 0}
   runnerAgent: {fileID: 944753671}
   locomotion: {fileID: 0}
   walkReferenceSpeed: 2.8
-  minimumPlaybackRate: 0.85
-  maximumPlaybackRate: 1.15
-  maximumVisualGroundingCorrection: 0.12
-  maximumGroundDistanceFromActor: 1.25
 --- !u!54 &944753670
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19189,10 +19187,11 @@ MonoBehaviour:
   playerTransform: {fileID: 1121842304}
   health: {fileID: 944753672}
   elite: 1
+  boneCombatRig: {fileID: 944753673}
   approachSpeed: 2.7
   bodyCheckSpeed: 6.5
   activationRange: 11
-  attackRange: 1.8
+  attackRange: 1.25
   attackCooldown: 1.25
 --- !u!114 &944753672
 MonoBehaviour:
@@ -19209,6 +19208,58 @@ MonoBehaviour:
   team: 2
   maximumHealth: 180
   invulnerabilitySeconds: 0.12
+--- !u!114 &944753673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944753663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df846c9b0c07f174e8bb4f028a14ffc1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseBoneCombatRig
+  team: 2
+  animator: {fileID: 2032645719}
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 944753671}
+  hurtboxes:
+  - region: 0
+    bone: 10
+    radius: 0.16
+  - region: 1
+    bone: 8
+    radius: 0.32
+  - region: 2
+    bone: 0
+    radius: 0.23
+  - region: 3
+    bone: 15
+    radius: 0.13
+  - region: 4
+    bone: 16
+    radius: 0.13
+  - region: 5
+    bone: 3
+    radius: 0.14
+  - region: 6
+    bone: 4
+    radius: 0.14
+  strikes:
+  - bone: 17
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 18
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 5
+    radius: 0.18
+    forwardOffset: 0.05
+  - bone: 6
+    radius: 0.18
+    forwardOffset: 0.05
+  debugDrawVolumes: 0
 --- !u!1 &952531030
 GameObject:
   m_ObjectHideFlags: 0
@@ -22005,6 +22056,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1068876374}
+  - component: {fileID: 1068876399}
   m_Layer: 0
   m_Name: SHOWCASE_V2_PROVISIONAL_LOCAL_REVIEW_ONLY
   m_TagString: Untagged
@@ -22037,6 +22089,18 @@ Transform:
   - {fileID: 85955954}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1068876399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068876373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d0d25c98e34e73b5576bbf2734d54a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.ShowcaseCameraWorldBlockerRoot
 --- !u!1 &1070009068
 GameObject:
   m_ObjectHideFlags: 0
@@ -22455,6 +22519,7 @@ GameObject:
   - component: {fileID: 1081471124}
   - component: {fileID: 1081471125}
   - component: {fileID: 1081471126}
+  - component: {fileID: 1081471127}
   m_Layer: 0
   m_Name: GAMEPLAY_ENY01_RUNNER_01
   m_TagString: Untagged
@@ -22576,14 +22641,11 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   physicalLifecycle: {fileID: 0}
   allyRelay: {fileID: 0}
+  mobileAlly: {fileID: 0}
   playerCombat: {fileID: 0}
   runnerAgent: {fileID: 1081471125}
   locomotion: {fileID: 0}
   walkReferenceSpeed: 2.8
-  minimumPlaybackRate: 0.85
-  maximumPlaybackRate: 1.15
-  maximumVisualGroundingCorrection: 0.12
-  maximumGroundDistanceFromActor: 1.25
 --- !u!54 &1081471124
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22629,10 +22691,11 @@ MonoBehaviour:
   playerTransform: {fileID: 1121842304}
   health: {fileID: 1081471126}
   elite: 0
+  boneCombatRig: {fileID: 1081471127}
   approachSpeed: 2.7
   bodyCheckSpeed: 6.5
   activationRange: 11
-  attackRange: 1.8
+  attackRange: 1.25
   attackCooldown: 1.25
 --- !u!114 &1081471126
 MonoBehaviour:
@@ -22649,6 +22712,58 @@ MonoBehaviour:
   team: 2
   maximumHealth: 100
   invulnerabilitySeconds: 0.2
+--- !u!114 &1081471127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081471117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df846c9b0c07f174e8bb4f028a14ffc1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseBoneCombatRig
+  team: 2
+  animator: {fileID: 1811649989}
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 1081471125}
+  hurtboxes:
+  - region: 0
+    bone: 10
+    radius: 0.16
+  - region: 1
+    bone: 8
+    radius: 0.32
+  - region: 2
+    bone: 0
+    radius: 0.23
+  - region: 3
+    bone: 15
+    radius: 0.13
+  - region: 4
+    bone: 16
+    radius: 0.13
+  - region: 5
+    bone: 3
+    radius: 0.14
+  - region: 6
+    bone: 4
+    radius: 0.14
+  strikes:
+  - bone: 17
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 18
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 5
+    radius: 0.18
+    forwardOffset: 0.05
+  - bone: 6
+    radius: 0.18
+    forwardOffset: 0.05
+  debugDrawVolumes: 0
 --- !u!1 &1082374561
 GameObject:
   m_ObjectHideFlags: 0
@@ -22946,6 +23061,8 @@ GameObject:
   - component: {fileID: 1119083206}
   - component: {fileID: 1119083205}
   - component: {fileID: 1119083207}
+  - component: {fileID: 1119083208}
+  - component: {fileID: 1119083209}
   m_Layer: 0
   m_Name: GAMEPLAY_CHR01_MOBILE_ALLY
   m_TagString: Untagged
@@ -23072,6 +23189,7 @@ MonoBehaviour:
   - {fileID: 1425937613}
   - {fileID: 820737517}
   preReleaseDelay: 0.2
+  requiresAnimationRelease: 1
   binderHorizontalSpeed: 7.5
   minimumBinderSpeedMultiplier: 0.9
   maximumBinderSpeedMultiplier: 1.1
@@ -23087,6 +23205,9 @@ MonoBehaviour:
   supplyApproachDistance: 0.85
   requiresExplicitFetch: 1
   binderHoldOffset: {x: 0, y: 1.05, z: 0.6}
+  binderGripSocket: {fileID: 1119083209}
+  chairGripRig: {fileID: 1970784281}
+  requiresChairGripRig: 1
   chairPlayerClearance: 0.45
   indicatorHeight: 2.1
 --- !u!114 &1119083205
@@ -23205,14 +23326,79 @@ MonoBehaviour:
   logicalInput: {fileID: 0}
   physicalLifecycle: {fileID: 0}
   allyRelay: {fileID: 1119083204}
+  mobileAlly: {fileID: 0}
   playerCombat: {fileID: 0}
   runnerAgent: {fileID: 0}
   locomotion: {fileID: 0}
   walkReferenceSpeed: 2.8
-  minimumPlaybackRate: 0.85
-  maximumPlaybackRate: 1.15
-  maximumVisualGroundingCorrection: 0.12
-  maximumGroundDistanceFromActor: 1.25
+--- !u!114 &1119083208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119083199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df846c9b0c07f174e8bb4f028a14ffc1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseBoneCombatRig
+  team: 1
+  animator: {fileID: 1970784278}
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 0}
+  hurtboxes:
+  - region: 0
+    bone: 10
+    radius: 0.16
+  - region: 1
+    bone: 8
+    radius: 0.32
+  - region: 2
+    bone: 0
+    radius: 0.23
+  - region: 3
+    bone: 15
+    radius: 0.13
+  - region: 4
+    bone: 16
+    radius: 0.13
+  - region: 5
+    bone: 3
+    radius: 0.14
+  - region: 6
+    bone: 4
+    radius: 0.14
+  strikes:
+  - bone: 17
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 18
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 5
+    radius: 0.18
+    forwardOffset: 0.05
+  - bone: 6
+    radius: 0.18
+    forwardOffset: 0.05
+  debugDrawVolumes: 0
+--- !u!114 &1119083209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119083199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f121b3df73a26144aa478523c27907ed, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.ShowcaseBinderGripSocket
+  animator: {fileID: 1970784278}
+  actorRoot: {fileID: 1119083203}
+  localGripOffset: {x: 0, y: -0.11, z: 0.035}
+  localGripRotationEuler: {x: 0, y: 90, z: 0}
 --- !u!1 &1119741563
 GameObject:
   m_ObjectHideFlags: 0
@@ -23550,6 +23736,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6927649074730488262, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1121842313}
+    - targetCorrespondingSourceObject: {fileID: 6927649074730488262, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1121842314}
+    - targetCorrespondingSourceObject: {fileID: 6927649074730488262, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1121842315}
   m_SourcePrefab: {fileID: 100100000, guid: 3f78515b2f8ccfd438392e3073a91dfb, type: 3}
 --- !u!114 &1121842303 stripped
 MonoBehaviour:
@@ -23637,11 +23829,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle
   interactionOwner: {fileID: 1121842307}
   carryAnchor: {fileID: 216534213}
+  lightBinderGripSocket: {fileID: 1121842315}
+  requireBoneTrackedLightGrip: 1
+  maximumGripSeparation: 0.18
   acquisitionSpeed: 7
   carryRotationSpeed: 540
   lightThrowSpeed: 12.5
   mediumThrowSpeed: 8
-  upwardThrowSpeed: 0.8
   maximumThrowSpeedMultiplier: 1.6
 --- !u!114 &1121842309
 MonoBehaviour:
@@ -23661,14 +23855,11 @@ MonoBehaviour:
   logicalInput: {fileID: 1121842303}
   physicalLifecycle: {fileID: 1121842308}
   allyRelay: {fileID: 0}
+  mobileAlly: {fileID: 0}
   playerCombat: {fileID: 1121842313}
   runnerAgent: {fileID: 0}
   locomotion: {fileID: 443728495}
   walkReferenceSpeed: 2.8
-  minimumPlaybackRate: 0.85
-  maximumPlaybackRate: 1.15
-  maximumVisualGroundingCorrection: 0.12
-  maximumGroundDistanceFromActor: 1.25
 --- !u!114 &1121842310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23753,10 +23944,79 @@ MonoBehaviour:
   logicalInput: {fileID: 1121842303}
   locomotion: {fileID: 443728495}
   physicalLifecycle: {fileID: 1121842308}
-  allyRelay: {fileID: 0}
+  allyRelay: {fileID: 1119083204}
   runnerPressure: {fileID: 912828966}
   resetController: {fileID: 824956724}
   objectiveController: {fileID: 905197541}
+  boneCombatRig: {fileID: 1121842314}
+--- !u!114 &1121842314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121842305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df846c9b0c07f174e8bb4f028a14ffc1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseBoneCombatRig
+  team: 0
+  animator: {fileID: 2030125093}
+  playerCombat: {fileID: 1121842313}
+  runnerAgent: {fileID: 0}
+  hurtboxes:
+  - region: 0
+    bone: 10
+    radius: 0.16
+  - region: 1
+    bone: 8
+    radius: 0.32
+  - region: 2
+    bone: 0
+    radius: 0.23
+  - region: 3
+    bone: 15
+    radius: 0.13
+  - region: 4
+    bone: 16
+    radius: 0.13
+  - region: 5
+    bone: 3
+    radius: 0.14
+  - region: 6
+    bone: 4
+    radius: 0.14
+  strikes:
+  - bone: 17
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 18
+    radius: 0.16
+    forwardOffset: 0.07
+  - bone: 5
+    radius: 0.18
+    forwardOffset: 0.05
+  - bone: 6
+    radius: 0.18
+    forwardOffset: 0.05
+  debugDrawVolumes: 0
+--- !u!114 &1121842315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121842305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f121b3df73a26144aa478523c27907ed, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.ShowcaseBinderGripSocket
+  animator: {fileID: 2030125093}
+  actorRoot: {fileID: 1121842304}
+  localGripOffset: {x: 0, y: -0.12, z: 0.04}
+  localGripRotationEuler: {x: 0, y: 90, z: 0}
 --- !u!1 &1127415624
 GameObject:
   m_ObjectHideFlags: 0
@@ -38105,6 +38365,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
   playerCombat: {fileID: 0}
   runnerAgent: {fileID: 1081471125}
+  allyRelay: {fileID: 0}
+  boneCombatRig: {fileID: 1081471127}
 --- !u!1 &1814100372
 GameObject:
   m_ObjectHideFlags: 0
@@ -41210,7 +41472,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f13f457327b253c46b79fd45d790ff6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1970784280}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f13f457327b253c46b79fd45d790ff6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1970784281}
   m_SourcePrefab: {fileID: 100100000, guid: f13f457327b253c46b79fd45d790ff6b, type: 3}
 --- !u!4 &1970784277 stripped
 Transform:
@@ -41222,6 +41490,42 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: f13f457327b253c46b79fd45d790ff6b, type: 3}
   m_PrefabInstance: {fileID: 1970784276}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1970784279 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f13f457327b253c46b79fd45d790ff6b, type: 3}
+  m_PrefabInstance: {fileID: 1970784276}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1970784280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970784279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588a7f5452829064dadefe62abb42338, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
+  playerCombat: {fileID: 0}
+  runnerAgent: {fileID: 0}
+  allyRelay: {fileID: 1119083204}
+  boneCombatRig: {fileID: 1119083208}
+--- !u!114 &1970784281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970784279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f2e4137aeb76048ba29c8683640d8a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.ShowcaseChairGripRig
+  animator: {fileID: 1970784278}
+  backrestHeight: 0.78
+  handInset: 0.22
 --- !u!1 &1984058992
 GameObject:
   m_ObjectHideFlags: 0
@@ -42675,6 +42979,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
   playerCombat: {fileID: 1121842313}
   runnerAgent: {fileID: 0}
+  allyRelay: {fileID: 0}
+  boneCombatRig: {fileID: 1121842314}
 --- !u!1001 &2032645717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42792,6 +43098,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Combat.ShowcaseAnimationEventReceiver
   playerCombat: {fileID: 0}
   runnerAgent: {fileID: 944753671}
+  allyRelay: {fileID: 0}
+  boneCombatRig: {fileID: 944753673}
 --- !u!1 &2034521197
 GameObject:
   m_ObjectHideFlags: 0
@@ -43697,10 +44005,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1509362377840532696, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
-      propertyPath: Lens.FieldOfView
-      value: 68
-      objectReference: {fileID: 0}
     - target: {fileID: 7952042279976792475, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
       propertyPath: m_Name
       value: GameplayCameraRig
@@ -43709,14 +44013,6 @@ PrefabInstance:
       propertyPath: logicalInput
       value:
       objectReference: {fileID: 1121842303}
-    - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
-      propertyPath: maximumPitch
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
-      propertyPath: minimumPitch
-      value: -12
-      objectReference: {fileID: 0}
     - target: {fileID: 9189907456320459239, guid: c41b22c0dc34871468f61f08c9c89892, type: 3}
       propertyPath: playerTarget
       value:

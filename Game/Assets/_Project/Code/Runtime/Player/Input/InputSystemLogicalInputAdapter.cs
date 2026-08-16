@@ -27,6 +27,8 @@ namespace BreakNotice.Gameplay.Input
         private InputAction strapReleaseAction;
         private InputAction resetEncounterAction;
         private InputAction restartAction;
+        private bool pointerCaptureRequired;
+        private int pointerCapturedFrame = -1;
 
         public LogicalInputSnapshot Snapshot { get; private set; }
 
@@ -38,6 +40,21 @@ namespace BreakNotice.Gameplay.Input
 
         public bool IsWebPointerGameplayActive =>
             IsWebPointerLocked || IsWebPointerFallbackActive;
+
+        public bool IsPointerLocked => IsWebPointerLocked;
+
+        public bool IsPointerFallbackActive => IsWebPointerFallbackActive;
+
+        public bool IsPointerGameplayActive => IsWebPointerGameplayActive;
+
+        public bool IsPointerCaptureRequired => pointerCaptureRequired;
+
+        public bool PointerJustCapturedThisFrame =>
+            pointerCaptureRequired && pointerCapturedFrame == Time.frameCount;
+
+        public bool IsPointerInputAllowed =>
+            !pointerCaptureRequired ||
+            (IsPointerGameplayActive && !PointerJustCapturedThisFrame);
 
         public Vector2 WebPointerFallbackLookDelta { get; private set; }
 
@@ -105,17 +122,18 @@ namespace BreakNotice.Gameplay.Input
             debugResetRequested = resetEncounterAction.WasPressedThisFrame();
 #endif
 
+            bool pointerInputAllowed = IsPointerInputAllowed;
             Snapshot = new LogicalInputSnapshot(
                 moveAction.ReadValue<Vector2>(),
-                lookAction.ReadValue<Vector2>(),
-                aimAction.IsPressed(),
+                pointerInputAllowed ? lookAction.ReadValue<Vector2>() : Vector2.zero,
+                pointerInputAllowed && aimAction.IsPressed(),
                 interactPrimaryAction.WasPressedThisFrame(),
-                throwAction.WasPressedThisFrame(),
+                pointerInputAllowed && throwAction.WasPressedThisFrame(),
                 callAllyAction.WasPressedThisFrame(),
                 strapReleaseAction.WasPressedThisFrame(),
                 debugResetRequested,
-                throwAction.IsPressed(),
-                throwAction.WasReleasedThisFrame(),
+                pointerInputAllowed && throwAction.IsPressed(),
+                pointerInputAllowed && throwAction.WasReleasedThisFrame(),
                 allyTaskAction.WasPressedThisFrame(),
                 regroupAllyAction.WasPressedThisFrame(),
                 sprintAction.IsPressed(),
@@ -128,11 +146,37 @@ namespace BreakNotice.Gameplay.Input
             bool fallbackActive,
             Vector2 fallbackLookDelta)
         {
+            SetPointerState(locked, fallbackActive, fallbackLookDelta);
+        }
+
+        public void SetPointerCaptureRequired(bool required)
+        {
+            pointerCaptureRequired = required;
+            if (!pointerCaptureRequired)
+            {
+                ClearWebPointerState();
+            }
+        }
+
+        public void SetPointerState(
+            bool locked,
+            bool fallbackActive,
+            Vector2 fallbackLookDelta)
+        {
+            bool wasGameplayActive = IsPointerGameplayActive;
             IsWebPointerLocked = locked;
             IsWebPointerFallbackActive = !locked && fallbackActive;
             WebPointerFallbackLookDelta = IsWebPointerFallbackActive
                 ? fallbackLookDelta
                 : Vector2.zero;
+            if (!wasGameplayActive && IsPointerGameplayActive)
+            {
+                pointerCapturedFrame = Time.frameCount;
+            }
+            else if (!IsPointerGameplayActive)
+            {
+                pointerCapturedFrame = -1;
+            }
         }
 
         public void ClearWebPointerState()

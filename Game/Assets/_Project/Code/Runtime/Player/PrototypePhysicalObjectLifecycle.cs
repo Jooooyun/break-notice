@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BreakNotice.Gameplay.Interaction
@@ -11,12 +12,23 @@ namespace BreakNotice.Gameplay.Interaction
         private const float CarryRotationCollisionStep = 2f;
         private const int CarryCollisionCapacity = 32;
         private const int CarryCollisionResolveIterations = 8;
+        private const int CollisionRestoreClearFixedSteps = 2;
+        private const float GripWorldBlockReleaseDelay = 0.05f;
 
         [SerializeField]
         private PrototypeInteractionStateOwner interactionOwner;
 
         [SerializeField]
         private Transform carryAnchor;
+
+        [SerializeField]
+        private ShowcaseBinderGripSocket lightBinderGripSocket;
+
+        [SerializeField]
+        private bool requireBoneTrackedLightGrip;
+
+        [SerializeField, Min(0.02f)]
+        private float maximumGripSeparation = 0.18f;
 
         [SerializeField, Min(0.1f)]
         private float acquisitionSpeed = 7f;
@@ -30,9 +42,6 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(0.1f)]
         private float mediumThrowSpeed = 8f;
 
-        [SerializeField]
-        private float upwardThrowSpeed = 0.8f;
-
         [SerializeField, Range(1f, 3f)]
         private float maximumThrowSpeedMultiplier = 1.6f;
 
@@ -41,9 +50,14 @@ namespace BreakNotice.Gameplay.Interaction
         private Rigidbody carriedBody;
         private Collider carriedCollider;
         private BoxCollider carriedBoxCollider;
-        private bool playerCollisionIgnored;
         private int carriedOriginalLayer;
         private bool carriedCameraCollisionIgnored;
+        private CarryCollisionLease activeCarryCollisionLease;
+        private readonly List<CarryCollisionLease> pendingCollisionRestores = new();
+        private uint nextCarryCollisionToken;
+        private bool gripWorldBlockDetectedThisStep;
+        private Vector3 gripWorldBlockNormalThisStep;
+        private float gripWorldBlockClearTimer;
         private uint nextThrowOriginSequence;
         private readonly RaycastHit[] carrySweepHits = new RaycastHit[CarryCollisionCapacity];
         private readonly Collider[] carryOverlapHits = new Collider[CarryCollisionCapacity];
@@ -66,6 +80,31 @@ namespace BreakNotice.Gameplay.Interaction
 
         public float MaximumThrowSpeedMultiplier => maximumThrowSpeedMultiplier;
 
+        public float GripSeparation { get; private set; }
+
+        public bool GripWorldBlocked { get; private set; }
+
+        public Vector3 GripWorldBlockNormal { get; private set; }
+
+        public bool GripSelfOverlap { get; private set; }
+
+        public bool GripPoseReached =>
+            !float.IsInfinity(GripSeparation) &&
+            GripSeparation <= maximumGripSeparation;
+
+        // Compatibility mirror.  It now means a confirmed world obstruction,
+        // never animation lag or player/carried-object self overlap.
+        public bool IsGripBlocked => GripWorldBlocked;
+
+        private void OnEnable()
+        {
+            EnsureCollisionLeaseIgnored(activeCarryCollisionLease);
+            foreach (CarryCollisionLease pending in pendingCollisionRestores)
+            {
+                EnsureCollisionLeaseIgnored(pending);
+            }
+        }
+
         public void Configure(
             PrototypeInteractionStateOwner owner,
             Transform authoredCarryAnchor,
@@ -78,6 +117,15 @@ namespace BreakNotice.Gameplay.Interaction
                 1f,
                 3f);
             playerController = GetComponent<CharacterController>();
+        }
+
+        public void ConfigureLightBinderGrip(
+            ShowcaseBinderGripSocket gripSocket,
+            float authoredMaximumGripSeparation = 0.18f)
+        {
+            lightBinderGripSocket = gripSocket;
+            requireBoneTrackedLightGrip = gripSocket != null;
+            maximumGripSeparation = Mathf.Max(0.02f, authoredMaximumGripSeparation);
         }
 
         public bool BeginCarry(PrototypeInteractionTarget target)
@@ -101,6 +149,14 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
+            if (target.WeightClass == PrototypeWeightClass.Light &&
+                requireBoneTrackedLightGrip &&
+                (lightBinderGripSocket == null ||
+                 !lightBinderGripSocket.TryGetWorldPose(out _, out _)))
+            {
+                return false;
+            }
+
             carriedTarget = target;
             carriedBody = body;
             carriedCollider = targetCollider;
@@ -111,12 +167,39 @@ namespace BreakNotice.Gameplay.Interaction
             carriedBody.angularVelocity = Vector3.zero;
             carriedBody.useGravity = false;
             carriedBody.isKinematic = true;
-            SetPlayerCollisionIgnored(true);
+            activeCarryCollisionLease = AcquireCarryCollisionLease(target, body);
+            EnsureCollisionLeaseIgnored(activeCarryCollisionLease);
             SetCarriedCameraCollisionIgnored(true);
+            ResetGripDiagnostics();
+            if (target.WeightClass == PrototypeWeightClass.Light &&
+                requireBoneTrackedLightGrip)
+            {
+                FollowLightGrip(true);
+            }
             return true;
         }
 
         public bool TryThrow(Vector3 requestedDirection, float charge01 = 0f)
+        {
+            Vector3 direction = requestedDirection.sqrMagnitude > 0.0001f
+                ? requestedDirection.normalized
+                : transform.forward;
+            return TryThrowResolved(direction, charge01);
+        }
+
+        public bool TryThrowAt(Vector3 frozenAimPoint, float charge01 = 0f)
+        {
+            if (carriedBody == null)
+            {
+                return false;
+            }
+
+            return TryThrowResolved(
+                ResolveAimDirection(carriedBody.worldCenterOfMass, frozenAimPoint),
+                charge01);
+        }
+
+        private bool TryThrowResolved(Vector3 requestedDirection, float charge01)
         {
             if (carriedTarget == null || carriedBody == null || interactionOwner == null)
             {
@@ -131,14 +214,15 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            SetPlayerCollisionIgnored(false);
             SetCarriedCameraCollisionIgnored(false);
             ApplyPhysicalThrow(target, body, requestedDirection, charge01);
+            QueueActiveCollisionLeaseForRestore(body);
 
             carriedTarget = null;
             carriedBody = null;
             carriedCollider = null;
             carriedBoxCollider = null;
+            ResetGripDiagnostics();
             interactionOwner.CompleteThrow(target);
             return true;
         }
@@ -169,6 +253,22 @@ namespace BreakNotice.Gameplay.Interaction
 
             ApplyPhysicalThrow(target, body, requestedDirection, charge01);
             return interactionOwner.CompleteThrow(target);
+        }
+
+        public bool TryThrowCommittedRelayTargetAt(
+            PrototypeInteractionTarget target,
+            Vector3 frozenAimPoint,
+            float charge01 = 0f)
+        {
+            Rigidbody body = target != null ? target.GetComponent<Rigidbody>() : null;
+            if (body == null)
+            {
+                return false;
+            }
+            return TryThrowCommittedRelayTarget(
+                target,
+                ResolveAimDirection(body.worldCenterOfMass, frozenAimPoint),
+                charge01);
         }
 
         public float GetThrowSpeed(PrototypeWeightClass weightClass)
@@ -203,13 +303,18 @@ namespace BreakNotice.Gameplay.Interaction
             float clampedCharge = Mathf.Clamp01(charge01);
             float speedMultiplier = GetThrowSpeedMultiplier(clampedCharge);
             float throwSpeed = GetThrowSpeed(target.WeightClass) * speedMultiplier;
-            Vector3 releaseVelocity = direction * throwSpeed + Vector3.up * upwardThrowSpeed;
+            Vector3 releaseVelocity = direction * throwSpeed;
 
             body.isKinematic = false;
             body.useGravity = true;
             body.linearVelocity = releaseVelocity;
-            body.angularVelocity = Vector3.up *
-                (target.WeightClass == PrototypeWeightClass.Light ? 4f : 2f);
+            Vector3 lateralAxis = Vector3.Cross(Vector3.up, direction).normalized;
+            if (lateralAxis.sqrMagnitude <= 0.0001f)
+            {
+                lateralAxis = transform.right;
+            }
+            body.angularVelocity = lateralAxis *
+                (target.WeightClass == PrototypeWeightClass.Light ? 4f : 0.5f);
             body.WakeUp();
 
             nextThrowOriginSequence++;
@@ -226,8 +331,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void DetachForReset()
         {
-            SetPlayerCollisionIgnored(false);
             SetCarriedCameraCollisionIgnored(false);
+            QueueActiveCollisionLeaseForRestore(carriedBody);
             if (carriedBody != null)
             {
                 carriedBody.isKinematic = false;
@@ -245,6 +350,7 @@ namespace BreakNotice.Gameplay.Interaction
             LastThrowCharge01 = 0f;
             LastThrowSpeedMultiplier = 1f;
             LastReleaseKineticEnergy = 0f;
+            ResetGripDiagnostics();
         }
 
         public void ClearThrowOriginForReset()
@@ -255,7 +361,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void FixedUpdate()
         {
-            if (carriedTarget == null || carriedBody == null || carryAnchor == null)
+            TryRestorePendingReleasedPlayerCollisions();
+            if (carriedTarget == null || carriedBody == null)
             {
                 return;
             }
@@ -265,6 +372,18 @@ namespace BreakNotice.Gameplay.Interaction
                 interactionOwner.CarriedTarget != carriedTarget)
             {
                 DetachForReset();
+                return;
+            }
+
+            EnsureCollisionLeaseIgnored(activeCarryCollisionLease);
+
+            if (carriedTarget.WeightClass == PrototypeWeightClass.Light &&
+                requireBoneTrackedLightGrip)
+            {
+                return;
+            }
+            if (carryAnchor == null)
+            {
                 return;
             }
 
@@ -282,6 +401,7 @@ namespace BreakNotice.Gameplay.Interaction
                 transform.rotation,
                 carryRotationSpeed * Time.fixedDeltaTime);
 
+            BeginGripWorldProbe();
             Quaternion currentRotation = carriedBody.rotation;
             nextPosition = ResolveCarryTranslation(before, nextPosition, currentRotation);
             if (WouldCarryPosePenetrate(nextPosition, currentRotation))
@@ -290,11 +410,131 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             nextRotation = ResolveCarryRotation(nextPosition, currentRotation, nextRotation);
-            TryRestorePlayerCollision(nextPosition, nextRotation);
 
             carriedBody.MovePosition(nextPosition);
             carriedBody.MoveRotation(nextRotation);
             AcquisitionPathLength += Vector3.Distance(before, nextPosition);
+            UpdateGripDiagnostics(destination, nextPosition, Time.fixedDeltaTime);
+        }
+
+        private Vector3 ResolveAimDirection(Vector3 releasePosition, Vector3 aimPoint)
+        {
+            Vector3 direction = aimPoint - releasePosition;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = transform.forward;
+            }
+            direction.Normalize();
+
+            float pitch = Mathf.Asin(Mathf.Clamp(direction.y, -1f, 1f)) *
+                Mathf.Rad2Deg;
+            float clampedPitch = Mathf.Clamp(pitch, -12f, 22f);
+            Vector3 planar = Vector3.ProjectOnPlane(direction, Vector3.up);
+            if (planar.sqrMagnitude <= 0.0001f)
+            {
+                planar = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+            }
+            planar.Normalize();
+            float radians = clampedPitch * Mathf.Deg2Rad;
+            return (planar * Mathf.Cos(radians) + Vector3.up * Mathf.Sin(radians)).normalized;
+        }
+
+        private void TryRestorePendingReleasedPlayerCollisions()
+        {
+            for (int index = pendingCollisionRestores.Count - 1; index >= 0; index--)
+            {
+                CarryCollisionLease lease = pendingCollisionRestores[index];
+                if (lease == null)
+                {
+                    pendingCollisionRestores.RemoveAt(index);
+                    continue;
+                }
+
+                EnsureCollisionLeaseIgnored(lease);
+                bool movingTowardPlayer = IsReleasedBodyMovingTowardPlayer(lease);
+                if (IsCollisionLeaseClear(lease) && !movingTowardPlayer)
+                {
+                    lease.ClearFixedSteps++;
+                }
+                else
+                {
+                    lease.ClearFixedSteps = 0;
+                }
+
+                if (lease.ClearFixedSteps < CollisionRestoreClearFixedSteps)
+                {
+                    continue;
+                }
+
+                RestoreCollisionLease(lease);
+                pendingCollisionRestores.RemoveAt(index);
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (carriedTarget == null || carriedBody == null ||
+                carriedTarget.WeightClass != PrototypeWeightClass.Light ||
+                !requireBoneTrackedLightGrip)
+            {
+                return;
+            }
+
+            if (interactionOwner == null ||
+                interactionOwner.HandState != PrototypeHandOwnershipState.Carrying ||
+                interactionOwner.CarriedTarget != carriedTarget)
+            {
+                DetachForReset();
+                return;
+            }
+
+            EnsureCollisionLeaseIgnored(activeCarryCollisionLease);
+            FollowLightGrip(false);
+        }
+
+        private void FollowLightGrip(bool snapAtContact)
+        {
+            BeginGripWorldProbe();
+            if (lightBinderGripSocket == null || carriedBody == null ||
+                !lightBinderGripSocket.TryGetWorldPose(
+                    out Vector3 destination,
+                    out Quaternion requestedRotation))
+            {
+                GripSeparation = float.PositiveInfinity;
+                GripWorldBlocked = false;
+                GripWorldBlockNormal = Vector3.zero;
+                gripWorldBlockClearTimer = 0f;
+                GripSelfOverlap = ComputeActiveCarrySelfOverlap();
+                return;
+            }
+
+            Vector3 before = carriedBody.position;
+            Quaternion currentRotation = carriedBody.rotation;
+            Vector3 nextPosition = ResolveCarryTranslation(
+                before,
+                destination,
+                currentRotation);
+            if (WouldCarryPosePenetrate(nextPosition, currentRotation))
+            {
+                nextPosition = ResolveCarryPenetration(
+                    before,
+                    nextPosition,
+                    currentRotation);
+            }
+
+            Quaternion nextRotation = ResolveCarryRotation(
+                nextPosition,
+                currentRotation,
+                requestedRotation);
+            carriedBody.position = nextPosition;
+            carriedBody.rotation = nextRotation;
+            AcquisitionPathLength += Vector3.Distance(before, nextPosition);
+            UpdateGripDiagnostics(destination, nextPosition, Time.deltaTime);
+
+            if (snapAtContact && GripSeparation <= CarryCollisionSkin)
+            {
+                GripSeparation = 0f;
+            }
         }
 
         private Vector3 ResolveCarryTranslation(
@@ -412,6 +652,7 @@ namespace BreakNotice.Gameplay.Interaction
                 {
                     permittedDistance = candidateDistance;
                     blockingNormal = hit.normal;
+                    RecordGripWorldBlock(hit.normal);
                 }
             }
 
@@ -538,10 +779,11 @@ namespace BreakNotice.Gameplay.Interaction
                         other,
                         other.transform.position,
                         other.transform.rotation,
-                        out _,
+                        out Vector3 separationDirection,
                         out float distance) &&
                     distance > CarryPenetrationTolerance)
                 {
+                    RecordGripWorldBlock(separationDirection);
                     return true;
                 }
             }
@@ -551,16 +793,21 @@ namespace BreakNotice.Gameplay.Interaction
 
         private bool IsCarryBlockingCollider(Collider other)
         {
-            bool belongsToPlayer = other != null &&
-                (other == playerController || other.transform.IsChildOf(transform));
             if (other == null ||
-                other == carriedCollider ||
+                IsInHierarchy(other.transform, transform) ||
+                (carriedTarget != null &&
+                 IsInHierarchy(other.transform, carriedTarget.transform)) ||
                 other.attachedRigidbody == carriedBody ||
-                (belongsToPlayer && playerCollisionIgnored))
+                other.GetComponentInParent<ShowcaseRunnerAgent>() != null ||
+                other.GetComponentInParent<ShowcaseMobileAllyController>() != null)
             {
                 return false;
             }
 
+            if (carriedCollider == null)
+            {
+                return false;
+            }
             if (Physics.GetIgnoreLayerCollision(
                     carriedCollider.gameObject.layer,
                     other.gameObject.layer))
@@ -569,31 +816,6 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             return !Physics.GetIgnoreCollision(carriedCollider, other);
-        }
-
-        private void TryRestorePlayerCollision(Vector3 position, Quaternion rotation)
-        {
-            if (!playerCollisionIgnored ||
-                playerController == null ||
-                carriedBoxCollider == null)
-            {
-                return;
-            }
-
-            bool overlapsPlayer = Physics.ComputePenetration(
-                carriedBoxCollider,
-                position,
-                rotation,
-                playerController,
-                playerController.transform.position,
-                playerController.transform.rotation,
-                out _,
-                out float distance) &&
-                distance > CarryPenetrationTolerance;
-            if (!overlapsPlayer)
-            {
-                SetPlayerCollisionIgnored(false);
-            }
         }
 
         private Vector3 GetCarryBoxCenter(Vector3 position, Quaternion rotation)
@@ -611,20 +833,296 @@ namespace BreakNotice.Gameplay.Interaction
             return Vector3.Scale(carriedBoxCollider.size * 0.5f, scale);
         }
 
-        private void SetPlayerCollisionIgnored(bool ignored)
+        private CarryCollisionLease AcquireCarryCollisionLease(
+            PrototypeInteractionTarget target,
+            Rigidbody body)
         {
+            for (int index = pendingCollisionRestores.Count - 1; index >= 0; index--)
+            {
+                CarryCollisionLease pending = pendingCollisionRestores[index];
+                if (pending == null || pending.Target != target)
+                {
+                    continue;
+                }
+
+                pendingCollisionRestores.RemoveAt(index);
+                pending.Body = body;
+                pending.ClearFixedSteps = 0;
+                pending.HasLastDistance = false;
+                return pending;
+            }
+
             if (playerController == null)
             {
                 playerController = GetComponent<CharacterController>();
             }
 
-            if (playerController == null || carriedCollider == null || playerCollisionIgnored == ignored)
+            Collider[] playerColliders = GetComponentsInChildren<Collider>(true);
+            Collider[] targetColliders = target.GetComponentsInChildren<Collider>(true);
+            List<CollisionPair> pairs = new();
+            foreach (Collider playerCollider in playerColliders)
+            {
+                if (playerCollider == null)
+                {
+                    continue;
+                }
+                foreach (Collider targetCollider in targetColliders)
+                {
+                    if (targetCollider == null || playerCollider == targetCollider)
+                    {
+                        continue;
+                    }
+                    pairs.Add(new CollisionPair(playerCollider, targetCollider));
+                }
+            }
+
+            nextCarryCollisionToken++;
+            return new CarryCollisionLease(
+                nextCarryCollisionToken,
+                target,
+                body,
+                playerColliders,
+                targetColliders,
+                pairs);
+        }
+
+        private static void EnsureCollisionLeaseIgnored(CarryCollisionLease lease)
+        {
+            if (lease == null)
             {
                 return;
             }
 
-            Physics.IgnoreCollision(playerController, carriedCollider, ignored);
-            playerCollisionIgnored = ignored;
+            foreach (CollisionPair pair in lease.Pairs)
+            {
+                if (!pair.IsValid || Physics.GetIgnoreCollision(pair.Player, pair.Target))
+                {
+                    continue;
+                }
+                Physics.IgnoreCollision(pair.Player, pair.Target, true);
+            }
+        }
+
+        private void QueueActiveCollisionLeaseForRestore(Rigidbody releasedBody)
+        {
+            if (activeCarryCollisionLease == null)
+            {
+                return;
+            }
+
+            activeCarryCollisionLease.Body = releasedBody;
+            activeCarryCollisionLease.ClearFixedSteps = 0;
+            activeCarryCollisionLease.HasLastDistance = false;
+            EnsureCollisionLeaseIgnored(activeCarryCollisionLease);
+            pendingCollisionRestores.Add(activeCarryCollisionLease);
+            activeCarryCollisionLease = null;
+        }
+
+        private static void RestoreCollisionLease(CarryCollisionLease lease)
+        {
+            if (lease == null)
+            {
+                return;
+            }
+            foreach (CollisionPair pair in lease.Pairs)
+            {
+                if (pair.IsValid)
+                {
+                    Physics.IgnoreCollision(pair.Player, pair.Target, false);
+                }
+            }
+        }
+
+        private bool IsCollisionLeaseClear(CarryCollisionLease lease)
+        {
+            foreach (CollisionPair pair in lease.Pairs)
+            {
+                if (!pair.IsValid || !pair.Player.enabled || !pair.Target.enabled ||
+                    !pair.Player.gameObject.activeInHierarchy ||
+                    !pair.Target.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+                if (Physics.ComputePenetration(
+                        pair.Player,
+                        pair.Player.transform.position,
+                        pair.Player.transform.rotation,
+                        pair.Target,
+                        pair.Target.transform.position,
+                        pair.Target.transform.rotation,
+                        out _,
+                        out float distance) &&
+                    distance > CarryPenetrationTolerance)
+                {
+                    return false;
+                }
+            }
+
+            if (playerController == null || !playerController.enabled)
+            {
+                return true;
+            }
+
+            GetCharacterControllerCapsule(
+                playerController,
+                out Vector3 bottom,
+                out Vector3 top,
+                out float radius);
+            float clearance = Mathf.Max(playerController.skinWidth, CarryCollisionSkin) + 0.01f;
+            int overlapCount = Physics.OverlapCapsuleNonAlloc(
+                bottom,
+                top,
+                radius + clearance,
+                carryOverlapHits,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore);
+            for (int index = 0; index < overlapCount; index++)
+            {
+                if (lease.ContainsTargetCollider(carryOverlapHits[index]))
+                {
+                    return false;
+                }
+            }
+            return overlapCount < CarryCollisionCapacity;
+        }
+
+        private bool IsReleasedBodyMovingTowardPlayer(CarryCollisionLease lease)
+        {
+            if (lease.Body == null || playerController == null)
+            {
+                return false;
+            }
+
+            Vector3 bodyPosition = lease.Body.worldCenterOfMass;
+            Vector3 playerPosition = playerController.bounds.center;
+            bodyPosition.y = 0f;
+            playerPosition.y = 0f;
+            float distance = Vector3.Distance(bodyPosition, playerPosition);
+            bool movingToward = lease.HasLastDistance &&
+                distance < lease.LastPlayerDistance - CarryPenetrationTolerance;
+            lease.LastPlayerDistance = distance;
+            lease.HasLastDistance = true;
+            return movingToward;
+        }
+
+        private void BeginGripWorldProbe()
+        {
+            gripWorldBlockDetectedThisStep = false;
+            gripWorldBlockNormalThisStep = Vector3.zero;
+        }
+
+        private void RecordGripWorldBlock(Vector3 normal)
+        {
+            Vector3 normalized = normal.sqrMagnitude > 0.0001f
+                ? normal.normalized
+                : Vector3.zero;
+            if (!gripWorldBlockDetectedThisStep ||
+                Mathf.Abs(normalized.y) < Mathf.Abs(gripWorldBlockNormalThisStep.y))
+            {
+                gripWorldBlockNormalThisStep = normalized;
+            }
+            gripWorldBlockDetectedThisStep = true;
+        }
+
+        private void UpdateGripDiagnostics(
+            Vector3 desiredGripPosition,
+            Vector3 actualPosition,
+            float deltaTime)
+        {
+            GripSeparation = Vector3.Distance(actualPosition, desiredGripPosition);
+            GripSelfOverlap = ComputeActiveCarrySelfOverlap();
+            bool confirmedWorldBlock = gripWorldBlockDetectedThisStep &&
+                GripSeparation > maximumGripSeparation;
+            if (confirmedWorldBlock)
+            {
+                GripWorldBlocked = true;
+                GripWorldBlockNormal = gripWorldBlockNormalThisStep;
+                gripWorldBlockClearTimer = 0f;
+                return;
+            }
+
+            if (!GripWorldBlocked)
+            {
+                GripWorldBlockNormal = Vector3.zero;
+                gripWorldBlockClearTimer = 0f;
+                return;
+            }
+
+            bool pathClearAndPoseReached = !gripWorldBlockDetectedThisStep &&
+                GripSeparation <= maximumGripSeparation;
+            gripWorldBlockClearTimer = pathClearAndPoseReached
+                ? gripWorldBlockClearTimer + Mathf.Max(0f, deltaTime)
+                : 0f;
+            if (gripWorldBlockClearTimer >= GripWorldBlockReleaseDelay)
+            {
+                GripWorldBlocked = false;
+                GripWorldBlockNormal = Vector3.zero;
+                gripWorldBlockClearTimer = 0f;
+            }
+        }
+
+        private bool ComputeActiveCarrySelfOverlap()
+        {
+            CarryCollisionLease lease = activeCarryCollisionLease;
+            if (lease == null)
+            {
+                return false;
+            }
+            foreach (CollisionPair pair in lease.Pairs)
+            {
+                if (!pair.IsValid || !pair.Player.enabled || !pair.Target.enabled)
+                {
+                    continue;
+                }
+                if (Physics.ComputePenetration(
+                        pair.Player,
+                        pair.Player.transform.position,
+                        pair.Player.transform.rotation,
+                        pair.Target,
+                        pair.Target.transform.position,
+                        pair.Target.transform.rotation,
+                        out _,
+                        out float distance) &&
+                    distance > CarryPenetrationTolerance)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ResetGripDiagnostics()
+        {
+            GripSeparation = 0f;
+            GripWorldBlocked = false;
+            GripWorldBlockNormal = Vector3.zero;
+            GripSelfOverlap = false;
+            gripWorldBlockDetectedThisStep = false;
+            gripWorldBlockNormalThisStep = Vector3.zero;
+            gripWorldBlockClearTimer = 0f;
+        }
+
+        private static bool IsInHierarchy(Transform candidate, Transform root)
+        {
+            return candidate != null && root != null &&
+                (candidate == root || candidate.IsChildOf(root));
+        }
+
+        private static void GetCharacterControllerCapsule(
+            CharacterController controller,
+            out Vector3 bottom,
+            out Vector3 top,
+            out float radius)
+        {
+            Vector3 scale = controller.transform.lossyScale;
+            float verticalScale = Mathf.Abs(scale.y);
+            float radialScale = Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.z));
+            radius = controller.radius * radialScale;
+            float height = Mathf.Max(radius * 2f, controller.height * verticalScale);
+            Vector3 center = controller.transform.TransformPoint(controller.center);
+            float halfSegment = Mathf.Max(0f, height * 0.5f - radius);
+            bottom = center - Vector3.up * halfSegment;
+            top = center + Vector3.up * halfSegment;
         }
 
         private void SetCarriedCameraCollisionIgnored(bool ignored)
@@ -648,6 +1146,64 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             carriedCameraCollisionIgnored = false;
+        }
+
+        private readonly struct CollisionPair
+        {
+            public CollisionPair(Collider player, Collider target)
+            {
+                Player = player;
+                Target = target;
+            }
+
+            public Collider Player { get; }
+            public Collider Target { get; }
+            public bool IsValid => Player != null && Target != null;
+        }
+
+        private sealed class CarryCollisionLease
+        {
+            public CarryCollisionLease(
+                uint token,
+                PrototypeInteractionTarget target,
+                Rigidbody body,
+                Collider[] playerColliders,
+                Collider[] targetColliders,
+                List<CollisionPair> pairs)
+            {
+                Token = token;
+                Target = target;
+                Body = body;
+                PlayerColliders = playerColliders;
+                TargetColliders = targetColliders;
+                Pairs = pairs;
+            }
+
+            public uint Token { get; }
+            public PrototypeInteractionTarget Target { get; }
+            public Rigidbody Body { get; set; }
+            public Collider[] PlayerColliders { get; }
+            public Collider[] TargetColliders { get; }
+            public List<CollisionPair> Pairs { get; }
+            public int ClearFixedSteps { get; set; }
+            public float LastPlayerDistance { get; set; }
+            public bool HasLastDistance { get; set; }
+
+            public bool ContainsTargetCollider(Collider value)
+            {
+                if (value == null)
+                {
+                    return false;
+                }
+                foreach (Collider targetCollider in TargetColliders)
+                {
+                    if (targetCollider == value)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
     }
 }

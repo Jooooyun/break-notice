@@ -59,8 +59,21 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.EqualTo(LayerMask.NameToLayer("Ignore Raycast")));
 
                 yield return new WaitForFixedUpdate();
+                Collider targetCollider = fixture.Target.GetComponent<Collider>();
+                Assert.That(
+                    Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
+                    Is.True,
+                    "Player/carried collision ownership must remain ignored for the full carry.");
                 Assert.That(fixture.Controller.ProcessThrow(), Is.True);
                 Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(originalLayer));
+                Assert.That(
+                    Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
+                    Is.True,
+                    "Physical release must enter pending restore instead of restoring immediately.");
+                yield return WaitForCollisionRestored(
+                    fixture.PlayerController,
+                    targetCollider,
+                    "Collision must restore after two consecutive clear FixedUpdates.");
 
                 Rigidbody body = fixture.Target.GetComponent<Rigidbody>();
                 body.linearVelocity = Vector3.zero;
@@ -76,9 +89,19 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Controller.BeginThrowCharge(), Is.True);
                 Assert.That(fixture.Controller.HasThrowCharge, Is.True);
                 fixture.Lifecycle.DetachForReset();
-                yield return null;
                 Assert.That(fixture.Target.gameObject.layer, Is.EqualTo(originalLayer));
+                yield return null;
                 Assert.That(fixture.Controller.HasThrowCharge, Is.False);
+                Assert.That(
+                    Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
+                    Is.True,
+                    "Reset detach must not restore collision before authored relocation.");
+                fixture.Target.transform.position = new Vector3(0f, 1f, 3f);
+                Physics.SyncTransforms();
+                yield return WaitForCollisionRestored(
+                    fixture.PlayerController,
+                    targetCollider,
+                    "Reset detach collision lease did not restore after authored relocation.");
             }
             finally
             {
@@ -102,6 +125,59 @@ namespace BreakNotice.LocomotionCamera.Tests
             yield return AssertCarryStopsBeforeSolidWall(
                 PrototypeWeightClass.Medium,
                 new Vector3(1.2f, 1.3f, 1.2f));
+        }
+
+        [UnityTest]
+        public IEnumerator CarryCollisionLease_IgnoresEveryHierarchyPairUntilClearDetach()
+        {
+            CarryFixture fixture = new CarryFixture(PrototypeWeightClass.Medium);
+            GameObject playerChild = new GameObject("PlayerChildCollider");
+            playerChild.transform.SetParent(fixture.PlayerTransform, false);
+            playerChild.transform.localPosition = new Vector3(0f, 1f, 0.15f);
+            BoxCollider playerChildCollider = playerChild.AddComponent<BoxCollider>();
+            playerChildCollider.size = new Vector3(0.35f, 0.35f, 0.35f);
+            GameObject targetChild = new GameObject("TargetChildCollider");
+            targetChild.transform.SetParent(fixture.Target.transform, false);
+            targetChild.transform.localPosition = new Vector3(0.2f, 0f, 0f);
+            BoxCollider targetChildCollider = targetChild.AddComponent<BoxCollider>();
+            targetChildCollider.size = new Vector3(0.2f, 0.2f, 0.2f);
+            Physics.SyncTransforms();
+
+            try
+            {
+                Assert.That(fixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
+                Collider[] playerColliders =
+                    fixture.PlayerTransform.GetComponentsInChildren<Collider>(true);
+                Collider[] targetColliders =
+                    fixture.Target.GetComponentsInChildren<Collider>(true);
+                for (int cycle = 0; cycle < 20; cycle++)
+                {
+                    fixture.PlayerTransform.rotation = Quaternion.Euler(
+                        0f,
+                        cycle % 2 == 0 ? 90f : -90f,
+                        0f);
+                    yield return new WaitForFixedUpdate();
+                    AssertAllPairsIgnored(playerColliders, targetColliders, true);
+                    Assert.That(fixture.Lifecycle.GripWorldBlocked, Is.False,
+                        "Player/carried self geometry must never become a world grip block.");
+                }
+
+                Assert.That(fixture.Controller.ProcessThrow(), Is.True);
+                AssertAllPairsIgnored(playerColliders, targetColliders, true);
+                Rigidbody body = fixture.Target.GetComponent<Rigidbody>();
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+                body.position = fixture.PlayerTransform.position + Vector3.forward * 4f;
+                Physics.SyncTransforms();
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
+                AssertAllPairsIgnored(playerColliders, targetColliders, false);
+            }
+            finally
+            {
+                fixture.Dispose();
+            }
         }
 
         [UnityTest]
@@ -292,6 +368,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                             target)),
                         Is.True,
                         target.RuntimeInstanceKey);
+                    Assert.That(owner.TryCompleteAcquisition(target), Is.True,
+                        target.RuntimeInstanceKey);
                     Assert.That(lifecycle.BeginCarry(target), Is.True, target.RuntimeInstanceKey);
 
                     for (int step = 0; step < 4; step++)
@@ -357,8 +435,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Collider wallCollider = wall.GetComponent<Collider>();
                 Assert.That(
                     Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
-                    Is.False,
-                    $"{weightClass} carry must restore player collision after acquisition clears the player.");
+                    Is.True,
+                    $"{weightClass} carry must keep every player/object pair ignored until detach.");
                 for (int step = 0; step < 36; step++)
                 {
                     fixture.PlayerController.Move(Vector3.forward * 0.08f);
@@ -394,7 +472,18 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Lifecycle.ThrowOriginCount, Is.EqualTo(1));
                 Assert.That(
                     Physics.GetIgnoreCollision(fixture.PlayerController, targetCollider),
-                    Is.False);
+                    Is.True,
+                    "Release collision restoration must be deferred while clearance is unresolved.");
+                Rigidbody releasedBody = fixture.Target.GetComponent<Rigidbody>();
+                releasedBody.linearVelocity = Vector3.zero;
+                releasedBody.angularVelocity = Vector3.zero;
+                releasedBody.position = fixture.PlayerTransform.position +
+                    Vector3.up + Vector3.forward * 3f;
+                Physics.SyncTransforms();
+                yield return WaitForCollisionRestored(
+                    fixture.PlayerController,
+                    targetCollider,
+                    $"{weightClass} release collision lease did not restore after clearance.");
             }
             finally
             {
@@ -445,10 +534,50 @@ namespace BreakNotice.LocomotionCamera.Tests
                 fixture.PlayerController.transform.rotation,
                 out _,
                 out float playerPenetrationDistance);
+            bool hasMeaningfulSelfOverlap = overlapsPlayer &&
+                playerPenetrationDistance > 0.001f;
             Assert.That(
-                overlapsPlayer && playerPenetrationDistance > 0.001f,
+                fixture.Lifecycle.GripSelfOverlap,
+                Is.EqualTo(hasMeaningfulSelfOverlap),
+                $"{weightClass} carry self-overlap diagnostics drifted from physics.");
+        }
+
+        private static void AssertAllPairsIgnored(
+            Collider[] playerColliders,
+            Collider[] targetColliders,
+            bool expected)
+        {
+            foreach (Collider playerCollider in playerColliders)
+            {
+                foreach (Collider targetCollider in targetColliders)
+                {
+                    Assert.That(
+                        Physics.GetIgnoreCollision(playerCollider, targetCollider),
+                        Is.EqualTo(expected),
+                        $"{playerCollider.name} x {targetCollider.name}");
+                }
+            }
+        }
+
+        private static IEnumerator WaitForCollisionRestored(
+            Collider playerCollider,
+            Collider targetCollider,
+            string failureMessage,
+            int maximumFixedSteps = 8)
+        {
+            for (int step = 0; step < maximumFixedSteps; step++)
+            {
+                yield return new WaitForFixedUpdate();
+                if (!Physics.GetIgnoreCollision(playerCollider, targetCollider))
+                {
+                    yield break;
+                }
+            }
+
+            Assert.That(
+                Physics.GetIgnoreCollision(playerCollider, targetCollider),
                 Is.False,
-                $"{weightClass} carry penetrated the player by {playerPenetrationDistance}.");
+                failureMessage);
         }
 
         private sealed class CarryFixture

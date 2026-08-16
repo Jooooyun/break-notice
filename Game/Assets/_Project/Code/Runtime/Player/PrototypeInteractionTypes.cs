@@ -27,6 +27,7 @@ namespace BreakNotice.Gameplay.Interaction
     public enum PrototypeHandOwnershipState
     {
         Free,
+        AcquisitionCommitted,
         Carrying,
         ThrowCommitted,
         HeavyCommitted

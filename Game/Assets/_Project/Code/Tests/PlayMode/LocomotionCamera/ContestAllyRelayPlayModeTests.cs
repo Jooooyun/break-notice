@@ -155,6 +155,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 fixture.View.transform.rotation = Quaternion.LookRotation(
                     binderCenter + Vector3.right * 1.2f - fixture.View.transform.position);
                 Physics.SyncTransforms();
+                yield return null;
 
                 Ray centreRay = new Ray(
                     fixture.View.transform.position,
@@ -420,6 +421,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderOne, out _), Is.True);
                 yield return fixture.WaitForRelease();
                 fixture.AimAt(fixture.BinderOne);
+                yield return null;
 
                 PrototypeInteractionDecision decision =
                     fixture.Interaction.ProcessInteractPrimary(false);
@@ -448,6 +450,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Interaction.ProcessThrow(), Is.True);
                 yield return fixture.WaitForRelease();
                 fixture.AimAt(fixture.BinderOne);
+                yield return null;
 
                 PrototypeInteractionDecision decision =
                     fixture.Interaction.ProcessInteractPrimary(false);
@@ -486,6 +489,7 @@ namespace BreakNotice.LocomotionCamera.Tests
 
                 yield return fixture.WaitForRelease();
                 fixture.AimAt(fixture.BinderOne);
+                yield return null;
                 PrototypeInteractionDecision decision =
                     fixture.Interaction.ProcessInteractPrimary(false);
 
@@ -745,6 +749,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Relay.TryRequestSupply(fixture.BinderOne, out _), Is.True);
                 yield return fixture.WaitForRelease();
                 fixture.AimAt(fixture.BinderOne);
+                yield return null;
                 Assert.That(fixture.Interaction.ProcessInteractPrimary(false).IsAccepted, Is.True);
                 yield return new WaitForFixedUpdate();
                 Assert.That(fixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
@@ -774,6 +779,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(fixture.Interaction.ProcessThrow(), Is.True);
                 yield return fixture.WaitForRelease();
                 fixture.AimAt(fixture.BinderOne);
+                yield return null;
                 Assert.That(fixture.Interaction.ProcessInteractPrimary(false).IsAccepted, Is.True);
                 Assert.That(fixture.Lifecycle.ThrowOriginCount, Is.EqualTo(1));
 
@@ -826,6 +832,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                          { fixture.DirectBinder, fixture.DirectChair })
                 {
                     fixture.AimAt(target);
+                    yield return null;
                     PrototypeInteractionDecision decision =
                         fixture.Interaction.ProcessInteractPrimary(false);
                     Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Scoop));

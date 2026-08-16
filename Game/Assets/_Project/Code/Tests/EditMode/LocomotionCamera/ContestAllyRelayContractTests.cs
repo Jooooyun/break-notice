@@ -88,6 +88,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 true);
             Assert.That(fixture.Owner.TryCommit(
                 PrototypeInteractionDecision.Accept(PrototypeInteractionOutcome.Scoop, direct)), Is.True);
+            Assert.That(fixture.Owner.TryCompleteAcquisition(direct), Is.True);
 
             Assert.That(
                 fixture.Relay.TryRequestSupply(fixture.BinderOne, out var rejection),
@@ -229,6 +230,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                 fixture.Owner.CreateContext(false, fixture.BinderOne));
 
             Assert.That(fixture.Owner.TryCommit(catchDecision), Is.True);
+            Assert.That(fixture.Owner.HandState,
+                Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
+            Assert.That(fixture.Owner.AcquisitionCommittedTarget,
+                Is.SameAs(fixture.BinderOne));
+            Assert.That(fixture.Owner.TryCompleteAcquisition(fixture.BinderOne), Is.True);
             Assert.That(fixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
             Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(fixture.BinderOne));
             Assert.That(fixture.Owner.RelayState, Is.EqualTo(PrototypeRelayReservationState.None));

@@ -66,7 +66,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator ShortGrabQRescueAndCombatTagAwardOneBreakBadge()
+        public IEnumerator ShortGrab_RemainsDisabledUntilApprovedAnimationSourceExists()
         {
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode(
                 S6ScenePath,
@@ -87,19 +87,13 @@ namespace BreakNotice.LocomotionCamera.Tests
             ally.transform.position = interaction.transform.position + Vector3.right * 1.5f;
             Physics.SyncTransforms();
             Assert.That(pressure.TryAcquireAttackToken(runner), Is.True);
-            Assert.That(runner.TryCommitShortGrab(), Is.True);
-            Assert.That(pressure.PlayerGrabbed, Is.True);
-            Assert.That(team.ResolveCurrentQContext(), Is.EqualTo(ShowcaseQContext.BreakGrab));
-            Assert.That(interaction.ProcessTeamContextQ(), Is.True);
+            Assert.That(runner.TryCommitShortGrab(), Is.False);
             Assert.That(pressure.PlayerGrabbed, Is.False);
-            Assert.That(team.HasBreak, Is.True);
-            Assert.That(runner.State, Is.EqualTo(ShowcaseRunnerState.Staggered));
-
-            Assert.That(team.ResolveCurrentQContext(), Is.EqualTo(ShowcaseQContext.CombatTag));
-            Assert.That(interaction.ProcessTeamContextQ(), Is.True);
-            Assert.That(team.BadgeCount, Is.EqualTo(1));
-            Assert.That(pressure.RescueCount, Is.EqualTo(1));
-            Assert.That(pressure.CombatTagCount, Is.EqualTo(1));
+            Assert.That(team.ResolveCurrentQContext(), Is.Not.EqualTo(ShowcaseQContext.BreakGrab));
+            Assert.That(team.HasBreak, Is.False);
+            Assert.That(team.BadgeCount, Is.Zero);
+            Assert.That(pressure.RescueCount, Is.Zero);
+            pressure.ReleaseAttackToken(runner);
         }
 
         [UnityTest]

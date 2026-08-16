@@ -51,7 +51,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             locomotion = player.GetComponent<ThirdPersonLocomotion>();
             cameraRig = cameraRigObject.GetComponent<ThirdPersonCameraRig>();
             cameraRig.Configure(player.transform, logicalInput);
-            locomotion.ConfigureCamera(cameraRig.OutputCamera.transform);
+            locomotion.ConfigureCamera(cameraRig.GameplayMovementReference);
 
             Physics.SyncTransforms();
             QueueGamepadState(default);
@@ -105,7 +105,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             }
 
             Vector3 displacement = player.transform.position - initialPosition;
-            Assert.That(new Vector2(displacement.x, displacement.z).magnitude, Is.GreaterThan(0.01f));
+            Assert.That(new Vector2(displacement.x, displacement.z).magnitude, Is.GreaterThan(0.006f));
         }
 
         [UnityTest]
@@ -221,13 +221,14 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator NormalCamera_UsesResidentEvilShoulderComposition()
+        public IEnumerator NormalCamera_UsesLeonCoreProfile()
         {
             yield return null;
 
-            Assert.That(cameraRig.CurrentDistance, Is.EqualTo(2.5f).Within(0.001f));
-            Assert.That(cameraRig.CurrentFieldOfView, Is.EqualTo(52f).Within(0.001f));
-            Assert.That(cameraRig.CurrentShoulderOffset.x, Is.EqualTo(0.9f).Within(0.001f));
+            Assert.That(cameraRig.CoreMode, Is.EqualTo(CameraCoreMode.Normal));
+            Assert.That(cameraRig.CurrentDistance, Is.EqualTo(2.55f).Within(0.001f));
+            Assert.That(cameraRig.CurrentFieldOfView, Is.EqualTo(50f).Within(0.001f));
+            Assert.That(cameraRig.CurrentShoulderOffset.x, Is.EqualTo(0.85f).Within(0.001f));
             Assert.That(cameraRig.CurrentShoulderOffset.y, Is.EqualTo(0f).Within(0.001f));
             Assert.That(cameraRig.CurrentVerticalArmLength, Is.EqualTo(0.1f).Within(0.001f));
             Assert.That(IsFinite(cameraRig.OutputCamera.transform.position), Is.True);
@@ -235,26 +236,49 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator NormalCamera_FramesPlayerOnLeftThirdAtSixteenByNine()
+        public IEnumerator SprintCamera_PullsBackWithoutFovPumpingAndReturnsToNormal()
+        {
+            QueueMobilityGamepadState(Vector2.up, true, false);
+            yield return new WaitForSecondsRealtime(0.25f);
+
+            Assert.That(locomotion.IsSprinting, Is.True);
+            Assert.That(cameraRig.CoreMode, Is.EqualTo(CameraCoreMode.Sprint));
+            Assert.That(cameraRig.SprintBlend, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(cameraRig.CurrentDistance, Is.EqualTo(2.7f).Within(0.001f));
+            Assert.That(cameraRig.CurrentFieldOfView, Is.EqualTo(50f).Within(0.001f));
+            Assert.That(cameraRig.CurrentShoulderOffset.x, Is.EqualTo(0.85f).Within(0.001f));
+
+            QueueGamepadState(default);
+            yield return new WaitForSecondsRealtime(0.25f);
+
+            Assert.That(cameraRig.CoreMode, Is.EqualTo(CameraCoreMode.Normal));
+            Assert.That(cameraRig.SprintBlend, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(cameraRig.CurrentDistance, Is.EqualTo(2.55f).Within(0.001f));
+            Assert.That(cameraRig.CurrentFieldOfView, Is.EqualTo(50f).Within(0.001f));
+        }
+
+        [UnityTest]
+        public IEnumerator NormalCamera_KeepsGrayboxProxyVisibleAtSixteenByNine()
         {
             cameraRig.OutputCamera.aspect = 16f / 9f;
             yield return null;
             yield return null;
 
-            Vector3 chestViewport = cameraRig.OutputCamera.WorldToViewportPoint(
-                player.transform.position + Vector3.up * 1.25f);
-            Vector3 headViewport = cameraRig.OutputCamera.WorldToViewportPoint(
-                player.transform.position + Vector3.up * 1.75f);
+            Vector3 lowerProxyViewport = cameraRig.OutputCamera.WorldToViewportPoint(
+                player.transform.position + Vector3.up * 0.5f);
+            Vector3 upperProxyViewport = cameraRig.OutputCamera.WorldToViewportPoint(
+                player.transform.position + Vector3.up * 0.9f);
 
             string framingContext =
                 $"player={player.transform.position} camera={cameraRig.OutputCamera.transform.position} " +
-                $"cameraForward={cameraRig.OutputCamera.transform.forward} chest={chestViewport} head={headViewport}";
-            Assert.That(chestViewport.z, Is.GreaterThan(0f), framingContext);
-            Assert.That(headViewport.z, Is.GreaterThan(0f), framingContext);
-            Assert.That(chestViewport.x, Is.InRange(0.2f, 0.42f));
-            Assert.That(headViewport.x, Is.InRange(0.2f, 0.42f));
-            Assert.That(chestViewport.y, Is.InRange(0.28f, 0.68f));
-            Assert.That(headViewport.y, Is.InRange(0.55f, 0.9f));
+                $"cameraForward={cameraRig.OutputCamera.transform.forward} " +
+                $"lowerProxy={lowerProxyViewport} upperProxy={upperProxyViewport}";
+            Assert.That(lowerProxyViewport.z, Is.GreaterThan(0f), framingContext);
+            Assert.That(upperProxyViewport.z, Is.GreaterThan(0f), framingContext);
+            Assert.That(lowerProxyViewport.x, Is.InRange(0.2f, 0.42f), framingContext);
+            Assert.That(upperProxyViewport.x, Is.InRange(0.2f, 0.42f), framingContext);
+            Assert.That(lowerProxyViewport.y, Is.InRange(0.2f, 0.8f), framingContext);
+            Assert.That(upperProxyViewport.y, Is.InRange(0.35f, 0.95f), framingContext);
         }
 
         [UnityTest]
@@ -281,10 +305,11 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             yield return new WaitForSecondsRealtime(0.25f);
             Assert.That(cameraRig.AimBlend, Is.EqualTo(1f).Within(0.001f));
-            Assert.That(cameraRig.CurrentDistance, Is.EqualTo(1.85f).Within(0.001f));
-            Assert.That(cameraRig.CurrentFieldOfView, Is.EqualTo(45f).Within(0.001f));
-            Assert.That(cameraRig.CurrentShoulderOffset.x, Is.EqualTo(0.78f).Within(0.001f));
-            Assert.That(cameraRig.CurrentShoulderOffset.y, Is.EqualTo(0.04f).Within(0.001f));
+            Assert.That(cameraRig.CoreMode, Is.EqualTo(CameraCoreMode.Aim));
+            Assert.That(cameraRig.CurrentDistance, Is.EqualTo(1.75f).Within(0.001f));
+            Assert.That(cameraRig.CurrentFieldOfView, Is.EqualTo(48f).Within(0.001f));
+            Assert.That(cameraRig.CurrentShoulderOffset.x, Is.EqualTo(0.75f).Within(0.001f));
+            Assert.That(cameraRig.CurrentShoulderOffset.y, Is.EqualTo(0f).Within(0.001f));
             Assert.That(cameraRig.CurrentVerticalArmLength, Is.EqualTo(0.08f).Within(0.001f));
 
             QueueGamepadState(default);
@@ -297,6 +322,83 @@ namespace BreakNotice.LocomotionCamera.Tests
             yield return new WaitForSecondsRealtime(0.25f);
             Assert.That(cameraRig.AimBlend, Is.EqualTo(0f).Within(0.001f));
             Assert.That(cameraRig.CurrentDistance, Is.EqualTo(normalDistance).Within(0.001f));
+        }
+
+        [UnityTest]
+        public IEnumerator AimMovement_UsesCameraRelativeStrafeAndBoundedBodyAlignment()
+        {
+            player.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+            Vector3 start = player.transform.position;
+            QueueGamepadState(new GamepadState
+            {
+                leftTrigger = 1f,
+                leftStick = Vector2.right
+            });
+
+            yield return new WaitForSecondsRealtime(0.3f);
+
+            Vector3 cameraForward = Vector3.ProjectOnPlane(
+                cameraRig.OutputCamera.transform.forward,
+                Vector3.up).normalized;
+            float yawError = Vector3.Angle(player.transform.forward, cameraForward);
+            Vector3 displacement = player.transform.position - start;
+            displacement.y = 0f;
+            Assert.That(cameraRig.IsAiming, Is.True);
+            Assert.That(yawError, Is.LessThan(8f));
+            Assert.That(displacement.magnitude, Is.GreaterThan(0.05f));
+            Assert.That(
+                Mathf.Abs(Vector3.Dot(displacement.normalized, cameraForward)),
+                Is.LessThan(0.35f),
+                "Aim left/right input must strafe rather than turn into forward locomotion.");
+        }
+
+        [UnityTest]
+        public IEnumerator FinalCameraSnapshot_IsCurrentBrainOutputAndCenterOpticalRay()
+        {
+            FinalCameraSnapshot snapshot = FinalCameraSnapshot.Invalid(-1);
+            void CaptureSnapshot(CinemachineBrain brain)
+            {
+                if (brain != null && brain.OutputCamera == cameraRig.OutputCamera)
+                {
+                    cameraRig.TryGetFinalCameraSnapshot(out snapshot);
+                }
+            }
+
+            CinemachineCore.CameraUpdatedEvent.AddListener(CaptureSnapshot);
+            try
+            {
+                yield return null;
+                yield return null;
+            }
+            finally
+            {
+                CinemachineCore.CameraUpdatedEvent.RemoveListener(CaptureSnapshot);
+            }
+
+            Assert.That(snapshot.IsValid, Is.True);
+            Assert.That(snapshot.FrameId, Is.InRange(Time.frameCount - 1, Time.frameCount));
+            Assert.That(snapshot.ProjectionMode,
+                Is.EqualTo(FinalCameraProjectionMode.Perspective));
+            Assert.That(snapshot.ActualCameraTransformPosition,
+                Is.EqualTo(cameraRig.OutputCamera.transform.position));
+            Assert.That(
+                Vector3.Dot(snapshot.CenterViewRay.direction,
+                    cameraRig.OutputCamera.transform.forward),
+                Is.GreaterThan(0.9999f));
+            Assert.That(
+                Vector3.Distance(
+                    snapshot.CenterViewRay.origin,
+                    snapshot.ActualCameraTransformPosition),
+                Is.EqualTo(snapshot.NearClipPlane).Within(0.002f));
+
+            Vector3 centerPoint = snapshot.CenterViewRay.GetPoint(10f);
+            Vector3 viewport = cameraRig.OutputCamera.WorldToViewportPoint(centerPoint);
+            float horizontalPixelError =
+                Mathf.Abs(viewport.x - 0.5f) * cameraRig.OutputCamera.pixelWidth;
+            float verticalPixelError =
+                Mathf.Abs(viewport.y - 0.5f) * cameraRig.OutputCamera.pixelHeight;
+            Assert.That(horizontalPixelError, Is.LessThanOrEqualTo(1f));
+            Assert.That(verticalPixelError, Is.LessThanOrEqualTo(1f));
         }
 
         [UnityTest]
@@ -343,38 +445,28 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator CameraCollision_IgnoresCarryLayerButStillResolvesAgainstWalls()
+        public IEnumerator CameraCollision_UsesSinglePreBrainSolverAndIgnoresDynamicProps()
         {
             CinemachineThirdPersonFollow thirdPersonFollow =
                 cameraRigObject.GetComponentInChildren<CinemachineThirdPersonFollow>();
             Assert.That(thirdPersonFollow, Is.Not.Null);
+            Assert.That(thirdPersonFollow.AvoidObstacles.Enabled, Is.False);
+            Assert.That(thirdPersonFollow.AvoidObstacles.CollisionFilter.value, Is.Zero);
+            Assert.That(cameraRig.PostBrainTransformWriteCount, Is.Zero);
 
-            int collisionMask = thirdPersonFollow.AvoidObstacles.CollisionFilter.value;
-            Assert.That(collisionMask & (1 << 0), Is.Not.EqualTo(0));
-            Assert.That(
-                collisionMask & Physics.IgnoreRaycastLayer,
-                Is.EqualTo(0));
-            Assert.That(thirdPersonFollow.AvoidObstacles.IgnoreTag, Is.EqualTo("Player"));
-            Assert.That(player.CompareTag("Player"), Is.True);
-
-            cameraRig.enabled = false;
             Transform orbitTarget = cameraRigObject.transform.Find("OrbitTarget");
             Assert.That(orbitTarget, Is.Not.Null);
-            orbitTarget.position = player.transform.position + Vector3.up * 1.45f;
-            orbitTarget.rotation = Quaternion.Euler(0f, 180f, 0f);
-
-            yield return null;
-            yield return null;
+            yield return new WaitForSecondsRealtime(0.1f);
 
             thirdPersonFollow.GetRigPositions(
                 out _,
                 out _,
                 out Vector3 handPosition);
-            Vector3 boomDirection = orbitTarget.forward * -1f;
+            Vector3 boomDirection =
+                (cameraRig.OutputCamera.transform.position - handPosition).normalized;
 
             GameObject carriedObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            carriedObject.name = "CameraIgnoredCarriedObject";
-            carriedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            carriedObject.name = "CameraSoftDynamicProp";
             carriedObject.transform.position = handPosition + boomDirection * 1f;
             carriedObject.transform.localScale = Vector3.one * 0.8f;
 
@@ -382,6 +474,9 @@ namespace BreakNotice.LocomotionCamera.Tests
             wall.name = "CameraBlockingWall";
             wall.transform.position = handPosition + boomDirection * 2.2f;
             wall.transform.localScale = new Vector3(4f, 4f, 0.25f);
+            int staticWorldLayer = LayerMask.NameToLayer("CameraStaticWorld");
+            Assert.That(staticWorldLayer, Is.GreaterThanOrEqualTo(0));
+            wall.layer = staticWorldLayer;
             Collider wallCollider = wall.GetComponent<Collider>();
 
             try
@@ -391,9 +486,32 @@ namespace BreakNotice.LocomotionCamera.Tests
                 yield return null;
                 yield return null;
 
-                Assert.That(thirdPersonFollow.CurrentObstacle, Is.SameAs(wallCollider));
+                Assert.That(cameraRig.CurrentBlockingCollider, Is.SameAs(wallCollider));
+                Assert.That(cameraRig.HardConstraintActiveThisFrame, Is.True);
+                Assert.That(cameraRig.ConstraintEvaluationsThisFrame, Is.EqualTo(1));
+                Assert.That(cameraRig.PostBrainTransformWriteCount, Is.Zero);
                 Assert.That(IsFinite(cameraRig.OutputCamera.transform.position), Is.True);
                 Assert.That(IsFinite(cameraRig.OutputCamera.transform.rotation), Is.True);
+
+                wall.transform.position += Vector3.up * 20f;
+                Physics.SyncTransforms();
+                float recoveryDeadline = Time.realtimeSinceStartup + 1.2f;
+                while ((cameraRig.HardConstraintActiveThisFrame ||
+                        cameraRig.SolvedShoulderScale < 0.999f ||
+                        cameraRig.SafeBoomFraction < 0.999f) &&
+                       Time.realtimeSinceStartup < recoveryDeadline)
+                {
+                    yield return null;
+                }
+
+                Assert.That(cameraRig.HardConstraintActiveThisFrame, Is.False);
+                Assert.That(cameraRig.SolvedShoulderScale, Is.EqualTo(1f).Within(0.001f));
+                Assert.That(cameraRig.SafeBoomFraction, Is.EqualTo(1f).Within(0.001f));
+                Assert.That(cameraRig.CurrentBlockingCollider, Is.Null);
+                Assert.That(locomotion.MovementReference,
+                    Is.SameAs(cameraRig.GameplayMovementReference));
+                Assert.That(locomotion.MovementReference,
+                    Is.Not.SameAs(cameraRig.OutputCamera.transform));
             }
             finally
             {
@@ -515,6 +633,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                     PrototypeInteractionOutcome.Scoop,
                     target)),
                 Is.True);
+            Assert.That(owner.TryCompleteAcquisition(target), Is.True);
         }
 
         private float GetExpectedGroundedPlayerY()

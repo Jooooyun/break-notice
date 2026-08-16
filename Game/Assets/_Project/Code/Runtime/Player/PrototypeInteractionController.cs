@@ -5,6 +5,47 @@ using UnityEngine;
 
 namespace BreakNotice.Gameplay.Interaction
 {
+    public enum PrototypeThrowPresentationPhase
+    {
+        None,
+        ChargingDirectCarry,
+        ReleaseAccepted
+    }
+
+    public readonly struct PrototypeThrowPresentationSnapshot
+    {
+        public PrototypeThrowPresentationSnapshot(
+            uint sequenceId,
+            PrototypeThrowPresentationPhase phase,
+            PrototypeInteractionTarget target,
+            float charge01,
+            float startedTime,
+            float releasedTime)
+        {
+            SequenceId = sequenceId;
+            Phase = phase;
+            Target = target;
+            Charge01 = Mathf.Clamp01(charge01);
+            StartedTime = startedTime;
+            ReleasedTime = releasedTime;
+        }
+
+        public uint SequenceId { get; }
+
+        public PrototypeThrowPresentationPhase Phase { get; }
+
+        public PrototypeInteractionTarget Target { get; }
+
+        public float Charge01 { get; }
+
+        public float StartedTime { get; }
+
+        public float ReleasedTime { get; }
+
+        public bool IsValid => Phase != PrototypeThrowPresentationPhase.None &&
+            Target != null;
+    }
+
     [DefaultExecutionOrder(100)]
     [DisallowMultipleComponent]
     public sealed class PrototypeInteractionController : MonoBehaviour
@@ -78,6 +119,13 @@ namespace BreakNotice.Gameplay.Interaction
         private bool throwChargeHeld;
         private float throwChargeStartedAt;
         private float frozenThrowCharge01;
+        private uint throwPresentationSequence;
+        private PrototypeThrowPresentationPhase throwPresentationPhase;
+        private PrototypeInteractionTarget throwPresentationTarget;
+        private float throwPresentationStartedAt;
+        private float throwPresentationReleasedAt;
+        private PrototypeInteractionTarget presentedTargetSnapshot;
+        private bool hasPresentedTargetSnapshot;
 #if UNITY_WEBGL && !UNITY_EDITOR
         private bool pointerWasLocked;
 #endif
@@ -150,6 +198,20 @@ namespace BreakNotice.Gameplay.Interaction
                 ? CalculateThrowCharge01(Time.unscaledTime - throwChargeStartedAt)
                 : frozenThrowCharge01;
 
+        public PrototypeThrowPresentationSnapshot ThrowPresentation =>
+            new PrototypeThrowPresentationSnapshot(
+                throwPresentationSequence,
+                throwPresentationPhase,
+                throwPresentationTarget,
+                throwPresentationPhase == PrototypeThrowPresentationPhase.None
+                    ? 0f
+                    : throwPresentationPhase ==
+                      PrototypeThrowPresentationPhase.ReleaseAccepted
+                        ? frozenThrowCharge01
+                        : ThrowCharge01,
+                throwPresentationStartedAt,
+                throwPresentationReleasedAt);
+
         public Camera ViewCamera => viewTransform != null
             ? viewTransform.GetComponent<Camera>()
             : null;
@@ -174,13 +236,14 @@ namespace BreakNotice.Gameplay.Interaction
             showcasePlayerCombatController ??= GetComponent<ShowcasePlayerCombatController>();
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             if (interactionOwner == null)
             {
                 return;
             }
 
+            UpdateThrowPresentationLifecycle();
             ValidateThrowChargeOwnership();
             if (logicalInput == null)
             {
@@ -188,14 +251,6 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             bool isAiming = logicalInput.Snapshot.Aim;
-            RefreshTarget(isAiming);
-            if (allyRelayController == null ||
-                !allyRelayController.RequiresExplicitFetch ||
-                (allyRelayController.PreparedTarget == null &&
-                 allyRelayController.RelayPhase == PrototypeRelayPhase.None))
-            {
-                CurrentAllyFetchCandidate = null;
-            }
             if (logicalInput.Snapshot.ResetEncounter)
             {
                 // Reset owns this entire logical frame even though the authored
@@ -223,7 +278,9 @@ namespace BreakNotice.Gameplay.Interaction
                 {
                     showcaseRunnerPressureController?.TryPlayerShove();
                 }
-                ClearThrowCharge();
+                ClearThrowCharge(
+                    throwPresentationPhase !=
+                    PrototypeThrowPresentationPhase.ReleaseAccepted);
                 return;
             }
 
@@ -295,6 +352,25 @@ namespace BreakNotice.Gameplay.Interaction
             else if (throwChargeHeld && !logicalInput.Snapshot.ThrowHeld)
             {
                 SuspendOrCancelThrowCharge();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (interactionOwner == null || logicalInput == null)
+            {
+                return;
+            }
+
+            RefreshTarget(logicalInput.Snapshot.Aim);
+            presentedTargetSnapshot = CurrentTarget;
+            hasPresentedTargetSnapshot = true;
+            if (allyRelayController == null ||
+                !allyRelayController.RequiresExplicitFetch ||
+                (allyRelayController.PreparedTarget == null &&
+                 allyRelayController.RelayPhase == PrototypeRelayPhase.None))
+            {
+                CurrentAllyFetchCandidate = null;
             }
         }
 
@@ -415,6 +491,15 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             RefreshTarget(isAiming);
+            if (hasPresentedTargetSnapshot && CurrentTarget != presentedTargetSnapshot)
+            {
+                CurrentTarget = null;
+                CurrentTargetDistance = float.PositiveInfinity;
+                CurrentTargetUsesPickupAssist = false;
+                return RecordDecision(PrototypeInteractionDecision.Reject(
+                    PrototypeInteractionRejection.NoValidTarget,
+                    presentedTargetSnapshot));
+            }
             bool explicitStrapContext =
                 strapContextEnabled &&
                 isAiming &&
@@ -450,19 +535,17 @@ namespace BreakNotice.Gameplay.Interaction
                      decision.Outcome == PrototypeInteractionOutcome.Catch &&
                      queuedCatch)
             {
-                Vector3 direction = viewTransform != null
-                    ? viewTransform.forward
-                    : transform.forward;
+                Vector3 aimPoint = ResolveFrozenThrowAimPoint(decision.Target);
                 bool physicalThrowSucceeded = showcasePlayerCombatController != null
-                    ? showcasePlayerCombatController.TryBeginQueuedRelayThrow(
+                    ? showcasePlayerCombatController.TryBeginQueuedRelayThrowAt(
                         decision.Target,
-                        direction,
+                        aimPoint,
                         IsQueuedThrowCharge ? ThrowCharge01 : 0f)
                     : physicalObjectLifecycle != null &&
-                      physicalObjectLifecycle.TryThrowCommittedRelayTarget(
-                          decision.Target,
-                          direction,
-                          IsQueuedThrowCharge ? ThrowCharge01 : 0f);
+                      physicalObjectLifecycle.TryThrowCommittedRelayTargetAt(
+                           decision.Target,
+                           aimPoint,
+                           IsQueuedThrowCharge ? ThrowCharge01 : 0f);
                 if (!physicalThrowSucceeded)
                 {
                     interactionOwner.CompleteThrow(decision.Target);
@@ -483,7 +566,7 @@ namespace BreakNotice.Gameplay.Interaction
                      decision.Outcome == PrototypeInteractionOutcome.Catch &&
                      physicalObjectLifecycle == null)
             {
-                interactionOwner.CancelCarry(decision.Target);
+                interactionOwner.CancelAcquisition(decision.Target);
                 allyRelayController?.ResolveCatchFailure(decision.Target);
                 decision = PrototypeInteractionDecision.Reject(
                     PrototypeInteractionRejection.OwnershipConflict,
@@ -499,9 +582,11 @@ namespace BreakNotice.Gameplay.Interaction
                     ? showcasePlayerCombatController.TryBeginAcquisition(
                         decision.Target,
                         decision.Outcome)
-                    : physicalObjectLifecycle.BeginCarry(decision.Target);
+                    : interactionOwner.TryCompleteAcquisition(decision.Target) &&
+                      physicalObjectLifecycle.BeginCarry(decision.Target);
                 if (!acquisitionStarted)
                 {
+                    interactionOwner.CancelAcquisition(decision.Target);
                     interactionOwner.CancelCarry(decision.Target);
                     if (decision.Outcome == PrototypeInteractionOutcome.Catch)
                     {
@@ -559,18 +644,24 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            Vector3 direction = viewTransform != null
-                ? viewTransform.forward
-                : transform.forward;
+            PrototypeInteractionTarget directTarget =
+                physicalObjectLifecycle.CarriedTarget;
+            Vector3 aimPoint = ResolveFrozenThrowAimPoint(directTarget);
             bool released = showcasePlayerCombatController != null
-                ? showcasePlayerCombatController.TryBeginDirectThrow(
-                    physicalObjectLifecycle.CarriedTarget,
-                    direction,
+                ? showcasePlayerCombatController.TryBeginDirectThrowAt(
+                    directTarget,
+                    aimPoint,
                     charge01)
-                : physicalObjectLifecycle.TryThrow(direction, charge01);
+                : physicalObjectLifecycle.TryThrowAt(aimPoint, charge01);
             if (released)
             {
-                ClearThrowCharge();
+                if (throwPresentationPhase ==
+                        PrototypeThrowPresentationPhase.ChargingDirectCarry &&
+                    throwPresentationTarget == directTarget)
+                {
+                    MarkDirectThrowReleaseAccepted(charge01);
+                }
+                ClearThrowCharge(false);
             }
 
             return released;
@@ -610,6 +701,10 @@ namespace BreakNotice.Gameplay.Interaction
             throwChargeHeld = true;
             throwChargeStartedAt = Time.unscaledTime;
             frozenThrowCharge01 = 0f;
+            if (mode == ThrowChargeMode.DirectCarry)
+            {
+                BeginDirectThrowPresentation(interactionOwner.CarriedTarget);
+            }
             return true;
         }
 
@@ -629,8 +724,12 @@ namespace BreakNotice.Gameplay.Interaction
                 return interactionOwner != null && interactionOwner.QueuedThrowArmed;
             }
 
-            ClearThrowCharge();
-            return ProcessThrow(charge01);
+            bool accepted = ProcessThrow(charge01);
+            if (!accepted)
+            {
+                ClearThrowCharge();
+            }
+            return accepted;
         }
 
         public float CalculateThrowCharge01(float heldDuration)
@@ -783,12 +882,78 @@ namespace BreakNotice.Gameplay.Interaction
             ClearThrowCharge();
         }
 
-        private void ClearThrowCharge()
+        private void ClearThrowCharge(bool clearPresentation = true)
         {
             throwChargeMode = ThrowChargeMode.None;
             throwChargeHeld = false;
             throwChargeStartedAt = 0f;
-            frozenThrowCharge01 = 0f;
+            if (clearPresentation)
+            {
+                frozenThrowCharge01 = 0f;
+                ClearThrowPresentation();
+            }
+        }
+
+        private void BeginDirectThrowPresentation(PrototypeInteractionTarget target)
+        {
+            if (target == null)
+            {
+                ClearThrowPresentation();
+                return;
+            }
+
+            throwPresentationSequence++;
+            throwPresentationPhase =
+                PrototypeThrowPresentationPhase.ChargingDirectCarry;
+            throwPresentationTarget = target;
+            throwPresentationStartedAt = Time.unscaledTime;
+            throwPresentationReleasedAt = 0f;
+        }
+
+        private void MarkDirectThrowReleaseAccepted(float charge01)
+        {
+            frozenThrowCharge01 = Mathf.Clamp01(charge01);
+            throwPresentationPhase =
+                PrototypeThrowPresentationPhase.ReleaseAccepted;
+            throwPresentationReleasedAt = Time.unscaledTime;
+        }
+
+        private void UpdateThrowPresentationLifecycle()
+        {
+            if (throwPresentationPhase == PrototypeThrowPresentationPhase.None)
+            {
+                return;
+            }
+
+            bool targetStillCarried = throwPresentationTarget != null &&
+                physicalObjectLifecycle != null &&
+                physicalObjectLifecycle.CarriedTarget == throwPresentationTarget &&
+                interactionOwner != null &&
+                interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                interactionOwner.CarriedTarget == throwPresentationTarget;
+            if (!targetStillCarried)
+            {
+                ClearThrowPresentation();
+                return;
+            }
+
+            if (throwPresentationPhase ==
+                    PrototypeThrowPresentationPhase.ReleaseAccepted &&
+                showcasePlayerCombatController != null &&
+                !showcasePlayerCombatController.IsActionLocked)
+            {
+                // The animation/action ended without a physical release.  Keep the
+                // physical carry authority and return presentation to Carry.
+                ClearThrowPresentation();
+            }
+        }
+
+        private void ClearThrowPresentation()
+        {
+            throwPresentationPhase = PrototypeThrowPresentationPhase.None;
+            throwPresentationTarget = null;
+            throwPresentationStartedAt = 0f;
+            throwPresentationReleasedAt = 0f;
         }
 
         private bool TryResolveReticleHit(
@@ -859,6 +1024,42 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             return true;
+        }
+
+        private Vector3 ResolveFrozenThrowAimPoint(PrototypeInteractionTarget ignoredTarget)
+        {
+            Vector3 origin = viewTransform != null
+                ? viewTransform.position
+                : transform.position + Vector3.up;
+            Vector3 forward = viewTransform != null
+                ? viewTransform.forward.normalized
+                : transform.forward;
+            int hitCount = Physics.RaycastNonAlloc(
+                origin,
+                forward,
+                visibilityHits,
+                ReticleRayMaximumDistance,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            float nearestDistance = float.PositiveInfinity;
+            Vector3 aimPoint = origin + forward * 30f;
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = visibilityHits[index];
+                if (hit.collider == null || BelongsToPlayer(hit.collider) ||
+                    (ignoredTarget != null &&
+                     (hit.collider.transform == ignoredTarget.transform ||
+                      hit.collider.transform.IsChildOf(ignoredTarget.transform))))
+                {
+                    continue;
+                }
+                if (hit.distance < nearestDistance)
+                {
+                    nearestDistance = hit.distance;
+                    aimPoint = hit.point;
+                }
+            }
+            return aimPoint;
         }
 
         private bool TryResolveManualPickupAssist(Vector3 interactionOrigin)

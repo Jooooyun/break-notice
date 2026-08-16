@@ -194,21 +194,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                     allyController,
                     Array.Empty<Transform>(),
                     Array.Empty<Vector2Int>());
+                typeof(ShowcaseMobileAllyController)
+                    .GetField("obstacleMask", BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?.SetValue(mobile, (LayerMask)0);
                 interaction.ConfigureShowcaseMobileAlly(mobile);
                 Vector3 allyBaseline = ally.transform.position;
                 uint legacyCallSequence = interaction.AllyCallAttemptSequence;
 
-                SetSnapshot(input, new LogicalInputSnapshot(
-                    Vector2.zero,
-                    Vector2.zero,
-                    false,
-                    false,
-                    false,
-                    true,
-                    false,
-                    false));
-                interaction.SendMessage("LateUpdate", SendMessageOptions.DontRequireReceiver);
-                SetSnapshot(input, default);
+                Assert.That(interaction.ProcessToggleAllyFollow(), Is.True);
 
                 Assert.That(mobile.FollowToggleAttemptSequence, Is.EqualTo(1));
                 Assert.That(mobile.RegroupAttemptSequence, Is.Zero);
@@ -216,18 +209,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.EqualTo(mobile.IsFollowCommanded));
                 Assert.That(interaction.AllyCallAttemptSequence, Is.EqualTo(legacyCallSequence));
 
-                SetSnapshot(input, new LogicalInputSnapshot(
-                    Vector2.zero,
-                    Vector2.zero,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    regroupAlly: true));
-                interaction.SendMessage("LateUpdate", SendMessageOptions.DontRequireReceiver);
-                SetSnapshot(input, default);
+                Assert.That(interaction.ProcessRegroupAlly(), Is.True);
 
                 Assert.That(mobile.RegroupAttemptSequence, Is.EqualTo(1));
                 Assert.That(mobile.FollowToggleAttemptSequence, Is.EqualTo(1));

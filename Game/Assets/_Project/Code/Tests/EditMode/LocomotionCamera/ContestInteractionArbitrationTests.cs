@@ -143,6 +143,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(owner.TryCommit(PrototypeInteractionDecision.Accept(
                 PrototypeInteractionOutcome.Scoop, secondBinder)), Is.False);
             Assert.That(owner.TryReserveRelay(chair), Is.False);
+            Assert.That(owner.HandState,
+                Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
+            Assert.That(owner.AcquisitionCommittedTarget, Is.SameAs(binder));
+            Assert.That(owner.TryCompleteAcquisition(binder), Is.True);
             Assert.That(owner.CarriedTarget, Is.SameAs(binder));
             Assert.That(owner.StrapTarget, Is.Null);
             Assert.That(owner.RelayReservedTarget, Is.Null);

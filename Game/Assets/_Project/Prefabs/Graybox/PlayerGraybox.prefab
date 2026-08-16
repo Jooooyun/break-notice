@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9679ecb593f4aa743b9fa7d99f421c10, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Input.InputSystemLogicalInputAdapter
   inputActions: {fileID: -944628639613478452, guid: 2844172616b9cc14aab9685026ecd0e6, type: 3}
 --- !u!114 &6403439242221617877
@@ -142,12 +142,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a549a9d80bccc41a448ee58af2781c, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.ThirdPersonLocomotion
   logicalInput: {fileID: 0}
   cameraTransform: {fileID: 0}
-  moveSpeed: 4.5
-  sprintSpeed: 6.5
+  moveSpeed: 3.2
+  sprintSpeed: 5.5
   rotationResponse: 12
   gravity: -25
   jumpHeight: 1.15

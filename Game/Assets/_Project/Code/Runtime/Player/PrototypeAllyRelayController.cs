@@ -36,6 +36,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(0f)]
         private float preReleaseDelay = 0.2f;
 
+        [SerializeField]
+        private bool requiresAnimationRelease;
+
         [SerializeField, Min(0.1f)]
         private float binderHorizontalSpeed = 7.5f;
 
@@ -81,6 +84,15 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private Vector3 binderHoldOffset = new Vector3(0f, 1.05f, 0.6f);
 
+        [SerializeField]
+        private ShowcaseBinderGripSocket binderGripSocket;
+
+        [SerializeField]
+        private ShowcaseChairGripRig chairGripRig;
+
+        [SerializeField]
+        private bool requiresChairGripRig;
+
         [SerializeField, Min(0.1f)]
         private float chairPlayerClearance = 0.45f;
 
@@ -118,6 +130,10 @@ namespace BreakNotice.Gameplay.Interaction
         private float preparedGroundHeight;
         private float fetchAssessmentElapsed;
         private PrototypeInteractionTarget suggestedFetchTarget;
+        private bool acquisitionAnimationRequested;
+        private bool acquisitionAnimationStateEntered;
+        private bool acquisitionContactCommitted;
+        private float acquisitionAnimationElapsed;
 
         public PrototypeAllySupportState AllyState { get; private set; } =
             PrototypeAllySupportState.Ready;
@@ -134,6 +150,8 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeInteractionTarget SuggestedFetchTarget => suggestedFetchTarget;
 
         public bool RequiresExplicitFetch => requiresExplicitFetch;
+
+        public bool RequiresAnimationRelease => requiresAnimationRelease;
 
         public bool IsAwaitingFetchTask =>
             requiresExplicitFetch &&
@@ -234,6 +252,15 @@ namespace BreakNotice.Gameplay.Interaction
 
         public int ReleaseCount { get; private set; }
 
+        public bool IsAwaitingAnimationRelease =>
+            RelayPhase == PrototypeRelayPhase.PreRelease && activeTarget != null;
+
+        public bool IsAwaitingAnimationAcquisition =>
+            AllyState == PrototypeAllySupportState.AcquiringSupply &&
+            preparedTarget != null &&
+            preparedTarget.Role == PrototypeInteractionRole.AllyBinder &&
+            acquisitionAnimationRequested;
+
         public int CatchCount { get; private set; }
 
         public event Action<PrototypeInteractionTarget> CatchCompleted;
@@ -297,6 +324,8 @@ namespace BreakNotice.Gameplay.Interaction
             activeTarget != null &&
             activeTarget.Role == PrototypeInteractionRole.AllyChair;
 
+        public bool IsChairGripActive => chairGripRig != null && chairGripRig.IsActive;
+
         public void Configure(
             PrototypeInteractionStateOwner owner,
             PrototypePhysicalObjectLifecycle lifecycle,
@@ -357,9 +386,28 @@ namespace BreakNotice.Gameplay.Interaction
             requiresExplicitFetch = explicitFetchRequired;
             suggestedFetchTarget = null;
             fetchAssessmentElapsed = FetchAssessmentInterval;
+            ClearAcquisitionAnimationState();
             ClearPreparedTarget(true);
             ClearActiveRelayState();
             AllyState = PrototypeAllySupportState.Ready;
+        }
+
+        public void ConfigureAnimationSync(bool required)
+        {
+            requiresAnimationRelease = required;
+        }
+
+        public void ConfigureBinderGrip(ShowcaseBinderGripSocket gripSocket)
+        {
+            binderGripSocket = gripSocket;
+        }
+
+        public void ConfigureChairGrip(
+            ShowcaseChairGripRig gripRig,
+            bool required = true)
+        {
+            chairGripRig = gripRig;
+            requiresChairGripRig = required;
         }
 
         public bool TryRequestFetch(
@@ -766,10 +814,22 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (RelayPhase == PrototypeRelayPhase.PreRelease)
             {
+                MaintainActiveBinderAtGrip();
                 phaseElapsed += Time.fixedDeltaTime;
-                if (phaseElapsed >= preReleaseDelay)
+                bool waitsForAnimation = requiresAnimationRelease &&
+                    activeTarget.Role == PrototypeInteractionRole.AllyBinder;
+                if (!waitsForAnimation && phaseElapsed >= preReleaseDelay)
                 {
                     ReleaseActiveTarget();
+                }
+                else if (waitsForAnimation &&
+                         phaseElapsed >= Mathf.Max(2f, preReleaseDelay + 1f))
+                {
+                    Debug.LogError(
+                        "ALLY SUPPLY ANIMATION RELEASE EVENT TIMEOUT; " +
+                        "the reserved object was not launched.",
+                        this);
+                    AbortPreRelease();
                 }
 
                 return;
@@ -802,6 +862,20 @@ namespace BreakNotice.Gameplay.Interaction
             if (settledElapsed >= settleDuration || phaseElapsed >= maximumRelayDuration)
             {
                 ResolvePhysicalPassage();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (RelayPhase == PrototypeRelayPhase.PreRelease)
+            {
+                MaintainActiveBinderAtGrip();
+            }
+            else if (preparedTargetAcquired &&
+                     preparedTarget != null &&
+                     preparedTarget.Role == PrototypeInteractionRole.AllyBinder)
+            {
+                MaintainPreparedBinder(0f);
             }
         }
 
@@ -862,6 +936,10 @@ namespace BreakNotice.Gameplay.Interaction
                 activeBody.angularVelocity = Vector3.zero;
             }
             activeBody.WakeUp();
+            if (activeTarget.Role == PrototypeInteractionRole.AllyChair)
+            {
+                chairGripRig?.EndGrip();
+            }
 
             consumedTargets.Add(activeTarget);
             RelayPhase = PrototypeRelayPhase.Released;
@@ -870,6 +948,71 @@ namespace BreakNotice.Gameplay.Interaction
             LastReleasePosition = activeBody.position;
             LastLaunchVelocity = activeBody.linearVelocity;
             ReleaseCount++;
+        }
+
+        public bool CommitAnimationSupplyRelease()
+        {
+            if (!IsAwaitingAnimationRelease || activeTarget == null ||
+                activeTarget.Role != PrototypeInteractionRole.AllyBinder)
+            {
+                return false;
+            }
+
+            ReleaseActiveTarget();
+            return RelayPhase == PrototypeRelayPhase.Released;
+        }
+
+        public void NotifyAnimationAcquisitionStateEntered()
+        {
+            if (IsAwaitingAnimationAcquisition)
+            {
+                acquisitionAnimationStateEntered = true;
+                acquisitionAnimationElapsed = 0f;
+            }
+        }
+
+        public bool CommitAnimationAcquisitionContact()
+        {
+            if (!IsAwaitingAnimationAcquisition ||
+                !acquisitionAnimationStateEntered ||
+                acquisitionContactCommitted ||
+                preparedBody == null ||
+                binderGripSocket == null ||
+                !binderGripSocket.TryGetWorldPose(
+                    out Vector3 position,
+                    out Quaternion rotation))
+            {
+                return false;
+            }
+
+            Vector3 before = preparedBody.position;
+            preparedBody.position = position;
+            preparedBody.rotation = rotation;
+            PreparationPathLength += Vector3.Distance(before, position);
+            preparedTargetAcquired = true;
+            acquisitionContactCommitted = true;
+            return true;
+        }
+
+        public void CompleteAnimationAction()
+        {
+            if (!IsAwaitingAnimationAcquisition)
+            {
+                return;
+            }
+
+            if (!acquisitionContactCommitted)
+            {
+                Debug.LogError(
+                    "ALLY ACQUISITION ANIMATION COMPLETED WITHOUT CARRY CONTACT.",
+                    this);
+                RestorePreparedBodyAfterFailedAcquisition();
+                AllyState = PrototypeAllySupportState.Blocked;
+                return;
+            }
+
+            ClearAcquisitionAnimationState();
+            CompletePreparedAcquisition(0f);
         }
 
         private Vector3 CalculateBinderLaunchVelocity(
@@ -955,6 +1098,7 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void ClearActiveRelayState()
         {
+            chairGripRig?.EndGrip();
             activeTarget = null;
             activeBody = null;
             phaseElapsed = 0f;
@@ -1110,6 +1254,47 @@ namespace BreakNotice.Gameplay.Interaction
             preparedBody.isKinematic = true;
 
             bool chair = preparedTarget.Role == PrototypeInteractionRole.AllyChair;
+            if (chair && requiresChairGripRig &&
+                (chairGripRig == null || !chairGripRig.IsAvailable ||
+                 preparedCollider is not BoxCollider))
+            {
+                RestorePreparedBodyAfterFailedAcquisition();
+                AllyState = PrototypeAllySupportState.Blocked;
+                return;
+            }
+            if (!chair && requiresAnimationRelease)
+            {
+                if (binderGripSocket == null ||
+                    !binderGripSocket.TryGetWorldPose(out _, out _))
+                {
+                    RestorePreparedBodyAfterFailedAcquisition();
+                    AllyState = PrototypeAllySupportState.Blocked;
+                    return;
+                }
+
+                if (!acquisitionAnimationRequested)
+                {
+                    acquisitionAnimationRequested = true;
+                    acquisitionAnimationStateEntered = false;
+                    acquisitionContactCommitted = false;
+                    acquisitionAnimationElapsed = 0f;
+                    return;
+                }
+
+                acquisitionAnimationElapsed += deltaTime;
+                if (!acquisitionAnimationStateEntered &&
+                    acquisitionAnimationElapsed >= 0.15f)
+                {
+                    Debug.LogError(
+                        "ALLY ACQUISITION ANIMATOR STATE ENTRY TIMEOUT; " +
+                        "the supply object was not attached.",
+                        this);
+                    RestorePreparedBodyAfterFailedAcquisition();
+                    AllyState = PrototypeAllySupportState.Blocked;
+                }
+                return;
+            }
+
             Vector3 destination = chair
                 ? allyTransform.TransformPoint(new Vector3(0f, 0f, supplyApproachDistance))
                 : allyTransform.TransformPoint(binderHoldOffset);
@@ -1120,26 +1305,23 @@ namespace BreakNotice.Gameplay.Interaction
             Quaternion destinationRotation = chair
                 ? Quaternion.Euler(0f, allyTransform.eulerAngles.y, 0f)
                 : allyTransform.rotation;
+            // Reaching the target is the authored acquisition contact. Attach in
+            // that same simulation step so the actor never walks away while the
+            // supply object visually trails behind it.
             Vector3 before = preparedBody.position;
-            Vector3 next = Vector3.MoveTowards(
-                before,
-                destination,
-                supplyAcquisitionSpeed * deltaTime);
-            Quaternion nextRotation = Quaternion.RotateTowards(
-                preparedBody.rotation,
-                destinationRotation,
-                allyTurnSpeed * deltaTime);
-            preparedBody.MovePosition(next);
-            preparedBody.MoveRotation(nextRotation);
-            PreparationPathLength += Vector3.Distance(before, next);
-            if (Vector3.Distance(next, destination) <= AcquisitionArrivalTolerance &&
-                Quaternion.Angle(nextRotation, destinationRotation) <= 1f)
+            preparedBody.position = destination;
+            preparedBody.rotation = destinationRotation;
+            if (chair && preparedCollider is BoxCollider chairBox &&
+                chairGripRig != null && chairGripRig.IsAvailable &&
+                !chairGripRig.BeginGrip(chairBox))
             {
-                preparedBody.position = destination;
-                preparedBody.rotation = destinationRotation;
-                preparedTargetAcquired = true;
-                CompletePreparedAcquisition(deltaTime);
+                RestorePreparedBodyAfterFailedAcquisition();
+                AllyState = PrototypeAllySupportState.Blocked;
+                return;
             }
+            PreparationPathLength += Vector3.Distance(before, destination);
+            preparedTargetAcquired = true;
+            CompletePreparedAcquisition(deltaTime);
         }
 
         private void CompletePreparedAcquisition(float deltaTime)
@@ -1169,9 +1351,39 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
+            if (requiresAnimationRelease)
+            {
+                if (binderGripSocket != null &&
+                    binderGripSocket.TryGetWorldPose(
+                        out Vector3 gripPosition,
+                        out Quaternion gripRotation))
+                {
+                    preparedBody.position = gripPosition;
+                    preparedBody.rotation = gripRotation;
+                }
+                return;
+            }
+
             Vector3 destination = allyTransform.TransformPoint(binderHoldOffset);
             preparedBody.position = destination;
             preparedBody.rotation = allyTransform.rotation;
+        }
+
+        private void MaintainActiveBinderAtGrip()
+        {
+            if (activeTarget == null ||
+                activeTarget.Role != PrototypeInteractionRole.AllyBinder ||
+                activeBody == null ||
+                binderGripSocket == null ||
+                !binderGripSocket.TryGetWorldPose(
+                    out Vector3 position,
+                    out Quaternion rotation))
+            {
+                return;
+            }
+
+            activeBody.position = position;
+            activeBody.rotation = rotation;
         }
 
         private void MaintainPreparedChair(float deltaTime)
@@ -1190,6 +1402,11 @@ namespace BreakNotice.Gameplay.Interaction
             preparedBody.position = destination;
             Quaternion yaw = Quaternion.Euler(0f, allyTransform.eulerAngles.y, 0f);
             preparedBody.rotation = yaw;
+            if (chairGripRig != null && chairGripRig.IsAvailable &&
+                !chairGripRig.IsActive && preparedCollider is BoxCollider chairBox)
+            {
+                chairGripRig.BeginGrip(chairBox);
+            }
         }
 
         private void FacePlayer(float deltaTime)
@@ -1443,6 +1660,31 @@ namespace BreakNotice.Gameplay.Interaction
             preparedBodyStateCaptured = true;
         }
 
+        private void RestorePreparedBodyAfterFailedAcquisition()
+        {
+            chairGripRig?.EndGrip();
+            if (preparedBodyStateCaptured && preparedBody != null)
+            {
+                preparedBody.isKinematic = preparedWasKinematic;
+                preparedBody.useGravity = preparedUsedGravity;
+                preparedBody.constraints = preparedConstraints;
+                if (!preparedBody.isKinematic)
+                {
+                    preparedBody.linearVelocity = preparedVelocity;
+                    preparedBody.angularVelocity = preparedAngularVelocity;
+                }
+            }
+            ClearAcquisitionAnimationState();
+        }
+
+        private void ClearAcquisitionAnimationState()
+        {
+            acquisitionAnimationRequested = false;
+            acquisitionAnimationStateEntered = false;
+            acquisitionContactCommitted = false;
+            acquisitionAnimationElapsed = 0f;
+        }
+
         private void ClearPreparedTarget(bool restoreBody)
         {
             mobileAllyController?.ClearTaskMovement();
@@ -1457,6 +1699,11 @@ namespace BreakNotice.Gameplay.Interaction
                     preparedBody.angularVelocity = preparedAngularVelocity;
                 }
             }
+            if (restoreBody || activeTarget == null ||
+                activeTarget.Role != PrototypeInteractionRole.AllyChair)
+            {
+                chairGripRig?.EndGrip();
+            }
 
             preparedTarget = null;
             preparedBody = null;
@@ -1465,6 +1712,7 @@ namespace BreakNotice.Gameplay.Interaction
             preparedLaneOpen = false;
             preparedBodyStateCaptured = false;
             preparedGroundHeight = 0f;
+            ClearAcquisitionAnimationState();
         }
 
         private bool IsKnownSupplyTarget(PrototypeInteractionTarget target)

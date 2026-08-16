@@ -32,6 +32,11 @@ namespace BreakNotice.Gameplay.Interaction
     [RequireComponent(typeof(Collider))]
     public sealed class ShowcaseRunnerAgent : MonoBehaviour
     {
+        private const float PlayerStandoffDistance = 0.81f;
+        private const float TelegraphSettleSeconds = 0.12f;
+        private const float EliteJumpLungeSpeed = 4.25f;
+        private const float EliteJumpMaximumTravel = 1.85f;
+        private const float PostHitCooldown = 0.65f;
         [SerializeField]
         private string runnerId = "RUNNER";
 
@@ -50,6 +55,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private bool elite;
 
+        [SerializeField]
+        private ShowcaseBoneCombatRig boneCombatRig;
+
         [SerializeField, Min(0.1f)]
         private float approachSpeed = 2.7f;
 
@@ -60,7 +68,7 @@ namespace BreakNotice.Gameplay.Interaction
         private float activationRange = 11f;
 
         [SerializeField, Min(0.5f)]
-        private float attackRange = 1.8f;
+        private float attackRange = 1.25f;
 
         [SerializeField, Min(0.1f)]
         private float attackCooldown = 1.25f;
@@ -74,6 +82,20 @@ namespace BreakNotice.Gameplay.Interaction
         private uint activeAttackSequence;
         private int attackAnimationVariant;
         private Collider runnerCollider;
+        private bool getupUsesBackVariant;
+        private const float AnimatorStateEntryTimeout = 0.15f;
+        private float animationRequestedAt;
+        private bool animationStateAcknowledged;
+        private uint awaitedAnimationCueRevision;
+        private bool lungeWindowOpen;
+        private Vector3 pendingReactionDirection;
+        private float pendingReactionDistance;
+        private float pendingReactionDuration;
+        private float reactionDistanceApplied;
+        private float reactionElapsed;
+        private bool reactionDisplacementPending;
+        private bool reactionDisplacementActive;
+        private float lungeTravelDistance;
 
         public string RunnerId => runnerId;
 
@@ -103,20 +125,29 @@ namespace BreakNotice.Gameplay.Interaction
         public uint ActiveAttackSequence => activeAttackSequence;
 
         public float StateElapsed => stateElapsed;
+        public bool CanOpenAttackWindow =>
+            !IsDead && (State == ShowcaseRunnerState.BodyCheck ||
+                        State == ShowcaseRunnerState.Shove);
 
         public Vector3 BaselinePosition => baselinePosition;
 
         public int AttackCommitCount { get; private set; }
+        public float CommandedPlanarSpeed { get; private set; }
+        public bool IsAttackWindowOpen => boneCombatRig != null &&
+            boneCombatRig.IsAttackWindowOpen;
 
         private void Awake()
         {
             body ??= GetComponent<Rigidbody>();
             runnerCollider = GetComponent<Collider>();
+            boneCombatRig ??= GetComponent<ShowcaseBoneCombatRig>();
+            ConfigurePlayerCollisionPair();
             CaptureBaseline();
         }
 
         private void FixedUpdate()
         {
+            CommandedPlanarSpeed = 0f;
             if (coordinator == null || playerTransform == null || body == null || IsDead ||
                 !coordinator.CanSimulatePressure())
             {
@@ -124,19 +155,36 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             float deltaTime = Time.fixedDeltaTime;
+            if (!animationStateAcknowledged && awaitedAnimationCueRevision != 0)
+            {
+                if (State != ShowcaseRunnerState.Dead &&
+                    Time.time - animationRequestedAt >= AnimatorStateEntryTimeout)
+                {
+                    Debug.LogError(
+                        $"RUNNER ANIMATOR STATE ENTRY TIMEOUT: {State}. " +
+                        "Damage or displacement was not forced.",
+                        this);
+                    CancelAnimationBoundState();
+                }
+                return;
+            }
+
             stateElapsed += deltaTime;
             cooldownRemaining = Mathf.Max(0f, cooldownRemaining - deltaTime);
+            AdvanceReactionDisplacement(deltaTime);
             switch (State)
             {
                 case ShowcaseRunnerState.OffBalance:
-                    if (stateElapsed >= 0.8f)
+                    if (stateElapsed >= 3f)
                     {
+                        Debug.LogError("RUNNER HIT ANIMATION COMPLETION EVENT TIMEOUT.", this);
                         EnterState(ShowcaseRunnerState.Recovering);
                     }
                     return;
                 case ShowcaseRunnerState.Staggered:
-                    if (stateElapsed >= 1.55f)
+                    if (stateElapsed >= 3f)
                     {
+                        Debug.LogError("RUNNER STAGGER ANIMATION COMPLETION EVENT TIMEOUT.", this);
                         EnterState(ShowcaseRunnerState.Recovering);
                     }
                     return;
@@ -147,11 +195,16 @@ namespace BreakNotice.Gameplay.Interaction
                     }
                     return;
                 case ShowcaseRunnerState.KnockedDown:
-                    if (stateElapsed >= 1.35f)
+                    if (stateElapsed >= 4f)
                     {
-                        SetAnimationCue(LastAttackKind == ShowcaseRunnerAttackKind.BodyCheck
-                            ? ShowcaseRunnerAnimationCue.GetupBack
-                            : ShowcaseRunnerAnimationCue.GetupFront);
+                        Debug.LogError("RUNNER KNOCKDOWN COMPLETION EVENT TIMEOUT.", this);
+                        EnterState(ShowcaseRunnerState.Recovering);
+                    }
+                    return;
+                case ShowcaseRunnerState.GettingUp:
+                    if (stateElapsed >= 4f)
+                    {
+                        Debug.LogError("RUNNER GETUP COMPLETION EVENT TIMEOUT.", this);
                         EnterState(ShowcaseRunnerState.Recovering);
                     }
                     return;
@@ -159,39 +212,46 @@ namespace BreakNotice.Gameplay.Interaction
                     return;
                 case ShowcaseRunnerState.Telegraph:
                     FacePlayer(deltaTime);
-                    if (stateElapsed >= 0.45f)
+                    if (stateElapsed >= TelegraphSettleSeconds)
                     {
                         CommitNextAttack();
                     }
                     return;
                 case ShowcaseRunnerState.BodyCheck:
-                    AdvanceTowardPlayer(bodyCheckSpeed, deltaTime);
-                    if (!hitApplied && stateElapsed >= 0.82f && DistanceToPlayer() <= 1.45f)
+                    if (!IsAttackWindowOpen)
                     {
-                        CommitAnimationAttackHit();
+                        FacePlayer(deltaTime);
                     }
-                    if (stateElapsed >= 1.15f)
+                    if (lungeWindowOpen &&
+                        AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack &&
+                        lungeTravelDistance < EliteJumpMaximumTravel)
                     {
+                        lungeTravelDistance += AdvanceTowardPlayer(
+                            EliteJumpLungeSpeed,
+                            deltaTime);
+                    }
+                    if (stateElapsed >= 4f)
+                    {
+                        Debug.LogError(
+                            "RUNNER ATTACK ANIMATION EVENT TIMEOUT; DAMAGE WAS NOT FORCED.",
+                            this);
                         CompleteAttack();
                     }
                     return;
                 case ShowcaseRunnerState.Shove:
-                    FacePlayer(deltaTime);
-                    if (!hitApplied && stateElapsed >= 0.62f && DistanceToPlayer() <= 1.7f)
+                    if (!IsAttackWindowOpen)
                     {
-                        CommitAnimationAttackHit();
+                        FacePlayer(deltaTime);
                     }
-                    if (stateElapsed >= 1.0f)
+                    if (stateElapsed >= 4f)
                     {
+                        Debug.LogError(
+                            "RUNNER ATTACK ANIMATION EVENT TIMEOUT; DAMAGE WAS NOT FORCED.",
+                            this);
                         CompleteAttack();
                     }
                     return;
                 case ShowcaseRunnerState.GrabCommitted:
-                    FacePlayer(deltaTime);
-                    if (stateElapsed >= 1.1f)
-                    {
-                        coordinator.ResolveTimedGrab(this);
-                    }
                     return;
             }
 
@@ -236,21 +296,23 @@ namespace BreakNotice.Gameplay.Interaction
             health = authoredHealth;
             elite = authoredElite;
             runnerCollider = GetComponent<Collider>();
+            boneCombatRig ??= GetComponent<ShowcaseBoneCombatRig>();
+            attackRange = 1.25f;
+            ConfigurePlayerCollisionPair();
             CaptureBaseline();
             ResetToRunBaseline();
         }
 
+        public void ConfigureBoneCombatRig(ShowcaseBoneCombatRig rig)
+        {
+            boneCombatRig = rig;
+        }
+
         public bool TryCommitShortGrab()
         {
-            if (coordinator == null || !coordinator.TryCommitGrab(this))
-            {
-                return false;
-            }
-
-            LastAttackKind = ShowcaseRunnerAttackKind.ShortGrab;
-            AttackCommitCount++;
-            EnterState(ShowcaseRunnerState.GrabCommitted);
-            return true;
+            // No approved ENY01 grab/hold/release source exists yet. Keeping this
+            // disabled prevents an invisible gameplay grab from preceding animation.
+            return false;
         }
 
         public void ReceivePhysicalStagger(bool medium)
@@ -276,7 +338,8 @@ namespace BreakNotice.Gameplay.Interaction
             }
             InterruptAttack();
             Vector3 direction = Vector3.ProjectOnPlane(playerForward, Vector3.up).normalized;
-            MoveBy(direction * 0.7f);
+            SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
+            QueueReactionDisplacement(direction, 0.3f, 0.2f);
             EnterState(ShowcaseRunnerState.OffBalance);
         }
 
@@ -336,9 +399,18 @@ namespace BreakNotice.Gameplay.Interaction
             hitApplied = false;
             activeAttackSequence = 0;
             attackAnimationVariant = 0;
+            getupUsesBackVariant = false;
+            animationRequestedAt = 0f;
+            animationStateAcknowledged = false;
+            awaitedAnimationCueRevision = 0;
+            lungeWindowOpen = false;
+            lungeTravelDistance = 0f;
+            ClearReactionDisplacement();
             AttackCommitCount = 0;
+            CommandedPlanarSpeed = 0f;
             AnimationCue = ShowcaseRunnerAnimationCue.None;
             AnimationCueRevision++;
+            boneCombatRig?.ResetRuntimeState();
             health?.ResetToBaseline();
             if (runnerCollider != null)
             {
@@ -384,6 +456,7 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             InterruptAttack();
+            cooldownRemaining = Mathf.Max(cooldownRemaining, PostHitCooldown);
             if (health.IsDead)
             {
                 EnterDeath();
@@ -394,23 +467,30 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 case ShowcaseHitReaction.Light:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitLight);
+                    QueueReactionDisplacement(impactDirection, 0.1f, 0.18f);
                     EnterState(ShowcaseRunnerState.OffBalance);
                     break;
                 case ShowcaseHitReaction.Body:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
+                    QueueReactionDisplacement(impactDirection, 0.15f, 0.2f);
                     EnterState(ShowcaseRunnerState.Staggered);
                     break;
                 case ShowcaseHitReaction.Rib:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitRib);
+                    QueueReactionDisplacement(impactDirection, 0.15f, 0.2f);
                     EnterState(ShowcaseRunnerState.Staggered);
                     break;
                 case ShowcaseHitReaction.Stomach:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitStomach);
+                    QueueReactionDisplacement(impactDirection, 0.15f, 0.2f);
                     EnterState(ShowcaseRunnerState.Staggered);
                     break;
                 default:
-                    SetAnimationCue(ShowcaseRunnerAnimationCue.HitBigHead);
-                    MoveBy(impactDirection * 0.85f);
+                    getupUsesBackVariant = Vector3.Dot(transform.forward, impactDirection) < 0f;
+                    SetAnimationCue(getupUsesBackVariant
+                        ? ShowcaseRunnerAnimationCue.KnockdownBack
+                        : ShowcaseRunnerAnimationCue.KnockdownFront);
+                    QueueReactionDisplacement(impactDirection, 0.55f, 0.24f);
                     EnterState(ShowcaseRunnerState.KnockedDown);
                     break;
             }
@@ -419,29 +499,89 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void CommitAnimationAttackHit()
         {
-            if (hitApplied || IsDead || coordinator == null)
+            // Retained for old serialized events only. Damage is committed only by
+            // TryCommitBoneHit after a bone-tracked overlap.
+        }
+
+        public void NotifyAnimationStateEntered(uint cueRevision)
+        {
+            if (cueRevision == 0 || cueRevision != awaitedAnimationCueRevision ||
+                animationStateAcknowledged)
             {
                 return;
             }
 
-            float allowedRange = State == ShowcaseRunnerState.BodyCheck ? 1.55f : 1.75f;
-            if (DistanceToPlayer() > allowedRange)
+            animationStateAcknowledged = true;
+            stateElapsed = 0f;
+            if (reactionDisplacementPending)
             {
-                return;
+                reactionDisplacementPending = false;
+                reactionDisplacementActive = true;
+                reactionElapsed = 0f;
+                reactionDistanceApplied = 0f;
+            }
+        }
+
+        public void SetAnimationLungeWindow(bool isOpen)
+        {
+            lungeWindowOpen = isOpen &&
+                State == ShowcaseRunnerState.BodyCheck &&
+                AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack;
+        }
+
+        internal bool TryCommitBoneHit(
+            ShowcasePlayerCombatController actualVictim,
+            uint expectedAttackSequence)
+        {
+            if (hitApplied || actualVictim == null || actualVictim.IsDead ||
+                coordinator == null || !CanOpenAttackWindow ||
+                expectedAttackSequence == 0 ||
+                expectedAttackSequence != activeAttackSequence)
+            {
+                return false;
             }
 
-            hitApplied = true;
             bool heavy = AnimationCue == ShowcaseRunnerAnimationCue.Kicking ||
                 AnimationCue == ShowcaseRunnerAnimationCue.Kicking2 ||
                 AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantPunch ||
                 AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantSwiping ||
                 AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack;
-            coordinator.ApplyPlayerAttack(
+            bool accepted = coordinator.ApplyPlayerAttackFromBoneContact(
                 this,
+                actualVictim,
                 heavy ? 30 : 20,
                 heavy,
                 heavy ? 4.2f : 3.2f,
                 activeAttackSequence);
+            if (accepted)
+            {
+                hitApplied = true;
+            }
+            return accepted;
+        }
+
+        public void CompleteAnimationAction()
+        {
+            switch (State)
+            {
+                case ShowcaseRunnerState.BodyCheck:
+                case ShowcaseRunnerState.Shove:
+                    CompleteAttack();
+                    break;
+                case ShowcaseRunnerState.OffBalance:
+                case ShowcaseRunnerState.Staggered:
+                    EnterState(ShowcaseRunnerState.Recovering);
+                    break;
+                case ShowcaseRunnerState.KnockedDown:
+                    SetAnimationCue(getupUsesBackVariant
+                        ? ShowcaseRunnerAnimationCue.GetupBack
+                        : ShowcaseRunnerAnimationCue.GetupFront);
+                    EnterState(ShowcaseRunnerState.GettingUp);
+                    break;
+                case ShowcaseRunnerState.GettingUp:
+                    EnterState(ShowcaseRunnerState.Recovering);
+                    break;
+            }
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -463,10 +603,13 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void CommitNextAttack()
         {
-            LastAttackKind = (ShowcaseRunnerAttackKind)(attackSequence % 3);
+            boneCombatRig?.CloseAttackWindow();
+            // ShortGrab remains disabled until a visible approved clip exists.
+            LastAttackKind = (ShowcaseRunnerAttackKind)(attackSequence % 2);
             attackSequence++;
             hitApplied = false;
             activeAttackSequence++;
+            lungeTravelDistance = 0f;
             switch (LastAttackKind)
             {
                 case ShowcaseRunnerAttackKind.BodyCheck:
@@ -490,6 +633,7 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void CompleteAttack()
         {
+            boneCombatRig?.CloseAttackWindow();
             coordinator?.ReleaseAttackToken(this);
             cooldownRemaining = attackCooldown;
             EnterState(ShowcaseRunnerState.Recovering);
@@ -497,27 +641,38 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void InterruptAttack()
         {
+            boneCombatRig?.CloseAttackWindow();
             coordinator?.ReleaseAttackToken(this);
         }
 
-        private void AdvanceTowardPlayer(float speed, float deltaTime)
+        private float AdvanceTowardPlayer(float speed, float deltaTime)
         {
             Vector3 direction = Vector3.ProjectOnPlane(
                 playerTransform.position - body.position,
                 Vector3.up);
             if (direction.sqrMagnitude <= 0.001f)
             {
-                return;
+                return 0f;
             }
 
+            float planarDistance = direction.magnitude;
             direction.Normalize();
-            float distance = speed * deltaTime;
+            CommandedPlanarSpeed = Mathf.Max(0f, speed);
+            float distance = Mathf.Min(
+                speed * deltaTime,
+                Mathf.Max(0f, planarDistance - PlayerStandoffDistance));
+            if (distance <= 0.0001f)
+            {
+                CommandedPlanarSpeed = 0f;
+                return 0f;
+            }
             if (body.SweepTest(direction, out RaycastHit hit, distance + 0.08f,
                     QueryTriggerInteraction.Ignore) &&
                 hit.transform != playerTransform &&
                 !hit.transform.IsChildOf(playerTransform))
             {
-                return;
+                CommandedPlanarSpeed = 0f;
+                return 0f;
             }
 
             body.MovePosition(body.position + direction * distance);
@@ -525,6 +680,24 @@ namespace BreakNotice.Gameplay.Interaction
                 body.rotation,
                 Quaternion.LookRotation(direction, Vector3.up),
                 540f * deltaTime));
+            return distance;
+        }
+
+        private void ConfigurePlayerCollisionPair()
+        {
+            if (runnerCollider == null || playerTransform == null)
+            {
+                return;
+            }
+
+            CharacterController playerController =
+                playerTransform.GetComponent<CharacterController>();
+            if (playerController != null)
+            {
+                // Damage is owned by the animated bone volumes. Root colliders
+                // remain solid against walls/props but never depenetrate the player.
+                Physics.IgnoreCollision(runnerCollider, playerController, true);
+            }
         }
 
         private void FacePlayer(float deltaTime)
@@ -546,6 +719,86 @@ namespace BreakNotice.Gameplay.Interaction
             if (body != null)
             {
                 body.position += Vector3.ProjectOnPlane(offset, Vector3.up);
+            }
+        }
+
+        private void QueueReactionDisplacement(Vector3 direction, float distance, float duration)
+        {
+            pendingReactionDirection = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
+            pendingReactionDistance = Mathf.Max(0f, distance);
+            pendingReactionDuration = Mathf.Max(0.01f, duration);
+            reactionDistanceApplied = 0f;
+            reactionElapsed = 0f;
+            reactionDisplacementPending = pendingReactionDirection.sqrMagnitude > 0.001f &&
+                pendingReactionDistance > 0f;
+            reactionDisplacementActive = false;
+        }
+
+        private void AdvanceReactionDisplacement(float deltaTime)
+        {
+            if (!reactionDisplacementActive || body == null)
+            {
+                return;
+            }
+
+            reactionElapsed = Mathf.Min(pendingReactionDuration, reactionElapsed + deltaTime);
+            float targetDistance = pendingReactionDistance *
+                (reactionElapsed / pendingReactionDuration);
+            float stepDistance = Mathf.Max(0f, targetDistance - reactionDistanceApplied);
+            if (stepDistance > 0f)
+            {
+                bool blocked = body.SweepTest(
+                    pendingReactionDirection,
+                    out RaycastHit hit,
+                    stepDistance + 0.02f,
+                    QueryTriggerInteraction.Ignore) &&
+                    hit.transform != playerTransform &&
+                    (playerTransform == null || !hit.transform.IsChildOf(playerTransform));
+                if (blocked)
+                {
+                    reactionDisplacementActive = false;
+                    return;
+                }
+
+                body.MovePosition(body.position + pendingReactionDirection * stepDistance);
+                reactionDistanceApplied += stepDistance;
+            }
+
+            if (reactionElapsed >= pendingReactionDuration)
+            {
+                reactionDisplacementActive = false;
+            }
+        }
+
+        private void ClearReactionDisplacement()
+        {
+            pendingReactionDirection = Vector3.zero;
+            pendingReactionDistance = 0f;
+            pendingReactionDuration = 0f;
+            reactionDistanceApplied = 0f;
+            reactionElapsed = 0f;
+            reactionDisplacementPending = false;
+            reactionDisplacementActive = false;
+        }
+
+        private void CancelAnimationBoundState()
+        {
+            lungeWindowOpen = false;
+            ClearReactionDisplacement();
+            awaitedAnimationCueRevision = 0;
+            animationStateAcknowledged = false;
+            switch (State)
+            {
+                case ShowcaseRunnerState.BodyCheck:
+                case ShowcaseRunnerState.Shove:
+                    CompleteAttack();
+                    break;
+                case ShowcaseRunnerState.OffBalance:
+                case ShowcaseRunnerState.Staggered:
+                case ShowcaseRunnerState.KnockedDown:
+                case ShowcaseRunnerState.GettingUp:
+                    EnterState(ShowcaseRunnerState.Recovering);
+                    break;
             }
         }
 
@@ -599,6 +852,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void EnterDeath()
         {
+            lungeWindowOpen = false;
+            ClearReactionDisplacement();
+            boneCombatRig?.CloseAttackWindow();
             InterruptAttack();
             SetAnimationCue(health.AcceptedDamageCount % 2 == 0
                 ? ShowcaseRunnerAnimationCue.Death2
@@ -619,6 +875,9 @@ namespace BreakNotice.Gameplay.Interaction
         {
             AnimationCue = cue;
             AnimationCueRevision++;
+            awaitedAnimationCueRevision = AnimationCueRevision;
+            animationRequestedAt = Time.time;
+            animationStateAcknowledged = false;
         }
 
         private void CaptureBaseline()

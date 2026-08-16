@@ -32,6 +32,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             var arbitrator = new PrototypeInteractionArbitrator();
 
             Assert.That(owner.TryCommit(arbitrator.Decide(owner.CreateContext(false, binder))), Is.True);
+            Assert.That(owner.HandState,
+                Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
+            Assert.That(owner.AcquisitionCommittedTarget, Is.SameAs(binder));
+            Assert.That(owner.TryCompleteAcquisition(binder), Is.True);
             Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
             Assert.That(owner.TryCommitThrow(out PrototypeInteractionTarget committed), Is.True);
             Assert.That(committed, Is.SameAs(binder));

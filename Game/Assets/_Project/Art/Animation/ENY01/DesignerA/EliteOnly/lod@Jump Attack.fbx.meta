@@ -56,8 +56,36 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1.7480001
-        functionName: ShowcaseCombatHit
+      - time: 0.24
+        functionName: ShowcaseLungeStart
+        data:
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4
+        functionName: ShowcaseAttackWindowOpen
+        data:
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6
+        functionName: ShowcaseAttackWindowClose
+        data:
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.62
+        functionName: ShowcaseLungeEnd
+        data:
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.88
+        functionName: ShowcaseActionComplete
         data:
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

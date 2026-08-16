@@ -55,8 +55,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.EqualTo(PrototypeInteractionOutcome.Scoop),
                     $"rejection={decision.Rejection}; current={controller.CurrentTarget?.RuntimeInstanceKey ?? "<none>"}; " +
                     $"eligible={target.IsScoopEligible}; range={controller.InteractionRange}");
-                Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
-                Assert.That(owner.CarriedTarget, Is.SameAs(target));
+                Assert.That(owner.HandState,
+                    Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
+                Assert.That(owner.AcquisitionCommittedTarget, Is.SameAs(target));
+                Assert.That(owner.CarriedTarget, Is.Null);
                 Assert.That(controller.InteractionAttemptSequence, Is.EqualTo(1));
                 Assert.That(
                     presenter.BuildLatestAttemptFeedbackText(),
@@ -191,7 +193,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 PrototypeInteractionDecision decision =
                     controller.ProcessInteractPrimary(false);
                 Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Scoop));
-                Assert.That(owner.CarriedTarget, Is.SameAs(target));
+                Assert.That(owner.AcquisitionCommittedTarget, Is.SameAs(target));
+                Assert.That(owner.CarriedTarget, Is.Null);
             }
             finally
             {

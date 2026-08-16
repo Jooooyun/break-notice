@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BreakNotice.Gameplay.Combat;
+using BreakNotice.Gameplay.Interaction;
 using BreakNotice.Presentation;
 using NUnit.Framework;
 using UnityEditor;
@@ -14,7 +16,7 @@ namespace BreakNotice.LocomotionCamera.Tests
     public sealed class ContestDesignerACharacterIntegrationTests
     {
         private const string ScenePath =
-            "Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v003.unity";
+            "Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity";
         private const string VisualName = "RUNTIME_DESIGNER_A_VISUAL";
         private const string ControllerRoot =
             "Assets/_Project/Art/Animation/DesignerAControllers";
@@ -104,17 +106,24 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(grayboxRenderers.All(renderer => !renderer.enabled), Is.True,
                     driver.Role.ToString());
             }
+
+            ShowcaseBoneCombatRig[] rigs = Components<ShowcaseBoneCombatRig>();
+            Assert.That(rigs, Has.Length.EqualTo(4));
+            Assert.That(rigs.All(rig => rig.Animator != null && rig.Animator.isHuman), Is.True);
+            Assert.That(rigs.Count(rig => rig.Team == ShowcaseCombatTeam.Player), Is.EqualTo(1));
+            Assert.That(rigs.Count(rig => rig.Team == ShowcaseCombatTeam.Ally), Is.EqualTo(1));
+            Assert.That(rigs.Count(rig => rig.Team == ShowcaseCombatTeam.Enemy), Is.EqualTo(2));
         }
 
         [Test]
-        public void RuntimeControllers_UsePlayerSprintAndBoundedWalkLocomotionWithoutFootIk()
+        public void RuntimeControllers_AreMinimalCodeOwnedPlaybackEngines()
         {
-            foreach (string fileName in new[]
+            foreach ((string fileName, int stateCount, bool expectsRun) in new[]
                      {
-                         "CHR00_Player.controller",
-                         "CHR01_Ally.controller",
-                         "ENY01_Normal.controller",
-                         "ENY01_Elite.controller"
+                         ("CHR00_Player.controller", 23, true),
+                         ("CHR01_Ally.controller", 5, true),
+                         ("ENY01_Normal.controller", 17, false),
+                         ("ENY01_Elite.controller", 20, false)
                      })
             {
                 AnimatorController controller = LoadController(fileName);
@@ -125,8 +134,9 @@ namespace BreakNotice.LocomotionCamera.Tests
                 AnimatorState idle = states.Single(state => state.name == "Idle");
                 AnimatorState walk = states.Single(state => state.name == "Walk");
 
+                Assert.That(states, Has.Length.EqualTo(stateCount), fileName);
                 Assert.That(states.Any(state => state.name == "Run"),
-                    Is.EqualTo(fileName == "CHR00_Player.controller"), fileName);
+                    Is.EqualTo(expectsRun), fileName);
                 Assert.That(idle.iKOnFeet, Is.False, fileName);
                 Assert.That(walk.iKOnFeet, Is.False, fileName);
                 Assert.That(walk.speedParameterActive, Is.True, fileName);
@@ -134,19 +144,13 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(controller.parameters.Any(parameter =>
                     parameter.name == "LocomotionPlayback" &&
                     parameter.type == AnimatorControllerParameterType.Float), Is.True, fileName);
-
-                AnimatorStateTransition[] speedTransitions = new[] { idle, walk }
-                    .SelectMany(state => state.transitions)
-                    .Where(transition => transition.conditions.Any(condition =>
-                        condition.parameter == "Speed"))
-                    .ToArray();
-                Assert.That(speedTransitions, Has.Length.EqualTo(2), fileName);
-                Assert.That(speedTransitions.All(transition =>
-                    !transition.hasExitTime &&
-                    Mathf.Approximately(transition.duration, 0.08f)), Is.True, fileName);
-                Assert.That(speedTransitions.All(transition =>
-                    transition.destinationState == idle ||
-                    transition.destinationState == walk), Is.True, fileName);
+                Assert.That(controller.parameters.Select(parameter => parameter.name),
+                    Is.EquivalentTo(new[] { "Speed", "LocomotionPlayback" }), fileName);
+                Assert.That(controller.parameters.All(parameter =>
+                    parameter.type == AnimatorControllerParameterType.Float), Is.True, fileName);
+                Assert.That(states.SelectMany(state => state.transitions), Is.Empty, fileName);
+                Assert.That(controller.layers.SelectMany(layer =>
+                    layer.stateMachine.anyStateTransitions), Is.Empty, fileName);
             }
         }
 
@@ -195,7 +199,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void LocomotionPlayback_PreservesNaturalWalkCadenceAtAllMovementSpeeds()
+        public void LocomotionPlayback_UsesStateSpecificNaturalCadence()
         {
             ShowcaseCharacterAnimationDriver driver = Components<
                     ShowcaseCharacterAnimationDriver>()
@@ -203,43 +207,261 @@ namespace BreakNotice.LocomotionCamera.Tests
                     candidate.Role == ShowcaseCharacterAnimationRole.Player);
 
             Assert.That(driver.CalculateLocomotionPlaybackRate(0f), Is.EqualTo(1f));
-            Assert.That(driver.CalculateLocomotionPlaybackRate(2.8f),
+            Assert.That(driver.CalculateLocomotionPlaybackRate(2.8f, 2.8f),
                 Is.EqualTo(1f).Within(0.001f));
-            Assert.That(driver.CalculateLocomotionPlaybackRate(4.5f),
-                Is.EqualTo(1.15f).Within(0.001f));
-            Assert.That(driver.CalculateLocomotionPlaybackRate(6f),
-                Is.EqualTo(1.15f).Within(0.001f));
+            Assert.That(driver.CalculateLocomotionPlaybackRate(3.2f, 3.2f),
+                Is.EqualTo(1f).Within(0.001f));
+            Assert.That(driver.CalculateLocomotionPlaybackRate(5.5f, 5.5f),
+                Is.EqualTo(1f).Within(0.001f));
+            Assert.That(driver.CalculateLocomotionPlaybackRate(6f, 4.2f),
+                Is.EqualTo(6f / 4.2f).Within(0.001f));
         }
 
         [Test]
-        public void AnimationCatalogs_ReferenceEveryApprovedRuntimeClip()
+        public void RuntimeAnimationEvents_AreSingleInRangeAndPreserveCompletionOrder()
         {
-            AssertCatalog("CHR00_Player.controller", "CHR00", 61);
-            AssertCatalog("CHR01_Ally.controller", "CHR01", 51);
-            AssertCatalog("ENY01_Normal.controller", "ENY01_SHARED", 54);
-            AssertCatalog("ENY01_Elite.controller", "ENY01_SHARED", 54);
+            foreach ((string path, string clipName, string functionName, float normalizedTime) in new[]
+            {
+                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseAttackWindowOpen", 0.42f),
+                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseAttackWindowClose", 0.82f),
+                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseAttackWindowOpen", 0.42f),
+                (AnimationRoot + "/CHR00/DesignerA/Legacy/Hook Punch.fbx", null, "ShowcaseAttackWindowOpen", 0.38f),
+                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseComboBufferOpen", 0.52f),
+                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseComboBufferClose", 0.76f),
+                (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Boxing.fbx", null, "ShowcaseAttackWindowOpen", 0.36f),
+                (AnimationRoot + "/ENY01/DesignerA/EliteOnly/lod@Jump Attack.fbx", null, "ShowcaseAttackWindowClose", 0.60f),
+                (AnimationRoot + "/ENY01/DesignerA/EliteOnly/lod@Jump Attack.fbx", null, "ShowcaseLungeStart", 0.24f),
+                (AnimationRoot + "/ENY01/DesignerA/EliteOnly/lod@Jump Attack.fbx", null, "ShowcaseLungeEnd", 0.62f),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx", null, "ShowcaseCarryContact", 0.52f),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx", null, "ShowcaseThrowRelease", 0.48f),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx", null, "ShowcaseThrowRelease", 0.52f),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Knockdown_B.fbx", null, "ShowcaseActionComplete", 0.88f),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Getup_B.fbx", null, "ShowcaseActionComplete", 0.88f),
+                (AnimationRoot + "/ENY01/DesignerA/ApprovedHit/Hit_Body.fbx", null, "ShowcaseActionComplete", 0.88f),
+                (AnimationRoot + "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Release.fbx", null, "ShowcaseAllySupplyRelease", 0.48f)
+            })
+            {
+                AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(path)
+                    .OfType<AnimationClip>()
+                    .Single(candidate => !candidate.name.StartsWith("__preview__") &&
+                        (string.IsNullOrEmpty(clipName) || candidate.name == clipName));
+                AnimationEvent[] matches = AnimationUtility.GetAnimationEvents(clip)
+                    .Where(animationEvent => animationEvent.functionName == functionName)
+                    .ToArray();
+                Assert.That(matches, Has.Length.EqualTo(1), path + " / " + functionName);
+                float tolerance = Mathf.Max(0.001f, 1f / Mathf.Max(1f, clip.frameRate));
+                Assert.That(matches[0].time,
+                    Is.EqualTo(clip.length * normalizedTime).Within(tolerance), path);
+                Assert.That(matches[0].time, Is.LessThanOrEqualTo(clip.length + tolerance), path);
+            }
         }
 
         [Test]
-        public void EnemyEligibility_NormalExcludesAndEliteIncludesSixEliteOnlyAnimations()
+        public void RuntimeControllers_ExcludeReviewCatalogAndBrokenReadyClip()
+        {
+            foreach (string fileName in new[]
+                     {
+                         "CHR00_Player.controller", "CHR01_Ally.controller",
+                         "ENY01_Normal.controller", "ENY01_Elite.controller"
+                     })
+            {
+                Assert.That(StateNames(LoadController(fileName)).Any(name =>
+                    name.Contains("__", StringComparison.Ordinal)), Is.False, fileName);
+            }
+
+            AnimatorController ally = LoadController("CHR01_Ally.controller");
+            Assert.That(ally.layers.SelectMany(layer => layer.stateMachine.states)
+                .Select(child => child.state.motion)
+                .OfType<AnimationClip>()
+                .Any(clip => clip.name.Contains("Windup", StringComparison.OrdinalIgnoreCase)),
+                Is.False);
+        }
+
+        [Test]
+        public void EnemyEligibility_NormalExcludesAndEliteUsesOnlyThreeApprovedUnarmedAttacks()
         {
             AnimatorController normal = LoadController("ENY01_Normal.controller");
             AnimatorController elite = LoadController("ENY01_Elite.controller");
 
-            Assert.That(StateNames(normal).Count(name =>
-                name.StartsWith("ENY01_ELITE_ONLY__", StringComparison.Ordinal)), Is.Zero);
-            Assert.That(StateNames(elite).Count(name =>
-                name.StartsWith("ENY01_ELITE_ONLY__", StringComparison.Ordinal)), Is.EqualTo(6));
+            string[] selected =
+            {
+                "EliteMutantPunchAction", "EliteMutantSwipingAction",
+                "EliteJumpAttackAction"
+            };
+            Assert.That(StateNames(normal), Has.None.Matches<string>(name =>
+                selected.Contains(name)));
+            Assert.That(StateNames(elite), Does.Contain(selected[0]));
+            Assert.That(StateNames(elite), Does.Contain(selected[1]));
+            Assert.That(StateNames(elite), Does.Contain(selected[2]));
+            Assert.That(StateNames(elite), Has.None.Matches<string>(name =>
+                name.Contains("Walking", StringComparison.OrdinalIgnoreCase) ||
+                name.Contains("Stabbing", StringComparison.OrdinalIgnoreCase) ||
+                name.Contains("Club", StringComparison.OrdinalIgnoreCase)));
+        }
 
-            string[] normalShared = StateNames(normal)
-                .Where(name => name.StartsWith("ENY01_SHARED__", StringComparison.Ordinal))
-                .OrderBy(name => name, StringComparer.Ordinal)
-                .ToArray();
-            string[] eliteShared = StateNames(elite)
-                .Where(name => name.StartsWith("ENY01_SHARED__", StringComparison.Ordinal))
-                .OrderBy(name => name, StringComparer.Ordinal)
-                .ToArray();
-            Assert.That(eliteShared, Is.EqualTo(normalShared));
+        [Test]
+        public void RuntimeActionSpeedsAndAllyChairIk_MatchApprovedCombatTuning()
+        {
+            AnimatorController player = LoadController("CHR00_Player.controller");
+            AnimatorController ally = LoadController("CHR01_Ally.controller");
+            AnimatorController normal = LoadController("ENY01_Normal.controller");
+            AnimatorController elite = LoadController("ENY01_Elite.controller");
+
+            AssertStateSpeed(player, "ThrowLightAction", 1.6f);
+            AssertStateSpeed(player, "ThrowMediumAction", 1.5f);
+            AssertStateSpeed(player, "MeleeHookAction", 1.4f);
+            AssertStateSpeed(normal, "AttackBoxingAction", 1.25f);
+            AssertStateSpeed(normal, "AttackBoxing2Action", 1.3f);
+            AssertStateSpeed(normal, "AttackKickingAction", 1.2f);
+            AssertStateSpeed(normal, "AttackKicking2Action", 1.2f);
+            AssertStateSpeed(elite, "EliteMutantPunchAction", 1f);
+            AssertStateSpeed(elite, "EliteMutantSwipingAction", 1f);
+            AssertStateSpeed(elite, "EliteJumpAttackAction", 1f);
+            Assert.That(ally.layers[0].iKPass, Is.True);
+
+            ShowcaseCharacterAnimationDriver allyDriver = Components<
+                    ShowcaseCharacterAnimationDriver>()
+                .Single(driver => driver.Role == ShowcaseCharacterAnimationRole.Ally);
+            ShowcaseChairGripRig chairGrip =
+                allyDriver.Animator.GetComponent<ShowcaseChairGripRig>();
+            Assert.That(chairGrip, Is.Not.Null);
+        }
+
+        [Test]
+        public void BoneCombatRig_SweptSphereRequiresActualGeometricOverlap()
+        {
+            Assert.That(ShowcaseBoneCombatRig.SweptSphereOverlapsSphere(
+                new Vector3(-2f, 0f, 0f),
+                new Vector3(2f, 0f, 0f),
+                0.1f,
+                Vector3.zero,
+                0.2f), Is.True, "Fast strike must not tunnel through a hurtbox.");
+            Assert.That(ShowcaseBoneCombatRig.SweptSphereOverlapsSphere(
+                new Vector3(-2f, 1f, 0f),
+                new Vector3(2f, 1f, 0f),
+                0.1f,
+                Vector3.zero,
+                0.2f), Is.False, "A near miss must not deal damage.");
+        }
+
+        [Test]
+        public void PlayerMeleeRuntimeClips_ExposeMeasuredHandTrajectories()
+        {
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/_Project/Art/Characters/CHR00/DesignerA/CHR00_Player.fbx");
+            Assert.That(model, Is.Not.Null);
+            GameObject instance = UnityEngine.Object.Instantiate(model);
+            try
+            {
+                Animator animator = instance.GetComponentInChildren<Animator>(true);
+                Assert.That(animator, Is.Not.Null);
+                Assert.That(animator.isHuman, Is.True);
+                foreach ((string path, string clipName, HumanBodyBones bone) in new[]
+                         {
+                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", HumanBodyBones.LeftHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", HumanBodyBones.RightHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", HumanBodyBones.RightHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", HumanBodyBones.LeftHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Hook Punch.fbx", null, HumanBodyBones.RightHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Hook Punch.fbx", null, HumanBodyBones.LeftHand)
+                         })
+                {
+                    AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(path)
+                        .OfType<AnimationClip>()
+                        .Single(candidate => !candidate.name.StartsWith("__preview__") &&
+                            (string.IsNullOrEmpty(clipName) || candidate.name == clipName));
+                    Transform hand = animator.GetBoneTransform(bone);
+                    Assert.That(hand, Is.Not.Null, clip.name);
+                    Vector3 min = Vector3.one * float.PositiveInfinity;
+                    Vector3 max = Vector3.one * float.NegativeInfinity;
+                    Vector3 windowMin = Vector3.one * float.PositiveInfinity;
+                    Vector3 windowMax = Vector3.one * float.NegativeInfinity;
+                    float maxForwardTime = 0f;
+                    for (int sample = 0; sample <= 60; sample++)
+                    {
+                        clip.SampleAnimation(instance, clip.length * sample / 60f);
+                        Vector3 local = instance.transform.InverseTransformPoint(hand.position);
+                        min = Vector3.Min(min, local);
+                        if (local.z >= max.z)
+                        {
+                            maxForwardTime = sample / 60f;
+                        }
+                        max = Vector3.Max(max, local);
+                        if (sample >= 23 && sample <= 35)
+                        {
+                            windowMin = Vector3.Min(windowMin, local);
+                            windowMax = Vector3.Max(windowMax, local);
+                        }
+                    }
+                    TestContext.WriteLine(
+                        $"{clip.name}/{bone}: length={clip.length:F3}, handMin={min}, " +
+                        $"handMax={max}, maxForwardTime={maxForwardTime:F3}, " +
+                        $"windowMin={windowMin}, windowMax={windowMax}");
+                    Assert.That((max - min).magnitude, Is.GreaterThan(0.05f), clip.name);
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(instance);
+            }
+        }
+
+        [Test]
+        public void EnemyMeleeRuntimeClips_ExposeMeasuredStrikeTrajectories()
+        {
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/_Project/Art/Characters/ENY01/DesignerA/ENY01_Normal.fbx");
+            Assert.That(model, Is.Not.Null);
+            GameObject instance = UnityEngine.Object.Instantiate(model);
+            try
+            {
+                Animator animator = instance.GetComponentInChildren<Animator>(true);
+                Assert.That(animator, Is.Not.Null);
+                foreach ((string path, HumanBodyBones bone) in new[]
+                         {
+                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking.fbx", HumanBodyBones.RightFoot),
+                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking.fbx", HumanBodyBones.LeftFoot),
+                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking_2.fbx", HumanBodyBones.RightFoot),
+                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking_2.fbx", HumanBodyBones.LeftFoot),
+                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Boxing.fbx", HumanBodyBones.RightHand)
+                         })
+                {
+                    AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(path)
+                        .OfType<AnimationClip>()
+                        .Single(candidate => !candidate.name.StartsWith("__preview__"));
+                    Transform strike = animator.GetBoneTransform(bone);
+                    Assert.That(strike, Is.Not.Null, clip.name);
+                    Vector3 windowMin = Vector3.one * float.PositiveInfinity;
+                    Vector3 windowMax = Vector3.one * float.NegativeInfinity;
+                    Vector3 overallMax = Vector3.one * float.NegativeInfinity;
+                    float maxForwardTime = 0f;
+                    for (int sample = 0; sample <= 60; sample++)
+                    {
+                        clip.SampleAnimation(instance, clip.length * sample / 60f);
+                        Vector3 local = instance.transform.InverseTransformPoint(strike.position);
+                        if (local.z >= overallMax.z)
+                        {
+                            maxForwardTime = sample / 60f;
+                        }
+                        overallMax = Vector3.Max(overallMax, local);
+                        if (sample >= 23 && sample <= 35)
+                        {
+                            windowMin = Vector3.Min(windowMin, local);
+                            windowMax = Vector3.Max(windowMax, local);
+                        }
+                    }
+                    TestContext.WriteLine(
+                        $"{clip.name}/{bone}: length={clip.length:F3}, " +
+                        $"maxForward={overallMax}, maxForwardTime={maxForwardTime:F3}, " +
+                        $"windowMin={windowMin}, windowMax={windowMax}");
+                    Assert.That((windowMax - windowMin).magnitude,
+                        Is.GreaterThan(0.02f), clip.name);
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(instance);
+            }
         }
 
         [Test]
@@ -291,6 +513,18 @@ namespace BreakNotice.LocomotionCamera.Tests
                 ControllerRoot + "/" + fileName);
             Assert.That(controller, Is.Not.Null, fileName);
             return controller;
+        }
+
+        private static void AssertStateSpeed(
+            AnimatorController controller,
+            string stateName,
+            float expected)
+        {
+            AnimatorState state = controller.layers
+                .SelectMany(layer => layer.stateMachine.states)
+                .Select(child => child.state)
+                .Single(candidate => candidate.name == stateName);
+            Assert.That(state.speed, Is.EqualTo(expected).Within(0.001f), stateName);
         }
 
         private static string[] StateNames(AnimatorController controller)

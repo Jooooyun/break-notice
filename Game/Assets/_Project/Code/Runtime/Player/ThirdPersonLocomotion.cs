@@ -1,9 +1,23 @@
+using System;
 using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
 using UnityEngine;
 
 namespace BreakNotice.Gameplay
 {
+    [Flags]
+    public enum PlayerMobilityLockReason
+    {
+        None = 0,
+        PlayerAction = 1 << 0,
+        HitReaction = 1 << 1,
+        Knockdown = 1 << 2,
+        Grab = 1 << 3,
+        Objective = 1 << 4,
+        Death = 1 << 5
+    }
+
+    [DefaultExecutionOrder(110)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(InputSystemLogicalInputAdapter))]
@@ -16,13 +30,16 @@ namespace BreakNotice.Gameplay
         private Transform cameraTransform;
 
         [SerializeField]
-        private float moveSpeed = 4.5f;
+        private float moveSpeed = 3.2f;
 
         [SerializeField]
-        private float sprintSpeed = 6.5f;
+        private float sprintSpeed = 5.5f;
 
         [SerializeField]
         private float rotationResponse = 12f;
+
+        [SerializeField]
+        private float aimTurnSpeedDegrees = 360f;
 
         [SerializeField]
         private float gravity = -25f;
@@ -38,12 +55,13 @@ namespace BreakNotice.Gameplay
 
         private CharacterController controller;
         private PrototypeInteractionStateOwner interactionOwner;
+        private PrototypePhysicalObjectLifecycle physicalLifecycle;
         private float verticalVelocity;
         private float coyoteTimeRemaining;
         private float jumpBufferTimeRemaining;
         private bool jumpConsumed;
         private CollisionFlags lastCollisionFlags;
-        private bool externalMovementBlocked;
+        private PlayerMobilityLockReason mobilityLocks;
         private Vector3 externalPlanarVelocity;
 
         public float MoveSpeed => moveSpeed;
@@ -70,7 +88,12 @@ namespace BreakNotice.Gameplay
 
         public float CurrentHorizontalSpeed { get; private set; }
 
-        public bool IsMovementExternallyBlocked => externalMovementBlocked;
+        public PlayerMobilityLockReason MobilityLocks => mobilityLocks;
+
+        public bool IsMovementExternallyBlocked =>
+            mobilityLocks != PlayerMobilityLockReason.None;
+
+        public Transform MovementReference => cameraTransform;
 
         private void Awake()
         {
@@ -81,13 +104,14 @@ namespace BreakNotice.Gameplay
             }
 
             interactionOwner = GetComponent<PrototypeInteractionStateOwner>();
+            physicalLifecycle = GetComponent<PrototypePhysicalObjectLifecycle>();
         }
 
         private void Update()
         {
             Vector2 moveInput = logicalInput.Snapshot.Move;
             bool mobilityBlocked = logicalInput.Snapshot.ResetEncounter ||
-                externalMovementBlocked ||
+                IsMovementExternallyBlocked ||
                 (interactionOwner != null && interactionOwner.BlocksNewInteraction);
             bool mediumCarry = IsCarryingMedium();
             bool hasMoveInput = moveInput.sqrMagnitude > 0.0001f;
@@ -127,14 +151,36 @@ namespace BreakNotice.Gameplay
             {
                 desiredDirection.Normalize();
             }
-
-            if (desiredDirection.sqrMagnitude > 0.0001f)
+            if (physicalLifecycle != null && physicalLifecycle.GripWorldBlocked)
             {
-                Quaternion desiredRotation = Quaternion.LookRotation(desiredDirection, Vector3.up);
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    desiredRotation,
-                    1f - Mathf.Exp(-rotationResponse * Time.deltaTime));
+                Vector3 blockNormal = Vector3.ProjectOnPlane(
+                    physicalLifecycle.GripWorldBlockNormal,
+                    Vector3.up);
+                if (blockNormal.sqrMagnitude > 0.0001f)
+                {
+                    blockNormal.Normalize();
+                    float inward = Vector3.Dot(desiredDirection, blockNormal);
+                    if (inward < 0f)
+                    {
+                        desiredDirection -= inward * blockNormal;
+                    }
+                }
+            }
+
+            bool aiming = logicalInput.Snapshot.Aim && !mobilityBlocked;
+            Vector3 facingDirection = aiming ? forward : desiredDirection;
+            if (!mobilityBlocked && facingDirection.sqrMagnitude > 0.0001f)
+            {
+                Quaternion desiredRotation = Quaternion.LookRotation(facingDirection, Vector3.up);
+                transform.rotation = aiming
+                    ? Quaternion.RotateTowards(
+                        transform.rotation,
+                        desiredRotation,
+                        Mathf.Max(0f, aimTurnSpeedDegrees) * Time.deltaTime)
+                    : Quaternion.Slerp(
+                        transform.rotation,
+                        desiredRotation,
+                        1f - Mathf.Exp(-rotationResponse * Time.deltaTime));
             }
 
             bool groundedBeforeMove = IsGrounded;
@@ -165,7 +211,10 @@ namespace BreakNotice.Gameplay
                 verticalVelocity += gravity * Time.deltaTime;
             }
 
-            Vector3 velocity = desiredDirection * CurrentHorizontalSpeed +
+            Vector3 controlledPlanarVelocity = mobilityBlocked
+                ? Vector3.zero
+                : desiredDirection * CurrentHorizontalSpeed;
+            Vector3 velocity = controlledPlanarVelocity +
                 externalPlanarVelocity +
                 Vector3.up * verticalVelocity;
             CollisionFlags collisionFlags = controller.Move(velocity * Time.deltaTime);
@@ -199,19 +248,43 @@ namespace BreakNotice.Gameplay
             interactionOwner = value;
         }
 
-        public void SetExternalMovementBlocked(bool blocked)
+        public void SetMobilityLock(PlayerMobilityLockReason reason, bool locked)
         {
-            externalMovementBlocked = blocked;
-            if (blocked)
+            if (reason == PlayerMobilityLockReason.None)
+            {
+                return;
+            }
+
+            if (locked)
+            {
+                mobilityLocks |= reason;
+            }
+            else
+            {
+                mobilityLocks &= ~reason;
+            }
+
+            if (IsMovementExternallyBlocked)
             {
                 IsSprinting = false;
                 jumpBufferTimeRemaining = 0f;
             }
         }
 
+        public bool HasMobilityLock(PlayerMobilityLockReason reason)
+        {
+            return reason != PlayerMobilityLockReason.None &&
+                (mobilityLocks & reason) == reason;
+        }
+
         public void AddExternalPlanarImpulse(Vector3 velocity)
         {
             externalPlanarVelocity += Vector3.ProjectOnPlane(velocity, Vector3.up);
+        }
+
+        public void ClearExternalPlanarImpulse()
+        {
+            externalPlanarVelocity = Vector3.zero;
         }
 
         public void ResetMotionState()
@@ -222,7 +295,7 @@ namespace BreakNotice.Gameplay
             jumpConsumed = false;
             IsSprinting = false;
             CurrentHorizontalSpeed = moveSpeed;
-            externalMovementBlocked = false;
+            mobilityLocks = PlayerMobilityLockReason.None;
             externalPlanarVelocity = Vector3.zero;
         }
 

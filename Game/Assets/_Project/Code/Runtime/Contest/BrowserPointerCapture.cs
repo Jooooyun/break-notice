@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace BreakNotice.Contest
 {
+    [DefaultExecutionOrder(-400)]
     [DisallowMultipleComponent]
     public sealed class BrowserPointerCapture : MonoBehaviour
     {
@@ -26,6 +27,8 @@ namespace BreakNotice.Contest
 
         public bool IsFallbackActive => isFallbackActive;
 
+        public bool CaptureFailed => captureFailed;
+
         public InputSystemLogicalInputAdapter LogicalInput => logicalInput;
 
         private void Awake()
@@ -34,44 +37,58 @@ namespace BreakNotice.Contest
             {
                 logicalInput = FindFirstObjectByType<InputSystemLogicalInputAdapter>();
             }
+            logicalInput?.SetPointerCaptureRequired(true);
         }
 
         public void Configure(InputSystemLogicalInputAdapter input)
         {
+            logicalInput?.SetPointerCaptureRequired(false);
             logicalInput = input;
+            logicalInput?.SetPointerCaptureRequired(isActiveAndEnabled);
         }
 
         private void OnEnable()
         {
+            logicalInput?.SetPointerCaptureRequired(true);
 #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLInput.stickyCursorLock = false;
             isSupported = BNPointerLock_Install() != 0;
             BNPointerLock_SetEnabled(1);
             RefreshPointerState();
+#else
+            isSupported = true;
+            RefreshDesktopPointerState();
 #endif
         }
 
         private void Update()
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 ReleasePointer();
                 return;
             }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
             RefreshPointerState();
+#else
+            RefreshDesktopPointerState();
+            if (!isLocked &&
+                Application.isFocused &&
+                Mouse.current != null &&
+                Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                RequestPointerCapture();
+            }
 #endif
         }
 
         private void OnApplicationFocus(bool hasFocus)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
             if (!hasFocus)
             {
                 ReleasePointer();
             }
-#endif
         }
 
         private void OnDisable()
@@ -79,6 +96,32 @@ namespace BreakNotice.Contest
 #if UNITY_WEBGL && !UNITY_EDITOR
             BNPointerLock_SetEnabled(0);
 #endif
+            ReleasePointer();
+            logicalInput?.SetPointerCaptureRequired(false);
+        }
+
+        public void RequestPointerCapture()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            // A browser pointer-lock request must originate from the trusted
+            // canvas click handled by the WebGL bridge.
+            RefreshPointerState();
+#else
+            isSupported = true;
+            isPending = false;
+            isFallbackActive = false;
+            captureFailed = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            ApplyPointerState(
+                Cursor.lockState == CursorLockMode.Locked,
+                false,
+                false,
+                Vector2.zero);
+#endif
+        }
+
+        public void ReleasePointerCapture()
+        {
             ReleasePointer();
         }
 
@@ -151,6 +194,19 @@ namespace BreakNotice.Contest
                 fallbackActive,
                 fallbackLookDelta);
         }
+#else
+        private void RefreshDesktopPointerState()
+        {
+            isSupported = true;
+            isPending = false;
+            isFallbackActive = false;
+            captureFailed = false;
+            ApplyPointerState(
+                Cursor.lockState == CursorLockMode.Locked,
+                false,
+                false,
+                Vector2.zero);
+        }
 #endif
 
         private void ReleasePointer()
@@ -172,7 +228,7 @@ namespace BreakNotice.Contest
         {
             isLocked = locked;
             isFallbackActive = !locked && fallbackActive;
-            logicalInput?.SetWebPointerState(
+            logicalInput?.SetPointerState(
                 isLocked,
                 isFallbackActive,
                 fallbackLookDelta);

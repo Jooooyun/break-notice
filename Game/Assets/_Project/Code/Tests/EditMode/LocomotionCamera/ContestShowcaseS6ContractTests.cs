@@ -33,7 +33,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(pressure.ActiveAttackTokenCount, Is.EqualTo(1));
             Assert.That(pressure.AttackTokenOwner, Is.SameAs(first));
             pressure.ReleaseAttackToken(first);
-            Assert.That(pressure.TryAcquireAttackToken(second), Is.True);
+            Assert.That(pressure.TryAcquireAttackToken(second), Is.False,
+                "A released token must observe the authored team attack gap.");
+            pressure.ResetToRunBaseline();
+            Assert.That(pressure.TryAcquireAttackToken(second), Is.True,
+                "Authored Reset clears the team attack gap deterministically.");
             Assert.That(pressure.AttackTokenOwner, Is.SameAs(second));
         }
 

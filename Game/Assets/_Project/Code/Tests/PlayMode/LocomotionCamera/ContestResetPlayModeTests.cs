@@ -94,6 +94,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 var arbitrator = new PrototypeInteractionArbitrator();
                 Assert.That(fixture.Owner.TryCommit(
                     arbitrator.Decide(fixture.Owner.CreateContext(false, binder))), Is.True);
+                Assert.That(fixture.Owner.TryCompleteAcquisition(binder), Is.True);
                 Assert.That(fixture.Lifecycle.BeginCarry(binder), Is.True);
                 for (int step = 0; step < 30; step++)
                 {
