@@ -1,0 +1,502 @@
+{
+  "status": "REVIEW_CANDIDATE_NOT_FINAL_NOT_RUNTIME",
+  "direction": "Z / Arcade Edge",
+  "sample_rate": 48000,
+  "subtype": "PCM_24",
+  "channels": 2,
+  "frames": 64800,
+  "contact_seconds": 0.2,
+  "stems": [
+    "pre",
+    "signature",
+    "emitter",
+    "runner",
+    "floor_tail"
+  ],
+  "cues": [
+    {
+      "cue_id": "T1_HAND_RUNNER_v01",
+      "family": "T1_HAND_RUNNER",
+      "tier": 1,
+      "variation": 1,
+      "branded_click": false,
+      "source_lineage": [
+        "punch11",
+        "hand_slap",
+        "body_fruit",
+        "cloth6"
+      ],
+      "composite_sha256": "8d2cc0b8706e477e2a53937b0052f3de6719b580a445f023cf15e348e095a1e0",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T1_HAND_RUNNER_v01/T1_HAND_RUNNER_v01_pre_REVIEW.wav",
+          "sha256": "3eac59fa3cb89908d93d785ff8e6b7dba075d57d137a0fd633f4d58a31e733b3"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T1_HAND_RUNNER_v01/T1_HAND_RUNNER_v01_signature_REVIEW.wav",
+          "sha256": "0b306b78e8b6260107700392dd1d33bea46fac5a3ef2ef62f830c816de140462"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T1_HAND_RUNNER_v01/T1_HAND_RUNNER_v01_emitter_REVIEW.wav",
+          "sha256": "a84ac7d5d438d406672625aeba0d4e37f65562d015c8b7712666f044f7a9ef51"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T1_HAND_RUNNER_v01/T1_HAND_RUNNER_v01_runner_REVIEW.wav",
+          "sha256": "22452ab4183d454d141de928a15e691533abd7e9fab88a9c138fc6f834d371a9"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T1_HAND_RUNNER_v01/T1_HAND_RUNNER_v01_floor_tail_REVIEW.wav",
+          "sha256": "9e10034d47f3ed10cf31bb0f00c4b69eb978eb0f38b0db38d21a711bffde4761"
+        }
+      ]
+    },
+    {
+      "cue_id": "T1_HAND_RUNNER_v02",
+      "family": "T1_HAND_RUNNER",
+      "tier": 1,
+      "variation": 2,
+      "branded_click": false,
+      "source_lineage": [
+        "punch12",
+        "hand_slap",
+        "body_fruit",
+        "cloth4"
+      ],
+      "composite_sha256": "3e407d7ba2cf661e50cf56180751a992405303a054b59a22dcd4dfb81fcfdf26",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T1_HAND_RUNNER_v02/T1_HAND_RUNNER_v02_pre_REVIEW.wav",
+          "sha256": "dd1298e4f14b7be24454c3f76514e78400994928d12e6f4fdad8b3372d5d04db"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T1_HAND_RUNNER_v02/T1_HAND_RUNNER_v02_signature_REVIEW.wav",
+          "sha256": "314386014ffab1546853bda5318d56f67daaddeff024aceb8b1fd43c31e2315e"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T1_HAND_RUNNER_v02/T1_HAND_RUNNER_v02_emitter_REVIEW.wav",
+          "sha256": "695503f66c33b25116983efa12e29624e100c6a43652aac86944a172138cbdd4"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T1_HAND_RUNNER_v02/T1_HAND_RUNNER_v02_runner_REVIEW.wav",
+          "sha256": "d1fa975482268b60638f6dcf56e5c547124d0d5d992530f9395de4aa9c784ee0"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T1_HAND_RUNNER_v02/T1_HAND_RUNNER_v02_floor_tail_REVIEW.wav",
+          "sha256": "c35eb084a50a00cf23410dfb27bc91a322cdfd59d803009be48fbb9f32c92bcb"
+        }
+      ]
+    },
+    {
+      "cue_id": "T1_HAND_RUNNER_v03",
+      "family": "T1_HAND_RUNNER",
+      "tier": 1,
+      "variation": 3,
+      "branded_click": false,
+      "source_lineage": [
+        "punch10",
+        "hand_slap",
+        "body_fruit",
+        "cloth6"
+      ],
+      "composite_sha256": "ff5f5c5c02845d5319225397490596484a04447c6fcef81c786dd836d04fcaf3",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T1_HAND_RUNNER_v03/T1_HAND_RUNNER_v03_pre_REVIEW.wav",
+          "sha256": "210ba627cae650d1f47876e2d734f3370fe6da8f216057aa6f6a8c38259e9391"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T1_HAND_RUNNER_v03/T1_HAND_RUNNER_v03_signature_REVIEW.wav",
+          "sha256": "da1c030472b19c5a9ff558a4da2fda833a7c0545f4d64c3a15527518c2999717"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T1_HAND_RUNNER_v03/T1_HAND_RUNNER_v03_emitter_REVIEW.wav",
+          "sha256": "cb15d142b2f69a0b6cd51be746f93b36b7a8f103e211d88ac20a4e7040fab637"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T1_HAND_RUNNER_v03/T1_HAND_RUNNER_v03_runner_REVIEW.wav",
+          "sha256": "c5580a0d50ca172a265e8c224026c8c16bd6258611145bb33d910e095a50dd73"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T1_HAND_RUNNER_v03/T1_HAND_RUNNER_v03_floor_tail_REVIEW.wav",
+          "sha256": "be733b217cab90b30baa8a71d7d881c816b8b541701af5f7288ad5b2c9701626"
+        }
+      ]
+    },
+    {
+      "cue_id": "T2_HOOK_RUNNER_v01",
+      "family": "T2_HOOK_RUNNER",
+      "tier": 2,
+      "variation": 1,
+      "branded_click": true,
+      "source_lineage": [
+        "punch10",
+        "hand_slap",
+        "body_hit",
+        "body_fruit",
+        "cloth4"
+      ],
+      "composite_sha256": "525258ee32e2ff389b4ed11b17925dea735a29fcf6bd2449143be1ca27438b6d",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T2_HOOK_RUNNER_v01/T2_HOOK_RUNNER_v01_pre_REVIEW.wav",
+          "sha256": "d017f718d392cd44dd36bbd1a83dac919313ee277d4da68b9529ee81e4a84faf"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T2_HOOK_RUNNER_v01/T2_HOOK_RUNNER_v01_signature_REVIEW.wav",
+          "sha256": "6bff9ec3dd2545b9579b8530f41027dc9a70951af4822df887e0f199db5cb60f"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T2_HOOK_RUNNER_v01/T2_HOOK_RUNNER_v01_emitter_REVIEW.wav",
+          "sha256": "e56fafcf4472dc67e2b64a0cba94156c2bf1b976c2aa5e9fda8a1cc5c4f76592"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T2_HOOK_RUNNER_v01/T2_HOOK_RUNNER_v01_runner_REVIEW.wav",
+          "sha256": "a9b1f5cc2e3d6a746591b196ec5387327f1cf9ab08c3ec39e9b7706ced8c3331"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T2_HOOK_RUNNER_v01/T2_HOOK_RUNNER_v01_floor_tail_REVIEW.wav",
+          "sha256": "b38191e725412dd830d968e3b79a6f038433e16a019f85b8f20eca00a705172f"
+        }
+      ]
+    },
+    {
+      "cue_id": "T2_HOOK_RUNNER_v02",
+      "family": "T2_HOOK_RUNNER",
+      "tier": 2,
+      "variation": 2,
+      "branded_click": true,
+      "source_lineage": [
+        "punch11",
+        "hand_slap",
+        "body_hit",
+        "body_fruit",
+        "cloth6"
+      ],
+      "composite_sha256": "aecb54eef9d0fe4db51507c5a053a612b922c698111b6db2e88c23209aafb152",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T2_HOOK_RUNNER_v02/T2_HOOK_RUNNER_v02_pre_REVIEW.wav",
+          "sha256": "b246082b2b65f0f2095bb9f78f000c8b69df9a23c935f26800f169136f42cee8"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T2_HOOK_RUNNER_v02/T2_HOOK_RUNNER_v02_signature_REVIEW.wav",
+          "sha256": "c917163052e04a97574ad166b7dfc8544dd84146ee34f549f6befe73dc6c61fd"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T2_HOOK_RUNNER_v02/T2_HOOK_RUNNER_v02_emitter_REVIEW.wav",
+          "sha256": "b7a78f8480b48539b2e8c1f148dc7819128fca74a62a00a4f9c1563993b297d2"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T2_HOOK_RUNNER_v02/T2_HOOK_RUNNER_v02_runner_REVIEW.wav",
+          "sha256": "4d480d1f3ff711e48974ab92ca3c864ee44e3007cee659e667213d0a10bebb47"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T2_HOOK_RUNNER_v02/T2_HOOK_RUNNER_v02_floor_tail_REVIEW.wav",
+          "sha256": "a5127f9e770563b5f5bbf4cb204140813ae74ece1474b79dab368449d8fdd7d9"
+        }
+      ]
+    },
+    {
+      "cue_id": "T2_HOOK_RUNNER_v03",
+      "family": "T2_HOOK_RUNNER",
+      "tier": 2,
+      "variation": 3,
+      "branded_click": true,
+      "source_lineage": [
+        "punch12",
+        "hand_slap",
+        "body_hit",
+        "body_fruit",
+        "shoulder_cloth"
+      ],
+      "composite_sha256": "c817ed6115ebb74cff35a1915e9056d21816f126ac606e32480418545ea9ef9e",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T2_HOOK_RUNNER_v03/T2_HOOK_RUNNER_v03_pre_REVIEW.wav",
+          "sha256": "5cb7a44af249ef28a60e3271dbbe2d850e4ee1f271c0e2c3c3f65fdb73f84c59"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T2_HOOK_RUNNER_v03/T2_HOOK_RUNNER_v03_signature_REVIEW.wav",
+          "sha256": "a6b417f213aa007700fd9ea6d92b8272eda282588832f478be42e3bf81502c49"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T2_HOOK_RUNNER_v03/T2_HOOK_RUNNER_v03_emitter_REVIEW.wav",
+          "sha256": "db570af842a8c40d808f924edd11322a389ca4735981b05571fb74fa96a14d99"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T2_HOOK_RUNNER_v03/T2_HOOK_RUNNER_v03_runner_REVIEW.wav",
+          "sha256": "f309379495d42a762732a8203f283a1c8b877ecb3a4945866b20d3319e065ef1"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T2_HOOK_RUNNER_v03/T2_HOOK_RUNNER_v03_floor_tail_REVIEW.wav",
+          "sha256": "e42235b809fdce098656ba3e238004560b9dd8c1fc369e7f1209cd87f4a4059c"
+        }
+      ]
+    },
+    {
+      "cue_id": "T2_BINDER_RUNNER_v01",
+      "family": "T2_BINDER_RUNNER",
+      "tier": 2,
+      "variation": 1,
+      "branded_click": true,
+      "source_lineage": [
+        "book2",
+        "plastic",
+        "ring",
+        "paper_crumple",
+        "paper_flips",
+        "body_hit",
+        "body_fruit"
+      ],
+      "composite_sha256": "95057f7ec072eca0f65d47338489795744bf7075c74dfeaa4c5640bc51dc81f7",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T2_BINDER_RUNNER_v01/T2_BINDER_RUNNER_v01_pre_REVIEW.wav",
+          "sha256": "e2afa328e9ac719b46b90975e29f53a4f2b31de8a0b12dc3848e2e746ce0aac5"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T2_BINDER_RUNNER_v01/T2_BINDER_RUNNER_v01_signature_REVIEW.wav",
+          "sha256": "99584de02064db0e2eb2849953999d7ac478906aa530431039598f79340b4388"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T2_BINDER_RUNNER_v01/T2_BINDER_RUNNER_v01_emitter_REVIEW.wav",
+          "sha256": "0b628e8cc106bc151e8b21c2a82c7cba68323fe65b7667e18d890280aef5c085"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T2_BINDER_RUNNER_v01/T2_BINDER_RUNNER_v01_runner_REVIEW.wav",
+          "sha256": "b76ca973818787f9d5227d16613e2073a4f532681896a94985c34592cba81bb4"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T2_BINDER_RUNNER_v01/T2_BINDER_RUNNER_v01_floor_tail_REVIEW.wav",
+          "sha256": "70a23ff137942a716d18557574cc03044f9ed3b0e1f69faf789e660fe06595b7"
+        }
+      ]
+    },
+    {
+      "cue_id": "T2_BINDER_RUNNER_v02",
+      "family": "T2_BINDER_RUNNER",
+      "tier": 2,
+      "variation": 2,
+      "branded_click": true,
+      "source_lineage": [
+        "book9",
+        "plastic",
+        "ring",
+        "paper_crumple",
+        "paper_flips",
+        "body_hit",
+        "body_fruit"
+      ],
+      "composite_sha256": "58ef03b93f65abbfb9ffe093120f2ac34a28db4050bcb5b1a9046160e29ec193",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T2_BINDER_RUNNER_v02/T2_BINDER_RUNNER_v02_pre_REVIEW.wav",
+          "sha256": "cf5d8096a11bcedb2a402bd72c35bbb2042e712df998f940e120d69b1b2a26d7"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T2_BINDER_RUNNER_v02/T2_BINDER_RUNNER_v02_signature_REVIEW.wav",
+          "sha256": "728abbd3d363186ff81d5626edee417cd338fe8e706ac8111357b2a08a946dfb"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T2_BINDER_RUNNER_v02/T2_BINDER_RUNNER_v02_emitter_REVIEW.wav",
+          "sha256": "626259d715fcdd53bad5f4779ed8a79c9925abd2cf2815801ad7ee2f73ee3f73"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T2_BINDER_RUNNER_v02/T2_BINDER_RUNNER_v02_runner_REVIEW.wav",
+          "sha256": "1cc747bc95f18178bba3831e0871a16931103cc5382b787cee805e957241ec5d"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T2_BINDER_RUNNER_v02/T2_BINDER_RUNNER_v02_floor_tail_REVIEW.wav",
+          "sha256": "18349cb458e253245abcc54871a2bf8bed159c414bd87bc6625444c3093656c8"
+        }
+      ]
+    },
+    {
+      "cue_id": "T2_BINDER_RUNNER_v03",
+      "family": "T2_BINDER_RUNNER",
+      "tier": 2,
+      "variation": 3,
+      "branded_click": true,
+      "source_lineage": [
+        "book12",
+        "plastic",
+        "ring",
+        "paper_crumple",
+        "paper_flips",
+        "body_hit",
+        "body_fruit"
+      ],
+      "composite_sha256": "1322d27c456408747e7507c9e05cf16b8e8e6e5ce273f47d87c5b7649640be5a",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T2_BINDER_RUNNER_v03/T2_BINDER_RUNNER_v03_pre_REVIEW.wav",
+          "sha256": "3ee14159e45d7569ff62a7d6e616effd6e0590324662b0170cfda117d45bbb9f"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T2_BINDER_RUNNER_v03/T2_BINDER_RUNNER_v03_signature_REVIEW.wav",
+          "sha256": "3525ba33873a655de9b177e4d8b035c7f3dcfa215b33bbf01b1cbc2d5a58d275"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T2_BINDER_RUNNER_v03/T2_BINDER_RUNNER_v03_emitter_REVIEW.wav",
+          "sha256": "6035e8bd166776c2477ffb08e178d04b5416b4972454524935427045501f529c"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T2_BINDER_RUNNER_v03/T2_BINDER_RUNNER_v03_runner_REVIEW.wav",
+          "sha256": "249ffb1c0faede08bd975575a97ff5e7562ae1b81626abf7001a2d332cf39fc1"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T2_BINDER_RUNNER_v03/T2_BINDER_RUNNER_v03_floor_tail_REVIEW.wav",
+          "sha256": "25e9e8568037a2d2915b4cb11353c8e4a0aee81160770005a4e38ae22350c481"
+        }
+      ]
+    },
+    {
+      "cue_id": "T3_CHAIR_RUNNER_RC_v01",
+      "family": "T3_CHAIR_RUNNER_RC",
+      "tier": 3,
+      "variation": 1,
+      "branded_click": true,
+      "source_lineage": [
+        "scrape1",
+        "metal06",
+        "metal08",
+        "ring",
+        "metal_drop",
+        "plastic",
+        "body_hit",
+        "thuds",
+        "punch10",
+        "wobble",
+        "workshop_scrape"
+      ],
+      "composite_sha256": "92079195c3d158065b7cbe3c9d895da7e1680448e892d30402712ce99c4aca81",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v01/T3_CHAIR_RUNNER_RC_v01_pre_REVIEW.wav",
+          "sha256": "e3cb3b8be54cdb660324b0017049e4836d4b3279a26a77600fb6792a25db5dcc"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v01/T3_CHAIR_RUNNER_RC_v01_signature_REVIEW.wav",
+          "sha256": "718f11514616e37e99646f65c8a42678cd652e62f1c0cfa08c48947757bb1d21"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v01/T3_CHAIR_RUNNER_RC_v01_emitter_REVIEW.wav",
+          "sha256": "752de09630b4a4d5447db22f592a44cad9d9ddd87f90bef3ad11f320be18f7ba"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v01/T3_CHAIR_RUNNER_RC_v01_runner_REVIEW.wav",
+          "sha256": "75ef946310bad036ba2fb4ad0812d4fee5abdbf74265e365051a4a1aef673246"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v01/T3_CHAIR_RUNNER_RC_v01_floor_tail_REVIEW.wav",
+          "sha256": "a31fc48ddff35d4e4c8bc2a17f42fa08fdcac3acc490f7c3849e2211014cd72d"
+        }
+      ]
+    },
+    {
+      "cue_id": "T3_CHAIR_RUNNER_RC_v02",
+      "family": "T3_CHAIR_RUNNER_RC",
+      "tier": 3,
+      "variation": 2,
+      "branded_click": true,
+      "source_lineage": [
+        "scrape2",
+        "metal11",
+        "metal08",
+        "ring",
+        "metal_drop",
+        "plastic",
+        "body_hit",
+        "thuds",
+        "punch12",
+        "wobble",
+        "workshop_scrape"
+      ],
+      "composite_sha256": "95c4e7cefd5a48f84f99862341aaf6f412b6a0e6ed5fde46eb428e16bf007fc5",
+      "stems": [
+        {
+          "name": "pre",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v02/T3_CHAIR_RUNNER_RC_v02_pre_REVIEW.wav",
+          "sha256": "3c182679691de09a753c81628dcdaff33c40aff993c88fe02c9f47701c656f34"
+        },
+        {
+          "name": "signature",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v02/T3_CHAIR_RUNNER_RC_v02_signature_REVIEW.wav",
+          "sha256": "ea8e556d2d8cc04f110de55a4bb46ce7f206af854f9c6525297196a146ca7ab2"
+        },
+        {
+          "name": "emitter",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v02/T3_CHAIR_RUNNER_RC_v02_emitter_REVIEW.wav",
+          "sha256": "bd56bb99fca944cb3f2e117f306202c4ce7e2ace174695a3c0831f3eb4de6b4e"
+        },
+        {
+          "name": "runner",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v02/T3_CHAIR_RUNNER_RC_v02_runner_REVIEW.wav",
+          "sha256": "ef4a450f1579b076fa004d6a97b65c84db92e6c1ce6a5ba4c997d1c258656c0b"
+        },
+        {
+          "name": "floor_tail",
+          "path": "Stems/T3_CHAIR_RUNNER_RC_v02/T3_CHAIR_RUNNER_RC_v02_floor_tail_REVIEW.wav",
+          "sha256": "07da599bdfcc71306804ed267457508f8a84962ffaebbab97b468833c2259fa5"
+        }
+      ]
+    }
+  ],
+  "derived": [
+    "IMPACT_LADDER_ACTUAL_DYNAMIC_REVIEW.wav",
+    "MATERIAL_10_TRIAL_BLIND_REVIEW.wav",
+    "T1_HAND_12_REPEAT_STRESS_REVIEW.wav",
+    "TIER_10_TRIAL_BLIND_REVIEW.wav"
+  ],
+  "private_answer_key": "Private/LADDER_QUIZ_MAPPING_PRIVATE.json"
+}

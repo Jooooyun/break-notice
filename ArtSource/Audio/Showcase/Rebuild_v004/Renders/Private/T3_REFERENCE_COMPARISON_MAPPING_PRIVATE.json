@@ -1,0 +1,15 @@
+{
+  "status": "PRIVATE_ANSWER_KEY",
+  "mapping": {
+    "X": "LOSSLESS_RC",
+    "Y": "APPROVED_Z_REFERENCE"
+  },
+  "reference_allowlist": {
+    "B_ArcadeEdge_v01_REVIEW.wav": "9dd84fad2aeade3dbfc5a0dbb0e49a505da554abcea6185803070e5e14d3708f",
+    "B_ArcadeEdge_v02_REVIEW.wav": "30335cd8498b10cf3c527965a20a3a3ea0ef6bf3fd71c49e848d8e93cb6292bb"
+  },
+  "rc_hashes": {
+    "T3_CHAIR_RUNNER_RC_v01_REVIEW.wav": "92079195c3d158065b7cbe3c9d895da7e1680448e892d30402712ce99c4aca81",
+    "T3_CHAIR_RUNNER_RC_v02_REVIEW.wav": "95c4e7cefd5a48f84f99862341aaf6f412b6a0e6ed5fde46eb428e16bf007fc5"
+  }
+}

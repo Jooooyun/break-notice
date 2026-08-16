@@ -1,0 +1,37 @@
+{
+  "status": "PASS_AUTOMATIC_REVIEW_CANDIDATE",
+  "t3_blind_common_picture": {
+    "purpose": "Phase-1 comparison; audio is the only intended variable.",
+    "captured_frames": 101,
+    "resolution": "960x540",
+    "fps": 30,
+    "source": "Unity 6000.3.20f1 direct transform sampling; no Animation asset or Runtime hook",
+    "pair_target_lufs": -20.0,
+    "common_video_stream_sha256": "9d9c6b873bd09ad9a9776f7942bab86536a26ce97e94f7d5202a961959574174",
+    "files": [
+      {
+        "file": "ReferenceOnly/Videos/T3_X_PAIR_COMMON_VIDEO_REVIEW.mp4",
+        "bytes": 130718,
+        "sha256": "adc025eb59f250a39ac0202f4345f816c635d4febed49de237f061124a2311c4",
+        "decode_exit_code": 0
+      },
+      {
+        "file": "ReferenceOnly/Videos/T3_Y_PAIR_COMMON_VIDEO_REVIEW.mp4",
+        "bytes": 132051,
+        "sha256": "e98f75ba9f23aaefea6b925eb5cf7655b4d37310c3f56104576d5f927a229175",
+        "decode_exit_code": 0
+      }
+    ]
+  },
+  "actual_dynamic_ladder": {
+    "file": "Derived/IMPACT_LADDER_ACTUAL_DYNAMIC_REVIEW.mp4",
+    "bytes": 2473210,
+    "sha256": "a6e17019acf80e26095279259ad9110e3d7bf3c3e76def600acd67cfb12717a5",
+    "decode_exit_code": 0,
+    "duration": "00:00:19.35",
+    "video": "H.264 High waveform, yuv420p, 960x540, 30 fps",
+    "audio": "AAC LC, 48000 Hz, stereo; sourced from the exact actual-dynamic ladder WAV"
+  },
+  "automatic_conclusion": "All three videos decode. X/Y demuxed video streams are byte-identical. No sonic preference is inferred.",
+  "human_gate": "Lock Phase-1 X/Y and Phase-2 trial answers before opening Phase 3."
+}

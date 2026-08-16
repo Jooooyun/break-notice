@@ -1,0 +1,121 @@
+{
+  "status": "PRIVATE_ANSWER_KEY",
+  "tier_trials": [
+    {
+      "trial": 1,
+      "cue_id": "T3_CHAIR_RUNNER_RC_v01",
+      "answer_tier": "T3"
+    },
+    {
+      "trial": 2,
+      "cue_id": "T1_HAND_RUNNER_v01",
+      "answer_tier": "T1"
+    },
+    {
+      "trial": 3,
+      "cue_id": "T1_HAND_RUNNER_v02",
+      "answer_tier": "T1"
+    },
+    {
+      "trial": 4,
+      "cue_id": "T3_CHAIR_RUNNER_RC_v02",
+      "answer_tier": "T3"
+    },
+    {
+      "trial": 5,
+      "cue_id": "T1_HAND_RUNNER_v03",
+      "answer_tier": "T1"
+    },
+    {
+      "trial": 6,
+      "cue_id": "T3_CHAIR_RUNNER_RC_v01",
+      "answer_tier": "T3"
+    },
+    {
+      "trial": 7,
+      "cue_id": "T2_HOOK_RUNNER_v01",
+      "answer_tier": "T2"
+    },
+    {
+      "trial": 8,
+      "cue_id": "T2_HOOK_RUNNER_v02",
+      "answer_tier": "T2"
+    },
+    {
+      "trial": 9,
+      "cue_id": "T2_HOOK_RUNNER_v03",
+      "answer_tier": "T2"
+    },
+    {
+      "trial": 10,
+      "cue_id": "T2_BINDER_RUNNER_v01",
+      "answer_tier": "T2"
+    }
+  ],
+  "material_trials": [
+    {
+      "trial": 1,
+      "cue_id": "T1_HAND_RUNNER_v01",
+      "answer_material": "HAND"
+    },
+    {
+      "trial": 2,
+      "cue_id": "T2_BINDER_RUNNER_v01",
+      "answer_material": "BINDER"
+    },
+    {
+      "trial": 3,
+      "cue_id": "T2_BINDER_RUNNER_v02",
+      "answer_material": "BINDER"
+    },
+    {
+      "trial": 4,
+      "cue_id": "T3_CHAIR_RUNNER_RC_v01",
+      "answer_material": "CHAIR"
+    },
+    {
+      "trial": 5,
+      "cue_id": "T2_BINDER_RUNNER_v03",
+      "answer_material": "BINDER"
+    },
+    {
+      "trial": 6,
+      "cue_id": "T1_HAND_RUNNER_v02",
+      "answer_material": "HAND"
+    },
+    {
+      "trial": 7,
+      "cue_id": "T1_HAND_RUNNER_v03",
+      "answer_material": "HAND"
+    },
+    {
+      "trial": 8,
+      "cue_id": "T3_CHAIR_RUNNER_RC_v02",
+      "answer_material": "CHAIR"
+    },
+    {
+      "trial": 9,
+      "cue_id": "T3_CHAIR_RUNNER_RC_v01",
+      "answer_material": "CHAIR"
+    },
+    {
+      "trial": 10,
+      "cue_id": "T2_HOOK_RUNNER_v01",
+      "answer_material": "HAND"
+    }
+  ],
+  "t1_stress_schedule": [
+    "T1_HAND_RUNNER_v01",
+    "T1_HAND_RUNNER_v02",
+    "T1_HAND_RUNNER_v03",
+    "T1_HAND_RUNNER_v01",
+    "T1_HAND_RUNNER_v02",
+    "T1_HAND_RUNNER_v03",
+    "T1_HAND_RUNNER_v01",
+    "T1_HAND_RUNNER_v02",
+    "T1_HAND_RUNNER_v03",
+    "T1_HAND_RUNNER_v01",
+    "T1_HAND_RUNNER_v02",
+    "T1_HAND_RUNNER_v03"
+  ]
+}

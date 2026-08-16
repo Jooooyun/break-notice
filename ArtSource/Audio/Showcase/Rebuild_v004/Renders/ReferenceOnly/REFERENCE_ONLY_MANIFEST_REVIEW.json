@@ -1,0 +1,19 @@
+{
+  "status": "BLIND_MAPPING_SAFE",
+  "pair_target_lufs": -20.0,
+  "pairs": [
+    {
+      "label": "X",
+      "sha256": "d956f1b9a427457fcb91e28a32129d3194ff214982ab289be92c1bbdf4adfdb5",
+      "variations": 2,
+      "integrated_lufs": -20.000000000000046
+    },
+    {
+      "label": "Y",
+      "sha256": "aa880068029987e693e84db3f9f80771bcc88312438351b8c3c89631c73c60c2",
+      "variations": 2,
+      "integrated_lufs": -20.000000000000032
+    }
+  ],
+  "warning": "One pair is the approved Z reference and one is the lossless RC. Mapping is private; distribute this Phase-1 surface without production composites or ladder reels."
+}

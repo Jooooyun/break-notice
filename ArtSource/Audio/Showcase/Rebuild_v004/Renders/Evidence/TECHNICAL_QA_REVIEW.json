@@ -1,0 +1,335 @@
+{
+  "status": "REVIEW_CANDIDATE",
+  "automatic_validation": {
+    "automatic_status": "PASS",
+    "failures": [],
+    "tier_bounds": {
+      "t1_max_true_peak_dbfs": -6.399999999999999,
+      "t2_min_true_peak_dbfs": -3.8999999999999977,
+      "t2_max_true_peak_dbfs": -3.1000000000000028,
+      "t3_min_true_peak_dbfs": -1.4999999999999996,
+      "t1_max_contact_rms_dbfs": -30.568854940251747,
+      "t2_min_contact_rms_dbfs": -28.522998657690405,
+      "t2_max_contact_rms_dbfs": -26.373499123518563,
+      "t3_min_contact_rms_dbfs": -22.530117238249172
+    },
+    "family_correlations": {
+      "T1_HAND_RUNNER": [
+        0.5042998232560728,
+        0.3575139860586253,
+        0.40974986227582344
+      ],
+      "T2_BINDER_RUNNER": [
+        0.4268632405660264,
+        -0.025659891474914053,
+        0.071260511062396
+      ],
+      "T2_HOOK_RUNNER": [
+        0.4269200896320019,
+        0.37195563646455143,
+        0.40963941936284975
+      ],
+      "T3_CHAIR_RUNNER_RC": [
+        0.04762899730914291
+      ]
+    },
+    "human_checks_pending": [
+      "laptop tier recognition at least 8/10",
+      "laptop material recognition at least 8/10",
+      "no click-machinegun fatigue in T1 12-repeat stress reel",
+      "T3 lossless RC not worse than approved Z reference"
+    ]
+  },
+  "source_validation": {
+    "count": 25,
+    "lossless_only": true,
+    "exact_hash_checked_before_decode": true,
+    "path_containment_checked": true
+  },
+  "cue_metrics": [
+    {
+      "cue_id": "T1_HAND_RUNNER_v01",
+      "family": "T1_HAND_RUNNER",
+      "tier": 1,
+      "variation": 1,
+      "branded_click": false,
+      "source_lineage": [
+        "punch11",
+        "hand_slap",
+        "body_fruit",
+        "cloth6"
+      ],
+      "composite_sha256": "8d2cc0b8706e477e2a53937b0052f3de6719b580a445f023cf15e348e095a1e0",
+      "metrics": {
+        "integrated_lufs": -27.608205898794605,
+        "sample_peak_dbfs": -7.528284085439644,
+        "true_peak_dbfs": -7.199999999999999,
+        "rms_dbfs": -35.9800931146906,
+        "contact_0_350ms_rms_dbfs": -30.568854940251747,
+        "dc_offset_max": 2.280939845650802e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T1_HAND_RUNNER_v02",
+      "family": "T1_HAND_RUNNER",
+      "tier": 1,
+      "variation": 2,
+      "branded_click": false,
+      "source_lineage": [
+        "punch12",
+        "hand_slap",
+        "body_fruit",
+        "cloth4"
+      ],
+      "composite_sha256": "3e407d7ba2cf661e50cf56180751a992405303a054b59a22dcd4dfb81fcfdf26",
+      "metrics": {
+        "integrated_lufs": -28.550323633868064,
+        "sample_peak_dbfs": -6.805527375031069,
+        "true_peak_dbfs": -6.799999999999999,
+        "rms_dbfs": -37.297360088627336,
+        "contact_0_350ms_rms_dbfs": -32.304202537862345,
+        "dc_offset_max": 2.875683945907834e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T1_HAND_RUNNER_v03",
+      "family": "T1_HAND_RUNNER",
+      "tier": 1,
+      "variation": 3,
+      "branded_click": false,
+      "source_lineage": [
+        "punch10",
+        "hand_slap",
+        "body_fruit",
+        "cloth6"
+      ],
+      "composite_sha256": "ff5f5c5c02845d5319225397490596484a04447c6fcef81c786dd836d04fcaf3",
+      "metrics": {
+        "integrated_lufs": -28.96893312732603,
+        "sample_peak_dbfs": -6.4055273750310695,
+        "true_peak_dbfs": -6.399999999999999,
+        "rms_dbfs": -37.64709579388666,
+        "contact_0_350ms_rms_dbfs": -32.674147971738556,
+        "dc_offset_max": 4.1329782841412615e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T2_HOOK_RUNNER_v01",
+      "family": "T2_HOOK_RUNNER",
+      "tier": 2,
+      "variation": 1,
+      "branded_click": true,
+      "source_lineage": [
+        "punch10",
+        "hand_slap",
+        "body_hit",
+        "body_fruit",
+        "cloth4"
+      ],
+      "composite_sha256": "525258ee32e2ff389b4ed11b17925dea735a29fcf6bd2449143be1ca27438b6d",
+      "metrics": {
+        "integrated_lufs": -24.88128670926231,
+        "sample_peak_dbfs": -3.926723099499121,
+        "true_peak_dbfs": -3.8999999999999977,
+        "rms_dbfs": -33.1139745694353,
+        "contact_0_350ms_rms_dbfs": -28.522998657690405,
+        "dc_offset_max": 2.3561011071729143e-16,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T2_HOOK_RUNNER_v02",
+      "family": "T2_HOOK_RUNNER",
+      "tier": 2,
+      "variation": 2,
+      "branded_click": true,
+      "source_lineage": [
+        "punch11",
+        "hand_slap",
+        "body_hit",
+        "body_fruit",
+        "cloth6"
+      ],
+      "composite_sha256": "aecb54eef9d0fe4db51507c5a053a612b922c698111b6db2e88c23209aafb152",
+      "metrics": {
+        "integrated_lufs": -24.877588710940294,
+        "sample_peak_dbfs": -3.7063886267517647,
+        "true_peak_dbfs": -3.6000000000000014,
+        "rms_dbfs": -33.10924877909161,
+        "contact_0_350ms_rms_dbfs": -28.203002309106722,
+        "dc_offset_max": 1.6573945630278994e-16,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T2_HOOK_RUNNER_v03",
+      "family": "T2_HOOK_RUNNER",
+      "tier": 2,
+      "variation": 3,
+      "branded_click": true,
+      "source_lineage": [
+        "punch12",
+        "hand_slap",
+        "body_hit",
+        "body_fruit",
+        "shoulder_cloth"
+      ],
+      "composite_sha256": "c817ed6115ebb74cff35a1915e9056d21816f126ac606e32480418545ea9ef9e",
+      "metrics": {
+        "integrated_lufs": -23.683287479977736,
+        "sample_peak_dbfs": -3.4252732797858205,
+        "true_peak_dbfs": -3.3000000000000007,
+        "rms_dbfs": -32.73363176068116,
+        "contact_0_350ms_rms_dbfs": -28.23176711200186,
+        "dc_offset_max": 1.8610493422985007e-16,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T2_BINDER_RUNNER_v01",
+      "family": "T2_BINDER_RUNNER",
+      "tier": 2,
+      "variation": 1,
+      "branded_click": true,
+      "source_lineage": [
+        "book2",
+        "plastic",
+        "ring",
+        "paper_crumple",
+        "paper_flips",
+        "body_hit",
+        "body_fruit"
+      ],
+      "composite_sha256": "95057f7ec072eca0f65d47338489795744bf7075c74dfeaa4c5640bc51dc81f7",
+      "metrics": {
+        "integrated_lufs": -24.387530591114018,
+        "sample_peak_dbfs": -3.778531419528538,
+        "true_peak_dbfs": -3.699999999999999,
+        "rms_dbfs": -32.6832409009202,
+        "contact_0_350ms_rms_dbfs": -27.698471372237993,
+        "dc_offset_max": 7.902929582690747e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T2_BINDER_RUNNER_v02",
+      "family": "T2_BINDER_RUNNER",
+      "tier": 2,
+      "variation": 2,
+      "branded_click": true,
+      "source_lineage": [
+        "book9",
+        "plastic",
+        "ring",
+        "paper_crumple",
+        "paper_flips",
+        "body_hit",
+        "body_fruit"
+      ],
+      "composite_sha256": "58ef03b93f65abbfb9ffe093120f2ac34a28db4050bcb5b1a9046160e29ec193",
+      "metrics": {
+        "integrated_lufs": -25.042665005505718,
+        "sample_peak_dbfs": -3.422829443653988,
+        "true_peak_dbfs": -3.3999999999999995,
+        "rms_dbfs": -33.255817921816295,
+        "contact_0_350ms_rms_dbfs": -28.432724747304896,
+        "dc_offset_max": 1.3195436470172901e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T2_BINDER_RUNNER_v03",
+      "family": "T2_BINDER_RUNNER",
+      "tier": 2,
+      "variation": 3,
+      "branded_click": true,
+      "source_lineage": [
+        "book12",
+        "plastic",
+        "ring",
+        "paper_crumple",
+        "paper_flips",
+        "body_hit",
+        "body_fruit"
+      ],
+      "composite_sha256": "1322d27c456408747e7507c9e05cf16b8e8e6e5ce273f47d87c5b7649640be5a",
+      "metrics": {
+        "integrated_lufs": -24.352184155358973,
+        "sample_peak_dbfs": -3.105527375031072,
+        "true_peak_dbfs": -3.1000000000000028,
+        "rms_dbfs": -30.724383411649335,
+        "contact_0_350ms_rms_dbfs": -26.373499123518563,
+        "dc_offset_max": 1.1268592201916513e-16,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T3_CHAIR_RUNNER_RC_v01",
+      "family": "T3_CHAIR_RUNNER_RC",
+      "tier": 3,
+      "variation": 1,
+      "branded_click": true,
+      "source_lineage": [
+        "scrape1",
+        "metal06",
+        "metal08",
+        "ring",
+        "metal_drop",
+        "plastic",
+        "body_hit",
+        "thuds",
+        "punch10",
+        "wobble",
+        "workshop_scrape"
+      ],
+      "composite_sha256": "92079195c3d158065b7cbe3c9d895da7e1680448e892d30402712ce99c4aca81",
+      "metrics": {
+        "integrated_lufs": -18.693417685843027,
+        "sample_peak_dbfs": -1.5454274532493475,
+        "true_peak_dbfs": -1.4999999999999996,
+        "rms_dbfs": -25.42925321375895,
+        "contact_0_350ms_rms_dbfs": -20.73579018728088,
+        "dc_offset_max": 4.2505215900059784e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    },
+    {
+      "cue_id": "T3_CHAIR_RUNNER_RC_v02",
+      "family": "T3_CHAIR_RUNNER_RC",
+      "tier": 3,
+      "variation": 2,
+      "branded_click": true,
+      "source_lineage": [
+        "scrape2",
+        "metal11",
+        "metal08",
+        "ring",
+        "metal_drop",
+        "plastic",
+        "body_hit",
+        "thuds",
+        "punch12",
+        "wobble",
+        "workshop_scrape"
+      ],
+      "composite_sha256": "95c4e7cefd5a48f84f99862341aaf6f412b6a0e6ed5fde46eb428e16bf007fc5",
+      "metrics": {
+        "integrated_lufs": -19.278500508864248,
+        "sample_peak_dbfs": -1.3755729754300883,
+        "true_peak_dbfs": -1.2000000000000006,
+        "rms_dbfs": -27.520740188621268,
+        "contact_0_350ms_rms_dbfs": -22.530117238249172,
+        "dc_offset_max": 5.1165131005728434e-17,
+        "transient_onset_offset_ms": 0.0
+      }
+    }
+  ],
+  "quiz_trial_counts": {
+    "tier": 10,
+    "material": 10,
+    "t1_stress": 12
+  }
+}

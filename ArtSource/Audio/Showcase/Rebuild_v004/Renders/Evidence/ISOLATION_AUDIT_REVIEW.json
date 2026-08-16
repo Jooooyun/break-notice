@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "failures": [],
+  "production_file_count": 91,
+  "source_file_count": 25,
+  "prior_review_audio_count": 68,
+  "expected_prior_review_audio_count": 68,
+  "prior_review_sha256_intersection_count": 0,
+  "prior_v002_git_blob_intersection_count": 0,
+  "prior_v002_git_blob_intersections": [],
+  "lossy_production_source_count": 0,
+  "reference_only_audio_count": 2,
+  "reference_carveout": [
+    "Renders\\ReferenceOnly\\T3_X_PAIR_BLIND_REVIEW.wav",
+    "Renders\\ReferenceOnly\\T3_Y_PAIR_BLIND_REVIEW.wav"
+  ],
+  "production_builder_prior_pack_token_count": 0
+}
