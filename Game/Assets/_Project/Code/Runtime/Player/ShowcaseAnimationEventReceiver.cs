@@ -93,15 +93,13 @@ namespace BreakNotice.Gameplay.Combat
 
         public void ShowcaseCarryContact()
         {
+            if (playerCombat == null)
+            {
+                return;
+            }
+
             CarryContactInvocationCount++;
-            if (playerCombat != null)
-            {
-                playerCombat.CommitAnimationCarryContact();
-            }
-            else
-            {
-                allyRelay?.CommitAnimationAcquisitionContact();
-            }
+            playerCombat.CommitAnimationCarryContact();
         }
 
         public void ShowcaseActionComplete()
@@ -116,10 +114,6 @@ namespace BreakNotice.Gameplay.Combat
                 if (runnerAgent != null)
                 {
                     runnerAgent.CompleteAnimationAction();
-                }
-                else
-                {
-                    allyRelay?.CompleteAnimationAction();
                 }
             }
         }

@@ -34,11 +34,17 @@ namespace BreakNotice.Presentation
         private const string AimUpperBodyLayerName = "Aim Upper Body";
         private const string AimUpperBodyStatePath =
             AimUpperBodyLayerName + ".AimUpperBodyPose";
+        private const string BinderWindupReadyStateName = "BinderWindupReady";
+        private const string BinderWindupReadyStatePath =
+            "Base Layer." + BinderWindupReadyStateName;
+        private static readonly int BinderWindupReadyStateHash =
+            Animator.StringToHash(BinderWindupReadyStatePath);
 
         private const float MinimumPlaybackRate = 0.75f;
         private const float MaximumPlaybackRate = 1.5f;
         private const float LocomotionBlendSeconds = 0.12f;
         private const float LocomotionToActionBlendSeconds = 0.08f;
+        private const float BinderWindupReadyBlendSeconds = 0.08f;
         private const float ComboBlendSeconds = 0.06f;
         private const float HitReactionBlendSeconds = 0.06f;
         private const float KnockdownBlendSeconds = 0.04f;
@@ -88,13 +94,15 @@ namespace BreakNotice.Presentation
         private bool decorativePlaybackActive;
         private bool jumpPlaybackActive;
         private bool allyReleasePlaybackActive;
-        private bool allyAcquisitionPlaybackActive;
+        private bool allyBinderWindupReadyPlaybackActive;
+        private PrototypeInteractionTarget pendingAllyBinderWindupReadyTarget;
+        private uint pendingAllyBinderWindupReadySequence;
+        private bool pendingAllyBinderWindupReadyCommitAttempted;
         private float inactiveDuration;
         private bool idleVariantPlayed;
         private int currentStateHash;
         private int pendingActionStateHash;
         private uint pendingActionCueRevision;
-        private bool pendingAllyAcquisitionAcknowledgement;
         private float localHitStopUntil;
         private bool localHitStopActive;
         private int aimUpperBodyLayerIndex = -1;
@@ -186,7 +194,18 @@ namespace BreakNotice.Presentation
 
         private void LateUpdate()
         {
-            if (pendingActionStateHash == 0 || animator == null ||
+            if (animator == null)
+            {
+                return;
+            }
+
+            if (role == ShowcaseCharacterAnimationRole.Ally)
+            {
+                TryCommitAllyBinderWindupReadyContact();
+                return;
+            }
+
+            if (pendingActionStateHash == 0 ||
                 !IsAnimatorInState(pendingActionStateHash))
             {
                 return;
@@ -201,15 +220,8 @@ namespace BreakNotice.Presentation
             {
                 runnerAgent?.NotifyAnimationStateEntered(pendingActionCueRevision);
             }
-            else if (role == ShowcaseCharacterAnimationRole.Ally &&
-                     pendingAllyAcquisitionAcknowledgement)
-            {
-                allyRelay?.NotifyAnimationAcquisitionStateEntered();
-            }
-
             pendingActionStateHash = 0;
             pendingActionCueRevision = 0;
-            pendingAllyAcquisitionAcknowledgement = false;
         }
 
         public void Configure(
@@ -521,21 +533,6 @@ namespace BreakNotice.Presentation
 
         private void UpdateAllyAnimation()
         {
-            if (allyRelay != null && allyRelay.IsAwaitingAnimationAcquisition)
-            {
-                if (!allyAcquisitionPlaybackActive)
-                {
-                    PlayState("AcquireAction", LocomotionToActionBlendSeconds, true);
-                    pendingActionStateHash = Animator.StringToHash(
-                        "Base Layer.AcquireAction");
-                    pendingActionCueRevision = 0;
-                    pendingAllyAcquisitionAcknowledgement = true;
-                    allyAcquisitionPlaybackActive = true;
-                }
-                return;
-            }
-            allyAcquisitionPlaybackActive = false;
-
             PrototypeRelayPhase relayPhase =
                 allyRelay?.RelayPhase ?? PrototypeRelayPhase.None;
             if (relayPhase == PrototypeRelayPhase.PreRelease &&
@@ -545,6 +542,8 @@ namespace BreakNotice.Presentation
                     allyRelay.ActiveTarget.Role == PrototypeInteractionRole.AllyBinder;
                 if (binderRelease)
                 {
+                    ClearPendingAllyBinderWindupReadyContact();
+                    allyBinderWindupReadyPlaybackActive = false;
                     PlayState(
                         "SupplyReleaseAction",
                         LocomotionToActionBlendSeconds,
@@ -566,7 +565,46 @@ namespace BreakNotice.Presentation
                     return;
                 }
                 allyReleasePlaybackActive = false;
+                PlayState("Idle", LocomotionBlendSeconds, false);
+                return;
             }
+
+            if (allyRelay != null &&
+                allyRelay.IsAwaitingBinderWindupReadyContact)
+            {
+                PrototypeInteractionTarget requestedTarget =
+                    allyRelay.BinderWindupReadyTarget;
+                uint requestedSequence = allyRelay.BinderWindupReadySequence;
+                bool requestChanged =
+                    requestedTarget != pendingAllyBinderWindupReadyTarget ||
+                    requestedSequence != pendingAllyBinderWindupReadySequence;
+                if (!allyBinderWindupReadyPlaybackActive || requestChanged)
+                {
+                    PlayState(
+                        BinderWindupReadyStateName,
+                        BinderWindupReadyBlendSeconds,
+                        true);
+                    pendingAllyBinderWindupReadyTarget = requestedTarget;
+                    pendingAllyBinderWindupReadySequence = requestedSequence;
+                    pendingAllyBinderWindupReadyCommitAttempted = false;
+                    allyBinderWindupReadyPlaybackActive = true;
+                }
+                return;
+            }
+
+            if (allyRelay != null && allyRelay.IsBinderWindupReadyHeld)
+            {
+                ClearPendingAllyBinderWindupReadyContact();
+                allyBinderWindupReadyPlaybackActive = true;
+                PlayState(
+                    BinderWindupReadyStateName,
+                    BinderWindupReadyBlendSeconds,
+                    false);
+                return;
+            }
+
+            ClearPendingAllyBinderWindupReadyContact();
+            allyBinderWindupReadyPlaybackActive = false;
 
             bool running = mobileAlly != null &&
                 LastPlanarSpeed > mobileAlly.NormalSpeed + 0.1f;
@@ -575,7 +613,8 @@ namespace BreakNotice.Presentation
                 : running
                     ? "Run"
                     : "Walk";
-            // Ready uses the stable Idle. The one-frame Windup source is excluded.
+            // Non-Binder Ready and ordinary movement use locomotion. A prepared
+            // Binder is handled above and keeps the authored Windup/Ready pose.
             PlayState(state, LocomotionBlendSeconds, false);
         }
 
@@ -694,6 +733,45 @@ namespace BreakNotice.Presentation
 
             return animator.IsInTransition(0) &&
                 animator.GetNextAnimatorStateInfo(0).fullPathHash == stateHash;
+        }
+
+        private void TryCommitAllyBinderWindupReadyContact()
+        {
+            if (pendingAllyBinderWindupReadyCommitAttempted ||
+                pendingAllyBinderWindupReadyTarget == null ||
+                pendingAllyBinderWindupReadySequence == 0 ||
+                allyRelay == null)
+            {
+                return;
+            }
+
+            if (allyRelay.BinderWindupReadyTarget !=
+                    pendingAllyBinderWindupReadyTarget ||
+                allyRelay.BinderWindupReadySequence !=
+                    pendingAllyBinderWindupReadySequence)
+            {
+                ClearPendingAllyBinderWindupReadyContact();
+                return;
+            }
+
+            if (animator.IsInTransition(0) ||
+                animator.GetCurrentAnimatorStateInfo(0).fullPathHash !=
+                    BinderWindupReadyStateHash)
+            {
+                return;
+            }
+
+            pendingAllyBinderWindupReadyCommitAttempted =
+                allyRelay.CommitBinderWindupReadyContact(
+                pendingAllyBinderWindupReadyTarget,
+                pendingAllyBinderWindupReadySequence);
+        }
+
+        private void ClearPendingAllyBinderWindupReadyContact()
+        {
+            pendingAllyBinderWindupReadyTarget = null;
+            pendingAllyBinderWindupReadySequence = 0;
+            pendingAllyBinderWindupReadyCommitAttempted = false;
         }
 
         private float ResolvePlanarSpeed()
@@ -858,7 +936,8 @@ namespace BreakNotice.Presentation
             CurrentBaseStateName = string.Empty;
             pendingActionStateHash = 0;
             pendingActionCueRevision = 0;
-            pendingAllyAcquisitionAcknowledgement = false;
+            allyBinderWindupReadyPlaybackActive = false;
+            ClearPendingAllyBinderWindupReadyContact();
         }
     }
 }

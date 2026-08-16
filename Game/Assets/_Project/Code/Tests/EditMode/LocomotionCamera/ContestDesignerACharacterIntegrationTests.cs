@@ -352,6 +352,53 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void AllySupplyController_UsesOnlyApprovedBinderWindupAndRelease()
+        {
+            AnimatorController controller = LoadController("CHR01_Ally.controller");
+            Dictionary<string, AnimatorState> states = controller.layers[0].stateMachine.states
+                .Select(child => child.state)
+                .ToDictionary(state => state.name, StringComparer.Ordinal);
+
+            Assert.That(states.Keys, Is.EquivalentTo(new[]
+            {
+                "Idle",
+                "Walk",
+                "Run",
+                "BinderWindupReady",
+                "SupplyReleaseAction"
+            }));
+            AssertStateMotionPath(
+                states["BinderWindupReady"],
+                AnimationRoot +
+                "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Windup.fbx");
+            AssertStateMotionPath(
+                states["SupplyReleaseAction"],
+                AnimationRoot +
+                "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Release.fbx");
+
+            AnimationClip windup = (AnimationClip)states["BinderWindupReady"].motion;
+            Assert.That(AnimationUtility.GetAnimationEvents(windup), Is.Empty,
+                "The one-frame ready pose must not own physical contact timing.");
+
+            AnimationClip release = (AnimationClip)states["SupplyReleaseAction"].motion;
+            AnimationEvent[] releaseEvents = AnimationUtility.GetAnimationEvents(release);
+            Assert.That(releaseEvents.Select(item => item.functionName),
+                Is.EquivalentTo(new[]
+                {
+                    "ShowcaseAllySupplyRelease",
+                    "ShowcaseActionComplete"
+                }));
+            Assert.That(releaseEvents, Has.Length.EqualTo(2));
+            AssertOwnedEventPair(
+                AnimationRoot +
+                "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Release.fbx",
+                "ShowcaseAllySupplyRelease",
+                0.48f,
+                "ShowcaseActionComplete",
+                0.88f);
+        }
+
+        [Test]
         public void PlayerAndEnemyControllers_ExposeApprovedCombatStateContracts()
         {
             AnimatorController player = LoadController("CHR00_Player.controller");
@@ -454,7 +501,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void RuntimeControllers_ExcludeReviewCatalogAndBrokenReadyClip()
+        public void RuntimeControllers_ExcludeReviewCatalogAndUnapprovedAllySupplyClips()
         {
             foreach (string fileName in new[]
                      {
@@ -467,11 +514,17 @@ namespace BreakNotice.LocomotionCamera.Tests
             }
 
             AnimatorController ally = LoadController("CHR01_Ally.controller");
-            Assert.That(ally.layers.SelectMany(layer => layer.stateMachine.states)
+            AnimationClip[] allyClips = ally.layers
+                .SelectMany(layer => layer.stateMachine.states)
                 .Select(child => child.state.motion)
                 .OfType<AnimationClip>()
-                .Any(clip => clip.name.Contains("Windup", StringComparison.OrdinalIgnoreCase)),
-                Is.False);
+                .ToArray();
+            Assert.That(allyClips.Any(clip => AssetDatabase.GetAssetPath(clip)
+                    .Contains("/CHR00/", StringComparison.OrdinalIgnoreCase)),
+                Is.False, "CHR01 must not reuse CHR00 Catch clips.");
+            Assert.That(allyClips.Any(clip => AssetDatabase.GetAssetPath(clip)
+                    .Contains("Supply_candidate_", StringComparison.OrdinalIgnoreCase)),
+                Is.False, "Review supply candidates must remain outside runtime playback.");
         }
 
         [Test]

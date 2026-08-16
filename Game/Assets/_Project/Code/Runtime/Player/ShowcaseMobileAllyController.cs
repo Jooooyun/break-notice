@@ -512,13 +512,18 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 desired = target.position -
                               toFetch.normalized * clampedStoppingDistance;
             desired.y = allyTransform.position.y;
-            if (HasClearPath(allyTransform.position, desired))
+            if (HasClearPath(allyTransform.position, desired, target))
             {
                 routeCost = PlanarDistance(allyTransform.position, desired);
                 return true;
             }
 
-            if (!TryPlanAnchorRoute(desired, out _, out _, out float plannedCost))
+            if (!TryPlanAnchorRoute(
+                    desired,
+                    out _,
+                    out _,
+                    out float plannedCost,
+                    target))
             {
                 return false;
             }
@@ -764,7 +769,11 @@ namespace BreakNotice.Gameplay.Interaction
                 Vector3 desired = fetchTarget.position -
                                   toFetch.normalized * fetchStoppingDistance;
                 desired.y = allyTransform.position.y;
-                return TryResolveTaskDestination(desired, out target, out anchorIndex);
+                return TryResolveTaskDestination(
+                    desired,
+                    out target,
+                    out anchorIndex,
+                    fetchTarget);
             }
 
             Vector3 preferred = CalculateFollowPosition(FollowSide);
@@ -798,16 +807,25 @@ namespace BreakNotice.Gameplay.Interaction
         private bool TryResolveTaskDestination(
             Vector3 desired,
             out Vector3 target,
-            out int anchorIndex)
+            out int anchorIndex,
+            Transform ignoredTerminalHierarchy = null)
         {
             target = desired;
             anchorIndex = -1;
-            if (HasClearPath(allyTransform.position, desired))
+            if (HasClearPath(
+                    allyTransform.position,
+                    desired,
+                    ignoredTerminalHierarchy))
             {
                 return true;
             }
 
-            if (!TryPlanAnchorRoute(desired, out anchorIndex, out _, out _))
+            if (!TryPlanAnchorRoute(
+                    desired,
+                    out anchorIndex,
+                    out _,
+                    out _,
+                    ignoredTerminalHierarchy))
             {
                 return false;
             }
@@ -821,7 +839,8 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 desired,
             out int nextAnchor,
             out int pathLength,
-            out float pathCost)
+            out float pathCost,
+            Transform ignoredTerminalHierarchy = null)
         {
             nextAnchor = -1;
             pathLength = int.MaxValue;
@@ -841,11 +860,17 @@ namespace BreakNotice.Gameplay.Interaction
                 {
                     continue;
                 }
-                if (HasClearPath(allyTransform.position, anchor.position))
+                if (HasClearPath(
+                        allyTransform.position,
+                        anchor.position,
+                        ignoredTerminalHierarchy))
                 {
                     starts.Add(index);
                 }
-                if (HasClearPath(anchor.position, desired))
+                if (HasClearPath(
+                        anchor.position,
+                        desired,
+                        ignoredTerminalHierarchy))
                 {
                     goals.Add(index);
                 }
@@ -896,7 +921,10 @@ namespace BreakNotice.Gameplay.Interaction
                 foreach (int neighbor in adjacency[current])
                 {
                     if (distance[neighbor] != int.MaxValue ||
-                        !HasClearPath(followAnchors[current].position, followAnchors[neighbor].position))
+                        !HasClearPath(
+                            followAnchors[current].position,
+                            followAnchors[neighbor].position,
+                            ignoredTerminalHierarchy))
                     {
                         continue;
                     }
@@ -1006,14 +1034,17 @@ namespace BreakNotice.Gameplay.Interaction
             return adjacency;
         }
 
-        private bool HasClearPath(Vector3 from, Vector3 to)
+        private bool HasClearPath(
+            Vector3 from,
+            Vector3 to,
+            Transform ignoredTerminalHierarchy = null)
         {
             Vector3 displacement = to - from;
             displacement.y = 0f;
             float distance = displacement.magnitude;
             if (distance <= arrivalTolerance)
             {
-                return IsCapsulePositionClear(to);
+                return IsCapsulePositionClear(to, ignoredTerminalHierarchy);
             }
 
             GetCapsuleAt(from, out Vector3 bottom, out Vector3 top, out float radius);
@@ -1033,15 +1064,18 @@ namespace BreakNotice.Gameplay.Interaction
             for (int index = 0; index < hitCount; index++)
             {
                 Collider collider = sweepHits[index].collider;
-                if (collider != null && !IsOwnedCollider(collider))
+                if (collider != null &&
+                    !IsOwnedCollider(collider, ignoredTerminalHierarchy))
                 {
                     return false;
                 }
             }
-            return IsCapsulePositionClear(to);
+            return IsCapsulePositionClear(to, ignoredTerminalHierarchy);
         }
 
-        private bool IsCapsulePositionClear(Vector3 position)
+        private bool IsCapsulePositionClear(
+            Vector3 position,
+            Transform ignoredTerminalHierarchy = null)
         {
             GetCapsuleAt(position, out Vector3 bottom, out Vector3 top, out float radius);
             int count = Physics.OverlapCapsuleNonAlloc(
@@ -1058,7 +1092,8 @@ namespace BreakNotice.Gameplay.Interaction
             for (int index = 0; index < count; index++)
             {
                 Collider collider = overlapHits[index];
-                if (collider != null && !IsOwnedCollider(collider))
+                if (collider != null &&
+                    !IsOwnedCollider(collider, ignoredTerminalHierarchy))
                 {
                     return false;
                 }
@@ -1087,13 +1122,18 @@ namespace BreakNotice.Gameplay.Interaction
             top = center + Vector3.up * halfSegment;
         }
 
-        private bool IsOwnedCollider(Collider collider)
+        private bool IsOwnedCollider(
+            Collider collider,
+            Transform ignoredTerminalHierarchy = null)
         {
             return collider.transform == allyTransform ||
                    collider.transform.IsChildOf(allyTransform) ||
                    (taskIgnoredPayload != null &&
-                    (collider.transform == taskIgnoredPayload ||
-                     collider.transform.IsChildOf(taskIgnoredPayload)));
+                     (collider.transform == taskIgnoredPayload ||
+                      collider.transform.IsChildOf(taskIgnoredPayload))) ||
+                   (ignoredTerminalHierarchy != null &&
+                    (collider.transform == ignoredTerminalHierarchy ||
+                     collider.transform.IsChildOf(ignoredTerminalHierarchy)));
         }
 
         private void RegisterBlockedStep()

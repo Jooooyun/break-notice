@@ -1326,7 +1326,7 @@ namespace BreakNotice.Contest.Editor
                 new("Idle", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Idle.fbx", 1f, true),
                 new("Walk", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Walk_F.fbx", 1f, true),
                 new("Run", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Run_F.fbx", 1f, true),
-                new("AcquireAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx", 1.5f),
+                new("BinderWindupReady", Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Windup.fbx"),
                 new("SupplyReleaseAction", Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx")
             };
             if (ControllerMatchesRuntimeContract(Characters[1].ControllerPath, states))

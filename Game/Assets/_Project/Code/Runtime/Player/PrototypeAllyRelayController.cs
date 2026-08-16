@@ -130,10 +130,11 @@ namespace BreakNotice.Gameplay.Interaction
         private float preparedGroundHeight;
         private float fetchAssessmentElapsed;
         private PrototypeInteractionTarget suggestedFetchTarget;
-        private bool acquisitionAnimationRequested;
-        private bool acquisitionAnimationStateEntered;
-        private bool acquisitionContactCommitted;
-        private float acquisitionAnimationElapsed;
+        private bool binderWindupReadyRequested;
+        private bool binderWindupReadyContactCommitted;
+        private float binderWindupReadyElapsed;
+        private uint nextBinderWindupReadySequence;
+        private uint activeBinderWindupReadySequence;
 
         public PrototypeAllySupportState AllyState { get; private set; } =
             PrototypeAllySupportState.Ready;
@@ -255,11 +256,35 @@ namespace BreakNotice.Gameplay.Interaction
         public bool IsAwaitingAnimationRelease =>
             RelayPhase == PrototypeRelayPhase.PreRelease && activeTarget != null;
 
-        public bool IsAwaitingAnimationAcquisition =>
+        public bool IsAwaitingBinderWindupReadyContact =>
             AllyState == PrototypeAllySupportState.AcquiringSupply &&
             preparedTarget != null &&
             preparedTarget.Role == PrototypeInteractionRole.AllyBinder &&
-            acquisitionAnimationRequested;
+            binderWindupReadyRequested &&
+            !binderWindupReadyContactCommitted &&
+            activeBinderWindupReadySequence != 0;
+
+        public bool IsBinderWindupReadyHeld =>
+            binderWindupReadyContactCommitted &&
+            preparedTargetAcquired &&
+            preparedTarget != null &&
+            preparedTarget.Role == PrototypeInteractionRole.AllyBinder &&
+            (AllyState == PrototypeAllySupportState.Ready ||
+             AllyState == PrototypeAllySupportState.Blocked ||
+             AllyState == PrototypeAllySupportState.AcquiringSupply);
+
+        public PrototypeInteractionTarget BinderWindupReadyTarget =>
+            binderWindupReadyRequested ? preparedTarget : null;
+
+        public uint BinderWindupReadySequence =>
+            binderWindupReadyRequested
+                ? activeBinderWindupReadySequence
+                : 0;
+
+        public bool IsBinderWindupReadyContactCommitted =>
+            binderWindupReadyContactCommitted;
+
+        public int BinderWindupReadyContactCount { get; private set; }
 
         public int CatchCount { get; private set; }
 
@@ -386,7 +411,7 @@ namespace BreakNotice.Gameplay.Interaction
             requiresExplicitFetch = explicitFetchRequired;
             suggestedFetchTarget = null;
             fetchAssessmentElapsed = FetchAssessmentInterval;
-            ClearAcquisitionAnimationState();
+            ClearBinderWindupReadyTransaction();
             ClearPreparedTarget(true);
             ClearActiveRelayState();
             AllyState = PrototypeAllySupportState.Ready;
@@ -755,12 +780,14 @@ namespace BreakNotice.Gameplay.Interaction
             ClearPreparedTarget(true);
             consumedTargets.Clear();
             ClearActiveRelayState();
+            chairGripRig?.ResetGrip();
             LastRequestRejection = PrototypeAllyRelayRejection.None;
             LastReleasePosition = Vector3.zero;
             LastLaunchVelocity = Vector3.zero;
             LastBinderSpeedMultiplier = 1f;
             LastBinderHorizontalSpeed = 0f;
             binderSpeedVariationSequence = 0;
+            BinderWindupReadyContactCount = 0;
             PreparationPathLength = 0f;
             AllyTravelPathLength = 0f;
             preparedGroundHeight = 0f;
@@ -977,20 +1004,15 @@ namespace BreakNotice.Gameplay.Interaction
             return RelayPhase == PrototypeRelayPhase.Released;
         }
 
-        public void NotifyAnimationAcquisitionStateEntered()
+        public bool CommitBinderWindupReadyContact(
+            PrototypeInteractionTarget expectedTarget,
+            uint expectedSequence)
         {
-            if (IsAwaitingAnimationAcquisition)
-            {
-                acquisitionAnimationStateEntered = true;
-                acquisitionAnimationElapsed = 0f;
-            }
-        }
-
-        public bool CommitAnimationAcquisitionContact()
-        {
-            if (!IsAwaitingAnimationAcquisition ||
-                !acquisitionAnimationStateEntered ||
-                acquisitionContactCommitted ||
+            if (!IsAwaitingBinderWindupReadyContact ||
+                expectedTarget == null ||
+                expectedTarget != preparedTarget ||
+                expectedSequence == 0 ||
+                expectedSequence != activeBinderWindupReadySequence ||
                 preparedBody == null ||
                 binderGripSocket == null ||
                 !binderGripSocket.TryGetWorldPose(
@@ -1005,29 +1027,10 @@ namespace BreakNotice.Gameplay.Interaction
             preparedBody.rotation = rotation;
             PreparationPathLength += Vector3.Distance(before, position);
             preparedTargetAcquired = true;
-            acquisitionContactCommitted = true;
-            return true;
-        }
-
-        public void CompleteAnimationAction()
-        {
-            if (!IsAwaitingAnimationAcquisition)
-            {
-                return;
-            }
-
-            if (!acquisitionContactCommitted)
-            {
-                Debug.LogError(
-                    "ALLY ACQUISITION ANIMATION COMPLETED WITHOUT CARRY CONTACT.",
-                    this);
-                RestorePreparedBodyAfterFailedAcquisition();
-                AllyState = PrototypeAllySupportState.Blocked;
-                return;
-            }
-
-            ClearAcquisitionAnimationState();
+            binderWindupReadyContactCommitted = true;
+            BinderWindupReadyContactCount++;
             CompletePreparedAcquisition(0f);
+            return true;
         }
 
         private Vector3 CalculateBinderLaunchVelocity(
@@ -1287,22 +1290,23 @@ namespace BreakNotice.Gameplay.Interaction
                     return;
                 }
 
-                if (!acquisitionAnimationRequested)
+                if (!binderWindupReadyRequested)
                 {
-                    acquisitionAnimationRequested = true;
-                    acquisitionAnimationStateEntered = false;
-                    acquisitionContactCommitted = false;
-                    acquisitionAnimationElapsed = 0f;
+                    binderWindupReadyRequested = true;
+                    binderWindupReadyContactCommitted = false;
+                    binderWindupReadyElapsed = 0f;
+                    activeBinderWindupReadySequence =
+                        NextBinderWindupReadySequence();
                     return;
                 }
 
-                acquisitionAnimationElapsed += deltaTime;
-                if (!acquisitionAnimationStateEntered &&
-                    acquisitionAnimationElapsed >= 0.15f)
+                binderWindupReadyElapsed += deltaTime;
+                if (!binderWindupReadyContactCommitted &&
+                    binderWindupReadyElapsed >= 0.15f)
                 {
                     Debug.LogError(
-                        "ALLY ACQUISITION ANIMATOR STATE ENTRY TIMEOUT; " +
-                        "the supply object was not attached.",
+                        "ALLY BINDER WINDUP READY CONTACT TIMEOUT; " +
+                        "the exact supply target was not attached.",
                         this);
                     RestorePreparedBodyAfterFailedAcquisition();
                     AllyState = PrototypeAllySupportState.Blocked;
@@ -1576,13 +1580,21 @@ namespace BreakNotice.Gameplay.Interaction
             out Vector3 destination)
         {
             destination = bodyPosition;
-            if (playerTransform == null || chairCollider == null)
+            if (playerTransform == null ||
+                chairCollider is not BoxCollider chairBox ||
+                !ShowcaseOrientedBoxGeometry.TryCreate(
+                    chairBox,
+                    out ShowcaseOrientedBoxGeometry chairGeometry))
             {
                 return false;
             }
 
+            Collider playerCollider = playerTransform.GetComponent<Collider>();
+            Vector3 playerCenter = playerCollider != null
+                ? playerCollider.bounds.center
+                : playerTransform.position;
             Vector3 horizontal = Vector3.ProjectOnPlane(
-                playerTransform.position - bodyPosition,
+                playerCenter - chairGeometry.Center,
                 Vector3.up);
             float distance = horizontal.magnitude;
             if (distance <= 0.0001f)
@@ -1591,13 +1603,18 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             Vector3 direction = horizontal / distance;
-            Bounds chairBounds = chairCollider.bounds;
-            float chairExtent =
-                Mathf.Abs(direction.x) * chairBounds.extents.x +
-                Mathf.Abs(direction.z) * chairBounds.extents.z;
-            Collider playerCollider = playerTransform.GetComponent<Collider>();
+            float chairExtent = chairGeometry.GetPlanarSupportRadius(direction);
             float playerExtent = 0.5f;
-            if (playerCollider != null)
+            CharacterController playerController =
+                playerTransform.GetComponent<CharacterController>();
+            if (playerController != null)
+            {
+                Vector3 playerScale = playerController.transform.lossyScale;
+                playerExtent = playerController.radius * Mathf.Max(
+                    Mathf.Abs(playerScale.x),
+                    Mathf.Abs(playerScale.z));
+            }
+            else if (playerCollider != null)
             {
                 Bounds playerBounds = playerCollider.bounds;
                 playerExtent =
@@ -1612,7 +1629,10 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            destination = bodyPosition + direction * travelDistance;
+            Vector3 destinationCenter =
+                chairGeometry.Center + direction * travelDistance;
+            destination = bodyPosition +
+                (destinationCenter - chairGeometry.Center);
             destination.y = bodyPosition.y;
             return true;
         }
@@ -1689,15 +1709,25 @@ namespace BreakNotice.Gameplay.Interaction
                     preparedBody.angularVelocity = preparedAngularVelocity;
                 }
             }
-            ClearAcquisitionAnimationState();
+            ClearBinderWindupReadyTransaction();
         }
 
-        private void ClearAcquisitionAnimationState()
+        private void ClearBinderWindupReadyTransaction()
         {
-            acquisitionAnimationRequested = false;
-            acquisitionAnimationStateEntered = false;
-            acquisitionContactCommitted = false;
-            acquisitionAnimationElapsed = 0f;
+            binderWindupReadyRequested = false;
+            binderWindupReadyContactCommitted = false;
+            binderWindupReadyElapsed = 0f;
+            activeBinderWindupReadySequence = 0;
+        }
+
+        private uint NextBinderWindupReadySequence()
+        {
+            nextBinderWindupReadySequence++;
+            if (nextBinderWindupReadySequence == 0)
+            {
+                nextBinderWindupReadySequence++;
+            }
+            return nextBinderWindupReadySequence;
         }
 
         private void ClearPreparedTarget(bool restoreBody)
@@ -1727,7 +1757,7 @@ namespace BreakNotice.Gameplay.Interaction
             preparedLaneOpen = false;
             preparedBodyStateCaptured = false;
             preparedGroundHeight = 0f;
-            ClearAcquisitionAnimationState();
+            ClearBinderWindupReadyTransaction();
         }
 
         private bool IsKnownSupplyTarget(PrototypeInteractionTarget target)
