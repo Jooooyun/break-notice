@@ -25,13 +25,15 @@ namespace BreakNotice.Contest.Editor
                 string assetPath,
                 float playbackSpeed = 1f,
                 bool locomotionDriven = false,
-                string clipName = null)
+                string clipName = null,
+                float cycleOffset = 0f)
             {
                 Name = name;
                 AssetPath = assetPath;
                 PlaybackSpeed = playbackSpeed;
                 LocomotionDriven = locomotionDriven;
                 ClipName = clipName;
+                CycleOffset = cycleOffset;
             }
 
             public string Name { get; }
@@ -39,11 +41,17 @@ namespace BreakNotice.Contest.Editor
             public float PlaybackSpeed { get; }
             public bool LocomotionDriven { get; }
             public string ClipName { get; }
+            public float CycleOffset { get; }
         }
 
         public const string RuntimeVisualName = "RUNTIME_DESIGNER_A_VISUAL";
         public const string ControllerRoot =
             "Assets/_Project/Art/Animation/DesignerAControllers";
+
+        private const string PlayerAimUpperBodyMaskPath =
+            ControllerRoot + "/CHR00_AimUpperBody.mask";
+        private const string PlayerAimUpperBodyLayerName = "Aim Upper Body";
+        private const string PlayerAimUpperBodyStateName = "AimUpperBodyPose";
 
         private const string CharacterRoot = "Assets/_Project/Art/Characters";
         private const string AnimationRoot = "Assets/_Project/Art/Animation";
@@ -124,6 +132,17 @@ namespace BreakNotice.Contest.Editor
                 "DESIGNER A RUNTIME INTEGRATION PASS: " +
                 "CHR00 + CHR01 + ENY01 Normal + ENY01 Elite, " +
                 "approved animation catalogs and live gameplay drivers connected.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Rebuild CHR00 Player Animation Controller")]
+        public static void RebuildPlayerAnimationController()
+        {
+            EnsureFolder(ControllerRoot);
+            CreatePlayerController();
+            AssetDatabase.SaveAssets();
+            Debug.Log(
+                "CHR00 PLAYER ANIMATION CONTROLLER PASS: controller-only authoring complete; " +
+                "the current Scene was not opened or modified.");
         }
 
         public static void ValidateCurrentIntegration()
@@ -1238,6 +1257,11 @@ namespace BreakNotice.Contest.Editor
                 new("Walk", Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx", 1f, true),
                 new("Run", Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx", 1f, true),
                 new("AimIdle", Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx"),
+                new("AimForward", Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx", 1f, true),
+                new("AimBackward", Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx", 1f, true, null, 1f),
+                new("AimStrafeLeft", Chr00AnimationRoot + "/Approved/CHR00_Strafe_L.fbx", 1f, true),
+                new("AimStrafeRight", Chr00AnimationRoot + "/Approved/CHR00_Strafe_R.fbx", 1f, true),
+                new("WalkStopAction", Chr00AnimationRoot + "/Approved/CHR00_Walk_Stop.fbx"),
                 new("RunStopAction", Chr00AnimationRoot + "/Approved/CHR00_Run_Stop.fbx"),
                 new("JumpAction", Chr00AnimationRoot + "/Approved/CHR00_Jump.fbx"),
                 new("IdleVariantAction", Chr00AnimationRoot + "/Approved/CHR00_Idle_Variant_Stretch.fbx"),
@@ -1258,14 +1282,21 @@ namespace BreakNotice.Contest.Editor
                 new("Death1Action", Chr00AnimationRoot + "/Legacy/Dying1.fbx"),
                 new("Death2Action", Chr00AnimationRoot + "/Legacy/Dying2.fbx")
             };
-            if (ControllerMatchesRuntimeContract(Characters[0].ControllerPath, states))
+            AvatarMask upperBodyMask = EnsurePlayerAimUpperBodyMask();
+            if (PlayerControllerMatchesRuntimeContract(
+                    Characters[0].ControllerPath,
+                    states,
+                    upperBodyMask))
             {
                 return;
             }
 
             AnimatorController controller = CreateController(Characters[0].ControllerPath);
+            RemoveAdditionalControllerLayers(controller);
             AddCoreParameters(controller, true, false);
             BuildRuntimeStates(controller.layers[0].stateMachine, states);
+            AddPlayerAimUpperBodyLayer(controller, upperBodyMask);
+            EditorUtility.SetDirty(controller);
         }
 
         private static void CreateAllyController()
@@ -1350,7 +1381,8 @@ namespace BreakNotice.Contest.Editor
                     contract.Name,
                     LoadContractClip(contract),
                     contract.PlaybackSpeed,
-                    contract.LocomotionDriven);
+                    contract.LocomotionDriven,
+                    contract.CycleOffset);
                 if (contract.Name == "Idle")
                 {
                     idle = state;
@@ -1376,6 +1408,153 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(controller);
         }
 
+        private static AvatarMask EnsurePlayerAimUpperBodyMask()
+        {
+            AvatarMask mask = AssetDatabase.LoadAssetAtPath<AvatarMask>(
+                PlayerAimUpperBodyMaskPath);
+            bool created = mask == null;
+            if (created)
+            {
+                mask = new AvatarMask
+                {
+                    name = Path.GetFileNameWithoutExtension(PlayerAimUpperBodyMaskPath)
+                };
+                AssetDatabase.CreateAsset(mask, PlayerAimUpperBodyMaskPath);
+            }
+
+            bool changed = created;
+            for (int index = 0; index < (int)AvatarMaskBodyPart.LastBodyPart; index++)
+            {
+                AvatarMaskBodyPart bodyPart = (AvatarMaskBodyPart)index;
+                bool expected = IsPlayerAimUpperBodyPart(bodyPart);
+                if (mask.GetHumanoidBodyPartActive(bodyPart) == expected)
+                {
+                    continue;
+                }
+
+                mask.SetHumanoidBodyPartActive(bodyPart, expected);
+                changed = true;
+            }
+
+            if (changed)
+            {
+                EditorUtility.SetDirty(mask);
+            }
+            return mask;
+        }
+
+        private static bool IsPlayerAimUpperBodyPart(AvatarMaskBodyPart bodyPart)
+        {
+            switch (bodyPart)
+            {
+                case AvatarMaskBodyPart.Body:
+                case AvatarMaskBodyPart.Head:
+                case AvatarMaskBodyPart.LeftArm:
+                case AvatarMaskBodyPart.RightArm:
+                case AvatarMaskBodyPart.LeftFingers:
+                case AvatarMaskBodyPart.RightFingers:
+                case AvatarMaskBodyPart.LeftHandIK:
+                case AvatarMaskBodyPart.RightHandIK:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static void AddPlayerAimUpperBodyLayer(
+            AnimatorController controller,
+            AvatarMask upperBodyMask)
+        {
+            controller.AddLayer(PlayerAimUpperBodyLayerName);
+            AnimatorControllerLayer[] layers = controller.layers;
+            int layerIndex = layers.Length - 1;
+            AnimatorControllerLayer layer = layers[layerIndex];
+            layer.avatarMask = upperBodyMask;
+            layer.blendingMode = AnimatorLayerBlendingMode.Override;
+            layer.defaultWeight = 0f;
+            layer.iKPass = false;
+            layer.syncedLayerIndex = -1;
+            layer.syncedLayerAffectsTiming = false;
+            layers[layerIndex] = layer;
+            controller.layers = layers;
+
+            AnimatorStateMachine stateMachine = layer.stateMachine;
+            AnimatorState state = AddRuntimeState(
+                stateMachine,
+                PlayerAimUpperBodyStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx"));
+            stateMachine.defaultState = state;
+        }
+
+        private static void RemoveAdditionalControllerLayers(
+            AnimatorController controller)
+        {
+            while (controller.layers.Length > 1)
+            {
+                controller.RemoveLayer(controller.layers.Length - 1);
+            }
+        }
+
+        private static bool PlayerControllerMatchesRuntimeContract(
+            string path,
+            IEnumerable<RuntimeStateContract> authoredContracts,
+            AvatarMask upperBodyMask)
+        {
+            RuntimeStateContract[] contracts = authoredContracts.ToArray();
+            if (contracts.Any(contract =>
+                    IsForbiddenPlayerRuntimeClip(contract.AssetPath)))
+            {
+                throw new InvalidOperationException(
+                    "CHR00 runtime controller cannot reference PREVIEW, Turn, or ALT clips.");
+            }
+
+            AnimatorController controller =
+                AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+            if (controller == null || controller.layers.Length != 2 ||
+                !ControllerHasRuntimeParameters(controller) ||
+                !RuntimeStateMachineMatchesContract(
+                    controller.layers[0].stateMachine,
+                    contracts))
+            {
+                return false;
+            }
+
+            AnimatorControllerLayer upperLayer = controller.layers[1];
+            AnimatorStateMachine upperMachine = upperLayer.stateMachine;
+            if (upperLayer.name != PlayerAimUpperBodyLayerName ||
+                upperLayer.avatarMask != upperBodyMask ||
+                upperLayer.blendingMode != AnimatorLayerBlendingMode.Override ||
+                Mathf.Abs(upperLayer.defaultWeight) > 0.0001f ||
+                upperLayer.iKPass || upperLayer.syncedLayerIndex != -1 ||
+                upperLayer.syncedLayerAffectsTiming ||
+                upperMachine == null || upperMachine.stateMachines.Length != 0 ||
+                upperMachine.anyStateTransitions.Length != 0 ||
+                upperMachine.states.Length != 1 ||
+                upperMachine.defaultState == null ||
+                upperMachine.defaultState.name != PlayerAimUpperBodyStateName)
+            {
+                return false;
+            }
+
+            AnimatorState upperState = upperMachine.states[0].state;
+            return upperState.name == PlayerAimUpperBodyStateName &&
+                   upperState.motion == LoadClip(
+                       Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx") &&
+                   Mathf.Abs(upperState.speed - 1f) <= 0.0001f &&
+                   Mathf.Abs(upperState.cycleOffset) <= 0.0001f &&
+                   !upperState.speedParameterActive &&
+                   !upperState.iKOnFeet && upperState.writeDefaultValues &&
+                   upperState.transitions.Length == 0;
+        }
+
+        private static bool IsForbiddenPlayerRuntimeClip(string assetPath)
+        {
+            string clipName = Path.GetFileNameWithoutExtension(assetPath);
+            return clipName.IndexOf("PREVIEW", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   clipName.IndexOf("Turn", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   clipName.IndexOf("ALT", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
         private static bool ControllerMatchesRuntimeContract(
             string path,
             IEnumerable<RuntimeStateContract> authoredContracts)
@@ -1384,16 +1563,30 @@ namespace BreakNotice.Contest.Editor
                 AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
             RuntimeStateContract[] contracts = authoredContracts.ToArray();
             if (controller == null || controller.layers.Length != 1 ||
-                controller.parameters.Length != 2 ||
-                !controller.parameters.All(parameter =>
-                    parameter.type == AnimatorControllerParameterType.Float &&
-                    (parameter.name == "Speed" ||
-                     parameter.name == "LocomotionPlayback")))
+                !ControllerHasRuntimeParameters(controller))
             {
                 return false;
             }
 
-            AnimatorStateMachine machine = controller.layers[0].stateMachine;
+            return RuntimeStateMachineMatchesContract(
+                controller.layers[0].stateMachine,
+                contracts);
+        }
+
+        private static bool ControllerHasRuntimeParameters(
+            AnimatorController controller)
+        {
+            return controller.parameters.Length == 2 &&
+                   controller.parameters.All(parameter =>
+                       parameter.type == AnimatorControllerParameterType.Float &&
+                       (parameter.name == "Speed" ||
+                        parameter.name == "LocomotionPlayback"));
+        }
+
+        private static bool RuntimeStateMachineMatchesContract(
+            AnimatorStateMachine machine,
+            RuntimeStateContract[] contracts)
+        {
             ChildAnimatorState[] children = machine.states;
             if (machine.defaultState == null || machine.defaultState.name != "Idle" ||
                 children.Length != contracts.Length ||
@@ -1409,8 +1602,10 @@ namespace BreakNotice.Contest.Editor
                     .Select(child => child.state)
                     .SingleOrDefault(candidate => candidate.name == contract.Name);
                 if (state == null || state.motion != LoadContractClip(contract) ||
-                    Mathf.Abs(state.speed - Mathf.Max(0.05f, contract.PlaybackSpeed)) >
+                    Mathf.Abs(state.speed - ResolveRuntimePlaybackSpeed(
+                        contract.PlaybackSpeed)) >
                     0.0001f ||
+                    Mathf.Abs(state.cycleOffset - contract.CycleOffset) > 0.0001f ||
                     state.iKOnFeet || !state.writeDefaultValues ||
                     state.speedParameterActive != contract.LocomotionDriven ||
                     (contract.LocomotionDriven &&
@@ -1488,10 +1683,12 @@ namespace BreakNotice.Contest.Editor
             string name,
             AnimationClip clip,
             float playbackSpeed = 1f,
-            bool locomotionDriven = false)
+            bool locomotionDriven = false,
+            float cycleOffset = 0f)
         {
             AnimatorState state = AddState(machine, name, clip);
-            state.speed = Mathf.Max(0.05f, playbackSpeed);
+            state.speed = ResolveRuntimePlaybackSpeed(playbackSpeed);
+            state.cycleOffset = cycleOffset;
             state.iKOnFeet = false;
             if (locomotionDriven)
             {
@@ -1499,6 +1696,16 @@ namespace BreakNotice.Contest.Editor
                 state.speedParameter = "LocomotionPlayback";
             }
             return state;
+        }
+
+        private static float ResolveRuntimePlaybackSpeed(float playbackSpeed)
+        {
+            if (Mathf.Abs(playbackSpeed) >= 0.05f)
+            {
+                return playbackSpeed;
+            }
+
+            return playbackSpeed < 0f ? -0.05f : 0.05f;
         }
 
         private static void ConfigureLocomotion(

@@ -120,7 +120,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             foreach ((string fileName, int stateCount, bool expectsRun) in new[]
                      {
-                         ("CHR00_Player.controller", 23, true),
+                         ("CHR00_Player.controller", 29, true),
                          ("CHR01_Ally.controller", 5, true),
                          ("ENY01_Normal.controller", 17, false),
                          ("ENY01_Elite.controller", 20, false)
@@ -151,6 +151,119 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(states.SelectMany(state => state.transitions), Is.Empty, fileName);
                 Assert.That(controller.layers.SelectMany(layer =>
                     layer.stateMachine.anyStateTransitions), Is.Empty, fileName);
+            }
+        }
+
+        [Test]
+        public void PlayerController_UsesDirectionalAimBaseStatesAndMaskedUpperBodyLayer()
+        {
+            AnimatorController controller = LoadController("CHR00_Player.controller");
+            Assert.That(controller.layers, Has.Length.EqualTo(2));
+
+            AnimatorControllerLayer baseLayer = controller.layers[0];
+            AnimatorControllerLayer upperBodyLayer = controller.layers[1];
+            Assert.That(baseLayer.name, Is.EqualTo("Base Layer"));
+            Assert.That(baseLayer.stateMachine.states, Has.Length.EqualTo(28));
+
+            Dictionary<string, AnimatorState> baseStates = baseLayer.stateMachine.states
+                .Select(child => child.state)
+                .ToDictionary(state => state.name, StringComparer.Ordinal);
+            foreach (string stateName in new[]
+                     {
+                         "AimForward",
+                         "AimBackward",
+                         "AimStrafeLeft",
+                         "AimStrafeRight",
+                         "WalkStopAction"
+                     })
+            {
+                Assert.That(baseStates, Contains.Key(stateName));
+            }
+
+            AssertStateMotionPath(
+                baseStates["AimForward"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Walk_F.fbx");
+            AssertStateMotionPath(
+                baseStates["AimBackward"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Walk_F.fbx");
+            Assert.That(baseStates["AimBackward"].speed, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(baseStates["AimBackward"].cycleOffset,
+                Is.EqualTo(1f).Within(0.001f));
+            AssertStateMotionPath(
+                baseStates["AimStrafeLeft"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strafe_L.fbx");
+            AssertStateMotionPath(
+                baseStates["AimStrafeRight"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strafe_R.fbx");
+            AssertStateMotionPath(
+                baseStates["WalkStopAction"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Walk_Stop.fbx");
+
+            foreach (string locomotionState in new[]
+                     {
+                         "AimForward",
+                         "AimBackward",
+                         "AimStrafeLeft",
+                         "AimStrafeRight"
+                     })
+            {
+                AnimatorState state = baseStates[locomotionState];
+                Assert.That(state.speedParameterActive, Is.True, locomotionState);
+                Assert.That(state.speedParameter, Is.EqualTo("LocomotionPlayback"),
+                    locomotionState);
+            }
+            Assert.That(baseStates["WalkStopAction"].speedParameterActive, Is.False);
+
+            Assert.That(upperBodyLayer.name, Is.EqualTo("Aim Upper Body"));
+            Assert.That(upperBodyLayer.blendingMode,
+                Is.EqualTo(AnimatorLayerBlendingMode.Override));
+            Assert.That(upperBodyLayer.defaultWeight, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(upperBodyLayer.avatarMask, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(upperBodyLayer.avatarMask),
+                Is.EqualTo(ControllerRoot + "/CHR00_AimUpperBody.mask"));
+            Assert.That(upperBodyLayer.stateMachine.states, Has.Length.EqualTo(1));
+            Assert.That(upperBodyLayer.stateMachine.defaultState, Is.Not.Null);
+            Assert.That(upperBodyLayer.stateMachine.defaultState.name,
+                Is.EqualTo("AimUpperBodyPose"));
+            Assert.That(upperBodyLayer.stateMachine.states[0].state.transitions, Is.Empty);
+            Assert.That(upperBodyLayer.stateMachine.anyStateTransitions, Is.Empty);
+
+            AvatarMask mask = upperBodyLayer.avatarMask;
+            foreach (AvatarMaskBodyPart part in new[]
+                     {
+                         AvatarMaskBodyPart.Body,
+                         AvatarMaskBodyPart.Head,
+                         AvatarMaskBodyPart.LeftArm,
+                         AvatarMaskBodyPart.RightArm,
+                         AvatarMaskBodyPart.LeftFingers,
+                         AvatarMaskBodyPart.RightFingers
+                     })
+            {
+                Assert.That(mask.GetHumanoidBodyPartActive(part), Is.True, part.ToString());
+            }
+            foreach (AvatarMaskBodyPart part in new[]
+                     {
+                         AvatarMaskBodyPart.Root,
+                         AvatarMaskBodyPart.LeftLeg,
+                         AvatarMaskBodyPart.RightLeg,
+                         AvatarMaskBodyPart.LeftFootIK,
+                         AvatarMaskBodyPart.RightFootIK
+                     })
+            {
+                Assert.That(mask.GetHumanoidBodyPartActive(part), Is.False, part.ToString());
+            }
+
+            foreach (AnimatorState state in controller.layers
+                         .SelectMany(layer => layer.stateMachine.states)
+                         .Select(child => child.state))
+            {
+                string path = AssetDatabase.GetAssetPath(state.motion);
+                Assert.That(path.IndexOf("PREVIEW", StringComparison.OrdinalIgnoreCase),
+                    Is.EqualTo(-1), state.name);
+                Assert.That(path.IndexOf("_ALT", StringComparison.OrdinalIgnoreCase),
+                    Is.EqualTo(-1), state.name);
+                Assert.That(path.IndexOf("Turn", StringComparison.OrdinalIgnoreCase),
+                    Is.EqualTo(-1), state.name);
             }
         }
 
@@ -525,6 +638,15 @@ namespace BreakNotice.LocomotionCamera.Tests
                 .Select(child => child.state)
                 .Single(candidate => candidate.name == stateName);
             Assert.That(state.speed, Is.EqualTo(expected).Within(0.001f), stateName);
+        }
+
+        private static void AssertStateMotionPath(
+            AnimatorState state,
+            string expectedPath)
+        {
+            Assert.That(state.motion, Is.TypeOf<AnimationClip>(), state.name);
+            Assert.That(AssetDatabase.GetAssetPath(state.motion), Is.EqualTo(expectedPath),
+                state.name);
         }
 
         private static string[] StateNames(AnimatorController controller)

@@ -14,6 +14,15 @@ namespace BreakNotice.Presentation
         EnemyElite = 3
     }
 
+    public enum ShowcasePlayerLocomotionDirection
+    {
+        None = 0,
+        Forward = 1,
+        Backward = 2,
+        Left = 3,
+        Right = 4
+    }
+
     [DefaultExecutionOrder(120)]
     [DisallowMultipleComponent]
     public sealed class ShowcaseCharacterAnimationDriver : MonoBehaviour
@@ -22,6 +31,10 @@ namespace BreakNotice.Presentation
         private static readonly int LocomotionPlaybackParameter =
             Animator.StringToHash("LocomotionPlayback");
 
+        private const string AimUpperBodyLayerName = "Aim Upper Body";
+        private const string AimUpperBodyStatePath =
+            AimUpperBodyLayerName + ".AimUpperBodyPose";
+
         private const float MinimumPlaybackRate = 0.75f;
         private const float MaximumPlaybackRate = 1.5f;
         private const float LocomotionBlendSeconds = 0.12f;
@@ -29,6 +42,8 @@ namespace BreakNotice.Presentation
         private const float ComboBlendSeconds = 0.06f;
         private const float HitReactionBlendSeconds = 0.06f;
         private const float KnockdownBlendSeconds = 0.04f;
+        private const float AimDirectionAxisSwitchMargin = 0.15f;
+        private const float AimUpperBodyBlendSeconds = 0.10f;
 
         [SerializeField]
         private ShowcaseCharacterAnimationRole role;
@@ -69,6 +84,7 @@ namespace BreakNotice.Presentation
         private Vector3 previousWorldPosition;
         private bool observedGrounded = true;
         private bool observedSprinting;
+        private bool observedMoving;
         private bool decorativePlaybackActive;
         private bool jumpPlaybackActive;
         private bool allyReleasePlaybackActive;
@@ -81,6 +97,8 @@ namespace BreakNotice.Presentation
         private bool pendingAllyAcquisitionAcknowledgement;
         private float localHitStopUntil;
         private bool localHitStopActive;
+        private int aimUpperBodyLayerIndex = -1;
+        private bool hasAimUpperBodyPose;
 
         public ShowcaseCharacterAnimationRole Role => role;
         public Animator Animator => animator;
@@ -90,6 +108,14 @@ namespace BreakNotice.Presentation
         public float LastPlanarSpeed { get; private set; }
         public float LastPlaybackRate { get; private set; } = 1f;
         public int CurrentStateHash => currentStateHash;
+        public ShowcasePlayerLocomotionDirection PlayerLocomotionDirection
+        {
+            get;
+            private set;
+        }
+        public string CurrentBaseStateName { get; private set; } = string.Empty;
+        public bool HasAimUpperBodyLayer => hasAimUpperBodyPose;
+        public float AimUpperBodyLayerWeight { get; private set; }
 
         private void Awake()
         {
@@ -243,12 +269,15 @@ namespace BreakNotice.Presentation
 
         private void UpdatePlayerAnimation()
         {
+            bool actionCueStartedThisFrame = false;
             if (playerCombat != null &&
                 playerCombat.AnimationCueRevision != observedPlayerCueRevision)
             {
                 observedPlayerCueRevision = playerCombat.AnimationCueRevision;
                 if (TryResolvePlayerCueState(playerCombat.AnimationCue, out string state))
                 {
+                    SetAimUpperBodyActive(false, true);
+                    PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
                     PlayState(
                         state,
                         ResolvePlayerActionBlend(playerCombat.AnimationCue),
@@ -258,11 +287,20 @@ namespace BreakNotice.Presentation
                         playerCombat.AnimationCueRevision);
                     decorativePlaybackActive = false;
                     jumpPlaybackActive = false;
+                    actionCueStartedThisFrame = true;
                 }
             }
 
-            if (playerCombat != null && playerCombat.IsActionLocked)
+            if (actionCueStartedThisFrame ||
+                (playerCombat != null && playerCombat.IsActionLocked))
             {
+                SetAimUpperBodyActive(false, true);
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+                // An action owns the full body and mobility until completion.
+                // Discard the pre-action locomotion observation so unlock cannot
+                // synthesize a decorative stop that never happened on screen.
+                observedMoving = false;
+                observedSprinting = false;
                 return;
             }
 
@@ -270,6 +308,8 @@ namespace BreakNotice.Presentation
             if (observedGrounded && !grounded && locomotion != null &&
                 locomotion.VerticalVelocity > 0f)
             {
+                SetAimUpperBodyActive(false, true);
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
                 PlayState("JumpAction", LocomotionToActionBlendSeconds, true);
                 jumpPlaybackActive = true;
                 decorativePlaybackActive = false;
@@ -290,12 +330,27 @@ namespace BreakNotice.Presentation
             bool sprinting = locomotion != null && locomotion.IsSprinting;
             bool moving = LastPlanarSpeed > 0.05f;
 
-            if (observedSprinting && !sprinting && LastPlanarSpeed <= 0.25f)
+            bool stopPlaybackStartedThisFrame = observedMoving && !moving && !aiming;
+            if (stopPlaybackStartedThisFrame)
             {
-                PlayState("RunStopAction", LocomotionToActionBlendSeconds, true);
+                PlayState(
+                    observedSprinting ? "RunStopAction" : "WalkStopAction",
+                    LocomotionToActionBlendSeconds,
+                    true);
                 decorativePlaybackActive = true;
             }
             observedSprinting = sprinting;
+            observedMoving = moving;
+
+            if (stopPlaybackStartedThisFrame)
+            {
+                // Stop clips own the full body.  Clear the Aim overlay before
+                // returning, otherwise the decorative early-return path would
+                // freeze a partially blended upper-body pose for the whole clip.
+                SetAimUpperBodyActive(false, true);
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+                return;
+            }
 
             if (decorativePlaybackActive)
             {
@@ -322,20 +377,146 @@ namespace BreakNotice.Presentation
             }
             else if (!idleVariantPlayed && inactiveDuration >= 8f)
             {
+                SetAimUpperBodyActive(false, false);
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
                 PlayState("IdleVariantAction", LocomotionToActionBlendSeconds, true);
                 idleVariantPlayed = true;
                 decorativePlaybackActive = true;
                 return;
             }
 
-            string locomotionState = sprinting && moving
-                ? "Run"
-                : moving
-                    ? "Walk"
-                    : aiming
-                        ? "AimIdle"
+            string locomotionState;
+            if (aiming)
+            {
+                SetAimUpperBodyActive(true, false);
+                locomotionState = ResolveAimLocomotionState(moving);
+                animator.SetFloat(
+                    LocomotionPlaybackParameter,
+                    PlayerLocomotionDirection ==
+                        ShowcasePlayerLocomotionDirection.Backward
+                        ? -LastPlaybackRate
+                        : LastPlaybackRate);
+            }
+            else
+            {
+                SetAimUpperBodyActive(false, false);
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+                animator.SetFloat(LocomotionPlaybackParameter, LastPlaybackRate);
+                locomotionState = sprinting && moving
+                    ? "Run"
+                    : moving
+                        ? "Walk"
                         : "Idle";
+            }
             PlayState(locomotionState, LocomotionBlendSeconds, false);
+        }
+
+        private string ResolveAimLocomotionState(bool moving)
+        {
+            if (!moving)
+            {
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+                return "AimIdle";
+            }
+
+            // The directional base clips provide the legs while the masked
+            // Aim Upper Body layer preserves the authored aiming pose. If the
+            // optional layer is absent, retain the safe full-body AimIdle pose
+            // instead of allowing an un-aimed walk underneath gameplay aim.
+            if (!hasAimUpperBodyPose)
+            {
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+                return "AimIdle";
+            }
+
+            Vector3 worldVelocity = ResolveWorldPlanarVelocity();
+            Vector3 localVelocity = transform.InverseTransformDirection(worldVelocity);
+            Vector2 localDirection = new(localVelocity.x, localVelocity.z);
+            if (localDirection.sqrMagnitude <= 0.0025f)
+            {
+                PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+                return "AimIdle";
+            }
+
+            localDirection.Normalize();
+            float lateral = Mathf.Abs(localDirection.x);
+            float longitudinal = Mathf.Abs(localDirection.y);
+            bool useLateral = ResolveAimLateralAxis(lateral, longitudinal);
+
+            PlayerLocomotionDirection = useLateral
+                ? localDirection.x < 0f
+                    ? ShowcasePlayerLocomotionDirection.Left
+                    : ShowcasePlayerLocomotionDirection.Right
+                : localDirection.y < 0f
+                    ? ShowcasePlayerLocomotionDirection.Backward
+                    : ShowcasePlayerLocomotionDirection.Forward;
+
+            string requestedState = PlayerLocomotionDirection switch
+            {
+                ShowcasePlayerLocomotionDirection.Forward => "AimForward",
+                ShowcasePlayerLocomotionDirection.Backward => "AimBackward",
+                ShowcasePlayerLocomotionDirection.Left => "AimStrafeLeft",
+                ShowcasePlayerLocomotionDirection.Right => "AimStrafeRight",
+                _ => "AimIdle"
+            };
+
+            if (HasBaseState(requestedState))
+            {
+                return requestedState;
+            }
+
+            PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+            return "AimIdle";
+        }
+
+        private bool ResolveAimLateralAxis(float lateral, float longitudinal)
+        {
+            bool wasLateral =
+                PlayerLocomotionDirection == ShowcasePlayerLocomotionDirection.Left ||
+                PlayerLocomotionDirection == ShowcasePlayerLocomotionDirection.Right;
+            bool wasLongitudinal =
+                PlayerLocomotionDirection == ShowcasePlayerLocomotionDirection.Forward ||
+                PlayerLocomotionDirection == ShowcasePlayerLocomotionDirection.Backward;
+
+            if (wasLateral)
+            {
+                return longitudinal <= lateral + AimDirectionAxisSwitchMargin;
+            }
+            if (wasLongitudinal)
+            {
+                return lateral > longitudinal + AimDirectionAxisSwitchMargin;
+            }
+            return lateral > longitudinal;
+        }
+
+        private void SetAimUpperBodyActive(bool active, bool immediate)
+        {
+            float targetWeight = active && hasAimUpperBodyPose ? 1f : 0f;
+            if (immediate || AimUpperBodyBlendSeconds <= 0f)
+            {
+                AimUpperBodyLayerWeight = targetWeight;
+            }
+            else
+            {
+                AimUpperBodyLayerWeight = Mathf.MoveTowards(
+                    AimUpperBodyLayerWeight,
+                    targetWeight,
+                    Time.deltaTime / AimUpperBodyBlendSeconds);
+            }
+
+            if (aimUpperBodyLayerIndex >= 0 && animator != null)
+            {
+                animator.SetLayerWeight(
+                    aimUpperBodyLayerIndex,
+                    AimUpperBodyLayerWeight);
+            }
+        }
+
+        private bool HasBaseState(string stateName)
+        {
+            return animator != null && animator.HasState(
+                0,
+                Animator.StringToHash("Base Layer." + stateName));
         }
 
         private void UpdateAllyAnimation()
@@ -448,11 +629,13 @@ namespace BreakNotice.Presentation
             }
             if (!restart && currentStateHash == stateHash)
             {
+                CurrentBaseStateName = stateName;
                 return;
             }
 
             animator.CrossFadeInFixedTime(stateHash, blendSeconds, 0, 0f);
             currentStateHash = stateHash;
+            CurrentBaseStateName = stateName;
         }
 
         private float ResolvePlayerActionBlend(ShowcasePlayerAnimationCue cue)
@@ -520,11 +703,18 @@ namespace BreakNotice.Presentation
                 return Mathf.Max(0f, runnerAgent.CommandedPlanarSpeed);
             }
 
+            Vector3 velocity = ResolveWorldPlanarVelocity();
+            return new Vector2(velocity.x, velocity.z).magnitude;
+        }
+
+        private Vector3 ResolveWorldPlanarVelocity()
+        {
             Vector3 velocity = movementController != null
                 ? movementController.velocity
                 : (transform.position - previousWorldPosition) /
                   Mathf.Max(0.0001f, Time.deltaTime);
-            return new Vector2(velocity.x, velocity.z).magnitude;
+            velocity.y = 0f;
+            return velocity;
         }
 
         private float ResolveNaturalReferenceSpeed()
@@ -630,6 +820,9 @@ namespace BreakNotice.Presentation
 
         private void ConfigureAnimatorRuntime()
         {
+            aimUpperBodyLayerIndex = -1;
+            hasAimUpperBodyPose = false;
+            AimUpperBodyLayerWeight = 0f;
             if (animator == null)
             {
                 return;
@@ -637,6 +830,18 @@ namespace BreakNotice.Presentation
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             animator.stabilizeFeet = false;
+
+            aimUpperBodyLayerIndex = role == ShowcaseCharacterAnimationRole.Player
+                ? animator.GetLayerIndex(AimUpperBodyLayerName)
+                : -1;
+            hasAimUpperBodyPose = aimUpperBodyLayerIndex >= 0 &&
+                animator.HasState(
+                    aimUpperBodyLayerIndex,
+                    Animator.StringToHash(AimUpperBodyStatePath));
+            if (aimUpperBodyLayerIndex >= 0)
+            {
+                animator.SetLayerWeight(aimUpperBodyLayerIndex, 0f);
+            }
         }
 
         private void CaptureCurrentGameplayState()
@@ -646,7 +851,11 @@ namespace BreakNotice.Presentation
             observedRunnerCueRevision = runnerAgent?.AnimationCueRevision ?? 0;
             observedGrounded = locomotion == null || locomotion.IsGrounded;
             observedSprinting = locomotion != null && locomotion.IsSprinting;
+            observedMoving = false;
+            PlayerLocomotionDirection = ShowcasePlayerLocomotionDirection.None;
+            SetAimUpperBodyActive(false, true);
             currentStateHash = 0;
+            CurrentBaseStateName = string.Empty;
             pendingActionStateHash = 0;
             pendingActionCueRevision = 0;
             pendingAllyAcquisitionAcknowledgement = false;
