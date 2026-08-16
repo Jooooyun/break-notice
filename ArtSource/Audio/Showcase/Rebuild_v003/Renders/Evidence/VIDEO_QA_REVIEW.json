@@ -1,0 +1,36 @@
+{
+  "status": "REVIEW_ONLY_NOT_FINAL",
+  "visual_condition": "Identical common Chair-to-Runner motion and camera for X/Y/Z",
+  "records": [
+    {
+      "blind_label": "X",
+      "common_video_frames": 105,
+      "frame_rate": 30,
+      "duration_seconds": 3.5,
+      "audio_sha256": "1f4aa38cb032298f0650a79e05048a6d7579e35d43670135d55a39e29a86f3ed",
+      "video_path": "Renders/Blind/Videos/BLIND_X_AUDITION_2VAR_REVIEW.mp4",
+      "video_bytes": 136372,
+      "video_sha256": "46460d24463d48bde0a366698a44b0016ad0866bb1fdec64ceedcc221504fd8a"
+    },
+    {
+      "blind_label": "Y",
+      "common_video_frames": 105,
+      "frame_rate": 30,
+      "duration_seconds": 3.5,
+      "audio_sha256": "6330c162c8e6fe5d1c30e3f00987267ec3e1eca359ec1c551df435579704e0a7",
+      "video_path": "Renders/Blind/Videos/BLIND_Y_AUDITION_2VAR_REVIEW.mp4",
+      "video_bytes": 132796,
+      "video_sha256": "13f39b683ad08b643e894f79e22e5eb67c144ea15ce3cc034e93bbe53ca860c4"
+    },
+    {
+      "blind_label": "Z",
+      "common_video_frames": 105,
+      "frame_rate": 30,
+      "duration_seconds": 3.5,
+      "audio_sha256": "56425ced53b259337eda1edc62f6cbb4f77f34eb5fdbb71eb333b724b225ad1a",
+      "video_path": "Renders/Blind/Videos/BLIND_Z_AUDITION_2VAR_REVIEW.mp4",
+      "video_bytes": 124643,
+      "video_sha256": "b3b6e42ca2fcfab540ddc466b85fef860d1e67ca67fd5639780758ca0358e612"
+    }
+  ]
+}

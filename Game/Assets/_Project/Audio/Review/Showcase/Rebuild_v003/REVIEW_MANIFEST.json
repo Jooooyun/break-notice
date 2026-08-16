@@ -1,0 +1,18 @@
+{
+  "status": "LOCAL_REVIEW_ONLY",
+  "blind_labels": [
+    "X",
+    "Y",
+    "Z"
+  ],
+  "variations_each": 2,
+  "stem_order": [
+    "pre",
+    "signature",
+    "chair",
+    "runner",
+    "floor_tail"
+  ],
+  "contact_seconds": 0.2,
+  "do_not_reveal_mapping_before_choice": true
+}

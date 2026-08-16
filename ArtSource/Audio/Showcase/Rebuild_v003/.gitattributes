@@ -1,0 +1,12 @@
+# Preserve retrieved evidence and review media byte-for-byte.
+Sources/Evidence/*.html -text
+Sources/*.zip -text
+Sources/*.wav -text
+Sources/*.mp3 -text
+Sources/KenneyImpactSounds/Audio/*.ogg -text
+Sources/KenneyImpactSounds/License.txt -text
+Renders/**/*.wav -text
+Renders/**/*.mp4 -text
+Renders/**/*.png -text
+HUMAN_OWNER_BLIND_REVIEW_PACKAGE_v003/*.wav -text
+HUMAN_OWNER_BLIND_REVIEW_PACKAGE_v003/*.mp4 -text

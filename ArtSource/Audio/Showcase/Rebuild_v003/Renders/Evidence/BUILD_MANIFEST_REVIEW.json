@@ -1,0 +1,311 @@
+{
+  "status": "REVIEW_ONLY",
+  "baseline": "b15d971375cfb3a0be7d978f9311b58702e9d431",
+  "branch": "codex/showcase-audio-rebuild-v003",
+  "old_audio_reused": false,
+  "source_rights_boundary": {
+    "all_sources": "newly acquired CC0 source bytes; no prior pack reuse",
+    "freesound_bytes": "public HQ preview MP3 derivatives used for REVIEW only",
+    "before_final": "replace selected Freesound previews with original lossless downloads and rerun QA unless the Human Owner explicitly accepts preview-derived sources"
+  },
+  "source_records": [
+    {
+      "role_id": "body_coat",
+      "path": "Sources/freesound-235451-body-hit-coat-wall-hq-preview.mp3",
+      "sha256": "41d655cf3c0cdb7b05ece9db2bc82cfefd2d2a4e543c520a7092e8228fff6ab7",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration_seconds": 6.272938,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    {
+      "role_id": "chair_roll",
+      "path": "Sources/freesound-317850-office-chair-roll-rattle-hq-preview.mp3",
+      "sha256": "36403919eaa0a0be18c47b188d7cada2a1aa48ec375034581dfa20fde4575cb2",
+      "sample_rate": 48000,
+      "channels": 1,
+      "duration_seconds": 53.397292,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    {
+      "role_id": "cloth_hit",
+      "path": "Sources/freesound-629976-clothed-body-hit-hq-preview.mp3",
+      "sha256": "0cf61888090d94bdfee37d499ea5370d739773a729c42ce5bd1e287911d0b56f",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.456576,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    {
+      "role_id": "fast_slide",
+      "path": "Sources/freesound-51132-chair-sliding-quickly-hq-preview.mp3",
+      "sha256": "e55ebc39361f5f0ad87f57f98b3cf699f761da1e6230cde05a759d3588a8a61d",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 10.362449,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    {
+      "role_id": "kenney_floor_1",
+      "path": "Sources/KenneyImpactSounds/Audio/footstep_concrete_001.ogg",
+      "sha256": "507a75eb19b897087855a3be3cf11a12d7fa37d143ad535eeebe0b8031c7325d",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.107642,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_floor_2",
+      "path": "Sources/KenneyImpactSounds/Audio/footstep_concrete_004.ogg",
+      "sha256": "24dd8db2413e5b81ad181e1205c12a1c7801da5f85715d471b92a4b2f632e45e",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.114354,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_metal_1",
+      "path": "Sources/KenneyImpactSounds/Audio/impactMetal_heavy_001.ogg",
+      "sha256": "83554049f81f4db9209379e103c30bfa63f65c42189a03f300b045c2c82e23ae",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.359274,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_metal_2",
+      "path": "Sources/KenneyImpactSounds/Audio/impactMetal_heavy_003.ogg",
+      "sha256": "b0f2ba4dabde9a87eb9c188a19d31e0c2300fd321adeba08d3b9b8aa011d7037",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.206916,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_punch_1",
+      "path": "Sources/KenneyImpactSounds/Audio/impactPunch_heavy_000.ogg",
+      "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.649025,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_punch_2",
+      "path": "Sources/KenneyImpactSounds/Audio/impactPunch_heavy_004.ogg",
+      "sha256": "f4c0c3eb8ab6517583b8218ed03f28923d1b687379aab4c1d5a6d4c10cf8e500",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.536349,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_soft_1",
+      "path": "Sources/KenneyImpactSounds/Audio/impactSoft_heavy_001.ogg",
+      "sha256": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.572041,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "kenney_soft_2",
+      "path": "Sources/KenneyImpactSounds/Audio/impactSoft_heavy_004.ogg",
+      "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0",
+      "sample_rate": 44100,
+      "channels": 2,
+      "duration_seconds": 0.500952,
+      "format": "OGG",
+      "subtype": "VORBIS"
+    },
+    {
+      "role_id": "metal_clink_1",
+      "path": "Sources/oga_clink1_0.wav",
+      "sha256": "0d439cd2b1f36f501b94c39661e39f91d160affe25c79f77dff7a2cd0ed7eadd",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 0.313469,
+      "format": "WAV",
+      "subtype": "PCM_16"
+    },
+    {
+      "role_id": "metal_clink_2",
+      "path": "Sources/oga_clink2.wav",
+      "sha256": "ecbf5a221f2aff32376b8584eea875d0b7d9963d22f6c16e237f5e7b63f51dc2",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 0.25542,
+      "format": "WAV",
+      "subtype": "PCM_16"
+    },
+    {
+      "role_id": "metal_clink_3",
+      "path": "Sources/oga_clink3.wav",
+      "sha256": "dd07516e51e9092efc36d13668de7d29d096955a437894cedeb5064933e2650f",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 0.290249,
+      "format": "WAV",
+      "subtype": "PCM_16"
+    },
+    {
+      "role_id": "metal_thud_2",
+      "path": "Sources/oga_thud2.wav",
+      "sha256": "5fb5c1b37a95cb6716d0bb529a0b9fe1ae9f3e2228b8f30c5c3dcbb1b570a3af",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 0.580499,
+      "format": "WAV",
+      "subtype": "PCM_16"
+    },
+    {
+      "role_id": "metal_thud_3",
+      "path": "Sources/oga_thud3.wav",
+      "sha256": "3aa636679ffdc9602d27655ca59a7c7342ae137b68e54c61aad0fb3c414506ca",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 0.417959,
+      "format": "WAV",
+      "subtype": "PCM_16"
+    },
+    {
+      "role_id": "plastic_core",
+      "path": "Sources/freesound-104051-plastic-metal-concrete-impact-hq-preview.mp3",
+      "sha256": "e6cf13f53e47b99fe09e224ef8ceff61f8fd49c78263f65ff223c136d9b47184",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration_seconds": 3.0,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    {
+      "role_id": "plastic_scrape",
+      "path": "Sources/freesound-708509-plastic-chair-concrete-scrape-hq-preview.mp3",
+      "sha256": "9dc3cedd1d62ae4f9cca8064681a107f353fe825d64c3d6390486b869141067d",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration_seconds": 6.263333,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    },
+    {
+      "role_id": "steel_chair",
+      "path": "Sources/freesound-494620-steel-chair-hq-preview.mp3",
+      "sha256": "72cac01e96da03a0b50d406e527f3800b422a6d18763e43d1b0e643e22ee3d6d",
+      "sample_rate": 44100,
+      "channels": 1,
+      "duration_seconds": 15.690884,
+      "format": "MP3",
+      "subtype": "MPEG_LAYER_III"
+    }
+  ],
+  "build_records": [
+    {
+      "candidate": "A",
+      "label": "Grounded",
+      "variation": 1,
+      "normalization_gain_db": 0.7956,
+      "contact_seconds": 0.2,
+      "stems": [
+        "pre",
+        "signature",
+        "chair",
+        "runner",
+        "floor_tail"
+      ]
+    },
+    {
+      "candidate": "A",
+      "label": "Grounded",
+      "variation": 2,
+      "normalization_gain_db": 0.6379,
+      "contact_seconds": 0.2,
+      "stems": [
+        "pre",
+        "signature",
+        "chair",
+        "runner",
+        "floor_tail"
+      ]
+    },
+    {
+      "candidate": "B",
+      "label": "Arcade Edge",
+      "variation": 1,
+      "normalization_gain_db": -6.0665,
+      "contact_seconds": 0.2,
+      "stems": [
+        "pre",
+        "signature",
+        "chair",
+        "runner",
+        "floor_tail"
+      ]
+    },
+    {
+      "candidate": "B",
+      "label": "Arcade Edge",
+      "variation": 2,
+      "normalization_gain_db": -6.2978,
+      "contact_seconds": 0.2,
+      "stems": [
+        "pre",
+        "signature",
+        "chair",
+        "runner",
+        "floor_tail"
+      ]
+    },
+    {
+      "candidate": "C",
+      "label": "Target Hybrid",
+      "variation": 1,
+      "normalization_gain_db": -1.3934,
+      "contact_seconds": 0.2,
+      "stems": [
+        "pre",
+        "signature",
+        "chair",
+        "runner",
+        "floor_tail"
+      ]
+    },
+    {
+      "candidate": "C",
+      "label": "Target Hybrid",
+      "variation": 2,
+      "normalization_gain_db": -0.8267,
+      "contact_seconds": 0.2,
+      "stems": [
+        "pre",
+        "signature",
+        "chair",
+        "runner",
+        "floor_tail"
+      ]
+    }
+  ],
+  "blind_labels": [
+    "X",
+    "Y",
+    "Z"
+  ],
+  "private_mapping_file": "Renders/PRIVATE_BLIND_MAPPING.json",
+  "qa_file": "Renders/Evidence/TECHNICAL_QA_REVIEW.json",
+  "review_waveform": {
+    "path": "Renders/Evidence/NORTH_STAR_WAVEFORMS_REVIEW.png",
+    "sha256": "6719e3a30801168d120803dc97b019df5f08a8c9e8d7277241775e179f4089db",
+    "bytes": 179015
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "warning": "DO NOT OPEN BEFORE THE HUMAN OWNER RECORDS AN X/Y/Z LISTENING DECISION.",
+  "seed_hex": "0x42524b4e56303033",
+  "mapping": {
+    "X": "A",
+    "Y": "C",
+    "Z": "B"
+  },
+  "candidate_intent": {
+    "A": {
+      "code": "A",
+      "label": "Grounded",
+      "description": "Real chair, body, cloth, and floor identity leads."
+    },
+    "B": {
+      "code": "B",
+      "label": "Arcade Edge",
+      "description": "Fast attack and signature clarity lead."
+    },
+    "C": {
+      "code": "C",
+      "label": "Target Hybrid",
+      "description": "Grounded material and arcade readability share authority."
+    }
+  }
+}
