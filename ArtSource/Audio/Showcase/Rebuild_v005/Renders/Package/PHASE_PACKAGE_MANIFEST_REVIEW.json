@@ -1,0 +1,275 @@
+{
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED",
+  "packages": {
+    "BREAK_NOTICE_T3_V005_DEBLIND_DETAIL_PHASE3.zip": {
+      "entries": {
+        "Blind/Pair/T3_PAIR_M_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_M_BLIND_REVIEW.mp4",
+          "sha256": "546bf07600f4e6709dc03e3e90680748ff8a7d980c52bb1f2abab7206faf60c2"
+        },
+        "Blind/Pair/T3_PAIR_M_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_M_BLIND_REVIEW.wav",
+          "sha256": "aa880068029987e693e84db3f9f80771bcc88312438351b8c3c89631c73c60c2"
+        },
+        "Blind/Pair/T3_PAIR_N_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_N_BLIND_REVIEW.mp4",
+          "sha256": "23d41a34605d4b7cd692db26d84c8ffdc2adb89aa79015bd874200102b610500"
+        },
+        "Blind/Pair/T3_PAIR_N_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_N_BLIND_REVIEW.wav",
+          "sha256": "6356358d4e2cf21dde79aeebac4eeb5a211a93b191a86e9031f8cd76e357bab2"
+        },
+        "Blind/Variation/v01/T3_V01_A_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_A_BLIND_REVIEW.mp4",
+          "sha256": "a6d4e51a1e695a3ce3f705669d4e51d6f1922c1f8c32643c82e9a348972dd4d4"
+        },
+        "Blind/Variation/v01/T3_V01_A_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_A_BLIND_REVIEW.wav",
+          "sha256": "579cad5ed2fcd0d23fd9839b9be03eb32d70f2fbef3316421c23ffcce40cdea2"
+        },
+        "Blind/Variation/v01/T3_V01_B_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_B_BLIND_REVIEW.mp4",
+          "sha256": "9ccbfaf633eaf4b39a13acbfb035f9ca3d6958dade396e586e631539640e097c"
+        },
+        "Blind/Variation/v01/T3_V01_B_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_B_BLIND_REVIEW.wav",
+          "sha256": "ab569be5ed9cb66b813f06692adb0d8adfd7c78f49a2f3cd36501b9540c59c47"
+        },
+        "Blind/Variation/v02/T3_V02_P_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_P_BLIND_REVIEW.mp4",
+          "sha256": "256c4e212ca422560c7d03aa5c190d3e6733c8405b734741f192e651bc801b8c"
+        },
+        "Blind/Variation/v02/T3_V02_P_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_P_BLIND_REVIEW.wav",
+          "sha256": "1f4ddea402e7b7a27f49ea3f6e15c8ae7009ae0923350172b61e7fb352cf3a59"
+        },
+        "Blind/Variation/v02/T3_V02_Q_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_Q_BLIND_REVIEW.mp4",
+          "sha256": "9e96f2d66acd2ddb0a9505d8b47fb6e6922a8e00fd9235648666ac56c833de2a"
+        },
+        "Blind/Variation/v02/T3_V02_Q_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_Q_BLIND_REVIEW.wav",
+          "sha256": "61eec6424a6801bad65cafd9cbb6e2df4ba1e15743ef75d1cf30129ccb9330c1"
+        },
+        "Composites/T3_CHAIR_RUNNER_v005_v01_RC_REVIEW.wav": {
+          "local_path": "Renders/Composites/T3_CHAIR_RUNNER_v005_v01_RC_REVIEW.wav",
+          "sha256": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329"
+        },
+        "Composites/T3_CHAIR_RUNNER_v005_v02_RC_REVIEW.wav": {
+          "local_path": "Renders/Composites/T3_CHAIR_RUNNER_v005_v02_RC_REVIEW.wav",
+          "sha256": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587"
+        },
+        "Docs/LISTENING_RESPONSE_TEMPLATE.md": {
+          "local_path": "LISTENING_RESPONSE_TEMPLATE.md",
+          "sha256": "c52e78e2d7b8554fb15ff851d271850dabc18b28994eb0853c6f0bc77841d770"
+        },
+        "Docs/REBUILD_DIRECTION_REVIEW.md": {
+          "local_path": "REBUILD_DIRECTION_REVIEW.md",
+          "sha256": "e3b52e8f70c722900a5361fdeb28c79df7aa7e7bb756f5cc133c4c3fa7fc228e"
+        },
+        "Docs/REHEARSAL_LOG.md": {
+          "local_path": "REHEARSAL_LOG.md",
+          "sha256": "a61f4c2edbaa77e9bc73ea971eebbe83ed60d158f74635d9675bbddf46da4522"
+        },
+        "Docs/REVIEW_CHECKLIST.md": {
+          "local_path": "REVIEW_CHECKLIST.md",
+          "sha256": "a604225d7a8d1f181b01e9dd28bf722a7bdc858c9fac418288687ff2a833daaa"
+        },
+        "Docs/SOURCE_PROVENANCE.md": {
+          "local_path": "SOURCE_PROVENANCE.md",
+          "sha256": "6f5a7a5e5bc9bf1859c18ce6d33acc18d1ccb710e8fd4c76d0f2fa71fd854af7"
+        },
+        "Evidence/CUE_MANIFEST_REVIEW.json": {
+          "local_path": "Renders/Evidence/CUE_MANIFEST_REVIEW.json",
+          "sha256": "f44ba0bad5284bc7f0064e26f121f2c10ce282dca1332db3bfd399ad71c50b6e"
+        },
+        "Evidence/ISOLATION_AUDIT_REVIEW.json": {
+          "local_path": "Renders/Evidence/ISOLATION_AUDIT_REVIEW.json",
+          "sha256": "f1a6ce08f644ab95abe4b5c4e553eeac33a7ca4750c413eb1190a8e13ada7cfb"
+        },
+        "Evidence/SOURCE_LEDGER_REVIEW.json": {
+          "local_path": "Renders/Evidence/SOURCE_LEDGER_REVIEW.json",
+          "sha256": "9d1f05a79ae37c01e311654c96274d4c7ca9b7296a3ab28b5c558fd7efae7684"
+        },
+        "Evidence/T3_V005_REVIEW_ASSEMBLY_MANIFEST.json": {
+          "local_path": "Renders/Evidence/T3_V005_REVIEW_ASSEMBLY_MANIFEST.json",
+          "sha256": "4806e598a05847191d7d6a1875a2798bd50a6bb2c9613009e8c87c85cf5e9a08"
+        },
+        "Evidence/T3_V005_VIDEO_QA_REVIEW.json": {
+          "local_path": "Renders/Evidence/T3_V005_VIDEO_QA_REVIEW.json",
+          "sha256": "909699bb447cc58d32ccda4252cf611c9ea6056174c58ffe094be68a84852110"
+        },
+        "Evidence/T3_V005_WAVEFORM_SPECTROGRAM_REVIEW.png": {
+          "local_path": "Renders/Evidence/T3_V005_WAVEFORM_SPECTROGRAM_REVIEW.png",
+          "sha256": "9c1c9feb420b9fd9201162df53f640743a1e432d54a3fbb88f414c46946db645"
+        },
+        "Evidence/TECHNICAL_QA_REVIEW.json": {
+          "local_path": "Renders/Evidence/TECHNICAL_QA_REVIEW.json",
+          "sha256": "574e6e434ce870b576ea3c53a4b17d27b16f222db85f8c9bd139cb78397cff99"
+        },
+        "Private/T3_V005_BLIND_MAPPING_PRIVATE.json": {
+          "local_path": "Renders/Private/T3_V005_BLIND_MAPPING_PRIVATE.json",
+          "sha256": "1a4f52f706ebc667bf5fa5568c6799f1141ee85963124f6b12e2e2a61dcc4e52"
+        },
+        "Provenance/Evidence/README.md": {
+          "local_path": "Sources/Evidence/README.md",
+          "sha256": "36979f4c41724a3ed79aaabf2f8273e082b2b605a42c526fb3f6f96705e55b41"
+        },
+        "Provenance/Evidence/creativecommons-cc0-1.0.html": {
+          "local_path": "Sources/Evidence/creativecommons-cc0-1.0.html",
+          "sha256": "001e3d1c905c18b1d034b34200cc952026abb38457c2294c23eaef7f6bda64df"
+        },
+        "Provenance/Evidence/lasonotheque-canvas-bag-floor.html": {
+          "local_path": "Sources/Evidence/lasonotheque-canvas-bag-floor.html",
+          "sha256": "8769f87c89454585ca7dd5de4505a017d80c8591579c1e59745658e062e0d078"
+        },
+        "Provenance/Evidence/lasonotheque-dumbbell-place-1.html": {
+          "local_path": "Sources/Evidence/lasonotheque-dumbbell-place-1.html",
+          "sha256": "689a2edaf44eee32a39542d4c99301d50d61941d6140fdb40bb9a485b3d431e8"
+        },
+        "Provenance/Evidence/lasonotheque-dumbbell-place-3.html": {
+          "local_path": "Sources/Evidence/lasonotheque-dumbbell-place-3.html",
+          "sha256": "ce6d09bb9ed0156bebbe24f51a67208207fc153d0bb230559e9a0cf0a19d58c7"
+        },
+        "Provenance/Evidence/lasonotheque-licenses.html": {
+          "local_path": "Sources/Evidence/lasonotheque-licenses.html",
+          "sha256": "a80d5c705ebdb5488c1bcac4d729e50ec36e4e2f113afad8118371cc6523a6db"
+        },
+        "Provenance/Evidence/lasonotheque-loaded-hand-truck-2.html": {
+          "local_path": "Sources/Evidence/lasonotheque-loaded-hand-truck-2.html",
+          "sha256": "5192b5c73be1de51a2f7e5ae83c631f7c97e89d0bb1a4c831a8649dd47a76498"
+        },
+        "Provenance/Evidence/opengameart-mechanical-sounds.html": {
+          "local_path": "Sources/Evidence/opengameart-mechanical-sounds.html",
+          "sha256": "48b27230dad2f1d5fc65d74979fd0da8775bab01ac48d84db0bd1932ac2cac52"
+        },
+        "Provenance/Evidence/opengameart-owlish-sound-effects.html": {
+          "local_path": "Sources/Evidence/opengameart-owlish-sound-effects.html",
+          "sha256": "d46ace7c6abd6b915e2ce6638e1d832f6f010c829eda129d4bd4e133222d4fc7"
+        },
+        "README.md": {
+          "local_path": "Renders/Review/PackageText/PHASE3_README.md",
+          "sha256": "d492a2acaf57f967b42e8b087343a8033c98fa3524f46366f2df0366b9a98388"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_emitter_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_emitter_REVIEW.wav",
+          "sha256": "6b1330c95cc3adc9de4c15b929a0c269eb30d330851a133ed93151d6dd6fef02"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_floor_tail_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_floor_tail_REVIEW.wav",
+          "sha256": "755bcdba8f014dc9b2e72eeb40d7183f3f8e10b15ea7e52550525b3e042dbda1"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_pre_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_pre_REVIEW.wav",
+          "sha256": "73c295c8ae36dba9bed71e3a4eb2a81c0168040df3091fb39b3d6f1fefcdb70c"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_runner_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_runner_REVIEW.wav",
+          "sha256": "d0db34bf5d46f195eb1a0d1e5ae4981ba5cbd066c3a8b6164531567915c8f8d3"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_signature_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_signature_REVIEW.wav",
+          "sha256": "bfeaf76f835199d5e981cc7d3a175351188e1bd5e7a96beb969477eea4bd5a60"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_emitter_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_emitter_REVIEW.wav",
+          "sha256": "a6bd8dd66cd3e594010f61f3c2a89ac7e20c623c8e66fd32583773c383d72812"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_floor_tail_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_floor_tail_REVIEW.wav",
+          "sha256": "ffc7d6cf390bc9ca6f7417e038508763f0a36dff3550c869894ad8f3d8eff607"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_pre_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_pre_REVIEW.wav",
+          "sha256": "fb9fb7099c1183e146b196c2f8fa16e34dc1004ec505d9bf66ba78fe87494b98"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_runner_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_runner_REVIEW.wav",
+          "sha256": "72b035557507bd11cf167ae11001127d8d276934941a03accd49b6d33344e5a9"
+        },
+        "Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_signature_REVIEW.wav": {
+          "local_path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_signature_REVIEW.wav",
+          "sha256": "e82edad4268225d0199f5e085c20925f7a792d900fcea2006efb55f5eafb43f2"
+        }
+      },
+      "sha256": "bf191d430fe49f3d8dfae09f402fb5b611a9f851b78e3b5e0f807a75c1ef2669",
+      "status": "READY"
+    },
+    "BREAK_NOTICE_T3_V005_PAIR_BLIND_PHASE1.zip": {
+      "entries": {
+        "PHASE1_RESPONSE.md": {
+          "local_path": "Renders/Review/PackageText/PHASE1_RESPONSE.md",
+          "sha256": "726bcf5ed3430d984f162cce79b426d5507f84c3708031ac1954750d50c409e7"
+        },
+        "README.md": {
+          "local_path": "Renders/Review/PackageText/PHASE1_README.md",
+          "sha256": "955bd17f71d82dfab49b8bdf0b32027cf25bec13fb189989d68cdd0b21f1c394"
+        },
+        "T3_PAIR_M_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_M_BLIND_REVIEW.mp4",
+          "sha256": "546bf07600f4e6709dc03e3e90680748ff8a7d980c52bb1f2abab7206faf60c2"
+        },
+        "T3_PAIR_M_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_M_BLIND_REVIEW.wav",
+          "sha256": "aa880068029987e693e84db3f9f80771bcc88312438351b8c3c89631c73c60c2"
+        },
+        "T3_PAIR_N_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_N_BLIND_REVIEW.mp4",
+          "sha256": "23d41a34605d4b7cd692db26d84c8ffdc2adb89aa79015bd874200102b610500"
+        },
+        "T3_PAIR_N_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/PairBlind/T3_PAIR_N_BLIND_REVIEW.wav",
+          "sha256": "6356358d4e2cf21dde79aeebac4eeb5a211a93b191a86e9031f8cd76e357bab2"
+        }
+      },
+      "sha256": "17b1f479906856e2bfc9d7ae83d3dc9702e4ff0abff226596d55bb910532834b"
+    },
+    "BREAK_NOTICE_T3_V005_VARIATION_BLIND_PHASE2.zip": {
+      "entries": {
+        "PHASE2_RESPONSE.md": {
+          "local_path": "Renders/Review/PackageText/PHASE2_RESPONSE.md",
+          "sha256": "a9f80341b2762304a8023d628e37d93231878008f92e58465a43701fe8f19592"
+        },
+        "README.md": {
+          "local_path": "Renders/Review/PackageText/PHASE2_README.md",
+          "sha256": "59c22399ba5b057851c19755526cf3a78c4e36086742f8c9007695eafc97dd88"
+        },
+        "v01/T3_V01_A_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_A_BLIND_REVIEW.mp4",
+          "sha256": "a6d4e51a1e695a3ce3f705669d4e51d6f1922c1f8c32643c82e9a348972dd4d4"
+        },
+        "v01/T3_V01_A_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_A_BLIND_REVIEW.wav",
+          "sha256": "579cad5ed2fcd0d23fd9839b9be03eb32d70f2fbef3316421c23ffcce40cdea2"
+        },
+        "v01/T3_V01_B_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_B_BLIND_REVIEW.mp4",
+          "sha256": "9ccbfaf633eaf4b39a13acbfb035f9ca3d6958dade396e586e631539640e097c"
+        },
+        "v01/T3_V01_B_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v01/T3_V01_B_BLIND_REVIEW.wav",
+          "sha256": "ab569be5ed9cb66b813f06692adb0d8adfd7c78f49a2f3cd36501b9540c59c47"
+        },
+        "v02/T3_V02_P_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_P_BLIND_REVIEW.mp4",
+          "sha256": "256c4e212ca422560c7d03aa5c190d3e6733c8405b734741f192e651bc801b8c"
+        },
+        "v02/T3_V02_P_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_P_BLIND_REVIEW.wav",
+          "sha256": "1f4ddea402e7b7a27f49ea3f6e15c8ae7009ae0923350172b61e7fb352cf3a59"
+        },
+        "v02/T3_V02_Q_BLIND_REVIEW.mp4": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_Q_BLIND_REVIEW.mp4",
+          "sha256": "9e96f2d66acd2ddb0a9505d8b47fb6e6922a8e00fd9235648666ac56c833de2a"
+        },
+        "v02/T3_V02_Q_BLIND_REVIEW.wav": {
+          "local_path": "Renders/Review/VariationBlind/v02/T3_V02_Q_BLIND_REVIEW.wav",
+          "sha256": "61eec6424a6801bad65cafd9cbb6e2df4ba1e15743ef75d1cf30129ccb9330c1"
+        }
+      },
+      "sha256": "7a0d8ebaad9135d0600a86acdb69bea407957f4015dc39241694d8c59aae54d6"
+    }
+  },
+  "release_order": "Phase 1 verdict -> Phase 2 verdicts -> Phase 3 deblind/detail",
+  "status": "THREE_PHASE_READY"
+}

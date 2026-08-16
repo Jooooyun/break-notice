@@ -1,0 +1,47 @@
+{
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED",
+  "comparisons": {
+    "pair": {
+      "common_video_stream_sha256": "a295dace4c4999ee2e4a1d867a3b092454809ec53fb959f2a2176970be1008e2",
+      "labels": {
+        "M": {
+          "matches_common_picture": true,
+          "video_stream_sha256": "a295dace4c4999ee2e4a1d867a3b092454809ec53fb959f2a2176970be1008e2"
+        },
+        "N": {
+          "matches_common_picture": true,
+          "video_stream_sha256": "a295dace4c4999ee2e4a1d867a3b092454809ec53fb959f2a2176970be1008e2"
+        }
+      }
+    },
+    "v01": {
+      "common_video_stream_sha256": "b578a06043ea0777995aa73d7a821c020620635d58b683c3cd29d9c0811bbe86",
+      "labels": {
+        "A": {
+          "matches_common_picture": true,
+          "video_stream_sha256": "b578a06043ea0777995aa73d7a821c020620635d58b683c3cd29d9c0811bbe86"
+        },
+        "B": {
+          "matches_common_picture": true,
+          "video_stream_sha256": "b578a06043ea0777995aa73d7a821c020620635d58b683c3cd29d9c0811bbe86"
+        }
+      }
+    },
+    "v02": {
+      "common_video_stream_sha256": "45eb655d26c10a5291362b7556b3c07ffb49e417081b3d658db734209bb820a3",
+      "labels": {
+        "P": {
+          "matches_common_picture": true,
+          "video_stream_sha256": "45eb655d26c10a5291362b7556b3c07ffb49e417081b3d658db734209bb820a3"
+        },
+        "Q": {
+          "matches_common_picture": true,
+          "video_stream_sha256": "45eb655d26c10a5291362b7556b3c07ffb49e417081b3d658db734209bb820a3"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "old_common_mp4_audio_mapping": "PROHIBITED / NOT MAPPED",
+  "status": "PASS"
+}

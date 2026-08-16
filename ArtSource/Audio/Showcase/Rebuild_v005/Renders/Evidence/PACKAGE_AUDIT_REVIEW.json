@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "failures": [],
+  "exact_zip_count": 3,
+  "safe_paths_crc_hash_manifest_local_byte_identity": "PASS",
+  "phase1_phase2_identity_leak_contract": "PASS",
+  "release_order": "Phase 1 verdict -> Phase 2 verdicts -> Phase 3 deblind/detail",
+  "packages": {
+    "BREAK_NOTICE_T3_V005_PAIR_BLIND_PHASE1.zip": {
+      "entries": 6,
+      "local_byte_matches": 6,
+      "sha256": "17b1f479906856e2bfc9d7ae83d3dc9702e4ff0abff226596d55bb910532834b",
+      "leaks": []
+    },
+    "BREAK_NOTICE_T3_V005_VARIATION_BLIND_PHASE2.zip": {
+      "entries": 10,
+      "local_byte_matches": 10,
+      "sha256": "7a0d8ebaad9135d0600a86acdb69bea407957f4015dc39241694d8c59aae54d6",
+      "leaks": []
+    },
+    "BREAK_NOTICE_T3_V005_DEBLIND_DETAIL_PHASE3.zip": {
+      "entries": 47,
+      "local_byte_matches": 47,
+      "sha256": "bf191d430fe49f3d8dfae09f402fb5b611a9f851b78e3b5e0f807a75c1ef2669",
+      "composite_count": 2,
+      "stem_count": 10,
+      "provenance_evidence_count": 9
+    }
+  },
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED"
+}

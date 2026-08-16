@@ -1,0 +1,94 @@
+{
+  "approved_y_reference_allowlist": {
+    "B_ArcadeEdge_v01_REVIEW.wav": "9dd84fad2aeade3dbfc5a0dbb0e49a505da554abcea6185803070e5e14d3708f",
+    "B_ArcadeEdge_v02_REVIEW.wav": "30335cd8498b10cf3c527965a20a3a3ea0ef6bf3fd71c49e848d8e93cb6292bb"
+  },
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED",
+  "blind_outputs": {
+    "pair": {
+      "M": {
+        "mp4": {
+          "path": "Renders/Review/PairBlind/T3_PAIR_M_BLIND_REVIEW.mp4",
+          "sha256": "546bf07600f4e6709dc03e3e90680748ff8a7d980c52bb1f2abab7206faf60c2"
+        },
+        "wav": {
+          "path": "Renders/Review/PairBlind/T3_PAIR_M_BLIND_REVIEW.wav",
+          "sha256": "aa880068029987e693e84db3f9f80771bcc88312438351b8c3c89631c73c60c2"
+        }
+      },
+      "N": {
+        "mp4": {
+          "path": "Renders/Review/PairBlind/T3_PAIR_N_BLIND_REVIEW.mp4",
+          "sha256": "23d41a34605d4b7cd692db26d84c8ffdc2adb89aa79015bd874200102b610500"
+        },
+        "wav": {
+          "path": "Renders/Review/PairBlind/T3_PAIR_N_BLIND_REVIEW.wav",
+          "sha256": "6356358d4e2cf21dde79aeebac4eeb5a211a93b191a86e9031f8cd76e357bab2"
+        }
+      }
+    },
+    "v01": {
+      "A": {
+        "mp4": {
+          "path": "Renders/Review/VariationBlind/v01/T3_V01_A_BLIND_REVIEW.mp4",
+          "sha256": "a6d4e51a1e695a3ce3f705669d4e51d6f1922c1f8c32643c82e9a348972dd4d4"
+        },
+        "wav": {
+          "path": "Renders/Review/VariationBlind/v01/T3_V01_A_BLIND_REVIEW.wav",
+          "sha256": "579cad5ed2fcd0d23fd9839b9be03eb32d70f2fbef3316421c23ffcce40cdea2"
+        }
+      },
+      "B": {
+        "mp4": {
+          "path": "Renders/Review/VariationBlind/v01/T3_V01_B_BLIND_REVIEW.mp4",
+          "sha256": "9ccbfaf633eaf4b39a13acbfb035f9ca3d6958dade396e586e631539640e097c"
+        },
+        "wav": {
+          "path": "Renders/Review/VariationBlind/v01/T3_V01_B_BLIND_REVIEW.wav",
+          "sha256": "ab569be5ed9cb66b813f06692adb0d8adfd7c78f49a2f3cd36501b9540c59c47"
+        }
+      }
+    },
+    "v02": {
+      "P": {
+        "mp4": {
+          "path": "Renders/Review/VariationBlind/v02/T3_V02_P_BLIND_REVIEW.mp4",
+          "sha256": "256c4e212ca422560c7d03aa5c190d3e6733c8405b734741f192e651bc801b8c"
+        },
+        "wav": {
+          "path": "Renders/Review/VariationBlind/v02/T3_V02_P_BLIND_REVIEW.wav",
+          "sha256": "1f4ddea402e7b7a27f49ea3f6e15c8ae7009ae0923350172b61e7fb352cf3a59"
+        }
+      },
+      "Q": {
+        "mp4": {
+          "path": "Renders/Review/VariationBlind/v02/T3_V02_Q_BLIND_REVIEW.mp4",
+          "sha256": "9e96f2d66acd2ddb0a9505d8b47fb6e6922a8e00fd9235648666ac56c833de2a"
+        },
+        "wav": {
+          "path": "Renders/Review/VariationBlind/v02/T3_V02_Q_BLIND_REVIEW.wav",
+          "sha256": "61eec6424a6801bad65cafd9cbb6e2df4ba1e15743ef75d1cf30129ccb9330c1"
+        }
+      }
+    }
+  },
+  "mapping": {
+    "pair": {
+      "M": "APPROVED_Y_REFERENCE",
+      "N": "NEW_V005_RC"
+    },
+    "v01": {
+      "A": "APPROVED_Y_REFERENCE",
+      "B": "NEW_V005_RC"
+    },
+    "v02": {
+      "P": "APPROVED_Y_REFERENCE",
+      "Q": "NEW_V005_RC"
+    }
+  },
+  "raw_v005_candidate_hashes": {
+    "v01": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329",
+    "v02": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587"
+  },
+  "status": "PRIVATE_ANSWER_KEY / OPEN ONLY AFTER PHASE 1 AND 2 VERDICTS"
+}

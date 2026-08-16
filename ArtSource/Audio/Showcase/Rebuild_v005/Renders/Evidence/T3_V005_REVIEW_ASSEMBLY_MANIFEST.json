@@ -1,0 +1,139 @@
+{
+  "approved_y_reference_allowlist": {
+    "B_ArcadeEdge_v01_REVIEW.wav": "9dd84fad2aeade3dbfc5a0dbb0e49a505da554abcea6185803070e5e14d3708f",
+    "B_ArcadeEdge_v02_REVIEW.wav": "30335cd8498b10cf3c527965a20a3a3ea0ef6bf3fd71c49e848d8e93cb6292bb"
+  },
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED",
+  "common_picture": {
+    "allowed_source": {
+      "audio_mapping": "PROHIBITED / NOT MAPPED",
+      "path": "Rebuild_v004/Renders/ReferenceOnly/Videos/T3_Y_PAIR_COMMON_VIDEO_REVIEW.mp4",
+      "sha256": "e98f75ba9f23aaefea6b925eb5cf7655b4d37310c3f56104576d5f927a229175",
+      "video_stream_sha256": "a295dace4c4999ee2e4a1d867a3b092454809ec53fb959f2a2176970be1008e2"
+    },
+    "masters": {
+      "T3_PAIR_COMMON_VIDEO_ONLY.mp4": {
+        "sha256": "ce0230ef1f1c45b2b2662d2f5e260da72ba5ce7965ad72f5c75ab12658741a35",
+        "video_stream_sha256": "a295dace4c4999ee2e4a1d867a3b092454809ec53fb959f2a2176970be1008e2"
+      },
+      "T3_V01_COMMON_VIDEO_ONLY.mp4": {
+        "sha256": "5cfa2c336c6529393583ef24a706e50da7ac8499154d13fd96201cb199fc7e98",
+        "video_stream_sha256": "b578a06043ea0777995aa73d7a821c020620635d58b683c3cd29d9c0811bbe86"
+      },
+      "T3_V02_COMMON_VIDEO_ONLY.mp4": {
+        "sha256": "8f3a5e7c5ddcf03c99821f734585753c197643f37d5a31d82cd73db95e6b5f95",
+        "video_stream_sha256": "45eb655d26c10a5291362b7556b3c07ffb49e417081b3d658db734209bb820a3"
+      }
+    }
+  },
+  "loudness_contract": {
+    "peak_normalization": "PROHIBITED / NOT USED",
+    "target_lufs": -20.0,
+    "tolerance_lufs": 0.1
+  },
+  "private_mapping_sha256_lock": "1a4f52f706ebc667bf5fa5568c6799f1141ee85963124f6b12e2e2a61dcc4e52",
+  "production_composite_and_stem_hashes_after": {
+    "Renders/Composites/T3_CHAIR_RUNNER_v005_v01_RC_REVIEW.wav": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329",
+    "Renders/Composites/T3_CHAIR_RUNNER_v005_v02_RC_REVIEW.wav": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_emitter_REVIEW.wav": "6b1330c95cc3adc9de4c15b929a0c269eb30d330851a133ed93151d6dd6fef02",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_floor_tail_REVIEW.wav": "755bcdba8f014dc9b2e72eeb40d7183f3f8e10b15ea7e52550525b3e042dbda1",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_pre_REVIEW.wav": "73c295c8ae36dba9bed71e3a4eb2a81c0168040df3091fb39b3d6f1fefcdb70c",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_runner_REVIEW.wav": "d0db34bf5d46f195eb1a0d1e5ae4981ba5cbd066c3a8b6164531567915c8f8d3",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_signature_REVIEW.wav": "bfeaf76f835199d5e981cc7d3a175351188e1bd5e7a96beb969477eea4bd5a60",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_emitter_REVIEW.wav": "a6bd8dd66cd3e594010f61f3c2a89ac7e20c623c8e66fd32583773c383d72812",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_floor_tail_REVIEW.wav": "ffc7d6cf390bc9ca6f7417e038508763f0a36dff3550c869894ad8f3d8eff607",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_pre_REVIEW.wav": "fb9fb7099c1183e146b196c2f8fa16e34dc1004ec505d9bf66ba78fe87494b98",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_runner_REVIEW.wav": "72b035557507bd11cf167ae11001127d8d276934941a03accd49b6d33344e5a9",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_signature_REVIEW.wav": "e82edad4268225d0199f5e085c20925f7a792d900fcea2006efb55f5eafb43f2"
+  },
+  "production_composite_and_stem_hashes_before": {
+    "Renders/Composites/T3_CHAIR_RUNNER_v005_v01_RC_REVIEW.wav": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329",
+    "Renders/Composites/T3_CHAIR_RUNNER_v005_v02_RC_REVIEW.wav": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_emitter_REVIEW.wav": "6b1330c95cc3adc9de4c15b929a0c269eb30d330851a133ed93151d6dd6fef02",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_floor_tail_REVIEW.wav": "755bcdba8f014dc9b2e72eeb40d7183f3f8e10b15ea7e52550525b3e042dbda1",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_pre_REVIEW.wav": "73c295c8ae36dba9bed71e3a4eb2a81c0168040df3091fb39b3d6f1fefcdb70c",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_runner_REVIEW.wav": "d0db34bf5d46f195eb1a0d1e5ae4981ba5cbd066c3a8b6164531567915c8f8d3",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_signature_REVIEW.wav": "bfeaf76f835199d5e981cc7d3a175351188e1bd5e7a96beb969477eea4bd5a60",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_emitter_REVIEW.wav": "a6bd8dd66cd3e594010f61f3c2a89ac7e20c623c8e66fd32583773c383d72812",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_floor_tail_REVIEW.wav": "ffc7d6cf390bc9ca6f7417e038508763f0a36dff3550c869894ad8f3d8eff607",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_pre_REVIEW.wav": "fb9fb7099c1183e146b196c2f8fa16e34dc1004ec505d9bf66ba78fe87494b98",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_runner_REVIEW.wav": "72b035557507bd11cf167ae11001127d8d276934941a03accd49b6d33344e5a9",
+    "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_signature_REVIEW.wav": "e82edad4268225d0199f5e085c20925f7a792d900fcea2006efb55f5eafb43f2"
+  },
+  "raw_v005_hashes_after": {
+    "v01": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329",
+    "v02": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587"
+  },
+  "raw_v005_hashes_before": {
+    "v01": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329",
+    "v02": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587"
+  },
+  "raw_v005_unchanged": true,
+  "review_audio_metrics_by_private_identity": {
+    "pair": {
+      "APPROVED_Y_REFERENCE": {
+        "estimated_true_peak_dbfs_4x": -3.9675669154118722,
+        "frames": 160800,
+        "gain_method": "single integrated-loudness scalar; no peak normalization, limiter, or clipper",
+        "integrated_lufs": -20.000000027596005,
+        "sample_peak_dbfs": -3.975472638022989,
+        "sha256": "aa880068029987e693e84db3f9f80771bcc88312438351b8c3c89631c73c60c2"
+      },
+      "NEW_V005_RC": {
+        "estimated_true_peak_dbfs_4x": -3.6736034530614097,
+        "frames": 160800,
+        "gain_method": "single integrated-loudness scalar; no peak normalization, limiter, or clipper",
+        "integrated_lufs": -19.99999999392954,
+        "sample_peak_dbfs": -3.7196109566159947,
+        "sha256": "6356358d4e2cf21dde79aeebac4eeb5a211a93b191a86e9031f8cd76e357bab2"
+      }
+    },
+    "v01": {
+      "APPROVED_Y_REFERENCE": {
+        "estimated_true_peak_dbfs_4x": -3.8782511321348796,
+        "frames": 64800,
+        "gain_method": "single integrated-loudness scalar; no peak normalization, limiter, or clipper",
+        "integrated_lufs": -20.000000008124022,
+        "sample_peak_dbfs": -3.886157112748045,
+        "sha256": "579cad5ed2fcd0d23fd9839b9be03eb32d70f2fbef3316421c23ffcce40cdea2"
+      },
+      "NEW_V005_RC": {
+        "estimated_true_peak_dbfs_4x": -3.5749732150669704,
+        "frames": 64800,
+        "gain_method": "single integrated-loudness scalar; no peak normalization, limiter, or clipper",
+        "integrated_lufs": -19.999999988421152,
+        "sample_peak_dbfs": -3.6209808881775984,
+        "sha256": "ab569be5ed9cb66b813f06692adb0d8adfd7c78f49a2f3cd36501b9540c59c47"
+      }
+    },
+    "v02": {
+      "APPROVED_Y_REFERENCE": {
+        "estimated_true_peak_dbfs_4x": -4.513055176281322,
+        "frames": 64800,
+        "gain_method": "single integrated-loudness scalar; no peak normalization, limiter, or clipper",
+        "integrated_lufs": -19.999999990402973,
+        "sample_peak_dbfs": -4.603958414825059,
+        "sha256": "1f4ddea402e7b7a27f49ea3f6e15c8ae7009ae0923350172b61e7fb352cf3a59"
+      },
+      "NEW_V005_RC": {
+        "estimated_true_peak_dbfs_4x": -3.770676905465653,
+        "frames": 64800,
+        "gain_method": "single integrated-loudness scalar; no peak normalization, limiter, or clipper",
+        "integrated_lufs": -19.999999993518916,
+        "sample_peak_dbfs": -3.8098141707881448,
+        "sha256": "61eec6424a6801bad65cafd9cbb6e2df4ba1e15743ef75d1cf30129ccb9330c1"
+      }
+    }
+  },
+  "status": "PASS_TECHNICAL_ASSEMBLY / HUMAN VERDICT REQUIRED",
+  "timing_contract": {
+    "contact_seconds": [
+      0.2,
+      2.2
+    ],
+    "pair_gap_seconds": 0.65,
+    "pair_seconds": 3.35,
+    "variation_seconds": 1.35
+  },
+  "video_qa_status": "PASS"
+}

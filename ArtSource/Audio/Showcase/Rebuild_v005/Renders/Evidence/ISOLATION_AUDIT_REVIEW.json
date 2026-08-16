@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "failures": [],
+  "scope": "Sources/Lossless + Renders/Composites + Renders/Stems only",
+  "production_file_count": 23,
+  "source_file_count": 11,
+  "composite_file_count": 2,
+  "stem_file_count": 10,
+  "lossy_source_count": 0,
+  "lossy_sources": [],
+  "lossless_decode_failures": [],
+  "prior_pack_sha256_audit": {
+    "Rebuild_v003": {
+      "audio_file_count": 68,
+      "sha256_intersection_count": 0,
+      "intersections": []
+    },
+    "Rebuild_v004": {
+      "audio_file_count": 97,
+      "sha256_intersection_count": 0,
+      "intersections": []
+    }
+  },
+  "prior_pack_union_intersection_count": 0,
+  "historical_commit_blob_audit": {
+    "v001": {
+      "commit": "f903e351195731f490fbb1ec54969c02077f3dac",
+      "git_blob_intersection_count": 0,
+      "git_blob_intersections": []
+    },
+    "v002": {
+      "commit": "071315b311621081e9b5bc9cbc5f6917177d09ea",
+      "git_blob_intersection_count": 0,
+      "git_blob_intersections": []
+    }
+  },
+  "production_builder_forbidden_token_counts": {
+    "Rebuild_v003": 0,
+    "Rebuild_v004": 0,
+    "B_ArcadeEdge": 0,
+    "9dd84fad2aeade3dbfc5a0dbb0e49a505da554abcea6185803070e5e14d3708f": 0,
+    "30335cd8498b10cf3c527965a20a3a3ea0ef6bf3fd71c49e848d8e93cb6292bb": 0,
+    "T3_Y_PAIR_COMMON_VIDEO_REVIEW.mp4": 0,
+    "ReferenceOnly": 0
+  },
+  "assembler_exact_allowlist": {
+    "audio_allowlist_ok": true,
+    "reference_root_ok": true,
+    "common_video_path_ok": true,
+    "common_video_hash_ok": true,
+    "prior_input_token_counts": {
+      "Rebuild_v003": 1,
+      "Rebuild_v004": 1,
+      "approved_v01_hash": 1,
+      "approved_v02_hash": 1,
+      "common_video_hash": 1
+    }
+  },
+  "reference_carveout": "assembler only; approved Y v01/v02 WAV and common-picture video stream",
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED"
+}

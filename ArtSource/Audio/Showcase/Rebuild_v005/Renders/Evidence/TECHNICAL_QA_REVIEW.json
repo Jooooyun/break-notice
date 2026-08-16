@@ -1,0 +1,174 @@
+{
+  "status": "PASS",
+  "failures": [],
+  "files": [
+    {
+      "path": "Renders/Composites/T3_CHAIR_RUNNER_v005_v01_RC_REVIEW.wav",
+      "sha256": "82fc03d79905e8f1e6001d2deb4bb35095bfda531b1aaa15d856f869dd2b1329",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Composites/T3_CHAIR_RUNNER_v005_v02_RC_REVIEW.wav",
+      "sha256": "a7f9c09298cde07f6165aa6f8300a8da984f2a86a5e5ae1a48868cd8743f7587",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_emitter_REVIEW.wav",
+      "sha256": "6b1330c95cc3adc9de4c15b929a0c269eb30d330851a133ed93151d6dd6fef02",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_floor_tail_REVIEW.wav",
+      "sha256": "755bcdba8f014dc9b2e72eeb40d7183f3f8e10b15ea7e52550525b3e042dbda1",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_pre_REVIEW.wav",
+      "sha256": "73c295c8ae36dba9bed71e3a4eb2a81c0168040df3091fb39b3d6f1fefcdb70c",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_runner_REVIEW.wav",
+      "sha256": "d0db34bf5d46f195eb1a0d1e5ae4981ba5cbd066c3a8b6164531567915c8f8d3",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v01_RC/T3_CHAIR_RUNNER_v005_v01_RC_signature_REVIEW.wav",
+      "sha256": "bfeaf76f835199d5e981cc7d3a175351188e1bd5e7a96beb969477eea4bd5a60",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_emitter_REVIEW.wav",
+      "sha256": "a6bd8dd66cd3e594010f61f3c2a89ac7e20c623c8e66fd32583773c383d72812",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_floor_tail_REVIEW.wav",
+      "sha256": "ffc7d6cf390bc9ca6f7417e038508763f0a36dff3550c869894ad8f3d8eff607",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_pre_REVIEW.wav",
+      "sha256": "fb9fb7099c1183e146b196c2f8fa16e34dc1004ec505d9bf66ba78fe87494b98",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_runner_REVIEW.wav",
+      "sha256": "72b035557507bd11cf167ae11001127d8d276934941a03accd49b6d33344e5a9",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    },
+    {
+      "path": "Renders/Stems/T3_CHAIR_RUNNER_v005_v02_RC/T3_CHAIR_RUNNER_v005_v02_RC_signature_REVIEW.wav",
+      "sha256": "e82edad4268225d0199f5e085c20925f7a792d900fcea2006efb55f5eafb43f2",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 64800,
+      "subtype": "PCM_24"
+    }
+  ],
+  "composite_count": 2,
+  "stem_count": 10,
+  "contact_frame": 9600,
+  "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED",
+  "cue_diagnostics": [
+    {
+      "cue_id": "T3_CHAIR_RUNNER_v005_v01_RC",
+      "metrics": {
+        "integrated_lufs": -24.216745233837514,
+        "sample_peak_dbfs": -7.837725558373751,
+        "estimated_true_peak_dbfs_4x": -7.791717982150244,
+        "contact_0_350ms_rms_dbfs": -25.176526640490447,
+        "contact_crest_db": 17.338801082116696,
+        "first_50ms_energy_share": 0.3733153179514096,
+        "pre_peak_below_contact_db": 25.20411878988823,
+        "contact_boundary_step_dbfs": -240.0,
+        "runner_body_peak_offset_seconds": 0.0511875,
+        "stem_contact_energy_share": {
+          "pre": 0.0,
+          "signature": 0.017843467327089888,
+          "emitter": 0.24284129138956037,
+          "runner": 0.629457239270618,
+          "floor_tail": 0.10985800201273171
+        },
+        "contact_band_energy_share": {
+          "20_120_hz": 0.36715740935423263,
+          "120_500_hz": 0.6220665105363042,
+          "500_3000_hz": 0.010562903385970254,
+          "3000_20000_hz": 0.00020521797333517287
+        },
+        "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED"
+      },
+      "diagnostic_warnings": [
+        "20-120Hz energy outside 40-55% Y-direction diagnostic band: 0.367",
+        "3-20kHz energy outside 5-12% Y-direction diagnostic band: 0.000"
+      ],
+      "decoded_stem_sum_null_error": 0.0
+    },
+    {
+      "cue_id": "T3_CHAIR_RUNNER_v005_v02_RC",
+      "metrics": {
+        "integrated_lufs": -24.094484815064238,
+        "sample_peak_dbfs": -7.904298288836122,
+        "estimated_true_peak_dbfs_4x": -7.865161346869408,
+        "contact_0_350ms_rms_dbfs": -25.115516730055685,
+        "contact_crest_db": 17.211218441219565,
+        "first_50ms_energy_share": 0.3575102277489126,
+        "pre_peak_below_contact_db": 26.353929184853122,
+        "contact_boundary_step_dbfs": -240.0,
+        "runner_body_peak_offset_seconds": 0.05272916666666667,
+        "stem_contact_energy_share": {
+          "pre": 0.0,
+          "signature": 0.01841224709807571,
+          "emitter": 0.20016846128647034,
+          "runner": 0.681771706529413,
+          "floor_tail": 0.09964758508604094
+        },
+        "contact_band_energy_share": {
+          "20_120_hz": 0.33802886705650487,
+          "120_500_hz": 0.5913050267365523,
+          "500_3000_hz": 0.06977662011317236,
+          "3000_20000_hz": 0.0006523222019141439
+        },
+        "automatic_perceptual_conclusion": "NONE / HUMAN VERDICT REQUIRED"
+      },
+      "diagnostic_warnings": [
+        "20-120Hz energy outside 40-55% Y-direction diagnostic band: 0.338",
+        "3-20kHz energy outside 5-12% Y-direction diagnostic band: 0.001"
+      ],
+      "decoded_stem_sum_null_error": 0.0
+    }
+  ]
+}
