@@ -133,6 +133,11 @@ namespace BreakNotice.Gameplay.Combat
 
         private void OnDisable()
         {
+            CancelPendingGameplayAction();
+            AnimationCue = ShowcasePlayerAnimationCue.None;
+            AnimationCueRevision++;
+            ClearOwnedMobilityLocks();
+
             if (resetController != null)
             {
                 resetController.ResetPerformed -= HandleResetPerformed;
@@ -152,6 +157,19 @@ namespace BreakNotice.Gameplay.Combat
 
             if (activeAction == ActiveAction.None)
             {
+                return;
+            }
+
+            if (RequiresPlayerPropRuntime(activeAction) &&
+                (physicalLifecycle == null ||
+                 !physicalLifecycle.IsPlayerPropRuntimeAvailable))
+            {
+                Debug.LogError(
+                    $"SHOWCASE PLAYER PROP RUNTIME UNAVAILABLE: {activeAction}. " +
+                    "The pending action and mobility lock are being cancelled.",
+                    this);
+                CancelPendingGameplayAction();
+                SetCue(ShowcasePlayerAnimationCue.None);
                 return;
             }
 
@@ -278,15 +296,16 @@ namespace BreakNotice.Gameplay.Combat
             meleeBufferWindowOpen = false;
             locomotion?.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, true);
 
+            ShowcasePlayerAnimationCue acquisitionCue;
             if (target.WeightClass == PrototypeWeightClass.Medium)
             {
-                SetCue(ShowcasePlayerAnimationCue.CatchMedium);
+                acquisitionCue = ShowcasePlayerAnimationCue.CatchMedium;
             }
             else if (outcome == PrototypeInteractionOutcome.Scoop)
             {
                 // A dedicated low pickup source is still pending. Do not misuse the
                 // directional airborne catch clips for a grounded scoop fallback.
-                SetCue(ShowcasePlayerAnimationCue.CatchSmallCenter);
+                acquisitionCue = ShowcasePlayerAnimationCue.CatchSmallCenter;
             }
             else
             {
@@ -295,11 +314,26 @@ namespace BreakNotice.Gameplay.Combat
                 {
                     actionDuration = 1.25f;
                 }
-                SetCue(Mathf.Abs(lateral) <= 0.28f
+                acquisitionCue = Mathf.Abs(lateral) <= 0.28f
                     ? ShowcasePlayerAnimationCue.CatchSmallCenter
                     : lateral < 0f
                         ? ShowcasePlayerAnimationCue.CatchSmallLeft
-                        : ShowcasePlayerAnimationCue.CatchSmallRight);
+                        : ShowcasePlayerAnimationCue.CatchSmallRight;
+            }
+
+            SetCue(acquisitionCue);
+            if (physicalLifecycle == null ||
+                !physicalLifecycle.PrepareAnimationAcquisition(
+                    target,
+                    acquisitionCue,
+                    outcome))
+            {
+                Debug.LogError(
+                    $"SHOWCASE PROP ACQUISITION PREPARE FAILED: {target.RuntimeInstanceKey} / " +
+                    $"{acquisitionCue}.",
+                    this);
+                CancelPendingGameplayAction();
+                return false;
             }
             return true;
         }
@@ -325,9 +359,20 @@ namespace BreakNotice.Gameplay.Combat
             actionEventCommitted = false;
             meleeBufferWindowOpen = false;
             locomotion?.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, true);
-            SetCue(target.WeightClass == PrototypeWeightClass.Light
+            ShowcasePlayerAnimationCue throwCue =
+                target.WeightClass == PrototypeWeightClass.Light
                 ? ShowcasePlayerAnimationCue.ThrowSmall
-                : ShowcasePlayerAnimationCue.ThrowMedium);
+                : ShowcasePlayerAnimationCue.ThrowMedium;
+            SetCue(throwCue);
+            if (!physicalLifecycle.BeginAnimationThrow(target, throwCue))
+            {
+                Debug.LogError(
+                    $"SHOWCASE PROP THROW PREPARE FAILED: {target.RuntimeInstanceKey} / " +
+                    $"{throwCue}.",
+                    this);
+                CancelPendingGameplayAction();
+                return false;
+            }
             return true;
         }
 
@@ -369,9 +414,21 @@ namespace BreakNotice.Gameplay.Combat
             actionEventCommitted = false;
             meleeBufferWindowOpen = false;
             locomotion?.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, true);
-            SetCue(target.WeightClass == PrototypeWeightClass.Light
+            ShowcasePlayerAnimationCue throwCue =
+                target.WeightClass == PrototypeWeightClass.Light
                 ? ShowcasePlayerAnimationCue.ThrowSmall
-                : ShowcasePlayerAnimationCue.ThrowMedium);
+                : ShowcasePlayerAnimationCue.ThrowMedium;
+            SetCue(throwCue);
+            if (physicalLifecycle == null ||
+                !physicalLifecycle.BeginAnimationThrow(target, throwCue))
+            {
+                Debug.LogError(
+                    $"SHOWCASE QUEUED PROP THROW PREPARE FAILED: " +
+                    $"{target.RuntimeInstanceKey} / {throwCue}.",
+                    this);
+                CancelPendingGameplayAction();
+                return false;
+            }
             return true;
         }
 
@@ -473,16 +530,15 @@ namespace BreakNotice.Gameplay.Combat
                 interactionOwner.TryCompleteAcquisition(pendingTarget);
             bool carried = ownershipCompleted && physicalLifecycle != null &&
                 physicalLifecycle.BeginCarry(pendingTarget);
-            actionEventCommitted = carried;
+            bool catchFailed = false;
             if (pendingAcquisitionOutcome == PrototypeInteractionOutcome.Catch)
             {
-                if (carried)
+                bool relayCompleted = carried && allyRelay != null &&
+                    allyRelay.CompleteCatch(pendingTarget, false);
+                if (!relayCompleted)
                 {
-                    allyRelay?.CompleteCatch(pendingTarget, false);
-                }
-                else
-                {
-                    allyRelay?.ResolveCatchFailure(pendingTarget);
+                    carried = false;
+                    catchFailed = true;
                 }
             }
 
@@ -490,7 +546,13 @@ namespace BreakNotice.Gameplay.Combat
             {
                 interactionOwner?.CancelAcquisition(pendingTarget);
                 interactionOwner?.CancelCarry(pendingTarget);
+                physicalLifecycle?.CancelPlayerPropAction(pendingTarget, false);
+                if (catchFailed)
+                {
+                    allyRelay?.ResolveCatchFailure(pendingTarget);
+                }
             }
+            actionEventCommitted = carried;
         }
 
         public void CommitAnimationThrowRelease()
@@ -526,12 +588,17 @@ namespace BreakNotice.Gameplay.Combat
                             pendingThrowCharge));
                 if (released)
                 {
-                    allyRelay?.CompleteCatch(pendingTarget, true);
-                }
-                else
-                {
-                    interactionOwner?.CompleteThrow(pendingTarget);
-                    allyRelay?.ResolveCatchFailure(pendingTarget);
+                    bool relayCompleted = allyRelay != null &&
+                        allyRelay.CompleteCatch(pendingTarget, true);
+                    if (!relayCompleted)
+                    {
+                        Debug.LogError(
+                            $"SHOWCASE QUEUED THROW PHYSICALLY RELEASED BUT RELAY " +
+                            $"FINALIZATION FAILED: {pendingTarget.RuntimeInstanceKey}.",
+                            this);
+                        interactionOwner?.TryCancelRelayReservation(pendingTarget);
+                        allyRelay?.ResolveCatchFailure(pendingTarget);
+                    }
                 }
             }
             else
@@ -539,7 +606,15 @@ namespace BreakNotice.Gameplay.Combat
                 return;
             }
 
-            actionEventCommitted = true;
+            actionEventCommitted = released;
+            if (!released)
+            {
+                Debug.LogError(
+                    $"SHOWCASE ANIMATION THROW RELEASE FAILED: {activeAction} / " +
+                    $"{pendingTarget.RuntimeInstanceKey}. Gameplay release was not committed.",
+                    this);
+                CancelPendingGameplayAction();
+            }
         }
 
         public void CompleteAnimationAction()
@@ -638,6 +713,7 @@ namespace BreakNotice.Gameplay.Combat
 
         public void ResetToRunBaseline()
         {
+            physicalLifecycle?.ResetPlayerPropAction();
             health?.ResetToBaseline();
             activeAction = ActiveAction.None;
             meleeTarget = null;
@@ -761,6 +837,17 @@ namespace BreakNotice.Gameplay.Combat
         private void CompleteActiveAction()
         {
             ActiveAction completed = activeAction;
+            PrototypeInteractionTarget completedTarget = pendingTarget;
+            if (completed == ActiveAction.Acquire && completedTarget != null &&
+                physicalLifecycle != null &&
+                !physicalLifecycle.CompleteAnimationAcquisition(completedTarget))
+            {
+                Debug.LogError(
+                    $"SHOWCASE PROP ACQUISITION COMPLETION FAILED: " +
+                    $"{completedTarget.RuntimeInstanceKey}. Falling back to stable carry.",
+                    this);
+                physicalLifecycle.CancelPlayerPropAction(completedTarget, true);
+            }
             boneCombatRig?.CloseAttackWindow();
             activeAction = ActiveAction.None;
             if (completed == ActiveAction.Melee)
@@ -796,17 +883,38 @@ namespace BreakNotice.Gameplay.Combat
             boneCombatRig?.CloseAttackWindow();
             if (activeAction == ActiveAction.Acquire && pendingTarget != null)
             {
-                interactionOwner?.CancelAcquisition(pendingTarget);
-                interactionOwner?.CancelCarry(pendingTarget);
+                bool acquisitionCancelled =
+                    interactionOwner?.CancelAcquisition(pendingTarget) == true;
+                bool carryCancelled =
+                    interactionOwner?.CancelCarry(pendingTarget) == true;
+                bool remainsCarried = !acquisitionCancelled && !carryCancelled &&
+                    interactionOwner != null &&
+                    interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                    interactionOwner.CarriedTarget == pendingTarget;
+                physicalLifecycle?.CancelPlayerPropAction(
+                    pendingTarget,
+                    remainsCarried);
                 if (pendingAcquisitionOutcome == PrototypeInteractionOutcome.Catch)
                 {
                     allyRelay?.ResolveCatchFailure(pendingTarget);
                 }
             }
+            else if (activeAction == ActiveAction.DirectThrow && pendingTarget != null)
+            {
+                bool remainsCarried = interactionOwner != null &&
+                    interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                    interactionOwner.CarriedTarget == pendingTarget &&
+                    physicalLifecycle != null &&
+                    physicalLifecycle.CarriedTarget == pendingTarget;
+                physicalLifecycle?.CancelPlayerPropAction(
+                    pendingTarget,
+                    remainsCarried);
+            }
             else if (activeAction == ActiveAction.QueuedRelayThrow && pendingTarget != null)
             {
                 interactionOwner?.CompleteThrow(pendingTarget);
                 allyRelay?.ResolveCatchFailure(pendingTarget);
+                physicalLifecycle?.CancelPlayerPropAction(pendingTarget, false);
             }
             activeAction = ActiveAction.None;
             pendingTarget = null;
@@ -840,6 +948,13 @@ namespace BreakNotice.Gameplay.Combat
         {
             return action == ActiveAction.Melee ||
                 action == ActiveAction.Acquire ||
+                action == ActiveAction.DirectThrow ||
+                action == ActiveAction.QueuedRelayThrow;
+        }
+
+        private static bool RequiresPlayerPropRuntime(ActiveAction action)
+        {
+            return action == ActiveAction.Acquire ||
                 action == ActiveAction.DirectThrow ||
                 action == ActiveAction.QueuedRelayThrow;
         }

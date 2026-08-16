@@ -81,7 +81,8 @@ namespace BreakNotice.Gameplay.Interaction
                     }
 
                     bool consumeQueuedThrow = QueuedThrowArmed;
-                    ClearRelayReservation();
+                    QueuedThrowArmed = false;
+                    RelayState = PrototypeRelayReservationState.CatchCommitted;
                     if (consumeQueuedThrow)
                     {
                         ThrowCommittedTarget = decision.Target;
@@ -207,6 +208,37 @@ namespace BreakNotice.Gameplay.Interaction
             RelayReservedTarget = null;
             RelayState = PrototypeRelayReservationState.None;
             QueuedThrowArmed = false;
+        }
+
+        public bool TryCompleteRelayCatchReservation(
+            PrototypeInteractionTarget target)
+        {
+            if (target == null ||
+                RelayState != PrototypeRelayReservationState.CatchCommitted ||
+                RelayReservedTarget != target)
+            {
+                return false;
+            }
+
+            RelayReservedTarget = null;
+            RelayState = PrototypeRelayReservationState.None;
+            QueuedThrowArmed = false;
+            return true;
+        }
+
+        public bool TryCancelRelayReservation(PrototypeInteractionTarget target)
+        {
+            if (target == null || RelayReservedTarget != target ||
+                (RelayState != PrototypeRelayReservationState.Active &&
+                 RelayState != PrototypeRelayReservationState.CatchCommitted))
+            {
+                return false;
+            }
+
+            RelayReservedTarget = null;
+            RelayState = PrototypeRelayReservationState.None;
+            QueuedThrowArmed = false;
+            return true;
         }
 
         public bool TryArmQueuedThrow()

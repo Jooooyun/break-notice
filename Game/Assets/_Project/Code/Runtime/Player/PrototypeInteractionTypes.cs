@@ -43,8 +43,9 @@ namespace BreakNotice.Gameplay.Interaction
 
     public enum PrototypeRelayReservationState
     {
-        None,
-        Active
+        None = 0,
+        Active = 1,
+        CatchCommitted = 2
     }
 
     public enum PrototypeAllySupportState

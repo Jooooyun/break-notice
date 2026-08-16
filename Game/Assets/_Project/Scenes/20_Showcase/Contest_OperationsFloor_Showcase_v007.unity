@@ -23819,6 +23819,7 @@ MonoBehaviour:
   interactionOwner: {fileID: 1121842307}
   carryAnchor: {fileID: 216534213}
   lightBinderGripSocket: {fileID: 1121842315}
+  playerPropGripRig: {fileID: 2030125096}
   requireBoneTrackedLightGrip: 1
   maximumGripSeparation: 0.18
   acquisitionSpeed: 7
@@ -42943,6 +42944,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2030125095}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2030125096}
   m_SourcePrefab: {fileID: 100100000, guid: 8bc68dbfeef263c4d942ce4a440a3ad6, type: 3}
 --- !u!4 &2030125092 stripped
 Transform:
@@ -42975,6 +42979,26 @@ MonoBehaviour:
   runnerAgent: {fileID: 0}
   allyRelay: {fileID: 0}
   boneCombatRig: {fileID: 1121842314}
+--- !u!114 &2030125096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030125094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0d4ac92fe94e7a9a1ec5cf553346bf, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BreakNotice.Gameplay::BreakNotice.Gameplay.Interaction.ShowcasePlayerPropGripRig
+  animator: {fileID: 2030125093}
+  actorRoot: {fileID: 1121842304}
+  carryAnchor: {fileID: 216534213}
+  stableLightSocket: {fileID: 1121842315}
+  lightActionLocalOffset: {x: 0, y: -0.13, z: 0.03}
+  lightActionLocalRotationEuler: {x: 0, y: 90, z: 0}
+  mediumLateralGrip: 0.12
+  mediumBackrestHeight: 0.78
 --- !u!1001 &2032645717
 PrefabInstance:
   m_ObjectHideFlags: 0

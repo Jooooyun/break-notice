@@ -220,7 +220,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void NormalCatch_TransitionsToCarrying()
+        public void NormalCatch_CommitKeepsExactRelayReservationUntilContactCompletion()
         {
             RelayFixture fixture = CreateFixture();
             var arbitrator = new PrototypeInteractionArbitrator();
@@ -234,14 +234,28 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
             Assert.That(fixture.Owner.AcquisitionCommittedTarget,
                 Is.SameAs(fixture.BinderOne));
+            Assert.That(fixture.Owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(fixture.Owner.RelayReservedTarget,
+                Is.SameAs(fixture.BinderOne));
             Assert.That(fixture.Owner.TryCompleteAcquisition(fixture.BinderOne), Is.True);
             Assert.That(fixture.Owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
             Assert.That(fixture.Owner.CarriedTarget, Is.SameAs(fixture.BinderOne));
+            Assert.That(fixture.Owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(
+                fixture.Owner.TryCompleteRelayCatchReservation(fixture.BinderOne),
+                Is.True);
             Assert.That(fixture.Owner.RelayState, Is.EqualTo(PrototypeRelayReservationState.None));
+            Assert.That(fixture.Owner.RelayReservedTarget, Is.Null);
+            Assert.That(
+                fixture.Owner.TryCompleteRelayCatchReservation(fixture.BinderOne),
+                Is.False,
+                "The animation contact transaction must settle exactly once.");
         }
 
         [Test]
-        public void QueuedCatch_TransitionsOnceToThrowCommitted()
+        public void QueuedCatch_CommitConsumesQueueButKeepsExactRelayReservation()
         {
             RelayFixture fixture = CreateFixture();
             var arbitrator = new PrototypeInteractionArbitrator();
@@ -256,6 +270,44 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(fixture.Owner.ThrowCommittedTarget, Is.SameAs(fixture.BinderOne));
             Assert.That(fixture.Owner.CarriedTarget, Is.Null);
             Assert.That(fixture.Owner.QueuedThrowArmed, Is.False);
+            Assert.That(fixture.Owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(fixture.Owner.RelayReservedTarget,
+                Is.SameAs(fixture.BinderOne));
+            Assert.That(
+                fixture.Owner.TryCompleteRelayCatchReservation(fixture.BinderOne),
+                Is.True);
+            Assert.That(fixture.Owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.None));
+        }
+
+        [Test]
+        public void CatchReservationCompletionAndCancellation_AreTargetCheckedAndIdempotent()
+        {
+            RelayFixture fixture = CreateFixture();
+            var arbitrator = new PrototypeInteractionArbitrator();
+            Assert.That(fixture.Owner.TryReserveRelay(fixture.BinderOne), Is.True);
+            PrototypeInteractionDecision catchDecision = arbitrator.Decide(
+                fixture.Owner.CreateContext(false, fixture.BinderOne));
+            Assert.That(fixture.Owner.TryCommit(catchDecision), Is.True);
+
+            Assert.That(
+                fixture.Owner.TryCompleteRelayCatchReservation(fixture.BinderTwo),
+                Is.False);
+            Assert.That(
+                fixture.Owner.TryCancelRelayReservation(fixture.BinderTwo),
+                Is.False);
+            Assert.That(fixture.Owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(
+                fixture.Owner.TryCancelRelayReservation(fixture.BinderOne),
+                Is.True);
+            Assert.That(
+                fixture.Owner.TryCancelRelayReservation(fixture.BinderOne),
+                Is.False);
+            Assert.That(fixture.Owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.None));
+            Assert.That(fixture.Owner.RelayReservedTarget, Is.Null);
         }
 
         [Test]

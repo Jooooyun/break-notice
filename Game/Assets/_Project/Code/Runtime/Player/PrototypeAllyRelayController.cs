@@ -721,7 +721,9 @@ namespace BreakNotice.Gameplay.Interaction
         public bool CompleteCatch(PrototypeInteractionTarget target, bool queuedThrow)
         {
             if (target == null || target != activeTarget ||
-                RelayPhase != PrototypeRelayPhase.Released)
+                RelayPhase != PrototypeRelayPhase.Released ||
+                interactionOwner == null ||
+                !interactionOwner.TryCompleteRelayCatchReservation(target))
             {
                 return false;
             }
@@ -741,7 +743,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             if (target != null && target == activeTarget)
             {
-                interactionOwner?.ClearRelayReservation();
+                interactionOwner?.TryCancelRelayReservation(target);
                 ClearActiveRelayState();
             }
         }
@@ -835,10 +837,23 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
-            if (interactionOwner.RelayState != PrototypeRelayReservationState.Active ||
+            PrototypeRelayReservationState reservationState =
+                interactionOwner.RelayState;
+            bool reservationValid =
+                reservationState == PrototypeRelayReservationState.Active ||
+                reservationState == PrototypeRelayReservationState.CatchCommitted;
+            if (!reservationValid ||
                 interactionOwner.RelayReservedTarget != activeTarget)
             {
                 ClearActiveRelayState();
+                return;
+            }
+
+            if (reservationState == PrototypeRelayReservationState.CatchCommitted)
+            {
+                // The player has accepted this exact airborne object and the
+                // animation contact event now owns settlement. Do not let the
+                // ordinary relay timeout erase the transaction in between.
                 return;
             }
 

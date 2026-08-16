@@ -224,8 +224,24 @@ namespace BreakNotice.Contest.Editor
                 player.transform,
                 new Vector3(0f, -0.12f, 0.04f),
                 new Vector3(0f, 90f, 0f));
-            player.GetComponent<PrototypePhysicalObjectLifecycle>()
-                .ConfigureLightBinderGrip(playerGrip, 0.18f);
+            Transform playerCarryAnchor = player.transform.Find("ContestCarryAnchor");
+            if (playerCarryAnchor == null)
+            {
+                throw new InvalidOperationException(
+                    "The authored CHR00 ContestCarryAnchor is required for prop grip sync.");
+            }
+            ShowcasePlayerPropGripRig playerPropGrip =
+                playerDriver.Animator.GetComponent<ShowcasePlayerPropGripRig>() ??
+                playerDriver.Animator.gameObject.AddComponent<ShowcasePlayerPropGripRig>();
+            playerPropGrip.Configure(
+                playerDriver.Animator,
+                player.transform,
+                playerCarryAnchor,
+                playerGrip);
+            PrototypePhysicalObjectLifecycle playerLifecycle =
+                player.GetComponent<PrototypePhysicalObjectLifecycle>();
+            playerLifecycle.ConfigureLightBinderGrip(playerGrip, 0.18f);
+            playerLifecycle.ConfigurePlayerPropGrip(playerPropGrip);
             ShowcaseBoneCombatRig playerBoneRig =
                 player.GetComponent<ShowcaseBoneCombatRig>() ??
                 player.AddComponent<ShowcaseBoneCombatRig>();
@@ -324,6 +340,8 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(playerDriver);
             EditorUtility.SetDirty(playerBoneRig);
             EditorUtility.SetDirty(playerGrip);
+            EditorUtility.SetDirty(playerPropGrip);
+            EditorUtility.SetDirty(playerLifecycle);
             EditorUtility.SetDirty(allyBoneRig);
             EditorUtility.SetDirty(allyGrip);
             EditorUtility.SetDirty(pressure);
@@ -1283,6 +1301,7 @@ namespace BreakNotice.Contest.Editor
                 new("Death2Action", Chr00AnimationRoot + "/Legacy/Dying2.fbx")
             };
             AvatarMask upperBodyMask = EnsurePlayerAimUpperBodyMask();
+            EnsureAnimatorLayerIkPass(Characters[0].ControllerPath);
             if (PlayerControllerMatchesRuntimeContract(
                     Characters[0].ControllerPath,
                     states,
@@ -1295,6 +1314,7 @@ namespace BreakNotice.Contest.Editor
             RemoveAdditionalControllerLayers(controller);
             AddCoreParameters(controller, true, false);
             BuildRuntimeStates(controller.layers[0].stateMachine, states);
+            EnsureAnimatorLayerIkPass(Characters[0].ControllerPath);
             AddPlayerAimUpperBodyLayer(controller, upperBodyMask);
             EditorUtility.SetDirty(controller);
         }
@@ -1511,6 +1531,7 @@ namespace BreakNotice.Contest.Editor
             AnimatorController controller =
                 AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
             if (controller == null || controller.layers.Length != 2 ||
+                !controller.layers[0].iKPass ||
                 !ControllerHasRuntimeParameters(controller) ||
                 !RuntimeStateMachineMatchesContract(
                     controller.layers[0].stateMachine,

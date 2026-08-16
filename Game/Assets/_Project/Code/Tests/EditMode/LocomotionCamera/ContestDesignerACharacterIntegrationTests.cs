@@ -163,6 +163,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             AnimatorControllerLayer baseLayer = controller.layers[0];
             AnimatorControllerLayer upperBodyLayer = controller.layers[1];
             Assert.That(baseLayer.name, Is.EqualTo("Base Layer"));
+            Assert.That(baseLayer.iKPass, Is.True);
             Assert.That(baseLayer.stateMachine.states, Has.Length.EqualTo(28));
 
             Dictionary<string, AnimatorState> baseStates = baseLayer.stateMachine.states
@@ -218,6 +219,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(upperBodyLayer.blendingMode,
                 Is.EqualTo(AnimatorLayerBlendingMode.Override));
             Assert.That(upperBodyLayer.defaultWeight, Is.EqualTo(0f).Within(0.001f));
+            Assert.That(upperBodyLayer.iKPass, Is.False);
             Assert.That(upperBodyLayer.avatarMask, Is.Not.Null);
             Assert.That(AssetDatabase.GetAssetPath(upperBodyLayer.avatarMask),
                 Is.EqualTo(ControllerRoot + "/CHR00_AimUpperBody.mask"));
@@ -265,6 +267,88 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(path.IndexOf("Turn", StringComparison.OrdinalIgnoreCase),
                     Is.EqualTo(-1), state.name);
             }
+        }
+
+        [Test]
+        public void PlayerPropGripRig_IsAuthoredOnAnimatorAndOwnedByPhysicalLifecycle()
+        {
+            ShowcaseCharacterAnimationDriver player = Components<
+                    ShowcaseCharacterAnimationDriver>()
+                .Single(driver => driver.Role == ShowcaseCharacterAnimationRole.Player);
+            ShowcasePlayerPropGripRig rig =
+                player.Animator.GetComponent<ShowcasePlayerPropGripRig>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                player.GetComponent<PrototypePhysicalObjectLifecycle>();
+            ShowcaseBinderGripSocket lightSocket =
+                player.GetComponent<ShowcaseBinderGripSocket>();
+
+            Assert.That(rig, Is.Not.Null);
+            Assert.That(lifecycle, Is.Not.Null);
+            Assert.That(lightSocket, Is.Not.Null);
+
+            var rigObject = new SerializedObject(rig);
+            Assert.That(rigObject.FindProperty("animator").objectReferenceValue,
+                Is.SameAs(player.Animator));
+            Assert.That(rigObject.FindProperty("actorRoot").objectReferenceValue,
+                Is.SameAs(player.transform));
+            Assert.That(rigObject.FindProperty("carryAnchor").objectReferenceValue,
+                Is.SameAs(player.transform.Find("ContestCarryAnchor")));
+            Assert.That(rigObject.FindProperty("stableLightSocket").objectReferenceValue,
+                Is.SameAs(lightSocket));
+
+            var lifecycleObject = new SerializedObject(lifecycle);
+            Assert.That(lifecycleObject.FindProperty("playerPropGripRig")
+                .objectReferenceValue, Is.SameAs(rig));
+        }
+
+        [Test]
+        public void PlayerObjectActions_UseExactClipsAndSingleOrderedOwnedEvents()
+        {
+            AnimatorController controller = LoadController("CHR00_Player.controller");
+            Dictionary<string, AnimatorState> states = controller.layers[0].stateMachine.states
+                .Select(child => child.state)
+                .ToDictionary(state => state.name, StringComparer.Ordinal);
+            foreach ((string state, string path) in new[]
+                     {
+                         ("CatchLightAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Center.fbx"),
+                         ("CatchSmallLeftAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_L.fbx"),
+                         ("CatchSmallRightAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_R.fbx"),
+                         ("CatchMediumAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx"),
+                         ("ThrowLightAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx"),
+                         ("ThrowMediumAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx")
+                     })
+            {
+                AssertStateMotionPath(states[state], path);
+            }
+
+            foreach (string path in new[]
+                     {
+                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Center.fbx",
+                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_L.fbx",
+                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_R.fbx",
+                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx"
+                     })
+            {
+                AssertOwnedEventPair(
+                    path,
+                    "ShowcaseCarryContact",
+                    0.52f,
+                    "ShowcaseActionComplete",
+                    0.88f);
+            }
+
+            AssertOwnedEventPair(
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx",
+                "ShowcaseThrowRelease",
+                0.48f,
+                "ShowcaseActionComplete",
+                0.88f);
+            AssertOwnedEventPair(
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx",
+                "ShowcaseThrowRelease",
+                0.52f,
+                "ShowcaseActionComplete",
+                0.88f);
         }
 
         [Test]
@@ -647,6 +731,34 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(state.motion, Is.TypeOf<AnimationClip>(), state.name);
             Assert.That(AssetDatabase.GetAssetPath(state.motion), Is.EqualTo(expectedPath),
                 state.name);
+        }
+
+        private static void AssertOwnedEventPair(
+            string path,
+            string firstFunction,
+            float firstNormalizedTime,
+            string secondFunction,
+            float secondNormalizedTime)
+        {
+            AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(path)
+                .OfType<AnimationClip>()
+                .Single(candidate => !candidate.name.StartsWith("__preview__"));
+            AnimationEvent[] events = AnimationUtility.GetAnimationEvents(clip);
+            AnimationEvent[] first = events
+                .Where(item => item.functionName == firstFunction)
+                .ToArray();
+            AnimationEvent[] second = events
+                .Where(item => item.functionName == secondFunction)
+                .ToArray();
+            float tolerance = Mathf.Max(0.001f, 1f / Mathf.Max(1f, clip.frameRate));
+
+            Assert.That(first, Has.Length.EqualTo(1), path + " / " + firstFunction);
+            Assert.That(second, Has.Length.EqualTo(1), path + " / " + secondFunction);
+            Assert.That(first[0].time,
+                Is.EqualTo(clip.length * firstNormalizedTime).Within(tolerance), path);
+            Assert.That(second[0].time,
+                Is.EqualTo(clip.length * secondNormalizedTime).Within(tolerance), path);
+            Assert.That(first[0].time, Is.LessThan(second[0].time), path);
         }
 
         private static string[] StateNames(AnimatorController controller)

@@ -391,6 +391,388 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
+        public IEnumerator OrdinaryRelayCatch_PreservesExactTransactionUntilNaturalCarryContact()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            PrototypeInteractionController interaction =
+                combat.GetComponent<PrototypeInteractionController>();
+            PrototypeInteractionStateOwner owner =
+                combat.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                combat.GetComponent<PrototypePhysicalObjectLifecycle>();
+            ShowcasePlayerPropGripRig gripRig = combat
+                .GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                .Animator.GetComponent<ShowcasePlayerPropGripRig>();
+            ShowcaseTeamContextController team =
+                SceneComponents<ShowcaseTeamContextController>().Single();
+            PrototypeAllyRelayController relay =
+                SceneComponents<PrototypeAllyRelayController>().Single();
+            ShowcaseAnimationEventReceiver playerReceiver = combat
+                .GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+            ShowcaseAnimationEventReceiver allyReceiver =
+                SceneComponents<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                    .Single(driver =>
+                        driver.Role ==
+                            BreakNotice.Presentation.ShowcaseCharacterAnimationRole.Ally)
+                    .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+
+            DisableRunners();
+            PrototypeInteractionTarget target = ResolveRelayBinder(relay);
+            yield return BeginReleasedBinderRelay(
+                relay,
+                interaction.transform,
+                target,
+                allyReceiver);
+            PositionIncomingBinderForCatch(interaction.transform, target);
+            Assert.That(interaction.RefreshTarget(false), Is.SameAs(target),
+                "The actual v007 interaction query must resolve the positioned relay Binder.");
+            interaction.SendMessage("LateUpdate", SendMessageOptions.DontRequireReceiver);
+            Assert.That(interaction.RefreshTarget(false), Is.SameAs(target));
+            Assert.That(relay.CanCatch(target), Is.True);
+
+            int contactBefore = playerReceiver.CarryContactInvocationCount;
+            int catchBefore = relay.CatchCount;
+            uint readinessBefore = team.ReadinessRevision;
+            PrototypeInteractionDecision decision =
+                interaction.ProcessInteractPrimary(false);
+
+            Assert.That(decision.IsAccepted, Is.True);
+            Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Catch));
+            Assert.That(decision.Target, Is.SameAs(target));
+            Assert.That(owner.HandState,
+                Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
+            Assert.That(owner.AcquisitionCommittedTarget, Is.SameAs(target));
+            Assert.That(owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(owner.RelayReservedTarget, Is.SameAs(target));
+            Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.Released));
+            Assert.That(relay.ActiveTarget, Is.SameAs(target));
+            Assert.That(lifecycle.CarriedTarget, Is.Null);
+            Assert.That(gripRig.Target, Is.SameAs(target));
+            Assert.That(gripRig.Phase,
+                Is.EqualTo(ShowcasePlayerPropGripPhase.AcquisitionPending));
+            Assert.That(playerReceiver.CarryContactInvocationCount,
+                Is.EqualTo(contactBefore));
+            Assert.That(relay.CatchCount, Is.EqualTo(catchBefore));
+            Assert.That(team.ReadinessRevision, Is.EqualTo(readinessBefore));
+
+            yield return new WaitForFixedUpdate();
+            Assert.That(owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted),
+                "Relay FixedUpdate must not erase a catch owned by the delayed animation event.");
+            Assert.That(owner.RelayReservedTarget, Is.SameAs(target));
+            Assert.That(relay.ActiveTarget, Is.SameAs(target));
+
+            yield return WaitUntilOrFail(
+                () => playerReceiver.CarryContactInvocationCount == contactBefore + 1,
+                3f,
+                "Natural CHR00 CarryContact AnimationEvent did not settle the relay catch.");
+
+            Assert.That(lifecycle.CarriedTarget, Is.SameAs(target));
+            Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Carrying));
+            Assert.That(owner.CarriedTarget, Is.SameAs(target));
+            Assert.That(owner.RelayState, Is.EqualTo(PrototypeRelayReservationState.None));
+            Assert.That(owner.RelayReservedTarget, Is.Null);
+            Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.None));
+            Assert.That(relay.ActiveTarget, Is.Null);
+            Assert.That(relay.CatchCount, Is.EqualTo(catchBefore + 1));
+            Assert.That(team.HasPass, Is.True);
+            Assert.That(team.ReadinessRevision, Is.EqualTo(readinessBefore + 1));
+
+            combat.CommitAnimationCarryContact();
+            Assert.That(relay.CatchCount, Is.EqualTo(catchBefore + 1),
+                "A duplicate contact callback must not complete the same catch twice.");
+            Assert.That(team.ReadinessRevision, Is.EqualTo(readinessBefore + 1),
+                "Pass success must be awarded exactly once for the same relay catch.");
+        }
+
+        [UnityTest]
+        public IEnumerator OrdinaryRelayCatch_CancelBeforeContactRollsBackInSameFrame()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            PrototypeInteractionController interaction =
+                combat.GetComponent<PrototypeInteractionController>();
+            PrototypeInteractionStateOwner owner =
+                combat.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                combat.GetComponent<PrototypePhysicalObjectLifecycle>();
+            ShowcasePlayerPropGripRig gripRig = combat
+                .GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                .Animator.GetComponent<ShowcasePlayerPropGripRig>();
+            ShowcaseTeamContextController team =
+                SceneComponents<ShowcaseTeamContextController>().Single();
+            PrototypeAllyRelayController relay =
+                SceneComponents<PrototypeAllyRelayController>().Single();
+            ShowcaseRunnerAgent damageSource =
+                SceneComponents<ShowcaseRunnerAgent>().First(item => !item.IsElite);
+            ShowcaseAnimationEventReceiver playerReceiver = combat
+                .GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+            ShowcaseAnimationEventReceiver allyReceiver =
+                SceneComponents<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                    .Single(driver =>
+                        driver.Role ==
+                            BreakNotice.Presentation.ShowcaseCharacterAnimationRole.Ally)
+                    .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+
+            DisableRunners();
+            PrototypeInteractionTarget target = ResolveRelayBinder(relay);
+            yield return BeginReleasedBinderRelay(
+                relay,
+                interaction.transform,
+                target,
+                allyReceiver);
+            PositionIncomingBinderForCatch(interaction.transform, target);
+            Assert.That(interaction.RefreshTarget(false), Is.SameAs(target),
+                "The actual v007 interaction query must resolve the positioned relay Binder.");
+            interaction.SendMessage("LateUpdate", SendMessageOptions.DontRequireReceiver);
+            Assert.That(interaction.RefreshTarget(false), Is.SameAs(target));
+            Assert.That(relay.CanCatch(target), Is.True);
+
+            int contactBefore = playerReceiver.CarryContactInvocationCount;
+            int catchBefore = relay.CatchCount;
+            uint readinessBefore = team.ReadinessRevision;
+            PrototypeInteractionDecision decision =
+                interaction.ProcessInteractPrimary(false);
+            Assert.That(decision.IsAccepted, Is.True);
+            Assert.That(owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(owner.RelayReservedTarget, Is.SameAs(target));
+            Assert.That(relay.ActiveTarget, Is.SameAs(target));
+
+            Assert.That(combat.ReceiveDamage(new ShowcaseDamageRequest(
+                ShowcaseCombatTeam.Enemy,
+                damageSource.RunnerId,
+                99001,
+                5,
+                ShowcaseHitReaction.Body,
+                Vector3.back)), Is.True);
+
+            Assert.That(playerReceiver.CarryContactInvocationCount,
+                Is.EqualTo(contactBefore));
+            Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
+            Assert.That(owner.AcquisitionCommittedTarget, Is.Null);
+            Assert.That(owner.RelayState, Is.EqualTo(PrototypeRelayReservationState.None));
+            Assert.That(owner.RelayReservedTarget, Is.Null);
+            Assert.That(lifecycle.CarriedTarget, Is.Null);
+            Assert.That(gripRig.Target, Is.Null);
+            Assert.That(gripRig.Phase, Is.EqualTo(ShowcasePlayerPropGripPhase.None));
+            Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.None));
+            Assert.That(relay.ActiveTarget, Is.Null);
+            Assert.That(relay.CatchCount, Is.EqualTo(catchBefore));
+            Assert.That(team.HasPass, Is.False);
+            Assert.That(team.ReadinessRevision, Is.EqualTo(readinessBefore));
+
+            combat.CommitAnimationCarryContact();
+            Assert.That(lifecycle.CarriedTarget, Is.Null,
+                "A late stale contact callback must not recreate cancelled ownership.");
+            Assert.That(relay.CatchCount, Is.EqualTo(catchBefore));
+            Assert.That(team.ReadinessRevision, Is.EqualTo(readinessBefore));
+        }
+
+        [UnityTest]
+        public IEnumerator AnimatorDisableDuringAcquisition_CleansPlayerTransactionWithinOneSecond()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            PrototypeInteractionStateOwner owner =
+                combat.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                combat.GetComponent<PrototypePhysicalObjectLifecycle>();
+            ThirdPersonLocomotion locomotion = combat.GetComponent<ThirdPersonLocomotion>();
+            BreakNotice.Presentation.ShowcaseCharacterAnimationDriver driver = combat
+                .GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>();
+            Animator animator = driver.Animator;
+            ShowcasePlayerPropGripRig gripRig =
+                animator.GetComponent<ShowcasePlayerPropGripRig>();
+            PrototypeInteractionTarget target =
+                SceneComponents<PrototypeInteractionTarget>()
+                    .First(item => item.IsScoopEligible &&
+                                   item.WeightClass == PrototypeWeightClass.Light);
+
+            DisableRunners();
+            Assert.That(owner.TryCommit(PrototypeInteractionDecision.Accept(
+                PrototypeInteractionOutcome.Scoop,
+                target)), Is.True);
+            Assert.That(combat.TryBeginAcquisition(
+                target,
+                PrototypeInteractionOutcome.Scoop), Is.True);
+            Assert.That(combat.IsActionLocked, Is.True);
+            Assert.That(locomotion.HasMobilityLock(
+                PlayerMobilityLockReason.PlayerAction), Is.True);
+            Assert.That(combat.AnimationCue, Is.Not.EqualTo(ShowcasePlayerAnimationCue.None));
+            Assert.That(gripRig.Phase,
+                Is.EqualTo(ShowcasePlayerPropGripPhase.AcquisitionPending));
+            Assert.That(gripRig.Target, Is.SameAs(target));
+
+            LogAssert.Expect(
+                LogType.Error,
+                "SHOWCASE PLAYER PROP RUNTIME UNAVAILABLE: Acquire. " +
+                "The pending action and mobility lock are being cancelled.");
+            animator.enabled = false;
+
+            yield return WaitUntilOrFail(
+                () => !combat.IsActionLocked &&
+                      !locomotion.HasMobilityLock(PlayerMobilityLockReason.PlayerAction) &&
+                      combat.AnimationCue == ShowcasePlayerAnimationCue.None &&
+                      owner.HandState == PrototypeHandOwnershipState.Free &&
+                      owner.AcquisitionCommittedTarget == null &&
+                      owner.CarriedTarget == null &&
+                      owner.ThrowCommittedTarget == null &&
+                      lifecycle.CarriedTarget == null &&
+                      gripRig.Phase == ShowcasePlayerPropGripPhase.None &&
+                      gripRig.Target == null &&
+                      !gripRig.IsAuthoritative,
+                1f,
+                "Disabling the CHR00 Animator must clear combat, PlayerAction, " +
+                "ownership, lifecycle, cue, and grip state within one second.");
+
+            Assert.That(combat.IsActionLocked, Is.False);
+            Assert.That(locomotion.HasMobilityLock(
+                PlayerMobilityLockReason.PlayerAction), Is.False);
+            Assert.That(combat.AnimationCue, Is.EqualTo(ShowcasePlayerAnimationCue.None));
+            Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
+            Assert.That(owner.AcquisitionCommittedTarget, Is.Null);
+            Assert.That(owner.CarriedTarget, Is.Null);
+            Assert.That(owner.ThrowCommittedTarget, Is.Null);
+            Assert.That(lifecycle.CarriedTarget, Is.Null);
+            Assert.That(gripRig.Phase, Is.EqualTo(ShowcasePlayerPropGripPhase.None));
+            Assert.That(gripRig.Target, Is.Null);
+            Assert.That(gripRig.IsAuthoritative, Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator QueuedRelayThrow_CancelBeforeReleasePreservesTrackedPoseAndClearsInboundVelocity()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            PrototypeInteractionStateOwner owner =
+                combat.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                combat.GetComponent<PrototypePhysicalObjectLifecycle>();
+            PrototypeInteractionController interaction =
+                combat.GetComponent<PrototypeInteractionController>();
+            PrototypeAllyRelayController relay =
+                SceneComponents<PrototypeAllyRelayController>().Single();
+            ShowcasePlayerPropGripRig gripRig = combat
+                .GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                .Animator.GetComponent<ShowcasePlayerPropGripRig>();
+            ShowcaseAnimationEventReceiver allyReceiver =
+                SceneComponents<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
+                    .Single(driver =>
+                        driver.Role ==
+                            BreakNotice.Presentation.ShowcaseCharacterAnimationRole.Ally)
+                    .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+
+            DisableRunners();
+            PrototypeInteractionTarget target = ResolveRelayBinder(relay);
+            yield return BeginReleasedBinderRelay(
+                relay,
+                interaction.transform,
+                target,
+                allyReceiver);
+
+            Rigidbody body = target.GetComponent<Rigidbody>();
+            Assert.That(body, Is.Not.Null);
+            bool originalIsKinematic = body.isKinematic;
+            bool originalUseGravity = body.useGravity;
+            Vector3 inboundLinearVelocity = body.linearVelocity;
+            Vector3 inboundAngularVelocity = body.angularVelocity;
+            Vector3 inboundPlanarVelocity = Vector3.ProjectOnPlane(
+                inboundLinearVelocity,
+                Vector3.up);
+            Assert.That(inboundPlanarVelocity.magnitude, Is.GreaterThan(0.1f),
+                "The actual released relay Binder must provide an inbound velocity " +
+                "that the cancellation path can prove it did not restore.");
+
+            Assert.That(relay.TryArmQueuedThrow(), Is.True);
+            Assert.That(owner.TryCommit(PrototypeInteractionDecision.Accept(
+                PrototypeInteractionOutcome.Catch,
+                target)), Is.True);
+            Assert.That(owner.HandState,
+                Is.EqualTo(PrototypeHandOwnershipState.ThrowCommitted));
+            Assert.That(owner.ThrowCommittedTarget, Is.SameAs(target));
+            Assert.That(owner.RelayState,
+                Is.EqualTo(PrototypeRelayReservationState.CatchCommitted));
+            Assert.That(owner.RelayReservedTarget, Is.SameAs(target));
+
+            uint throwOriginBefore = lifecycle.ThrowOriginCount;
+            Assert.That(combat.TryBeginQueuedRelayThrow(
+                target,
+                combat.transform.forward,
+                0.5f), Is.True);
+            Assert.That(body.isKinematic, Is.True);
+            Assert.That(body.useGravity, Is.False);
+            Assert.That(body.linearVelocity, Is.EqualTo(Vector3.zero));
+            Assert.That(body.angularVelocity, Is.EqualTo(Vector3.zero));
+
+            yield return WaitUntilOrFail(
+                () => gripRig.Phase == ShowcasePlayerPropGripPhase.Throw &&
+                      gripRig.Target == target &&
+                      gripRig.LastAppliedPoseFrameId >= Time.frameCount - 1 &&
+                      gripRig.CurrentGripPositionError <= 0.03f &&
+                      gripRig.CurrentGripRotationError <= 5f,
+                1f,
+                "The queued Binder did not reach the finalized CHR00 hand-tracked " +
+                "Throw pose before cancellation.");
+
+            Pose trackedPose = new(body.position, body.rotation);
+            Assert.That(lifecycle.ThrowOriginCount, Is.EqualTo(throwOriginBefore));
+            Assert.That(lifecycle.LastPhysicalReleaseSnapshot.IsValid, Is.False);
+
+            combat.enabled = false;
+
+            Assert.That(Vector3.Distance(body.position, trackedPose.position),
+                Is.LessThanOrEqualTo(0.001f),
+                "Pre-release cancellation must retain the finalized hand-tracked position.");
+            Assert.That(Quaternion.Angle(body.rotation, trackedPose.rotation),
+                Is.LessThanOrEqualTo(0.1f),
+                "Pre-release cancellation must retain the finalized hand-tracked rotation.");
+            Assert.That(body.isKinematic, Is.EqualTo(originalIsKinematic));
+            Assert.That(body.useGravity, Is.EqualTo(originalUseGravity));
+            Assert.That(body.linearVelocity, Is.EqualTo(Vector3.zero));
+            Assert.That(body.angularVelocity, Is.EqualTo(Vector3.zero));
+            Assert.That(lifecycle.ThrowOriginCount, Is.EqualTo(throwOriginBefore));
+            Assert.That(lifecycle.LastPhysicalReleaseSnapshot.IsValid, Is.False);
+            Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
+            Assert.That(owner.ThrowCommittedTarget, Is.Null);
+            Assert.That(owner.RelayState, Is.EqualTo(PrototypeRelayReservationState.None));
+            Assert.That(owner.RelayReservedTarget, Is.Null);
+            Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.None));
+            Assert.That(relay.ActiveTarget, Is.Null);
+            Assert.That(gripRig.Phase, Is.EqualTo(ShowcasePlayerPropGripPhase.None));
+            Assert.That(gripRig.Target, Is.Null);
+
+            Vector3 cancelledPosition = body.position;
+            yield return new WaitForFixedUpdate();
+            Assert.That(Vector3.ProjectOnPlane(
+                    body.linearVelocity,
+                    Vector3.up).magnitude,
+                Is.LessThanOrEqualTo(0.1f),
+                $"Old inbound velocity was relaunched after cancellation. " +
+                $"Before={inboundLinearVelocity}; after={body.linearVelocity}.");
+            Assert.That(body.angularVelocity.magnitude, Is.LessThanOrEqualTo(0.1f),
+                $"Old inbound angular velocity was relaunched after cancellation. " +
+                $"Before={inboundAngularVelocity}; after={body.angularVelocity}.");
+            Assert.That(Vector3.ProjectOnPlane(
+                    body.position - cancelledPosition,
+                    Vector3.up).magnitude,
+                Is.LessThanOrEqualTo(0.01f),
+                "The cancelled Binder must not resume its old inbound planar trajectory.");
+        }
+
+        [UnityTest]
         public IEnumerator PlayerKnockdown_BlocksMovementThroughGetupCompletion()
         {
             yield return LoadScene();
@@ -528,6 +910,102 @@ namespace BreakNotice.LocomotionCamera.Tests
                 throwHeld: true));
             interaction.SendMessage("Update", SendMessageOptions.DontRequireReceiver);
             SetInputSnapshot(input, default);
+        }
+
+        private IEnumerator BeginReleasedBinderRelay(
+            PrototypeAllyRelayController relay,
+            Transform player,
+            PrototypeInteractionTarget target,
+            ShowcaseAnimationEventReceiver allyReceiver)
+        {
+            float readyDeadline = Time.realtimeSinceStartup + 1f;
+            while ((relay.AllyState != PrototypeAllySupportState.Ready ||
+                    relay.RelayPhase != PrototypeRelayPhase.None ||
+                    relay.ActiveTarget != null) &&
+                   Time.realtimeSinceStartup < readyDeadline)
+            {
+                yield return null;
+            }
+            Assert.That(relay.AllyState, Is.EqualTo(PrototypeAllySupportState.Ready),
+                "Actual v007 ally relay did not become available before relay setup.");
+            Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.None));
+            Assert.That(relay.ActiveTarget, Is.Null);
+
+            Collider targetCollider = target.GetComponent<Collider>();
+            Rigidbody body = target.GetComponent<Rigidbody>();
+            Assert.That(targetCollider, Is.Not.Null);
+            Assert.That(body, Is.Not.Null);
+
+            Vector3 destination = player.position +
+                player.forward * 0.75f + Vector3.up * 1.05f;
+            Vector3 positionedRoot = body.position +
+                (destination - targetCollider.bounds.center);
+            body.position = positionedRoot;
+            target.transform.position = positionedRoot;
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            Physics.SyncTransforms();
+
+            Assert.That(relay.HasValidPhysicalLane(target), Is.True);
+            int releaseBefore = allyReceiver.AllySupplyReleaseInvocationCount;
+            Assert.That(
+                relay.TryRequestSupply(target, out PrototypeAllyRelayRejection rejection),
+                Is.True,
+                $"Actual v007 Binder relay setup failed: {rejection}.");
+            yield return WaitUntilOrFail(
+                () => allyReceiver.AllySupplyReleaseInvocationCount == releaseBefore + 1,
+                3f,
+                "Natural CHR01 supply release AnimationEvent did not fire.");
+            Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.Released));
+            Assert.That(relay.ActiveTarget, Is.SameAs(target));
+        }
+
+        private void PositionIncomingBinderForCatch(
+            Transform player,
+            PrototypeInteractionTarget target)
+        {
+            Rigidbody body = target.GetComponent<Rigidbody>();
+            Collider targetCollider = target.GetComponent<Collider>();
+            Camera outputCamera = SceneComponents<Camera>()
+                .Single(camera => camera.isActiveAndEnabled);
+            Vector3 forward = Vector3.ProjectOnPlane(
+                outputCamera.transform.forward,
+                Vector3.up).normalized;
+            if (forward.sqrMagnitude <= 0.0001f)
+            {
+                forward = player.forward;
+            }
+
+            player.rotation = Quaternion.LookRotation(forward, Vector3.up);
+            Vector3 desiredCenter = player.position +
+                forward * 0.9f + Vector3.up;
+            Vector3 positionedRoot = body.position +
+                (desiredCenter - targetCollider.bounds.center);
+            body.position = positionedRoot;
+            target.transform.position = positionedRoot;
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            Physics.SyncTransforms();
+        }
+
+        private static PrototypeInteractionTarget ResolveRelayBinder(
+            PrototypeAllyRelayController relay)
+        {
+            PrototypeInteractionTarget target = relay.SupplyTargets.FirstOrDefault(item =>
+                item != null &&
+                item.Role == PrototypeInteractionRole.AllyBinder &&
+                item.WeightClass == PrototypeWeightClass.Light &&
+                item.CatchEligible);
+            Assert.That(target, Is.Not.Null);
+            return target;
+        }
+
+        private void DisableRunners()
+        {
+            foreach (ShowcaseRunnerAgent runner in SceneComponents<ShowcaseRunnerAgent>())
+            {
+                runner.enabled = false;
+            }
         }
 
         private static void SetInputSnapshot(
