@@ -1,16 +1,14 @@
 * text=auto eol=lf
-
 *.png binary
 *.jpg binary
 *.jpeg binary
 *.webp binary
 *.psd binary
-*.fbx binary
+*.fbx filter=lfs diff=lfs merge=lfs -text
 *.blend binary
 *.wav binary
 *.mp3 binary
 *.ogg binary
-
 # Unity YAML merge-friendly assets
 *.unity text eol=lf
 *.prefab text eol=lf
