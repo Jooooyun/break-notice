@@ -139,3 +139,31 @@ Rodin에서 LOD 폴더 받으면 `lod.fbx`(텍스처 없음) 대신 **`lod_basic
 따로 받아 Mixamo 리깅 후 Blender에서 수동으로 재연결해야 기존 5텍스처 스펙(diffuse/
 normal/metallic/roughness/emissive) 맞음. Mixamo 업로드 전에 fbx 안의 Camera/Cube/Light
 잡동사니, LOD1~4는 지우고 LOD0 메쉬만 남길 것(리깅 계산엔 텍스처 무관, 지오메트리만 씀).
+
+---
+
+## 5. Unity에서 텍스처 흰색/회색으로만 나올 때 (신규, 실제로 겪음)
+
+`path_mode='COPY', embed_textures=True`로 export해도(§1 참고) **Unity에서 열면 캐릭터가
+텍스처 없이 밋밋한 흰색으로 나올 수 있음**. 원인: Blender FBX exporter가 diffuse/normal
+같은 일부 채널은 텍스처를 바이트로 fbx 안에 넣긴 하지만, FBX 레거시 머티리얼 포맷
+자체엔 Metallic/Roughness 같은 PBR 슬롯이 없어서 머티리얼 속성-텍스처 연결 자체가
+씹힘 — Unity 쪽에서 보면 셰이더가 `Standard`(URP 프로젝트인데 legacy shader)로 들어오고
+텍스처 슬롯 전부 NULL, 심지어 `embedded_texture_count=0`(Unity가 텍스처 서브에셋 자체를
+못 찾음)로 나옴. **Blender에서 packed=true로 확인되는 것과 Unity가 실제로 그 텍스처를
+읽어오는 것은 별개 문제** — Blender 쪽 검증만으로는 이 버그 못 잡음, Unity에서 직접
+열어봐야 걸림.
+
+**해결 절차**(CHR01/ENY01에 이미 적용 완료, `Game/Assets/_Project/Art/Materials/Fixed/`
+참고):
+1. Blender에서 캐릭터 베이스 fbx(`female_helper.fbx` 등) 열어서 `bpy.data.images`의
+   각 이미지를 `img.save(filepath=...)`로 PNG 파일로 직접 추출(embedded 상태론 못 씀,
+   실제 파일로 뽑아야 함)
+2. 추출한 PNG를 Unity `Assets/.../Textures/{캐릭터}/`에 넣기
+3. `Shader.Find("Universal Render Pipeline/Lit")`로 머티리얼 새로 만들고 `_BaseMap`
+   (diffuse), `_BumpMap`(normal, TextureImporterType.NormalMap으로 import 설정 바꿔야 함)
+   수동으로 연결. Metallic/Roughness는 텍스처로 안 넣고 `_Metallic`/`_Smoothness` 슬라이더
+   값으로 근사(정밀 PBR 필요하면 나중에 채널 합성해서 텍스처로 교체)
+4. 캐릭터별 fbx 전부에 대해 `ModelImporter.AddRemap(new SourceAssetIdentifier(typeof(Material),
+   "원래머티리얼이름"), 새머티리얼)` 호출 후 `SaveAndReimport()` — Blender 재export 없이
+   Unity 쪽에서 머티리얼만 갈아끼우는 방식, 훨씬 빠름
