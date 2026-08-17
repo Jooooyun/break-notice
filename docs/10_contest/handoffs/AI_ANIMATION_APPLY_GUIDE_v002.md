@@ -115,14 +115,43 @@ CHR01은 이동+던지기 조합 없이 정지 상태 Supply만 수행.
 
 ---
 
-## 2. 검증 절차 (v001 §3과 동일, 재확인만)
+## 2. 검증 절차 — Humanoid로 연결할 것 (v001 §3 확장)
 
-1. Unity 프로젝트에 fbx import
-2. **"Create Avatar From This Model"로 새 Avatar 생성** — 절대 다른 파일 Avatar Copy 금지
-3. 실제 재생: 스켈레톤 리타겟 정상인지(팔다리 꺾임/뒤틀림 없는지), 제자리에서 도는지,
-   인접 애니메이션과 자연스럽게 이어지는지
-4. 문제 있으면 v001 §3-4 체크리스트(Mesh 포함 export 실수, All Actions 옵션,
+**반드시 Humanoid 방식으로 연결할 것. Generic 쓰지 말 것.** 이유: CHR00/CHR01/ENY01 전부
+Mixamo 표준 스켈레톤(`mixamorig:` 본 이름 체계) 기반이라 Humanoid로 잡으면 (1) 파일마다
+자기 자신의 Avatar를 자동 생성할 수 있고 (2) 나중에 다른 Mixamo 기반 캐릭터끼리 애니메이션
+재사용/리타겟이 자유로움. Generic으로 잡으면 이 프로젝트가 지금까지 겪은 "Copy From Other
+Avatar Rig Error" 문제를 원천적으로 피할 방법이 없어짐.
+
+**단계별(Inspector 기준):**
+
+1. fbx를 Unity 프로젝트 Assets 안에 넣음(드래그 or 파일 복사)
+2. Project 창에서 그 fbx 선택 → Inspector 상단 탭 중 **Rig** 탭 클릭
+3. **Animation Type** 드롭다운 → `Humanoid` 선택 (기본값이 `Generic`으로 잡혀있을 수 있음,
+   반드시 바꿀 것)
+4. **Avatar Definition** 드롭다운 → **`Create From This Model`** 선택
+   — **`Copy From Other Avatar`는 절대 선택하지 말 것.** 이게 이번 프로젝트가 실제로
+   겪었던 버그의 원인(파일마다 본 계층이 미세하게 달라서 다른 파일 Avatar 억지로
+   갖다 붙이면 팔다리가 이상하게 꺾임). 각 fbx는 자기 메쉬+본이 이미 다 들어있으니
+   무조건 자기 자신에서 새로 만들면 됨.
+5. 하단 **Apply** 버튼 클릭 → Unity가 자동으로 본 이름(`mixamorig:Hips`,
+   `mixamorig:LeftUpLeg` 등)을 Humanoid 표준 골격 슬롯에 매핑 시도함
+6. **꼭 확인**: Rig 탭에 있는 **Configure...** 버튼 클릭 → Avatar 설정 화면 열림.
+   화면에 초록색 사람 실루엣 나오는데, **본 매핑 실패한 부위는 빨간색/회색으로 표시됨**.
+   전체 초록색이면 정상, 하나라도 빨갛게 뜨면 그 fbx 본 이름이 표준이랑 안 맞는다는
+   뜻이니 Blender에서 이름 다시 확인해야 함(이번 CHR01/ENY01은 전부 Mixamo 표준이라
+   정상적으로 자동 매핑됨 — 이미 확인됨, §0 참고)
+7. 다 확인했으면 Configure 화면 나가서(우측 상단 Done 또는 다른 애셋 클릭) 저장
+8. 씬에 캐릭터 배치 → **Animator** 컴포넌트 확인(Avatar 필드에 방금 만든 Avatar 자동으로
+   들어가 있어야 함) → 재생해서 스켈레톤 리타겟 정상인지(팔다리 꺾임/뒤틀림 없는지),
+   제자리에서 도는지, 인접 애니메이션과 자연스럽게 이어지는지 확인
+9. 문제 있으면 v001 §3-4 체크리스트(Mesh 포함 export 실수, All Actions 옵션,
    Edit/Pose Mode 혼동, Quaternion 반대경로 회전)부터 의심
+
+**여러 파일 한 번에 처리할 때**: fbx 여러 개를 Project 창에서 다중 선택(Shift/Ctrl+클릭)한
+채로 Rig 탭 열면 설정을 한 번에 일괄 적용 가능 — Animation Type=Humanoid,
+Avatar Definition=Create From This Model로 맞추고 Apply 누르면 선택한 파일 전부에 적용됨.
+116개를 하나씩 할 필요 없음.
 
 ## 3. Git 커밋 규칙
 
