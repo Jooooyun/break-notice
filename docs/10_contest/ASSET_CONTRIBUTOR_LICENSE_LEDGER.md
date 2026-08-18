@@ -21,7 +21,11 @@
 
 ## Contest-Period Runtime Assets
 
-현재 등록된 contest-period production asset 또는 외부 contributor delivery는
-없다. 실제 delivery가 발생하면 creator, date, source/export/runtime path,
-original/purchased/open-license/AI-generated classification, exact license,
-written permission과 inclusion decision을 추가한다.
+| Asset ID | Asset Name | Creator | Contribution Date | Classification | Exact License / Permission | Source Path | Export / Runtime Path | Owner Status | Submission Use |
+|---|---|---|---|---|---|---|---|---|---|
+| EXT-PH-NOTEPADS-001 | Office Notepads 1K | Ulan Cabanilla / Poly Haven | 2026-08-18 retrieval | Open License | CC0 1.0 Universal; commercial use, modification, redistribution and sold-product inclusion permitted by `https://polyhaven.com/license` | `ArtSource/External/PolyHaven/office_notepads/` | `Game/Assets/_Project/Art/Props/Decorative/PolyHaven/office_notepads/` | HUMAN OWNER DIRECTLY AUTHORIZED FOR THIS MAP / TECHNICAL REVIEW PENDING | Stage 01 office dressing only |
+| EXT-PH-STATIONERY-001 | Stationery Supplies 1K | Mateusz Sadek / Poly Haven | 2026-08-18 retrieval | Open License | CC0 1.0 Universal; commercial use, modification, redistribution and sold-product inclusion permitted by `https://polyhaven.com/license` | `ArtSource/External/PolyHaven/stationery_supplies/` | `Game/Assets/_Project/Art/Props/Decorative/PolyHaven/stationery_supplies/` | HUMAN OWNER DIRECTLY AUTHORIZED FOR THIS MAP / TECHNICAL REVIEW PENDING | Stage 01 office dressing only |
+
+정확한 다운로드 URL과 파일 hash는
+`ArtSource/External/PolyHaven/README.md`에 보존한다. Preview 이미지와
+Poly Haven 사이트 branding은 runtime 또는 source delivery에 포함하지 않는다.
