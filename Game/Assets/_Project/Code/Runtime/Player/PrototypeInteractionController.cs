@@ -19,6 +19,7 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeThrowPresentationPhase phase,
             PrototypeInteractionTarget target,
             float charge01,
+            Vector3 aimPoint,
             float startedTime,
             float releasedTime)
         {
@@ -26,6 +27,7 @@ namespace BreakNotice.Gameplay.Interaction
             Phase = phase;
             Target = target;
             Charge01 = Mathf.Clamp01(charge01);
+            AimPoint = aimPoint;
             StartedTime = startedTime;
             ReleasedTime = releasedTime;
         }
@@ -37,6 +39,8 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeInteractionTarget Target { get; }
 
         public float Charge01 { get; }
+
+        public Vector3 AimPoint { get; }
 
         public float StartedTime { get; }
 
@@ -122,6 +126,7 @@ namespace BreakNotice.Gameplay.Interaction
         private uint throwPresentationSequence;
         private PrototypeThrowPresentationPhase throwPresentationPhase;
         private PrototypeInteractionTarget throwPresentationTarget;
+        private Vector3 throwPresentationAimPoint;
         private float throwPresentationStartedAt;
         private float throwPresentationReleasedAt;
         private PrototypeInteractionTarget presentedTargetSnapshot;
@@ -131,6 +136,13 @@ namespace BreakNotice.Gameplay.Interaction
 #endif
 
         public PrototypeInteractionStateOwner InteractionOwner => interactionOwner;
+
+        public PrototypeWeaponSelection WeaponSelection => interactionOwner != null
+            ? interactionOwner.WeaponSelection
+            : PrototypeWeaponSelection.Fists;
+
+        public PrototypeInteractionTarget ObjectWeaponTarget =>
+            interactionOwner?.ObjectWeaponTarget;
 
         public PrototypeInteractionTarget CurrentTarget { get; private set; }
 
@@ -145,6 +157,13 @@ namespace BreakNotice.Gameplay.Interaction
         public float PickupAssistHorizontalAngle => pickupAssistHorizontalAngle;
 
         public float PickupAssistUpwardAngle => pickupAssistUpwardAngle;
+
+        public Vector3 ResolveReticleAimPoint()
+        {
+            PrototypeInteractionTarget ignoredTarget =
+                physicalObjectLifecycle?.CarriedTarget ?? interactionOwner?.CarriedTarget;
+            return ResolveFrozenThrowAimPoint(ignoredTarget);
+        }
 
         public float PickupAssistDownwardAngle => pickupAssistDownwardAngle;
 
@@ -209,12 +228,68 @@ namespace BreakNotice.Gameplay.Interaction
                       PrototypeThrowPresentationPhase.ReleaseAccepted
                         ? frozenThrowCharge01
                         : ThrowCharge01,
+                throwPresentationAimPoint,
                 throwPresentationStartedAt,
                 throwPresentationReleasedAt);
 
         public Camera ViewCamera => viewTransform != null
             ? viewTransform.GetComponent<Camera>()
             : null;
+
+        public bool TryGetThrowPreview(out PrototypeThrowSolution solution)
+        {
+            PrototypeThrowPresentationSnapshot presentation = ThrowPresentation;
+            if (!presentation.IsValid || physicalObjectLifecycle == null ||
+                presentation.Phase == PrototypeThrowPresentationPhase.None)
+            {
+                solution = default;
+                return false;
+            }
+
+            Vector3 aimPoint = presentation.Phase ==
+                    PrototypeThrowPresentationPhase.ReleaseAccepted
+                ? presentation.AimPoint
+                : ResolveFrozenThrowAimPoint(presentation.Target);
+            return physicalObjectLifecycle.TryCreateThrowSolution(
+                presentation.Target,
+                aimPoint,
+                presentation.Charge01,
+                out solution);
+        }
+
+        public bool TryBuildThrowTrajectoryPreview(
+            Vector3[] positions,
+            out int positionCount)
+        {
+            positionCount = 0;
+            if (positions == null || positions.Length < 2 ||
+                !TryGetThrowPreview(out PrototypeThrowSolution solution))
+            {
+                return false;
+            }
+
+            const float sampleInterval = 0.075f;
+            PrototypeInteractionTarget ignoredTarget = ThrowPresentation.Target;
+            positions[positionCount++] = solution.Origin;
+            Vector3 previous = solution.Origin;
+            for (int index = 1; index < positions.Length; index++)
+            {
+                Vector3 next = solution.PositionAt(index * sampleInterval);
+                if (TryResolveTrajectoryCollision(
+                        previous,
+                        next,
+                        ignoredTarget,
+                        out Vector3 collisionPoint))
+                {
+                    positions[positionCount++] = collisionPoint;
+                    break;
+                }
+
+                positions[positionCount++] = next;
+                previous = next;
+            }
+            return positionCount >= 2;
+        }
 
         private void Awake()
         {
@@ -243,6 +318,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
+            interactionOwner.SynchronizeWeaponSelection();
             UpdateThrowPresentationLifecycle();
             ValidateThrowChargeOwnership();
             if (logicalInput == null)
@@ -259,6 +335,10 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
+            ProcessWeaponSelection(
+                logicalInput.Snapshot.SelectFists,
+                logicalInput.Snapshot.SelectObjectWeapon);
+
             bool pointerActionAvailable = true;
 #if UNITY_WEBGL && !UNITY_EDITOR
             // The first trusted click after an Escape/focus loss is reserved for
@@ -270,10 +350,28 @@ namespace BreakNotice.Gameplay.Interaction
             pointerActionAvailable = pointerCaptured && !pointerJustCaptured;
 #endif
 
+            if (showcaseCargoStrapController != null &&
+                showcaseCargoStrapController.IsActionLocked)
+            {
+                if (logicalInput.Snapshot.StrapRelease)
+                {
+                    ProcessStrapRelease();
+                }
+                if (pointerActionAvailable && logicalInput.Snapshot.Throw &&
+                    (showcaseCargoStrapController.IsAttackActive ||
+                     showcaseCargoStrapController.IsSmallSpinning))
+                {
+                    ProcessAttackPressed();
+                }
+                ClearThrowCharge();
+                return;
+            }
+
             if (showcasePlayerCombatController != null &&
                 showcasePlayerCombatController.BlocksInteraction)
             {
                 if (pointerActionAvailable && logicalInput.Snapshot.Throw &&
+                    WeaponSelection == PrototypeWeaponSelection.Fists &&
                     showcasePlayerCombatController.CanBufferMelee)
                 {
                     showcaseRunnerPressureController?.TryPlayerShove();
@@ -291,11 +389,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (logicalInput.Snapshot.Throw && pointerActionAvailable)
             {
-                if (showcaseRunnerPressureController == null ||
-                    !showcaseRunnerPressureController.TryPlayerShove())
-                {
-                    BeginThrowCharge();
-                }
+                ProcessAttackPressed();
             }
 
             if (logicalInput.Snapshot.StrapRelease)
@@ -447,6 +541,66 @@ namespace BreakNotice.Gameplay.Interaction
             showcasePlayerCombatController = playerCombat;
         }
 
+        public bool ProcessWeaponSelection(
+            bool selectFists,
+            bool selectObjectWeapon)
+        {
+            if (interactionOwner == null || selectFists == selectObjectWeapon ||
+                (showcaseCargoStrapController != null &&
+                 showcaseCargoStrapController.IsActionLocked &&
+                 !showcaseCargoStrapController.IsSmallSpinning) ||
+                (showcasePlayerCombatController != null &&
+                 showcasePlayerCombatController.BlocksInteraction))
+            {
+                return false;
+            }
+
+            if (selectObjectWeapon)
+            {
+                ClearThrowCharge();
+                return interactionOwner.TrySelectWeapon(
+                    PrototypeWeaponSelection.ObjectWeapon);
+            }
+
+            if (interactionOwner.HandState == PrototypeHandOwnershipState.Carrying)
+            {
+                if (physicalObjectLifecycle == null ||
+                    !physicalObjectLifecycle.TryDropCarriedTarget())
+                {
+                    return false;
+                }
+            }
+
+            ClearThrowCharge();
+            return interactionOwner.TrySelectWeapon(PrototypeWeaponSelection.Fists);
+        }
+
+        public bool ProcessAttackPressed()
+        {
+            if (interactionOwner == null || interactionOwner.BlocksNewInteraction)
+            {
+                return false;
+            }
+
+            if (WeaponSelection == PrototypeWeaponSelection.ObjectWeapon &&
+                showcaseCargoStrapController != null &&
+                interactionOwner.StrapTarget != null &&
+                interactionOwner.ObjectWeaponTarget == interactionOwner.StrapTarget)
+            {
+                return showcaseCargoStrapController.TryBeginAttack(
+                    ResolveFrozenThrowAimPoint(interactionOwner.StrapTarget));
+            }
+
+            return WeaponSelection switch
+            {
+                PrototypeWeaponSelection.Fists =>
+                    showcaseRunnerPressureController != null &&
+                    showcaseRunnerPressureController.TryPlayerShove(),
+                PrototypeWeaponSelection.ObjectWeapon => BeginThrowCharge(),
+                _ => false
+            };
+        }
+
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)
         {
             // The centre reticle ray remains the first-priority selector. When it
@@ -504,7 +658,7 @@ namespace BreakNotice.Gameplay.Interaction
                 strapContextEnabled &&
                 isAiming &&
                 CurrentTarget != null &&
-                CurrentTarget.HasLoadBearingMetalAnchor &&
+                CurrentTarget.IsCargoStrapEligible &&
                 interactionOwner.RelayState == PrototypeRelayReservationState.None &&
                 (showcaseCargoStrapController == null ||
                  showcaseCargoStrapController.CanDirectAttach(CurrentTarget));
@@ -523,8 +677,12 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeInteractionDecision decision = arbitrator.Decide(context);
             bool queuedCatch = decision.Outcome == PrototypeInteractionOutcome.Catch &&
                                interactionOwner.QueuedThrowArmed;
+            bool deferredStrapCommit = decision.IsAccepted &&
+                decision.Outcome == PrototypeInteractionOutcome.AttachStrap &&
+                showcaseCargoStrapController != null;
 
-            if (decision.IsAccepted && !interactionOwner.TryCommit(decision))
+            if (decision.IsAccepted && !deferredStrapCommit &&
+                !interactionOwner.TryCommit(decision))
             {
                 decision = PrototypeInteractionDecision.Reject(
                     PrototypeInteractionRejection.OwnershipConflict,
@@ -608,7 +766,7 @@ namespace BreakNotice.Gameplay.Interaction
                      decision.Outcome == PrototypeInteractionOutcome.AttachStrap)
             {
                 if (showcaseCargoStrapController != null &&
-                    !showcaseCargoStrapController.NotifyDirectAttachment(decision.Target))
+                    !showcaseCargoStrapController.TryBeginDirectAttach(decision.Target))
                 {
                     decision = PrototypeInteractionDecision.Reject(
                         PrototypeInteractionRejection.OwnershipConflict,
@@ -627,7 +785,8 @@ namespace BreakNotice.Gameplay.Interaction
         public bool ProcessThrow(float charge01)
         {
             if (interactionOwner == null ||
-                interactionOwner.BlocksNewInteraction)
+                interactionOwner.BlocksNewInteraction ||
+                WeaponSelection != PrototypeWeaponSelection.ObjectWeapon)
             {
                 return false;
             }
@@ -659,7 +818,7 @@ namespace BreakNotice.Gameplay.Interaction
                         PrototypeThrowPresentationPhase.ChargingDirectCarry &&
                     throwPresentationTarget == directTarget)
                 {
-                    MarkDirectThrowReleaseAccepted(charge01);
+                    MarkDirectThrowReleaseAccepted(charge01, aimPoint);
                 }
                 ClearThrowCharge(false);
             }
@@ -672,6 +831,7 @@ namespace BreakNotice.Gameplay.Interaction
             ValidateThrowChargeOwnership();
             if (interactionOwner == null ||
                 interactionOwner.BlocksNewInteraction ||
+                WeaponSelection != PrototypeWeaponSelection.ObjectWeapon ||
                 HasThrowCharge)
             {
                 return false;
@@ -679,6 +839,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             ThrowChargeMode mode;
             if (interactionOwner.HandState == PrototypeHandOwnershipState.Carrying &&
+                WeaponSelection == PrototypeWeaponSelection.ObjectWeapon &&
                 interactionOwner.CarriedTarget != null &&
                 physicalObjectLifecycle != null &&
                 physicalObjectLifecycle.CarriedTarget == interactionOwner.CarriedTarget)
@@ -844,6 +1005,7 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             bool valid = !interactionOwner.BlocksNewInteraction &&
+                WeaponSelection == PrototypeWeaponSelection.ObjectWeapon &&
                 (throwChargeMode switch
                 {
                     ThrowChargeMode.DirectCarry =>
@@ -906,13 +1068,15 @@ namespace BreakNotice.Gameplay.Interaction
             throwPresentationPhase =
                 PrototypeThrowPresentationPhase.ChargingDirectCarry;
             throwPresentationTarget = target;
+            throwPresentationAimPoint = Vector3.zero;
             throwPresentationStartedAt = Time.unscaledTime;
             throwPresentationReleasedAt = 0f;
         }
 
-        private void MarkDirectThrowReleaseAccepted(float charge01)
+        private void MarkDirectThrowReleaseAccepted(float charge01, Vector3 aimPoint)
         {
             frozenThrowCharge01 = Mathf.Clamp01(charge01);
+            throwPresentationAimPoint = aimPoint;
             throwPresentationPhase =
                 PrototypeThrowPresentationPhase.ReleaseAccepted;
             throwPresentationReleasedAt = Time.unscaledTime;
@@ -952,6 +1116,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             throwPresentationPhase = PrototypeThrowPresentationPhase.None;
             throwPresentationTarget = null;
+            throwPresentationAimPoint = Vector3.zero;
             throwPresentationStartedAt = 0f;
             throwPresentationReleasedAt = 0f;
         }
@@ -1060,6 +1225,49 @@ namespace BreakNotice.Gameplay.Interaction
                 }
             }
             return aimPoint;
+        }
+
+        private bool TryResolveTrajectoryCollision(
+            Vector3 start,
+            Vector3 end,
+            PrototypeInteractionTarget ignoredTarget,
+            out Vector3 collisionPoint)
+        {
+            Vector3 segment = end - start;
+            float distance = segment.magnitude;
+            if (distance <= 0.0001f)
+            {
+                collisionPoint = default;
+                return false;
+            }
+
+            int hitCount = Physics.RaycastNonAlloc(
+                start,
+                segment / distance,
+                visibilityHits,
+                distance,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            float nearestDistance = float.PositiveInfinity;
+            collisionPoint = default;
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = visibilityHits[index];
+                if (hit.collider == null || BelongsToPlayer(hit.collider) ||
+                    (ignoredTarget != null &&
+                     (hit.collider.transform == ignoredTarget.transform ||
+                      hit.collider.transform.IsChildOf(ignoredTarget.transform))))
+                {
+                    continue;
+                }
+
+                if (hit.distance < nearestDistance)
+                {
+                    nearestDistance = hit.distance;
+                    collisionPoint = hit.point;
+                }
+            }
+            return !float.IsInfinity(nearestDistance);
         }
 
         private bool TryResolveManualPickupAssist(Vector3 interactionOrigin)

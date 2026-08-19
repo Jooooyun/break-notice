@@ -16,7 +16,12 @@ namespace BreakNotice.Gameplay.Combat
         private PrototypeAllyRelayController allyRelay;
 
         [SerializeField]
+        private ShowcaseCargoStrapController cargoStrap;
+
+        [SerializeField]
         private ShowcaseBoneCombatRig boneCombatRig;
+
+        private uint cargoStrapAnimationRevision;
 
         public int CombatHitInvocationCount { get; private set; }
         public int ThrowReleaseInvocationCount { get; private set; }
@@ -29,16 +34,36 @@ namespace BreakNotice.Gameplay.Combat
         public int ComboBufferCloseInvocationCount { get; private set; }
         public int LungeWindowOpenInvocationCount { get; private set; }
         public int LungeWindowCloseInvocationCount { get; private set; }
+        public int StrapThrowReleaseInvocationCount { get; private set; }
+        public int StrapAttachContactInvocationCount { get; private set; }
+        public int StrapPullCompleteInvocationCount { get; private set; }
+        public int StrapAttackImpulseInvocationCount { get; private set; }
+        public int StrapActionCompleteInvocationCount { get; private set; }
+        public uint CargoStrapAnimationRevision => cargoStrapAnimationRevision;
+
+        private void Awake()
+        {
+            cargoStrap ??= GetComponentInParent<ShowcaseCargoStrapController>();
+            boneCombatRig ??= GetComponentInParent<ShowcaseBoneCombatRig>();
+        }
 
         public void Configure(
             ShowcasePlayerCombatController authoredPlayerCombat,
             ShowcaseRunnerAgent authoredRunnerAgent,
-            PrototypeAllyRelayController authoredAllyRelay = null)
+            PrototypeAllyRelayController authoredAllyRelay = null,
+            ShowcaseCargoStrapController authoredCargoStrap = null)
         {
             playerCombat = authoredPlayerCombat;
             runnerAgent = authoredRunnerAgent;
             allyRelay = authoredAllyRelay;
+            cargoStrap = authoredCargoStrap ??
+                GetComponentInParent<ShowcaseCargoStrapController>();
             boneCombatRig = GetComponentInParent<ShowcaseBoneCombatRig>();
+        }
+
+        public void SetCargoStrapAnimationRevision(uint revision)
+        {
+            cargoStrapAnimationRevision = revision;
         }
 
         public void ShowcaseCombatHit()
@@ -58,7 +83,11 @@ namespace BreakNotice.Gameplay.Combat
         public void ShowcaseAttackWindowClose()
         {
             AttackWindowCloseInvocationCount++;
+            uint closingSequence = boneCombatRig != null
+                ? boneCombatRig.ActiveAttackSequence
+                : 0;
             boneCombatRig?.CloseAttackWindow();
+            runnerAgent?.NotifyAttackWindowClosed(closingSequence);
         }
 
         public void ShowcaseComboBufferOpen()
@@ -122,6 +151,41 @@ namespace BreakNotice.Gameplay.Combat
         {
             AllySupplyReleaseInvocationCount++;
             allyRelay?.CommitAnimationSupplyRelease();
+        }
+
+        public void ShowcaseStrapThrowRelease()
+        {
+            StrapThrowReleaseInvocationCount++;
+            cargoStrap?.CommitAnimationStrapThrowRelease(
+                cargoStrapAnimationRevision);
+        }
+
+        public void ShowcaseStrapAttachContact()
+        {
+            StrapAttachContactInvocationCount++;
+            cargoStrap?.CommitAnimationStrapAttachContact(
+                cargoStrapAnimationRevision);
+        }
+
+        public void ShowcaseStrapPullComplete()
+        {
+            StrapPullCompleteInvocationCount++;
+            cargoStrap?.CommitAnimationStrapPullComplete(
+                cargoStrapAnimationRevision);
+        }
+
+        public void ShowcaseStrapAttackImpulse()
+        {
+            StrapAttackImpulseInvocationCount++;
+            cargoStrap?.CommitAnimationStrapAttackImpulse(
+                cargoStrapAnimationRevision);
+        }
+
+        public void ShowcaseStrapActionComplete()
+        {
+            StrapActionCompleteInvocationCount++;
+            cargoStrap?.CompleteAnimationStrapAction(
+                cargoStrapAnimationRevision);
         }
     }
 }

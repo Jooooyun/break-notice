@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.7164618">
+  <test-suite type="TestSuite" id="1179" name="Game" fullname="Game" runstate="Runnable" testcasecount="149" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.716462" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1172" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="149" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.702793" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="31736" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1173" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="149" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.700976" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1174" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="149" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.699638" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1175" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="149" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.698202" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1057" name="ContestChr01SupplyAnimationSyncPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:54Z" duration="18.692931" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1058" name="BinderFetchReadyAndRelease_CommitsAtOneOwnedTransitionBoundary" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.BinderFetchReadyAndRelease_CommitsAtOneOwnedTransitionBoundary" methodname="BinderFetchReadyAndRelease_CommitsAtOneOwnedTransitionBoundary" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="269642227" result="Passed" start-time="2026-08-17 17:06:35Z" end-time="2026-08-17 17:06:42Z" duration="6.769889" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+]]></output>
+              </test-case>
+              <test-case id="1059" name="ChairFetchReadyAndFeed_UsesMonotonicPostIkGripWithoutMovingChair" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.ChairFetchReadyAndFeed_UsesMonotonicPostIkGripWithoutMovingChair" methodname="ChairFetchReadyAndFeed_UsesMonotonicPostIkGripWithoutMovingChair" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="968030576" result="Passed" start-time="2026-08-17 17:06:42Z" end-time="2026-08-17 17:06:53Z" duration="10.397273" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+CHR01 CHAIR HOLDING SUMMARY: Samples=3, RawL=0.033508, RawR=0.034190, ContactL=0.000002, ContactR=0.000001.
+CHR01 CHAIR LONG HOLD SUMMARY: AppliedFrames=8306, IdleNormalized=0.050->1.000, GoalStepMax=0.000005, ContactStepMax=0.000005, RawResidualMax=0.034529, RenderedContactErrorMax=0.001546.
+]]></output>
+              </test-case>
+              <test-case id="1060" name="ChairGrip_ResetAndAnimatorDisableClearHoldingState" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.ChairGrip_ResetAndAnimatorDisableClearHoldingState" methodname="ChairGrip_ResetAndAnimatorDisableClearHoldingState" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="1016101196" result="Passed" start-time="2026-08-17 17:06:53Z" end-time="2026-08-17 17:06:54Z" duration="1.500324" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+]]></output>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1064" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-17 17:06:54Z" end-time="2026-08-17 17:06:54Z" duration="0.008345" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1061" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(0.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(0.0f)" methodname="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="1565179972" result="Passed" start-time="2026-08-17 17:06:54Z" end-time="2026-08-17 17:06:54Z" duration="0.004140" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1062" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(45.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(45.0f)" methodname="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="1161411209" result="Passed" start-time="2026-08-17 17:06:54Z" end-time="2026-08-17 17:06:54Z" duration="0.000247" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1063" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(90.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(90.0f)" methodname="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="1088987664" result="Passed" start-time="2026-08-17 17:06:54Z" end-time="2026-08-17 17:06:54Z" duration="0.000247" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

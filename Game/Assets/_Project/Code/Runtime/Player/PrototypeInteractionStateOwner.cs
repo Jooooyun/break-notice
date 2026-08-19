@@ -17,6 +17,9 @@ namespace BreakNotice.Gameplay.Interaction
         public PrototypeRelayReservationState RelayState { get; private set; } =
             PrototypeRelayReservationState.None;
 
+        public PrototypeWeaponSelection WeaponSelection { get; private set; } =
+            PrototypeWeaponSelection.Fists;
+
         public PrototypeInteractionTarget CarriedTarget { get; private set; }
 
         public PrototypeInteractionTarget AcquisitionCommittedTarget { get; private set; }
@@ -32,6 +35,28 @@ namespace BreakNotice.Gameplay.Interaction
         public bool BlocksNewInteraction =>
             GlobalState == PrototypeGlobalInteractionState.FailurePending ||
             GlobalState == PrototypeGlobalInteractionState.ResetPending;
+
+        public PrototypeInteractionTarget ObjectWeaponTarget
+        {
+            get
+            {
+                if (IsAvailableObjectWeaponTarget(CarriedTarget))
+                {
+                    return CarriedTarget;
+                }
+
+                if (StrapState != PrototypeStrapOwnershipState.Stored &&
+                    IsAvailableObjectWeaponTarget(StrapTarget))
+                {
+                    return StrapTarget;
+                }
+
+                return RelayState == PrototypeRelayReservationState.Active &&
+                       IsAvailableObjectWeaponTarget(RelayReservedTarget)
+                    ? RelayReservedTarget
+                    : null;
+            }
+        }
 
         public PrototypeInteractionContext CreateContext(
             bool explicitStrapContext,
@@ -70,10 +95,12 @@ namespace BreakNotice.Gameplay.Interaction
 
                     AcquisitionCommittedTarget = decision.Target;
                     HandState = PrototypeHandOwnershipState.AcquisitionCommitted;
+                    WeaponSelection = PrototypeWeaponSelection.ObjectWeapon;
                     return true;
 
                 case PrototypeInteractionOutcome.Catch:
                     if (!decision.Target.CatchEligible ||
+                        decision.Target.WeightClass == PrototypeWeightClass.Heavy ||
                         RelayState != PrototypeRelayReservationState.Active ||
                         RelayReservedTarget != decision.Target)
                     {
@@ -94,12 +121,12 @@ namespace BreakNotice.Gameplay.Interaction
                         HandState = PrototypeHandOwnershipState.AcquisitionCommitted;
                     }
 
+                    WeaponSelection = PrototypeWeaponSelection.ObjectWeapon;
+
                     return true;
 
                 case PrototypeInteractionOutcome.AttachStrap:
-                    if (!decision.Target.StrapEligible ||
-                        !decision.Target.HasLoadBearingMetalAnchor ||
-                        decision.Target.WeightClass != PrototypeWeightClass.Medium)
+                    if (!decision.Target.IsCargoStrapEligible)
                     {
                         return false;
                     }
@@ -119,6 +146,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             target = CarriedTarget;
             if (BlocksNewInteraction ||
+                WeaponSelection != PrototypeWeaponSelection.ObjectWeapon ||
                 HandState != PrototypeHandOwnershipState.Carrying ||
                 target == null ||
                 StrapState != PrototypeStrapOwnershipState.Stored)
@@ -141,6 +169,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             CarriedTarget = null;
             HandState = PrototypeHandOwnershipState.Free;
+            SynchronizeWeaponSelection();
             return true;
         }
 
@@ -157,6 +186,7 @@ namespace BreakNotice.Gameplay.Interaction
             AcquisitionCommittedTarget = null;
             CarriedTarget = target;
             HandState = PrototypeHandOwnershipState.Carrying;
+            WeaponSelection = PrototypeWeaponSelection.ObjectWeapon;
             return true;
         }
 
@@ -170,6 +200,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             AcquisitionCommittedTarget = null;
             HandState = PrototypeHandOwnershipState.Free;
+            SynchronizeWeaponSelection();
             return true;
         }
 
@@ -183,6 +214,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             ThrowCommittedTarget = null;
             HandState = PrototypeHandOwnershipState.Free;
+            SynchronizeWeaponSelection();
             return true;
         }
 
@@ -190,6 +222,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             if (target == null ||
                 BlocksNewInteraction ||
+                target.WeightClass == PrototypeWeightClass.Heavy ||
                 HandState != PrototypeHandOwnershipState.Free ||
                 StrapState != PrototypeStrapOwnershipState.Stored ||
                 RelayState != PrototypeRelayReservationState.None ||
@@ -200,6 +233,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             RelayReservedTarget = target;
             RelayState = PrototypeRelayReservationState.Active;
+            WeaponSelection = PrototypeWeaponSelection.ObjectWeapon;
             return true;
         }
 
@@ -208,6 +242,7 @@ namespace BreakNotice.Gameplay.Interaction
             RelayReservedTarget = null;
             RelayState = PrototypeRelayReservationState.None;
             QueuedThrowArmed = false;
+            SynchronizeWeaponSelection();
         }
 
         public bool TryCompleteRelayCatchReservation(
@@ -223,6 +258,7 @@ namespace BreakNotice.Gameplay.Interaction
             RelayReservedTarget = null;
             RelayState = PrototypeRelayReservationState.None;
             QueuedThrowArmed = false;
+            SynchronizeWeaponSelection();
             return true;
         }
 
@@ -238,6 +274,7 @@ namespace BreakNotice.Gameplay.Interaction
             RelayReservedTarget = null;
             RelayState = PrototypeRelayReservationState.None;
             QueuedThrowArmed = false;
+            SynchronizeWeaponSelection();
             return true;
         }
 
@@ -267,6 +304,34 @@ namespace BreakNotice.Gameplay.Interaction
 
             StrapTarget = null;
             StrapState = PrototypeStrapOwnershipState.Stored;
+            SynchronizeWeaponSelection();
+            return true;
+        }
+
+        public bool TryBeginStrapRelease(PrototypeInteractionTarget target)
+        {
+            if (BlocksNewInteraction || target == null || StrapTarget != target ||
+                (StrapState != PrototypeStrapOwnershipState.Attached &&
+                 StrapState != PrototypeStrapOwnershipState.Tensioned))
+            {
+                return false;
+            }
+
+            StrapState = PrototypeStrapOwnershipState.ReleaseRequested;
+            return true;
+        }
+
+        public bool TryCompleteStrapRelease(PrototypeInteractionTarget target)
+        {
+            if (target == null || StrapTarget != target ||
+                StrapState != PrototypeStrapOwnershipState.ReleaseRequested)
+            {
+                return false;
+            }
+
+            StrapTarget = null;
+            StrapState = PrototypeStrapOwnershipState.Stored;
+            SynchronizeWeaponSelection();
             return true;
         }
 
@@ -282,6 +347,48 @@ namespace BreakNotice.Gameplay.Interaction
 
             StrapState = PrototypeStrapOwnershipState.Tensioned;
             return true;
+        }
+
+        public bool TrySelectWeapon(PrototypeWeaponSelection selection)
+        {
+            if (BlocksNewInteraction)
+            {
+                return false;
+            }
+
+            if (selection == PrototypeWeaponSelection.Fists)
+            {
+                if (HandState != PrototypeHandOwnershipState.Free ||
+                    RelayState != PrototypeRelayReservationState.None)
+                {
+                    return false;
+                }
+
+                WeaponSelection = PrototypeWeaponSelection.Fists;
+                return true;
+            }
+
+            PrototypeInteractionTarget objectTarget = ObjectWeaponTarget;
+            if (!IsAvailableObjectWeaponTarget(objectTarget))
+            {
+                return false;
+            }
+
+            WeaponSelection = PrototypeWeaponSelection.ObjectWeapon;
+            return true;
+        }
+
+        public void SynchronizeWeaponSelection()
+        {
+            if (WeaponSelection != PrototypeWeaponSelection.ObjectWeapon ||
+                ObjectWeaponTarget != null ||
+                AcquisitionCommittedTarget != null ||
+                ThrowCommittedTarget != null)
+            {
+                return;
+            }
+
+            WeaponSelection = PrototypeWeaponSelection.Fists;
         }
 
         public bool TryBeginFailurePending()
@@ -322,8 +429,18 @@ namespace BreakNotice.Gameplay.Interaction
             StrapTarget = null;
             RelayReservedTarget = null;
             QueuedThrowArmed = false;
+            WeaponSelection = PrototypeWeaponSelection.Fists;
             GlobalState = PrototypeGlobalInteractionState.Playable;
             return true;
+        }
+
+        private static bool IsAvailableObjectWeaponTarget(
+            PrototypeInteractionTarget target)
+        {
+            return target != null &&
+                   target.WeightClass != PrototypeWeightClass.Heavy &&
+                   !target.IsPlayerThrowExhausted &&
+                   target.gameObject.activeInHierarchy;
         }
     }
 }

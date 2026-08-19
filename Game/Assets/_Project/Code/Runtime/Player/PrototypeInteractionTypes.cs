@@ -48,6 +48,12 @@ namespace BreakNotice.Gameplay.Interaction
         CatchCommitted = 2
     }
 
+    public enum PrototypeWeaponSelection
+    {
+        Fists,
+        ObjectWeapon
+    }
+
     public enum PrototypeAllySupportState
     {
         Ready,

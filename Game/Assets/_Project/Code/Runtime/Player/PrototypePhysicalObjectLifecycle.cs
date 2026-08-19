@@ -123,6 +123,7 @@ namespace BreakNotice.Gameplay.Interaction
         private BoxCollider queuedAnimationThrowBoxCollider;
         private bool queuedAnimationOriginalIsKinematic;
         private bool queuedAnimationOriginalUseGravity;
+        private RigidbodyConstraints queuedAnimationOriginalConstraints;
         private int carriedOriginalLayer;
         private bool carriedCameraCollisionIgnored;
         private bool playerPropGripConfigured;
@@ -358,6 +359,7 @@ namespace BreakNotice.Gameplay.Interaction
             body.useGravity = false;
             body.isKinematic = true;
             activeQueuedAnimationCollisionLease = AcquireCarryCollisionLease(target, body);
+            queuedAnimationOriginalConstraints = body.constraints;
             EnsureCollisionLeaseIgnored(activeQueuedAnimationCollisionLease);
             ResetGripDiagnostics();
             return true;
@@ -370,6 +372,9 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 body.isKinematic = queuedAnimationOriginalIsKinematic;
                 body.useGravity = queuedAnimationOriginalUseGravity;
+                activeQueuedAnimationCollisionLease?.HoldRotationUntilRestore(
+                    body,
+                    queuedAnimationOriginalConstraints);
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
                 if (!body.isKinematic)
@@ -387,6 +392,7 @@ namespace BreakNotice.Gameplay.Interaction
             queuedAnimationThrowBoxCollider = null;
             queuedAnimationOriginalIsKinematic = false;
             queuedAnimationOriginalUseGravity = false;
+            queuedAnimationOriginalConstraints = RigidbodyConstraints.None;
             ResetGripDiagnostics();
         }
 
@@ -441,6 +447,7 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 queuedBody.isKinematic = queuedAnimationOriginalIsKinematic;
                 queuedBody.useGravity = queuedAnimationOriginalUseGravity;
+                queuedBody.constraints = queuedAnimationOriginalConstraints;
                 queuedBody.linearVelocity = Vector3.zero;
                 queuedBody.angularVelocity = Vector3.zero;
                 if (!queuedBody.isKinematic)
@@ -461,6 +468,7 @@ namespace BreakNotice.Gameplay.Interaction
             queuedAnimationThrowBoxCollider = null;
             queuedAnimationOriginalIsKinematic = false;
             queuedAnimationOriginalUseGravity = false;
+            queuedAnimationOriginalConstraints = RigidbodyConstraints.None;
 
             SetCarriedCameraCollisionIgnored(false);
             Rigidbody body = carriedBody;
@@ -649,6 +657,43 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        public bool TryDropCarriedTarget()
+        {
+            if (carriedTarget == null ||
+                carriedBody == null ||
+                interactionOwner == null ||
+                interactionOwner.BlocksNewInteraction ||
+                interactionOwner.HandState != PrototypeHandOwnershipState.Carrying ||
+                interactionOwner.CarriedTarget != carriedTarget ||
+                carriedTarget.GetComponent<Rigidbody>() != carriedBody)
+            {
+                return false;
+            }
+
+            PrototypeInteractionTarget target = carriedTarget;
+            Rigidbody body = carriedBody;
+            SetCarriedCameraCollisionIgnored(false);
+            if (playerPropGripRig != null &&
+                !playerPropGripRig.CancelAction(target, false))
+            {
+                playerPropGripRig.ResetRuntimeState();
+            }
+            body.isKinematic = false;
+            body.useGravity = true;
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            body.WakeUp();
+            QueueActiveCollisionLeaseForRestore(body);
+
+            carriedTarget = null;
+            carriedBody = null;
+            carriedCollider = null;
+            carriedBoxCollider = null;
+            AcquisitionPathLength = 0f;
+            ResetGripDiagnostics();
+            return interactionOwner.CancelCarry(target);
+        }
+
         public bool TryThrow(Vector3 requestedDirection, float charge01 = 0f)
         {
             Vector3 direction = requestedDirection.sqrMagnitude > 0.0001f
@@ -801,6 +846,65 @@ namespace BreakNotice.Gameplay.Interaction
                 Mathf.Clamp01(charge01));
         }
 
+        public bool TryCreateThrowSolution(
+            PrototypeInteractionTarget target,
+            Vector3 aimPoint,
+            float charge01,
+            out PrototypeThrowSolution solution)
+        {
+            Rigidbody body = target != null ? target.GetComponent<Rigidbody>() : null;
+            if (body == null)
+            {
+                solution = default;
+                return false;
+            }
+
+            Vector3 direction = ResolveAimDirection(body.worldCenterOfMass, aimPoint);
+            solution = CreateThrowSolution(target, body, direction, charge01);
+            return solution.IsValid;
+        }
+
+        public bool TryLaunchReleasedStrapTargetAt(
+            PrototypeInteractionTarget target,
+            Vector3 aimPoint,
+            float charge01 = 0f)
+        {
+            if (target == null || !target.gameObject.activeInHierarchy ||
+                target.IsPlayerThrowExhausted || interactionOwner == null ||
+                interactionOwner.StrapState != PrototypeStrapOwnershipState.Stored ||
+                interactionOwner.StrapTarget != null ||
+                target == carriedTarget || target == queuedAnimationThrowTarget)
+            {
+                return false;
+            }
+
+            Rigidbody body = target.GetComponent<Rigidbody>();
+            if (body == null)
+            {
+                return false;
+            }
+
+            Vector3 direction = ResolveAimDirection(body.worldCenterOfMass, aimPoint);
+            PrototypeThrowSolution solution = CreateThrowSolution(
+                target,
+                body,
+                direction,
+                charge01);
+            if (!solution.IsValid)
+            {
+                return false;
+            }
+
+            CarryCollisionLease releaseLease = AcquireCarryCollisionLease(target, body);
+            EnsureCollisionLeaseIgnored(releaseLease);
+            body.isKinematic = false;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            body.interpolation = RigidbodyInterpolation.Interpolate;
+            ApplyPhysicalThrow(target, body, direction, charge01);
+            QueueCollisionLeaseForRestore(ref releaseLease, body);
+            return true;
+        }
+
         private void ApplyPhysicalThrow(
             PrototypeInteractionTarget target,
             Rigidbody body,
@@ -812,8 +916,12 @@ namespace BreakNotice.Gameplay.Interaction
                 : transform.forward;
             float clampedCharge = Mathf.Clamp01(charge01);
             float speedMultiplier = GetThrowSpeedMultiplier(clampedCharge);
-            float throwSpeed = GetThrowSpeed(target.WeightClass) * speedMultiplier;
-            Vector3 releaseVelocity = direction * throwSpeed;
+            PrototypeThrowSolution solution = CreateThrowSolution(
+                target,
+                body,
+                direction,
+                clampedCharge);
+            Vector3 releaseVelocity = solution.InitialVelocity;
 
             body.isKinematic = false;
             body.useGravity = true;
@@ -829,6 +937,13 @@ namespace BreakNotice.Gameplay.Interaction
             body.WakeUp();
 
             nextThrowOriginSequence++;
+            if (!target.TryCommitSuccessfulPlayerThrow(nextThrowOriginSequence))
+            {
+                Debug.LogError(
+                    $"PLAYER THROW USE COMMIT FAILED: {target.RuntimeInstanceKey} / " +
+                    $"{nextThrowOriginSequence}.",
+                    target);
+            }
             LastThrowOrigin = new PlayerThrowOrigin(
                 nextThrowOriginSequence,
                 target.ContentDefinitionId,
@@ -847,6 +962,21 @@ namespace BreakNotice.Gameplay.Interaction
                 body.linearVelocity,
                 body.angularVelocity,
                 clampedCharge);
+        }
+
+        private PrototypeThrowSolution CreateThrowSolution(
+            PrototypeInteractionTarget target,
+            Rigidbody body,
+            Vector3 direction,
+            float charge01)
+        {
+            float throwSpeed = GetThrowSpeed(target.WeightClass, charge01);
+            return PrototypeThrowBallistics.Solve(
+                body.worldCenterOfMass,
+                direction,
+                throwSpeed,
+                transform.forward,
+                Physics.gravity);
         }
 
         public void DetachForReset()
@@ -984,6 +1114,7 @@ namespace BreakNotice.Gameplay.Interaction
                 }
 
                 EnsureCollisionLeaseIgnored(lease);
+                lease.StabilizeBodyRotation();
                 bool movingTowardPlayer = IsReleasedBodyMovingTowardPlayer(lease);
                 if (IsCollisionLeaseClear(lease) && !movingTowardPlayer)
                 {
@@ -1594,6 +1725,7 @@ namespace BreakNotice.Gameplay.Interaction
 
                 pendingCollisionRestores.RemoveAt(index);
                 pending.Body = body;
+                pending.RestoreBodyConstraints();
                 pending.CaptureFallbackPose(body);
                 pending.ClearFixedSteps = 0;
                 pending.HasLastDistance = false;
@@ -1688,6 +1820,7 @@ namespace BreakNotice.Gameplay.Interaction
                     Physics.IgnoreCollision(pair.Player, pair.Target, false);
                 }
             }
+            lease.RestoreBodyConstraints();
         }
 
         private void RestoreCollisionLeaseSafely(
@@ -1756,6 +1889,15 @@ namespace BreakNotice.Gameplay.Interaction
                     continue;
                 }
 
+                if (pending.HasConstraintsToRestore &&
+                    TryRestorePendingCollisionLeaseAtFallbackPose(
+                        pending,
+                        pendingBody))
+                {
+                    RestoreCollisionLease(pending);
+                    continue;
+                }
+
                 QuarantineCollisionLease(
                     ref pending,
                     pendingBody,
@@ -1763,6 +1905,33 @@ namespace BreakNotice.Gameplay.Interaction
                         ? MissingBodyQuarantineReason
                         : PendingLeaseQuarantineReason);
             }
+        }
+
+        private bool TryRestorePendingCollisionLeaseAtFallbackPose(
+            CarryCollisionLease lease,
+            Rigidbody body)
+        {
+            if (lease == null || body == null || !lease.HasFallbackPose)
+            {
+                return false;
+            }
+
+            Vector3 startPosition = body.position;
+            Quaternion startRotation = body.rotation;
+            ApplyBodyPoseImmediately(
+                body,
+                lease.FallbackPosition,
+                lease.FallbackRotation);
+            if (IsCollisionLeaseClear(lease) &&
+                IsCollisionLeaseWorldSafe(lease, body))
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+                return true;
+            }
+
+            ApplyBodyPoseImmediately(body, startPosition, startRotation);
+            return false;
         }
 
         private bool IsCollisionLeaseWorldSafe(
@@ -2266,6 +2435,11 @@ namespace BreakNotice.Gameplay.Interaction
 
         private sealed class CarryCollisionLease
         {
+            private const RigidbodyConstraints QueuedCancelStabilization =
+                RigidbodyConstraints.FreezePositionX |
+                RigidbodyConstraints.FreezePositionZ |
+                RigidbodyConstraints.FreezeRotation;
+
             public CarryCollisionLease(
                 uint token,
                 PrototypeInteractionTarget target,
@@ -2295,12 +2469,53 @@ namespace BreakNotice.Gameplay.Interaction
             public bool HasFallbackPose { get; private set; }
             public Vector3 FallbackPosition { get; private set; }
             public Quaternion FallbackRotation { get; private set; }
+            public bool HasConstraintsToRestore { get; private set; }
+            public RigidbodyConstraints ConstraintsToRestore { get; private set; }
 
             public void CaptureFallbackPose(Rigidbody body)
             {
                 HasFallbackPose = body != null;
                 FallbackPosition = body != null ? body.position : default;
                 FallbackRotation = body != null ? body.rotation : Quaternion.identity;
+            }
+
+            public void HoldRotationUntilRestore(
+                Rigidbody body,
+                RigidbodyConstraints originalConstraints)
+            {
+                Body = body;
+                HasConstraintsToRestore = body != null;
+                ConstraintsToRestore = originalConstraints;
+                if (body != null)
+                {
+                    body.constraints = originalConstraints |
+                        QueuedCancelStabilization;
+                    body.angularVelocity = Vector3.zero;
+                }
+            }
+
+            public void StabilizeBodyRotation()
+            {
+                if (HasConstraintsToRestore && Body != null)
+                {
+                    Body.constraints = ConstraintsToRestore |
+                        QueuedCancelStabilization;
+                    Body.angularVelocity = Vector3.zero;
+                }
+            }
+
+            public void RestoreBodyConstraints()
+            {
+                if (!HasConstraintsToRestore)
+                {
+                    return;
+                }
+                if (Body != null)
+                {
+                    Body.constraints = ConstraintsToRestore;
+                }
+                HasConstraintsToRestore = false;
+                ConstraintsToRestore = RigidbodyConstraints.None;
             }
 
             public bool ContainsTargetCollider(Collider value)

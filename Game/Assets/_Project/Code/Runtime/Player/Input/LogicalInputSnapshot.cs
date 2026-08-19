@@ -19,7 +19,11 @@ namespace BreakNotice.Gameplay.Input
             bool regroupAlly = false,
             bool sprint = false,
             bool jump = false,
-            bool restart = false)
+            bool restart = false,
+            bool selectFists = false,
+            bool selectObjectWeapon = false,
+            bool interactPrimaryHeld = false,
+            bool interactPrimaryReleased = false)
         {
             Move = move;
             Look = look;
@@ -36,6 +40,10 @@ namespace BreakNotice.Gameplay.Input
             Sprint = sprint;
             Jump = jump;
             Restart = restart;
+            SelectFists = selectFists;
+            SelectObjectWeapon = selectObjectWeapon;
+            InteractPrimaryHeld = interactPrimaryHeld;
+            InteractPrimaryReleased = interactPrimaryReleased;
         }
 
         public Vector2 Move { get; }
@@ -45,6 +53,10 @@ namespace BreakNotice.Gameplay.Input
         public bool Aim { get; }
 
         public bool InteractPrimary { get; }
+
+        public bool InteractPrimaryHeld { get; }
+
+        public bool InteractPrimaryReleased { get; }
 
         public bool Throw { get; }
 
@@ -67,5 +79,9 @@ namespace BreakNotice.Gameplay.Input
         public bool ResetEncounter { get; }
 
         public bool Restart { get; }
+
+        public bool SelectFists { get; }
+
+        public bool SelectObjectWeapon { get; }
     }
 }

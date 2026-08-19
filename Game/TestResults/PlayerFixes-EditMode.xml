@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.6323206">
+  <test-suite type="TestSuite" id="1000" name="Game" fullname="Game" runstate="Runnable" testcasecount="179" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.632321" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1217" name="BreakNotice.LocomotionCamera.EditModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll" runstate="Runnable" testcasecount="162" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.618714" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="23384" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1218" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="162" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.616759" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1219" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="162" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.615188" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1220" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="162" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.613527" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1086" name="ContestDesignerACharacterIntegrationTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestDesignerACharacterIntegrationTests" classname="BreakNotice.LocomotionCamera.Tests.ContestDesignerACharacterIntegrationTests" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.568872" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1095" name="PlayerAndEnemyControllers_ExposeApprovedCombatStateContracts" fullname="BreakNotice.LocomotionCamera.Tests.ContestDesignerACharacterIntegrationTests.PlayerAndEnemyControllers_ExposeApprovedCombatStateContracts" methodname="PlayerAndEnemyControllers_ExposeApprovedCombatStateContracts" classname="BreakNotice.LocomotionCamera.Tests.ContestDesignerACharacterIntegrationTests" runstate="Runnable" seed="905609921" result="Passed" start-time="2026-08-18 08:44:56Z" end-time="2026-08-18 08:44:57Z" duration="0.464315" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1089" name="PlayerController_UsesDirectionalBaseAndDedicatedMaskedUpperBodyLayers" fullname="BreakNotice.LocomotionCamera.Tests.ContestDesignerACharacterIntegrationTests.PlayerController_UsesDirectionalBaseAndDedicatedMaskedUpperBodyLayers" methodname="PlayerController_UsesDirectionalBaseAndDedicatedMaskedUpperBodyLayers" classname="BreakNotice.LocomotionCamera.Tests.ContestDesignerACharacterIntegrationTests" runstate="Runnable" seed="1754032108" result="Passed" start-time="2026-08-18 08:44:57Z" end-time="2026-08-18 08:44:57Z" duration="0.077876" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1181" name="ContestThrownObjectDamageContractTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests" classname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-18 08:44:57Z" end-time="2026-08-18 08:44:57Z" duration="0.028110" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1184" name="PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow" fullname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests.PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow" classname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-18 08:44:57Z" end-time="2026-08-18 08:44:57Z" duration="0.025143" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1182" name="PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow(Light,20)" fullname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests.PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow(Light,20)" methodname="PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow" classname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests" runstate="Runnable" seed="236781724" result="Passed" start-time="2026-08-18 08:44:57Z" end-time="2026-08-18 08:44:57Z" duration="0.021732" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1183" name="PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow(Medium,30)" fullname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests.PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow(Medium,30)" methodname="PlayerThrownObject_UsesHealthApprovalAndDeduplicatesOneThrow" classname="BreakNotice.LocomotionCamera.Tests.ContestThrownObjectDamageContractTests" runstate="Runnable" seed="698965502" result="Passed" start-time="2026-08-18 08:44:57Z" end-time="2026-08-18 08:44:57Z" duration="0.001204" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

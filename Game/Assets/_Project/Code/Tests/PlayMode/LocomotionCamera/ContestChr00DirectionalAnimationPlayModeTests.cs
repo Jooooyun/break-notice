@@ -53,10 +53,22 @@ namespace BreakNotice.LocomotionCamera.Tests
                     SceneComponents<ShowcaseCharacterAnimationDriver>(scene)
                         .Single(candidate =>
                             candidate.Role == ShowcaseCharacterAnimationRole.Player);
+                ThirdPersonLocomotion locomotion =
+                    driver.GetComponent<ThirdPersonLocomotion>();
+                PrototypeInteractionController interaction =
+                    driver.GetComponent<PrototypeInteractionController>();
+                ThirdPersonCameraRig cameraRig =
+                    SceneComponents<ThirdPersonCameraRig>(scene).Single();
+                Camera gameplayCamera = cameraRig.OutputCamera;
                 Animator animator = driver.Animator;
                 Assert.That(animator, Is.Not.Null);
-                Assert.That(animator.layerCount, Is.EqualTo(2));
+                Assert.That(locomotion, Is.Not.Null);
+                Assert.That(interaction, Is.Not.Null);
+                Assert.That(gameplayCamera, Is.Not.Null);
+                Assert.That(animator.layerCount, Is.EqualTo(4));
                 Assert.That(animator.GetLayerName(1), Is.EqualTo("Aim Upper Body"));
+                Assert.That(animator.GetLayerName(2), Is.EqualTo("Strap Upper Body"));
+                Assert.That(animator.GetLayerName(3), Is.EqualTo("Melee Moving Legs"));
                 Assert.That(driver.HasAimUpperBodyLayer, Is.True);
 
                 Transform visual = driver.transform.Find("RUNTIME_DESIGNER_A_VISUAL");
@@ -64,6 +76,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Vector3 visualPosition = visual.localPosition;
                 Quaternion visualRotation = visual.localRotation;
                 Vector3 visualScale = visual.localScale;
+                Transform hips = animator.GetBoneTransform(HumanBodyBones.Hips);
+                Assert.That(hips, Is.Not.Null);
 
                 QueueGamepadState(gamepad, default);
                 for (int frame = 0; frame < 4; frame++)
@@ -74,7 +88,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 QueueGamepadState(gamepad, new GamepadState { leftTrigger = 1f });
                 yield return WaitForState(
                     driver,
-                    "AimIdle",
+                    "Idle",
                     ShowcasePlayerLocomotionDirection.None,
                     1f);
 
@@ -84,6 +98,83 @@ namespace BreakNotice.LocomotionCamera.Tests
                 {
                     yield return null;
                 }
+                Vector3 hipsLocalBeforeAimTurn =
+                    driver.transform.InverseTransformPoint(hips.position);
+
+                Vector3 playerPositionBeforeAimTurn = driver.transform.position;
+                for (int frame = 0; frame < 12; frame++)
+                {
+                    QueueGamepadState(gamepad, new GamepadState
+                    {
+                        leftTrigger = 1f,
+                        rightStick = new Vector2(0.8f, 0f)
+                    });
+                    yield return null;
+                }
+                QueueGamepadState(gamepad, new GamepadState { leftTrigger = 1f });
+                yield return null;
+
+                Ray centerRay = gameplayCamera.ViewportPointToRay(
+                    new Vector3(0.5f, 0.5f, 0f));
+                GameObject aimMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                aimMarker.name = "TEST_RETICLE_AIM_POINT";
+                SceneManager.MoveGameObjectToScene(aimMarker, scene);
+                aimMarker.transform.position = centerRay.GetPoint(4f);
+                aimMarker.transform.localScale = Vector3.one * 0.4f;
+                Collider aimMarkerCollider = aimMarker.GetComponent<Collider>();
+                Physics.SyncTransforms();
+
+                float facingDeadline = Time.realtimeSinceStartup + 1f;
+                Vector3 reticleDirection = Vector3.zero;
+                Vector3 reticleAimPoint = Vector3.zero;
+                while (Time.realtimeSinceStartup < facingDeadline)
+                {
+                    QueueGamepadState(gamepad, new GamepadState { leftTrigger = 1f });
+                    yield return null;
+                    reticleAimPoint = interaction.ResolveReticleAimPoint();
+                    reticleDirection = Vector3.ProjectOnPlane(
+                        reticleAimPoint - driver.transform.position,
+                        Vector3.up).normalized;
+                    if (reticleDirection.sqrMagnitude > 0.001f &&
+                        Vector3.Angle(driver.transform.forward, reticleDirection) <= 1.5f)
+                    {
+                        break;
+                    }
+                }
+                Assert.That(reticleDirection.sqrMagnitude, Is.GreaterThan(0.001f));
+                Assert.That(Vector3.Distance(
+                        aimMarkerCollider.ClosestPoint(reticleAimPoint),
+                        reticleAimPoint),
+                    Is.LessThanOrEqualTo(0.02f),
+                    "The gameplay aim authority did not use the optical center ray.");
+                Assert.That(Vector3.Angle(driver.transform.forward, reticleDirection),
+                    Is.LessThanOrEqualTo(1.5f),
+                    "Aim root did not face the actual center-reticle world point.");
+                Assert.That(Vector3.Angle(
+                        locomotion.AimFacingWorldDirection,
+                        reticleDirection),
+                    Is.LessThanOrEqualTo(0.25f));
+                Assert.That(Vector3.Angle(visual.forward, reticleDirection),
+                    Is.LessThanOrEqualTo(1.5f),
+                    "The visible CHR00 body diverged from gameplay aim facing.");
+                Assert.That(Vector3.Angle(animator.transform.forward, reticleDirection),
+                    Is.LessThanOrEqualTo(1.5f),
+                    "The animated CHR00 model diverged from gameplay aim facing.");
+                Assert.That(Vector3.ProjectOnPlane(
+                        driver.transform.position - playerPositionBeforeAimTurn,
+                        Vector3.up).magnitude,
+                    Is.LessThanOrEqualTo(0.02f),
+                    "Aim facing moved the player body instead of rotating it in place.");
+                Vector3 hipsLocalDuringAim =
+                    driver.transform.InverseTransformPoint(hips.position);
+                Assert.That(Vector2.Distance(
+                        new Vector2(hipsLocalBeforeAimTurn.x, hipsLocalBeforeAimTurn.z),
+                        new Vector2(hipsLocalDuringAim.x, hipsLocalDuringAim.z)),
+                    Is.LessThanOrEqualTo(0.03f),
+                    "Stationary Aim displaced the visible pelvis away from the player root.");
+                Assert.That(Mathf.Abs(hipsLocalDuringAim.y - hipsLocalBeforeAimTurn.y),
+                    Is.LessThanOrEqualTo(0.03f),
+                    "Stationary Aim changed the visible body support height.");
 
                 foreach ((Vector2 move, string state,
                              ShowcasePlayerLocomotionDirection direction) in new[]
@@ -119,7 +210,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                         new GamepadState { leftTrigger = 1f });
                     yield return WaitForState(
                         driver,
-                        "AimIdle",
+                        "Idle",
                         ShowcasePlayerLocomotionDirection.None,
                         1f);
                 }
@@ -161,7 +252,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator V007MovingActionCompletion_DoesNotSynthesizeAStopWithoutInput()
+        public IEnumerator V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs()
         {
             yield return EnsureShowcaseSceneUnloaded();
             Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
@@ -187,8 +278,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                             candidate.Role == ShowcaseCharacterAnimationRole.Player);
                 ShowcasePlayerCombatController combat =
                     SceneComponents<ShowcasePlayerCombatController>(scene).Single();
+                PrototypeInteractionController interaction =
+                    combat.GetComponent<PrototypeInteractionController>();
                 ShowcaseAnimationEventReceiver receiver =
                     driver.Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+                Assert.That(interaction, Is.Not.Null);
                 Assert.That(receiver, Is.Not.Null);
 
                 QueueGamepadState(gamepad,
@@ -200,43 +294,101 @@ namespace BreakNotice.LocomotionCamera.Tests
                     0f);
 
                 int completedBefore = receiver.ActionCompleteInvocationCount;
+                Vector3 reticleDirection = Vector3.ProjectOnPlane(
+                    interaction.ResolveReticleAimPoint() - combat.transform.position,
+                    Vector3.up).normalized;
+                combat.transform.rotation = Quaternion.LookRotation(
+                    Vector3.Cross(Vector3.up, reticleDirection),
+                    Vector3.up);
                 Assert.That(combat.TryRequestMelee(null), Is.True,
                     "The real player action owner must accept the melee cue while moving.");
                 Assert.That(combat.IsActionLocked, Is.True);
-                QueueGamepadState(gamepad, default);
+                Assert.That(Vector3.Angle(combat.transform.forward, reticleDirection),
+                    Is.LessThanOrEqualTo(1.5f),
+                    "A targetless punch must snap to the optical reticle, not the old move yaw.");
+                ThirdPersonLocomotion locomotion = combat.GetComponent<ThirdPersonLocomotion>();
+                Assert.That(locomotion.HasMobilityLock(
+                    PlayerMobilityLockReason.PlayerAction), Is.False);
+                Assert.That(locomotion.HasJumpLock(
+                    PlayerMobilityLockReason.MeleeAction), Is.True);
 
-                yield return WaitForState(
-                    driver,
-                    "MeleeJabAction",
-                    ShowcasePlayerLocomotionDirection.None,
-                    0f);
+                Assert.That(driver.HasMeleeMovingLegsLayer, Is.True);
+                int meleeLayer = driver.Animator.GetLayerIndex("Melee Moving Legs");
+                int jabHash = Animator.StringToHash(
+                    "Base Layer.MeleeJabAction");
+                int jabReturnHash = Animator.StringToHash(
+                    "Base Layer.MeleeJabReturnAction");
+                int[] movingLegStateHashes =
+                {
+                    Animator.StringToHash("Melee Moving Legs.MeleeLegsForward"),
+                    Animator.StringToHash("Melee Moving Legs.MeleeLegsBackward"),
+                    Animator.StringToHash("Melee Moving Legs.MeleeLegsLeft"),
+                    Animator.StringToHash("Melee Moving Legs.MeleeLegsRight"),
+                    Animator.StringToHash("Melee Moving Legs.MeleeLegsRun")
+                };
+                float jabDeadline = Time.realtimeSinceStartup + 2f;
+                while ((driver.Animator.GetCurrentAnimatorStateInfo(0)
+                            .fullPathHash != jabHash ||
+                        driver.MeleeMovingLegsLayerWeight < 0.99f) &&
+                       Time.realtimeSinceStartup < jabDeadline)
+                {
+                    yield return null;
+                }
+                Assert.That(
+                    driver.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash,
+                    Is.EqualTo(jabHash));
+                Assert.That(driver.MeleeMovingLegsLayerWeight,
+                    Is.EqualTo(1f).Within(0.001f));
+                int currentLegState = driver.Animator
+                    .GetCurrentAnimatorStateInfo(meleeLayer).fullPathHash;
+                int nextLegState = driver.Animator.IsInTransition(meleeLayer)
+                    ? driver.Animator.GetNextAnimatorStateInfo(meleeLayer).fullPathHash
+                    : 0;
+                Assert.That(movingLegStateHashes.Contains(currentLegState) ||
+                            movingLegStateHashes.Contains(nextLegState),
+                    Is.True,
+                    "Moving melee must use a directional locomotion state on the legs layer.");
+                Assert.That(driver.CurrentBaseStateName,
+                    Is.EqualTo("MeleeJabAction"),
+                    "The original full-body punch must remain the Base action owner.");
 
                 float completionDeadline = Time.realtimeSinceStartup + 3f;
+                bool sawJabReturn = false;
                 while (combat.IsActionLocked &&
                        Time.realtimeSinceStartup < completionDeadline)
                 {
                     yield return null;
+                    sawJabReturn |= driver.Animator
+                        .GetCurrentAnimatorStateInfo(0).fullPathHash ==
+                        jabReturnHash;
                 }
+                Assert.That(sawJabReturn, Is.True,
+                    "An unbuffered Jab must play the authored 14-to-1 return state.");
                 Assert.That(combat.IsActionLocked, Is.False,
                     "The natural action-complete event did not release player ownership.");
                 Assert.That(receiver.ActionCompleteInvocationCount,
                     Is.GreaterThan(completedBefore),
                     "The action must complete through the authored AnimationEvent path.");
-
-                bool reachedIdle = false;
-                for (int frame = 0; frame < 45; frame++)
+                float legsReleaseDeadline = Time.realtimeSinceStartup + 0.5f;
+                while (driver.MeleeMovingLegsLayerWeight > 0.001f &&
+                       Time.realtimeSinceStartup < legsReleaseDeadline)
                 {
                     yield return null;
-                    Assert.That(driver.CurrentBaseStateName,
-                        Is.Not.EqualTo("WalkStopAction"),
-                        "Unlock synthesized a WalkStop from movement hidden by the action.");
-                    Assert.That(driver.CurrentBaseStateName,
-                        Is.Not.EqualTo("RunStopAction"),
-                        "Unlock synthesized a RunStop from movement hidden by the action.");
-                    reachedIdle |= driver.CurrentBaseStateName == "Idle";
                 }
-                Assert.That(reachedIdle, Is.True,
-                    $"Player never returned to Idle after action completion; " +
+                Assert.That(driver.MeleeMovingLegsLayerWeight,
+                    Is.LessThanOrEqualTo(0.001f));
+
+                QueueGamepadState(gamepad, default);
+                bool returnedToLocomotionOwnership = false;
+                for (int frame = 0; frame < 20; frame++)
+                {
+                    yield return null;
+                    returnedToLocomotionOwnership |=
+                        driver.CurrentBaseStateName == "WalkStopAction" ||
+                        driver.CurrentBaseStateName == "Idle";
+                }
+                Assert.That(returnedToLocomotionOwnership, Is.True,
+                    $"Player never returned to locomotion ownership after melee; " +
                     $"state={driver.CurrentBaseStateName}.");
             }
             finally
@@ -277,7 +429,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                     SceneComponents<ShowcaseCharacterAnimationDriver>(scene)
                         .Single(candidate =>
                             candidate.Role == ShowcaseCharacterAnimationRole.Player);
-                Assert.That(driver.Animator.layerCount, Is.EqualTo(2));
+                Assert.That(driver.Animator.layerCount, Is.EqualTo(4));
 
                 QueueGamepadState(gamepad, new GamepadState
                 {

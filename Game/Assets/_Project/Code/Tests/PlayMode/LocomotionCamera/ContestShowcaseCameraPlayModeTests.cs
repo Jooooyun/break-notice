@@ -21,6 +21,95 @@ namespace BreakNotice.LocomotionCamera.Tests
             "Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity";
 
         [UnityTest]
+        public IEnumerator V007AcceptedHitFeedback_ReachesOutputCameraAndRestoresExactly()
+        {
+            yield return EnsureShowcaseSceneUnloaded();
+            AsyncOperation load = EditorSceneManager.LoadSceneAsyncInPlayMode(
+                ScenePath,
+                new LoadSceneParameters(LoadSceneMode.Additive));
+            Assert.That(load, Is.Not.Null);
+            while (!load.isDone)
+            {
+                yield return null;
+            }
+
+            Scene scene = SceneManager.GetSceneByPath(ScenePath);
+            Assert.That(scene.IsValid() && scene.isLoaded, Is.True);
+            try
+            {
+                DisablePointerCapture(scene);
+                ThirdPersonCameraRig cameraRig =
+                    GetSceneComponents<ThirdPersonCameraRig>(scene).Single();
+                ShowcaseCameraConstraintSolver solver =
+                    GetSceneComponents<ShowcaseCameraConstraintSolver>(scene).Single();
+                ShowcaseHitFeedbackController feedback =
+                    GetSceneComponents<ShowcaseHitFeedbackController>(scene).Single();
+                foreach (ShowcaseRunnerAgent runner in
+                         GetSceneComponents<ShowcaseRunnerAgent>(scene))
+                {
+                    runner.enabled = false;
+                }
+
+                cameraRig.HardResetCameraState();
+                for (int frame = 0; frame < 6; frame++)
+                {
+                    yield return null;
+                }
+
+                feedback.Play(
+                    ShowcaseHitVfxTier.Heavy,
+                    cameraRig.OutputCamera.transform.position +
+                        cameraRig.OutputCamera.transform.forward,
+                    cameraRig.OutputCamera.transform.forward);
+                float maximumPositionDelta = 0f;
+                float maximumRotationDelta = 0f;
+                float deadline = Time.realtimeSinceStartup + 0.3f;
+                while (Time.realtimeSinceStartup < deadline)
+                {
+                    yield return null;
+                    if (!solver.HasLastSolvedPose)
+                    {
+                        continue;
+                    }
+                    maximumPositionDelta = Mathf.Max(
+                        maximumPositionDelta,
+                        Vector3.Distance(
+                            cameraRig.OutputCamera.transform.position,
+                            solver.LastSolvedPose.position));
+                    maximumRotationDelta = Mathf.Max(
+                        maximumRotationDelta,
+                        Quaternion.Angle(
+                            cameraRig.OutputCamera.transform.rotation,
+                            solver.LastSolvedPose.rotation));
+                }
+
+                Assert.That(maximumPositionDelta, Is.GreaterThan(0.04f),
+                    "The accepted Heavy impulse never reached OutputCamera position.");
+                Assert.That(maximumRotationDelta, Is.GreaterThan(0.25f),
+                    "The accepted Heavy impulse never reached OutputCamera rotation.");
+                yield return new WaitForSecondsRealtime(0.18f);
+                yield return null;
+                Assert.That(Vector3.Distance(
+                        cameraRig.OutputCamera.transform.position,
+                        solver.LastSolvedPose.position),
+                    Is.LessThanOrEqualTo(0.002f));
+                Assert.That(Quaternion.Angle(
+                        cameraRig.OutputCamera.transform.rotation,
+                        solver.LastSolvedPose.rotation),
+                    Is.LessThanOrEqualTo(0.02f));
+                Assert.That(feedback.ActiveVictimGlowCount, Is.Zero,
+                    "A direct camera-only impulse must not light a character.");
+            }
+            finally
+            {
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+        }
+
+        [UnityTest]
         public IEnumerator V007ActualChr00_LeonCoreNormalAndAimLandmarksMatchApprovedViewportRanges()
         {
             yield return EnsureShowcaseSceneUnloaded();

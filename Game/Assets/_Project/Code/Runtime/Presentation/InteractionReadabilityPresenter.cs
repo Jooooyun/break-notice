@@ -9,6 +9,7 @@ namespace BreakNotice.Presentation
     public sealed class InteractionReadabilityPresenter : MonoBehaviour
     {
         private const float FeedbackDuration = 0.9f;
+        private const int ThrowTrajectoryCapacity = 26;
 
         [SerializeField]
         private PrototypeInteractionController interactionController;
@@ -23,6 +24,17 @@ namespace BreakNotice.Presentation
         private uint observedAllyTaskSequence;
         private string activeFeedback = string.Empty;
         private float feedbackExpiresAt;
+        private readonly Vector3[] throwTrajectoryPoints =
+            new Vector3[ThrowTrajectoryCapacity];
+        private LineRenderer throwTrajectoryLine;
+        private Material throwTrajectoryMaterial;
+
+        public bool IsThrowTrajectoryVisible =>
+            throwTrajectoryLine != null && throwTrajectoryLine.enabled;
+
+        public int ThrowTrajectoryPointCount => throwTrajectoryLine != null
+            ? throwTrajectoryLine.positionCount
+            : 0;
 
         public void Configure(PrototypeInteractionController controller)
         {
@@ -49,13 +61,58 @@ namespace BreakNotice.Presentation
 
             ShowcaseCargoStrapController cargoStrap =
                 interactionController.ShowcaseCargoStrapController;
-            if (cargoStrap != null && cargoStrap.IsAttached)
+            if (cargoStrap != null &&
+                cargoStrap.Phase != ShowcaseCargoStrapPhase.Stored)
             {
-                string state = cargoStrap.IsTensioned ? "TENSIONED REDIRECT" : "ATTACHED";
+                string targetName = cargoStrap.ActiveTarget != null
+                    ? cargoStrap.ActiveTarget.DisplayName
+                    : "OBJECT";
+                if (cargoStrap.Phase == ShowcaseCargoStrapPhase.Prepare)
+                {
+                    return $"GEAR01 PREPARE: {targetName} | HOLD [E], RELEASE TO THROW";
+                }
+                if (cargoStrap.Phase == ShowcaseCargoStrapPhase.Rolling)
+                {
+                    return $"GEAR01 READY: {targetName} | RELEASE [E] TO ATTACH";
+                }
+                if (cargoStrap.Phase == ShowcaseCargoStrapPhase.Throw)
+                {
+                    return cargoStrap.IsTensioned &&
+                           cargoStrap.ActiveTarget?.WeightClass ==
+                               PrototypeWeightClass.Light
+                        ? $"GEAR01 SMALL THROW RELEASE: {targetName}"
+                        : $"GEAR01 CLAMP IN FLIGHT: {targetName}";
+                }
+                if (cargoStrap.Phase == ShowcaseCargoStrapPhase.Pull)
+                {
+                    return $"GEAR01 APPLYING TENSION: {targetName}";
+                }
+                if (cargoStrap.Phase == ShowcaseCargoStrapPhase.Releasing)
+                {
+                    return "GEAR01 SAFETY RELEASE | CONTROLLED RETRACTION";
+                }
+                if (cargoStrap.Phase == ShowcaseCargoStrapPhase.SmallSpinning)
+                {
+                    return $"GEAR01 SMALL SPINNING: {targetName} | " +
+                           "[1] FISTS | [2] SPIN | LMB THROW | [R] RELEASE";
+                }
+
+                string state = cargoStrap.IsMediumSwinging
+                    ? "MEDIUM TETHER SWING"
+                    : cargoStrap.Phase == ShowcaseCargoStrapPhase.MediumExtending
+                        ? "MEDIUM EXTEND"
+                        : cargoStrap.IsMediumRecovering
+                            ? "MEDIUM RECOVER"
+                            : cargoStrap.IsMediumRearReady
+                                ? "REAR READY"
+                                : "REAR FOLLOW";
                 string warning = cargoStrap.IsWarning ? " | LIMIT WARNING" : string.Empty;
-                return $"GEAR01 {state}: {cargoStrap.ActiveTarget.DisplayName} | " +
+                string weapon = cargoStrap.IsStrapWeaponSelected
+                    ? "[2] STRAP OBJECT | LMB TARGET SWING"
+                    : "[1] FISTS | [2] SELECT STRAP OBJECT";
+                return $"GEAR01 {state}: {targetName} | " +
                        $"{cargoStrap.CurrentStrapLength:0.0}/{cargoStrap.MaximumStrapLength:0.0} M" +
-                       $"{warning} | MOVE TO REDIRECT | [R] RELEASE";
+                       $"{warning} | {weapon} | [R] RELEASE";
             }
 
             if (owner.HandState == PrototypeHandOwnershipState.Carrying && owner.CarriedTarget != null)
@@ -188,7 +245,10 @@ namespace BreakNotice.Presentation
             string selection = interactionController.CurrentTargetUsesPickupAssist
                 ? "PICKUP ASSIST"
                 : "TARGET LOCKED";
-            return $"{selection}: {identity} | {distance} | [E] PICK UP";
+            string strapPrompt = target.IsCargoStrapEligible
+                ? " | RMB+[E] STRAP"
+                : string.Empty;
+            return $"{selection}: {identity} | {distance} | [E] PICK UP{strapPrompt}";
         }
 
         public string BuildReticleText()
@@ -219,7 +279,7 @@ namespace BreakNotice.Presentation
                 return "+";
             }
 
-            return target.IsScoopEligible
+            return target.IsScoopEligible || target.IsCargoStrapEligible
                 ? "[E]"
                 : "[!]";
         }
@@ -259,6 +319,13 @@ namespace BreakNotice.Presentation
                     PrototypeHandOwnershipState.Free)
             {
                 return string.Empty;
+            }
+
+            if (target.IsCargoStrapEligible)
+            {
+                return target.IsScoopEligible
+                    ? $"PICK UP OR AIM+STRAP {target.DisplayName}"
+                    : $"AIM+STRAP {target.DisplayName}";
             }
 
             if (target.IsScoopEligible)
@@ -407,8 +474,11 @@ namespace BreakNotice.Presentation
         {
             if (interactionController == null)
             {
+                HideThrowTrajectory();
                 return;
             }
+
+            UpdateThrowTrajectory();
 
             if (interactionController.AllyTaskAttemptSequence != observedAllyTaskSequence)
             {
@@ -430,6 +500,96 @@ namespace BreakNotice.Presentation
             }
         }
 
+        private void OnDisable()
+        {
+            HideThrowTrajectory();
+        }
+
+        private void OnDestroy()
+        {
+            if (throwTrajectoryMaterial != null)
+            {
+                Destroy(throwTrajectoryMaterial);
+                throwTrajectoryMaterial = null;
+            }
+        }
+
+        private void UpdateThrowTrajectory()
+        {
+            if (!Application.isPlaying ||
+                !interactionController.TryBuildThrowTrajectoryPreview(
+                    throwTrajectoryPoints,
+                    out int pointCount))
+            {
+                HideThrowTrajectory();
+                return;
+            }
+
+            EnsureThrowTrajectoryLine();
+            PrototypeThrowPresentationSnapshot presentation =
+                interactionController.ThrowPresentation;
+            Color trajectoryColor = Color.Lerp(
+                new Color(0.1f, 0.8f, 1f, 0.92f),
+                new Color(1f, 0.62f, 0.08f, 1f),
+                presentation.Charge01);
+            throwTrajectoryLine.startColor = trajectoryColor;
+            throwTrajectoryLine.endColor = new Color(
+                trajectoryColor.r,
+                trajectoryColor.g,
+                trajectoryColor.b,
+                0.24f);
+            throwTrajectoryLine.positionCount = pointCount;
+            for (int index = 0; index < pointCount; index++)
+            {
+                throwTrajectoryLine.SetPosition(index, throwTrajectoryPoints[index]);
+            }
+            throwTrajectoryLine.enabled = true;
+        }
+
+        private void EnsureThrowTrajectoryLine()
+        {
+            if (throwTrajectoryLine != null)
+            {
+                return;
+            }
+
+            GameObject lineObject = new("CHR00_THROW_TRAJECTORY");
+            lineObject.transform.SetParent(transform, false);
+            throwTrajectoryLine = lineObject.AddComponent<LineRenderer>();
+            throwTrajectoryLine.useWorldSpace = true;
+            throwTrajectoryLine.loop = false;
+            throwTrajectoryLine.startWidth = 0.045f;
+            throwTrajectoryLine.endWidth = 0.018f;
+            throwTrajectoryLine.numCapVertices = 2;
+            throwTrajectoryLine.numCornerVertices = 2;
+            throwTrajectoryLine.receiveShadows = false;
+            throwTrajectoryLine.enabled = false;
+
+            Shader shader = Shader.Find("Sprites/Default");
+            if (shader == null)
+            {
+                shader = Shader.Find("Universal Render Pipeline/Unlit");
+            }
+            if (shader != null)
+            {
+                throwTrajectoryMaterial = new Material(shader)
+                {
+                    name = "CHR00_THROW_TRAJECTORY_RUNTIME_MATERIAL"
+                };
+                throwTrajectoryLine.sharedMaterial = throwTrajectoryMaterial;
+            }
+        }
+
+        private void HideThrowTrajectory()
+        {
+            if (throwTrajectoryLine == null)
+            {
+                return;
+            }
+            throwTrajectoryLine.enabled = false;
+            throwTrajectoryLine.positionCount = 0;
+        }
+
         private void OnGUI()
         {
             string status = BuildStatusText();
@@ -440,8 +600,15 @@ namespace BreakNotice.Presentation
 
             EnsureStyles();
             DrawAllyReadyIndicator();
+            bool healthVfxActive = ShowcaseHealthVfxPresenter.Active != null;
             GUI.Label(
-                new Rect(0f, Screen.height - 78f, Screen.width, 42f),
+                healthVfxActive
+                    ? new Rect(
+                        Screen.width * 0.35f,
+                        Screen.height - 78f,
+                        Screen.width * 0.63f,
+                        42f)
+                    : new Rect(0f, Screen.height - 78f, Screen.width, 42f),
                 status,
                 promptStyle);
 

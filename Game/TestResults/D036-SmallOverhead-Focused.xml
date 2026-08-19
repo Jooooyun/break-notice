@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 15:20:24Z" end-time="2026-08-17 15:20:29Z" duration="4.1343673">
+  <test-suite type="TestSuite" id="1178" name="Game" fullname="Game" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:20:24Z" end-time="2026-08-17 15:20:29Z" duration="4.134367" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1171" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:20:25Z" end-time="2026-08-17 15:20:29Z" duration="4.118791" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="27548" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1172" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:20:25Z" end-time="2026-08-17 15:20:29Z" duration="4.115441" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1173" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:20:25Z" end-time="2026-08-17 15:20:29Z" duration="4.112638" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1174" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:20:25Z" end-time="2026-08-17 15:20:29Z" duration="4.109834" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1127" name="ContestShowcaseS5PlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-08-17 15:20:25Z" end-time="2026-08-17 15:20:29Z" duration="4.103518" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1139" name="ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder" methodname="ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1905239842" result="Failed" start-time="2026-08-17 15:20:25Z" end-time="2026-08-17 15:20:29Z" duration="4.084868" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: greater than or equal to 0.0500000007f
+  But was:  -0.594575465f
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests+<ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder>d__16.MoveNext () [0x004a4] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestShowcaseS5PlayModeTests.cs:1575
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

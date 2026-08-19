@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="12" result="Passed" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.4571349">
+  <test-suite type="TestSuite" id="1178" name="Game" fullname="Game" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.457135" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1171" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.440948" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="23396" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1172" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.437921" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1173" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.435333" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1174" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.432826" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1127" name="ContestShowcaseS5PlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:52Z" duration="49.426743" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1139" name="ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder" methodname="ActualHumanoidSmallRollingAndThrowReleaseDrivePhysicalBinder" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="645269625" result="Passed" start-time="2026-08-17 15:27:02Z" end-time="2026-08-17 15:27:08Z" duration="6.087326" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1133" name="ActualHumanoidStrapClipsDriveNaturalAttachAttackAndReleaseEvents" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.ActualHumanoidStrapClipsDriveNaturalAttachAttackAndReleaseEvents" methodname="ActualHumanoidStrapClipsDriveNaturalAttachAttackAndReleaseEvents" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1441225807" result="Passed" start-time="2026-08-17 15:27:08Z" end-time="2026-08-17 15:27:15Z" duration="6.318968" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1129" name="AssistAttachAwardsBraceAndExplicitReleaseRestoresPhysicalState" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.AssistAttachAwardsBraceAndExplicitReleaseRestoresPhysicalState" methodname="AssistAttachAwardsBraceAndExplicitReleaseRestoresPhysicalState" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1482467148" result="Passed" start-time="2026-08-17 15:27:15Z" end-time="2026-08-17 15:27:15Z" duration="0.539194" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1130" name="AuthoredResetClearsStrapAndBraceReadiness" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.AuthoredResetClearsStrapAndBraceReadiness" methodname="AuthoredResetClearsStrapAndBraceReadiness" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="889174926" result="Passed" start-time="2026-08-17 15:27:15Z" end-time="2026-08-17 15:27:16Z" duration="0.323413" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1136" name="MediumAttackAndRecoveryAllowSprintMoveBlockJumpAndKeepTargetFacing" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.MediumAttackAndRecoveryAllowSprintMoveBlockJumpAndKeepTargetFacing" methodname="MediumAttackAndRecoveryAllowSprintMoveBlockJumpAndKeepTargetFacing" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1330093468" result="Passed" start-time="2026-08-17 15:27:16Z" end-time="2026-08-17 15:27:19Z" duration="3.080936" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1137" name="MediumMovementBeyondSnapshotRangeRecoversWithoutDamageOrUse" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.MediumMovementBeyondSnapshotRangeRecoversWithoutDamageOrUse" methodname="MediumMovementBeyondSnapshotRangeRecoversWithoutDamageOrUse" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="973946018" result="Passed" start-time="2026-08-17 15:27:19Z" end-time="2026-08-17 15:27:20Z" duration="1.598911" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1135" name="MediumSwing_LastThirtyFivePercentBuffersExactlyOnce" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.MediumSwing_LastThirtyFivePercentBuffersExactlyOnce" methodname="MediumSwing_LastThirtyFivePercentBuffersExactlyOnce" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1268428470" result="Passed" start-time="2026-08-17 15:27:20Z" end-time="2026-08-17 15:27:23Z" duration="2.766428" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1134" name="MediumSwing_NearMidMaxLeftRightActualCollisionMatrix" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.MediumSwing_NearMidMaxLeftRightActualCollisionMatrix" methodname="MediumSwing_NearMidMaxLeftRightActualCollisionMatrix" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1800684347" result="Passed" start-time="2026-08-17 15:27:23Z" end-time="2026-08-17 15:27:44Z" duration="20.997454" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1132" name="ReleasedSmallThrowUsesSharedDurabilityAndDeactivatesAfterCollision" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.ReleasedSmallThrowUsesSharedDurabilityAndDeactivatesAfterCollision" methodname="ReleasedSmallThrowUsesSharedDurabilityAndDeactivatesAfterCollision" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1925073843" result="Passed" start-time="2026-08-17 15:27:44Z" end-time="2026-08-17 15:27:44Z" duration="0.318303" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1128" name="S4RemainsPreservedAndS5HasSingularStrapComposition" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.S4RemainsPreservedAndS5HasSingularStrapComposition" methodname="S4RemainsPreservedAndS5HasSingularStrapComposition" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1884612957" result="Passed" start-time="2026-08-17 15:27:44Z" end-time="2026-08-17 15:27:45Z" duration="0.635662" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1131" name="SmallBinderSpinsAtActualHandPausesOnOneAndThrowsOnNextLmb" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.SmallBinderSpinsAtActualHandPausesOnOneAndThrowsOnNextLmb" methodname="SmallBinderSpinsAtActualHandPausesOnOneAndThrowsOnNextLmb" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1700069246" result="Passed" start-time="2026-08-17 15:27:45Z" end-time="2026-08-17 15:27:47Z" duration="1.677590" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1138" name="SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse" methodname="SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="289313576" result="Passed" start-time="2026-08-17 15:27:47Z" end-time="2026-08-17 15:27:52Z" duration="5.061077" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

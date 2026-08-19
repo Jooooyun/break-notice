@@ -69,6 +69,24 @@
           "initialStateCheck": false
         },
         {
+          "name": "SelectFists",
+          "type": "Button",
+          "id": "a2e950d6-6d94-4597-a5d9-47e5fa73caf1",
+          "expectedControlType": "Button",
+          "processors": "",
+          "interactions": "",
+          "initialStateCheck": false
+        },
+        {
+          "name": "SelectObjectWeapon",
+          "type": "Button",
+          "id": "bd08ae2c-fc89-49cc-b0ef-892a02858325",
+          "expectedControlType": "Button",
+          "processors": "",
+          "interactions": "",
+          "initialStateCheck": false
+        },
+        {
           "name": "CallAlly",
           "type": "Button",
           "id": "5527e367-7a18-4c4d-a470-11fb29e119f7",
@@ -319,6 +337,28 @@
           "processors": "",
           "groups": "Gamepad",
           "action": "Throw",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "47755527-b436-4f4b-bc04-3b328c32009f",
+          "path": "<Keyboard>/digit1",
+          "interactions": "",
+          "processors": "",
+          "groups": "Keyboard&Mouse",
+          "action": "SelectFists",
+          "isComposite": false,
+          "isPartOfComposite": false
+        },
+        {
+          "name": "",
+          "id": "c18b4cf3-c332-4fca-a814-cf95cfa2c838",
+          "path": "<Keyboard>/digit2",
+          "interactions": "",
+          "processors": "",
+          "groups": "Keyboard&Mouse",
+          "action": "SelectObjectWeapon",
           "isComposite": false,
           "isPartOfComposite": false
         },

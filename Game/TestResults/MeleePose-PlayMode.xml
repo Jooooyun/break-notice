@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:32Z" duration="2.2677326">
+  <test-suite type="TestSuite" id="1190" name="Game" fullname="Game" runstate="Runnable" testcasecount="159" result="Failed" site="Child" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:32Z" duration="2.267733" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1183" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="159" result="Failed" site="Child" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:32Z" duration="2.254015" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2092" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1184" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="159" result="Failed" site="Child" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:32Z" duration="2.252350" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1185" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="159" result="Failed" site="Child" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:32Z" duration="2.251028" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1186" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="159" result="Failed" site="Child" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:32Z" duration="2.249715" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1042" name="ContestChr00DirectionalAnimationPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:31Z" duration="1.434195" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1044" name="V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests.V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" methodname="V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" seed="579352729" result="Failed" start-time="2026-08-18 11:26:30Z" end-time="2026-08-18 11:26:31Z" duration="1.417406" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: 54887771
+  But was:  -1305489966
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests+<V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs>d__2.MoveNext () [0x0042c] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestChr00DirectionalAnimationPlayModeTests.cs:336
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1099" name="ContestShowcaseCombatPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" testcasecount="19" result="Failed" site="Child" start-time="2026-08-18 11:26:31Z" end-time="2026-08-18 11:26:32Z" duration="0.799403" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1104" name="PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher" methodname="PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="515935601" result="Failed" start-time="2026-08-18 11:26:31Z" end-time="2026-08-18 11:26:32Z" duration="0.537916" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: 85
+  But was:  80
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests+<PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher>d__8.MoveNext () [0x00570] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestShowcaseCombatPlayModeTests.cs:323
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1103" name="PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs" methodname="PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="683962719" result="Passed" start-time="2026-08-18 11:26:32Z" end-time="2026-08-18 11:26:32Z" duration="0.234373" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

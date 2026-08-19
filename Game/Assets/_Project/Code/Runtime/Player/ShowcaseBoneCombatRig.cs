@@ -21,16 +21,28 @@ namespace BreakNotice.Gameplay.Combat
     public sealed class ShowcaseBoneCombatRig : MonoBehaviour
     {
         private const float ContactTolerance = 0.015f;
+        private const float PlayerStrikeRadius = 0.18f;
+        private const float PlayerStrikeForwardOffset = 0.115f;
+        // Enemy strike bones resolve at the wrist/ankle rather than the visible
+        // fist/toe tip. These offsets bridge only that authored limb length;
+        // the overlap still requires the natural animation window and sweep.
+        private const float EnemyHandStrikeForwardOffset = 0.24f;
+        private const float EnemyFootStrikeForwardOffset = 0.32f;
         private readonly struct PendingContact
         {
-            public PendingContact(ShowcaseBoneCombatRig victim, uint sequence)
+            public PendingContact(
+                ShowcaseBoneCombatRig victim,
+                uint sequence,
+                Vector3 worldPoint)
             {
                 Victim = victim;
                 Sequence = sequence;
+                WorldPoint = worldPoint;
             }
 
             public ShowcaseBoneCombatRig Victim { get; }
             public uint Sequence { get; }
+            public Vector3 WorldPoint { get; }
         }
         [Serializable]
         private sealed class HurtboxBinding
@@ -135,6 +147,12 @@ namespace BreakNotice.Gameplay.Combat
                     : null;
                 return boneTransform != null;
             }
+
+            public void ConfigureVolume(float authoredRadius, float authoredForwardOffset)
+            {
+                radius = Mathf.Max(0.01f, authoredRadius);
+                forwardOffset = Mathf.Max(0f, authoredForwardOffset);
+            }
         }
 
         private static readonly List<ShowcaseBoneCombatRig> ActiveRigs = new();
@@ -176,6 +194,8 @@ namespace BreakNotice.Gameplay.Combat
         public int AttackWindowCloseCount { get; private set; }
         public int ContactCount { get; private set; }
         public int AcceptedHitCount { get; private set; }
+        public uint HitConfirmationSequence { get; private set; }
+        public Vector3 LastAcceptedHitPoint { get; private set; }
         public uint ActiveAttackSequence => activeAttackSequence;
         public float MinimumWindowSurfaceSeparation { get; private set; } =
             float.PositiveInfinity;
@@ -188,6 +208,7 @@ namespace BreakNotice.Gameplay.Combat
             hurtboxes = Array.Empty<HurtboxBinding>();
             strikes = Array.Empty<StrikeBinding>();
             EnsureDefaultDefinitions();
+            ApplyAuthoredStrikeReach();
             BindHumanoidBones();
         }
 
@@ -231,6 +252,11 @@ namespace BreakNotice.Gameplay.Combat
 
         private void Update()
         {
+            ResolvePendingContacts();
+        }
+
+        internal void ResolvePendingContacts()
+        {
             if (pendingContacts.Count == 0)
             {
                 return;
@@ -239,9 +265,14 @@ namespace BreakNotice.Gameplay.Combat
             for (int index = 0; index < pendingContacts.Count; index++)
             {
                 PendingContact contact = pendingContacts[index];
-                if (TryCommitActualContact(contact.Victim, contact.Sequence))
+                if (TryCommitActualContact(
+                        contact.Victim,
+                        contact.Sequence,
+                        contact.WorldPoint))
                 {
                     AcceptedHitCount++;
+                    HitConfirmationSequence++;
+                    LastAcceptedHitPoint = contact.WorldPoint;
                 }
             }
             pendingContacts.Clear();
@@ -260,6 +291,7 @@ namespace BreakNotice.Gameplay.Combat
             hurtboxes = Array.Empty<HurtboxBinding>();
             strikes = Array.Empty<StrikeBinding>();
             EnsureDefaultDefinitions();
+            ApplyAuthoredStrikeReach();
             BindHumanoidBones();
         }
 
@@ -302,6 +334,32 @@ namespace BreakNotice.Gameplay.Combat
             return IsAttackWindowOpen;
         }
 
+        public bool TryGetPrimaryActiveStrikeVolume(
+            out Vector3 center,
+            out float radius)
+        {
+            if (!IsAttackWindowOpen || activeStrikeCount <= 0)
+            {
+                center = default;
+                radius = 0f;
+                return false;
+            }
+
+            int strikeIndex = activeStrikeIndices[0];
+            if (strikeIndex < 0 || strikeIndex >= strikes.Length ||
+                !strikes[strikeIndex].IsBound)
+            {
+                center = default;
+                radius = 0f;
+                return false;
+            }
+
+            StrikeBinding strike = strikes[strikeIndex];
+            center = strike.WorldCenter + transform.forward * strike.ForwardOffset;
+            radius = strike.Radius;
+            return true;
+        }
+
         public void CloseAttackWindow()
         {
             if (IsAttackWindowOpen)
@@ -321,6 +379,8 @@ namespace BreakNotice.Gameplay.Combat
             AttackWindowCloseCount = 0;
             ContactCount = 0;
             AcceptedHitCount = 0;
+            HitConfirmationSequence = 0;
+            LastAcceptedHitPoint = Vector3.zero;
             pendingContacts.Clear();
             MinimumWindowSurfaceSeparation = float.PositiveInfinity;
         }
@@ -363,6 +423,7 @@ namespace BreakNotice.Gameplay.Combat
                 }
 
                 bool overlaps = false;
+                Vector3 contactPoint = default;
                 for (int hurtboxIndex = 0;
                      hurtboxIndex < victim.hurtboxes.Length;
                      hurtboxIndex++)
@@ -396,6 +457,11 @@ namespace BreakNotice.Gameplay.Combat
                     }
 
                     overlaps = true;
+                    Vector3 towardHurtbox = hurtbox.WorldCenter - closest;
+                    Vector3 contactNormal = towardHurtbox.sqrMagnitude > 0.000001f
+                        ? towardHurtbox.normalized
+                        : transform.forward;
+                    contactPoint = closest + contactNormal * radius;
                     break;
                 }
 
@@ -406,17 +472,24 @@ namespace BreakNotice.Gameplay.Combat
 
                 contactedVictims.Add(victim.GetInstanceID());
                 ContactCount++;
-                pendingContacts.Add(new PendingContact(victim, activeAttackSequence));
+                pendingContacts.Add(new PendingContact(
+                    victim,
+                    activeAttackSequence,
+                    contactPoint));
             }
         }
 
-        private bool TryCommitActualContact(ShowcaseBoneCombatRig victim, uint sequence)
+        private bool TryCommitActualContact(
+            ShowcaseBoneCombatRig victim,
+            uint sequence,
+            Vector3 worldPoint)
         {
             if (playerCombat != null)
             {
                 return playerCombat.TryCommitBoneHit(
                     victim.runnerAgent,
-                    sequence);
+                    sequence,
+                    worldPoint);
             }
             if (runnerAgent != null)
             {
@@ -436,7 +509,7 @@ namespace BreakNotice.Gameplay.Combat
                 sequence = playerCombat.ActiveAttackSequence;
                 bones = playerCombat.ActiveMeleeStep switch
                 {
-                    1 => new[] { HumanBodyBones.RightHand },
+                    1 => new[] { HumanBodyBones.LeftHand },
                     2 => new[] { HumanBodyBones.RightHand },
                     _ => new[] { HumanBodyBones.RightHand }
                 };
@@ -448,14 +521,23 @@ namespace BreakNotice.Gameplay.Combat
                 sequence = runnerAgent.ActiveAttackSequence;
                 bones = runnerAgent.AnimationCue switch
                 {
+                    ShowcaseRunnerAnimationCue.Boxing =>
+                        new[] { HumanBodyBones.LeftHand },
+                    // The delivered "Boxing 2" take is a right-knee/front-foot strike.
+                    ShowcaseRunnerAnimationCue.Boxing2 =>
+                        new[] { HumanBodyBones.RightFoot },
                     ShowcaseRunnerAnimationCue.Kicking =>
                         new[] { HumanBodyBones.LeftFoot },
                     ShowcaseRunnerAnimationCue.Kicking2 =>
                         new[] { HumanBodyBones.RightFoot },
-                    ShowcaseRunnerAnimationCue.EliteJumpAttack =>
-                        new[] { HumanBodyBones.RightHand, HumanBodyBones.LeftHand },
+                    ShowcaseRunnerAnimationCue.EliteMutantPunch =>
+                        new[] { HumanBodyBones.RightHand },
                     ShowcaseRunnerAnimationCue.EliteMutantSwiping =>
-                        new[] { HumanBodyBones.RightHand, HumanBodyBones.LeftHand },
+                        new[]
+                        {
+                            HumanBodyBones.RightHand,
+                            HumanBodyBones.LeftHand
+                        },
                     _ => new[] { HumanBodyBones.RightHand }
                 };
                 return sequence != 0;
@@ -541,6 +623,41 @@ namespace BreakNotice.Gameplay.Combat
             for (int index = 0; index < strikes.Length; index++)
             {
                 strikes[index].Bind(animator);
+            }
+        }
+
+        private void ApplyAuthoredStrikeReach()
+        {
+            if (strikes == null)
+            {
+                return;
+            }
+
+            for (int index = 0; index < strikes.Length; index++)
+            {
+                HumanBodyBones bone = strikes[index].Bone;
+                bool hand = bone == HumanBodyBones.LeftHand ||
+                    bone == HumanBodyBones.RightHand;
+                bool foot = bone == HumanBodyBones.LeftFoot ||
+                    bone == HumanBodyBones.RightFoot;
+                if (playerCombat != null && hand)
+                {
+                    strikes[index].ConfigureVolume(
+                        PlayerStrikeRadius,
+                        PlayerStrikeForwardOffset);
+                }
+                else if (runnerAgent != null && hand)
+                {
+                    strikes[index].ConfigureVolume(
+                        strikes[index].Radius,
+                        EnemyHandStrikeForwardOffset);
+                }
+                else if (runnerAgent != null && foot)
+                {
+                    strikes[index].ConfigureVolume(
+                        strikes[index].Radius,
+                        EnemyFootStrikeForwardOffset);
+                }
             }
         }
 

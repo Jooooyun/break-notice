@@ -1,0 +1,1539 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.20f1 (c9ba695d4f07) revision 13220457'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys" at "2026-08-17T16:42:50.0219538Z"
+OS: 'Windows 11  (10.0.26200) Core' Language: 'ko' Physical Memory: 32405 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-17T16:42:50Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Unity.exe
+-batchmode
+-nographics
+-projectPath
+C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game
+-executeMethod
+BreakNotice.Contest.Editor.DesignerACharacterIntegrationAuthoring.RebuildAllyAnimationController
+-logFile
+C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\TestResults\D040-Rebuild-CHR01-v2.log
+-quit
+Successfully changed project path to: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game
+C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [4604]  Target information:
+
+Player connection [4604]  * "[IP] 172.29.224.1 [Port] 55504 [Flags] 2 [Guid] 3497534263 [EditorId] 3497534263 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [4604]  * "[IP] 192.168.254.1 [Port] 55504 [Flags] 2 [Guid] 3497534263 [EditorId] 3497534263 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [4604]  * "[IP] 192.168.11.1 [Port] 55504 [Flags] 2 [Guid] 3497534263 [EditorId] 3497534263 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [4604]  * "[IP] 192.168.219.104 [Port] 55504 [Flags] 2 [Guid] 3497534263 [EditorId] 3497534263 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [4604] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [4604] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-31232" after 0.4 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-jys"
+[Licensing::IpcConnector] LicenseClient-jys channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-jys-6000.3.20 doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 28336)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys-6000.3.20" at "2026-08-17T16:42:52.4566313Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 28336, path: "C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              9ac87cbec30346c6b383292663380c58
+  Correlation Id:          215a9005576168c56056b82cf4e647bb
+  External correlation Id: 6504392225734772425
+  Machine Id:              CvP+HZ18afEpqboWGIwFhl4K16Y=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jys-6000.3.20" (connect: 0.86s, validation: 0.27s, handshake: 0.01s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys-6000.3.20-notifications" at "2026-08-17T16:42:52.7416642Z"
+[Licensing::Module] Connected to LicensingClient (PId: 28336, launch time: 0.01, total connection time: 1.14s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-23T17:40:49Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-23T17:40:49Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Module] Licensing Background thread has ended after 2.79s
+[Licensing::Module] Licensing is initialized (took 2.09s).
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-23T17:40:49Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 3 unused hashed content files
+Refreshing native plugins compatible for Editor in 0.44 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.20f1 (c9ba695d4f07)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56232
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003937 seconds.
+- Loaded All Assemblies, in  0.708 seconds
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.648 seconds
+Domain Reload Profiling: 1351ms
+	BeginReloadAssembly (235ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (15ms)
+	RebuildCommonClasses (68ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (81ms)
+	LoadAllAssembliesAndSetupDomain (295ms)
+		LoadAssemblies (215ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (290ms)
+			TypeCache.Refresh (287ms)
+				TypeCache.ScanAssembly (264ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (648ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (585ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (85ms)
+			SetLoadedEditorAssemblies (6ms)
+			BeforeProcessingInitializeOnLoad (140ms)
+			ProcessInitializeOnLoadAttributes (228ms)
+			ProcessInitializeOnLoadMethodAttributes (125ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-23T17:42:54Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 25 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.cinemachine@3.1.7 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.cinemachine@f3f96bcb59af)
+    com.unity.inputsystem@1.20.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.inputsystem@7a4e1a2a8194)
+    com.unity.splines@2.9.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.splines@e6e1d5900acc)
+    com.unity.searcher@4.9.4 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.burst@1.8.29 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.mathematics@1.3.3 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.collections@2.6.6 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.collections@9796e5ee0d9e)
+    com.unity.settings-manager@2.1.1 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86)
+    com.unity.nuget.mono-cecil@1.11.6 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.5.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.test-framework.performance@8b56083ec0f0)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.universal@37e06a5b08b3)
+    com.unity.test-framework@1.6.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.test-framework@bd7f943e9647)
+    com.unity.modules.animation@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.ext.nunit@2.0.5 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.core@731b06833851)
+    com.unity.shadergraph@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.shadergraph@fe0f710ccc2d)
+    com.unity.render-pipelines.universal-config@17.0.3 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.universal-config@8dc1aab4af1d)
+    com.unity.modules.uielements@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.ugui@2.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.ugui@e20f1880fa04)
+    com.unity.modules.physics@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.terrain@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.hierarchycore)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.01 seconds
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 6s457ms
+[580/743    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[719/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/BreakNotice.Gameplay.dll (+2 others)
+[720/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/BreakNotice.ContestBrowser.dll (+2 others)
+[721/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/BreakNotice.Gameplay.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/BreakNotice.Gameplay.dll, with 139 defines and 238 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[722/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.Gameplay.pdb
+[723/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/BreakNotice.ContestBrowser.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/BreakNotice.ContestBrowser.dll, with 139 defines and 239 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[724/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.ContestBrowser.dll
+[725/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.ContestBrowser.pdb
+[726/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/BreakNotice.Presentation.dll (+2 others)
+[727/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.Gameplay.dll
+[728/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/BreakNotice.Presentation.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/BreakNotice.Presentation.dll, with 139 defines and 239 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[729/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.Presentation.pdb
+[730/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[731/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/BreakNotice.LocomotionCamera.EditModeTests.dll (+2 others)
+[732/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/BreakNotice.LocomotionCamera.PlayModeTests.dll (+2 others)
+[733/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.Presentation.dll
+[734/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/BreakNotice.LocomotionCamera.PlayModeTests.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/BreakNotice.LocomotionCamera.PlayModeTests.dll, with 139 defines and 236 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[735/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.pdb
+[736/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll
+[737/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/BreakNotice.LocomotionCamera.EditModeTests.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/BreakNotice.LocomotionCamera.EditModeTests.dll, with 137 defines and 274 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[738/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.pdb
+[739/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll
+[740/743    2s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll, with 137 defines and 315 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[741/743    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[742/743    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (6.40 seconds), 25 items updated, 743 evaluated
+AssetDatabase: script compilation time: 7.171855s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  3.581 seconds
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Start importing Assets/_Project/Art/Animation/ENY01/Normal using Guid(b09504066e3fb764681e854dd90ce57e) (DefaultImporter) -> (artifact id: '9dccdf4472d7d7d46042e6a6e5ac79f7') in 0.0236834 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite using Guid(91a35e24e5705ef4fba013a334dedc58) (DefaultImporter) -> (artifact id: 'defbbf3a10bc7a13660ef58543492f57') in 0.0013823 seconds
+Refreshing native plugins compatible for Editor in 1.05 ms, found 0 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.426 seconds
+Domain Reload Profiling: 7999ms
+	BeginReloadAssembly (457ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (46ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (167ms)
+	RebuildCommonClasses (63ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (49ms)
+	LoadAllAssembliesAndSetupDomain (2980ms)
+		LoadAssemblies (2909ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (245ms)
+			TypeCache.Refresh (170ms)
+				TypeCache.ScanAssembly (156ms)
+			BuildScriptInfoCaches (56ms)
+			ResolveRequiredComponents (15ms)
+	FinalizeReload (4427ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (4152ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (46ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (255ms)
+			ProcessInitializeOnLoadAttributes (3707ms)
+			ProcessInitializeOnLoadMethodAttributes (125ms)
+			AfterProcessingInitializeOnLoad (12ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (36ms)
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run_Backwards.fbx using Guid(10a1658572b51604f93aeedc930718be) (FBXImporter)Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Keyframe reduction: Ratio: 54.780445%;
+ -> (artifact id: 'd55c061da11cd4f3e6c30f3994259999') in 1.3061891 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Walk_Left_Turn.fbx using Guid(10553eea2943b5b45ae46283524d0d51) (FBXImporter)Keyframe reduction: Ratio: 48.086071%;
+ -> (artifact id: '05c30a86b0b16cb70282362ee7ce43fe') in 0.9906421 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Melee_Candidate_Kicking.fbx using Guid(200d4b209ce3ed74d802e94edaaf9696) (FBXImporter)Keyframe reduction: Ratio: 21.086607%;
+ -> (artifact id: '2f73f0d9b245f71d6d6c04ebe717dac0') in 0.9596265 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_R_90.fbx using Guid(3094b721f1342ed418fc9127615f35ca) (FBXImporter)Keyframe reduction: Ratio: 38.135071%;
+ -> (artifact id: '0754a873abff8612d70db54bf3ff51e1') in 1.3566605 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Melee_Candidate_Boxing_2.fbx using Guid(50844ae7c895d214a87e77ee42c104e5) (FBXImporter)Keyframe reduction: Ratio: 29.197966%;
+ -> (artifact id: '28b6d643263551e708e34c8fd810e599') in 0.8822293 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Backwards_Turn_Left.fbx using Guid(50d422f97811e384383448e34f61e1fb) (FBXImporter)Keyframe reduction: Ratio: 55.286842%;
+ -> (artifact id: 'e14146127b6fa41cea9309e6ac06afa7') in 0.869808 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Hurting_Idle.fbx using Guid(607601ff3ebc44642a89f76faf90059f) (FBXImporter)Keyframe reduction: Ratio: 29.094868%;
+ -> (artifact id: 'c747126f1577d27c46e5fc19417a1654') in 0.90238 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run_Jump.fbx using Guid(902720458012e794a92152d12b5b1216) (FBXImporter)Keyframe reduction: Ratio: 58.682785%;
+ -> (artifact id: 'd6d7a50ea4ab89b3e54b7971d9ac5a64') in 0.8705897 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Turn_Left.fbx using Guid(a00ac6c632172df48a406580e2f47019) (FBXImporter)Keyframe reduction: Ratio: 23.203718%;
+ -> (artifact id: 'ef4d302259c8234aa0de0933372b512f') in 0.8752183 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Strafe_L.fbx using Guid(e0d0d7859f6b72a46ad29e1dd7a20b9d) (FBXImporter)Keyframe reduction: Ratio: 42.492603%;
+ -> (artifact id: 'fb061a1866ad040b002e44ff53d57311') in 1.1278834 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Right_Strafe.fbx using Guid(01eb97ed2ba348940a53b255bff20391) (FBXImporter)Keyframe reduction: Ratio: 57.001972%;
+ -> (artifact id: '510c47171901408c6290f2a9080544d1') in 0.8744607 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Standing_Jump.fbx using Guid(510454cfa550afe4fb3e3dc353b1480a) (FBXImporter)Keyframe reduction: Ratio: 46.133434%;
+ -> (artifact id: '351d7b9a2c0dfdcb8a0c8ceec2bf0d52') in 0.8861615 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Knockdown_F.fbx using Guid(c1db1021507069249996d02eea1b894a) (FBXImporter)Keyframe reduction: Ratio: 53.011688%;
+ -> (artifact id: 'b4b93e18b5c131fe666483f185b102ce') in 1.099668 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Hit_Reaction.fbx using Guid(d1fe94712038cf64c93ba6cb80b05ac8) (FBXImporter)Keyframe reduction: Ratio: 44.294167%;
+ -> (artifact id: 'e1b74aee88c9a6b6126fc42c1c5045c6') in 0.8802344 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Walking.fbx using Guid(1232478268b07034faff69b9adf1e3e3) (FBXImporter)Keyframe reduction: Ratio: 26.584951%;
+ -> (artifact id: '56857ef4d9de12ff76b1a8a118f2caf6') in 0.8762108 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run_Left_Turn.fbx using Guid(1292b19f1b3283c45a99b637113a1e1a) (FBXImporter)Keyframe reduction: Ratio: 62.815331%;
+ -> (artifact id: 'd8939a88ca5cadb021e46f03cd23d991') in 0.9196146 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run_Backwards_Right_Turn.fbx using Guid(5253d824b0a80b0459594e303b3bf350) (FBXImporter)Keyframe reduction: Ratio: 62.547859%;
+ -> (artifact id: '9ba2c81dc7c083b085627e270326322d') in 0.8615979 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Backwards_Turn_Right.fbx using Guid(7231298cfd8f8e84f8f28a9b2878cf74) (FBXImporter)Keyframe reduction: Ratio: 53.012371%;
+ -> (artifact id: 'bc8b27af08325104bd46929769013723') in 0.8872612 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Hit_Stomach.fbx using Guid(728269ee8f85352418f74dbeff95791b) (FBXImporter)Keyframe reduction: Ratio: 23.540699%;
+ -> (artifact id: '4e64b72e195861abdf29170d12fe9eab') in 0.8899703 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Left_Strafe_Walking.fbx using Guid(82ab6c7871a15864a88580df10765087) (FBXImporter)Keyframe reduction: Ratio: 45.336872%;
+ -> (artifact id: '85ff269ef6924951c631408234847243') in 0.8767283 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Right_Strafe.fbx using Guid(922097424164882418beb6d94f42e19b) (FBXImporter)Keyframe reduction: Ratio: 55.987598%;
+ -> (artifact id: 'f976c5194655c1afdf5b5cf74b4258ab') in 0.8729431 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Turn_Right.fbx using Guid(929173a82fb3ba644b5355a14d25fec6) (FBXImporter)Keyframe reduction: Ratio: 54.653030%;
+ -> (artifact id: '22f8c0669b1d227aca13aaf34893007b') in 0.8767905 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Turning_Right_45_Degrees.fbx using Guid(92eee59fd5b586f45b640b25fd0a8277) (FBXImporter)Keyframe reduction: Ratio: 34.366058%;
+ -> (artifact id: '77c9edb5a113f7dc627674d6312432ea') in 0.908745 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Turn_Left.fbx using Guid(c2f8704665832c243ae13aa0dd85b2f5) (FBXImporter)Keyframe reduction: Ratio: 50.908710%;
+ -> (artifact id: 'f0010d15caf851287e586ec630facc75') in 0.8810916 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Hit_Reaction.fbx using Guid(33eafe273509ed54fb87ea8a36ffa871) (FBXImporter)Keyframe reduction: Ratio: 44.547756%;
+ -> (artifact id: '8b47f202d92c9880943b533d9e4ac99c') in 0.8763862 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Idle.fbx using Guid(a3749cd1f07b30747ad356b451e23401) (FBXImporter)Keyframe reduction: Ratio: 5.356091%;
+ -> (artifact id: 'd4d552c19b3720aa68fe33c13a7a061d') in 0.9065223 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Walking_Backwards.fbx using Guid(b3ed2f5a260ac144e9037ccb4a86a251) (FBXImporter)Keyframe reduction: Ratio: 30.642433%;
+ -> (artifact id: '662205af7d03644e41857d740cbc961b') in 0.883783 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Left_Turn_90.fbx using Guid(e3449cafdb22aac4295b6ff4b3529d4a) (FBXImporter)Keyframe reduction: Ratio: 34.805580%;
+ -> (artifact id: '6ee6db8043f72392adebb73fae0360d1') in 0.8813876 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Getup_B.fbx using Guid(043e5e664071bc740bdaed26d77e0756) (FBXImporter)Keyframe reduction: Ratio: 33.914715%;
+ -> (artifact id: '87edab990f7de817d6aae6dbd93af857') in 1.1180996 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Right_Turn_90.fbx using Guid(34047ab6d3b032b4ea30b0b6d6002a77) (FBXImporter)Keyframe reduction: Ratio: 38.726788%;
+ -> (artifact id: '3c9b5036e720ce70590871d14e4a3dec') in 0.872047 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Jump.fbx using Guid(64fcc45ccd248c64d887ae346408a6b8) (FBXImporter)Keyframe reduction: Ratio: 58.889828%;
+ -> (artifact id: '2ddbc7f4dbd49599a2ecf811942d41d3') in 1.0752664 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run_Backwards.fbx using Guid(a4c998b68d5caae43af72d497174a244) (FBXImporter)Keyframe reduction: Ratio: 54.624729%;
+ -> (artifact id: '2893b38e8b7a072b521e2e962f93e744') in 0.8735878 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run_Left_Turn.fbx using Guid(055d87a35ad227447a8fa8f08d28d09f) (FBXImporter)Keyframe reduction: Ratio: 63.002178%;
+ -> (artifact id: '3b12dacdfa683cff480bc06ad26bb976') in 0.8783347 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Standard_Run.fbx using Guid(2548c683c0c57e7479f5f46ada7c80f4) (FBXImporter)Keyframe reduction: Ratio: 63.467957%;
+ -> (artifact id: '3de34ffbb22b18b7aa48ae3c346fda3c') in 0.9091515 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Lod_Mutant_Swiping.fbx using Guid(45afa2bf16c95f2489fa9f5466815b54) (FBXImporter)Keyframe reduction: Ratio: 30.827675%;
+ -> (artifact id: '9acd9377706c3f0aa942f57c669a5705') in 0.8825676 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Getup_F.fbx using Guid(9517496dcae99d34e87a43bba2267385) (FBXImporter)Keyframe reduction: Ratio: 50.143703%;
+ -> (artifact id: '485b715bf414dcb4587a7cf535e9ed85') in 1.0898182 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Backwards_Turn_Left.fbx using Guid(0643dcc2837e88e429b15050cdd9576b) (FBXImporter)Keyframe reduction: Ratio: 55.801384%;
+ -> (artifact id: '2ea792b2c2abac32b6618568c4ca6c2b') in 0.8842951 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Melee_Candidate_Kicking_2.fbx using Guid(268ecafbf6668b345a94659c040e9e5d) (FBXImporter)Keyframe reduction: Ratio: 26.854801%;
+ -> (artifact id: 'a18c61352233317c665153c816f2560d') in 0.8785775 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Walk.fbx using Guid(76c1f0cde44f7414f93a109e937e2979) (FBXImporter)Keyframe reduction: Ratio: 50.224854%;
+ -> (artifact id: '890b37f55eab9e356f505b5114314124') in 0.8885837 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Lod_Mutant_Punch.fbx using Guid(b696269d961aef04e97208841132e0fb) (FBXImporter)Keyframe reduction: Ratio: 43.335491%;
+ -> (artifact id: '7d7f14e9b533204fd9c5fa16e7f4a962') in 0.8915489 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_180_Running.fbx using Guid(d66f5bd71851ae3409c8821fd36e2e42) (FBXImporter)Keyframe reduction: Ratio: 50.239502%;
+ -> (artifact id: '133078dc13a80465a7e2ce9add1c0aeb') in 1.1141282 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Hit_Head.fbx using Guid(f635637f7f5b3404f913387efae30a04) (FBXImporter)Keyframe reduction: Ratio: 27.434105%;
+ -> (artifact id: '713d0648ca5409cda64f15ba1b491bcc') in 0.8752945 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Stumble_Idle.fbx using Guid(0747adc8fd031d746a6ad6bc3c14f944) (FBXImporter)Keyframe reduction: Ratio: 31.881651%;
+ -> (artifact id: '5eec651e5d3fcac4fba2d6836f18f77c') in 0.8996856 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Melee_Candidate_Boxing_2.fbx using Guid(279138f281ad1304cb66bcb69356c125) (FBXImporter)Keyframe reduction: Ratio: 29.306971%;
+ -> (artifact id: 'e0549d255d5c7bb8ce2d9274234b9904') in 0.8867015 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_180_Walking.fbx using Guid(27e89e772874be04f9981addc69bd270) (FBXImporter)Keyframe reduction: Ratio: 41.401035%;
+ -> (artifact id: 'b84c982e44a2dc707d427dbf91769ff7') in 1.0724397 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run_Right_Turn.fbx using Guid(274a0b16b96d1c44880269ab022e974d) (FBXImporter)Keyframe reduction: Ratio: 59.378696%;
+ -> (artifact id: '96327460d85c4a2f521c01329780008e') in 0.9070264 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Standard_Run.fbx using Guid(470118e92008cbe459e8169415836c7a) (FBXImporter)Keyframe reduction: Ratio: 64.342690%;
+ -> (artifact id: '657fbe3fd80f921559006247865ca70b') in 0.8721841 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Lod_Mutant_Walking.fbx using Guid(470a534923f0d444590aa67d41157dd9) (FBXImporter)Keyframe reduction: Ratio: 32.450237%;
+ -> (artifact id: '3c99df2323fd848938a0a57b50cb1699') in 0.8718037 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Walk_Right_Turn.fbx using Guid(576896c6eaa22cc4080cafe39e4df397) (FBXImporter)Keyframe reduction: Ratio: 43.258659%;
+ -> (artifact id: 'ed758f65f0b02898e8f6adea9df6d545') in 0.8862945 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Hit_BigHeadHit.fbx using Guid(a7cd5dcdbe924b54783d83abfc8bbcf8) (FBXImporter)Keyframe reduction: Ratio: 23.169001%;
+ -> (artifact id: '35b6d4da44a917db17e4301e3a50644e') in 0.8773511 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Jump.fbx using Guid(d75dc55f37bfc034394d0592d3143dc4) (FBXImporter)Keyframe reduction: Ratio: 43.347675%;
+ -> (artifact id: '9ae3b283245ad2f5d49073f8de0c35bc') in 0.8837237 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run_Right_Turn.fbx using Guid(e72d14d0f1b089d40a956c132a242cdf) (FBXImporter)Keyframe reduction: Ratio: 58.698223%;
+ -> (artifact id: 'f168d668a25053caff2f17b8f857ebd8') in 0.8977748 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Hit_Stomach.fbx using Guid(38e242b5c4f2c6e459dda1b7d1e42577) (FBXImporter)Keyframe reduction: Ratio: 23.668638%;
+ -> (artifact id: '2cc18699351c1184008828e5e658f12f') in 0.9073463 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Lod_Mutant_Punch.fbx using Guid(58b6c79313a5f4a419ed9d4c8cf88e9d) (FBXImporter)Keyframe reduction: Ratio: 43.250957%;
+ -> (artifact id: '61ca4c74411efa42ac06250a267aea09') in 0.8729968 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Turn_Left.fbx using Guid(b830269953ed1dd40adb43358f5edfd7) (FBXImporter)Keyframe reduction: Ratio: 50.781914%;
+ -> (artifact id: '28e5a1ae4b2e71fbe3b9181fae9e1d98') in 0.8689054 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Melee_Candidate_Kicking.fbx using Guid(d81d4893a4950364296cc3ddd5a07d6a) (FBXImporter)Keyframe reduction: Ratio: 21.274881%;
+ -> (artifact id: '207493be09df2a97de63046376610e14') in 0.8710623 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Hit_Rib.fbx using Guid(49d15c9631eafe44a9728e8b9ba95ff1) (FBXImporter)Keyframe reduction: Ratio: 31.629372%;
+ -> (artifact id: '663ce9660ce9e0e86bf6116ece8434da') in 0.867995 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Left_Strafe.fbx using Guid(59f4c89d505125d4498f803948cbdd58) (FBXImporter)Keyframe reduction: Ratio: 59.425186%;
+ -> (artifact id: '856bf5076caa32ac5117dabcdad0b13b') in 0.8765587 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Idle.fbx using Guid(6994d0b0d1a2cc243aed9f81238860a1) (FBXImporter)Keyframe reduction: Ratio: 13.805993%;
+ -> (artifact id: 'd8ec6d88904eb7be644a9aea4e3fc2e0') in 0.9501876 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Left_Strafe_Walking.fbx using Guid(7974c53d9ed0bcf4faa26516f4f45560) (FBXImporter)Keyframe reduction: Ratio: 45.139633%;
+ -> (artifact id: 'e2399356e6fdb4a4b3bd5fffd9cf3e1d') in 0.8910992 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run_Jump.fbx using Guid(79943909ae8c96c4a8e5cf06dcf2a489) (FBXImporter)Keyframe reduction: Ratio: 58.451248%;
+ -> (artifact id: 'edc18d2563df6368f471900c00c33c54') in 0.8680479 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Idle.fbx using Guid(8944f44643d74524f8582f6d1953ac3a) (FBXImporter)Keyframe reduction: Ratio: 10.665032%;
+ -> (artifact id: '343f580729eb55957bd34df35fd1f55d') in 1.1473361 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Walk_Stop.fbx using Guid(995e10a4649011545bce0ae23fd36322) (FBXImporter)Keyframe reduction: Ratio: 20.027311%;
+ -> (artifact id: '5ec7f41d860865be9cfd7c5b1ba2b54c') in 1.0858868 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Turning_Right_45_Degrees.fbx using Guid(c90550899d7506740bb263d459160a05) (FBXImporter)Keyframe reduction: Ratio: 33.404518%;
+ -> (artifact id: '7773cdbe703c89695e4ab44e33f00458') in 0.8770939 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Hit_Body.fbx using Guid(f919dcd72f15f8c4f89bed4654cc984c) (FBXImporter)Keyframe reduction: Ratio: 28.533855%;
+ -> (artifact id: '86d9cc25d4572e18a3bece23f6d54b39') in 0.913586 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Hit_Rib.fbx using Guid(1a9f0e5792ace7847ac7590f18c86480) (FBXImporter)Keyframe reduction: Ratio: 31.684845%;
+ -> (artifact id: '73ab0ef85168c656f3369cf477932099') in 0.8745665 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Lod_One_Hand_Club_Combo.fbx using Guid(2ad8f97db3dbf104e945ebce9addec4d) (FBXImporter)Keyframe reduction: Ratio: 35.233997%;
+ -> (artifact id: '4bfe7a5f113807b17b9b26b6210704cb') in 0.8973546 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Walking.fbx using Guid(2a7c777c6c03cb5438b690877c1f4d42) (FBXImporter)Keyframe reduction: Ratio: 26.458155%;
+ -> (artifact id: '4f430b657608f5651b601d36d9754b36') in 0.8761131 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Melee_Hit_Body.fbx using Guid(2affcc6cf732ada4a85ae668d1ed286d) (FBXImporter)Keyframe reduction: Ratio: 23.860546%;
+ -> (artifact id: '1e65e2f856187567d26e17604f1c74cf') in 1.0783338 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Walking_Backwards.fbx using Guid(4aaf67dbeacd3994c830f7a0f411493b) (FBXImporter)Keyframe reduction: Ratio: 30.247955%;
+ -> (artifact id: '567dea5f9bae60b496c0f91e1c54bc37') in 0.8711918 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Right_Turn_90.fbx using Guid(5a660c86143f5404da3b05f5c172b981) (FBXImporter)Keyframe reduction: Ratio: 38.890022%;
+ -> (artifact id: '3d8bfa756cb3f4bd213859d0b1d28a5c') in 0.9268101 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Right_Strafe_Walking.fbx using Guid(8ab8039ef66c161429fbe4a858017987) (FBXImporter)Keyframe reduction: Ratio: 45.874798%;
+ -> (artifact id: '86b8a2077018b01adb237c02d6573387') in 0.9001243 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Walk_Right_Turn.fbx using Guid(8a0b396bee9b8144f9d1dff190449b00) (FBXImporter)Keyframe reduction: Ratio: 43.248096%;
+ -> (artifact id: 'eec4740f614e0d9694fdfef3ddb651c0') in 0.8929652 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Turn_Left.fbx using Guid(ba9977b30955d504baa1f3d0295e0a9a) (FBXImporter)Keyframe reduction: Ratio: 22.506338%;
+ -> (artifact id: '25e320c4a7855a414c3852c26f3499ea') in 0.8792937 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Supply_Binder_Release.fbx using Guid(ea966be38409a584fa360ec570151cdc) (FBXImporter)Keyframe reduction: Ratio: 32.890049%;
+ -> (artifact id: '5850613b6cb2e2a2092b03cf4eddc486') in 1.1558878 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Melee_Candidate_Boxing.fbx using Guid(fa520bbb40e05de49b7ccced6413851d) (FBXImporter)Keyframe reduction: Ratio: 26.909824%;
+ -> (artifact id: '46e81701dc6b9c5adfc7b27fa14afce8') in 0.8892357 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Walk_Left_Turn.fbx using Guid(bbd5e0bead9a3e547b40e3aa02c82626) (FBXImporter)Keyframe reduction: Ratio: 47.981094%;
+ -> (artifact id: '912bc613b57a34f30813b139a6b07544') in 0.8882009 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Lod_One_Hand_Club_Combo.fbx using Guid(fb3fb98764d498b48a25613f31094798) (FBXImporter)Keyframe reduction: Ratio: 35.207104%;
+ -> (artifact id: '6d97e306ce4c13b1bd9c5f64e41828aa') in 0.9150463 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Standing_Jump.fbx using Guid(0c79560b0cee68948aea99c8c745701f) (FBXImporter)Keyframe reduction: Ratio: 45.898788%;
+ -> (artifact id: 'eb00fff9f0080a55bd1223216e477237') in 0.8750574 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Left_Turn_90.fbx using Guid(3c3b37bd07f17ed46b3d44ad0a88d4ed) (FBXImporter)Keyframe reduction: Ratio: 34.742180%;
+ -> (artifact id: '457c2d60e60b67841d31c9d4d5a93e20') in 0.8768155 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Turn_Right.fbx using Guid(3cabb79129aff3d46b8f10db1dc5a6b0) (FBXImporter)Keyframe reduction: Ratio: 54.814411%;
+ -> (artifact id: '5a555981b526cb5dc143882866152e52') in 0.8870617 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run_Backwards_Right_Turn.fbx using Guid(3cae84ebf4402924f9190f801833fa9c) (FBXImporter)Keyframe reduction: Ratio: 63.035149%;
+ -> (artifact id: 'cb227745dc77da5fea75c3ec94b79a9b') in 0.8847315 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run_Backwards_Left_Turn.fbx using Guid(6ccf16d32e87b834a9ada2e0782a5152) (FBXImporter)Keyframe reduction: Ratio: 61.982250%;
+ -> (artifact id: '5aba128effdc9f5f9265f3ce7f553378') in 0.8703528 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Lod_Mutant_Swiping.fbx using Guid(ac23c0d62069644429166353a567d8e0) (FBXImporter)Keyframe reduction: Ratio: 31.032211%;
+ -> (artifact id: 'ec13f1126871f4007282e6c4d490401f') in 0.9399558 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Hit_Body.fbx using Guid(ac0839eeaffeffb46a7a8f8361a84ede) (FBXImporter)Keyframe reduction: Ratio: 28.681782%;
+ -> (artifact id: '59833fa9b4f3a4deae6eeca478946e54') in 0.8869478 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Run_Backwards.fbx using Guid(cc2a9902aa6a4294a9c3685cfa5c53f3) (FBXImporter)Keyframe reduction: Ratio: 53.706921%;
+ -> (artifact id: 'd3d12e4d9c91a4fb9d2bb89c02e4fb5f') in 0.8721196 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Walk_F.fbx using Guid(fcf9e1b5cdb57d94a95e44cbd3694525) (FBXImporter)Keyframe reduction: Ratio: 41.678993%;
+ -> (artifact id: 'd2fd149515a09e40bff89a27fbf863ae') in 1.077636 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Jump.fbx using Guid(3d848008344e08342ad62e8d3318d143) (FBXImporter)Keyframe reduction: Ratio: 43.033886%;
+ -> (artifact id: 'efd35b26fcbd7b98ab985d6a51a611cf') in 0.8879337 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Walk_Backwards.fbx using Guid(4dd1e19b95213c844adb752eaf5cca91) (FBXImporter)Keyframe reduction: Ratio: 42.081451%;
+ -> (artifact id: '291b2d20bf65e2a5d1bb0ee951cc9b71') in 0.8888612 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_L_90.fbx using Guid(9d87269f16f6c1c4ab88b83b6191b3b7) (FBXImporter)Keyframe reduction: Ratio: 36.136940%;
+ -> (artifact id: 'ae16ee65d4d15b793e5f25dfa70786ce') in 1.1265447 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Wave_Idle.fbx using Guid(ad4730db6e4c55e429bb3b3df8b80a31) (FBXImporter)Keyframe reduction: Ratio: 26.514507%;
+ -> (artifact id: 'b829093b281323943f53c2ab3c87b186') in 0.8843593 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Idle.fbx using Guid(0ef6540de2ab7e149a036fa37cfecbc2) (FBXImporter)Keyframe reduction: Ratio: 5.278295%;
+ -> (artifact id: '6c0fbfaf72d4dd493b66f53856125153') in 0.9039538 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run_Backwards_Left_Turn.fbx using Guid(3ed02dcae86be4a4c838f66ee9c39468) (FBXImporter)Keyframe reduction: Ratio: 62.389053%;
+ -> (artifact id: '32a5db5954212ce1bf1a80d6d11097a7') in 0.8754317 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Idle_Variant_Stretch.fbx using Guid(3e9f4f510853953469f345e519dd4543) (FBXImporter)Keyframe reduction: Ratio: 19.805862%;
+ -> (artifact id: '1895069824011554cf828f03a66bc515') in 1.1118814 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Melee_Candidate_Kicking_2.fbx using Guid(4e5081ab305be464b9930bc500b6f1a4) (FBXImporter)Keyframe reduction: Ratio: 27.146112%;
+ -> (artifact id: '8f9ad693619c45c393b1539a1de43a1d') in 0.889965 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Run_Backwards.fbx using Guid(4ef06217fa8b43148a31ace0cfc5a2b4) (FBXImporter)Keyframe reduction: Ratio: 53.324051%;
+ -> (artifact id: 'e82a8da0efd70f4871479f5d0d67bc5a') in 0.8788671 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Strafe_R.fbx using Guid(4ed47cff5b650f54d9ca87ff8a4f86dd) (FBXImporter)Keyframe reduction: Ratio: 40.976330%;
+ -> (artifact id: 'fb19e2c0fdf4b547da922159d06c183b') in 1.1337963 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Run.fbx using Guid(5e7c6e5b1507e43469017c3e1ef05404) (FBXImporter)Keyframe reduction: Ratio: 57.337276%;
+ -> (artifact id: 'ecdce1557ff0ee812754e6cbe9cd49b8') in 0.869156 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Hurting_Idle.fbx using Guid(6e6ae119f7ef1a648b47f322166d5552) (FBXImporter)Keyframe reduction: Ratio: 28.717733%;
+ -> (artifact id: '93066193d1535242dc91f1ca9bb20d66') in 0.8956043 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Injured_Walk.fbx using Guid(7e034ce9b16c6f44e8bb277d53aa66c4) (FBXImporter)Keyframe reduction: Ratio: 49.976330%;
+ -> (artifact id: 'bed881f57defe2a5bcf620ee6b4bd3ec') in 0.871876 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Run_F.fbx using Guid(8e54b3ae926c716479a399b5e915de97) (FBXImporter)Keyframe reduction: Ratio: 54.034424%;
+ -> (artifact id: '54de724c9cac6190875b987ee13d202a') in 1.0977843 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Melee_Candidate_Boxing.fbx using Guid(ce8012b87101412439d0aaaac24a478a) (FBXImporter)Keyframe reduction: Ratio: 26.662540%;
+ -> (artifact id: 'f1a6ef5d9cf50c49730e96d53dc01038') in 0.8916335 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Wave_Idle.fbx using Guid(de7153cdcddb82848a7cc98596c11dc4) (FBXImporter)Keyframe reduction: Ratio: 27.078047%;
+ -> (artifact id: 'e5c893d7326be3e69a2b836c58baf075') in 0.924849 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Hit_BigHeadHit.fbx using Guid(eea5199a78d2dc6419618ce48563b428) (FBXImporter)Keyframe reduction: Ratio: 22.842955%;
+ -> (artifact id: '70f4ff4aac03a2fd3f904d4cfb0b6161') in 0.883956 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Walk_Backwards.fbx using Guid(fe5f8019ea39c334ab28d27097837f06) (FBXImporter)Keyframe reduction: Ratio: 42.197464%;
+ -> (artifact id: '71c0b3ca74775a106e3ce291a1098836') in 0.8726823 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Knockdown_B.fbx using Guid(1f3394e2a7836a34c8e865b05ce19ed2) (FBXImporter)Keyframe reduction: Ratio: 48.000710%;
+ -> (artifact id: '61a22428edd461333a133deca81e9302') in 1.0772519 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Left_Strafe.fbx using Guid(1f6a97bdc0e97ae44b0bc4d21efa16a2) (FBXImporter)Keyframe reduction: Ratio: 60.608620%;
+ -> (artifact id: '52a7057b79b64d8f202b50599fc354cc') in 0.8797585 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Right_Strafe_Walking.fbx using Guid(4fb069d9c761ecc4baa850e6eb369ed8) (FBXImporter)Keyframe reduction: Ratio: 46.484444%;
+ -> (artifact id: '9046b1089ec98f16177726b53ef7130d') in 0.8829693 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Run_Stop.fbx using Guid(7f4e0e491c93ea74e9493bc396194de5) (FBXImporter)Keyframe reduction: Ratio: 35.016907%;
+ -> (artifact id: 'bd485b6d117420ccc393842d6420182f') in 1.0982927 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Lod_Mutant_Walking.fbx using Guid(8fa168570836c2b4fb5ae679d53e8986) (FBXImporter)Keyframe reduction: Ratio: 32.046803%;
+ -> (artifact id: 'ac59ccdc67f9be62d55db67971fa4b67') in 0.8636309 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Stumble_Idle.fbx using Guid(8f0b36648d51c3a49872d1ee874b210f) (FBXImporter)Keyframe reduction: Ratio: 32.153847%;
+ -> (artifact id: 'e3a8efc0526a0460e3a80b5e7d12fcbb') in 0.8930669 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Backwards_Turn_Right.fbx using Guid(9f9047d7f47179b43818fdc22a86837e) (FBXImporter)Keyframe reduction: Ratio: 53.684772%;
+ -> (artifact id: 'fe77988ec01cb47d659d5cafe16e9d20') in 0.8702902 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Run.fbx using Guid(bfd0b847f83143541a70468dd7253dcd) (FBXImporter)Keyframe reduction: Ratio: 57.810650%;
+ -> (artifact id: 'c3d9f2aacc4fa34cba5ad618648df1df') in 0.8790792 seconds
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Supply_Binder_Windup.fbx using Guid(bf4793d55a320594e8d3f4615e3d052e) (FBXImporter)Keyframe reduction: Ratio: 74.358963%;
+Model 'CHR01_Supply_Binder_Windup' contains animation clip 'Scene' which has length of 0 frames (start=21, end=21). It will result in empty animation. 
+ -> (artifact id: 'c24f318f53eedd4b21ac01db8ce23687') in 1.1278307 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Normal/ENY01_Normal_Hit_Head.fbx using Guid(ffd83092d74fb204584d5cb8ecc8bd41) (FBXImporter)Keyframe reduction: Ratio: 27.460999%;
+ -> (artifact id: 'c539c782973ae35aaae84bc78c428e67') in 0.870133 seconds
+Start importing Assets/_Project/Art/Animation/ENY01/Elite/ENY01_Elite_Injured_Idle.fbx using Guid(ff2c2abd53f7c2c4c8a0b72f51a46115) (FBXImporter)Keyframe reduction: Ratio: 14.333625%;
+ -> (artifact id: '43974a6b77f863003ff8a611b2d0240b') in 0.9183944 seconds
+Start importing Packages/com.unity.render-pipelines.core/Tests/Editor/UnifiedRayTracing/TraceRays.urtshader using Guid(1142bbad8b9e8c44c83a9775ff120d37) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceRays.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: 'dd638e02bca59984993d349a248eb317') in 0.0258763 seconds
+Start importing Packages/com.unity.render-pipelines.universal/Runtime/RendererFeatures/SurfaceCacheGI/SurfaceCacheCore/RisEstimation.urtshader using Guid(713f6141bd66a134383b787f2eaa7c11) (ScriptedImporter)
+Compiling Ray Tracing Shader "RisEstimation.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '321aefa72d844652b88729da3244b29d') in 0.0231571 seconds
+Start importing Packages/com.unity.render-pipelines.core/Editor/Lighting/ProbeVolume/RenderingLayerMask/TraceRenderingLayerMask.urtshader using Guid(94a070d33e408384bafc1dea4a565df9) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceRenderingLayerMask.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '92a0bb7150ff7d9ec6bc75e0df27bd15') in 0.0229517 seconds
+Start importing Packages/com.unity.render-pipelines.universal/Runtime/RendererFeatures/SurfaceCacheGI/SurfaceCacheCore/UniformEstimation.urtshader using Guid(94a39d12848d8d64ca962a72b74e7c50) (ScriptedImporter)
+Compiling Ray Tracing Shader "UniformEstimation.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '0e156ebda1cce9f11c92623df456791b') in 0.0165789 seconds
+Start importing Packages/com.unity.render-pipelines.core/Tests/Editor/UnifiedRayTracing/TraceTransparentRays.urtshader using Guid(6513c3b892e933c4f8d00c19d5c47532) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceTransparentRays.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '6b9d31cccfa4cd462cadf40a7b6828a6') in 0.008994 seconds
+Start importing Packages/com.unity.render-pipelines.core/Editor/Lighting/ProbeVolume/DynamicGI/DynamicGISkyOcclusion.urtshader using Guid(5a2a534753fbdb44e96c3c78b5a6999d) (ScriptedImporter)
+Compiling Ray Tracing Shader "DynamicGISkyOcclusion.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: '9c28aba97d53600e0c1af1aeaeb3ee0b') in 0.0141348 seconds
+Start importing Packages/com.unity.render-pipelines.core/Tests/Editor/UnifiedRayTracing/TraceRaysAndFetchAttributes.urtshader using Guid(fbc59f55df2416344b008dc23753cae2) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceRaysAndFetchAttributes.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: 'c036ee11528b06db66db12af6714a8c8') in 0.0112291 seconds
+Start importing Packages/com.unity.render-pipelines.universal/Runtime/RendererFeatures/SurfaceCacheGI/SurfaceCacheCore/RestirCandidateTemporal.urtshader using Guid(ad3a9f9982f8c4f4a839a78955e78458) (ScriptedImporter)
+Compiling Ray Tracing Shader "RestirCandidateTemporal.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: 'fd25540064fb42b26a3e9c4d849c9d74') in 0.0158893 seconds
+Start importing Packages/com.unity.render-pipelines.core/Editor/Lighting/ProbeVolume/VirtualOffset/TraceVirtualOffset.urtshader using Guid(ff2cbab5da58bf04d82c5f34037ed123) (ScriptedImporter)
+Compiling Ray Tracing Shader "TraceVirtualOffset.urtshader", keywords = <no keywords>
+    finished in 0.00 seconds. Local cache hits 1, remote cache hits 0, compiled 0 platform variants
+ -> (artifact id: 'ed7f5efa6003d25c455bcbba31ab6d08') in 0.0219025 seconds
+Refreshing native plugins compatible for Editor in 0.96 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=347d40da5b4fa404988f485d46e62f2b): Total: 124.824 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=127 (actual=127, local cache=0, cache server=0)
+		Asset DB Process Time: managed=165 ms, native=113094 ms
+		Asset DB Callback time: managed=429 ms, native=305 ms
+		Scripting: domain reloads=1, domain reload time=3582 ms, compile time=7176 ms, other=70 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.002ms
+	InvokePackagesCallback: 21.035ms
+	ApplyChangesToAssetFolders: 0.820ms
+	Scan: 138.296ms
+	OnSourceAssetsModified: 1.288ms
+	CategorizeAssetsWithTransientArtifact: 34.145ms
+	ProcessAssetsWithTransientArtifactChanges: 84.525ms
+	CategorizeAssets: 73.077ms
+	ImportOutOfDateAssets: 112734.746ms (-2741.424ms without children)
+		ImportManagerImport: 108298.652ms (16.117ms without children)
+			ImportInProcess: 108279.436ms
+			UpdateCategorizedAssets: 3.099ms
+		CompileScripts: 7175.647ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 0.276ms
+		ReloadImportedAssets: 0.016ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.749ms
+		InitializingProgressBar: 0.011ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.816ms
+	PostProcessAllAssets: 707.195ms
+	Hotreload: 8.802ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.006ms
+	UnloadStreamsBegin: 2.344ms
+	PersistCurrentRevisions: 0.925ms
+	UnloadStreamsEnd: 0.001ms
+	GenerateScriptTypeHashes: 5.867ms
+	Untracked: 11016.815ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 3.127ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Game
+Unloading 346 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4253 unused Assets / (8.7 MB). Loaded Objects now: 4888.
+Memory consumption went from 274.1 MB to 265.4 MB.
+Total: 17.520700 ms (FindLiveObjects: 0.540300 ms CreateObjectMapping: 0.431300 ms MarkObjects: 9.197000 ms  DeleteObjects: 7.350700 ms)
+
+Asset Pipeline Refresh (id=c888762859564b84896a4e6af8b22265): Total: 0.070 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Getup_B.fbx using Guid(043e5e664071bc740bdaed26d77e0756) (FBXImporter)Keyframe reduction: Ratio: 33.914719%;
+ -> (artifact id: '61e1e088f34c2af17e92cd0b4c5827e4') in 0.9272767 seconds
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=33f72c949a6f8a1468c50f8c235bb02f): Total: 1.065 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1056 ms
+		Asset DB Callback time: managed=5 ms, native=2 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.002ms
+	ApplyChangesToAssetFolders: 0.121ms
+	Scan: 61.167ms
+	OnSourceAssetsModified: 1.085ms
+	CategorizeAssetsWithTransientArtifact: 0.037ms
+	ProcessAssetsWithTransientArtifactChanges: 0.097ms
+	CategorizeAssets: 29.897ms
+	ImportOutOfDateAssets: 947.527ms (-15.018ms without children)
+		ImportManagerImport: 943.730ms (15.979ms without children)
+			ImportInProcess: 927.713ms
+			UpdateCategorizedAssets: 0.038ms
+		ReloadNativeAssets: 0.039ms
+		UnloadImportedAssets: 2.083ms
+		ReloadImportedAssets: 15.504ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.591ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.587ms
+	PostProcessAllAssets: 5.507ms
+	Hotreload: 1.359ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.222ms
+	UnloadStreamsBegin: 0.112ms
+	PersistCurrentRevisions: 0.281ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 18.076ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Getup_F.fbx using Guid(9517496dcae99d34e87a43bba2267385) (FBXImporter)Keyframe reduction: Ratio: 50.143703%;
+ -> (artifact id: 'be4255a39cfff9e94c2ce482fdf7b2e6') in 0.932061 seconds
+Refreshing native plugins compatible for Editor in 0.73 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=7625f173471ccb84399266c19ba637d1): Total: 1.029 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1025 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.120ms
+	Scan: 34.341ms
+	OnSourceAssetsModified: 0.081ms
+	CategorizeAssetsWithTransientArtifact: 0.028ms
+	ProcessAssetsWithTransientArtifactChanges: 0.102ms
+	CategorizeAssets: 28.319ms
+	ImportOutOfDateAssets: 955.608ms (-18.522ms without children)
+		ImportManagerImport: 951.968ms (19.438ms without children)
+			ImportInProcess: 932.496ms
+			UpdateCategorizedAssets: 0.034ms
+		ReloadNativeAssets: 0.028ms
+		UnloadImportedAssets: 1.925ms
+		ReloadImportedAssets: 19.011ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.532ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.656ms
+	PostProcessAllAssets: 1.270ms
+	Hotreload: 1.508ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.214ms
+	UnloadStreamsBegin: 0.183ms
+	PersistCurrentRevisions: 0.430ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 6.916ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Idle.fbx using Guid(8944f44643d74524f8582f6d1953ac3a) (FBXImporter)Keyframe reduction: Ratio: 10.665032%;
+ -> (artifact id: 'e84a1cfe0f775c63b5ad952b7431cc61') in 0.9400173 seconds
+Refreshing native plugins compatible for Editor in 0.78 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=bce1b594ca8483942ac09813b7fce848): Total: 1.038 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1033 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.109ms
+	Scan: 34.032ms
+	OnSourceAssetsModified: 0.080ms
+	CategorizeAssetsWithTransientArtifact: 0.021ms
+	ProcessAssetsWithTransientArtifactChanges: 0.084ms
+	CategorizeAssets: 28.044ms
+	ImportOutOfDateAssets: 964.964ms (-19.803ms without children)
+		ImportManagerImport: 961.351ms (20.879ms without children)
+			ImportInProcess: 940.433ms
+			UpdateCategorizedAssets: 0.038ms
+		ReloadNativeAssets: 0.027ms
+		UnloadImportedAssets: 1.867ms
+		ReloadImportedAssets: 20.419ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.549ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.543ms
+	PostProcessAllAssets: 1.327ms
+	Hotreload: 1.818ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.200ms
+	UnloadStreamsBegin: 0.273ms
+	PersistCurrentRevisions: 0.294ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.544ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Idle_Variant_Stretch.fbx using Guid(3e9f4f510853953469f345e519dd4543) (FBXImporter)Keyframe reduction: Ratio: 19.805862%;
+ -> (artifact id: '790397bf4555cce55c7e885ab3363d82') in 0.9532631 seconds
+Refreshing native plugins compatible for Editor in 0.81 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=8ce9717d4d73b2841aa98849ae8a376a): Total: 1.064 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1060 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.113ms
+	Scan: 34.693ms
+	OnSourceAssetsModified: 0.070ms
+	CategorizeAssetsWithTransientArtifact: 0.022ms
+	ProcessAssetsWithTransientArtifactChanges: 0.091ms
+	CategorizeAssets: 28.723ms
+	ImportOutOfDateAssets: 989.721ms (-32.428ms without children)
+		ImportManagerImport: 987.282ms (33.538ms without children)
+			ImportInProcess: 953.704ms
+			UpdateCategorizedAssets: 0.039ms
+		ReloadNativeAssets: 0.028ms
+		UnloadImportedAssets: 0.656ms
+		ReloadImportedAssets: 33.028ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.579ms
+		InitializingProgressBar: 0.011ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.003ms
+		OnDemandSchedulerStart: 0.563ms
+	PostProcessAllAssets: 1.315ms
+	Hotreload: 1.598ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.201ms
+	UnloadStreamsBegin: 0.171ms
+	PersistCurrentRevisions: 0.306ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.684ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Jump.fbx using Guid(64fcc45ccd248c64d887ae346408a6b8) (FBXImporter)Keyframe reduction: Ratio: 58.889828%;
+ -> (artifact id: '4744d0f524878213a07c556de84c9d75') in 0.9168904 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=5a02f196935bde24cbde47bedf1d80c7): Total: 1.016 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1012 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.145ms
+	Scan: 31.706ms
+	OnSourceAssetsModified: 0.057ms
+	CategorizeAssetsWithTransientArtifact: 0.022ms
+	ProcessAssetsWithTransientArtifactChanges: 0.099ms
+	CategorizeAssets: 28.402ms
+	ImportOutOfDateAssets: 945.321ms (-23.469ms without children)
+		ImportManagerImport: 941.936ms (24.517ms without children)
+			ImportInProcess: 917.372ms
+			UpdateCategorizedAssets: 0.047ms
+		ReloadNativeAssets: 0.027ms
+		UnloadImportedAssets: 1.805ms
+		ReloadImportedAssets: 24.030ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.536ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.445ms
+	PostProcessAllAssets: 1.244ms
+	Hotreload: 1.476ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.185ms
+	UnloadStreamsBegin: 0.206ms
+	PersistCurrentRevisions: 0.297ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 6.793ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Knockdown_B.fbx using Guid(1f3394e2a7836a34c8e865b05ce19ed2) (FBXImporter)Keyframe reduction: Ratio: 48.000706%;
+ -> (artifact id: '2e0b29b52d25c80b3d0bf17811569ade') in 0.9159161 seconds
+Refreshing native plugins compatible for Editor in 0.79 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=cf0dd6225396d594180faac0bcffde9c): Total: 1.018 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1014 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.113ms
+	Scan: 36.976ms
+	OnSourceAssetsModified: 0.064ms
+	CategorizeAssetsWithTransientArtifact: 0.022ms
+	ProcessAssetsWithTransientArtifactChanges: 0.092ms
+	CategorizeAssets: 27.957ms
+	ImportOutOfDateAssets: 942.561ms (-21.694ms without children)
+		ImportManagerImport: 939.049ms (22.654ms without children)
+			ImportInProcess: 916.358ms
+			UpdateCategorizedAssets: 0.036ms
+		ReloadNativeAssets: 0.026ms
+		UnloadImportedAssets: 1.858ms
+		ReloadImportedAssets: 22.229ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.516ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.003ms
+		OnDemandSchedulerStart: 0.565ms
+	PostProcessAllAssets: 1.323ms
+	Hotreload: 1.599ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.201ms
+	UnloadStreamsBegin: 0.170ms
+	PersistCurrentRevisions: 0.292ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.709ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Knockdown_F.fbx using Guid(c1db1021507069249996d02eea1b894a) (FBXImporter)Keyframe reduction: Ratio: 53.011684%;
+ -> (artifact id: '92ed6c62fca30df2a68e246944d91f31') in 0.9365108 seconds
+Refreshing native plugins compatible for Editor in 0.64 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=2d32ee72e040ef946bf75ba3aadaf69f): Total: 1.036 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1033 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.117ms
+	Scan: 34.123ms
+	OnSourceAssetsModified: 0.084ms
+	CategorizeAssetsWithTransientArtifact: 0.026ms
+	ProcessAssetsWithTransientArtifactChanges: 0.121ms
+	CategorizeAssets: 30.808ms
+	ImportOutOfDateAssets: 960.857ms (-19.332ms without children)
+		ImportManagerImport: 957.300ms (20.293ms without children)
+			ImportInProcess: 936.971ms
+			UpdateCategorizedAssets: 0.036ms
+		ReloadNativeAssets: 0.027ms
+		UnloadImportedAssets: 1.838ms
+		ReloadImportedAssets: 19.873ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.584ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.556ms
+	PostProcessAllAssets: 1.209ms
+	Hotreload: 1.397ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.188ms
+	UnloadStreamsBegin: 0.155ms
+	PersistCurrentRevisions: 0.310ms
+	UnloadStreamsEnd: 0.007ms
+	Untracked: 7.012ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Melee_Hit_Body.fbx using Guid(2affcc6cf732ada4a85ae668d1ed286d) (FBXImporter)Keyframe reduction: Ratio: 23.860546%;
+ -> (artifact id: '2d8002ab5bfb12cd61e2df57617d5142') in 0.9143655 seconds
+Refreshing native plugins compatible for Editor in 0.89 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=63458f4039663934b9687649e7e682de): Total: 1.012 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1008 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.119ms
+	Scan: 31.709ms
+	OnSourceAssetsModified: 0.062ms
+	CategorizeAssetsWithTransientArtifact: 0.024ms
+	ProcessAssetsWithTransientArtifactChanges: 0.103ms
+	CategorizeAssets: 28.651ms
+	ImportOutOfDateAssets: 940.570ms (-22.073ms without children)
+		ImportManagerImport: 938.109ms (23.119ms without children)
+			ImportInProcess: 914.951ms
+			UpdateCategorizedAssets: 0.039ms
+		ReloadNativeAssets: 0.027ms
+		UnloadImportedAssets: 0.716ms
+		ReloadImportedAssets: 22.611ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.547ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.621ms
+	PostProcessAllAssets: 1.273ms
+	Hotreload: 1.662ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.244ms
+	UnloadStreamsBegin: 0.202ms
+	PersistCurrentRevisions: 0.311ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.738ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Run_F.fbx using Guid(8e54b3ae926c716479a399b5e915de97) (FBXImporter)Keyframe reduction: Ratio: 54.034424%;
+ -> (artifact id: 'ecd232768ec7ba949a9860d5c5bac80b') in 0.9127493 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=5f6237f76c3b3fb499c0ae840617361f): Total: 1.013 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1009 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.124ms
+	Scan: 35.027ms
+	OnSourceAssetsModified: 0.066ms
+	CategorizeAssetsWithTransientArtifact: 0.025ms
+	ProcessAssetsWithTransientArtifactChanges: 0.098ms
+	CategorizeAssets: 28.066ms
+	ImportOutOfDateAssets: 939.742ms (-21.829ms without children)
+		ImportManagerImport: 936.198ms (22.935ms without children)
+			ImportInProcess: 913.224ms
+			UpdateCategorizedAssets: 0.039ms
+		ReloadNativeAssets: 0.028ms
+		UnloadImportedAssets: 1.881ms
+		ReloadImportedAssets: 22.461ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.541ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.450ms
+	PostProcessAllAssets: 1.261ms
+	Hotreload: 1.578ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.212ms
+	UnloadStreamsBegin: 0.187ms
+	PersistCurrentRevisions: 0.290ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.645ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Run_Stop.fbx using Guid(7f4e0e491c93ea74e9493bc396194de5) (FBXImporter)Keyframe reduction: Ratio: 35.016907%;
+ -> (artifact id: '4a59983d6f2e9be88fce29d9d07aff3f') in 0.9409694 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=d447b046e934fce4f9386c515af4ce35): Total: 1.038 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1034 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.002ms
+	ApplyChangesToAssetFolders: 0.138ms
+	Scan: 31.585ms
+	OnSourceAssetsModified: 0.060ms
+	CategorizeAssetsWithTransientArtifact: 0.025ms
+	ProcessAssetsWithTransientArtifactChanges: 0.101ms
+	CategorizeAssets: 30.442ms
+	ImportOutOfDateAssets: 965.282ms (-19.414ms without children)
+		ImportManagerImport: 961.753ms (20.309ms without children)
+			ImportInProcess: 941.409ms
+			UpdateCategorizedAssets: 0.035ms
+		ReloadNativeAssets: 0.024ms
+		UnloadImportedAssets: 1.847ms
+		ReloadImportedAssets: 19.890ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.545ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.626ms
+	PostProcessAllAssets: 1.138ms
+	Hotreload: 1.558ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.202ms
+	UnloadStreamsBegin: 0.169ms
+	PersistCurrentRevisions: 0.345ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 7.108ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Strafe_L.fbx using Guid(e0d0d7859f6b72a46ad29e1dd7a20b9d) (FBXImporter)Keyframe reduction: Ratio: 42.492603%;
+ -> (artifact id: '0640679a8a477b953ed3164a69035f52') in 0.9393636 seconds
+Refreshing native plugins compatible for Editor in 0.77 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=33ca36f0979657948a85a1faf5fc06e3): Total: 1.034 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1030 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.111ms
+	Scan: 34.440ms
+	OnSourceAssetsModified: 0.059ms
+	CategorizeAssetsWithTransientArtifact: 0.019ms
+	ProcessAssetsWithTransientArtifactChanges: 0.082ms
+	CategorizeAssets: 27.884ms
+	ImportOutOfDateAssets: 961.647ms (-17.605ms without children)
+		ImportManagerImport: 958.267ms (18.434ms without children)
+			ImportInProcess: 939.799ms
+			UpdateCategorizedAssets: 0.034ms
+		ReloadNativeAssets: 0.024ms
+		UnloadImportedAssets: 1.848ms
+		ReloadImportedAssets: 17.992ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.504ms
+		InitializingProgressBar: 0.012ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.603ms
+	PostProcessAllAssets: 1.190ms
+	Hotreload: 1.563ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.189ms
+	UnloadStreamsBegin: 0.166ms
+	PersistCurrentRevisions: 0.290ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.464ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Strafe_R.fbx using Guid(4ed47cff5b650f54d9ca87ff8a4f86dd) (FBXImporter)Keyframe reduction: Ratio: 40.976330%;
+ -> (artifact id: '42518c35a20618d6af3a38470ff6ad09') in 0.902365 seconds
+Refreshing native plugins compatible for Editor in 0.71 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=824121663b1213640b9a33d419daac4c): Total: 0.996 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=992 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.119ms
+	Scan: 34.570ms
+	OnSourceAssetsModified: 0.066ms
+	CategorizeAssetsWithTransientArtifact: 0.015ms
+	ProcessAssetsWithTransientArtifactChanges: 0.100ms
+	CategorizeAssets: 28.007ms
+	ImportOutOfDateAssets: 922.945ms (-16.817ms without children)
+		ImportManagerImport: 920.694ms (17.779ms without children)
+			ImportInProcess: 902.875ms
+			UpdateCategorizedAssets: 0.040ms
+		ReloadNativeAssets: 0.024ms
+		UnloadImportedAssets: 0.650ms
+		ReloadImportedAssets: 17.286ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.503ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.595ms
+	PostProcessAllAssets: 1.171ms
+	Hotreload: 1.603ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.189ms
+	UnloadStreamsBegin: 0.159ms
+	PersistCurrentRevisions: 0.285ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 6.779ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Supply_Binder_Release.fbx using Guid(ea966be38409a584fa360ec570151cdc) (FBXImporter)Keyframe reduction: Ratio: 32.890049%;
+ -> (artifact id: '3717b7d62f8676080dbf9dadb520fa88') in 0.9201655 seconds
+Refreshing native plugins compatible for Editor in 0.82 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=44a019d77112f8f4c93ad06f2920d8e7): Total: 1.027 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1023 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.121ms
+	Scan: 41.241ms
+	OnSourceAssetsModified: 0.071ms
+	CategorizeAssetsWithTransientArtifact: 0.027ms
+	ProcessAssetsWithTransientArtifactChanges: 0.103ms
+	CategorizeAssets: 27.992ms
+	ImportOutOfDateAssets: 946.832ms (-21.473ms without children)
+		ImportManagerImport: 943.142ms (22.480ms without children)
+			ImportInProcess: 920.624ms
+			UpdateCategorizedAssets: 0.038ms
+		ReloadNativeAssets: 0.026ms
+		UnloadImportedAssets: 1.909ms
+		ReloadImportedAssets: 22.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.526ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.689ms
+	PostProcessAllAssets: 1.272ms
+	Hotreload: 1.815ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.210ms
+	UnloadStreamsBegin: 0.221ms
+	PersistCurrentRevisions: 0.290ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 7.046ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Supply_Binder_Windup.fbx using Guid(bf4793d55a320594e8d3f4615e3d052e) (FBXImporter)Keyframe reduction: Ratio: 74.358963%;
+Model 'CHR01_Supply_Binder_Windup' contains animation clip 'CHR01_Supply_Binder_Windup' which has length of 0 frames (start=21, end=21). It will result in empty animation. 
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEditor.AssetDatabase:ImportAsset (string,UnityEditor.ImportAssetOptions)
+UnityEditor.AssetDatabase:ImportAsset (string)
+UnityEditor.AssetImporter:SaveAndReimport ()
+BreakNotice.Contest.Editor.DesignerACharacterIntegrationAuthoring:ConfigureLatestChr01Animations () (at Assets/_Project/Code/Editor/Contest/DesignerACharacterIntegrationAuthoring.cs:796)
+BreakNotice.Contest.Editor.DesignerACharacterIntegrationAuthoring:RebuildAllyAnimationController () (at Assets/_Project/Code/Editor/Contest/DesignerACharacterIntegrationAuthoring.cs:298)
+
+[Assets/_Project/Code/Editor/Contest/DesignerACharacterIntegrationAuthoring.cs line 796]
+
+ -> (artifact id: '6cf794a452b7ba4086de35522efc83ec') in 0.9314975 seconds
+Refreshing native plugins compatible for Editor in 0.69 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=f34a6c45bb42c2f4fae11b02df4fec66): Total: 1.030 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1026 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.112ms
+	Scan: 34.455ms
+	OnSourceAssetsModified: 0.066ms
+	CategorizeAssetsWithTransientArtifact: 0.020ms
+	ProcessAssetsWithTransientArtifactChanges: 0.084ms
+	CategorizeAssets: 27.833ms
+	ImportOutOfDateAssets: 956.874ms (-20.236ms without children)
+		ImportManagerImport: 953.168ms (21.191ms without children)
+			ImportInProcess: 931.941ms
+			UpdateCategorizedAssets: 0.036ms
+		ReloadNativeAssets: 0.027ms
+		UnloadImportedAssets: 1.923ms
+		ReloadImportedAssets: 20.755ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.589ms
+		InitializingProgressBar: 0.009ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.638ms
+	PostProcessAllAssets: 1.208ms
+	Hotreload: 1.548ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.186ms
+	UnloadStreamsBegin: 0.169ms
+	PersistCurrentRevisions: 0.301ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.801ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_180_Running.fbx using Guid(d66f5bd71851ae3409c8821fd36e2e42) (FBXImporter)Keyframe reduction: Ratio: 50.239506%;
+ -> (artifact id: 'caebf76702a9062e557e6e86a96b4f43') in 0.9121088 seconds
+Refreshing native plugins compatible for Editor in 0.63 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b65242f6880ffdc4cabb4a04cc5e028a): Total: 1.011 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1007 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.123ms
+	Scan: 35.592ms
+	OnSourceAssetsModified: 0.065ms
+	CategorizeAssetsWithTransientArtifact: 0.026ms
+	ProcessAssetsWithTransientArtifactChanges: 0.102ms
+	CategorizeAssets: 28.319ms
+	ImportOutOfDateAssets: 936.397ms (-19.359ms without children)
+		ImportManagerImport: 932.956ms (20.315ms without children)
+			ImportInProcess: 912.608ms
+			UpdateCategorizedAssets: 0.033ms
+		ReloadNativeAssets: 0.026ms
+		UnloadImportedAssets: 1.763ms
+		ReloadImportedAssets: 19.913ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.542ms
+		InitializingProgressBar: 0.008ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.546ms
+	PostProcessAllAssets: 1.187ms
+	Hotreload: 1.445ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.199ms
+	UnloadStreamsBegin: 0.173ms
+	PersistCurrentRevisions: 0.300ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.909ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_180_Walking.fbx using Guid(27e89e772874be04f9981addc69bd270) (FBXImporter)Keyframe reduction: Ratio: 41.401031%;
+ -> (artifact id: 'c1e3f7bbc46c86006b3ce76bcadde6f1') in 0.9243579 seconds
+Refreshing native plugins compatible for Editor in 0.75 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=d6165a2877a54c04c86108488aa75d9f): Total: 1.021 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1016 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.144ms
+	Scan: 34.164ms
+	OnSourceAssetsModified: 0.068ms
+	CategorizeAssetsWithTransientArtifact: 0.031ms
+	ProcessAssetsWithTransientArtifactChanges: 0.100ms
+	CategorizeAssets: 28.286ms
+	ImportOutOfDateAssets: 947.169ms (-19.020ms without children)
+		ImportManagerImport: 944.738ms (19.816ms without children)
+			ImportInProcess: 924.887ms
+			UpdateCategorizedAssets: 0.034ms
+		ReloadNativeAssets: 0.025ms
+		UnloadImportedAssets: 0.831ms
+		ReloadImportedAssets: 19.406ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.543ms
+		InitializingProgressBar: 0.011ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.635ms
+	PostProcessAllAssets: 1.295ms
+	Hotreload: 1.618ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.209ms
+	UnloadStreamsBegin: 0.218ms
+	PersistCurrentRevisions: 0.335ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.959ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_L_90.fbx using Guid(9d87269f16f6c1c4ab88b83b6191b3b7) (FBXImporter)Keyframe reduction: Ratio: 36.136940%;
+ -> (artifact id: 'bf800c5d545b26bfdb065422924f2df7') in 0.9107757 seconds
+Refreshing native plugins compatible for Editor in 0.74 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=d786dcea9db9c274fa0eba51208b69df): Total: 1.010 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1007 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.129ms
+	Scan: 33.841ms
+	OnSourceAssetsModified: 0.065ms
+	CategorizeAssetsWithTransientArtifact: 0.020ms
+	ProcessAssetsWithTransientArtifactChanges: 0.091ms
+	CategorizeAssets: 28.170ms
+	ImportOutOfDateAssets: 937.923ms (-21.938ms without children)
+		ImportManagerImport: 934.207ms (22.897ms without children)
+			ImportInProcess: 911.266ms
+			UpdateCategorizedAssets: 0.044ms
+		ReloadNativeAssets: 0.026ms
+		UnloadImportedAssets: 1.944ms
+		ReloadImportedAssets: 22.481ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.570ms
+		InitializingProgressBar: 0.011ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.007ms
+		OnDemandSchedulerStart: 0.616ms
+	PostProcessAllAssets: 1.145ms
+	Hotreload: 1.624ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.227ms
+	UnloadStreamsBegin: 0.178ms
+	PersistCurrentRevisions: 0.288ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 6.765ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Turn_R_90.fbx using Guid(3094b721f1342ed418fc9127615f35ca) (FBXImporter)Keyframe reduction: Ratio: 38.135071%;
+ -> (artifact id: '64cd9d0953810ffbe7b20988b45fbc3e') in 0.914159 seconds
+Refreshing native plugins compatible for Editor in 0.69 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=d2d8c73bd7bf4774faa94403182e57b4): Total: 1.017 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1013 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.136ms
+	Scan: 39.425ms
+	OnSourceAssetsModified: 0.065ms
+	CategorizeAssetsWithTransientArtifact: 0.024ms
+	ProcessAssetsWithTransientArtifactChanges: 0.121ms
+	CategorizeAssets: 28.082ms
+	ImportOutOfDateAssets: 938.762ms (-19.166ms without children)
+		ImportManagerImport: 935.054ms (20.080ms without children)
+			ImportInProcess: 914.935ms
+			UpdateCategorizedAssets: 0.040ms
+		ReloadNativeAssets: 0.027ms
+		UnloadImportedAssets: 2.035ms
+		ReloadImportedAssets: 19.611ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.594ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.594ms
+	PostProcessAllAssets: 1.154ms
+	Hotreload: 1.544ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.201ms
+	UnloadStreamsBegin: 0.170ms
+	PersistCurrentRevisions: 0.304ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 7.212ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Walk_F.fbx using Guid(fcf9e1b5cdb57d94a95e44cbd3694525) (FBXImporter)Keyframe reduction: Ratio: 41.678993%;
+ -> (artifact id: '5c5c1d2fea4783a27eb2b4561d93a7b1') in 0.9163671 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=dc66ad72e507c0d4da66ddd09b9f9597): Total: 1.017 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1012 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.125ms
+	Scan: 36.051ms
+	OnSourceAssetsModified: 0.059ms
+	CategorizeAssetsWithTransientArtifact: 0.032ms
+	ProcessAssetsWithTransientArtifactChanges: 0.100ms
+	CategorizeAssets: 28.235ms
+	ImportOutOfDateAssets: 941.769ms (-20.238ms without children)
+		ImportManagerImport: 938.125ms (21.261ms without children)
+			ImportInProcess: 916.828ms
+			UpdateCategorizedAssets: 0.035ms
+		ReloadNativeAssets: 0.025ms
+		UnloadImportedAssets: 1.941ms
+		ReloadImportedAssets: 20.841ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.538ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.524ms
+	PostProcessAllAssets: 1.248ms
+	Hotreload: 1.635ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.263ms
+	UnloadStreamsBegin: 0.180ms
+	PersistCurrentRevisions: 0.319ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.614ms
+
+Start importing Assets/_Project/Art/Animation/CHR01/CHR01_Walk_Stop.fbx using Guid(995e10a4649011545bce0ae23fd36322) (FBXImporter)Keyframe reduction: Ratio: 20.027311%;
+ -> (artifact id: '0d91000d146a5631a082cef94355a559') in 0.9147002 seconds
+Refreshing native plugins compatible for Editor in 0.71 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=e08b3f37eaa1c934e85a3786d67fcf13): Total: 1.014 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1010 ms
+		Asset DB Callback time: managed=1 ms, native=1 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=935, non-scripts=2069
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.155ms
+	Scan: 37.542ms
+	OnSourceAssetsModified: 0.067ms
+	CategorizeAssetsWithTransientArtifact: 0.025ms
+	ProcessAssetsWithTransientArtifactChanges: 0.095ms
+	CategorizeAssets: 28.048ms
+	ImportOutOfDateAssets: 937.902ms (-19.383ms without children)
+		ImportManagerImport: 935.500ms (20.282ms without children)
+			ImportInProcess: 915.184ms
+			UpdateCategorizedAssets: 0.034ms
+		ReloadNativeAssets: 0.032ms
+		UnloadImportedAssets: 0.724ms
+		ReloadImportedAssets: 19.860ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.579ms
+		InitializingProgressBar: 0.010ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.002ms
+		OnDemandSchedulerStart: 0.578ms
+	PostProcessAllAssets: 1.275ms
+	Hotreload: 1.620ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.218ms
+	UnloadStreamsBegin: 0.237ms
+	PersistCurrentRevisions: 0.334ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 6.812ms
+
+Start importing Assets/_Project/Art/Animation/DesignerAControllers/CHR01_Ally.controller using Guid(caeb3d9eb60103942ba3f2db0d35712c) (NativeFormatImporter) -> (artifact id: '492af00c064c37127dfa0d6250c2f4d1') in 0.0039092 seconds
+Refreshing native plugins compatible for Editor in 0.63 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=90987d58d86bf1b499035cf7f942922e): Total: 0.052 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+CHR01 LATEST ANIMATION SET PASS: exact top-level 20 independent Humanoid sources imported, five runtime states rebuilt, Supply release synchronized; no CHR00, ENY01, or Scene authoring invoked.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+BreakNotice.Contest.Editor.DesignerACharacterIntegrationAuthoring:RebuildAllyAnimationController () (at Assets/_Project/Code/Editor/Contest/DesignerACharacterIntegrationAuthoring.cs:301)
+
+(Filename: Assets/_Project/Code/Editor/Contest/DesignerACharacterIntegrationAuthoring.cs Line: 301)
+
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-23T17:42:54Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Batchmode quit successfully invoked - shutting down!
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-jys-6000.3.20-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-jys-6000.3.20 channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

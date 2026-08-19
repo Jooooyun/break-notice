@@ -21,6 +21,8 @@ namespace BreakNotice.Gameplay.Input
         private InputAction aimAction;
         private InputAction interactPrimaryAction;
         private InputAction throwAction;
+        private InputAction selectFistsAction;
+        private InputAction selectObjectWeaponAction;
         private InputAction allyTaskAction;
         private InputAction callAllyAction;
         private InputAction regroupAllyAction;
@@ -101,6 +103,8 @@ namespace BreakNotice.Gameplay.Input
             aimAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Aim), true);
             interactPrimaryAction = actionMap.FindAction(nameof(PrototypeLogicalAction.InteractPrimary), true);
             throwAction = actionMap.FindAction(nameof(PrototypeLogicalAction.Throw), true);
+            selectFistsAction = actionMap.FindAction(nameof(PrototypeLogicalAction.SelectFists), true);
+            selectObjectWeaponAction = actionMap.FindAction(nameof(PrototypeLogicalAction.SelectObjectWeapon), true);
             allyTaskAction = actionMap.FindAction(nameof(PrototypeLogicalAction.AllyTask), true);
             callAllyAction = actionMap.FindAction(nameof(PrototypeLogicalAction.CallAlly), true);
             regroupAllyAction = actionMap.FindAction(nameof(PrototypeLogicalAction.RegroupAlly), true);
@@ -138,7 +142,11 @@ namespace BreakNotice.Gameplay.Input
                 regroupAllyAction.WasPressedThisFrame(),
                 sprintAction.IsPressed(),
                 jumpAction.WasPressedThisFrame(),
-                restartAction.WasPressedThisFrame());
+                restartAction.WasPressedThisFrame(),
+                selectFistsAction.WasPressedThisFrame(),
+                selectObjectWeaponAction.WasPressedThisFrame(),
+                interactPrimaryAction.IsPressed(),
+                interactPrimaryAction.WasReleasedThisFrame());
         }
 
         public void SetWebPointerState(

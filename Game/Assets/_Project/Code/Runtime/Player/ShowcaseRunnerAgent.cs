@@ -32,11 +32,17 @@ namespace BreakNotice.Gameplay.Interaction
     [RequireComponent(typeof(Collider))]
     public sealed class ShowcaseRunnerAgent : MonoBehaviour
     {
+        // The delivered attacks are authored in place. The runner must finish
+        // its approach at actual limb-contact distance instead of entering the
+        // telegraph at the older broad acquisition radius.
         private const float PlayerStandoffDistance = 0.81f;
+        private const float AttackArrivalTolerance = 0.01f;
         private const float TelegraphSettleSeconds = 0.12f;
-        private const float EliteJumpLungeSpeed = 4.25f;
-        private const float EliteJumpMaximumTravel = 1.85f;
         private const float PostHitCooldown = 0.65f;
+        // The Elite right hook travels across the actor's right side instead of
+        // straight down its forward axis. A braced stance turns that authored
+        // arc into the target without moving either root through the other.
+        private const float EliteMutantPunchFacingOffsetDegrees = 38f;
         [SerializeField]
         private string runnerId = "RUNNER";
 
@@ -61,9 +67,6 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(0.1f)]
         private float approachSpeed = 2.7f;
 
-        [SerializeField, Min(0.1f)]
-        private float bodyCheckSpeed = 6.5f;
-
         [SerializeField, Min(0.5f)]
         private float activationRange = 11f;
 
@@ -71,7 +74,7 @@ namespace BreakNotice.Gameplay.Interaction
         private float attackRange = 1.25f;
 
         [SerializeField, Min(0.1f)]
-        private float attackCooldown = 1.25f;
+        private float attackCooldown = 0.4f;
 
         private Vector3 baselinePosition;
         private Quaternion baselineRotation;
@@ -80,14 +83,16 @@ namespace BreakNotice.Gameplay.Interaction
         private int attackSequence;
         private bool hitApplied;
         private uint activeAttackSequence;
-        private int attackAnimationVariant;
+        private uint attackRandomState;
+        private int punchesUntilKick;
+        private bool hasPreparedAttack;
+        private bool attackTokenReleasedAtWindowClose;
         private Collider runnerCollider;
         private bool getupUsesBackVariant;
         private const float AnimatorStateEntryTimeout = 0.15f;
         private float animationRequestedAt;
         private bool animationStateAcknowledged;
         private uint awaitedAnimationCueRevision;
-        private bool lungeWindowOpen;
         private Vector3 pendingReactionDirection;
         private float pendingReactionDistance;
         private float pendingReactionDuration;
@@ -95,7 +100,6 @@ namespace BreakNotice.Gameplay.Interaction
         private float reactionElapsed;
         private bool reactionDisplacementPending;
         private bool reactionDisplacementActive;
-        private float lungeTravelDistance;
 
         public string RunnerId => runnerId;
 
@@ -125,6 +129,14 @@ namespace BreakNotice.Gameplay.Interaction
         public uint ActiveAttackSequence => activeAttackSequence;
 
         public float StateElapsed => stateElapsed;
+
+        public float AttackStandoffDistance =>
+            Mathf.Min(attackRange, PlayerStandoffDistance);
+        public bool IsAttackWindup =>
+            State == ShowcaseRunnerState.Telegraph && hasPreparedAttack;
+        public bool IsAttackRecovery =>
+            State == ShowcaseRunnerState.Recovering &&
+            attackTokenReleasedAtWindowClose;
         public bool CanOpenAttackWindow =>
             !IsDead && (State == ShowcaseRunnerState.BodyCheck ||
                         State == ShowcaseRunnerState.Shove);
@@ -143,6 +155,7 @@ namespace BreakNotice.Gameplay.Interaction
             boneCombatRig ??= GetComponent<ShowcaseBoneCombatRig>();
             ConfigurePlayerCollisionPair();
             CaptureBaseline();
+            ResetAttackCadence();
         }
 
         private void FixedUpdate()
@@ -189,6 +202,28 @@ namespace BreakNotice.Gameplay.Interaction
                     }
                     return;
                 case ShowcaseRunnerState.Recovering:
+                    if (attackTokenReleasedAtWindowClose)
+                    {
+                        float recoveryDistance = DistanceToPlayer();
+                        if (recoveryDistance > activationRange)
+                        {
+                            EnterState(ShowcaseRunnerState.Patrol);
+                            return;
+                        }
+                        if (recoveryDistance >
+                            AttackStandoffDistance + AttackArrivalTolerance)
+                        {
+                            EnterState(ShowcaseRunnerState.Approach);
+                            AdvanceTowardPlayer(approachSpeed, deltaTime);
+                            return;
+                        }
+                        if (cooldownRemaining <= 0f &&
+                            coordinator.TryAcquireAttackToken(this))
+                        {
+                            CommitNextAttack();
+                        }
+                        return;
+                    }
                     if (stateElapsed >= 0.45f)
                     {
                         EnterState(ShowcaseRunnerState.Patrol);
@@ -214,22 +249,10 @@ namespace BreakNotice.Gameplay.Interaction
                     FacePlayer(deltaTime);
                     if (stateElapsed >= TelegraphSettleSeconds)
                     {
-                        CommitNextAttack();
+                        CommitPreparedAttack();
                     }
                     return;
                 case ShowcaseRunnerState.BodyCheck:
-                    if (!IsAttackWindowOpen)
-                    {
-                        FacePlayer(deltaTime);
-                    }
-                    if (lungeWindowOpen &&
-                        AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack &&
-                        lungeTravelDistance < EliteJumpMaximumTravel)
-                    {
-                        lungeTravelDistance += AdvanceTowardPlayer(
-                            EliteJumpLungeSpeed,
-                            deltaTime);
-                    }
                     if (stateElapsed >= 4f)
                     {
                         Debug.LogError(
@@ -239,10 +262,6 @@ namespace BreakNotice.Gameplay.Interaction
                     }
                     return;
                 case ShowcaseRunnerState.Shove:
-                    if (!IsAttackWindowOpen)
-                    {
-                        FacePlayer(deltaTime);
-                    }
                     if (stateElapsed >= 4f)
                     {
                         Debug.LogError(
@@ -262,7 +281,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
-            if (distance > attackRange)
+            if (distance > AttackStandoffDistance + AttackArrivalTolerance)
             {
                 EnterState(ShowcaseRunnerState.Approach, false);
                 AdvanceTowardPlayer(approachSpeed, deltaTime);
@@ -271,7 +290,7 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (cooldownRemaining <= 0f && coordinator.TryAcquireAttackToken(this))
             {
-                EnterState(ShowcaseRunnerState.Telegraph);
+                CommitNextAttack();
             }
         }
 
@@ -292,7 +311,6 @@ namespace BreakNotice.Gameplay.Interaction
             body = authoredBody != null ? authoredBody : GetComponent<Rigidbody>();
             playerTransform = player;
             approachSpeed = Mathf.Max(0.1f, authoredApproachSpeed);
-            bodyCheckSpeed = Mathf.Max(0.1f, authoredBodyCheckSpeed);
             health = authoredHealth;
             elite = authoredElite;
             runnerCollider = GetComponent<Collider>();
@@ -398,13 +416,13 @@ namespace BreakNotice.Gameplay.Interaction
             attackSequence = 0;
             hitApplied = false;
             activeAttackSequence = 0;
-            attackAnimationVariant = 0;
+            ResetAttackCadence();
+            hasPreparedAttack = false;
+            attackTokenReleasedAtWindowClose = false;
             getupUsesBackVariant = false;
             animationRequestedAt = 0f;
             animationStateAcknowledged = false;
             awaitedAnimationCueRevision = 0;
-            lungeWindowOpen = false;
-            lungeTravelDistance = 0f;
             ClearReactionDisplacement();
             AttackCommitCount = 0;
             CommandedPlanarSpeed = 0f;
@@ -443,13 +461,61 @@ namespace BreakNotice.Gameplay.Interaction
                 },
                 _ => ShowcaseHitReaction.BigHead
             };
-            bool accepted = health.TryApplyDamage(new ShowcaseDamageRequest(
-                ShowcaseCombatTeam.Player,
+            return ReceivePlayerHit(
                 "CHR00",
                 authoredAttackSequence,
                 damage,
                 reaction,
-                impactDirection));
+                impactDirection);
+        }
+
+        public bool ReceivePlayerObjectHit(
+            string sourceId,
+            uint authoredAttackSequence,
+            int damage,
+            Vector3 impactDirection)
+        {
+            if (string.IsNullOrWhiteSpace(sourceId) ||
+                authoredAttackSequence == 0)
+            {
+                return false;
+            }
+
+            return ReceivePlayerHit(
+                sourceId,
+                authoredAttackSequence,
+                damage,
+                ShowcaseHitReaction.Body,
+                impactDirection);
+        }
+
+        private bool ReceivePlayerHit(
+            string sourceId,
+            uint authoredAttackSequence,
+            int damage,
+            ShowcaseHitReaction reaction,
+            Vector3 impactDirection)
+        {
+            if (health == null || IsDead)
+            {
+                return false;
+            }
+
+            Vector3 planarImpactDirection = Vector3.ProjectOnPlane(
+                impactDirection,
+                Vector3.up).normalized;
+            if (planarImpactDirection.sqrMagnitude <= 0.001f)
+            {
+                planarImpactDirection = transform.forward;
+            }
+
+            bool accepted = health.TryApplyDamage(new ShowcaseDamageRequest(
+                ShowcaseCombatTeam.Player,
+                sourceId,
+                authoredAttackSequence,
+                damage,
+                reaction,
+                planarImpactDirection));
             if (!accepted)
             {
                 return false;
@@ -467,30 +533,35 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 case ShowcaseHitReaction.Light:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitLight);
-                    QueueReactionDisplacement(impactDirection, 0.1f, 0.18f);
+                    QueueReactionDisplacement(planarImpactDirection, 0.1f, 0.18f);
                     EnterState(ShowcaseRunnerState.OffBalance);
                     break;
                 case ShowcaseHitReaction.Body:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
-                    QueueReactionDisplacement(impactDirection, 0.15f, 0.2f);
+                    QueueReactionDisplacement(planarImpactDirection, 0.15f, 0.2f);
                     EnterState(ShowcaseRunnerState.Staggered);
                     break;
                 case ShowcaseHitReaction.Rib:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitRib);
-                    QueueReactionDisplacement(impactDirection, 0.15f, 0.2f);
+                    QueueReactionDisplacement(planarImpactDirection, 0.15f, 0.2f);
                     EnterState(ShowcaseRunnerState.Staggered);
                     break;
                 case ShowcaseHitReaction.Stomach:
                     SetAnimationCue(ShowcaseRunnerAnimationCue.HitStomach);
-                    QueueReactionDisplacement(impactDirection, 0.15f, 0.2f);
+                    QueueReactionDisplacement(planarImpactDirection, 0.15f, 0.2f);
                     EnterState(ShowcaseRunnerState.Staggered);
                     break;
                 default:
-                    getupUsesBackVariant = Vector3.Dot(transform.forward, impactDirection) < 0f;
+                    getupUsesBackVariant = Vector3.Dot(
+                        transform.forward,
+                        planarImpactDirection) < 0f;
                     SetAnimationCue(getupUsesBackVariant
                         ? ShowcaseRunnerAnimationCue.KnockdownBack
                         : ShowcaseRunnerAnimationCue.KnockdownFront);
-                    QueueReactionDisplacement(impactDirection, 0.55f, 0.24f);
+                    QueueReactionDisplacement(
+                        planarImpactDirection,
+                        0.55f,
+                        0.24f);
                     EnterState(ShowcaseRunnerState.KnockedDown);
                     break;
             }
@@ -524,9 +595,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void SetAnimationLungeWindow(bool isOpen)
         {
-            lungeWindowOpen = isOpen &&
-                State == ShowcaseRunnerState.BodyCheck &&
-                AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack;
+            // Legacy AnimationEvent compatibility only. Elite Jump Attack is no
+            // longer reachable and no runner movement is owned by this event.
         }
 
         internal bool TryCommitBoneHit(
@@ -543,15 +613,16 @@ namespace BreakNotice.Gameplay.Interaction
 
             bool heavy = AnimationCue == ShowcaseRunnerAnimationCue.Kicking ||
                 AnimationCue == ShowcaseRunnerAnimationCue.Kicking2 ||
+                AnimationCue == ShowcaseRunnerAnimationCue.Boxing2;
+            bool eliteTechnique =
                 AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantPunch ||
-                AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantSwiping ||
-                AnimationCue == ShowcaseRunnerAnimationCue.EliteJumpAttack;
+                AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantSwiping;
             bool accepted = coordinator.ApplyPlayerAttackFromBoneContact(
                 this,
                 actualVictim,
-                heavy ? 30 : 20,
+                heavy ? 30 : eliteTechnique ? 25 : 20,
                 heavy,
-                heavy ? 4.2f : 3.2f,
+                heavy ? 4.2f : eliteTechnique ? 3.8f : 3.2f,
                 activeAttackSequence);
             if (accepted)
             {
@@ -564,6 +635,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             switch (State)
             {
+                case ShowcaseRunnerState.Telegraph:
                 case ShowcaseRunnerState.BodyCheck:
                 case ShowcaseRunnerState.Shove:
                     CompleteAttack();
@@ -603,46 +675,74 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void CommitNextAttack()
         {
+            if (hasPreparedAttack)
+            {
+                return;
+            }
+
             boneCombatRig?.CloseAttackWindow();
-            // ShortGrab remains disabled until a visible approved clip exists.
-            LastAttackKind = (ShowcaseRunnerAttackKind)(attackSequence % 2);
+            ShowcaseRunnerAnimationCue cue = ResolveNextAttackAnimation();
+            LastAttackKind = IsKickCue(cue)
+                ? ShowcaseRunnerAttackKind.BodyCheck
+                : ShowcaseRunnerAttackKind.Shove;
             attackSequence++;
             hitApplied = false;
             activeAttackSequence++;
-            lungeTravelDistance = 0f;
-            switch (LastAttackKind)
+            attackTokenReleasedAtWindowClose = false;
+            AttackCommitCount++;
+            SetAnimationCue(cue);
+
+            hasPreparedAttack = true;
+            EnterState(ShowcaseRunnerState.Telegraph);
+        }
+
+        private void CommitPreparedAttack()
+        {
+            if (!hasPreparedAttack)
             {
-                case ShowcaseRunnerAttackKind.BodyCheck:
-                    AttackCommitCount++;
-                    SetAnimationCue(ResolveBodyCheckAnimation());
-                    EnterState(ShowcaseRunnerState.BodyCheck);
-                    break;
-                case ShowcaseRunnerAttackKind.Shove:
-                    AttackCommitCount++;
-                    SetAnimationCue(ResolveShoveAnimation());
-                    EnterState(ShowcaseRunnerState.Shove);
-                    break;
-                default:
-                    if (!TryCommitShortGrab())
-                    {
-                        CompleteAttack();
-                    }
-                    break;
+                CompleteAttack();
+                return;
             }
+
+            hasPreparedAttack = false;
+            EnterState(LastAttackKind == ShowcaseRunnerAttackKind.BodyCheck
+                ? ShowcaseRunnerState.BodyCheck
+                : ShowcaseRunnerState.Shove);
+        }
+
+        public void NotifyAttackWindowClosed(uint closingAttackSequence)
+        {
+            if (attackTokenReleasedAtWindowClose ||
+                closingAttackSequence == 0 ||
+                closingAttackSequence != activeAttackSequence ||
+                !CanOpenAttackWindow)
+            {
+                return;
+            }
+
+            attackTokenReleasedAtWindowClose = true;
+            cooldownRemaining = Mathf.Max(cooldownRemaining, attackCooldown);
+            coordinator?.ReleaseAttackToken(this);
         }
 
         private void CompleteAttack()
         {
             boneCombatRig?.CloseAttackWindow();
+            hasPreparedAttack = false;
             coordinator?.ReleaseAttackToken(this);
-            cooldownRemaining = attackCooldown;
+            if (!attackTokenReleasedAtWindowClose)
+            {
+                cooldownRemaining = Mathf.Max(cooldownRemaining, attackCooldown);
+            }
             EnterState(ShowcaseRunnerState.Recovering);
         }
 
         private void InterruptAttack()
         {
             boneCombatRig?.CloseAttackWindow();
+            hasPreparedAttack = false;
             coordinator?.ReleaseAttackToken(this);
+            attackTokenReleasedAtWindowClose = false;
         }
 
         private float AdvanceTowardPlayer(float speed, float deltaTime)
@@ -707,9 +807,19 @@ namespace BreakNotice.Gameplay.Interaction
                 Vector3.up);
             if (direction.sqrMagnitude > 0.001f)
             {
+                Quaternion targetRotation = Quaternion.LookRotation(
+                    direction.normalized,
+                    Vector3.up);
+                if (AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantPunch)
+                {
+                    targetRotation *= Quaternion.Euler(
+                        0f,
+                        EliteMutantPunchFacingOffsetDegrees,
+                        0f);
+                }
                 body.MoveRotation(Quaternion.RotateTowards(
                     body.rotation,
-                    Quaternion.LookRotation(direction.normalized, Vector3.up),
+                    targetRotation,
                     540f * deltaTime));
             }
         }
@@ -783,12 +893,12 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void CancelAnimationBoundState()
         {
-            lungeWindowOpen = false;
             ClearReactionDisplacement();
             awaitedAnimationCueRevision = 0;
             animationStateAcknowledged = false;
             switch (State)
             {
+                case ShowcaseRunnerState.Telegraph:
                 case ShowcaseRunnerState.BodyCheck:
                 case ShowcaseRunnerState.Shove:
                     CompleteAttack();
@@ -824,35 +934,91 @@ namespace BreakNotice.Gameplay.Interaction
             }
         }
 
-        private ShowcaseRunnerAnimationCue ResolveBodyCheckAnimation()
+        private ShowcaseRunnerAnimationCue ResolveNextAttackAnimation()
         {
-            attackAnimationVariant++;
-            if (elite)
+            if (punchesUntilKick > 0)
             {
-                return attackAnimationVariant % 2 == 0
-                    ? ShowcaseRunnerAnimationCue.EliteMutantSwiping
-                    : ShowcaseRunnerAnimationCue.EliteJumpAttack;
+                punchesUntilKick--;
+                return ResolvePunchCue(elite, NextAttackRandom(8));
             }
-            return attackAnimationVariant % 2 == 0
-                ? ShowcaseRunnerAnimationCue.Kicking2
-                : ShowcaseRunnerAnimationCue.Kicking;
+
+            ShowcaseRunnerAnimationCue kick = ResolveKickCue(NextAttackRandom(3));
+            punchesUntilKick = 2 + NextAttackRandom(2);
+            return kick;
         }
 
-        private ShowcaseRunnerAnimationCue ResolveShoveAnimation()
+        private static ShowcaseRunnerAnimationCue ResolvePunchCue(
+            bool eliteRunner,
+            int slot)
         {
-            attackAnimationVariant++;
-            if (elite && attackAnimationVariant % 2 != 0)
+            if (!eliteRunner)
             {
-                return ShowcaseRunnerAnimationCue.EliteMutantPunch;
+                return ShowcaseRunnerAnimationCue.Boxing;
             }
-            return attackAnimationVariant % 2 == 0
-                ? ShowcaseRunnerAnimationCue.Boxing2
-                : ShowcaseRunnerAnimationCue.Boxing;
+
+            int normalized = Mathf.Abs(slot) % 8;
+            return normalized switch
+            {
+                < 4 => ShowcaseRunnerAnimationCue.Boxing,
+                < 6 => ShowcaseRunnerAnimationCue.EliteMutantPunch,
+                _ => ShowcaseRunnerAnimationCue.EliteMutantSwiping
+            };
+        }
+
+        private static ShowcaseRunnerAnimationCue ResolveKickCue(int slot)
+        {
+            return (Mathf.Abs(slot) % 3) switch
+            {
+                0 => ShowcaseRunnerAnimationCue.Kicking,
+                1 => ShowcaseRunnerAnimationCue.Kicking2,
+                _ => ShowcaseRunnerAnimationCue.Boxing2
+            };
+        }
+
+        private static bool IsKickCue(ShowcaseRunnerAnimationCue cue)
+        {
+            return cue == ShowcaseRunnerAnimationCue.Kicking ||
+                cue == ShowcaseRunnerAnimationCue.Kicking2 ||
+                cue == ShowcaseRunnerAnimationCue.Boxing2;
+        }
+
+        private uint CreateAttackRandomSeed()
+        {
+            uint hash = 2166136261u;
+            string value = string.IsNullOrEmpty(runnerId) ? name : runnerId;
+            for (int index = 0; index < value.Length; index++)
+            {
+                hash ^= value[index];
+                hash *= 16777619u;
+            }
+            hash ^= elite ? 0x9E3779B9u : 0x85EBCA6Bu;
+            return hash != 0u ? hash : 0xA341316Cu;
+        }
+
+        private void ResetAttackCadence()
+        {
+            attackRandomState = CreateAttackRandomSeed();
+            punchesUntilKick = 2 + NextAttackRandom(2);
+        }
+
+        private int NextAttackRandom(int maxExclusive)
+        {
+            if (maxExclusive <= 1)
+            {
+                return 0;
+            }
+            uint state = attackRandomState != 0u
+                ? attackRandomState
+                : 0xA341316Cu;
+            state ^= state << 13;
+            state ^= state >> 17;
+            state ^= state << 5;
+            attackRandomState = state;
+            return (int)(state % (uint)maxExclusive);
         }
 
         private void EnterDeath()
         {
-            lungeWindowOpen = false;
             ClearReactionDisplacement();
             boneCombatRig?.CloseAttackWindow();
             InterruptAttack();

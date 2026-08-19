@@ -135,6 +135,7 @@ namespace BreakNotice.Gameplay.Interaction
         private ShowcaseRunnerPressureController runnerPressureController;
 
         private PrototypeAllyRelayController subscribedRelay;
+        private ShowcaseCargoStrapController subscribedCargoStrap;
         private int observedResetCount;
         private bool playerGrabbedAvailable;
         private bool finisherWindowAvailable;
@@ -199,11 +200,13 @@ namespace BreakNotice.Gameplay.Interaction
         private void OnEnable()
         {
             RefreshRelaySubscription();
+            RefreshCargoStrapSubscription();
         }
 
         private void OnDisable()
         {
             RemoveRelaySubscription();
+            RemoveCargoStrapSubscription();
         }
 
         private void Update()
@@ -235,7 +238,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void ConfigureCargoStrap(ShowcaseCargoStrapController cargoStrap)
         {
+            RemoveCargoStrapSubscription();
             cargoStrapController = cargoStrap;
+            RefreshCargoStrapSubscription();
             ResolveCurrentQContext();
         }
 
@@ -315,7 +320,6 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            RecordBraceSuccess();
             return true;
         }
 
@@ -419,6 +423,40 @@ namespace BreakNotice.Gameplay.Interaction
                 target.WeightClass == PrototypeWeightClass.Light)
             {
                 RecordPassSuccess();
+            }
+        }
+
+        private void HandleAssistedAttachCompleted(PrototypeInteractionTarget target)
+        {
+            if (target != null)
+            {
+                RecordBraceSuccess();
+            }
+        }
+
+        private void RefreshCargoStrapSubscription()
+        {
+            if (!isActiveAndEnabled || subscribedCargoStrap == cargoStrapController)
+            {
+                return;
+            }
+
+            RemoveCargoStrapSubscription();
+            subscribedCargoStrap = cargoStrapController;
+            if (subscribedCargoStrap != null)
+            {
+                subscribedCargoStrap.AssistedAttachCompleted +=
+                    HandleAssistedAttachCompleted;
+            }
+        }
+
+        private void RemoveCargoStrapSubscription()
+        {
+            if (subscribedCargoStrap != null)
+            {
+                subscribedCargoStrap.AssistedAttachCompleted -=
+                    HandleAssistedAttachCompleted;
+                subscribedCargoStrap = null;
             }
         }
 

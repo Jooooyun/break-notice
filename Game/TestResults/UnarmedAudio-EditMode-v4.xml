@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.7833614">
+  <test-suite type="TestSuite" id="1000" name="Game" fullname="Game" runstate="Runnable" testcasecount="177" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.783361" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1213" name="BreakNotice.LocomotionCamera.EditModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll" runstate="Runnable" testcasecount="160" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.769603" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="22788" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1214" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="160" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.766581" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1215" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="160" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.763900" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1216" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="160" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.761075" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1181" name="ContestUnarmedCombatAudioContractTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests" classname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.755132" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1184" name="S7Scene_HasOneBoundedSpatialUnarmedAudioDirector" fullname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests.S7Scene_HasOneBoundedSpatialUnarmedAudioDirector" methodname="S7Scene_HasOneBoundedSpatialUnarmedAudioDirector" classname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests" runstate="Runnable" seed="1008080562" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:38Z" duration="0.684840" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1182" name="SelectedFullWavs_PreserveBytesAndPcmImportContract" fullname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests.SelectedFullWavs_PreserveBytesAndPcmImportContract" methodname="SelectedFullWavs_PreserveBytesAndPcmImportContract" classname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests" runstate="Runnable" seed="1600940212" result="Passed" start-time="2026-08-18 05:15:38Z" end-time="2026-08-18 05:15:39Z" duration="0.044251" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1183" name="TimingAuthority_MapsOneFullTakePerUnarmedAttackAtBaseOffset" fullname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests.TimingAuthority_MapsOneFullTakePerUnarmedAttackAtBaseOffset" methodname="TimingAuthority_MapsOneFullTakePerUnarmedAttackAtBaseOffset" classname="BreakNotice.LocomotionCamera.Tests.ContestUnarmedCombatAudioContractTests" runstate="Runnable" seed="389702921" result="Passed" start-time="2026-08-18 05:15:39Z" end-time="2026-08-18 05:15:39Z" duration="0.006261" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

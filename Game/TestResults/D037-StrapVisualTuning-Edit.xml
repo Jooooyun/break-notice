@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.1304138">
+  <test-suite type="TestSuite" id="1000" name="Game" fullname="Game" runstate="Runnable" testcasecount="165" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.130414" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1199" name="BreakNotice.LocomotionCamera.EditModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.118011" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29980" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1200" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.116903" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1201" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.116131" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1202" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="148" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.115261" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1057" name="ContestCargoStrapPresentationContractTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.109447" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1058" name="ConfigureBuildsBlackYellowReviewStrapAndSilverColliderlessClamp" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests.ConfigureBuildsBlackYellowReviewStrapAndSilverColliderlessClamp" methodname="ConfigureBuildsBlackYellowReviewStrapAndSilverColliderlessClamp" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" runstate="Runnable" seed="1375577123" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.056296" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1062" name="MediumDynamicTensionChangesSagWithoutMovingActualEndpoint" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests.MediumDynamicTensionChangesSagWithoutMovingActualEndpoint" methodname="MediumDynamicTensionChangesSagWithoutMovingActualEndpoint" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" runstate="Runnable" seed="324002400" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.014225" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1061" name="PrepareRevealsThinRightSideRouteTowardExactGrip" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests.PrepareRevealsThinRightSideRouteTowardExactGrip" methodname="PrepareRevealsThinRightSideRouteTowardExactGrip" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" runstate="Runnable" seed="1609565700" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.003782" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1059" name="PresentationSourceHasNoGameplayPhysicsWrites" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests.PresentationSourceHasNoGameplayPhysicsWrites" methodname="PresentationSourceHasNoGameplayPhysicsWrites" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" runstate="Runnable" seed="434336722" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.003166" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1060" name="SnapshotDrivesHandGuideFistBypassAndReleaseRetraction" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests.SnapshotDrivesHandGuideFistBypassAndReleaseRetraction" methodname="SnapshotDrivesHandGuideFistBypassAndReleaseRetraction" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoStrapPresentationContractTests" runstate="Runnable" seed="1797826978" result="Passed" start-time="2026-08-17 15:49:44Z" end-time="2026-08-17 15:49:44Z" duration="0.003232" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

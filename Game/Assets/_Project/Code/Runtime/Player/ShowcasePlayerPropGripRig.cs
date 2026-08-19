@@ -19,6 +19,8 @@ namespace BreakNotice.Gameplay.Interaction
         CatchLightLeft,
         CatchLightRight,
         CatchMedium,
+        PickupLowSmall,
+        PickupLowMedium,
         ThrowLight,
         ThrowMedium
     }
@@ -31,10 +33,6 @@ namespace BreakNotice.Gameplay.Interaction
     [DisallowMultipleComponent]
     public sealed class ShowcasePlayerPropGripRig : MonoBehaviour
     {
-        private const float AcquisitionBlendStartNormalized = 0.52f;
-        private const float AcquisitionBlendEndNormalized = 0.88f;
-        private const float LightThrowReleaseNormalized = 0.48f;
-        private const float MediumThrowReleaseNormalized = 0.52f;
         // Keep the chair body outside CHR00's capsule. Hands target the near
         // backrest face below, so the prop center itself does not need to enter
         // the player's reach envelope.
@@ -44,7 +42,7 @@ namespace BreakNotice.Gameplay.Interaction
         private const float MediumCarryAnchorRetraction = 0.33f;
         private const float MediumCarryDownOffset = 1.10f;
         private const float MediumGripNearFaceFactor = 1f;
-        private const float MediumGripPalmClearance = 0.040f;
+        private const float MediumGripPalmClearance = 0.070f;
         private const float AuthoredMediumLateralGrip = 0.12f;
 
         [SerializeField]
@@ -77,8 +75,12 @@ namespace BreakNotice.Gameplay.Interaction
         private Transform rightLowerArm;
         private Pose acquisitionContactPose;
         private Pose throwSourcePose;
+        private ShowcasePlayerPropGripProfile carryProfileBeforeThrow;
         private bool hasAcquisitionContactPose;
         private bool hasThrowSourcePose;
+        private float acquisitionStabilizeNormalized;
+        private float acquisitionCompleteNormalized;
+        private float throwReleaseNormalized;
         private Pose mediumDesiredPoseForFrame;
         private int mediumDesiredPoseFrame = -1;
         private uint mediumDesiredPoseSequence;
@@ -169,7 +171,12 @@ namespace BreakNotice.Gameplay.Interaction
             if (!HasHumanoidRig || target == null ||
                 (outcome != PrototypeInteractionOutcome.Scoop &&
                  outcome != PrototypeInteractionOutcome.Catch) ||
-                !TryResolveAcquisitionProfile(target, cue, out ShowcasePlayerPropGripProfile profile))
+                !TryResolveAcquisitionProfile(target, cue, out ShowcasePlayerPropGripProfile profile) ||
+                !ShowcaseChr00AnimationTiming.TryGetAcquisitionTiming(
+                    cue,
+                    out _,
+                    out float stabilizeNormalized,
+                    out float completeNormalized))
             {
                 return false;
             }
@@ -178,8 +185,12 @@ namespace BreakNotice.Gameplay.Interaction
             Target = target;
             Profile = profile;
             Phase = ShowcasePlayerPropGripPhase.AcquisitionPending;
+            acquisitionStabilizeNormalized = stabilizeNormalized;
+            acquisitionCompleteNormalized = completeNormalized;
+            throwReleaseNormalized = 0f;
             hasAcquisitionContactPose = false;
             hasThrowSourcePose = false;
+            carryProfileBeforeThrow = ShowcasePlayerPropGripProfile.None;
             PreAttachPositionError = 0f;
             CurrentGripPositionError = 0f;
             CurrentGripRotationError = 0f;
@@ -224,10 +235,13 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
+            ShowcasePlayerPropGripProfile completedProfile = Profile;
             Phase = ShowcasePlayerPropGripPhase.Carry;
-            Profile = target.WeightClass == PrototypeWeightClass.Medium
-                ? ShowcasePlayerPropGripProfile.CatchMedium
-                : ShowcasePlayerPropGripProfile.CatchLightCenter;
+            Profile = completedProfile == ShowcasePlayerPropGripProfile.PickupLowSmall
+                ? ShowcasePlayerPropGripProfile.PickupLowSmall
+                : target.WeightClass == PrototypeWeightClass.Medium
+                    ? ShowcasePlayerPropGripProfile.CatchMedium
+                    : ShowcasePlayerPropGripProfile.CatchLightCenter;
             hasAcquisitionContactPose = false;
             MediumIkWeight = target.WeightClass == PrototypeWeightClass.Medium ? 1f : 0f;
             poseIsAuthoritative = TryGetStableCarryPose(target, out _);
@@ -242,22 +256,33 @@ namespace BreakNotice.Gameplay.Interaction
         {
             if (!HasHumanoidRig || target == null ||
                 !TryResolveThrowProfile(target, cue, out ShowcasePlayerPropGripProfile profile) ||
+                !ShowcaseChr00AnimationTiming.TryGetThrowTiming(
+                    cue,
+                    out float releaseNormalized,
+                    out _) ||
                 !IsFinite(sourcePosition) ||
                 !TryNormalize(sourceRotation, out Quaternion normalizedSourceRotation))
             {
                 return false;
             }
 
+            ShowcasePlayerPropGripProfile sourceCarryProfile = Phase == ShowcasePlayerPropGripPhase.Carry
+                ? Profile
+                : ShowcasePlayerPropGripProfile.None;
             AdvanceSequence();
             Target = target;
+            carryProfileBeforeThrow = sourceCarryProfile;
             Profile = profile;
             Phase = ShowcasePlayerPropGripPhase.Throw;
+            acquisitionStabilizeNormalized = 0f;
+            acquisitionCompleteNormalized = 0f;
+            throwReleaseNormalized = releaseNormalized;
             throwSourcePose = new Pose(sourcePosition, normalizedSourceRotation);
             hasThrowSourcePose = true;
             hasAcquisitionContactPose = false;
             ReleasePoseError = 0f;
             MediumIkWeight = IsMediumProfile(profile)
-                ? 1f - EvaluateThrowBlendWeight(profile)
+                ? 1f - EvaluateThrowBlendWeight()
                 : 0f;
             poseIsAuthoritative = true;
             return true;
@@ -277,11 +302,14 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             Phase = ShowcasePlayerPropGripPhase.Carry;
-            Profile = target.WeightClass == PrototypeWeightClass.Medium
-                ? ShowcasePlayerPropGripProfile.CatchMedium
-                : ShowcasePlayerPropGripProfile.CatchLightCenter;
+            Profile = carryProfileBeforeThrow != ShowcasePlayerPropGripProfile.None
+                ? carryProfileBeforeThrow
+                : target.WeightClass == PrototypeWeightClass.Medium
+                    ? ShowcasePlayerPropGripProfile.CatchMedium
+                    : ShowcasePlayerPropGripProfile.CatchLightCenter;
             hasAcquisitionContactPose = false;
             hasThrowSourcePose = false;
+            carryProfileBeforeThrow = ShowcasePlayerPropGripProfile.None;
             MediumIkWeight = target.WeightClass == PrototypeWeightClass.Medium ? 1f : 0f;
             poseIsAuthoritative = TryGetStableCarryPose(target, out _);
             return true;
@@ -315,8 +343,12 @@ namespace BreakNotice.Gameplay.Interaction
             poseIsAuthoritative = false;
             hasAcquisitionContactPose = false;
             hasThrowSourcePose = false;
+            carryProfileBeforeThrow = ShowcasePlayerPropGripProfile.None;
             acquisitionContactPose = default;
             throwSourcePose = default;
+            acquisitionStabilizeNormalized = 0f;
+            acquisitionCompleteNormalized = 0f;
+            throwReleaseNormalized = 0f;
             InvalidateMediumDesiredPoseCache();
         }
 
@@ -509,8 +541,14 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            float blend = EvaluateAcquisitionBlendWeight();
-            pose = LerpPose(acquisitionContactPose, stablePose, blend);
+            Pose actionPose = TryGetActionObjectPose(Profile, target, out Pose currentActionPose)
+                ? currentActionPose
+                : acquisitionContactPose;
+            float blend = Mathf.InverseLerp(
+                acquisitionStabilizeNormalized,
+                acquisitionCompleteNormalized,
+                GetActionNormalizedTime());
+            pose = LerpPose(actionPose, stablePose, blend);
             MediumIkWeight = IsMediumProfile(Profile) ? blend : 0f;
             return IsFinite(pose);
         }
@@ -526,7 +564,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            float blend = EvaluateThrowBlendWeight(Profile);
+            float blend = EvaluateThrowBlendWeight();
             pose = LerpPose(throwSourcePose, actionPose, blend);
             MediumIkWeight = IsMediumProfile(Profile) ? 1f - blend : 0f;
             return IsFinite(pose);
@@ -547,18 +585,31 @@ namespace BreakNotice.Gameplay.Interaction
                         rightLowerArm,
                         out pose);
                 case ShowcasePlayerPropGripProfile.CatchLightLeft:
-                case ShowcasePlayerPropGripProfile.ThrowLight:
                     return TryGetLightActionPose(
-                        leftHand.position,
+                        (leftHand.position + rightHand.position) * 0.5f,
                         leftHand,
                         leftLowerArm,
                         out pose);
                 case ShowcasePlayerPropGripProfile.CatchLightRight:
                     return TryGetLightActionPose(
+                        (leftHand.position + rightHand.position) * 0.5f,
+                        rightHand,
+                        rightLowerArm,
+                        out pose);
+                case ShowcasePlayerPropGripProfile.PickupLowSmall:
+                    return TryGetLightActionPose(
                         rightHand.position,
                         rightHand,
                         rightLowerArm,
                         out pose);
+                case ShowcasePlayerPropGripProfile.ThrowLight:
+                    return TryGetLightActionPose(
+                        rightHand.position,
+                        rightHand,
+                        rightLowerArm,
+                        out pose);
+                case ShowcasePlayerPropGripProfile.PickupLowMedium:
+                    return TryGetMediumPickupPose(target, out pose);
                 case ShowcasePlayerPropGripProfile.CatchMedium:
                 case ShowcasePlayerPropGripProfile.ThrowMedium:
                     return TryGetMediumActionPose(target, out pose);
@@ -607,6 +658,29 @@ namespace BreakNotice.Gameplay.Interaction
             return IsFinite(pose);
         }
 
+        private bool TryGetMediumPickupPose(
+            PrototypeInteractionTarget target,
+            out Pose pose)
+        {
+            pose = default;
+            if (target == null ||
+                !target.TryGetComponent(out BoxCollider chairCollider) ||
+                chairCollider.transform != target.transform ||
+                !TryGetForearmFrame(rightHand, rightLowerArm, out Quaternion handFrame))
+            {
+                return false;
+            }
+
+            Vector3 localGripMidpoint = GetMediumLocalGripMidpoint(chairCollider);
+            Vector3 scaledLocalGrip = Vector3.Scale(
+                localGripMidpoint,
+                Abs(target.transform.lossyScale));
+            pose = new Pose(
+                rightHand.position - handFrame * scaledLocalGrip,
+                handFrame);
+            return IsFinite(pose);
+        }
+
         private bool TryGetStableCarryPose(
             PrototypeInteractionTarget target,
             out Pose pose)
@@ -619,6 +693,11 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (target.WeightClass == PrototypeWeightClass.Light)
             {
+                if (Profile == ShowcasePlayerPropGripProfile.PickupLowSmall)
+                {
+                    return TryGetActionObjectPose(Profile, target, out pose);
+                }
+
                 if (stableLightSocket == null ||
                     !stableLightSocket.TryGetWorldPose(
                         out Vector3 lightPosition,
@@ -823,7 +902,7 @@ namespace BreakNotice.Gameplay.Interaction
                 case ShowcasePlayerPropGripPhase.Carry:
                     return 1f;
                 case ShowcasePlayerPropGripPhase.Throw:
-                    return 1f - EvaluateThrowBlendWeight(Profile);
+                    return 1f - EvaluateThrowBlendWeight();
                 default:
                     return 0f;
             }
@@ -832,17 +911,17 @@ namespace BreakNotice.Gameplay.Interaction
         private float EvaluateAcquisitionBlendWeight()
         {
             return Mathf.InverseLerp(
-                AcquisitionBlendStartNormalized,
-                AcquisitionBlendEndNormalized,
+                acquisitionStabilizeNormalized,
+                acquisitionCompleteNormalized,
                 GetActionNormalizedTime());
         }
 
-        private float EvaluateThrowBlendWeight(ShowcasePlayerPropGripProfile profile)
+        private float EvaluateThrowBlendWeight()
         {
-            float releaseNormalized = profile == ShowcasePlayerPropGripProfile.ThrowMedium
-                ? MediumThrowReleaseNormalized
-                : LightThrowReleaseNormalized;
-            return Mathf.InverseLerp(0f, releaseNormalized, GetActionNormalizedTime());
+            return Mathf.InverseLerp(
+                0f,
+                throwReleaseNormalized,
+                GetActionNormalizedTime());
         }
 
         private float GetActionNormalizedTime()
@@ -910,6 +989,11 @@ namespace BreakNotice.Gameplay.Interaction
             profile = ShowcasePlayerPropGripProfile.None;
             if (target.WeightClass == PrototypeWeightClass.Medium)
             {
+                if (cue == ShowcasePlayerAnimationCue.PickupLowMedium)
+                {
+                    profile = ShowcasePlayerPropGripProfile.PickupLowMedium;
+                    return true;
+                }
                 if (cue != ShowcasePlayerAnimationCue.CatchMedium)
                 {
                     return false;
@@ -925,6 +1009,9 @@ namespace BreakNotice.Gameplay.Interaction
 
             switch (cue)
             {
+                case ShowcasePlayerAnimationCue.PickupLowSmall:
+                    profile = ShowcasePlayerPropGripProfile.PickupLowSmall;
+                    return true;
                 case ShowcasePlayerAnimationCue.CatchSmallCenter:
                     profile = ShowcasePlayerPropGripProfile.CatchLightCenter;
                     return true;
@@ -985,14 +1072,19 @@ namespace BreakNotice.Gameplay.Interaction
             poseIsAuthoritative = false;
             hasAcquisitionContactPose = false;
             hasThrowSourcePose = false;
+            carryProfileBeforeThrow = ShowcasePlayerPropGripProfile.None;
             acquisitionContactPose = default;
             throwSourcePose = default;
+            acquisitionStabilizeNormalized = 0f;
+            acquisitionCompleteNormalized = 0f;
+            throwReleaseNormalized = 0f;
             InvalidateMediumDesiredPoseCache();
         }
 
         private static bool IsMediumProfile(ShowcasePlayerPropGripProfile profile)
         {
-            return profile == ShowcasePlayerPropGripProfile.CatchMedium ||
+            return profile == ShowcasePlayerPropGripProfile.PickupLowMedium ||
+                profile == ShowcasePlayerPropGripProfile.CatchMedium ||
                 profile == ShowcasePlayerPropGripProfile.ThrowMedium;
         }
 

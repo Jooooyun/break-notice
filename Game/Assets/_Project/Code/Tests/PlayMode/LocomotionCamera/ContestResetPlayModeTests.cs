@@ -173,6 +173,74 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
+        public IEnumerator ResetAfterThrowExhaustion_RestoresSameInstanceAndUseBaseline()
+        {
+            ResetFixture fixture = new ResetFixture();
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            wall.transform.position = new Vector3(0f, 1.5f, 1.8f);
+            wall.transform.localScale = new Vector3(3f, 3f, 0.3f);
+            try
+            {
+                PrototypeInteractionTarget binder = fixture.Targets[0];
+                int instanceId = binder.gameObject.GetInstanceID();
+                var arbitrator = new PrototypeInteractionArbitrator();
+                Assert.That(fixture.Owner.TryCommit(
+                    arbitrator.Decide(fixture.Owner.CreateContext(false, binder))), Is.True);
+                Assert.That(fixture.Owner.TryCompleteAcquisition(binder), Is.True);
+                Assert.That(fixture.Lifecycle.BeginCarry(binder), Is.True);
+                for (int step = 0; step < 20; step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+
+                Assert.That(fixture.Lifecycle.TryThrow(Vector3.forward), Is.True);
+                Assert.That(binder.CommittedPlayerThrowUses, Is.EqualTo(1));
+                Assert.That(binder.IsPlayerThrowExhausted, Is.True);
+                Assert.That(binder.IsThrowDepletionPending, Is.True);
+                for (int step = 0; step < 25; step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+                yield return null;
+
+                Assert.That(binder.gameObject.activeInHierarchy, Is.False);
+                Assert.That(binder.IsThrowDepletionPending, Is.False);
+                Assert.That(
+                    fixture.Reset.RequestReset(EncounterResetCause.ManualInput),
+                    Is.True);
+
+                Assert.That(binder.gameObject.activeInHierarchy, Is.True);
+                Assert.That(binder.gameObject.GetInstanceID(), Is.EqualTo(instanceId));
+                Assert.That(binder.CommittedPlayerThrowUses, Is.Zero);
+                Assert.That(
+                    binder.RemainingPlayerThrowUses,
+                    Is.EqualTo(binder.MaximumPlayerThrowUses));
+                Assert.That(binder.IsPlayerThrowExhausted, Is.False);
+                Assert.That(binder.IsThrowDepletionPending, Is.False);
+                Assert.That(binder.LastCommittedPlayerThrowSequence, Is.Zero);
+                Assert.That(fixture.Owner.WeaponSelection,
+                    Is.EqualTo(PrototypeWeaponSelection.Fists));
+                Assert.That(fixture.Owner.ObjectWeaponTarget, Is.Null);
+                Assert.That(fixture.Lifecycle.ThrowOriginCount, Is.Zero);
+                Assert.That(fixture.Lifecycle.LastThrowOrigin.IsPlayerOwned, Is.False);
+                yield return null;
+
+                Assert.That(binder.gameObject.activeInHierarchy, Is.True);
+                Assert.That(fixture.Reset.UnexpectedBaselineDifferenceCount, Is.Zero);
+                Assert.That(fixture.Reset.ObjectLossCount, Is.Zero);
+                Assert.That(fixture.Reset.ObjectDuplicationCount, Is.Zero);
+                Assert.That(fixture.Reset.OwnershipLeakCount, Is.Zero);
+            }
+            finally
+            {
+                fixture.Dispose();
+                Object.Destroy(wall);
+            }
+
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator ContestScene_ResetInventoryIsExactlyAuthoredPrototypeContent()
         {
             AsyncOperation load = SceneManager.LoadSceneAsync(

@@ -1,0 +1,414 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.20f1 (c9ba695d4f07) revision 13220457'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26200) Core' Language: 'ko' Physical Memory: 32405 MB
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys" at "2026-08-18T05:05:16.7021672Z"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-18T05:05:16Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Unity.exe
+-batchmode
+-nographics
+-quit
+-projectPath
+C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game
+-executeMethod
+BreakNotice.Contest.Editor.ContestUnarmedCombatAudioAuthoring.PrepareS7UnarmedCombatAudio
+-logFile
+C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\TestResults\UnarmedAudio-Authoring-v4.log
+Successfully changed project path to: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game
+C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [29964]  Target information:
+
+Player connection [29964]  * "[IP] 172.29.224.1 [Port] 55504 [Flags] 2 [Guid] 445639296 [EditorId] 445639296 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29964]  * "[IP] 192.168.254.1 [Port] 55504 [Flags] 2 [Guid] 445639296 [EditorId] 445639296 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29964]  * "[IP] 192.168.11.1 [Port] 55504 [Flags] 2 [Guid] 445639296 [EditorId] 445639296 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29964]  * "[IP] 192.168.219.104 [Port] 55504 [Flags] 2 [Guid] 445639296 [EditorId] 445639296 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29964] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [29964] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-19220" after 0.4 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-jys"
+[Licensing::IpcConnector] LicenseClient-jys channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-jys-6000.3.20 doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 21052)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys-6000.3.20" at "2026-08-18T05:05:19.0724271Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 21052, path: "C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              fc2d521b4eca436f9548b310d7a4a137
+  Correlation Id:          baa6a25b512a4e0ac596095078811a00
+  External correlation Id: 4702577472420370271
+  Machine Id:              CvP+HZ18afEpqboWGIwFhl4K16Y=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jys-6000.3.20" (connect: 0.85s, validation: 0.22s, handshake: 0.01s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys-6000.3.20-notifications" at "2026-08-18T05:05:19.2975111Z"
+[Licensing::Module] Connected to LicensingClient (PId: 21052, launch time: 0.01, total connection time: 1.08s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-24T06:04:20Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.02
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-24T06:04:20Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Module] Licensing Background thread has ended after 2.66s
+[Licensing::Module] Licensing is initialized (took 1.99s).
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-24T06:04:20Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Refreshing native plugins compatible for Editor in 0.41 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.20f1 (c9ba695d4f07)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56220
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003999 seconds.
+- Loaded All Assemblies, in  0.702 seconds
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.672 seconds
+Domain Reload Profiling: 1370ms
+	BeginReloadAssembly (230ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (9ms)
+	RebuildCommonClasses (65ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (80ms)
+	LoadAllAssembliesAndSetupDomain (300ms)
+		LoadAssemblies (216ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (295ms)
+			TypeCache.Refresh (291ms)
+				TypeCache.ScanAssembly (269ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (673ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (607ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (87ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (144ms)
+			ProcessInitializeOnLoadAttributes (248ms)
+			ProcessInitializeOnLoadMethodAttributes (122ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-24T06:05:20Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 26 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.cinemachine@3.1.7 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.cinemachine@f3f96bcb59af)
+    com.unity.inputsystem@1.20.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.inputsystem@7a4e1a2a8194)
+    com.unity.splines@2.9.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.splines@e6e1d5900acc)
+    com.unity.searcher@4.9.4 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.burst@1.8.29 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.mathematics@1.3.3 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.collections@2.6.6 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.collections@9796e5ee0d9e)
+    com.unity.settings-manager@2.1.1 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86)
+    com.unity.nuget.mono-cecil@1.11.6 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.5.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.test-framework.performance@8b56083ec0f0)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.universal@37e06a5b08b3)
+    com.unity.test-framework@1.6.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.test-framework@bd7f943e9647)
+    com.unity.modules.animation@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.audio@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.audio)
+    com.unity.ext.nunit@2.0.5 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.core@731b06833851)
+    com.unity.shadergraph@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.shadergraph@fe0f710ccc2d)
+    com.unity.render-pipelines.universal-config@17.0.3 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.universal-config@8dc1aab4af1d)
+    com.unity.modules.uielements@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.ugui@2.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.ugui@e20f1880fa04)
+    com.unity.modules.physics@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.terrain@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.hierarchycore)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 3s198ms
+[584/743    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[735/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[736/743    0s] Csc Library/Bee/artifacts/1900b0aE.dag/BreakNotice.LocomotionCamera.EditModeTests.dll (+2 others)
+[737/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/BreakNotice.LocomotionCamera.EditModeTests.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/BreakNotice.LocomotionCamera.EditModeTests.dll, with 137 defines and 274 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[738/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.pdb
+[739/743    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll, with 137 defines and 315 references
+
+processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[740/743    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[741/743    0s] CopyFiles Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll
+[742/743    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (3.15 seconds), 9 items updated, 743 evaluated
+AssetDatabase: script compilation time: 3.912912s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  2.849 seconds
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Refreshing native plugins compatible for Editor in 0.79 ms, found 0 plugins.
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.292 seconds
+Domain Reload Profiling: 7133ms
+	BeginReloadAssembly (478ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (59ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (172ms)
+	RebuildCommonClasses (69ms)
+	RebuildNativeTypeToScriptingClass (25ms)
+	initialDomainReloadingComplete (49ms)
+	LoadAllAssembliesAndSetupDomain (2219ms)
+		LoadAssemblies (2149ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (243ms)
+			TypeCache.Refresh (169ms)
+				TypeCache.ScanAssembly (156ms)
+			BuildScriptInfoCaches (56ms)
+			ResolveRequiredComponents (14ms)
+	FinalizeReload (4293ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (4019ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (50ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (253ms)
+			ProcessInitializeOnLoadAttributes (3564ms)
+			ProcessInitializeOnLoadMethodAttributes (136ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (36ms)
+Refreshing native plugins compatible for Editor in 0.77 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=0c4f7981c8433f343ac0b0cd48ccf32c): Total: 12.235 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=4849 ms
+		Asset DB Callback time: managed=506 ms, native=27 ms
+		Scripting: domain reloads=1, domain reload time=2850 ms, compile time=3916 ms, other=84 ms
+		Project Asset Count: scripts=938, non-scripts=2076
+		Asset File Changes: new=0, changed=2, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.002ms
+	InvokePackagesCallback: 25.681ms
+	ApplyChangesToAssetFolders: 0.941ms
+	Scan: 169.429ms
+	OnSourceAssetsModified: 1.478ms
+	CategorizeAssetsWithTransientArtifact: 34.618ms
+	ProcessAssetsWithTransientArtifactChanges: 81.776ms
+	CategorizeAssets: 67.123ms
+	ImportOutOfDateAssets: 4300.944ms (383.065ms without children)
+		CompileScripts: 3916.144ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 0.174ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.736ms
+		InitializingProgressBar: 0.001ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.823ms
+	PostProcessAllAssets: 507.566ms
+	Hotreload: 2.643ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.021ms
+	UnloadStreamsBegin: 2.246ms
+	PersistCurrentRevisions: 0.191ms
+	UnloadStreamsEnd: 0.002ms
+	GenerateScriptTypeHashes: 5.049ms
+	Untracked: 7039.903ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 3.162ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Game
+Unloading 224 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4129 unused Assets / (8.9 MB). Loaded Objects now: 4890.
+Memory consumption went from 210.3 MB to 201.4 MB.
+Total: 18.694200 ms (FindLiveObjects: 0.474600 ms CreateObjectMapping: 0.416900 ms MarkObjects: 9.446900 ms  DeleteObjects: 8.354100 ms)
+
+Start importing Assets/_Project/Audio/Impact/Unarmed/BN_BODY_IMPACT_06_FULL.wav using Guid(dffc69ec9cd1c4847a9d3884ee182187) (AudioImporter) -> (artifact id: '7d52be813df9b0d3de2c39162e9208a4') in 0.1158275 seconds
+Refreshing native plugins compatible for Editor in 0.85 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=34b96d24f54032a488f2211f293e0198): Total: 0.244 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Impact/Unarmed/BN_FACE_PUNCH_02_FULL.wav using Guid(849fb7cfecd5d8c4d9bf84a46593d46a) (AudioImporter) -> (artifact id: 'd47224c59386aff009ee2ab23736ab4b') in 0.0973567 seconds
+Refreshing native plugins compatible for Editor in 0.96 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=867ac2e49a5be194f95d9c065e03fc07): Total: 0.127 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Impact/Unarmed/BN_FACE_PUNCH_03_FULL.wav using Guid(4424024886c9590469e305f7ae015434) (AudioImporter) -> (artifact id: '599afb26e3039e3ae1fed7160ad0e79d') in 0.0829406 seconds
+Refreshing native plugins compatible for Editor in 0.83 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=2cf79be5010ceeb4e885d0d067a4e34c): Total: 0.106 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Impact/Unarmed/BN_FACE_PUNCH_01_FULL.wav using Guid(132643e9cc600e54394b486d51b0abed) (AudioImporter) -> (artifact id: '91898cd1d73e29e39591f0f916273a3c') in 0.1041557 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=8dcd647afb612954bbf258b1528d1295): Total: 0.126 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Impact/Unarmed/BN_FACE_PUNCH_04_FULL.wav using Guid(7b368d72bb56e094a8585ead66583bbe) (AudioImporter) -> (artifact id: '29674a286a8e9a74aa068714a269e1ee') in 0.103042 seconds
+Refreshing native plugins compatible for Editor in 0.89 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=e6644ce720c39ae408a736c97c8a55e7): Total: 0.128 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Impact/Unarmed/BN_BODY_IMPACT_02_FULL.wav using Guid(1b47d6a231e4b0e458022a9c4e0b15ba) (AudioImporter) -> (artifact id: 'd155913f4cc19f071ea89e6bd8b8c66c') in 0.0828697 seconds
+Refreshing native plugins compatible for Editor in 0.81 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=355a90caf81aaf84aa5305143f40d18a): Total: 0.107 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Opening scene 'Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity'
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity'
+	Deserialize:            61.173 ms
+	Integration:            557.124 ms
+	Integration of assets:  0.064 ms
+	Thread Wait Time:       0.011 ms
+	Total Operation Time:   618.372 ms
+Unloading 10 unused Assets / (0.5 KB). Loaded Objects now: 8122.
+Memory consumption went from 235.0 MB to 235.0 MB.
+Total: 10.617800 ms (FindLiveObjects: 0.638900 ms CreateObjectMapping: 0.362700 ms MarkObjects: 9.564900 ms  DeleteObjects: 0.050200 ms)
+
+InvalidOperationException: Sequence contains no matching element
+  at System.Linq.Enumerable.Single[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`2[T,TResult] predicate) [0x00070] in <80564d689e48448fa2a7101993ee7201>:0 
+  at BreakNotice.Contest.Editor.ContestUnarmedCombatAudioAuthoring.ApplyToScene (UnityEngine.SceneManagement.Scene scene) [0x00117] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Editor\Contest\ContestUnarmedCombatAudioAuthoring.cs:132 
+  at BreakNotice.Contest.Editor.ContestUnarmedCombatAudioAuthoring.PrepareS7UnarmedCombatAudio () [0x0002d] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Editor\Contest\ContestUnarmedCombatAudioAuthoring.cs:51 
+
+(Filename: Assets/_Project/Code/Editor/Contest/ContestUnarmedCombatAudioAuthoring.cs Line: 51)
+
+executeMethod method BreakNotice.Contest.Editor.ContestUnarmedCombatAudioAuthoring.PrepareS7UnarmedCombatAudio threw exception.
+Exiting without the bug reporter. Application will terminate with return code 1

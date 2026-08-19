@@ -41,6 +41,19 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void StrapEligibleAllyBinder_RemainsAnExactSupplyTarget()
+        {
+            RelayFixture fixture = CreateFixture();
+
+            Assert.That(fixture.BinderOne.StrapEligible, Is.True);
+            Assert.That(
+                fixture.Relay.TryRequestSupply(fixture.BinderOne, out var rejection),
+                Is.True);
+            Assert.That(rejection, Is.EqualTo(PrototypeAllyRelayRejection.None));
+            Assert.That(fixture.Relay.ActiveTarget, Is.SameAs(fixture.BinderOne));
+        }
+
+        [Test]
         public void ZeroCandidate_IsSafeRejectionWithoutMutation()
         {
             RelayFixture fixture = CreateFixture();
@@ -376,10 +389,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             view.transform.rotation = Quaternion.identity;
             PrototypeInteractionTarget binderOne = CreateTarget(
                 "BINDER-ALLY-01", PrototypeWeightClass.Light,
-                PrototypeInteractionRole.AllyBinder, false, true, false, false, true);
+                PrototypeInteractionRole.AllyBinder, false, true, true, false, true);
             PrototypeInteractionTarget binderTwo = CreateTarget(
                 "BINDER-ALLY-02", PrototypeWeightClass.Light,
-                PrototypeInteractionRole.AllyBinder, false, true, false, false, true);
+                PrototypeInteractionRole.AllyBinder, false, true, true, false, true);
             PrototypeInteractionTarget chair = CreateTarget(
                 "CHAIR-ALLY-01", PrototypeWeightClass.Medium,
                 PrototypeInteractionRole.AllyChair, false, false, true, true, true);

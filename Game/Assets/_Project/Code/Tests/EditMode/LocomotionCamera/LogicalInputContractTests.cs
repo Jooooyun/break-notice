@@ -38,7 +38,7 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             InputActionMap map = asset.actionMaps[0];
             Assert.That(map.name, Is.EqualTo("PrototypePlayer"));
-            Assert.That(map.actions.Count, Is.EqualTo(13));
+            Assert.That(map.actions.Count, Is.EqualTo(15));
             Assert.That(
                 map.actions.Select(action => action.name),
                 Is.EquivalentTo(Enum.GetNames(typeof(PrototypeLogicalAction))));
@@ -124,7 +124,61 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(mobility.Jump, Is.True);
             Assert.That(
                 LoadInputAsset().FindActionMap("PrototypePlayer", true).actions.Count,
-                Is.EqualTo(13));
+                Is.EqualTo(15));
+        }
+
+        [Test]
+        public void WeaponSelection_UsesDigitKeyEdgesAndSnapshotExposesRequests()
+        {
+            InputActionMap map = LoadInputAsset().FindActionMap("PrototypePlayer", true);
+            InputAction selectFists = map.FindAction("SelectFists", true);
+            InputAction selectObjectWeapon = map.FindAction("SelectObjectWeapon", true);
+
+            Assert.That(selectFists.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(selectObjectWeapon.type, Is.EqualTo(InputActionType.Button));
+            Assert.That(
+                selectFists.bindings.Select(binding => binding.effectivePath),
+                Is.EquivalentTo(new[] { "<Keyboard>/digit1" }));
+            Assert.That(
+                selectObjectWeapon.bindings.Select(binding => binding.effectivePath),
+                Is.EquivalentTo(new[] { "<Keyboard>/digit2" }));
+
+            var fistsRequested = new LogicalInputSnapshot(
+                Vector2.zero,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                selectFists: true);
+            var objectWeaponRequested = new LogicalInputSnapshot(
+                Vector2.zero,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                selectObjectWeapon: true);
+
+            Assert.That(fistsRequested.SelectFists, Is.True);
+            Assert.That(fistsRequested.SelectObjectWeapon, Is.False);
+            Assert.That(objectWeaponRequested.SelectFists, Is.False);
+            Assert.That(objectWeaponRequested.SelectObjectWeapon, Is.True);
+            Assert.That(default(LogicalInputSnapshot).SelectFists, Is.False);
+            Assert.That(default(LogicalInputSnapshot).SelectObjectWeapon, Is.False);
+
+            string adapterSource = File.ReadAllText(
+                "Assets/_Project/Code/Runtime/Player/Input/InputSystemLogicalInputAdapter.cs");
+            StringAssert.Contains(
+                "selectFistsAction.WasPressedThisFrame()",
+                adapterSource);
+            StringAssert.Contains(
+                "selectObjectWeaponAction.WasPressedThisFrame()",
+                adapterSource);
         }
 
         [Test]

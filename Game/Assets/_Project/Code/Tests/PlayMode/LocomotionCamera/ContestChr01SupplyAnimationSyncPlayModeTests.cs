@@ -107,6 +107,18 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(driver.Animator.IsInTransition(0), Is.False);
             Assert.That(driver.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash,
                 Is.EqualTo(windupHash));
+            AnimatorClipInfo[] windupClips = driver.Animator.GetCurrentAnimatorClipInfo(0);
+            float windupClipInfoDeadline = Time.time + 0.5f;
+            while (windupClips.Length == 0 && Time.time < windupClipInfoDeadline)
+            {
+                yield return null;
+                windupClips = driver.Animator.GetCurrentAnimatorClipInfo(0);
+            }
+            Assert.That(windupClips, Has.Length.EqualTo(1));
+            Assert.That(windupClips[0].clip.name,
+                Is.EqualTo("CHR01_Supply_Binder_Windup_Runtime"));
+            Assert.That(windupClips[0].clip.isHumanMotion, Is.True,
+                "The held Binder pose must evaluate as Humanoid motion.");
             Assert.That(relay.IsBinderWindupReadyContactCommitted, Is.True);
             Assert.That(relay.PreparedTarget, Is.SameAs(binder));
             AssertBinderAtSocket(body);
@@ -134,10 +146,30 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(selected, Is.SameAs(binder));
             Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.PreRelease));
 
+            int releaseHash = Animator.StringToHash("Base Layer.SupplyReleaseAction");
+            yield return WaitUntilOrFail(
+                () => !driver.Animator.IsInTransition(0) &&
+                      driver.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash ==
+                          releaseHash,
+                1f,
+                "CHR01 did not enter the trimmed Binder release clip.");
+            Assert.That(receiver.AllySupplyReleaseInvocationCount,
+                Is.EqualTo(eventBefore));
+            Assert.That(body.isKinematic, Is.True,
+                "The Binder must remain owned until the authored open-hand frame.");
+            AssertBinderAtSocket(body);
+
             yield return WaitUntilOrFail(
                 () => receiver.AllySupplyReleaseInvocationCount == eventBefore + 1,
                 3f,
                 "Natural CHR01 Binder release AnimationEvent did not fire.");
+            AnimatorStateInfo releaseInfo = driver.Animator.GetCurrentAnimatorStateInfo(0);
+            Assert.That(releaseInfo.fullPathHash, Is.EqualTo(releaseHash));
+            Assert.That(releaseInfo.normalizedTime,
+                Is.InRange(
+                    ShowcaseNonPlayerAnimationTiming.AllySupplyRelease,
+                    0.45f),
+                "The physical release must occur near source frame 28, not in the idle tail.");
             Assert.That(relay.ReleaseCount, Is.EqualTo(releaseBefore + 1));
             Assert.That(relay.RelayPhase, Is.EqualTo(PrototypeRelayPhase.Released));
             for (int frame = 0; frame < 5; frame++)
@@ -147,6 +179,18 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.EqualTo(eventBefore + 1));
                 Assert.That(relay.ReleaseCount, Is.EqualTo(releaseBefore + 1));
             }
+
+            int idleHash = Animator.StringToHash("Base Layer.Idle");
+            yield return WaitUntilOrFail(
+                () => driver.CurrentBaseStateName == "Idle" &&
+                      (driver.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash ==
+                           idleHash ||
+                       driver.Animator.GetNextAnimatorStateInfo(0).fullPathHash ==
+                           idleHash),
+                1.5f,
+                "The trimmed Binder release did not finish through the driver's 0.98 gate.");
+            Assert.That(receiver.AllySupplyReleaseInvocationCount,
+                Is.EqualTo(eventBefore + 1));
 
             Assert.That(reset.RequestReset(EncounterResetCause.ManualInput), Is.True);
             yield return null;

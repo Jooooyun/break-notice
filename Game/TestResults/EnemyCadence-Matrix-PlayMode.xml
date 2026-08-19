@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.5032484">
+  <test-suite type="TestSuite" id="1182" name="Game" fullname="Game" runstate="Runnable" testcasecount="152" result="Failed" site="Child" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.503248" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1175" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="152" result="Failed" site="Child" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.488512" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="25564" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1176" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="152" result="Failed" site="Child" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.485745" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1177" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="152" result="Failed" site="Child" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.483559" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1178" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="152" result="Failed" site="Child" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.481189" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1098" name="ContestShowcaseCombatPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" testcasecount="16" result="Failed" site="Child" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.474718" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1105" name="ApprovedEnemyAttackMatrix_AllTenUnarmedCuesUseNaturalBoneWindowsOnce" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.ApprovedEnemyAttackMatrix_AllTenUnarmedCuesUseNaturalBoneWindowsOnce" methodname="ApprovedEnemyAttackMatrix_AllTenUnarmedCuesUseNaturalBoneWindowsOnce" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="2017753647" result="Failed" start-time="2026-08-17 19:23:52Z" end-time="2026-08-17 19:24:05Z" duration="13.454740" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Elite Mutant Punch: approved strike bones did not overlap player hurtboxes. Minimum surface separation: 0.4700 m.
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests+<WaitUntilOrFail>d__35.MoveNext () [0x0005c] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestShowcaseCombatPlayModeTests.cs:1549
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

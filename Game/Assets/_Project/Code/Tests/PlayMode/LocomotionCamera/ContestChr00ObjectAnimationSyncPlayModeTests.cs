@@ -34,6 +34,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         private ShowcaseCharacterAnimationDriver driver;
         private ShowcasePlayerPropGripRig gripRig;
         private ShowcaseAnimationEventReceiver receiver;
+        private InteractionReadabilityPresenter interactionPresenter;
         private InputSystemLogicalInputAdapter input;
         private AuthoredEncounterResetController reset;
 
@@ -534,6 +535,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             driver = combat.GetComponent<ShowcaseCharacterAnimationDriver>();
             gripRig = driver.Animator.GetComponent<ShowcasePlayerPropGripRig>();
             receiver = driver.Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+            interactionPresenter = SceneComponents<InteractionReadabilityPresenter>().Single();
             reset = SceneComponents<AuthoredEncounterResetController>().Single();
 
             Assert.That(interaction, Is.Not.Null);
@@ -542,6 +544,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(input, Is.Not.Null);
             Assert.That(gripRig, Is.Not.Null);
             Assert.That(receiver, Is.Not.Null);
+            Assert.That(interactionPresenter, Is.Not.Null);
             input.enabled = false;
             foreach (ShowcaseRunnerAgent runner in SceneComponents<ShowcaseRunnerAgent>())
             {
@@ -554,12 +557,22 @@ namespace BreakNotice.LocomotionCamera.Tests
             PositionForDirectAcquisition(target);
             uint gripSequenceBefore = gripRig.SequenceId;
             int contactBefore = receiver.CarryContactInvocationCount;
+            int completionBefore = receiver.ActionCompleteInvocationCount;
+            ShowcasePlayerAnimationCue expectedCue =
+                target.WeightClass == PrototypeWeightClass.Medium
+                    ? ShowcasePlayerAnimationCue.PickupLowMedium
+                    : ShowcasePlayerAnimationCue.PickupLowSmall;
+            string expectedState = target.WeightClass == PrototypeWeightClass.Medium
+                ? "PickupLowMediumAction"
+                : "PickupLowSmallAction";
 
             Assert.That(interaction.RefreshTarget(false), Is.SameAs(target));
             yield return null;
+            float acquisitionStartedAt = Time.time;
             PrototypeInteractionDecision decision = interaction.ProcessInteractPrimary(false);
             Assert.That(decision.IsAccepted, Is.True, decision.Rejection.ToString());
             Assert.That(decision.Outcome, Is.EqualTo(PrototypeInteractionOutcome.Scoop));
+            Assert.That(combat.AnimationCue, Is.EqualTo(expectedCue));
             Assert.That(owner.HandState,
                 Is.EqualTo(PrototypeHandOwnershipState.AcquisitionCommitted));
             Assert.That(lifecycle.CarriedTarget, Is.Null);
@@ -567,6 +580,11 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Is.EqualTo(ShowcasePlayerPropGripPhase.AcquisitionPending));
             Assert.That(gripRig.SequenceId, Is.EqualTo(gripSequenceBefore + 1));
             Assert.That(gripRig.Target, Is.SameAs(target));
+
+            yield return WaitUntilOrFail(
+                () => driver.CurrentBaseStateName == expectedState,
+                1f,
+                $"{expectedState} did not become the active CHR00 state.");
 
             yield return new WaitForSeconds(0.1f);
             Assert.That(receiver.CarryContactInvocationCount, Is.EqualTo(contactBefore));
@@ -582,14 +600,28 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(gripRig.Target, Is.SameAs(target));
             Assert.That(gripRig.Phase,
                 Is.EqualTo(ShowcasePlayerPropGripPhase.AcquisitionAttached));
+            float contactBudget = target.WeightClass == PrototypeWeightClass.Medium
+                ? 0.65f
+                : 0.58f;
+            Assert.That(Time.time - acquisitionStartedAt,
+                Is.LessThanOrEqualTo(contactBudget),
+                $"{target.WeightClass} pickup contact remained too slow.");
             yield return null;
             AssertCarryPose(target);
 
             yield return WaitUntilOrFail(
                 () => !combat.IsActionLocked,
-                3f,
+                6f,
                 "Natural acquisition completion event did not release the action.");
             Assert.That(receiver.CarryContactInvocationCount, Is.EqualTo(contactBefore + 1));
+            Assert.That(receiver.ActionCompleteInvocationCount,
+                Is.EqualTo(completionBefore + 1));
+            float completionBudget = target.WeightClass == PrototypeWeightClass.Medium
+                ? 1.75f
+                : 1.55f;
+            Assert.That(Time.time - acquisitionStartedAt,
+                Is.LessThanOrEqualTo(completionBudget),
+                $"{target.WeightClass} pickup kept the player locked too long.");
             Assert.That(gripRig.Phase, Is.EqualTo(ShowcasePlayerPropGripPhase.Carry));
             yield return null;
             AssertCarryPose(target);
@@ -625,6 +657,10 @@ namespace BreakNotice.LocomotionCamera.Tests
         private IEnumerator ThrowNaturally(PrototypeInteractionTarget target)
         {
             int releaseBefore = receiver.ThrowReleaseInvocationCount;
+            int completionBefore = receiver.ActionCompleteInvocationCount;
+            string expectedState = target.WeightClass == PrototypeWeightClass.Medium
+                ? "ThrowMediumAction"
+                : "ThrowLightAction";
             SetInputSnapshot(input, new LogicalInputSnapshot(
                 Vector2.zero,
                 Vector2.zero,
@@ -639,6 +675,18 @@ namespace BreakNotice.LocomotionCamera.Tests
             yield return new WaitForSecondsRealtime(0.12f);
             float charge01 = interaction.ThrowCharge01;
             Assert.That(charge01, Is.GreaterThan(0.05f));
+            Assert.That(interaction.TryGetThrowPreview(
+                out PrototypeThrowSolution previewSolution), Is.True);
+            Assert.That(previewSolution.InitialVelocity.y, Is.GreaterThan(0f));
+            var previewPoints = new Vector3[26];
+            Assert.That(interaction.TryBuildThrowTrajectoryPreview(
+                previewPoints,
+                out int previewPointCount), Is.True);
+            Assert.That(previewPointCount, Is.GreaterThanOrEqualTo(4));
+            Assert.That(previewPoints[1].y, Is.GreaterThan(previewPoints[0].y));
+            Assert.That(interactionPresenter.IsThrowTrajectoryVisible, Is.True);
+            Assert.That(interactionPresenter.ThrowTrajectoryPointCount,
+                Is.GreaterThanOrEqualTo(4));
             bool releaseAccepted = interaction.ReleaseThrowCharge();
             SetInputSnapshot(input, default);
             Assert.That(releaseAccepted, Is.True);
@@ -648,6 +696,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(owner.CarriedTarget, Is.SameAs(target));
             Assert.That(lifecycle.CarriedTarget, Is.SameAs(target));
             Assert.That(gripRig.Phase, Is.EqualTo(ShowcasePlayerPropGripPhase.Throw));
+
+            yield return WaitUntilOrFail(
+                () => driver.CurrentBaseStateName == expectedState,
+                1f,
+                $"{expectedState} did not become the active CHR00 state.");
 
             yield return new WaitForSeconds(0.1f);
             Assert.That(receiver.ThrowReleaseInvocationCount, Is.EqualTo(releaseBefore));
@@ -669,14 +722,20 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(snapshot.LinearVelocity.magnitude,
                 Is.EqualTo(lifecycle.GetThrowSpeed(target.WeightClass, charge01))
                     .Within(0.02f));
+            Assert.That(snapshot.LinearVelocity.y, Is.GreaterThan(0f),
+                "The committed physical throw must begin with the visible upward arc.");
             Assert.That(lifecycle.CarriedTarget, Is.Null);
             Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
             Assert.That(gripRig.Phase, Is.EqualTo(ShowcasePlayerPropGripPhase.None));
             Assert.That(receiver.ThrowReleaseInvocationCount, Is.EqualTo(releaseBefore + 1));
+            yield return null;
+            Assert.That(interactionPresenter.IsThrowTrajectoryVisible, Is.False);
             yield return WaitUntilOrFail(
                 () => !combat.IsActionLocked,
                 3f,
                 "Natural throw completion event did not release the action.");
+            Assert.That(receiver.ActionCompleteInvocationCount,
+                Is.EqualTo(completionBefore + 1));
         }
 
         private IEnumerator BeginDirectThrowWindup(PrototypeInteractionTarget target)
@@ -894,7 +953,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             {
                 Vector3 localGrip = chair.center +
                     Vector3.up * (chair.size.y * 0.5f * 0.78f) +
-                    Vector3.back * ((chair.size.z * 0.5f) + 0.040f);
+                    Vector3.back * ((chair.size.z * 0.5f) + 0.070f);
                 Vector3 scale = target.transform.lossyScale;
                 Vector3 scaledLocalGrip = Vector3.Scale(
                     localGrip,

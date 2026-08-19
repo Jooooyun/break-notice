@@ -935,6 +935,15 @@ Codex는 다음을 임의로 추가하지 않는다.
 
 사용자가 승인하기 전에는 다음 단계로 넘어가지 않는다.
 
-**The specification is law.  
-The image is evidence, not authority.  
+**The specification is law.
+The image is evidence, not authority.
 Owner approval opens the next gate.**
+
+<!-- ballast session-start block -->
+
+## Session start (ballast)
+
+1. Before substantive work, read `memory/00-INDEX.md` and `memory/DECISIONS.md`. Standing decisions are followed without relitigating; changed decisions use the supersede protocol.
+2. Record decisions and important facts in `memory/` in the same session. Unresolved items go to `memory/OPEN-QUESTIONS.md`.
+3. Claims carry labels: confirmed / observed / assumed / hearsay / unknown.
+4. External-facing product claims require evidence in `memory/PRODUCT-TRUTH.md`.

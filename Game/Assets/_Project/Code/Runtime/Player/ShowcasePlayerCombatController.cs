@@ -15,6 +15,8 @@ namespace BreakNotice.Gameplay.Combat
         CatchSmallLeft,
         CatchSmallRight,
         CatchMedium,
+        PickupLowSmall,
+        PickupLowMedium,
         ThrowSmall,
         ThrowMedium,
         HitBody,
@@ -23,7 +25,8 @@ namespace BreakNotice.Gameplay.Combat
         GetupBack,
         GetupFront,
         Death1,
-        Death2
+        Death2,
+        MeleeJabReturn
     }
 
     [DefaultExecutionOrder(-35)]
@@ -46,8 +49,9 @@ namespace BreakNotice.Gameplay.Combat
         private static readonly float[] MeleeDurations = { 0f, 1.00f, 1.05f, 1.15f };
         private static readonly int[] MeleeDamage = { 0, 15, 20, 35 };
         private const float AnimatorStateEntryTimeout = 0.15f;
-        private const float MaximumMeleeApproachDistance = 0.25f;
-        private const float MeleeContactStandoff = 0.67f;
+        private const int MinimumAnimatorStateEntryFrames = 2;
+        private const float MaximumMeleeApproachDistance = 0.36f;
+        private const float MeleeContactStandoff = 0.533f;
         private const float MeleeApproachSpeed = 5f;
 
         [SerializeField]
@@ -80,6 +84,12 @@ namespace BreakNotice.Gameplay.Combat
         [SerializeField]
         private ShowcaseBoneCombatRig boneCombatRig;
 
+        [SerializeField]
+        private ShowcaseCargoStrapController cargoStrap;
+
+        [SerializeField]
+        private PrototypeInteractionController interactionController;
+
         private ActiveAction activeAction;
         private ShowcaseRunnerAgent meleeTarget;
         private PrototypeInteractionTarget pendingTarget;
@@ -92,12 +102,15 @@ namespace BreakNotice.Gameplay.Combat
         private float actionDuration;
         private bool actionEventCommitted;
         private bool meleeQueued;
+        private bool meleeHookQueued;
+        private bool meleeJabReturnActive;
         private int activeMeleeStep;
         private float lastMeleeCompletedAt = float.NegativeInfinity;
         private uint nextAttackSequence;
         private uint activeAttackSequence;
         private bool getupUsesBackVariant;
         private float actionRequestedAt;
+        private int actionRequestedFrame = -1;
         private bool animationStateAcknowledged;
         private uint awaitedAnimationCueRevision;
         private bool meleeBufferWindowOpen;
@@ -109,6 +122,7 @@ namespace BreakNotice.Gameplay.Combat
         private bool reactionDisplacementPending;
         private bool reactionDisplacementActive;
         private float meleeApproachDistance;
+        private Vector3 meleeFacingDirection;
 
         public ShowcaseCombatHealth Health => health;
         public ShowcasePlayerAnimationCue AnimationCue { get; private set; }
@@ -117,10 +131,9 @@ namespace BreakNotice.Gameplay.Combat
         public bool IsActionLocked => activeAction != ActiveAction.None;
         public bool BlocksInteraction => IsDead || IsActionLocked;
         public bool AllowsAim => !IsDead && activeAction == ActiveAction.None;
-        public bool CanBufferMelee => activeAction == ActiveAction.Melee &&
-            activeMeleeStep < 3 && !meleeQueued;
+        public bool CanBufferMelee => CanAcceptMeleeFollowUpInput;
         public int ActiveMeleeStep => activeMeleeStep;
-        public bool HasBufferedMelee => meleeQueued;
+        public bool HasBufferedMelee => meleeQueued || meleeHookQueued;
         public uint ActiveAttackSequence => activeAttackSequence;
         public bool IsMeleeActionActive => activeAction == ActiveAction.Melee;
         public ShowcaseRunnerAgent ActiveMeleeTarget => meleeTarget;
@@ -128,6 +141,8 @@ namespace BreakNotice.Gameplay.Combat
 
         private void OnEnable()
         {
+            cargoStrap ??= GetComponent<ShowcaseCargoStrapController>();
+            interactionController ??= GetComponent<PrototypeInteractionController>();
             SubscribeToReset();
         }
 
@@ -176,12 +191,18 @@ namespace BreakNotice.Gameplay.Combat
             if (!animationStateAcknowledged)
             {
                 if (activeAction != ActiveAction.Death &&
-                    Time.time - actionRequestedAt >= AnimatorStateEntryTimeout)
+                    Time.time - actionRequestedAt >= AnimatorStateEntryTimeout &&
+                    Time.frameCount - actionRequestedFrame >=
+                        MinimumAnimatorStateEntryFrames)
                 {
                     ActiveAction timedOut = activeAction;
+                    string detail = timedOut == ActiveAction.HitReaction
+                        ? "Accepted damage remains committed; hit-reaction " +
+                          "presentation was not acknowledged and mobility " +
+                          "ownership is being restored."
+                        : "Gameplay fact was not committed; ownership is being restored.";
                     Debug.LogError(
-                        $"SHOWCASE ANIMATOR STATE ENTRY TIMEOUT: {timedOut}. " +
-                        "Gameplay fact was not committed; ownership is being restored.",
+                        $"SHOWCASE ANIMATOR STATE ENTRY TIMEOUT: {timedOut}. {detail}",
                         this);
                     CancelTimedOutAction(timedOut);
                 }
@@ -237,6 +258,8 @@ namespace BreakNotice.Gameplay.Combat
             resetController = reset;
             objectiveController = objective;
             boneCombatRig ??= GetComponent<ShowcaseBoneCombatRig>();
+            cargoStrap ??= GetComponent<ShowcaseCargoStrapController>();
+            interactionController ??= GetComponent<PrototypeInteractionController>();
             SubscribeToReset();
             ResetToRunBaseline();
         }
@@ -251,17 +274,24 @@ namespace BreakNotice.Gameplay.Combat
             if (IsDead || interactionOwner == null || logicalInput == null ||
                 logicalInput.Snapshot.Aim ||
                 interactionOwner.HandState != PrototypeHandOwnershipState.Free ||
-                interactionOwner.StrapState != PrototypeStrapOwnershipState.Stored ||
-                interactionOwner.RelayState != PrototypeRelayReservationState.None)
+                interactionOwner.RelayState != PrototypeRelayReservationState.None ||
+                interactionOwner.WeaponSelection != PrototypeWeaponSelection.Fists)
             {
                 return false;
             }
 
             if (activeAction == ActiveAction.Melee)
             {
-                if (!meleeQueued && activeMeleeStep < 3)
+                if (CanAcceptMeleeFollowUpInput)
                 {
-                    meleeQueued = true;
+                    if (activeMeleeStep == 1 && meleeQueued)
+                    {
+                        meleeHookQueued = true;
+                    }
+                    else
+                    {
+                        meleeQueued = true;
+                    }
                     return true;
                 }
                 return false;
@@ -276,11 +306,20 @@ namespace BreakNotice.Gameplay.Combat
             return true;
         }
 
+        private bool CanAcceptMeleeFollowUpInput =>
+            activeAction == ActiveAction.Melee &&
+            !meleeJabReturnActive &&
+            activeMeleeStep < 3 &&
+            (activeMeleeStep == 1
+                ? !meleeHookQueued
+                : !meleeQueued && meleeBufferWindowOpen);
+
         public bool TryBeginAcquisition(
             PrototypeInteractionTarget target,
             PrototypeInteractionOutcome outcome)
         {
             if (target == null || IsDead || activeAction != ActiveAction.None ||
+                target.WeightClass == PrototypeWeightClass.Heavy ||
                 (outcome != PrototypeInteractionOutcome.Scoop &&
                  outcome != PrototypeInteractionOutcome.Catch))
             {
@@ -297,15 +336,15 @@ namespace BreakNotice.Gameplay.Combat
             locomotion?.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, true);
 
             ShowcasePlayerAnimationCue acquisitionCue;
-            if (target.WeightClass == PrototypeWeightClass.Medium)
+            if (outcome == PrototypeInteractionOutcome.Scoop)
+            {
+                acquisitionCue = target.WeightClass == PrototypeWeightClass.Medium
+                    ? ShowcasePlayerAnimationCue.PickupLowMedium
+                    : ShowcasePlayerAnimationCue.PickupLowSmall;
+            }
+            else if (target.WeightClass == PrototypeWeightClass.Medium)
             {
                 acquisitionCue = ShowcasePlayerAnimationCue.CatchMedium;
-            }
-            else if (outcome == PrototypeInteractionOutcome.Scoop)
-            {
-                // A dedicated low pickup source is still pending. Do not misuse the
-                // directional airborne catch clips for a grounded scoop fallback.
-                acquisitionCue = ShowcasePlayerAnimationCue.CatchSmallCenter;
             }
             else
             {
@@ -344,6 +383,10 @@ namespace BreakNotice.Gameplay.Combat
             float charge01)
         {
             if (target == null || IsDead || activeAction != ActiveAction.None ||
+                interactionOwner == null ||
+                interactionOwner.WeaponSelection !=
+                    PrototypeWeaponSelection.ObjectWeapon ||
+                target.WeightClass == PrototypeWeightClass.Heavy ||
                 physicalLifecycle == null || physicalLifecycle.CarriedTarget != target)
             {
                 return false;
@@ -398,6 +441,9 @@ namespace BreakNotice.Gameplay.Combat
         {
             if (target == null || IsDead || activeAction != ActiveAction.None ||
                 interactionOwner == null ||
+                interactionOwner.WeaponSelection !=
+                    PrototypeWeaponSelection.ObjectWeapon ||
+                target.WeightClass == PrototypeWeightClass.Heavy ||
                 interactionOwner.HandState != PrototypeHandOwnershipState.ThrowCommitted ||
                 interactionOwner.ThrowCommittedTarget != target)
             {
@@ -484,6 +530,7 @@ namespace BreakNotice.Gameplay.Combat
         {
             meleeBufferWindowOpen = isOpen &&
                 activeAction == ActiveAction.Melee &&
+                !meleeJabReturnActive &&
                 activeMeleeStep < 3;
         }
 
@@ -501,7 +548,8 @@ namespace BreakNotice.Gameplay.Combat
 
         internal bool TryCommitBoneHit(
             ShowcaseRunnerAgent actualVictim,
-            uint expectedAttackSequence)
+            uint expectedAttackSequence,
+            Vector3 worldPoint)
         {
             if (activeAction != ActiveAction.Melee || actualVictim == null ||
                 actualVictim.IsDead || !actionEventCommitted ||
@@ -516,7 +564,8 @@ namespace BreakNotice.Gameplay.Combat
                     actualVictim,
                     activeMeleeStep,
                     activeAttackSequence,
-                    MeleeDamage[activeMeleeStep]);
+                    MeleeDamage[activeMeleeStep],
+                    worldPoint);
         }
 
         public void CommitAnimationCarryContact()
@@ -624,6 +673,14 @@ namespace BreakNotice.Gameplay.Combat
                 return;
             }
 
+            if (activeAction == ActiveAction.Melee)
+            {
+                // Swept-bone contact is discovered in LateUpdate and normally
+                // resolved on the next Update. Commit that physical fact before
+                // advancing the combo sequence so Jab cannot be re-labelled Cross.
+                boneCombatRig?.ResolvePendingContacts();
+            }
+
             if (RequiresGameplayCommit(activeAction) && !actionEventCommitted)
             {
                 Debug.LogError(
@@ -633,9 +690,17 @@ namespace BreakNotice.Gameplay.Combat
                 return;
             }
 
+            if (activeAction == ActiveAction.Melee && meleeJabReturnActive)
+            {
+                meleeJabReturnActive = false;
+                CompleteActiveAction();
+                return;
+            }
+
             if (activeAction == ActiveAction.Melee && meleeQueued && activeMeleeStep < 3)
             {
-                int nextStep = activeMeleeStep + 1;
+                int completedStep = activeMeleeStep;
+                bool carryRapidFollowUp = completedStep == 1 && meleeHookQueued;
                 ShowcaseRunnerAgent nextTarget = meleeTarget;
                 if (nextTarget == null || nextTarget.IsDead)
                 {
@@ -643,8 +708,25 @@ namespace BreakNotice.Gameplay.Combat
                         ? runnerPressure.ResolvePlayerMeleeTargetForCombo()
                         : null;
                 }
+                bool finisherReady = ShouldUseMeleeFinisher(nextTarget);
+                int nextStep = finisherReady
+                    ? 3
+                    : completedStep == 1
+                        ? 2
+                        : 1;
                 meleeQueued = false;
+                meleeHookQueued = false;
                 StartMelee(nextStep, nextTarget ?? meleeTarget);
+                if (carryRapidFollowUp && nextStep == 2)
+                {
+                    meleeQueued = true;
+                }
+                return;
+            }
+
+            if (activeAction == ActiveAction.Melee && activeMeleeStep == 1)
+            {
+                BeginMeleeJabReturn();
                 return;
             }
 
@@ -670,6 +752,11 @@ namespace BreakNotice.Gameplay.Combat
                 return false;
             }
 
+            if (cargoStrap != null &&
+                (cargoStrap.IsActionLocked || cargoStrap.IsAttached))
+            {
+                cargoStrap.CancelForPlayerInterruption();
+            }
             CancelPendingGameplayAction();
             ClearReactionDisplacement();
             if (health.IsDead)
@@ -718,6 +805,7 @@ namespace BreakNotice.Gameplay.Combat
             activeAction = ActiveAction.None;
             meleeTarget = null;
             meleeApproachDistance = 0f;
+            meleeFacingDirection = Vector3.zero;
             pendingTarget = null;
             pendingAcquisitionOutcome = PrototypeInteractionOutcome.None;
             pendingThrowDirection = Vector3.zero;
@@ -728,6 +816,8 @@ namespace BreakNotice.Gameplay.Combat
             actionDuration = 0f;
             actionEventCommitted = false;
             meleeQueued = false;
+            meleeHookQueued = false;
+            meleeJabReturnActive = false;
             meleeBufferWindowOpen = false;
             activeMeleeStep = 0;
             lastMeleeCompletedAt = float.NegativeInfinity;
@@ -735,6 +825,7 @@ namespace BreakNotice.Gameplay.Combat
             activeAttackSequence = 0;
             getupUsesBackVariant = false;
             actionRequestedAt = 0f;
+            actionRequestedFrame = -1;
             animationStateAcknowledged = false;
             awaitedAnimationCueRevision = 0;
             ClearReactionDisplacement();
@@ -747,7 +838,27 @@ namespace BreakNotice.Gameplay.Combat
         private void StartMelee(int step, ShowcaseRunnerAgent target)
         {
             boneCombatRig?.CloseAttackWindow();
+            meleeJabReturnActive = false;
             activeMeleeStep = Mathf.Clamp(step, 1, 3);
+            if (activeMeleeStep == 1)
+            {
+                meleeQueued = false;
+                meleeHookQueued = false;
+            }
+            meleeFacingDirection = ResolveMeleeFacingDirection(target);
+            ApplyMeleeFacing(meleeFacingDirection, true);
+            if (target == null && runnerPressure != null)
+            {
+                // Target selection historically used the actor's previous movement
+                // yaw. Align to the optical reticle first, then give the existing
+                // melee selector one deterministic chance to acquire that lane.
+                target = runnerPressure.ResolvePlayerMeleeTargetForCombo();
+                if (target != null)
+                {
+                    meleeFacingDirection = ResolveMeleeFacingDirection(target);
+                    ApplyMeleeFacing(meleeFacingDirection, true);
+                }
+            }
             meleeTarget = target;
             meleeApproachDistance = 0f;
             activeAction = ActiveAction.Melee;
@@ -756,7 +867,11 @@ namespace BreakNotice.Gameplay.Combat
             actionEventCommitted = false;
             meleeBufferWindowOpen = false;
             activeAttackSequence = ++nextAttackSequence;
-            locomotion?.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, true);
+            // Keep planar locomotion available. The authored full-body strike
+            // stays on the Base layer; a legs-only locomotion layer is blended
+            // only while the player is actually moving.
+            locomotion?.SetJumpLock(PlayerMobilityLockReason.MeleeAction, true);
+            UpdateMeleeFacingOverride();
             SetCue(activeMeleeStep switch
             {
                 1 => ShowcasePlayerAnimationCue.MeleeJab,
@@ -765,17 +880,36 @@ namespace BreakNotice.Gameplay.Combat
             });
         }
 
+        private void BeginMeleeJabReturn()
+        {
+            boneCombatRig?.CloseAttackWindow();
+            meleeJabReturnActive = true;
+            meleeBufferWindowOpen = false;
+            actionStartedAt = Time.time;
+            actionDuration = MeleeDurations[1];
+            SetCue(ShowcasePlayerAnimationCue.MeleeJabReturn);
+        }
+
         private void FaceMeleeTarget(float deltaTime)
         {
-            if (meleeTarget == null || deltaTime <= 0f)
+            Vector3 direction = meleeTarget != null
+                ? Vector3.ProjectOnPlane(
+                    meleeTarget.transform.position - transform.position,
+                    Vector3.up)
+                : meleeFacingDirection;
+            if (direction.sqrMagnitude <= 0.001f)
             {
+                locomotion?.SetFacingOverride(
+                    PlayerMobilityLockReason.MeleeAction,
+                    Vector3.zero,
+                    false);
                 return;
             }
 
-            Vector3 direction = Vector3.ProjectOnPlane(
-                meleeTarget.transform.position - transform.position,
-                Vector3.up);
-            if (direction.sqrMagnitude <= 0.001f)
+            meleeFacingDirection = direction.normalized;
+            ApplyMeleeFacing(meleeFacingDirection, false);
+
+            if (deltaTime <= 0f)
             {
                 return;
             }
@@ -784,6 +918,63 @@ namespace BreakNotice.Gameplay.Combat
                 transform.rotation,
                 Quaternion.LookRotation(direction.normalized, Vector3.up),
                 360f * deltaTime);
+        }
+
+        private Vector3 ResolveMeleeFacingDirection(ShowcaseRunnerAgent target)
+        {
+            Vector3 direction = target != null
+                ? Vector3.ProjectOnPlane(
+                    target.transform.position - transform.position,
+                    Vector3.up)
+                : Vector3.zero;
+            if (direction.sqrMagnitude <= 0.001f)
+            {
+                interactionController ??= GetComponent<PrototypeInteractionController>();
+                if (interactionController != null)
+                {
+                    direction = Vector3.ProjectOnPlane(
+                        interactionController.ResolveReticleAimPoint() -
+                            transform.position,
+                        Vector3.up);
+                }
+            }
+            if (direction.sqrMagnitude <= 0.001f)
+            {
+                direction = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+            }
+            return direction.sqrMagnitude > 0.001f
+                ? direction.normalized
+                : Vector3.forward;
+        }
+
+        private void ApplyMeleeFacing(Vector3 direction, bool snapImmediately)
+        {
+            Vector3 planar = Vector3.ProjectOnPlane(direction, Vector3.up);
+            if (planar.sqrMagnitude <= 0.001f)
+            {
+                return;
+            }
+
+            planar.Normalize();
+            locomotion?.SetFacingOverride(
+                PlayerMobilityLockReason.MeleeAction,
+                planar,
+                true);
+            if (snapImmediately)
+            {
+                transform.rotation = Quaternion.LookRotation(planar, Vector3.up);
+            }
+        }
+
+        private void UpdateMeleeFacingOverride()
+        {
+            FaceMeleeTarget(0f);
+        }
+
+        private static bool ShouldUseMeleeFinisher(ShowcaseRunnerAgent target)
+        {
+            return target != null && !target.IsDead && target.Health != null &&
+                target.Health.CurrentHealth <= MeleeDamage[3];
         }
 
         private void AdvanceMeleeApproach(float deltaTime)
@@ -855,10 +1046,13 @@ namespace BreakNotice.Gameplay.Combat
                 lastMeleeCompletedAt = Time.time;
                 activeMeleeStep = 0;
                 meleeQueued = false;
+                meleeHookQueued = false;
+                meleeJabReturnActive = false;
             }
             ReleaseMobilityLockFor(completed);
             meleeTarget = null;
             meleeApproachDistance = 0f;
+            meleeFacingDirection = Vector3.zero;
             pendingTarget = null;
             pendingAcquisitionOutcome = PrototypeInteractionOutcome.None;
             pendingThrowDirection = Vector3.zero;
@@ -924,7 +1118,10 @@ namespace BreakNotice.Gameplay.Combat
             pendingThrowCharge = 0f;
             meleeTarget = null;
             meleeApproachDistance = 0f;
+            meleeFacingDirection = Vector3.zero;
             meleeQueued = false;
+            meleeHookQueued = false;
+            meleeJabReturnActive = false;
             meleeBufferWindowOpen = false;
             actionEventCommitted = false;
             animationStateAcknowledged = false;
@@ -964,6 +1161,14 @@ namespace BreakNotice.Gameplay.Combat
             switch (action)
             {
                 case ActiveAction.Melee:
+                    locomotion?.SetJumpLock(
+                        PlayerMobilityLockReason.MeleeAction,
+                        false);
+                    locomotion?.SetFacingOverride(
+                        PlayerMobilityLockReason.MeleeAction,
+                        Vector3.zero,
+                        false);
+                    break;
                 case ActiveAction.Acquire:
                 case ActiveAction.DirectThrow:
                 case ActiveAction.QueuedRelayThrow:
@@ -995,11 +1200,22 @@ namespace BreakNotice.Gameplay.Combat
                 PlayerMobilityLockReason.PlayerAction,
                 PlayerMobilityLockReason.HitReaction,
                 PlayerMobilityLockReason.Knockdown,
-                PlayerMobilityLockReason.Death
+                PlayerMobilityLockReason.Death,
+                PlayerMobilityLockReason.MeleeAction
             })
             {
                 locomotion?.SetMobilityLock(reason, false);
             }
+            locomotion?.SetJumpLock(PlayerMobilityLockReason.PlayerAction, false);
+            locomotion?.SetJumpLock(PlayerMobilityLockReason.MeleeAction, false);
+            locomotion?.SetFacingOverride(
+                PlayerMobilityLockReason.PlayerAction,
+                Vector3.zero,
+                false);
+            locomotion?.SetFacingOverride(
+                PlayerMobilityLockReason.MeleeAction,
+                Vector3.zero,
+                false);
         }
 
         private void SetCue(ShowcasePlayerAnimationCue cue)
@@ -1008,6 +1224,7 @@ namespace BreakNotice.Gameplay.Combat
             AnimationCueRevision++;
             awaitedAnimationCueRevision = AnimationCueRevision;
             actionRequestedAt = Time.time;
+            actionRequestedFrame = Time.frameCount;
             animationStateAcknowledged = false;
         }
 

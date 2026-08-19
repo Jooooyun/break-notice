@@ -205,11 +205,17 @@ namespace BreakNotice.LocomotionCamera.Tests
                 {
                     yield return new WaitForFixedUpdate();
                 }
+                yield return null;
 
                 Assert.That(fixture.Target.transform.position, Is.Not.EqualTo(releasePosition));
                 Assert.That(fixture.Target.transform.position.z, Is.LessThan(3.7f));
-                Assert.That(fixture.Target.gameObject.activeInHierarchy, Is.True);
+                Assert.That(fixture.Target.gameObject.activeInHierarchy, Is.False);
                 Assert.That(fixture.Lifecycle.ThrowOriginCount, Is.EqualTo(1));
+                Assert.That(fixture.Target.CommittedPlayerThrowUses, Is.EqualTo(1));
+                Assert.That(fixture.Target.RemainingPlayerThrowUses, Is.Zero);
+                Assert.That(fixture.Target.IsPlayerThrowExhausted, Is.True);
+                Assert.That(fixture.Target.IsThrowDepletionPending, Is.False);
+                Assert.That(fixture.Target.LastCommittedPlayerThrowSequence, Is.EqualTo(1));
             }
             finally
             {
@@ -272,12 +278,18 @@ namespace BreakNotice.LocomotionCamera.Tests
         public IEnumerator RepeatedAcquisition_ReusesSameObjectWithoutDuplication()
         {
             CarryFixture fixture = new CarryFixture(PrototypeWeightClass.Medium);
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            wall.transform.position = new Vector3(0f, 1f, 3.2f);
+            wall.transform.localScale = new Vector3(4f, 2f, 0.3f);
             try
             {
                 int instanceId = fixture.Target.gameObject.GetInstanceID();
                 Assert.That(fixture.Controller.ProcessInteractPrimary(false).IsAccepted, Is.True);
                 yield return new WaitForFixedUpdate();
                 Assert.That(fixture.Controller.ProcessThrow(), Is.True);
+                Assert.That(fixture.Target.CommittedPlayerThrowUses, Is.EqualTo(1));
+                Assert.That(fixture.Target.RemainingPlayerThrowUses, Is.EqualTo(1));
+                Assert.That(fixture.Target.IsPlayerThrowExhausted, Is.False);
                 yield return new WaitForFixedUpdate();
 
                 Rigidbody body = fixture.Target.GetComponent<Rigidbody>();
@@ -292,10 +304,25 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Object.FindObjectsByType<PrototypeInteractionTarget>(FindObjectsSortMode.None)
                         .Count(target => target.RuntimeInstanceKey == fixture.Target.RuntimeInstanceKey),
                     Is.EqualTo(1));
+
+                Assert.That(fixture.Controller.ProcessThrow(), Is.True);
+                Assert.That(fixture.Target.CommittedPlayerThrowUses, Is.EqualTo(2));
+                Assert.That(fixture.Target.RemainingPlayerThrowUses, Is.Zero);
+                Assert.That(fixture.Target.IsPlayerThrowExhausted, Is.True);
+                for (int step = 0; step < 25; step++)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+                yield return null;
+
+                Assert.That(fixture.Target.gameObject.activeInHierarchy, Is.False);
+                Assert.That(fixture.Target.gameObject.GetInstanceID(), Is.EqualTo(instanceId));
+                Assert.That(fixture.Target.IsThrowDepletionPending, Is.False);
             }
             finally
             {
                 fixture.Dispose();
+                Object.Destroy(wall);
             }
 
             yield return null;

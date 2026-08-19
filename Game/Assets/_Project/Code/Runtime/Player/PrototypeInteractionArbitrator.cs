@@ -93,10 +93,7 @@ namespace BreakNotice.Gameplay.Interaction
 
         private static bool IsValidStrapTarget(PrototypeInteractionTarget target)
         {
-            return target != null &&
-                   target.WeightClass == PrototypeWeightClass.Medium &&
-                   target.StrapEligible &&
-                   target.HasLoadBearingMetalAnchor;
+            return target != null && target.IsCargoStrapEligible;
         }
     }
 }

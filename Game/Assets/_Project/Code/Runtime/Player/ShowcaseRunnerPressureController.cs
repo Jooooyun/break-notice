@@ -56,6 +56,10 @@ namespace BreakNotice.Gameplay.Interaction
         private const int VisibilityHitCapacity = 32;
         private const float PlayerMeleeFacingDot = 0.7f;
         private const float TeamAttackGapSeconds = 0.4f;
+        private const int LightThrowDamage = 20;
+        private const int MediumThrowDamage = 30;
+        private const int MediumSwingDamage = 25;
+        private const float CargoTargetAimPadding = 0.35f;
 
         [SerializeField]
         private PrototypeInteractionStateOwner interactionOwner;
@@ -104,6 +108,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         [SerializeField]
         private ShowcasePlayerCombatController playerCombat;
+
+        [SerializeField]
+        private ShowcaseCargoStrapController cargoStrap;
 
         public ShowcaseRunnerAgent[] Runners => runners;
 
@@ -197,6 +204,9 @@ namespace BreakNotice.Gameplay.Interaction
             nextTeamAttackTime = 0f;
             playerCombat = player != null
                 ? player.GetComponent<ShowcasePlayerCombatController>()
+                : null;
+            cargoStrap = player != null
+                ? player.GetComponent<ShowcaseCargoStrapController>()
                 : null;
         }
 
@@ -313,7 +323,6 @@ namespace BreakNotice.Gameplay.Interaction
             }
             if (Time.time < nextPlayerMeleeTime || target == null ||
                 interactionOwner.HandState != PrototypeHandOwnershipState.Free ||
-                interactionOwner.StrapState != PrototypeStrapOwnershipState.Stored ||
                 interactionOwner.RelayState != PrototypeRelayReservationState.None)
             {
                 return false;
@@ -335,16 +344,217 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
+            if (source.WeightClass == PrototypeWeightClass.Medium)
+            {
+                ShowcaseCargoStrapController cargo = ResolveCargoStrap();
+                bool cargoOwnsSource = cargo != null &&
+                    cargo.ActiveTarget == source;
+                bool activeCargoSwing = cargoOwnsSource &&
+                    (cargo.IsMediumSwinging ||
+                     cargo.Phase == ShowcaseCargoStrapPhase.MediumExtending);
+                if (activeCargoSwing)
+                {
+                    if (!CanSimulatePressure() ||
+                        !cargo.TryAuthorizeMediumSwingImpact(
+                            source,
+                            runner,
+                            impactSpeed,
+                            out uint swingSequence,
+                            out string sourceId))
+                    {
+                        return;
+                    }
+
+                    Vector3 impactDirection = ResolveObjectImpactDirection(
+                        source,
+                        runner);
+                    bool accepted = runner.ReceivePlayerObjectHit(
+                        sourceId,
+                        swingSequence,
+                        MediumSwingDamage,
+                        impactDirection);
+                    if (accepted)
+                    {
+                        cargo.ConfirmMediumSwingImpact(runner, swingSequence);
+                        PhysicalImpactCount++;
+                    }
+                    CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                        source.transform,
+                        runner.transform,
+                        accepted,
+                        ResolveObjectImpactPoint(source, runner)));
+                    return;
+                }
+                if (cargoOwnsSource)
+                {
+                    // Rear follow, Pull and Recover contacts are controlled
+                    // tether motion, not attacks. Do not synthesize a stagger.
+                    return;
+                }
+            }
+
+            if (TryCommitPlayerThrownObjectImpact(runner, source))
+            {
+                return;
+            }
+
             if (source.WeightClass == PrototypeWeightClass.Light)
             {
                 runner.ReceivePhysicalStagger(false);
                 PhysicalImpactCount++;
+                CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                    source.transform,
+                    runner.transform,
+                    true,
+                    ResolveObjectImpactPoint(source, runner)));
             }
             else if (source.WeightClass == PrototypeWeightClass.Medium)
             {
                 runner.ReceivePhysicalStagger(true);
                 PhysicalImpactCount++;
+                CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                    source.transform,
+                    runner.transform,
+                    true,
+                    ResolveObjectImpactPoint(source, runner)));
             }
+        }
+
+        private bool TryCommitPlayerThrownObjectImpact(
+            ShowcaseRunnerAgent runner,
+            PrototypeInteractionTarget source)
+        {
+            ShowcaseCargoStrapController cargo = ResolveCargoStrap();
+            if (cargo != null && cargo.ActiveTarget == source)
+            {
+                return false;
+            }
+
+            uint throwSequence = source.LastCommittedPlayerThrowSequence;
+            int damage = source.WeightClass switch
+            {
+                PrototypeWeightClass.Light => LightThrowDamage,
+                PrototypeWeightClass.Medium => MediumThrowDamage,
+                _ => 0
+            };
+            if (throwSequence == 0 || damage <= 0 || !CanSimulatePressure())
+            {
+                return false;
+            }
+
+            Vector3 impactDirection = ResolveObjectImpactDirection(source, runner);
+            bool accepted = runner.ReceivePlayerObjectHit(
+                $"CHR00_THROW:{source.RuntimeInstanceKey}",
+                throwSequence,
+                damage,
+                impactDirection);
+            CombatContactResolved?.Invoke(new ShowcaseCombatContactResult(
+                source.transform,
+                runner.transform,
+                accepted,
+                ResolveObjectImpactPoint(source, runner)));
+            if (accepted)
+            {
+                PhysicalImpactCount++;
+            }
+            return true;
+        }
+
+        public bool TryResolveCargoStrapTarget(
+            Vector3 aimPoint,
+            float maxRange,
+            out ShowcaseRunnerAgent runner,
+            out Vector3 targetPoint,
+            out bool beyondRange)
+        {
+            runner = null;
+            targetPoint = default;
+            beyondRange = false;
+            if (!CanSimulatePressure() || playerTransform == null ||
+                maxRange <= 0f)
+            {
+                return false;
+            }
+
+            Vector3 origin = playerTransform.position + Vector3.up;
+            Vector3 aimDirection = aimPoint - origin;
+            if (aimDirection.sqrMagnitude <= 0.001f)
+            {
+                aimDirection = playerTransform.forward;
+            }
+            aimDirection.Normalize();
+
+            ShowcaseRunnerAgent best = null;
+            Vector3 bestCenter = default;
+            float bestScore = float.PositiveInfinity;
+            float bestRange = float.PositiveInfinity;
+            for (int index = 0; index < runners.Length; index++)
+            {
+                ShowcaseRunnerAgent candidate = runners[index];
+                if (candidate == null || candidate.IsDead)
+                {
+                    continue;
+                }
+
+                Collider targetCollider = candidate.GetComponent<Collider>();
+                if (targetCollider == null || !targetCollider.enabled)
+                {
+                    continue;
+                }
+
+                Vector3 center = targetCollider.bounds.center;
+                Vector3 toCenter = center - origin;
+                float rayDistance = Vector3.Dot(toCenter, aimDirection);
+                if (rayDistance <= 0f || !HasClearLane(origin, center))
+                {
+                    continue;
+                }
+
+                Vector3 nearestRayPoint = origin + (aimDirection * rayDistance);
+                float rayMissDistance = Vector3.Distance(center, nearestRayPoint);
+                Vector3 extents = targetCollider.bounds.extents;
+                float aimAllowance = Mathf.Max(extents.x, extents.z) +
+                    CargoTargetAimPadding;
+                if (rayMissDistance > aimAllowance)
+                {
+                    continue;
+                }
+
+                float planarRange = PlanarDistance(center, playerTransform.position);
+                float score = rayMissDistance / Mathf.Max(0.05f, aimAllowance);
+                bool betterScore = score < bestScore - 0.0001f;
+                bool sameScore = Mathf.Abs(score - bestScore) <= 0.0001f;
+                bool betterRange = sameScore && planarRange < bestRange - 0.0001f;
+                bool deterministicTie = sameScore &&
+                    Mathf.Abs(planarRange - bestRange) <= 0.0001f &&
+                    (best == null || string.CompareOrdinal(
+                        candidate.RunnerId,
+                        best.RunnerId) < 0);
+                if (!betterScore && !betterRange && !deterministicTie)
+                {
+                    continue;
+                }
+
+                best = candidate;
+                bestCenter = center;
+                bestScore = score;
+                bestRange = planarRange;
+            }
+
+            if (best == null)
+            {
+                return false;
+            }
+            if (bestRange > maxRange)
+            {
+                beyondRange = true;
+                targetPoint = bestCenter;
+                return false;
+            }
+
+            runner = best;
+            targetPoint = bestCenter;
+            return true;
         }
 
         public void ApplyPlayerPressure(ShowcaseRunnerAgent runner, float impulseSpeed)
@@ -472,7 +682,8 @@ namespace BreakNotice.Gameplay.Interaction
             ShowcaseRunnerAgent target,
             int comboStep,
             uint attackSequence,
-            int damage)
+            int damage,
+            Vector3 worldPoint)
         {
             if (!IsValidMeleeContactTarget(target))
             {
@@ -488,7 +699,7 @@ namespace BreakNotice.Gameplay.Interaction
                 playerTransform,
                 target.transform,
                 accepted,
-                target.transform.position + Vector3.up));
+                worldPoint));
             if (accepted)
             {
                 PlayerMeleeCount++;
@@ -635,6 +846,55 @@ namespace BreakNotice.Gameplay.Interaction
                 HasClearLane(
                     playerTransform.position + Vector3.up,
                     target.transform.position + Vector3.up);
+        }
+
+        private ShowcaseCargoStrapController ResolveCargoStrap()
+        {
+            if (cargoStrap == null && playerTransform != null)
+            {
+                cargoStrap = playerTransform.GetComponent<ShowcaseCargoStrapController>();
+            }
+            return cargoStrap;
+        }
+
+        private static Vector3 ResolveObjectImpactDirection(
+            PrototypeInteractionTarget source,
+            ShowcaseRunnerAgent runner)
+        {
+            Rigidbody sourceBody = source != null
+                ? source.GetComponent<Rigidbody>()
+                : null;
+            Vector3 direction = sourceBody != null
+                ? Vector3.ProjectOnPlane(sourceBody.linearVelocity, Vector3.up)
+                : Vector3.zero;
+            if (direction.sqrMagnitude <= 0.001f && source != null && runner != null)
+            {
+                direction = Vector3.ProjectOnPlane(
+                    runner.transform.position - source.transform.position,
+                    Vector3.up);
+            }
+            return direction.sqrMagnitude > 0.001f
+                ? direction.normalized
+                : Vector3.forward;
+        }
+
+        private static Vector3 ResolveObjectImpactPoint(
+            PrototypeInteractionTarget source,
+            ShowcaseRunnerAgent runner)
+        {
+            Collider sourceCollider = source != null
+                ? source.GetComponent<Collider>()
+                : null;
+            Collider runnerCollider = runner != null
+                ? runner.GetComponent<Collider>()
+                : null;
+            if (sourceCollider != null && runnerCollider != null)
+            {
+                return runnerCollider.ClosestPoint(sourceCollider.bounds.center);
+            }
+            return runner != null
+                ? runner.transform.position + Vector3.up
+                : Vector3.zero;
         }
 
         private bool HasClearLane(Vector3 start, Vector3 end)

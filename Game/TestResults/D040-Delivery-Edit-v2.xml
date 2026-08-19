@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.5655573">
+  <test-suite type="TestSuite" id="1000" name="Game" fullname="Game" runstate="Runnable" testcasecount="172" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.565557" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1207" name="BreakNotice.LocomotionCamera.EditModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll" runstate="Runnable" testcasecount="155" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.552700" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="4640" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1208" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="155" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.550795" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1209" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="155" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.549131" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1210" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="155" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.547295" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1113" name="ContestNonChr00AnimationDeliveryContractTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests" classname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.541280" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1116" name="Delivery_ContainsExactlyEightExplicitMeleeCandidates" fullname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests.Delivery_ContainsExactlyEightExplicitMeleeCandidates" methodname="Delivery_ContainsExactlyEightExplicitMeleeCandidates" classname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests" runstate="Runnable" seed="1163798304" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:40Z" duration="0.038127" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1114" name="Delivery_HasExactPerCharacterInventoryAndEnemySymmetry" fullname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests.Delivery_HasExactPerCharacterInventoryAndEnemySymmetry" methodname="Delivery_HasExactPerCharacterInventoryAndEnemySymmetry" classname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests" runstate="Runnable" seed="504959441" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:40Z" duration="0.004953" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1115" name="Delivery_UsesIndependentHumanoidAvatarImportContract" fullname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests.Delivery_UsesIndependentHumanoidAvatarImportContract" methodname="Delivery_UsesIndependentHumanoidAvatarImportContract" classname="BreakNotice.LocomotionCamera.Tests.ContestNonChr00AnimationDeliveryContractTests" runstate="Runnable" seed="634434478" result="Passed" start-time="2026-08-17 16:49:40Z" end-time="2026-08-17 16:49:41Z" duration="1.468849" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -52,6 +52,24 @@ namespace BreakNotice.Contest.Editor
             ControllerRoot + "/CHR00_AimUpperBody.mask";
         private const string PlayerAimUpperBodyLayerName = "Aim Upper Body";
         private const string PlayerAimUpperBodyStateName = "AimUpperBodyPose";
+        private const string PlayerStrapUpperBodyLayerName = "Strap Upper Body";
+        private const string PlayerStrapRollingUpperBodyStateName =
+            "StrapRollingUpperBodyPose";
+        private const string PlayerStrapTensionUpperBodyStateName =
+            "StrapTensionUpperBodyPose";
+        private const string PlayerStrapAttackLeftUpperBodyStateName =
+            "StrapAttackLeftUpperBodyAction";
+        private const string PlayerStrapAttackRightUpperBodyStateName =
+            "StrapAttackRightUpperBodyAction";
+        private const string PlayerMeleeMovingLegsMaskPath =
+            ControllerRoot + "/CHR00_MeleeMovingLegs.mask";
+        private const string PlayerMeleeMovingLegsLayerName = "Melee Moving Legs";
+        private const string PlayerMeleeLegsIdleStateName = "MeleeLegsIdle";
+        private const string PlayerMeleeLegsForwardStateName = "MeleeLegsForward";
+        private const string PlayerMeleeLegsBackwardStateName = "MeleeLegsBackward";
+        private const string PlayerMeleeLegsLeftStateName = "MeleeLegsLeft";
+        private const string PlayerMeleeLegsRightStateName = "MeleeLegsRight";
+        private const string PlayerMeleeLegsRunStateName = "MeleeLegsRun";
 
         private const string CharacterRoot = "Assets/_Project/Art/Characters";
         private const string AnimationRoot = "Assets/_Project/Art/Animation";
@@ -59,6 +77,8 @@ namespace BreakNotice.Contest.Editor
             "Assets/_Project/Art/Textures/Characters/DesignerA";
         private const string MaterialRoot =
             "Assets/_Project/Art/Materials/Characters/DesignerA";
+        private const string CharacterHitEmissionMaskPath =
+            MaterialRoot + "/T_CharacterHitEmissionBlack.asset";
 
         private const string Chr00Model =
             CharacterRoot + "/CHR00/DesignerA/CHR00_Player.fbx";
@@ -72,9 +92,126 @@ namespace BreakNotice.Contest.Editor
         private const string Chr00AnimationRoot =
             AnimationRoot + "/CHR00/DesignerA";
         private const string Chr01AnimationRoot =
-            AnimationRoot + "/CHR01/DesignerA";
-        private const string EnyAnimationRoot =
-            AnimationRoot + "/ENY01/DesignerA";
+            AnimationRoot + "/CHR01";
+        private const string EnyNormalAnimationRoot =
+            AnimationRoot + "/ENY01/Normal";
+        private const string EnyEliteAnimationRoot =
+            AnimationRoot + "/ENY01/Elite";
+
+        private const string Chr01SupplyReleaseRuntimeClipName =
+            "CHR01_Supply_Binder_Release_Runtime";
+        private const string Chr01SupplyWindupRuntimeClipName =
+            "CHR01_Supply_Binder_Windup_Runtime";
+
+        private static readonly string[] Chr01LatestClipNames =
+        {
+            "CHR01_Getup_B",
+            "CHR01_Getup_F",
+            "CHR01_Idle",
+            "CHR01_Idle_Variant_Stretch",
+            "CHR01_Jump",
+            "CHR01_Knockdown_B",
+            "CHR01_Knockdown_F",
+            "CHR01_Melee_Hit_Body",
+            "CHR01_Run_F",
+            "CHR01_Run_Stop",
+            "CHR01_Strafe_L",
+            "CHR01_Strafe_R",
+            "CHR01_Supply_Binder_Release",
+            "CHR01_Supply_Binder_Windup",
+            "CHR01_Turn_180_Running",
+            "CHR01_Turn_180_Walking",
+            "CHR01_Turn_L_90",
+            "CHR01_Turn_R_90",
+            "CHR01_Walk_F",
+            "CHR01_Walk_Stop"
+        };
+
+        private static readonly HashSet<string> Chr01LoopingClipNames =
+            new(StringComparer.Ordinal)
+            {
+                "CHR01_Idle",
+                "CHR01_Walk_F",
+                "CHR01_Run_F",
+                "CHR01_Strafe_L",
+                "CHR01_Strafe_R",
+                "CHR01_Supply_Binder_Windup"
+            };
+
+        private static readonly string[] EnyLatestClipSuffixes =
+        {
+            "Hit_BigHeadHit",
+            "Hit_Body",
+            "Hit_Head",
+            "Hit_Reaction",
+            "Hit_Rib",
+            "Hit_Stomach",
+            "Idle",
+            "Injured_Backwards_Turn_Left",
+            "Injured_Backwards_Turn_Right",
+            "Injured_Hurting_Idle",
+            "Injured_Idle",
+            "Injured_Run_Backwards",
+            "Injured_Run_Backwards_Left_Turn",
+            "Injured_Run_Backwards_Right_Turn",
+            "Injured_Run_Jump",
+            "Injured_Run_Left_Turn",
+            "Injured_Run_Right_Turn",
+            "Injured_Run",
+            "Injured_Standing_Jump",
+            "Injured_Stumble_Idle",
+            "Injured_Turn_Left",
+            "Injured_Turn_Right",
+            "Injured_Walk_Backwards",
+            "Injured_Walk_Left_Turn",
+            "Injured_Walk_Right_Turn",
+            "Injured_Walk",
+            "Injured_Wave_Idle",
+            "Jump",
+            "Left_Strafe",
+            "Left_Strafe_Walking",
+            "Left_Turn_90",
+            "Lod_Mutant_Punch",
+            "Lod_Mutant_Swiping",
+            "Lod_Mutant_Walking",
+            "Lod_One_Hand_Club_Combo",
+            "Melee_Candidate_Boxing",
+            "Melee_Candidate_Boxing_2",
+            "Melee_Candidate_Kicking",
+            "Melee_Candidate_Kicking_2",
+            "Right_Strafe",
+            "Right_Strafe_Walking",
+            "Right_Turn_90",
+            "Run_Backwards",
+            "Standard_Run",
+            "Turn_Left",
+            "Turning_Right_45_Degrees",
+            "Walking",
+            "Walking_Backwards"
+        };
+
+        private static readonly HashSet<string> EnyLatestLoopingClipSuffixes =
+            new(StringComparer.Ordinal)
+            {
+                "Idle",
+                "Walking",
+                "Walking_Backwards",
+                "Standard_Run",
+                "Run_Backwards",
+                "Left_Strafe",
+                "Right_Strafe",
+                "Left_Strafe_Walking",
+                "Right_Strafe_Walking",
+                "Lod_Mutant_Walking",
+                "Injured_Hurting_Idle",
+                "Injured_Idle",
+                "Injured_Stumble_Idle",
+                "Injured_Wave_Idle",
+                "Injured_Walk",
+                "Injured_Walk_Backwards",
+                "Injured_Run",
+                "Injured_Run_Backwards"
+            };
 
         private static readonly CharacterDefinition[] Characters =
         {
@@ -138,11 +275,80 @@ namespace BreakNotice.Contest.Editor
         public static void RebuildPlayerAnimationController()
         {
             EnsureFolder(ControllerRoot);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            ConfigureAnimationFolder(Chr00AnimationRoot + "/Approved");
+            ConfigurePlayerMeleeSubclips();
+            ConfigurePlayerStrapSubclips();
+            ConfigureCombatAnimationEvents();
             CreatePlayerController();
             AssetDatabase.SaveAssets();
             Debug.Log(
-                "CHR00 PLAYER ANIMATION CONTROLLER PASS: controller-only authoring complete; " +
-                "the current Scene was not opened or modified.");
+                "CHR00 UPDATED ANIMATION SET PASS: independent Humanoid imports, " +
+                "Jab/Cross subclips, owned events and player controller rebuilt; " +
+                "no Scene was opened or modified.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Rebuild ENY01 Enemy Animation Controllers")]
+        public static void RebuildEnemyAnimationControllers()
+        {
+            EnsureFolder(ControllerRoot);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            ConfigureLatestEnemyAnimations();
+            CreateEnemyController(false);
+            CreateEnemyController(true);
+            AssetDatabase.SaveAssets();
+            Debug.Log(
+                "ENY01 LATEST ANIMATION SET PASS: Normal and Elite each imported " +
+                "their own exact 48 Humanoid sources; 17/19-state controllers rebuilt; " +
+                "no CHR00, CHR01, or Scene authoring was invoked.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Rebuild CHR01 Ally Animation Controller")]
+        public static void RebuildAllyAnimationController()
+        {
+            EnsureFolder(ControllerRoot);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            ConfigureLatestChr01Animations();
+            CreateAllyController();
+            AssetDatabase.SaveAssets();
+            Debug.Log(
+                "CHR01 LATEST ANIMATION SET PASS: exact top-level 20 independent " +
+                "Humanoid sources imported, five runtime states rebuilt, Supply " +
+                "release synchronized; no CHR00, ENY01, or Scene authoring invoked.");
+        }
+
+        [MenuItem("BREAK NOTICE/Contest/Reset CHR00 Strap Avatars From Own FBX")]
+        public static void ResetPlayerStrapAvatarsFromOwnFbx()
+        {
+            string approvedRoot = Chr00AnimationRoot + "/Approved";
+            string[] paths = AssetDatabase.FindAssets("t:Model", new[] { approvedRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => IsApprovedPlayerStrapClip(path))
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            if (paths.Length != 6)
+            {
+                throw new InvalidOperationException(
+                    $"Expected exactly six approved CHR00 Strap FBX files, found {paths.Length}.");
+            }
+
+            foreach (string path in paths)
+            {
+                ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+                if (importer == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Strap animation importer is missing: {path}");
+                }
+
+                importer.clipAnimations = Array.Empty<ModelImporterClipAnimation>();
+                importer.animationType = ModelImporterAnimationType.Generic;
+                importer.avatarSetup = ModelImporterAvatarSetup.NoAvatar;
+                importer.sourceAvatar = null;
+                importer.SaveAndReimport();
+            }
+
+            RebuildPlayerAnimationController();
         }
 
         public static void ValidateCurrentIntegration()
@@ -255,7 +461,12 @@ namespace BreakNotice.Contest.Editor
                 playerCombat,
                 null,
                 player.GetComponent<ThirdPersonLocomotion>());
-            ConfigureAnimationReceiver(playerDriver.Animator, playerCombat, null, null);
+            ConfigureAnimationReceiver(
+                playerDriver.Animator,
+                playerCombat,
+                null,
+                null,
+                player.GetComponent<ShowcaseCargoStrapController>());
 
             ShowcaseCharacterAnimationDriver allyDriver =
                 ally.GetComponent<ShowcaseCharacterAnimationDriver>();
@@ -303,7 +514,7 @@ namespace BreakNotice.Contest.Editor
                 runnerHealth.Configure(
                     ShowcaseCombatTeam.Enemy,
                     elite ? 180 : 100,
-                    elite ? 0.12f : 0.2f);
+                    0.12f);
                 runner.Configure(
                     $"RUNNER {index + 1}",
                     pressure,
@@ -365,7 +576,8 @@ namespace BreakNotice.Contest.Editor
             Animator animator,
             ShowcasePlayerCombatController playerCombat,
             ShowcaseRunnerAgent runner,
-            PrototypeAllyRelayController allyRelay)
+            PrototypeAllyRelayController allyRelay,
+            ShowcaseCargoStrapController cargoStrap = null)
         {
             if (animator == null)
             {
@@ -374,7 +586,7 @@ namespace BreakNotice.Contest.Editor
             ShowcaseAnimationEventReceiver receiver =
                 animator.GetComponent<ShowcaseAnimationEventReceiver>() ??
                 animator.gameObject.AddComponent<ShowcaseAnimationEventReceiver>();
-            receiver.Configure(playerCombat, runner, allyRelay);
+            receiver.Configure(playerCombat, runner, allyRelay, cargoStrap);
             EditorUtility.SetDirty(receiver);
         }
 
@@ -400,7 +612,7 @@ namespace BreakNotice.Contest.Editor
 
                 Transform model = visual.GetChild(0);
                 model.localRotation = Quaternion.identity;
-                NormalizeVisual(actor.transform, model.gameObject);
+                NormalizeVisual(actor.transform, model.gameObject, definition.Role);
                 Animator animator = model.GetComponent<Animator>() ??
                     model.GetComponentInChildren<Animator>(true);
                 if (animator == null)
@@ -443,8 +655,8 @@ namespace BreakNotice.Contest.Editor
             LoadAvatar(EnyNormalModel);
             LoadAvatar(EnyEliteModel);
             ConfigureAnimationFolder(Chr00AnimationRoot);
-            ConfigureAnimationFolder(Chr01AnimationRoot);
-            ConfigureAnimationFolder(EnyAnimationRoot);
+            ConfigureLatestChr01Animations();
+            ConfigureLatestEnemyAnimations();
 
             foreach (CharacterDefinition definition in Characters)
             {
@@ -476,6 +688,345 @@ namespace BreakNotice.Contest.Editor
             importer.SaveAndReimport();
         }
 
+        private static void ConfigureLatestChr01Animations()
+        {
+            string[] paths = AssetDatabase.FindAssets(
+                    "t:Model",
+                    new[] { Chr01AnimationRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path =>
+                    path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(
+                        Path.GetDirectoryName(path)?.Replace('\\', '/'),
+                        Chr01AnimationRoot,
+                        StringComparison.Ordinal))
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            string[] actualNames = paths
+                .Select(Path.GetFileNameWithoutExtension)
+                .ToArray();
+            if (paths.Length != Chr01LatestClipNames.Length ||
+                !actualNames.ToHashSet(StringComparer.Ordinal).SetEquals(
+                    Chr01LatestClipNames))
+            {
+                throw new InvalidOperationException(
+                    "CHR01 latest delivery must contain exactly the approved " +
+                    $"top-level 20 FBX files; found {paths.Length}.");
+            }
+
+            foreach (string path in paths)
+            {
+                ModelImporter importer =
+                    AssetImporter.GetAtPath(path) as ModelImporter;
+                if (importer == null)
+                {
+                    throw new InvalidOperationException(
+                        $"CHR01 latest animation importer is missing: {path}");
+                }
+
+                string clipName = Path.GetFileNameWithoutExtension(path);
+                bool release = string.Equals(
+                    clipName,
+                    "CHR01_Supply_Binder_Release",
+                    StringComparison.Ordinal);
+                bool loop = Chr01LoopingClipNames.Contains(clipName);
+                ModelImporterClipAnimation source =
+                    importer.defaultClipAnimations?.SingleOrDefault();
+                if (source == null)
+                {
+                    throw new InvalidOperationException(
+                        $"CHR01 latest source must have one default take: {path}");
+                }
+
+                ModelImporterClipAnimation[] existing = importer.clipAnimations;
+                ModelImporterClipAnimation[] desiredClips;
+                if (release)
+                {
+                    ModelImporterClipAnimation windup = CreateRuntimeSubclip(
+                        Chr01SupplyWindupRuntimeClipName,
+                        source,
+                        21f,
+                        22f,
+                        existing,
+                        true);
+                    windup.events = Array.Empty<AnimationEvent>();
+                    ModelImporterClipAnimation releaseClip = CreateRuntimeSubclip(
+                        Chr01SupplyReleaseRuntimeClipName,
+                        source,
+                        21f,
+                        44f,
+                        existing);
+                    releaseClip.events = new[]
+                    {
+                        new AnimationEvent
+                        {
+                            functionName = "ShowcaseAllySupplyRelease",
+                            // Unity source frames 21..44; Blender reports 22..45.
+                            // The authored open-hand release is source frame 28.
+                            time = ShowcaseNonPlayerAnimationTiming.AllySupplyRelease
+                        }
+                    };
+                    desiredClips = new[] { windup, releaseClip };
+                }
+                else
+                {
+                    ModelImporterClipAnimation desired = CreateRuntimeSubclip(
+                        clipName,
+                        source,
+                        source.firstFrame,
+                        source.lastFrame,
+                        existing,
+                        loop);
+                    desired.events = Array.Empty<AnimationEvent>();
+                    desiredClips = new[] { desired };
+                }
+
+                bool importerChanged =
+                    !importer.importAnimation ||
+                    importer.animationType != ModelImporterAnimationType.Human ||
+                    importer.avatarSetup !=
+                        ModelImporterAvatarSetup.CreateFromThisModel ||
+                    importer.sourceAvatar != null ||
+                    importer.importCameras ||
+                    importer.importLights ||
+                    importer.materialImportMode != ModelImporterMaterialImportMode.None;
+                importer.importAnimation = true;
+                importer.animationType = ModelImporterAnimationType.Human;
+                importer.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+                importer.sourceAvatar = null;
+                importer.importCameras = false;
+                importer.importLights = false;
+                importer.materialImportMode = ModelImporterMaterialImportMode.None;
+
+                HumanDescription humanDescription = importer.humanDescription;
+                if (humanDescription.hasTranslationDoF)
+                {
+                    humanDescription.hasTranslationDoF = false;
+                    importer.humanDescription = humanDescription;
+                    importerChanged = true;
+                }
+
+                bool clipChanged = existing == null ||
+                    existing.Length != desiredClips.Length;
+                if (!clipChanged)
+                {
+                    for (int index = 0; index < desiredClips.Length; index++)
+                    {
+                        ModelImporterClipAnimation actual = existing[index];
+                        ModelImporterClipAnimation desired = desiredClips[index];
+                        if (actual.name != desired.name ||
+                            actual.takeName != desired.takeName ||
+                            !Mathf.Approximately(actual.firstFrame, desired.firstFrame) ||
+                            !Mathf.Approximately(actual.lastFrame, desired.lastFrame) ||
+                            actual.loopTime != desired.loopTime ||
+                            actual.loopPose != desired.loopPose ||
+                            !actual.lockRootRotation ||
+                            actual.keepOriginalOrientation ||
+                            !actual.lockRootHeightY ||
+                            actual.keepOriginalPositionY ||
+                            !actual.lockRootPositionXZ ||
+                            actual.keepOriginalPositionXZ ||
+                            !actual.heightFromFeet ||
+                            !AnimationEventsEqual(actual.events, desired.events))
+                        {
+                            clipChanged = true;
+                            break;
+                        }
+                    }
+                }
+                if (importerChanged || clipChanged)
+                {
+                    importer.clipAnimations = desiredClips;
+                    importer.SaveAndReimport();
+                }
+
+                LoadAvatar(path);
+            }
+        }
+
+        private static void ConfigureLatestEnemyAnimations()
+        {
+            ConfigureLatestEnemyAnimations(false);
+            ConfigureLatestEnemyAnimations(true);
+        }
+
+        private static void ConfigureLatestEnemyAnimations(bool elite)
+        {
+            string variant = elite ? "Elite" : "Normal";
+            string root = elite ? EnyEliteAnimationRoot : EnyNormalAnimationRoot;
+            string filePrefix = $"ENY01_{variant}_";
+            string[] paths = AssetDatabase.FindAssets("t:Model", new[] { root })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path =>
+                    path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(
+                        Path.GetDirectoryName(path)?.Replace('\\', '/'),
+                        root,
+                        StringComparison.Ordinal))
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            string[] expectedNames = EnyLatestClipSuffixes
+                .Select(suffix => filePrefix + suffix)
+                .ToArray();
+            string[] actualNames = paths
+                .Select(Path.GetFileNameWithoutExtension)
+                .ToArray();
+            if (paths.Length != EnyLatestClipSuffixes.Length ||
+                !actualNames.ToHashSet(StringComparer.Ordinal).SetEquals(expectedNames))
+            {
+                throw new InvalidOperationException(
+                    $"ENY01 {variant} latest delivery must contain exactly the " +
+                    $"approved flat 48 FBX files; found {paths.Length}.");
+            }
+
+            foreach (string path in paths)
+            {
+                ModelImporter importer =
+                    AssetImporter.GetAtPath(path) as ModelImporter;
+                if (importer == null)
+                {
+                    throw new InvalidOperationException(
+                        $"ENY01 {variant} animation importer is missing: {path}");
+                }
+
+                string sourceName = Path.GetFileNameWithoutExtension(path);
+                string suffix = sourceName.Substring(filePrefix.Length);
+                ModelImporterClipAnimation source =
+                    importer.defaultClipAnimations?.SingleOrDefault();
+                if (source == null)
+                {
+                    throw new InvalidOperationException(
+                        $"ENY01 {variant} source must have one default take: {path}");
+                }
+
+                ModelImporterClipAnimation[] existing = importer.clipAnimations;
+                bool loop = EnyLatestLoopingClipSuffixes.Contains(suffix);
+                ModelImporterClipAnimation desired = CreateRuntimeSubclip(
+                    sourceName,
+                    source,
+                    source.firstFrame,
+                    source.lastFrame,
+                    existing,
+                    loop);
+                desired.events = CreateLatestEnemyAnimationEvents(elite, suffix);
+
+                bool importerChanged =
+                    !importer.importAnimation ||
+                    importer.animationType != ModelImporterAnimationType.Human ||
+                    importer.avatarSetup !=
+                        ModelImporterAvatarSetup.CreateFromThisModel ||
+                    importer.sourceAvatar != null ||
+                    importer.importCameras ||
+                    importer.importLights ||
+                    importer.materialImportMode != ModelImporterMaterialImportMode.None ||
+                    !Mathf.Approximately(importer.globalScale, 1f);
+                importer.importAnimation = true;
+                importer.animationType = ModelImporterAnimationType.Human;
+                importer.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+                importer.sourceAvatar = null;
+                importer.importCameras = false;
+                importer.importLights = false;
+                importer.materialImportMode = ModelImporterMaterialImportMode.None;
+                importer.globalScale = 1f;
+
+                HumanDescription humanDescription = importer.humanDescription;
+                if (humanDescription.hasTranslationDoF)
+                {
+                    humanDescription.hasTranslationDoF = false;
+                    importer.humanDescription = humanDescription;
+                    importerChanged = true;
+                }
+
+                bool clipChanged = existing == null || existing.Length != 1 ||
+                    existing[0].name != desired.name ||
+                    existing[0].takeName != desired.takeName ||
+                    !Mathf.Approximately(existing[0].firstFrame, desired.firstFrame) ||
+                    !Mathf.Approximately(existing[0].lastFrame, desired.lastFrame) ||
+                    existing[0].loopTime != desired.loopTime ||
+                    existing[0].loopPose != desired.loopPose ||
+                    !existing[0].lockRootRotation ||
+                    existing[0].keepOriginalOrientation ||
+                    !existing[0].lockRootHeightY ||
+                    existing[0].keepOriginalPositionY ||
+                    !existing[0].lockRootPositionXZ ||
+                    existing[0].keepOriginalPositionXZ ||
+                    !existing[0].heightFromFeet ||
+                    !AnimationEventsEqual(existing[0].events, desired.events);
+                if (importerChanged || clipChanged)
+                {
+                    importer.clipAnimations = new[] { desired };
+                    importer.SaveAndReimport();
+                }
+
+                LoadAvatar(path);
+            }
+        }
+
+        private static AnimationEvent[] CreateLatestEnemyAnimationEvents(
+            bool elite,
+            string suffix)
+        {
+            (float open, float close)? attack = suffix switch
+            {
+                "Melee_Candidate_Boxing" => (
+                    ShowcaseNonPlayerAnimationTiming.BoxingWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.BoxingWindowClose),
+                "Melee_Candidate_Boxing_2" => (
+                    ShowcaseNonPlayerAnimationTiming.Boxing2WindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.Boxing2WindowClose),
+                "Melee_Candidate_Kicking" => (
+                    ShowcaseNonPlayerAnimationTiming.KickingWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.KickingWindowClose),
+                "Melee_Candidate_Kicking_2" => (
+                    ShowcaseNonPlayerAnimationTiming.Kicking2WindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.Kicking2WindowClose),
+                "Lod_Mutant_Punch" when elite => (
+                    ShowcaseNonPlayerAnimationTiming.MutantPunchWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.MutantPunchWindowClose),
+                "Lod_Mutant_Swiping" when elite => (
+                    ShowcaseNonPlayerAnimationTiming.MutantSwipeWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.MutantSwipeWindowClose),
+                _ => null
+            };
+            if (attack.HasValue)
+            {
+                return new[]
+                {
+                    new AnimationEvent
+                    {
+                        functionName = "ShowcaseAttackWindowOpen",
+                        time = attack.Value.open
+                    },
+                    new AnimationEvent
+                    {
+                        functionName = "ShowcaseAttackWindowClose",
+                        time = attack.Value.close
+                    },
+                    new AnimationEvent
+                    {
+                        functionName = "ShowcaseActionComplete",
+                        time = ShowcaseNonPlayerAnimationTiming.EnemyActionComplete
+                    }
+                };
+            }
+
+            bool connectedHit = suffix == "Hit_Head" ||
+                suffix == "Hit_Body" ||
+                suffix == "Hit_Rib" ||
+                suffix == "Hit_Stomach" ||
+                suffix == "Hit_BigHeadHit";
+            return connectedHit
+                ? new[]
+                {
+                    new AnimationEvent
+                    {
+                        functionName = "ShowcaseActionComplete",
+                        time = ShowcaseNonPlayerAnimationTiming.EnemyHitComplete
+                    }
+                }
+                : Array.Empty<AnimationEvent>();
+        }
+
         private static void ConfigureAnimationFolder(string folder)
         {
             string[] guids = AssetDatabase.FindAssets("t:Model", new[] { folder });
@@ -499,7 +1050,36 @@ namespace BreakNotice.Contest.Editor
                         $"Animation importer is missing: {path}");
                 }
 
+                ModelImporterClipAnimation[] importedDefaults =
+                    importer.defaultClipAnimations;
+                ModelImporterClipAnimation[] importedConfigured =
+                    importer.clipAnimations;
+                bool sourceTakeChanged = importedConfigured != null &&
+                    importedConfigured.Length > 0 &&
+                    (importedDefaults == null ||
+                     importedDefaults.Length == 0 ||
+                     importedConfigured.Any(clip => !importedDefaults.Any(source =>
+                         source.takeName == clip.takeName)));
+                if (sourceTakeChanged)
+                {
+                    // A binary replacement can keep the old .meta GUID while its
+                    // source root/take changes. Clear the stale HumanDescription
+                    // through Generic once before rebuilding an independent Avatar.
+                    importer.clipAnimations = Array.Empty<ModelImporterClipAnimation>();
+                    importer.animationType = ModelImporterAnimationType.Generic;
+                    importer.avatarSetup = ModelImporterAvatarSetup.NoAvatar;
+                    importer.sourceAvatar = null;
+                    importer.SaveAndReimport();
+                    importer = AssetImporter.GetAtPath(path) as ModelImporter;
+                    if (importer == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Animation importer disappeared after source reset: {path}");
+                    }
+                }
+
                 bool changed =
+                    sourceTakeChanged ||
                     !importer.importAnimation ||
                     importer.animationType != ModelImporterAnimationType.Human ||
                     importer.avatarSetup != ModelImporterAvatarSetup.CreateFromThisModel ||
@@ -515,10 +1095,39 @@ namespace BreakNotice.Contest.Editor
                 importer.importLights = false;
                 importer.materialImportMode = ModelImporterMaterialImportMode.None;
 
-                ModelImporterClipAnimation[] clips = importer.clipAnimations;
-                if (clips == null || clips.Length == 0)
+                // The approved strap clips deliberately animate a small set of
+                // non-root translations. Unity otherwise discards them and
+                // reports an Avatar bone-length mismatch on every import.
+                // Translation DoF keeps each source-owned Humanoid Avatar
+                // independent; Copy From Other Avatar remains prohibited.
+                HumanDescription humanDescription = importer.humanDescription;
+                bool useTranslationDof = IsApprovedPlayerStrapClip(path);
+                if (humanDescription.hasTranslationDoF != useTranslationDof)
                 {
-                    clips = importer.defaultClipAnimations;
+                    humanDescription.hasTranslationDoF = useTranslationDof;
+                    importer.humanDescription = humanDescription;
+                    changed = true;
+                }
+
+                ModelImporterClipAnimation[] defaults = importer.defaultClipAnimations;
+                if (defaults == null || defaults.Length == 0)
+                {
+                    throw new InvalidOperationException(
+                        $"Animation source has no default take: {path}");
+                }
+
+                ModelImporterClipAnimation[] clips = importer.clipAnimations;
+                bool configuredTakeMissing = clips == null || clips.Length == 0 ||
+                    clips.Any(clip => !defaults.Any(source =>
+                        source.takeName == clip.takeName));
+                if (sourceTakeChanged || configuredTakeMissing)
+                {
+                    clips = defaults;
+                    string clipName = Path.GetFileNameWithoutExtension(path);
+                    foreach (ModelImporterClipAnimation clip in clips)
+                    {
+                        clip.name = clipName;
+                    }
                     changed = true;
                 }
                 foreach (ModelImporterClipAnimation clip in clips)
@@ -555,6 +1164,14 @@ namespace BreakNotice.Contest.Editor
         private static bool IsLoopingClip(string path)
         {
             string name = Path.GetFileNameWithoutExtension(path).ToLowerInvariant();
+            if (name.Contains("preview") ||
+                name.Contains("_ref") ||
+                name.Contains("short_alt") ||
+                (name.StartsWith("chr00_turn_", StringComparison.Ordinal) &&
+                 !name.Contains("loop_alt")))
+            {
+                return false;
+            }
             return name.Contains("idle") ||
                    name.Contains("walking") ||
                    name.Contains("walk_f") ||
@@ -563,8 +1180,19 @@ namespace BreakNotice.Contest.Editor
                    name.Contains("standard run") ||
                    name.Contains("strafe") ||
                    name.Contains("turn") ||
+                   name.Contains("strap_rolling") ||
                    name.Contains("tension_loop") ||
                    name.Contains("windup");
+        }
+
+        private static bool IsApprovedPlayerStrapClip(string path)
+        {
+            string name = Path.GetFileNameWithoutExtension(path);
+            return path.IndexOf(
+                       "/CHR00/DesignerA/Approved/",
+                       StringComparison.OrdinalIgnoreCase) >= 0 &&
+                   name.StartsWith("CHR00_Strap_", StringComparison.Ordinal) &&
+                   name.IndexOf("candidate", StringComparison.OrdinalIgnoreCase) < 0;
         }
 
         private static Avatar LoadAvatar(string modelPath)
@@ -677,6 +1305,7 @@ namespace BreakNotice.Contest.Editor
             Material existing = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
             if (existing != null && string.IsNullOrEmpty(textureFolder))
             {
+                EnsureCharacterHitEmission(existing);
                 return existing;
             }
 
@@ -737,13 +1366,67 @@ namespace BreakNotice.Contest.Editor
             if (emission != null)
             {
                 material.SetTexture("_EmissionMap", emission);
-                material.SetColor("_EmissionColor", Color.white);
-                material.EnableKeyword("_EMISSION");
             }
 
+            EnsureCharacterHitEmission(material);
+            return material;
+        }
+
+        internal static void EnsureCharacterHitEmission(Material material)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            // StandardShaderGUI removes _EMISSION again when the authored
+            // emission is black. Keep a non-black authored color behind an
+            // explicit black mask so the variant survives import/build while
+            // the baseline appearance remains unchanged. Runtime feedback
+            // overrides the map with white for the short visible pulse.
+            Texture2D blackMask = GetOrCreateCharacterHitEmissionMask();
+            if (material.HasProperty("_EmissionMap"))
+            {
+                material.SetTexture("_EmissionMap", blackMask);
+            }
+            if (material.HasProperty("_EmissionColor"))
+            {
+                material.SetColor(
+                    "_EmissionColor",
+                    new Color(0.12f, 0.12f, 0.12f, 1f));
+            }
+            material.globalIlluminationFlags =
+                MaterialGlobalIlluminationFlags.RealtimeEmissive;
+            material.EnableKeyword("_EMISSION");
             material.enableInstancing = true;
             EditorUtility.SetDirty(material);
-            return material;
+        }
+
+        private static Texture2D GetOrCreateCharacterHitEmissionMask()
+        {
+            Texture2D existing = AssetDatabase.LoadAssetAtPath<Texture2D>(
+                CharacterHitEmissionMaskPath);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var texture = new Texture2D(
+                1,
+                1,
+                TextureFormat.RGBA32,
+                false,
+                true)
+            {
+                name = "T_CharacterHitEmissionBlack",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                anisoLevel = 0
+            };
+            texture.SetPixel(0, 0, Color.black);
+            texture.Apply(false, false);
+            AssetDatabase.CreateAsset(texture, CharacterHitEmissionMaskPath);
+            return texture;
         }
 
         private static Texture2D[] LoadTextures(string textureFolder)
@@ -852,6 +1535,7 @@ namespace BreakNotice.Contest.Editor
         {
             EnsureFolder(ControllerRoot);
             ConfigurePlayerMeleeSubclips();
+            ConfigurePlayerStrapSubclips();
             ConfigureCombatAnimationEvents();
             CreatePlayerController();
             CreateAllyController();
@@ -863,7 +1547,9 @@ namespace BreakNotice.Contest.Editor
         private static void CreateCombatControllers()
         {
             EnsureFolder(ControllerRoot);
+            ConfigureLatestEnemyAnimations();
             ConfigurePlayerMeleeSubclips();
+            ConfigurePlayerStrapSubclips();
             ConfigureCombatAnimationEvents();
             CreatePlayerController();
             CreateAllyController();
@@ -910,7 +1596,7 @@ namespace BreakNotice.Contest.Editor
                 .Select(child => child.state)
                 .Single(state => state.name == "Walk");
             run = AddState(machine, "Run", LoadClip(
-                Chr01AnimationRoot + "/SharedLocomotion/CHR00_Run_F.fbx"));
+                Chr01AnimationRoot + "/CHR01_Run_F.fbx"));
             run.speedParameterActive = true;
             run.speedParameter = "LocomotionPlayback";
             AddBoolTransition(walk, run, "Sprint", true);
@@ -922,18 +1608,15 @@ namespace BreakNotice.Contest.Editor
         {
             (string path, string clipName, float openTime, float closeTime)[] attacks =
             {
-                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
-                    "CHR00_Melee_Jab_Runtime", 0.42f, 0.82f),
-                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
-                    "CHR00_Melee_Cross_Runtime", 0.42f, 0.68f),
-                (Chr00AnimationRoot + "/Legacy/Hook Punch.fbx", null, 0.38f, 0.58f),
-                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx", null, 0.36f, 0.56f),
-                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx", null, 0.36f, 0.58f),
-                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx", null, 0.48f, 0.68f),
-                (EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx", null, 0.34f, 0.52f),
-                (EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx", null, 0.34f, 0.54f),
-                (EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx", null, 0.42f, 0.64f),
-                (EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx", null, 0.40f, 0.60f)
+                (Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx",
+                    "CHR00_Melee_Jab_Runtime",
+                    ShowcaseChr00AnimationTiming.MeleeJabWindowOpen,
+                    ShowcaseChr00AnimationTiming.MeleeJabWindowClose),
+                (Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx",
+                    "CHR00_Melee_Cross_Runtime",
+                    ShowcaseChr00AnimationTiming.MeleeCrossWindowOpen,
+                    ShowcaseChr00AnimationTiming.MeleeCrossWindowClose),
+                (Chr00AnimationRoot + "/Legacy/Hook Punch.fbx", null, 0.38f, 0.58f)
             };
             foreach ((string path, string clipName, float openTime, float closeTime) in attacks)
             {
@@ -948,82 +1631,150 @@ namespace BreakNotice.Contest.Editor
                     "ShowcaseAttackWindowClose",
                     closeTime,
                     clipName);
+                float completeTime = clipName == "CHR00_Melee_Jab_Runtime"
+                    ? ShowcaseChr00AnimationTiming.MeleeJabComplete
+                    : clipName == "CHR00_Melee_Cross_Runtime"
+                        ? ShowcaseChr00AnimationTiming.MeleeCrossComplete
+                        : 0.88f;
                 ConfigureAnimationEvent(
                     path,
                     "ShowcaseActionComplete",
-                    0.88f,
+                    completeTime,
                     clipName);
             }
 
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx",
+                "ShowcaseActionComplete",
+                ShowcaseChr00AnimationTiming.MeleeJabReturnComplete,
+                "CHR00_Melee_Jab_Return_Runtime");
+
             foreach ((string path, string clipName, float openTime, float closeTime) in new[]
             {
-                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
-                    "CHR00_Melee_Jab_Runtime", 0.52f, 0.78f),
-                (Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx",
-                    "CHR00_Melee_Cross_Runtime", 0.50f, 0.76f)
+                (Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx",
+                    "CHR00_Melee_Jab_Runtime",
+                    ShowcaseChr00AnimationTiming.MeleeJabBufferOpen,
+                    ShowcaseChr00AnimationTiming.MeleeJabBufferClose),
+                (Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx",
+                    "CHR00_Melee_Cross_Runtime",
+                    ShowcaseChr00AnimationTiming.MeleeCrossBufferOpen,
+                    ShowcaseChr00AnimationTiming.MeleeCrossBufferClose)
             })
             {
                 ConfigureAnimationEvent(path, "ShowcaseComboBufferOpen", openTime, clipName);
                 ConfigureAnimationEvent(path, "ShowcaseComboBufferClose", closeTime, clipName);
             }
 
-            string eliteJump = EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx";
-            ConfigureAnimationEvent(eliteJump, "ShowcaseLungeStart", 0.24f);
-            ConfigureAnimationEvent(eliteJump, "ShowcaseLungeEnd", 0.62f);
-
-            string[] catches =
+            foreach ((string path, float contact, float complete) in new[]
             {
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx"
-            };
-            foreach (string path in catches)
+                (Chr00AnimationRoot + "/Approved/CHR00_Pickup_Low_Small.fbx",
+                    ShowcaseChr00AnimationTiming.PickupLowSmallContact,
+                    ShowcaseChr00AnimationTiming.PickupLowSmallComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Pickup_Low_Medium.fbx",
+                    ShowcaseChr00AnimationTiming.PickupLowMediumContact,
+                    ShowcaseChr00AnimationTiming.PickupLowMediumComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Center.fbx",
+                    ShowcaseChr00AnimationTiming.CatchSmallCenterContact,
+                    ShowcaseChr00AnimationTiming.CatchSmallCenterComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx",
+                    ShowcaseChr00AnimationTiming.CatchSmallDivingContact,
+                    ShowcaseChr00AnimationTiming.CatchSmallDivingComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx",
+                    ShowcaseChr00AnimationTiming.CatchSmallDivingContact,
+                    ShowcaseChr00AnimationTiming.CatchSmallDivingComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx",
+                    ShowcaseChr00AnimationTiming.CatchMediumContact,
+                    ShowcaseChr00AnimationTiming.CatchMediumComplete)
+            })
             {
-                ConfigureAnimationEvent(path, "ShowcaseCarryContact", 0.52f);
-                ConfigureAnimationEvent(path, "ShowcaseActionComplete", 0.88f);
+                ConfigureAnimationEvent(path, "ShowcaseCarryContact", contact);
+                ConfigureAnimationEvent(path, "ShowcaseActionComplete", complete);
             }
 
-            foreach ((string path, float releaseTime) in new[]
+            foreach ((string path, float releaseTime, float completeTime) in new[]
             {
-                (Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx", 0.48f),
-                (Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx", 0.52f)
+                (Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx",
+                    ShowcaseChr00AnimationTiming.ThrowSmallRelease,
+                    ShowcaseChr00AnimationTiming.ThrowSmallComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx",
+                    ShowcaseChr00AnimationTiming.ThrowMediumRelease,
+                    ShowcaseChr00AnimationTiming.ThrowMediumComplete)
             })
             {
                 ConfigureAnimationEvent(path, "ShowcaseThrowRelease", releaseTime);
-                ConfigureAnimationEvent(path, "ShowcaseActionComplete", 0.88f);
+                ConfigureAnimationEvent(path, "ShowcaseActionComplete", completeTime);
             }
 
-            foreach (string path in new[]
+            foreach ((string path, float completeTime) in new[]
             {
-                Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx",
-                Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx",
-                EnyAnimationRoot + "/Shared/hit reaction.fbx",
-                EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx",
-                EnyAnimationRoot + "/ApprovedHit/Hit_Rib.fbx",
-                EnyAnimationRoot + "/ApprovedHit/Hit_Stomach.fbx",
-                EnyAnimationRoot + "/ApprovedHit/Hit_BigHeadHit.fbx"
+                (Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx",
+                    ShowcaseChr00AnimationTiming.HitBodyComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx",
+                    ShowcaseChr00AnimationTiming.KnockdownBackComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx",
+                    ShowcaseChr00AnimationTiming.KnockdownFrontComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx",
+                    ShowcaseChr00AnimationTiming.GetupBackComplete),
+                (Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx",
+                    ShowcaseChr00AnimationTiming.GetupFrontComplete)
             })
             {
-                ConfigureAnimationEvent(path, "ShowcaseActionComplete", 0.88f);
+                ConfigureAnimationEvent(path, "ShowcaseActionComplete", completeTime);
             }
 
+            string strapRoot = Chr00AnimationRoot + "/Approved/CHR00_Strap_";
             ConfigureAnimationEvent(
-                Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx",
-                "ShowcaseAllySupplyRelease",
-                0.48f);
+                strapRoot + "Prepare.fbx",
+                "ShowcaseStrapActionComplete",
+                0.98f);
+
             ConfigureAnimationEvent(
-                Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx",
-                "ShowcaseActionComplete",
-                0.88f);
+                strapRoot + "Throw.fbx",
+                "ShowcaseStrapThrowRelease",
+                13f / 14f);
+            ConfigureAnimationEvent(
+                strapRoot + "Throw.fbx",
+                "ShowcaseStrapAttachContact",
+                0.985f);
+            ConfigureAnimationEvent(
+                strapRoot + "Throw.fbx",
+                "ShowcaseStrapActionComplete",
+                0.995f);
+
+            string strapPull = strapRoot + "Pull.fbx";
+            RemoveAnimationEvent(
+                strapPull,
+                "CHR00_Strap_Pull",
+                "ShowcaseStrapActionComplete");
+            ConfigureAnimationEvent(
+                strapPull,
+                "ShowcaseStrapPullComplete",
+                0.98f,
+                "CHR00_Strap_Pull");
+
+            foreach ((string side, string clipName, float impulseTime) in new[]
+            {
+                ("Attack_L.fbx", "CHR00_Strap_Attack_L", 8f / 20f),
+                ("Attack_R.fbx", "CHR00_Strap_Attack_R", 8f / 22f)
+            })
+            {
+                ConfigureAnimationEvent(
+                    strapRoot + side,
+                    "ShowcaseStrapAttackImpulse",
+                    impulseTime,
+                    clipName);
+                ConfigureAnimationEvent(
+                    strapRoot + side,
+                    "ShowcaseStrapActionComplete",
+                    0.95f,
+                    clipName);
+            }
         }
 
         private static void ConfigurePlayerMeleeSubclips()
         {
-            string path = Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx";
+            string path =
+                Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx";
             ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
             if (importer == null)
             {
@@ -1043,16 +1794,22 @@ namespace BreakNotice.Contest.Editor
             ModelImporterClipAnimation jab = CreateRuntimeSubclip(
                 "CHR00_Melee_Jab_Runtime",
                 source,
-                0f,
-                36f,
+                1f,
+                14f,
+                existing);
+            ModelImporterClipAnimation jabReturn = CreateRuntimeSubclip(
+                "CHR00_Melee_Jab_Return_Runtime",
+                source,
+                1f,
+                14f,
                 existing);
             ModelImporterClipAnimation cross = CreateRuntimeSubclip(
                 "CHR00_Melee_Cross_Runtime",
                 source,
-                37f,
-                70f,
+                14f,
+                60f,
                 existing);
-            ModelImporterClipAnimation[] desired = { jab, cross };
+            ModelImporterClipAnimation[] desired = { jab, jabReturn, cross };
 
             bool same = existing != null && existing.Length == desired.Length;
             if (same)
@@ -1071,6 +1828,116 @@ namespace BreakNotice.Contest.Editor
                 importer.clipAnimations = desired;
                 importer.SaveAndReimport();
             }
+
+            ConfigurePlayerStrapAttackClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Strap_Attack_L.fbx",
+                "CHR00_Strap_Attack_L");
+            ConfigurePlayerStrapAttackClip(
+                Chr00AnimationRoot + "/Approved/CHR00_Strap_Attack_R.fbx",
+                "CHR00_Strap_Attack_R");
+        }
+
+        private static void ConfigurePlayerStrapAttackClip(
+            string path,
+            string attackClipName)
+        {
+            ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+            if (importer == null)
+            {
+                throw new InvalidOperationException(
+                    $"CHR00 strap attack source importer is missing: {path}");
+            }
+
+            ModelImporterClipAnimation[] existing = importer.clipAnimations;
+            ModelImporterClipAnimation source = existing?
+                .FirstOrDefault(candidate => candidate.name == attackClipName) ??
+                importer.defaultClipAnimations.FirstOrDefault();
+            if (source == null)
+            {
+                throw new InvalidOperationException(
+                    $"CHR00 strap attack source has no take: {path}");
+            }
+
+            ModelImporterClipAnimation attack = CreateRuntimeSubclip(
+                attackClipName,
+                source,
+                source.firstFrame,
+                source.lastFrame,
+                existing);
+            ModelImporterClipAnimation[] desired = { attack };
+            bool same = existing != null && existing.Length == desired.Length;
+            if (same)
+            {
+                for (int index = 0; index < desired.Length; index++)
+                {
+                    same &= existing[index].name == desired[index].name &&
+                            Mathf.Approximately(existing[index].firstFrame,
+                                desired[index].firstFrame) &&
+                            Mathf.Approximately(existing[index].lastFrame,
+                                desired[index].lastFrame) &&
+                            existing[index].loopTime == desired[index].loopTime;
+                }
+            }
+            if (!same)
+            {
+                importer.clipAnimations = desired;
+                importer.SaveAndReimport();
+            }
+        }
+
+        private static void ConfigurePlayerStrapSubclips()
+        {
+            string path =
+                Chr00AnimationRoot + "/Approved/CHR00_Strap_Pull.fbx";
+            ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+            if (importer == null)
+            {
+                throw new InvalidOperationException(
+                    $"CHR00 strap pull source importer is missing: {path}");
+            }
+
+            ModelImporterClipAnimation[] existing = importer.clipAnimations;
+            ModelImporterClipAnimation source = importer.defaultClipAnimations
+                .FirstOrDefault();
+            if (source == null)
+            {
+                throw new InvalidOperationException(
+                    $"CHR00 strap pull source has no default take: {path}");
+            }
+
+            ModelImporterClipAnimation pull = CreateRuntimeSubclip(
+                "CHR00_Strap_Pull",
+                source,
+                source.firstFrame,
+                source.lastFrame,
+                existing);
+            ModelImporterClipAnimation hold = CreateRuntimeSubclip(
+                "CHR00_Strap_Tension_Hold_Runtime",
+                source,
+                source.lastFrame - 1f,
+                source.lastFrame,
+                existing,
+                true);
+            ModelImporterClipAnimation[] desired = { pull, hold };
+
+            bool same = existing != null && existing.Length == desired.Length;
+            if (same)
+            {
+                for (int index = 0; index < desired.Length; index++)
+                {
+                    same &= existing[index].name == desired[index].name &&
+                            Mathf.Approximately(existing[index].firstFrame,
+                                desired[index].firstFrame) &&
+                            Mathf.Approximately(existing[index].lastFrame,
+                                desired[index].lastFrame) &&
+                            existing[index].loopTime == desired[index].loopTime;
+                }
+            }
+            if (!same)
+            {
+                importer.clipAnimations = desired;
+                importer.SaveAndReimport();
+            }
         }
 
         private static ModelImporterClipAnimation CreateRuntimeSubclip(
@@ -1078,7 +1945,8 @@ namespace BreakNotice.Contest.Editor
             ModelImporterClipAnimation source,
             float firstFrame,
             float lastFrame,
-            ModelImporterClipAnimation[] existing)
+            ModelImporterClipAnimation[] existing,
+            bool loop = false)
         {
             AnimationEvent[] preserved = existing?
                 .FirstOrDefault(candidate => candidate.name == name)?.events ??
@@ -1089,8 +1957,8 @@ namespace BreakNotice.Contest.Editor
                 takeName = source.takeName,
                 firstFrame = Mathf.Max(source.firstFrame, firstFrame),
                 lastFrame = Mathf.Min(source.lastFrame, lastFrame),
-                loopTime = false,
-                loopPose = false,
+                loopTime = loop,
+                loopPose = loop,
                 lockRootRotation = true,
                 keepOriginalOrientation = false,
                 lockRootHeightY = true,
@@ -1287,11 +2155,21 @@ namespace BreakNotice.Contest.Editor
                 new("CatchSmallLeftAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_L.fbx", 2.2f),
                 new("CatchSmallRightAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Small_Diving_R.fbx", 2.2f),
                 new("CatchMediumAction", Chr00AnimationRoot + "/Approved/CHR00_Catch_Medium.fbx", 1.2f),
+                new("PickupLowSmallAction", Chr00AnimationRoot + "/Approved/CHR00_Pickup_Low_Small.fbx", ShowcaseChr00AnimationTiming.PickupLowSmallStateSpeed),
+                new("PickupLowMediumAction", Chr00AnimationRoot + "/Approved/CHR00_Pickup_Low_Medium.fbx", ShowcaseChr00AnimationTiming.PickupLowMediumStateSpeed),
                 new("ThrowLightAction", Chr00AnimationRoot + "/Approved/CHR00_Throw_Small.fbx", 1.6f),
                 new("ThrowMediumAction", Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx", 1.5f),
-                new("MeleeJabAction", Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx", 1.25f, false, "CHR00_Melee_Jab_Runtime"),
-                new("MeleeCrossAction", Chr00AnimationRoot + "/Legacy/Fist Fight A.fbx", 1.25f, false, "CHR00_Melee_Cross_Runtime"),
-                new("MeleeHookAction", Chr00AnimationRoot + "/Legacy/Hook Punch.fbx", 1.4f),
+                new("StrapPrepareAction", Chr00AnimationRoot + "/Approved/CHR00_Strap_Prepare.fbx", 1.6f),
+                new("StrapRollingAction", Chr00AnimationRoot + "/Approved/CHR00_Strap_Rolling.fbx"),
+                new("StrapThrowAction", Chr00AnimationRoot + "/Approved/CHR00_Strap_Throw.fbx", 1.4f),
+                new("StrapPullAction", Chr00AnimationRoot + "/Approved/CHR00_Strap_Pull.fbx", 1.4f, false, "CHR00_Strap_Pull"),
+                new("StrapTensionHold", Chr00AnimationRoot + "/Approved/CHR00_Strap_Pull.fbx", 1f, false, "CHR00_Strap_Tension_Hold_Runtime"),
+                new("StrapAttackLeftAction", Chr00AnimationRoot + "/Approved/CHR00_Strap_Attack_L.fbx", 0.65f, false, "CHR00_Strap_Attack_L"),
+                new("StrapAttackRightAction", Chr00AnimationRoot + "/Approved/CHR00_Strap_Attack_R.fbx", 0.65f, false, "CHR00_Strap_Attack_R"),
+                new("MeleeJabAction", Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx", 1.25f, false, "CHR00_Melee_Jab_Runtime"),
+                new("MeleeJabReturnAction", Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx", -1.25f, false, "CHR00_Melee_Jab_Return_Runtime", 1f),
+                new("MeleeCrossAction", Chr00AnimationRoot + "/Approved/CHR00_Melee_JabCross_raw.fbx", 1.25f, false, "CHR00_Melee_Cross_Runtime"),
+                new("MeleeHookAction", Chr00AnimationRoot + "/Legacy/Hook Punch.fbx", ShowcaseChr00AnimationTiming.MeleeHookStateSpeed),
                 new("HitBodyAction", Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx"),
                 new("KnockdownBackAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"),
                 new("KnockdownFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"),
@@ -1301,11 +2179,13 @@ namespace BreakNotice.Contest.Editor
                 new("Death2Action", Chr00AnimationRoot + "/Legacy/Dying2.fbx")
             };
             AvatarMask upperBodyMask = EnsurePlayerAimUpperBodyMask();
+            AvatarMask meleeMovingLegsMask = EnsurePlayerMeleeMovingLegsMask();
             EnsureAnimatorLayerIkPass(Characters[0].ControllerPath);
             if (PlayerControllerMatchesRuntimeContract(
                     Characters[0].ControllerPath,
                     states,
-                    upperBodyMask))
+                    upperBodyMask,
+                    meleeMovingLegsMask))
             {
                 return;
             }
@@ -1316,18 +2196,31 @@ namespace BreakNotice.Contest.Editor
             BuildRuntimeStates(controller.layers[0].stateMachine, states);
             EnsureAnimatorLayerIkPass(Characters[0].ControllerPath);
             AddPlayerAimUpperBodyLayer(controller, upperBodyMask);
+            AddPlayerStrapUpperBodyLayer(controller, upperBodyMask);
+            AddPlayerMeleeMovingLegsLayer(controller, meleeMovingLegsMask);
             EditorUtility.SetDirty(controller);
         }
 
         private static void CreateAllyController()
         {
+            ConfigureLatestChr01Animations();
             RuntimeStateContract[] states =
             {
-                new("Idle", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Idle.fbx", 1f, true),
-                new("Walk", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Walk_F.fbx", 1f, true),
-                new("Run", Chr01AnimationRoot + "/SharedLocomotion/CHR00_Run_F.fbx", 1f, true),
-                new("BinderWindupReady", Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Windup.fbx"),
-                new("SupplyReleaseAction", Chr01AnimationRoot + "/Approved/CHR01_Supply_Binder_Release.fbx")
+                new("Idle", Chr01AnimationRoot + "/CHR01_Idle.fbx", 1f, true),
+                new("Walk", Chr01AnimationRoot + "/CHR01_Walk_F.fbx", 1f, true),
+                new("Run", Chr01AnimationRoot + "/CHR01_Run_F.fbx", 1f, true),
+                new(
+                    "BinderWindupReady",
+                    Chr01AnimationRoot + "/CHR01_Supply_Binder_Release.fbx",
+                    1f,
+                    false,
+                    Chr01SupplyWindupRuntimeClipName),
+                new(
+                    "SupplyReleaseAction",
+                    Chr01AnimationRoot + "/CHR01_Supply_Binder_Release.fbx",
+                    ShowcaseNonPlayerAnimationTiming.AllySupplyReleaseStateSpeed,
+                    false,
+                    Chr01SupplyReleaseRuntimeClipName)
             };
             if (ControllerMatchesRuntimeContract(Characters[1].ControllerPath, states))
             {
@@ -1346,38 +2239,46 @@ namespace BreakNotice.Contest.Editor
             CharacterDefinition definition = Characters[elite ? 3 : 2];
             var states = new List<RuntimeStateContract>
             {
-                new("Idle", EnyAnimationRoot + "/Shared/idle.fbx", 1f, true),
-                new("Walk", EnyAnimationRoot + "/Shared/walking.fbx", 1f, true),
-                new("HitLightAction", EnyAnimationRoot + "/Shared/hit reaction.fbx"),
-                new("HitBodyAction", EnyAnimationRoot + "/ApprovedHit/Hit_Body.fbx"),
-                new("HitRibAction", EnyAnimationRoot + "/ApprovedHit/Hit_Rib.fbx"),
-                new("HitStomachAction", EnyAnimationRoot + "/ApprovedHit/Hit_Stomach.fbx"),
-                new("HitBigHeadAction", EnyAnimationRoot + "/ApprovedHit/Hit_BigHeadHit.fbx"),
-                new("AttackBoxingAction", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing.fbx", 1.25f),
-                new("AttackBoxing2Action", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Boxing_2.fbx", 1.3f),
-                new("AttackKickingAction", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking.fbx", 1.2f),
-                new("AttackKicking2Action", EnyAnimationRoot + "/MeleeCandidates/Melee_candidate_Kicking_2.fbx", 1.2f),
+                new("Idle", EnemyClipPath(elite, "Idle"), 1f, true),
+                new("Run", EnemyClipPath(elite, "Standard_Run"), 1f, true),
+                new("HitLightAction", EnemyClipPath(elite, "Hit_Head")),
+                new("HitBodyAction", EnemyClipPath(elite, "Hit_Body")),
+                new("HitRibAction", EnemyClipPath(elite, "Hit_Rib")),
+                new("HitStomachAction", EnemyClipPath(elite, "Hit_Stomach")),
+                new("HitBigHeadAction", EnemyClipPath(elite, "Hit_BigHeadHit")),
+                new(
+                    "AttackBoxingAction",
+                    EnemyClipPath(elite, "Melee_Candidate_Boxing"),
+                    ShowcaseNonPlayerAnimationTiming.BoxingStateSpeed),
+                new(
+                    "AttackKneeStrikeAction",
+                    EnemyClipPath(elite, "Melee_Candidate_Boxing_2"),
+                    ShowcaseNonPlayerAnimationTiming.Boxing2StateSpeed),
+                new(
+                    "AttackKickingAction",
+                    EnemyClipPath(elite, "Melee_Candidate_Kicking"),
+                    ShowcaseNonPlayerAnimationTiming.KickingStateSpeed),
+                new(
+                    "AttackKicking2Action",
+                    EnemyClipPath(elite, "Melee_Candidate_Kicking_2"),
+                    ShowcaseNonPlayerAnimationTiming.Kicking2StateSpeed),
                 new("KnockdownBackAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx"),
                 new("KnockdownFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"),
                 new("GetupBackAction", Chr00AnimationRoot + "/Approved/CHR00_Getup_B.fbx"),
                 new("GetupFrontAction", Chr00AnimationRoot + "/Approved/CHR00_Getup_F.fbx"),
-                new("Death1Action", Chr00AnimationRoot + "/Legacy/Dying1.fbx"),
-                new("Death2Action", Chr00AnimationRoot + "/Legacy/Dying2.fbx")
+                new("Death1Action", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_F.fbx"),
+                new("Death2Action", Chr00AnimationRoot + "/Approved/CHR00_Knockdown_B.fbx")
             };
             if (elite)
             {
                 states.Add(new RuntimeStateContract(
                     "EliteMutantPunchAction",
-                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Punch.fbx",
-                    1f));
+                    EnemyClipPath(true, "Lod_Mutant_Punch"),
+                    ShowcaseNonPlayerAnimationTiming.MutantPunchStateSpeed));
                 states.Add(new RuntimeStateContract(
                     "EliteMutantSwipingAction",
-                    EnyAnimationRoot + "/EliteOnly/lod@Mutant Swiping.fbx",
-                    1f));
-                states.Add(new RuntimeStateContract(
-                    "EliteJumpAttackAction",
-                    EnyAnimationRoot + "/EliteOnly/lod@Jump Attack.fbx",
-                    1f));
+                    EnemyClipPath(true, "Lod_Mutant_Swiping"),
+                    ShowcaseNonPlayerAnimationTiming.MutantSwipeStateSpeed));
             }
             if (ControllerMatchesRuntimeContract(definition.ControllerPath, states))
             {
@@ -1387,6 +2288,13 @@ namespace BreakNotice.Contest.Editor
             AnimatorController controller = CreateController(definition.ControllerPath);
             AddCoreParameters(controller, false, false);
             BuildRuntimeStates(controller.layers[0].stateMachine, states);
+        }
+
+        private static string EnemyClipPath(bool elite, string suffix)
+        {
+            string variant = elite ? "Elite" : "Normal";
+            string root = elite ? EnyEliteAnimationRoot : EnyNormalAnimationRoot;
+            return $"{root}/ENY01_{variant}_{suffix}.fbx";
         }
 
         private static void BuildRuntimeStates(
@@ -1481,6 +2389,44 @@ namespace BreakNotice.Contest.Editor
             }
         }
 
+        private static AvatarMask EnsurePlayerMeleeMovingLegsMask()
+        {
+            AvatarMask mask = AssetDatabase.LoadAssetAtPath<AvatarMask>(
+                PlayerMeleeMovingLegsMaskPath);
+            bool created = mask == null;
+            if (created)
+            {
+                mask = new AvatarMask
+                {
+                    name = Path.GetFileNameWithoutExtension(
+                        PlayerMeleeMovingLegsMaskPath)
+                };
+                AssetDatabase.CreateAsset(mask, PlayerMeleeMovingLegsMaskPath);
+            }
+
+            bool changed = created;
+            for (int index = 0;
+                 index < (int)AvatarMaskBodyPart.LastBodyPart;
+                 index++)
+            {
+                AvatarMaskBodyPart bodyPart = (AvatarMaskBodyPart)index;
+                bool expected = bodyPart == AvatarMaskBodyPart.LeftLeg ||
+                    bodyPart == AvatarMaskBodyPart.RightLeg;
+                if (mask.GetHumanoidBodyPartActive(bodyPart) == expected)
+                {
+                    continue;
+                }
+                mask.SetHumanoidBodyPartActive(bodyPart, expected);
+                changed = true;
+            }
+
+            if (changed)
+            {
+                EditorUtility.SetDirty(mask);
+            }
+            return mask;
+        }
+
         private static void AddPlayerAimUpperBodyLayer(
             AnimatorController controller,
             AvatarMask upperBodyMask)
@@ -1506,6 +2452,109 @@ namespace BreakNotice.Contest.Editor
             stateMachine.defaultState = state;
         }
 
+        private static void AddPlayerStrapUpperBodyLayer(
+            AnimatorController controller,
+            AvatarMask upperBodyMask)
+        {
+            controller.AddLayer(PlayerStrapUpperBodyLayerName);
+            AnimatorControllerLayer[] layers = controller.layers;
+            int layerIndex = layers.Length - 1;
+            AnimatorControllerLayer layer = layers[layerIndex];
+            layer.avatarMask = upperBodyMask;
+            layer.blendingMode = AnimatorLayerBlendingMode.Override;
+            layer.defaultWeight = 0f;
+            layer.iKPass = false;
+            layer.syncedLayerIndex = -1;
+            layer.syncedLayerAffectsTiming = false;
+            layers[layerIndex] = layer;
+            controller.layers = layers;
+
+            AnimatorStateMachine stateMachine = layer.stateMachine;
+            AnimatorState rolling = AddRuntimeState(
+                stateMachine,
+                PlayerStrapRollingUpperBodyStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Strap_Rolling.fbx"));
+            AddRuntimeState(
+                stateMachine,
+                PlayerStrapTensionUpperBodyStateName,
+                LoadClip(
+                    Chr00AnimationRoot + "/Approved/CHR00_Strap_Pull.fbx",
+                    "CHR00_Strap_Tension_Hold_Runtime"));
+            AddRuntimeState(
+                stateMachine,
+                PlayerStrapAttackLeftUpperBodyStateName,
+                LoadClip(
+                    Chr00AnimationRoot + "/Approved/CHR00_Strap_Attack_L.fbx",
+                    "CHR00_Strap_Attack_L"),
+                0.65f);
+            AddRuntimeState(
+                stateMachine,
+                PlayerStrapAttackRightUpperBodyStateName,
+                LoadClip(
+                    Chr00AnimationRoot + "/Approved/CHR00_Strap_Attack_R.fbx",
+                    "CHR00_Strap_Attack_R"),
+                0.65f);
+            stateMachine.defaultState = rolling;
+        }
+
+        private static void AddPlayerMeleeMovingLegsLayer(
+            AnimatorController controller,
+            AvatarMask movingLegsMask)
+        {
+            controller.AddLayer(PlayerMeleeMovingLegsLayerName);
+            AnimatorControllerLayer[] layers = controller.layers;
+            int layerIndex = layers.Length - 1;
+            AnimatorControllerLayer layer = layers[layerIndex];
+            layer.avatarMask = movingLegsMask;
+            layer.blendingMode = AnimatorLayerBlendingMode.Override;
+            layer.defaultWeight = 0f;
+            layer.iKPass = false;
+            layer.syncedLayerIndex = -1;
+            layer.syncedLayerAffectsTiming = false;
+            layers[layerIndex] = layer;
+            controller.layers = layers;
+
+            AnimatorStateMachine stateMachine = layer.stateMachine;
+            AnimatorState idle = AddRuntimeState(
+                stateMachine,
+                PlayerMeleeLegsIdleStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Idle.fbx"),
+                1f,
+                true);
+            AddRuntimeState(
+                stateMachine,
+                PlayerMeleeLegsForwardStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"),
+                1f,
+                true);
+            AddRuntimeState(
+                stateMachine,
+                PlayerMeleeLegsBackwardStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"),
+                1f,
+                true,
+                1f);
+            AddRuntimeState(
+                stateMachine,
+                PlayerMeleeLegsLeftStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Strafe_L.fbx"),
+                1f,
+                true);
+            AddRuntimeState(
+                stateMachine,
+                PlayerMeleeLegsRightStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Strafe_R.fbx"),
+                1f,
+                true);
+            AddRuntimeState(
+                stateMachine,
+                PlayerMeleeLegsRunStateName,
+                LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx"),
+                1f,
+                true);
+            stateMachine.defaultState = idle;
+        }
+
         private static void RemoveAdditionalControllerLayers(
             AnimatorController controller)
         {
@@ -1518,19 +2567,21 @@ namespace BreakNotice.Contest.Editor
         private static bool PlayerControllerMatchesRuntimeContract(
             string path,
             IEnumerable<RuntimeStateContract> authoredContracts,
-            AvatarMask upperBodyMask)
+            AvatarMask upperBodyMask,
+            AvatarMask meleeMovingLegsMask)
         {
             RuntimeStateContract[] contracts = authoredContracts.ToArray();
             if (contracts.Any(contract =>
                     IsForbiddenPlayerRuntimeClip(contract.AssetPath)))
             {
                 throw new InvalidOperationException(
-                    "CHR00 runtime controller cannot reference PREVIEW, Turn, or ALT clips.");
+                    "CHR00 runtime controller cannot reference PREVIEW, Turn, ALT, " +
+                    "REF, or candidate clips.");
             }
 
             AnimatorController controller =
                 AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
-            if (controller == null || controller.layers.Length != 2 ||
+            if (controller == null || controller.layers.Length != 4 ||
                 !controller.layers[0].iKPass ||
                 !ControllerHasRuntimeParameters(controller) ||
                 !RuntimeStateMachineMatchesContract(
@@ -1558,14 +2609,151 @@ namespace BreakNotice.Contest.Editor
             }
 
             AnimatorState upperState = upperMachine.states[0].state;
-            return upperState.name == PlayerAimUpperBodyStateName &&
-                   upperState.motion == LoadClip(
-                       Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx") &&
-                   Mathf.Abs(upperState.speed - 1f) <= 0.0001f &&
-                   Mathf.Abs(upperState.cycleOffset) <= 0.0001f &&
-                   !upperState.speedParameterActive &&
-                   !upperState.iKOnFeet && upperState.writeDefaultValues &&
-                   upperState.transitions.Length == 0;
+            if (upperState.name != PlayerAimUpperBodyStateName ||
+                upperState.motion != LoadClip(
+                    Chr00AnimationRoot + "/Approved/CHR00_Aim_Idle.fbx") ||
+                Mathf.Abs(upperState.speed - 1f) > 0.0001f ||
+                Mathf.Abs(upperState.cycleOffset) > 0.0001f ||
+                upperState.speedParameterActive || upperState.iKOnFeet ||
+                !upperState.writeDefaultValues || upperState.transitions.Length != 0)
+            {
+                return false;
+            }
+
+            AnimatorControllerLayer strapLayer = controller.layers[2];
+            AnimatorStateMachine strapMachine = strapLayer.stateMachine;
+            if (strapLayer.name != PlayerStrapUpperBodyLayerName ||
+                strapLayer.avatarMask != upperBodyMask ||
+                strapLayer.blendingMode != AnimatorLayerBlendingMode.Override ||
+                Mathf.Abs(strapLayer.defaultWeight) > 0.0001f ||
+                strapLayer.iKPass || strapLayer.syncedLayerIndex != -1 ||
+                strapLayer.syncedLayerAffectsTiming || strapMachine == null ||
+                strapMachine.stateMachines.Length != 0 ||
+                strapMachine.anyStateTransitions.Length != 0 ||
+                strapMachine.states.Length != 4 ||
+                strapMachine.defaultState == null ||
+                strapMachine.defaultState.name !=
+                    PlayerStrapRollingUpperBodyStateName)
+            {
+                return false;
+            }
+
+            Dictionary<string, AnimatorState> strapStates = strapMachine.states
+                .Select(child => child.state)
+                .ToDictionary(state => state.name, StringComparer.Ordinal);
+            bool strapLayerMatches = RuntimeUpperBodyStateMatches(
+                       strapStates,
+                       PlayerStrapRollingUpperBodyStateName,
+                       LoadClip(Chr00AnimationRoot +
+                           "/Approved/CHR00_Strap_Rolling.fbx")) &&
+                   RuntimeUpperBodyStateMatches(
+                       strapStates,
+                       PlayerStrapTensionUpperBodyStateName,
+                       LoadClip(
+                           Chr00AnimationRoot + "/Approved/CHR00_Strap_Pull.fbx",
+                           "CHR00_Strap_Tension_Hold_Runtime")) &&
+                   RuntimeUpperBodyStateMatches(
+                       strapStates,
+                       PlayerStrapAttackLeftUpperBodyStateName,
+                       LoadClip(
+                           Chr00AnimationRoot +
+                               "/Approved/CHR00_Strap_Attack_L.fbx",
+                           "CHR00_Strap_Attack_L"),
+                       0.65f) &&
+                   RuntimeUpperBodyStateMatches(
+                       strapStates,
+                       PlayerStrapAttackRightUpperBodyStateName,
+                        LoadClip(
+                            Chr00AnimationRoot +
+                                "/Approved/CHR00_Strap_Attack_R.fbx",
+                            "CHR00_Strap_Attack_R"),
+                        0.65f);
+            if (!strapLayerMatches)
+            {
+                return false;
+            }
+
+            AnimatorControllerLayer meleeLayer = controller.layers[3];
+            AnimatorStateMachine meleeMachine = meleeLayer.stateMachine;
+            if (meleeLayer.name != PlayerMeleeMovingLegsLayerName ||
+                meleeLayer.avatarMask != meleeMovingLegsMask ||
+                meleeLayer.blendingMode != AnimatorLayerBlendingMode.Override ||
+                Mathf.Abs(meleeLayer.defaultWeight) > 0.0001f ||
+                meleeLayer.iKPass || meleeLayer.syncedLayerIndex != -1 ||
+                meleeLayer.syncedLayerAffectsTiming || meleeMachine == null ||
+                meleeMachine.stateMachines.Length != 0 ||
+                meleeMachine.anyStateTransitions.Length != 0 ||
+                meleeMachine.states.Length != 6 ||
+                meleeMachine.defaultState == null ||
+                meleeMachine.defaultState.name != PlayerMeleeLegsIdleStateName)
+            {
+                return false;
+            }
+
+            Dictionary<string, AnimatorState> meleeStates = meleeMachine.states
+                .Select(child => child.state)
+                .ToDictionary(state => state.name, StringComparer.Ordinal);
+            return RuntimeUpperBodyStateMatches(
+                       meleeStates,
+                       PlayerMeleeLegsIdleStateName,
+                       LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Idle.fbx"),
+                       1f,
+                       0f,
+                       true) &&
+                   RuntimeUpperBodyStateMatches(
+                       meleeStates,
+                       PlayerMeleeLegsForwardStateName,
+                       LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"),
+                       1f,
+                       0f,
+                       true) &&
+                   RuntimeUpperBodyStateMatches(
+                       meleeStates,
+                       PlayerMeleeLegsBackwardStateName,
+                       LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx"),
+                       1f,
+                       1f,
+                       true) &&
+                   RuntimeUpperBodyStateMatches(
+                       meleeStates,
+                       PlayerMeleeLegsLeftStateName,
+                       LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Strafe_L.fbx"),
+                       1f,
+                       0f,
+                       true) &&
+                   RuntimeUpperBodyStateMatches(
+                       meleeStates,
+                       PlayerMeleeLegsRightStateName,
+                       LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Strafe_R.fbx"),
+                       1f,
+                       0f,
+                       true) &&
+                   RuntimeUpperBodyStateMatches(
+                       meleeStates,
+                       PlayerMeleeLegsRunStateName,
+                       LoadClip(Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx"),
+                       1f,
+                       0f,
+                       true);
+        }
+
+        private static bool RuntimeUpperBodyStateMatches(
+            IReadOnlyDictionary<string, AnimatorState> states,
+            string stateName,
+            AnimationClip motion,
+            float playbackSpeed = 1f,
+            float cycleOffset = 0f,
+            bool locomotionDriven = false)
+        {
+            return states.TryGetValue(stateName, out AnimatorState state) &&
+                   state.motion == motion &&
+                   Mathf.Abs(state.speed - playbackSpeed) <= 0.0001f &&
+                   Mathf.Abs(state.cycleOffset - cycleOffset) <= 0.0001f &&
+                   state.speedParameterActive == locomotionDriven &&
+                   (!locomotionDriven ||
+                    state.speedParameter == "LocomotionPlayback") &&
+                   !state.iKOnFeet &&
+                   state.writeDefaultValues && state.transitions.Length == 0;
         }
 
         private static bool IsForbiddenPlayerRuntimeClip(string assetPath)
@@ -1573,7 +2761,9 @@ namespace BreakNotice.Contest.Editor
             string clipName = Path.GetFileNameWithoutExtension(assetPath);
             return clipName.IndexOf("PREVIEW", StringComparison.OrdinalIgnoreCase) >= 0 ||
                    clipName.IndexOf("Turn", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   clipName.IndexOf("ALT", StringComparison.OrdinalIgnoreCase) >= 0;
+                   clipName.IndexOf("ALT", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   clipName.IndexOf("_REF", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   clipName.IndexOf("candidate", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private static bool ControllerMatchesRuntimeContract(
@@ -1990,7 +3180,7 @@ namespace BreakNotice.Contest.Editor
             instance.transform.localPosition = Vector3.zero;
             instance.transform.localRotation = Quaternion.identity;
             instance.transform.localScale = Vector3.one;
-            NormalizeVisual(actor.transform, instance);
+            NormalizeVisual(actor.transform, instance, definition.Role);
 
             Material material = GetOrCreateCharacterMaterial(definition);
             foreach (Renderer renderer in instance.GetComponentsInChildren<Renderer>(true))
@@ -2042,7 +3232,10 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(boneRig);
         }
 
-        private static void NormalizeVisual(Transform actor, GameObject instance)
+        private static void NormalizeVisual(
+            Transform actor,
+            GameObject instance,
+            ShowcaseCharacterAnimationRole role)
         {
             Bounds bounds = CalculateBounds(instance);
             if (bounds.size.y <= 0.001f)
@@ -2058,6 +3251,19 @@ namespace BreakNotice.Contest.Editor
                 actor.position.x - bounds.center.x,
                 supportY - bounds.min.y,
                 actor.position.z - bounds.center.z);
+
+            if (role == ShowcaseCharacterAnimationRole.EnemyNormal ||
+                role == ShowcaseCharacterAnimationRole.EnemyElite)
+            {
+                // Enemy collision and attack reach are owned by the actor root.
+                // Mesh-bounds centering put the Normal skeleton 12 cm behind that
+                // root because its bind silhouette is asymmetric. Keep grounding,
+                // but align the FBX/Humanoid root on XZ for both variants.
+                Vector3 localPosition = instance.transform.localPosition;
+                localPosition.x = 0f;
+                localPosition.z = 0f;
+                instance.transform.localPosition = localPosition;
+            }
         }
 
         private static float CalculateSupportPlaneY(Transform actor)
@@ -2135,27 +3341,27 @@ namespace BreakNotice.Contest.Editor
                 Characters[2].ControllerPath);
             AnimatorController elite = AssetDatabase.LoadAssetAtPath<AnimatorController>(
                 Characters[3].ControllerPath);
-            string[] selectedEliteStates =
+            string[] forbiddenEnemyStates =
             {
-                "EliteMutantPunchAction",
-                "EliteMutantSwipingAction",
-                "EliteJumpAttackAction"
-            };
-            string[] reviewOnlyEliteStates =
-            {
+                "Walk",
+                "AttackBoxing2Action",
+                "EliteJumpAttackAction",
                 "EliteMutantWalkingAction",
                 "EliteClubComboAction",
                 "EliteStabbingAction"
             };
-            if (selectedEliteStates.Any(name => ControllerHasState(normal, name)) ||
-                selectedEliteStates.Any(name => !ControllerHasState(elite, name)) ||
-                reviewOnlyEliteStates.Any(name => ControllerHasState(normal, name) ||
-                                                   ControllerHasState(elite, name)))
+            if (!ControllerHasState(normal, "Run") ||
+                !ControllerHasState(elite, "Run") ||
+                ControllerHasState(normal, "EliteMutantPunchAction") ||
+                ControllerHasState(normal, "EliteMutantSwipingAction") ||
+                !ControllerHasState(elite, "EliteMutantPunchAction") ||
+                !ControllerHasState(elite, "EliteMutantSwipingAction") ||
+                forbiddenEnemyStates.Any(name => ControllerHasState(normal, name) ||
+                                                  ControllerHasState(elite, name)))
             {
                 throw new InvalidOperationException(
-                    "ENY01 runtime eligibility mismatch: Normal must exclude all " +
-                    "Elite-only attacks; Elite must include only the three selected " +
-                    "unarmed attacks. Review-only sources must remain unreferenced.");
+                    "ENY01 runtime eligibility mismatch: Elite Punch/Swipe must be " +
+                    "Elite-only while weapon, prop and review sources stay unreferenced.");
             }
 
             ShowcaseBoneCombatRig[] combatRigs = scene.GetRootGameObjects()

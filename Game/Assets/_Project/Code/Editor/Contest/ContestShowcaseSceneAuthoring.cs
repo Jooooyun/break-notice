@@ -352,6 +352,10 @@ namespace BreakNotice.Contest.Editor
             Scene scene = EditorSceneManager.OpenScene(
                 ShowcaseS7ScenePath,
                 OpenSceneMode.Single);
+            // S7 is the actual playable review Scene. Re-apply the latest S5
+            // composition so new strap sockets/presentation cannot remain only
+            // in an older source Scene that was copied before this revision.
+            ApplyS5CargoStrap(scene);
             ApplyS7ObjectiveAndExit(scene);
             EditorSceneManager.MarkSceneDirty(scene);
             if (!EditorSceneManager.SaveScene(scene, ShowcaseS7ScenePath))
@@ -808,8 +812,25 @@ namespace BreakNotice.Contest.Editor
                 "GEAR01_SEGMENTED_STRAP_GRAYBOX",
                 new[] { Vector3.zero, Vector3.zero },
                 new Color(1f, 0.78f, 0.08f, 1f),
-                0.055f,
+                ShowcaseCargoStrapPresentation.StrapWorldWidthMeters,
                 false);
+            LineRenderer objectTetherLine = CreateReviewLine(
+                s5Root.transform,
+                "GEAR01_OBJECT_TETHER_GRAYBOX",
+                new[] { Vector3.zero, Vector3.zero },
+                new Color(1f, 0.78f, 0.08f, 1f),
+                ShowcaseCargoStrapPresentation.StrapWorldWidthMeters,
+                false);
+
+            GameObject reviewClamp = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            reviewClamp.name = "GEAR01_REVIEW_CLAMP_PRIMITIVE";
+            reviewClamp.transform.SetParent(s5Root.transform, false);
+            reviewClamp.transform.localScale = new Vector3(0.08f, 0.04f, 0.16f);
+            Collider reviewClampCollider = reviewClamp.GetComponent<Collider>();
+            if (reviewClampCollider != null)
+            {
+                UnityEngine.Object.DestroyImmediate(reviewClampCollider);
+            }
 
             GameObject player = RequireRootAny(
                 scene,
@@ -842,6 +863,7 @@ namespace BreakNotice.Contest.Editor
             }
 
             PrototypeInteractionTarget[] targets = GetInteractionTargets(scene);
+            ConfigureCargoStrapClampSockets(targets);
             cargo.Configure(
                 owner,
                 input,
@@ -850,6 +872,19 @@ namespace BreakNotice.Contest.Editor
                 ally.transform,
                 targets,
                 strapLine);
+
+            Transform reelSocket = ResolvePlayerCarabinerSocket(player);
+            Transform rightHandSocket = ResolvePlayerRightHandSocket(player);
+            ShowcaseCargoStrapPresentation presentation =
+                player.GetComponent<ShowcaseCargoStrapPresentation>() ??
+                player.AddComponent<ShowcaseCargoStrapPresentation>();
+            presentation.Configure(
+                cargo,
+                reelSocket,
+                rightHandSocket,
+                strapLine,
+                reviewClamp.transform,
+                objectTetherLine);
             interaction.ConfigureShowcaseS5(cargo);
             team.ConfigureCargoStrap(cargo);
 
@@ -858,7 +893,171 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(interaction);
             EditorUtility.SetDirty(team);
             EditorUtility.SetDirty(cargo);
+            EditorUtility.SetDirty(presentation);
             EditorUtility.SetDirty(strapLine);
+            EditorUtility.SetDirty(objectTetherLine);
+        }
+
+        private static void ConfigureCargoStrapClampSockets(
+            IEnumerable<PrototypeInteractionTarget> authoredTargets)
+        {
+            foreach (PrototypeInteractionTarget target in authoredTargets)
+            {
+                if (target == null)
+                {
+                    continue;
+                }
+
+                bool isBinder = target.WeightClass == PrototypeWeightClass.Light &&
+                    (target.Role == PrototypeInteractionRole.DirectBinder ||
+                     target.Role == PrototypeInteractionRole.AllyBinder);
+                bool isChair = target.WeightClass == PrototypeWeightClass.Medium &&
+                    target.StrapEligible &&
+                    target.HasLoadBearingMetalAnchor &&
+                    (target.Role == PrototypeInteractionRole.DirectChair ||
+                     target.Role == PrototypeInteractionRole.AllyChair);
+                if (!isBinder && !isChair)
+                {
+                    continue;
+                }
+
+                if (isBinder && !target.StrapEligible)
+                {
+                    target.Configure(
+                        target.ContentDefinitionId,
+                        target.RuntimeInstanceKey,
+                        target.DisplayName,
+                        target.WeightClass,
+                        target.Role,
+                        target.DirectAcquisitionEligible,
+                        target.CatchEligible,
+                        true,
+                        false);
+                }
+
+                Collider targetCollider = target.GetComponent<Collider>();
+                if (targetCollider == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Cargo strap target requires a collider: {target.RuntimeInstanceKey}");
+                }
+
+                Bounds bounds = targetCollider.bounds;
+                Vector3 worldPosition = isBinder
+                    ? bounds.center -
+                      (target.transform.right * Mathf.Max(0.02f, bounds.extents.x * 0.8f))
+                    : new Vector3(
+                        bounds.center.x,
+                        bounds.min.y + Mathf.Min(0.28f, bounds.extents.y * 0.5f),
+                        bounds.center.z);
+                Transform socket = EnsureLocalSocket(
+                    target.transform,
+                    "GEAR01_STRAP_CLAMP_SOCKET",
+                    target.transform.InverseTransformPoint(worldPosition));
+                target.ConfigureStrapClampSocket(socket);
+                EditorUtility.SetDirty(target);
+            }
+        }
+
+        private static Transform ResolvePlayerRightHandSocket(GameObject player)
+        {
+            ShowcaseCharacterAnimationDriver driver =
+                player.GetComponent<ShowcaseCharacterAnimationDriver>();
+            Animator animator = driver != null ? driver.Animator : null;
+            if (animator == null || !animator.isHuman)
+            {
+                Animator[] candidates = player.GetComponentsInChildren<Animator>(true);
+                animator = null;
+                foreach (Animator candidate in candidates)
+                {
+                    if (candidate != null && candidate.isHuman)
+                    {
+                        animator = candidate;
+                        break;
+                    }
+                }
+            }
+            Transform rightHand = animator != null && animator.isHuman
+                ? animator.GetBoneTransform(HumanBodyBones.RightHand)
+                : null;
+
+            // The imported Humanoid bone is authoritative. Returning it
+            // directly prevents an earlier root-level fallback socket from
+            // placing the strap guide above the animated hand.
+            if (rightHand != null)
+            {
+                Transform socket = EnsureLocalSocket(
+                    rightHand,
+                    "GEAR01_STRAP_HAND_SOCKET",
+                    Vector3.zero);
+                if (ShowcaseCargoStrapController.TryResolveRightHandGripWorldPosition(
+                        animator,
+                        out Vector3 gripWorldPosition))
+                {
+                    socket.SetPositionAndRotation(
+                        gripWorldPosition,
+                        rightHand.rotation);
+                    EditorUtility.SetDirty(socket);
+                }
+                return socket;
+            }
+
+            return EnsureLocalSocket(
+                player.transform,
+                "GEAR01_STRAP_HAND_SOCKET_FALLBACK",
+                new Vector3(0.34f, 1.25f, 0.3f));
+        }
+
+        private static Transform ResolvePlayerCarabinerSocket(GameObject player)
+        {
+            ShowcaseCharacterAnimationDriver driver =
+                player.GetComponent<ShowcaseCharacterAnimationDriver>();
+            Animator animator = driver != null ? driver.Animator : null;
+            if (animator == null || !animator.isHuman)
+            {
+                animator = player.GetComponentsInChildren<Animator>(true)
+                    .FirstOrDefault(candidate => candidate != null && candidate.isHuman);
+            }
+            Transform hips = animator != null && animator.isHuman
+                ? animator.GetBoneTransform(HumanBodyBones.Hips)
+                : null;
+            if (hips == null)
+            {
+                throw new InvalidOperationException(
+                    "CHR00 Cargo Strap requires a valid Humanoid Hips bone for " +
+                    "the authored waist carabiner socket.");
+            }
+
+            Transform socket = hips.Find("GEAR01_CARABINER_SOCKET");
+            if (socket == null)
+            {
+                socket = new GameObject("GEAR01_CARABINER_SOCKET").transform;
+                socket.SetParent(hips, false);
+            }
+            socket.SetPositionAndRotation(
+                animator.transform.TransformPoint(
+                    ShowcaseCargoStrapPresentation.CarabinerModelLocalPosition),
+                animator.transform.rotation);
+            EditorUtility.SetDirty(socket);
+            return socket;
+        }
+
+        private static Transform EnsureLocalSocket(
+            Transform parent,
+            string socketName,
+            Vector3 localPosition)
+        {
+            Transform socket = parent.Find(socketName);
+            if (socket == null)
+            {
+                socket = new GameObject(socketName).transform;
+                socket.SetParent(parent, false);
+            }
+            socket.localPosition = localPosition;
+            socket.localRotation = Quaternion.identity;
+            socket.localScale = Vector3.one;
+            EditorUtility.SetDirty(socket);
+            return socket;
         }
 
         public static void ApplyS6RunnerPressure(Scene scene)

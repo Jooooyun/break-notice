@@ -17,13 +17,21 @@ namespace BreakNotice.Presentation
         private GUIStyle worldMarkerStyle;
         private float contactMarkerUntil;
         private bool contactAccepted;
+        private Vector3 contactMarkerWorldPoint;
+        private ShowcaseBoneCombatRig playerCombatRig;
 
         public ShowcaseRunnerPressureController PressureController => pressureController;
+        public bool IsContactMarkerVisible => Time.unscaledTime < contactMarkerUntil;
+        public Vector3 LastContactMarkerWorldPoint => contactMarkerWorldPoint;
 
         public void Configure(ShowcaseRunnerPressureController pressure)
         {
             Unsubscribe();
             pressureController = pressure;
+            playerCombatRig = pressureController != null &&
+                pressureController.PlayerTransform != null
+                    ? pressureController.PlayerTransform.GetComponent<ShowcaseBoneCombatRig>()
+                    : null;
             Subscribe();
         }
 
@@ -55,7 +63,7 @@ namespace BreakNotice.Presentation
                 builder.Append(runner.State.ToString().ToUpperInvariant());
             }
             ShowcaseCombatHealth playerHealth = pressureController.PlayerHealth;
-            string health = playerHealth != null
+            string health = playerHealth != null && ShowcaseHealthVfxPresenter.Active == null
                 ? $"PLAYER HP {playerHealth.CurrentHealth}/{playerHealth.MaximumHealth}  |  "
                 : string.Empty;
             string melee = pressureController.HasPlayerMeleeTarget
@@ -85,12 +93,38 @@ namespace BreakNotice.Presentation
             GUI.Label(new Rect(12f, 106f, Screen.width - 24f, 34f), status, statusStyle);
 
             DrawContactMarker();
+            DrawPlayerMeleeMarker();
+            DrawWorldContactMarker();
             DrawRunnerMarkers();
+        }
+
+        public bool TryGetPlayerStrikeMarker(
+            out Vector3 worldCenter,
+            out float radius)
+        {
+            if (playerCombatRig == null && pressureController != null &&
+                pressureController.PlayerTransform != null)
+            {
+                playerCombatRig = pressureController.PlayerTransform
+                    .GetComponent<ShowcaseBoneCombatRig>();
+            }
+            if (playerCombatRig != null &&
+                playerCombatRig.TryGetPrimaryActiveStrikeVolume(
+                    out worldCenter,
+                    out radius))
+            {
+                return true;
+            }
+
+            worldCenter = default;
+            radius = 0f;
+            return false;
         }
 
         private void DrawContactMarker()
         {
-            if (Time.unscaledTime >= contactMarkerUntil)
+            if (ShowcaseCombatHitVfxPresenter.Active != null ||
+                Time.unscaledTime >= contactMarkerUntil)
             {
                 return;
             }
@@ -137,7 +171,8 @@ namespace BreakNotice.Presentation
                 bool telegraph = runner.State == ShowcaseRunnerState.Telegraph;
                 bool active = runner.IsAttackWindowOpen;
                 ShowcaseCombatHealth health = runner.Health;
-                bool showHealth = health != null &&
+                bool showHealth = ShowcaseHealthVfxPresenter.Active == null &&
+                    health != null &&
                     (health.CurrentHealth < health.MaximumHealth ||
                      Vector3.Distance(
                          pressureController.PlayerTransform.position,
@@ -162,10 +197,62 @@ namespace BreakNotice.Presentation
             }
         }
 
+        private void DrawPlayerMeleeMarker()
+        {
+            Camera camera = Camera.main;
+            if (camera == null ||
+                !TryGetPlayerStrikeMarker(out Vector3 center, out _))
+            {
+                return;
+            }
+
+            Vector3 screen = camera.WorldToScreenPoint(center);
+            if (screen.z <= 0f)
+            {
+                return;
+            }
+
+            EnsureWorldMarkerStyle();
+            worldMarkerStyle.normal.textColor = new Color(1f, 0.58f, 0.08f, 1f);
+            GUI.Label(
+                new Rect(screen.x - 45f, Screen.height - screen.y - 18f, 90f, 36f),
+                "◎ STRIKE",
+                worldMarkerStyle);
+        }
+
+        private void DrawWorldContactMarker()
+        {
+            if (ShowcaseCombatHitVfxPresenter.Active != null ||
+                !contactAccepted || !IsContactMarkerVisible)
+            {
+                return;
+            }
+
+            Camera camera = Camera.main;
+            if (camera == null)
+            {
+                return;
+            }
+
+            Vector3 screen = camera.WorldToScreenPoint(contactMarkerWorldPoint);
+            if (screen.z <= 0f)
+            {
+                return;
+            }
+
+            EnsureWorldMarkerStyle();
+            worldMarkerStyle.normal.textColor = Color.white;
+            GUI.Label(
+                new Rect(screen.x - 42f, Screen.height - screen.y - 22f, 84f, 44f),
+                "× HIT",
+                worldMarkerStyle);
+        }
+
         private void HandleCombatContact(ShowcaseCombatContactResult result)
         {
             contactAccepted = result.Accepted;
-            contactMarkerUntil = Time.unscaledTime + 0.12f;
+            contactMarkerWorldPoint = result.WorldPoint;
+            contactMarkerUntil = Time.unscaledTime + 0.20f;
             if (!result.Accepted)
             {
                 return;
@@ -180,6 +267,17 @@ namespace BreakNotice.Presentation
         {
             contactMarkerUntil = 0f;
             contactAccepted = false;
+            contactMarkerWorldPoint = Vector3.zero;
+        }
+
+        private void EnsureWorldMarkerStyle()
+        {
+            worldMarkerStyle ??= new GUIStyle(GUI.skin.box)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 13,
+                fontStyle = FontStyle.Bold
+            };
         }
 
         private void Subscribe()

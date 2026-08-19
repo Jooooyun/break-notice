@@ -153,6 +153,9 @@ namespace BreakNotice.Presentation
         [SerializeField]
         private LayerMask actorProxyLayers;
 
+        [SerializeField]
+        private ShowcaseHitRotationImpulseExtension hitFeedbackImpulse;
+
         private int hardWorldQueryMask;
 
         private ShowcaseCameraConstraintFrame frameInput;
@@ -356,6 +359,11 @@ namespace BreakNotice.Presentation
         {
             base.Awake();
             ResolveLayerMasks();
+            if (hitFeedbackImpulse == null)
+            {
+                hitFeedbackImpulse = GetComponent<
+                    ShowcaseHitRotationImpulseExtension>();
+            }
             softOcclusionPresenter =
                 GetComponent<ShowcaseCameraSoftOcclusionPresenter>();
             if (softOcclusionPresenter == null)
@@ -391,8 +399,15 @@ namespace BreakNotice.Presentation
             }
         }
 
+        public void ConfigureHitFeedback(
+            ShowcaseHitRotationImpulseExtension impulse)
+        {
+            hitFeedbackImpulse = impulse;
+        }
+
         public void ResetSolverState()
         {
+            hitFeedbackImpulse?.ResetFeedback();
             requestedTuple = default;
             safeTargetTuple = default;
             resolvedTuple = default;
@@ -502,6 +517,7 @@ namespace BreakNotice.Presentation
             {
                 Solve(ref state, orientation, state.Lens, deltaTime);
             }
+            hitFeedbackImpulse?.ApplyAfterConstraint(ref state);
         }
 
         private void Solve(

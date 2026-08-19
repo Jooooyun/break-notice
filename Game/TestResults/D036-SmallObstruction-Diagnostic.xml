@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.6515768">
+  <test-suite type="TestSuite" id="1178" name="Game" fullname="Game" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.651577" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1171" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.636062" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="15132" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1172" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.632391" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1173" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.629468" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1174" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="148" result="Failed" site="Child" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.626530" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1127" name="ContestShowcaseS5PlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.619946" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1138" name="SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests.SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse" methodname="SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests" runstate="Runnable" seed="1735625358" result="Failed" start-time="2026-08-17 15:25:00Z" end-time="2026-08-17 15:25:04Z" duration="3.600658" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Obstructed overhead orbit must pause before penetrating the ceiling. body=Center: (-4.23, 2.20, -16.81), Extents: (0.16, 0.17, 0.16); ceiling=Center: (-5.00, 2.42, -17.04), Extents: (1.50, 0.10, 1.50); velocity=(1.58, 3.82, -1.61); center=(-4.99, 2.18, -16.93); clearance=0.136
+  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestShowcaseS5PlayModeTests+<SmallOverheadObstructionPausesResumesAndPreservesExactThrowUse>d__15.MoveNext () [0x003ad] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestShowcaseS5PlayModeTests.cs:1429
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

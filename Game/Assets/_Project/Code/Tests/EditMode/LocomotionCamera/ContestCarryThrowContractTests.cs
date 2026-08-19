@@ -85,6 +85,68 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
+        public void ThrowUseBudget_IsWeightDerivedWithoutOpeningHeavyAcquisition()
+        {
+            PrototypeInteractionTarget light = CreateTarget(
+                PrototypeWeightClass.Light,
+                PrototypeInteractionRole.DirectBinder,
+                true,
+                true);
+            PrototypeInteractionTarget medium = CreateTarget(
+                PrototypeWeightClass.Medium,
+                PrototypeInteractionRole.DirectChair,
+                true,
+                true);
+            PrototypeInteractionTarget heavy = CreateTarget(
+                PrototypeWeightClass.Heavy,
+                PrototypeInteractionRole.Copier,
+                true,
+                false);
+            var arbitrator = new PrototypeInteractionArbitrator();
+            PrototypeInteractionStateOwner owner = CreatePlayer().owner;
+
+            Assert.That(light.MaximumPlayerThrowUses, Is.EqualTo(1));
+            Assert.That(medium.MaximumPlayerThrowUses, Is.EqualTo(2));
+            Assert.That(heavy.MaximumPlayerThrowUses, Is.EqualTo(3));
+            Assert.That(light.CommittedPlayerThrowUses, Is.Zero);
+            Assert.That(light.RemainingPlayerThrowUses, Is.EqualTo(1));
+            Assert.That(light.IsPlayerThrowExhausted, Is.False);
+            Assert.That(light.IsThrowDepletionPending, Is.False);
+            Assert.That(light.LastCommittedPlayerThrowSequence, Is.Zero);
+            Assert.That(heavy.IsScoopEligible, Is.False);
+            Assert.That(
+                arbitrator.Decide(owner.CreateContext(false, heavy)).Rejection,
+                Is.EqualTo(PrototypeInteractionRejection.HeavyRecognitionOnly));
+        }
+
+        [Test]
+        public void SuccessfulPhysicalThrow_CommitsExactlyOneUse()
+        {
+            (PrototypeInteractionStateOwner owner, PrototypePhysicalObjectLifecycle lifecycle) player =
+                CreatePlayer();
+            PrototypeInteractionTarget binder = CreateTarget(
+                PrototypeWeightClass.Light,
+                PrototypeInteractionRole.DirectBinder,
+                true,
+                true);
+            var arbitrator = new PrototypeInteractionArbitrator();
+
+            Assert.That(player.owner.TryCommit(
+                arbitrator.Decide(player.owner.CreateContext(false, binder))), Is.True);
+            Assert.That(player.owner.TryCompleteAcquisition(binder), Is.True);
+            Assert.That(player.lifecycle.BeginCarry(binder), Is.True);
+            Assert.That(player.lifecycle.TryThrow(Vector3.forward), Is.True);
+
+            Assert.That(binder.CommittedPlayerThrowUses, Is.EqualTo(1));
+            Assert.That(binder.RemainingPlayerThrowUses, Is.Zero);
+            Assert.That(binder.IsPlayerThrowExhausted, Is.True);
+            Assert.That(binder.IsThrowDepletionPending, Is.True);
+            Assert.That(binder.LastCommittedPlayerThrowSequence, Is.EqualTo(1));
+            Assert.That(binder.DirectAcquisitionEligible, Is.False);
+            Assert.That(player.lifecycle.ThrowOriginCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void ChargedThrowProfile_PreservesTapAndBoundsMaximumSpeedAndEnergyMultiplier()
         {
             PrototypePhysicalObjectLifecycle lifecycle = CreatePlayer().lifecycle;
@@ -105,6 +167,49 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(
                 lifecycle.GetThrowSpeedMultiplier(1f) * lifecycle.GetThrowSpeedMultiplier(1f),
                 Is.EqualTo(2.56f).Within(0.001f));
+        }
+
+        [Test]
+        public void BallisticThrow_AddsVisibleArcWithoutChangingAuthoredTotalSpeed()
+        {
+            PrototypeThrowSolution light = PrototypeThrowBallistics.Solve(
+                Vector3.up,
+                Vector3.forward,
+                12.5f,
+                Vector3.forward,
+                Physics.gravity);
+            PrototypeThrowSolution medium = PrototypeThrowBallistics.Solve(
+                Vector3.up,
+                Vector3.forward,
+                8f,
+                Vector3.forward,
+                Physics.gravity);
+            PrototypeThrowSolution charged = PrototypeThrowBallistics.Solve(
+                Vector3.up,
+                Vector3.forward,
+                20f,
+                Vector3.forward,
+                Physics.gravity);
+
+            Assert.That(light.IsValid, Is.True);
+            Assert.That(light.InitialVelocity.magnitude,
+                Is.EqualTo(12.5f).Within(0.001f));
+            Assert.That(medium.InitialVelocity.magnitude,
+                Is.EqualTo(8f).Within(0.001f));
+            Assert.That(charged.InitialVelocity.magnitude,
+                Is.EqualTo(20f).Within(0.001f));
+            Assert.That(light.InitialVelocity.y, Is.GreaterThan(0f));
+            Assert.That(medium.InitialVelocity.y, Is.GreaterThan(0f));
+            Assert.That(
+                medium.InitialVelocity.y / medium.InitialVelocity.z,
+                Is.GreaterThan(light.InitialVelocity.y / light.InitialVelocity.z));
+
+            float apexTime = -light.InitialVelocity.y / Physics.gravity.y;
+            Assert.That(apexTime, Is.GreaterThan(0f));
+            Assert.That(light.PositionAt(apexTime).y,
+                Is.GreaterThan(light.Origin.y + 0.2f));
+            Assert.That(light.PositionAt(apexTime * 2.2f).y,
+                Is.LessThan(light.PositionAt(apexTime).y));
         }
 
         [Test]

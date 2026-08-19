@@ -1786,8 +1786,7 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 PrototypeInteractionRole.AllyBinder =>
                     target.WeightClass == PrototypeWeightClass.Light &&
-                    target.CatchEligible &&
-                    !target.StrapEligible,
+                    target.CatchEligible,
                 PrototypeInteractionRole.AllyChair =>
                     target.WeightClass == PrototypeWeightClass.Medium &&
                     !target.CatchEligible &&

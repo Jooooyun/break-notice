@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:36Z" duration="5.3560558">
+  <test-suite type="TestSuite" id="1190" name="Game" fullname="Game" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:36Z" duration="5.356056" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1183" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:36Z" duration="5.342138" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="12828" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1184" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:36Z" duration="5.340375" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1185" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:36Z" duration="5.339149" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1186" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:36Z" duration="5.337826" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1042" name="ContestChr00DirectionalAnimationPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:33Z" duration="2.200121" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1044" name="V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests.V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" methodname="V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" seed="1333217179" result="Passed" start-time="2026-08-18 11:37:31Z" end-time="2026-08-18 11:37:33Z" duration="2.183114" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1099" name="ContestShowcaseCombatPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" testcasecount="19" result="Passed" start-time="2026-08-18 11:37:33Z" end-time="2026-08-18 11:37:36Z" duration="3.121468" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1104" name="PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher" methodname="PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1299297039" result="Passed" start-time="2026-08-18 11:37:33Z" end-time="2026-08-18 11:37:36Z" duration="2.851832" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+]]></output>
+              </test-case>
+              <test-case id="1103" name="PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs" methodname="PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1166014051" result="Passed" start-time="2026-08-18 11:37:36Z" end-time="2026-08-18 11:37:36Z" duration="0.243847" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.2022977">
+  <test-suite type="TestSuite" id="1190" name="Game" fullname="Game" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.202298" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1183" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.188581" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="7064" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1184" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.186927" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1185" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.185667" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1186" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="159" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.184322" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1042" name="ContestChr00DirectionalAnimationPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.177577" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1044" name="V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests.V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" methodname="V007MovingMelee_UsesFullBodyStrikeAndReticleFacingWithMovingLegs" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" seed="2082810489" result="Passed" start-time="2026-08-18 11:36:24Z" end-time="2026-08-18 11:36:27Z" duration="2.161041" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

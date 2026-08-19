@@ -21,6 +21,35 @@ namespace BreakNotice.LocomotionCamera.Tests
         private const string ScenePath =
             "Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity";
 
+        private readonly struct RunnerAttackMatrixCase
+        {
+            public RunnerAttackMatrixCase(
+                string name,
+                bool elite,
+                bool kickSlot,
+                int randomSlot,
+                ShowcaseRunnerAnimationCue expectedCue,
+                int expectedDamage,
+                params HumanBodyBones[] expectedStrikeBones)
+            {
+                Name = name;
+                Elite = elite;
+                KickSlot = kickSlot;
+                RandomSlot = randomSlot;
+                ExpectedCue = expectedCue;
+                ExpectedDamage = expectedDamage;
+                ExpectedStrikeBones = expectedStrikeBones;
+            }
+
+            public string Name { get; }
+            public bool Elite { get; }
+            public bool KickSlot { get; }
+            public int RandomSlot { get; }
+            public ShowcaseRunnerAnimationCue ExpectedCue { get; }
+            public int ExpectedDamage { get; }
+            public HumanBodyBones[] ExpectedStrikeBones { get; }
+        }
+
         private Scene loadedScene;
 
         [UnityTearDown]
@@ -65,7 +94,149 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows()
+        public IEnumerator PlayerJumpTakeoff_StartsAuthoredJumpAtPhysicalImpulseFrame()
+        {
+            yield return LoadScene();
+            DisableRunners();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            ThirdPersonLocomotion locomotion = combat.GetComponent<ThirdPersonLocomotion>();
+            InputSystemLogicalInputAdapter input =
+                combat.GetComponent<InputSystemLogicalInputAdapter>();
+            ShowcaseCharacterAnimationDriver driver =
+                combat.GetComponent<ShowcaseCharacterAnimationDriver>();
+            Assert.That(locomotion.IsGrounded, Is.True);
+            input.enabled = false;
+
+            uint takeoffBefore = locomotion.JumpTakeoffRevision;
+            SetInputSnapshot(input, new LogicalInputSnapshot(
+                Vector2.zero,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                jump: true));
+            yield return null;
+
+            Assert.That(locomotion.JumpTakeoffRevision,
+                Is.EqualTo(takeoffBefore + 1u));
+            Assert.That(locomotion.VerticalVelocity, Is.GreaterThan(0f));
+
+            Assert.That(driver.CurrentBaseStateName, Is.EqualTo("JumpAction"),
+                "The physical takeoff revision must start JumpAction in the same frame.");
+
+            driver.Animator.Update(0f);
+            int jumpHash = Animator.StringToHash("Base Layer.JumpAction");
+            AnimatorStateInfo jumpState = driver.Animator.IsInTransition(0)
+                ? driver.Animator.GetNextAnimatorStateInfo(0)
+                : driver.Animator.GetCurrentAnimatorStateInfo(0);
+            Assert.That(jumpState.fullPathHash, Is.EqualTo(jumpHash));
+            Assert.That(jumpState.normalizedTime,
+                Is.GreaterThanOrEqualTo(ShowcaseChr00AnimationTiming.JumpImpulse - 0.02f),
+                "JumpAction must enter at the authored takeoff frame, not its grounded lead-in.");
+            SetInputSnapshot(input, default);
+        }
+
+        [UnityTest]
+        public IEnumerator PlayerHitReaction_InterruptsAttachedMediumBeforeAnimatorEntry()
+        {
+            yield return LoadScene();
+            DisableRunners();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            ShowcaseCargoStrapController cargo =
+                combat.GetComponent<ShowcaseCargoStrapController>();
+            PrototypeInteractionStateOwner owner =
+                combat.GetComponent<PrototypeInteractionStateOwner>();
+            ShowcaseCharacterAnimationDriver driver =
+                combat.GetComponent<ShowcaseCharacterAnimationDriver>();
+            ShowcaseRunnerAgent source =
+                SceneComponents<ShowcaseRunnerAgent>().First(item => !item.IsElite);
+            PrototypeInteractionTarget medium =
+                SceneComponents<PrototypeInteractionTarget>().First(target =>
+                    target.Role == PrototypeInteractionRole.DirectChair);
+
+            combat.transform.position = medium.transform.position +
+                new Vector3(0f, 0.9f, -2f);
+            Physics.SyncTransforms();
+            yield return new WaitForFixedUpdate();
+
+            Assert.That(cargo.TryBeginDirectAttach(medium), Is.True);
+            CompleteStrapAttachSequence(cargo);
+            Assert.That(cargo.Phase, Is.EqualTo(ShowcaseCargoStrapPhase.Tensioned));
+            Assert.That(cargo.IsAttached, Is.True);
+
+            Assert.That(combat.ReceiveDamage(new ShowcaseDamageRequest(
+                ShowcaseCombatTeam.Enemy,
+                source.RunnerId,
+                97001,
+                5,
+                ShowcaseHitReaction.Body,
+                Vector3.back)), Is.True);
+            driver.ApplyLocalHitStop(0.05f);
+
+            Assert.That(cargo.Phase, Is.EqualTo(ShowcaseCargoStrapPhase.Releasing),
+                "An attached Tensioned strap must yield to the accepted hit reaction.");
+            Assert.That(owner.StrapState,
+                Is.EqualTo(PrototypeStrapOwnershipState.ReleaseRequested));
+            Assert.That(combat.AnimationCue, Is.EqualTo(ShowcasePlayerAnimationCue.HitBody));
+            yield return WaitUntilOrFail(
+                () => driver.CurrentBaseStateName == "HitBodyAction",
+                0.75f,
+                "HitBodyAction did not win the cargo/player cue race after hit-stop.");
+        }
+
+        [UnityTest]
+        public IEnumerator PlayerMelee_MovementKeepsFullBodyStrikeWithDirectionalLegs()
+        {
+            yield return LoadScene();
+            DisableRunners();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            ThirdPersonLocomotion locomotion = combat.GetComponent<ThirdPersonLocomotion>();
+            InputSystemLogicalInputAdapter input =
+                combat.GetComponent<InputSystemLogicalInputAdapter>();
+            ShowcaseCharacterAnimationDriver driver =
+                combat.GetComponent<ShowcaseCharacterAnimationDriver>();
+            input.enabled = false;
+
+            Assert.That(combat.TryRequestMelee(null), Is.True);
+            SetInputSnapshot(input, new LogicalInputSnapshot(
+                Vector2.up,
+                Vector2.zero,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false));
+            Vector3 start = combat.transform.position;
+            yield return WaitUntilOrFail(
+                () => driver.MeleeMovingLegsLayerWeight >= 0.99f &&
+                      driver.CurrentBaseStateName == "MeleeJabAction",
+                0.75f,
+                "Melee did not preserve the authored full-body Base strike with moving legs.");
+            yield return new WaitForSeconds(0.1f);
+
+            Assert.That(Vector3.ProjectOnPlane(
+                    combat.transform.position - start,
+                    Vector3.up).magnitude,
+                Is.GreaterThan(0.05f));
+            Assert.That(locomotion.HasMobilityLock(
+                PlayerMobilityLockReason.PlayerAction), Is.False);
+            Assert.That(locomotion.HasJumpLock(
+                PlayerMobilityLockReason.MeleeAction), Is.True);
+            SetInputSnapshot(input, default);
+        }
+
+        [UnityTest]
+        public IEnumerator PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher()
         {
             yield return LoadScene();
 
@@ -73,82 +244,189 @@ namespace BreakNotice.LocomotionCamera.Tests
                 SceneComponents<ShowcasePlayerCombatController>().Single();
             ShowcaseRunnerPressureController pressure =
                 SceneComponents<ShowcaseRunnerPressureController>().Single();
+            PrototypeInteractionController interaction =
+                SceneComponents<PrototypeInteractionController>().Single();
             ShowcaseRunnerAgent target = pressure.Runners.Single(item => !item.IsElite);
             ShowcaseAnimationEventReceiver receiver =
                 combat.GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
                     .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
             ShowcaseBoneCombatRig combatRig =
                 combat.GetComponent<ShowcaseBoneCombatRig>();
+            ShowcaseRunnerPressurePresenter pressurePresenter =
+                SceneComponents<ShowcaseRunnerPressurePresenter>().Single();
+            ShowcaseHitFeedbackController hitFeedback =
+                SceneComponents<ShowcaseHitFeedbackController>().Single();
+            ShowcaseHitRotationImpulseExtension rotationImpulse =
+                SceneComponents<ShowcaseHitRotationImpulseExtension>().Single();
+            ThirdPersonCameraRig cameraRig =
+                SceneComponents<ThirdPersonCameraRig>().Single();
+
+            Assert.That(hitFeedback.PlayCount, Is.Zero);
+            Assert.That(hitFeedback.LightProfile.PositionAmplitude,
+                Is.LessThan(hitFeedback.MediumProfile.PositionAmplitude));
+            Assert.That(hitFeedback.MediumProfile.PositionAmplitude,
+                Is.LessThan(hitFeedback.HeavyProfile.PositionAmplitude));
+            Assert.That(hitFeedback.LightProfile.VictimGlowIntensity,
+                Is.LessThan(hitFeedback.MediumProfile.VictimGlowIntensity));
+            Assert.That(hitFeedback.MediumProfile.VictimGlowIntensity,
+                Is.LessThan(hitFeedback.HeavyProfile.VictimGlowIntensity));
 
             foreach (ShowcaseRunnerAgent runner in pressure.Runners)
             {
                 runner.enabled = false;
             }
+            Assert.That(pressure.PlayerGrabbed, Is.False);
             PlaceRunnerInFront(combat.transform, target);
-            PrototypeInteractionController interaction =
-                combat.GetComponent<PrototypeInteractionController>();
-            InputSystemLogicalInputAdapter input =
-                combat.GetComponent<InputSystemLogicalInputAdapter>();
 
-            Assert.That(combat.TryRequestMelee(target), Is.True);
+            Assert.That(interaction.WeaponSelection,
+                Is.EqualTo(PrototypeWeaponSelection.Fists));
+            float comboStartedAt = Time.time;
+            Assert.That(interaction.ProcessAttackPressed(), Is.True);
             Assert.That(combat.ActiveMeleeStep, Is.EqualTo(1));
+            Assert.That(receiver.ComboBufferOpenInvocationCount, Is.EqualTo(0));
+            Assert.That(combat.CanBufferMelee, Is.True,
+                "Jab must remember the second press from its first active frame.");
+            Assert.That(pressure.TryPlayerShove(), Is.True);
+            Assert.That(combat.HasBufferedMelee, Is.True,
+                "An early second LMB press must queue Cross instead of being discarded.");
+            Assert.That(combat.TryRequestMelee(target), Is.True,
+                "A rapid third press during Jab must reserve the next regular strike.");
             yield return WaitUntilOrFail(
                 () => receiver.ComboBufferOpenInvocationCount >= 1,
                 2f,
                 "Jab combo-buffer AnimationEvent did not fire.");
-            Assert.That(combat.TryRequestMelee(target), Is.True);
-            Assert.That(combat.HasBufferedMelee, Is.True);
             yield return WaitUntilOrFail(
                 () => receiver.AttackWindowOpenInvocationCount >= 1,
                 2f,
                 "Jab attack-window AnimationEvent did not fire.");
+            Assert.That(combatRig.TryGetPrimaryActiveStrikeVolume(
+                out Vector3 activeStrikeCenter,
+                out float activeStrikeRadius), Is.True);
+            Assert.That(activeStrikeRadius, Is.GreaterThan(0f));
+            Assert.That(pressurePresenter.TryGetPlayerStrikeMarker(
+                out Vector3 presentedStrikeCenter,
+                out float presentedStrikeRadius), Is.True);
+            Assert.That(Vector3.Distance(activeStrikeCenter, presentedStrikeCenter),
+                Is.LessThanOrEqualTo(0.001f));
+            Assert.That(presentedStrikeRadius,
+                Is.EqualTo(activeStrikeRadius).Within(0.001f));
+            yield return WaitUntilOrFail(
+                () => combatRig.AcceptedHitCount >= 1,
+                1f,
+                "Jab bones did not overlap the runner hurtbox.");
+            Assert.That(combatRig.HitConfirmationSequence, Is.EqualTo(1));
+            Assert.That(pressurePresenter.IsContactMarkerVisible, Is.True);
+            Assert.That(Vector3.Distance(
+                    pressurePresenter.LastContactMarkerWorldPoint,
+                    combatRig.LastAcceptedHitPoint),
+                Is.LessThanOrEqualTo(0.001f));
+            Assert.That(target.Health.CurrentHealth, Is.EqualTo(85));
+            Assert.That(hitFeedback.PlayCount, Is.EqualTo(1));
+            Assert.That(hitFeedback.LastLevel, Is.EqualTo(ShowcaseHitVfxTier.Light));
+            Assert.That(hitFeedback.GlowPlaybackCount, Is.EqualTo(1));
+            Assert.That(hitFeedback.IsVictimGlowActive(target.transform), Is.True);
+            AssertVictimEmissionVisible(target.transform);
+            Assert.That(hitFeedback.LastImpulseDuration, Is.EqualTo(0.075f).Within(0.001f));
+            yield return null;
+            Assert.That(rotationImpulse.PeakAppliedEulerMagnitude, Is.GreaterThan(0f));
+            Assert.That(rotationImpulse.PeakAppliedPositionMagnitude, Is.GreaterThan(0f));
             yield return WaitUntilOrFail(
                 () => receiver.AttackWindowCloseInvocationCount >= 1,
                 1f,
                 "Jab attack-window close AnimationEvent did not fire.");
-            Assert.That(combatRig.AcceptedHitCount, Is.GreaterThanOrEqualTo(1),
-                $"Jab bones did not overlap the runner hurtbox. " +
-                $"Minimum surface separation: {combatRig.MinimumWindowSurfaceSeparation:F4} m; " +
-                $"bounded approach: {combat.MeleeApproachDistance:F4} m; " +
-                $"root separation: {Vector3.Distance(combat.transform.position, target.transform.position):F4} m.");
-            Assert.That(target.Health.CurrentHealth, Is.EqualTo(85));
             yield return WaitUntilOrFail(
                 () => combat.ActiveMeleeStep == 2,
                 2f,
                 "Jab completion did not start Cross.");
 
             Assert.That(combat.ActiveMeleeStep, Is.EqualTo(2));
+            Assert.That(Time.time - comboStartedAt, Is.LessThanOrEqualTo(0.55f),
+                "Jab-to-Cross transition remained too slow.");
+            Assert.That(receiver.ComboBufferOpenInvocationCount, Is.EqualTo(1));
+            Assert.That(combat.CanBufferMelee, Is.False,
+                "The already-reserved follow-up must reject additional presses.");
+            Assert.That(pressure.TryPlayerShove(), Is.False);
+            Assert.That(combat.HasBufferedMelee, Is.True,
+                "The rapid third press must remain reserved through Cross.");
             yield return WaitUntilOrFail(
                 () => receiver.ComboBufferOpenInvocationCount >= 2,
                 2f,
                 "Cross combo-buffer AnimationEvent did not fire.");
-            Assert.That(combat.TryRequestMelee(target), Is.True);
-            Assert.That(combat.HasBufferedMelee, Is.True);
             yield return WaitUntilOrFail(
                 () => receiver.AttackWindowOpenInvocationCount >= 2,
                 2f,
                 "Cross attack-window AnimationEvent did not fire.");
             yield return WaitUntilOrFail(
-                () => combatRig.AcceptedHitCount >= 2,
+                () => combatRig.AcceptedHitCount >= 2 ||
+                      combat.ActiveMeleeStep != 2,
                 1f,
                 "Cross bones did not overlap the runner hurtbox.");
+            Assert.That(combatRig.AcceptedHitCount, Is.EqualTo(2),
+                $"Cross missed before returning to Jab. Minimum surface " +
+                $"separation: {combatRig.MinimumWindowSurfaceSeparation:F4} m; " +
+                $"rejectedDamage={target.Health.RejectedDamageCount}.");
             Assert.That(target.Health.CurrentHealth, Is.EqualTo(65));
+            Assert.That(hitFeedback.PlayCount, Is.EqualTo(2));
+            Assert.That(hitFeedback.LastLevel, Is.EqualTo(ShowcaseHitVfxTier.Medium));
             yield return WaitUntilOrFail(
-                () => combat.ActiveMeleeStep == 3,
+                () => combat.ActiveMeleeStep == 1,
                 2f,
-                "Cross completion did not start Hook.");
-
-            Assert.That(combat.ActiveMeleeStep, Is.EqualTo(3));
+                "A non-lethal Cross must loop back to Jab instead of starting Hook.");
+            Assert.That(target.Health.CurrentHealth, Is.EqualTo(65));
+            Assert.That(combat.TryRequestMelee(target), Is.True);
+            Assert.That(combat.TryRequestMelee(target), Is.True,
+                "Rapid input must reserve Cross and the following finisher decision.");
             yield return WaitUntilOrFail(
                 () => receiver.AttackWindowOpenInvocationCount >= 3,
                 2f,
-                "Hook attack-window AnimationEvent did not fire.");
+                "Second Jab attack-window AnimationEvent did not fire.");
             yield return WaitUntilOrFail(
                 () => combatRig.AcceptedHitCount >= 3,
                 1f,
-                "Hook bones did not overlap the runner hurtbox.");
+                "Second Jab bones did not overlap the runner hurtbox.");
+            Assert.That(target.Health.CurrentHealth, Is.EqualTo(50));
+            Assert.That(hitFeedback.LastLevel, Is.EqualTo(ShowcaseHitVfxTier.Light));
+
+            yield return WaitUntilOrFail(
+                () => combat.ActiveMeleeStep == 2,
+                2f,
+                "Second Jab completion did not start Cross.");
+            yield return WaitUntilOrFail(
+                () => receiver.AttackWindowOpenInvocationCount >= 4,
+                2f,
+                "Second Cross attack-window AnimationEvent did not fire.");
+            yield return WaitUntilOrFail(
+                () => combatRig.AcceptedHitCount >= 4,
+                1f,
+                "Second Cross bones did not overlap the runner hurtbox.");
             Assert.That(target.Health.CurrentHealth, Is.EqualTo(30));
-            Assert.That(target.State, Is.EqualTo(ShowcaseRunnerState.KnockedDown));
+            Assert.That(hitFeedback.LastLevel, Is.EqualTo(ShowcaseHitVfxTier.Medium));
+
+            yield return WaitUntilOrFail(
+                () => combat.ActiveMeleeStep == 3,
+                2f,
+                "Cross at lethal Hook health did not start the finisher.");
+            yield return WaitUntilOrFail(
+                () => receiver.AttackWindowOpenInvocationCount >= 5,
+                2f,
+                "Finisher Hook attack-window AnimationEvent did not fire.");
+            yield return WaitUntilOrFail(
+                () => combatRig.AcceptedHitCount >= 5,
+                1f,
+                "Finisher Hook bones did not overlap the runner hurtbox.");
+            Assert.That(target.Health.CurrentHealth, Is.Zero);
+            Assert.That(target.State, Is.EqualTo(ShowcaseRunnerState.Dead));
+            Assert.That(hitFeedback.PlayCount, Is.EqualTo(5));
+            Assert.That(hitFeedback.LastLevel, Is.EqualTo(ShowcaseHitVfxTier.Heavy));
+            Assert.That(Time.time - comboStartedAt, Is.LessThanOrEqualTo(3.2f),
+                "The health-gated five-hit finisher chain was not responsive.");
+            yield return WaitUntilOrFail(
+                () => !hitFeedback.IsShakeActive &&
+                      hitFeedback.ActiveVictimGlowCount == 0,
+                0.35f,
+                "Rapid hit feedback left camera impulse or victim glow residue.");
+            Assert.That(cameraRig.PostBrainTransformWriteCount, Is.Zero,
+                "Hit feedback must remain inside the Cinemachine pipeline.");
         }
 
         [UnityTest]
@@ -174,6 +452,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                 combat.GetComponent<BreakNotice.Presentation.ShowcaseCharacterAnimationDriver>()
                     .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
             ShowcaseBoneCombatRig rig = combat.GetComponent<ShowcaseBoneCombatRig>();
+            ShowcaseHitFeedbackController hitFeedback =
+                SceneComponents<ShowcaseHitFeedbackController>().Single();
             Assert.That(combat.TryRequestMelee(null), Is.True);
             yield return WaitUntilOrFail(
                 () => receiver.AttackWindowOpenInvocationCount == 1,
@@ -187,6 +467,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(target.Health.CurrentHealth, Is.EqualTo(100));
             Assert.That(rig.ContactCount, Is.Zero);
             Assert.That(rig.AcceptedHitCount, Is.Zero);
+            Assert.That(hitFeedback.PlayCount, Is.Zero);
+            Assert.That(hitFeedback.GlowPlaybackCount, Is.Zero);
+            Assert.That(hitFeedback.ActiveVictimGlowCount, Is.Zero);
+            Assert.That(hitFeedback.IsShakeActive, Is.False);
         }
 
         [UnityTest]
@@ -199,12 +483,15 @@ namespace BreakNotice.LocomotionCamera.Tests
             ShowcaseRunnerPressureController pressure =
                 SceneComponents<ShowcaseRunnerPressureController>().Single();
             ShowcaseRunnerAgent runner = pressure.Runners.First(item => !item.IsElite);
+            ShowcaseHitFeedbackController hitFeedback =
+                SceneComponents<ShowcaseHitFeedbackController>().Single();
             foreach (ShowcaseRunnerAgent candidate in pressure.Runners)
             {
-                candidate.enabled = false;
+                candidate.enabled = candidate == runner;
             }
 
-            Vector3 position = player.transform.position + player.transform.forward * 0.81f;
+            Vector3 position = player.transform.position +
+                player.transform.forward * runner.AttackStandoffDistance;
             runner.transform.position = position;
             runner.transform.rotation = Quaternion.LookRotation(
                 player.transform.position - position,
@@ -221,6 +508,13 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(pressure.TryAcquireAttackToken(runner), Is.True);
             runner.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
             int startingHealth = player.Health.CurrentHealth;
+            Assert.That(runner.AnimationCue, Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing));
+            Assert.That(
+                runner.AnimationCue,
+                Is.Not.EqualTo(ShowcaseRunnerAnimationCue.EliteJumpAttack));
+            Assert.That(rig.IsAttackWindowOpen, Is.False);
+            Assert.That(rig.AcceptedHitCount, Is.Zero);
+            Assert.That(player.Health.CurrentHealth, Is.EqualTo(startingHealth));
             yield return WaitUntilOrFail(
                 () => receiver.AttackWindowOpenInvocationCount == 1,
                 3f,
@@ -237,6 +531,320 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             Assert.That(player.Health.CurrentHealth, Is.LessThan(startingHealth));
             Assert.That(rig.AcceptedHitCount, Is.EqualTo(1));
+            Assert.That(hitFeedback.PlayCount, Is.EqualTo(1));
+            Assert.That(hitFeedback.LastLevel, Is.EqualTo(ShowcaseHitVfxTier.Light));
+            Assert.That(hitFeedback.GlowPlaybackCount, Is.EqualTo(1));
+            Assert.That(hitFeedback.IsVictimGlowActive(player.transform), Is.True);
+            AssertVictimEmissionVisible(player.transform);
+        }
+
+        [UnityTest]
+        public IEnumerator RunnerApproach_ClosesToNaturalBoxingContactDistanceBeforeAttack()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController player =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            ShowcaseRunnerPressureController pressure =
+                SceneComponents<ShowcaseRunnerPressureController>().Single();
+            ShowcaseRunnerAgent runner = pressure.Runners.First(item => !item.IsElite);
+            ShowcaseCharacterAnimationDriver driver =
+                runner.GetComponent<ShowcaseCharacterAnimationDriver>();
+            foreach (ShowcaseRunnerAgent candidate in pressure.Runners)
+            {
+                candidate.enabled = candidate == runner;
+            }
+
+            Vector3 position = player.transform.position +
+                player.transform.forward * 0.9f;
+            Quaternion rotation = Quaternion.LookRotation(
+                player.transform.position - position,
+                Vector3.up);
+            Rigidbody body = runner.GetComponent<Rigidbody>();
+            body.position = position;
+            body.rotation = rotation;
+            if (!body.isKinematic)
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+            }
+            runner.transform.SetPositionAndRotation(position, rotation);
+            Physics.SyncTransforms();
+
+            int startingHealth = player.Health.CurrentHealth;
+            float approachDeadline = Time.realtimeSinceStartup + 4f;
+            while (runner.AnimationCue != ShowcaseRunnerAnimationCue.Boxing &&
+                   Time.realtimeSinceStartup < approachDeadline)
+            {
+                yield return null;
+            }
+            float distanceAtCommit = Vector3.ProjectOnPlane(
+                runner.transform.position - player.transform.position,
+                Vector3.up).magnitude;
+            Assert.That(
+                runner.AnimationCue,
+                Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing),
+                $"Runner never completed its approach: state={runner.State}, " +
+                $"distance={distanceAtCommit:F3}, pressure={pressure.CanSimulatePressure()}, " +
+                $"token={pressure.AttackTokenOwner?.RunnerId ?? "none"}.");
+
+            yield return WaitUntilOrFail(
+                () => driver.CurrentBaseStateName == "AttackBoxingAction",
+                0.5f,
+                "The runner dropped through Idle instead of beginning the prepared Boxing wind-up.");
+
+            float planarDistance = Vector3.ProjectOnPlane(
+                runner.transform.position - player.transform.position,
+                Vector3.up).magnitude;
+            Assert.That(
+                planarDistance,
+                Is.LessThanOrEqualTo(runner.AttackStandoffDistance + 0.06f),
+                "Runner telegraphed before reaching natural limb-contact distance.");
+            Assert.That(
+                planarDistance,
+                Is.GreaterThanOrEqualTo(0.795f),
+                "Runner penetrated the player capsule to manufacture attack contact.");
+
+            yield return WaitUntilOrFail(
+                () => player.Health.CurrentHealth == startingHealth - 20,
+                2f,
+                "Natural Boxing did not damage the player after the autonomous approach.");
+        }
+
+        [UnityTest]
+        public IEnumerator RunnerAttackRecovery_ChainsIntoNextPunchWithoutIdleFrame()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController player =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            ShowcaseRunnerPressureController pressure =
+                SceneComponents<ShowcaseRunnerPressureController>().Single();
+            ShowcaseRunnerAgent runner = pressure.Runners.First(item => !item.IsElite);
+            foreach (ShowcaseRunnerAgent candidate in pressure.Runners)
+            {
+                candidate.enabled = candidate == runner;
+            }
+
+            PositionRunnerAtAttackStandoff(player.transform, runner);
+            ShowcaseCharacterAnimationDriver driver =
+                runner.GetComponent<ShowcaseCharacterAnimationDriver>();
+            ShowcaseAnimationEventReceiver receiver =
+                driver.Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+            Assert.That(pressure.TryAcquireAttackToken(runner), Is.True);
+            runner.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
+            Assert.That(runner.AnimationCue,
+                Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing));
+            uint firstRevision = runner.AnimationCueRevision;
+
+            yield return WaitUntilOrFail(
+                () => receiver.AttackWindowCloseInvocationCount == 1,
+                3f,
+                "The first punch window never closed.");
+
+            bool sawIdle = false;
+            float chainDeadline = Time.realtimeSinceStartup + 2f;
+            while (runner.AnimationCueRevision == firstRevision &&
+                   Time.realtimeSinceStartup < chainDeadline)
+            {
+                sawIdle |= driver.CurrentBaseStateName == "Idle";
+                yield return null;
+            }
+
+            Assert.That(runner.AnimationCueRevision, Is.GreaterThan(firstRevision),
+                "The next authored punch did not chain from recovery.");
+            Assert.That(sawIdle, Is.False,
+                "Attack recovery dropped through an arms-down Idle frame.");
+            Assert.That(runner.AnimationCue,
+                Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing),
+                "The normal cadence must begin with two or three punches before a kick.");
+            Assert.That(driver.CurrentBaseStateName,
+                Is.EqualTo("AttackBoxingAction"));
+        }
+
+        [UnityTest]
+        public IEnumerator ApprovedEnemyAttackMatrix_AllTenUnarmedCuesUseNaturalBoneWindowsOnce()
+        {
+            RunnerAttackMatrixCase[] cases =
+            {
+                new(
+                    "Normal Kicking",
+                    false,
+                    true,
+                    0,
+                    ShowcaseRunnerAnimationCue.Kicking,
+                    30,
+                    HumanBodyBones.LeftFoot),
+                new(
+                    "Normal Boxing",
+                    false,
+                    false,
+                    0,
+                    ShowcaseRunnerAnimationCue.Boxing,
+                    20,
+                    HumanBodyBones.LeftHand),
+                new(
+                    "Normal Kicking2",
+                    false,
+                    true,
+                    1,
+                    ShowcaseRunnerAnimationCue.Kicking2,
+                    30,
+                    HumanBodyBones.RightFoot),
+                new(
+                    "Normal Knee Strike",
+                    false,
+                    true,
+                    2,
+                    ShowcaseRunnerAnimationCue.Boxing2,
+                    30,
+                    HumanBodyBones.RightFoot),
+                new(
+                    "Elite Kicking",
+                    true,
+                    true,
+                    0,
+                    ShowcaseRunnerAnimationCue.Kicking,
+                    30,
+                    HumanBodyBones.LeftFoot),
+                new(
+                    "Elite Boxing",
+                    true,
+                    false,
+                    0,
+                    ShowcaseRunnerAnimationCue.Boxing,
+                    20,
+                    HumanBodyBones.LeftHand),
+                new(
+                    "Elite Kicking2",
+                    true,
+                    true,
+                    1,
+                    ShowcaseRunnerAnimationCue.Kicking2,
+                    30,
+                    HumanBodyBones.RightFoot),
+                new(
+                    "Elite Knee Strike",
+                    true,
+                    true,
+                    2,
+                    ShowcaseRunnerAnimationCue.Boxing2,
+                    30,
+                    HumanBodyBones.RightFoot),
+                new(
+                    "Elite Mutant Punch",
+                    true,
+                    false,
+                    4,
+                    ShowcaseRunnerAnimationCue.EliteMutantPunch,
+                    25,
+                    HumanBodyBones.RightHand),
+                new(
+                    "Elite Mutant Swiping",
+                    true,
+                    false,
+                    6,
+                    ShowcaseRunnerAnimationCue.EliteMutantSwiping,
+                    25,
+                    HumanBodyBones.RightHand,
+                    HumanBodyBones.LeftHand)
+            };
+
+            foreach (RunnerAttackMatrixCase attackCase in cases)
+            {
+                yield return ReloadSceneForAttackMatrixCase();
+
+                ShowcasePlayerCombatController player =
+                    SceneComponents<ShowcasePlayerCombatController>().Single();
+                ShowcaseRunnerPressureController pressure =
+                    SceneComponents<ShowcaseRunnerPressureController>().Single();
+                ShowcaseRunnerAgent runner = pressure.Runners
+                    .Single(item => item.IsElite == attackCase.Elite);
+                foreach (ShowcaseRunnerAgent candidate in pressure.Runners)
+                {
+                    candidate.enabled = candidate == runner;
+                }
+
+                SeedRunnerAttackSelector(runner, attackCase);
+                PositionRunnerAtAttackStandoff(player.transform, runner);
+
+                ShowcaseAnimationEventReceiver receiver = runner
+                    .GetComponent<ShowcaseCharacterAnimationDriver>()
+                    .Animator.GetComponent<ShowcaseAnimationEventReceiver>();
+                ShowcaseBoneCombatRig rig = runner.GetComponent<ShowcaseBoneCombatRig>();
+                int startingHealth = player.Health.CurrentHealth;
+                int startingDamageCount = player.Health.AcceptedDamageCount;
+
+                Assert.That(pressure.TryAcquireAttackToken(runner), Is.True, attackCase.Name);
+                runner.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
+                Assert.That(runner.AnimationCue,
+                    Is.EqualTo(attackCase.ExpectedCue), attackCase.Name);
+                Assert.That(rig.IsAttackWindowOpen, Is.False, attackCase.Name);
+                Assert.That(rig.AcceptedHitCount, Is.Zero, attackCase.Name);
+                Assert.That(player.Health.CurrentHealth,
+                    Is.EqualTo(startingHealth), attackCase.Name);
+                Assert.That(player.Health.AcceptedDamageCount,
+                    Is.EqualTo(startingDamageCount), attackCase.Name);
+
+                float centerDistance = Vector3.ProjectOnPlane(
+                    runner.transform.position - player.transform.position,
+                    Vector3.up).magnitude;
+                Assert.That(centerDistance, Is.GreaterThanOrEqualTo(0.795f),
+                    $"{attackCase.Name}: runner penetrated the player capsule before contact.");
+
+                yield return WaitUntilOrFail(
+                    () => receiver.AttackWindowOpenInvocationCount == 1 &&
+                          rig.IsAttackWindowOpen,
+                    3f,
+                    $"{attackCase.Name}: natural attack-window event did not open.");
+                CollectionAssert.AreEqual(
+                    attackCase.ExpectedStrikeBones,
+                    ResolveActiveStrikeBones(rig),
+                    $"{attackCase.Name}: wrong humanoid strike bone selection.");
+
+                yield return WaitUntilOrFail(
+                    () => rig.AcceptedHitCount == 1,
+                    1f,
+                    $"{attackCase.Name}: approved strike bones did not overlap player hurtboxes. " +
+                    $"Minimum surface separation: {rig.MinimumWindowSurfaceSeparation:F4} m.");
+                Assert.That(rig.ContactCount, Is.EqualTo(1), attackCase.Name);
+                Assert.That(player.Health.CurrentHealth,
+                    Is.EqualTo(startingHealth - attackCase.ExpectedDamage),
+                    attackCase.Name);
+                Assert.That(player.Health.AcceptedDamageCount,
+                    Is.EqualTo(startingDamageCount + 1), attackCase.Name);
+                if (attackCase.KickSlot)
+                {
+                    Assert.That(new[]
+                    {
+                        ShowcasePlayerAnimationCue.KnockdownBack,
+                        ShowcasePlayerAnimationCue.KnockdownFront
+                    }, Does.Contain(player.AnimationCue),
+                        $"{attackCase.Name}: kick-class attacks must remain the only knockdowns.");
+                }
+                else
+                {
+                    Assert.That(player.AnimationCue,
+                        Is.EqualTo(ShowcasePlayerAnimationCue.HitBody),
+                        $"{attackCase.Name}: punch-class attacks must not knock the player down.");
+                }
+
+                yield return WaitUntilOrFail(
+                    () => receiver.AttackWindowCloseInvocationCount == 1 &&
+                          !rig.IsAttackWindowOpen,
+                    3f,
+                    $"{attackCase.Name}: natural attack-window close event did not fire.");
+                Assert.That(pressure.AttackTokenOwner, Is.Null,
+                    $"{attackCase.Name}: the next runner was blocked through the harmless recovery tail.");
+                int healthAtClose = player.Health.CurrentHealth;
+                yield return new WaitForSeconds(0.2f);
+                Assert.That(rig.AcceptedHitCount, Is.EqualTo(1),
+                    $"{attackCase.Name}: duplicate hit committed after window close.");
+                Assert.That(player.Health.CurrentHealth, Is.EqualTo(healthAtClose),
+                    $"{attackCase.Name}: duplicate damage committed after window close.");
+                Assert.That(player.Health.AcceptedDamageCount,
+                    Is.EqualTo(startingDamageCount + 1), attackCase.Name);
+            }
         }
 
         [UnityTest]
@@ -695,8 +1303,13 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             Rigidbody body = target.GetComponent<Rigidbody>();
             Assert.That(body, Is.Not.Null);
+            Collider binderCollider = target.GetComponent<Collider>();
+            CharacterController playerCollider = combat.GetComponent<CharacterController>();
+            Assert.That(binderCollider, Is.Not.Null);
+            Assert.That(playerCollider, Is.Not.Null);
             bool originalIsKinematic = body.isKinematic;
             bool originalUseGravity = body.useGravity;
+            RigidbodyConstraints originalConstraints = body.constraints;
             Vector3 inboundLinearVelocity = body.linearVelocity;
             Vector3 inboundAngularVelocity = body.angularVelocity;
             Vector3 inboundPlanarVelocity = Vector3.ProjectOnPlane(
@@ -726,6 +1339,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(body.useGravity, Is.False);
             Assert.That(body.linearVelocity, Is.EqualTo(Vector3.zero));
             Assert.That(body.angularVelocity, Is.EqualTo(Vector3.zero));
+            Assert.That(body.constraints, Is.EqualTo(originalConstraints));
+            Assert.That(Physics.GetIgnoreCollision(playerCollider, binderCollider), Is.True);
 
             yield return WaitUntilOrFail(
                 () => gripRig.Phase == ShowcasePlayerPropGripPhase.Throw &&
@@ -753,6 +1368,12 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(body.useGravity, Is.EqualTo(originalUseGravity));
             Assert.That(body.linearVelocity, Is.EqualTo(Vector3.zero));
             Assert.That(body.angularVelocity, Is.EqualTo(Vector3.zero));
+            Assert.That(body.constraints,
+                Is.EqualTo(originalConstraints |
+                    RigidbodyConstraints.FreezePositionX |
+                    RigidbodyConstraints.FreezePositionZ |
+                    RigidbodyConstraints.FreezeRotation));
+            Assert.That(Physics.GetIgnoreCollision(playerCollider, binderCollider), Is.True);
             Assert.That(lifecycle.ThrowOriginCount, Is.EqualTo(throwOriginBefore));
             Assert.That(lifecycle.LastPhysicalReleaseSnapshot.IsValid, Is.False);
             Assert.That(owner.HandState, Is.EqualTo(PrototypeHandOwnershipState.Free));
@@ -780,6 +1401,19 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Vector3.up).magnitude,
                 Is.LessThanOrEqualTo(0.01f),
                 "The cancelled Binder must not resume its old inbound planar trajectory.");
+            Assert.That(body.constraints,
+                Is.EqualTo(originalConstraints |
+                    RigidbodyConstraints.FreezePositionX |
+                    RigidbodyConstraints.FreezePositionZ |
+                    RigidbodyConstraints.FreezeRotation));
+
+            lifecycle.enabled = false;
+            Physics.SyncTransforms();
+            Assert.That(target.gameObject.activeSelf, Is.True,
+                "A queued-throw cancellation with a valid fallback pose must not " +
+                "quarantine the Binder.");
+            Assert.That(body.constraints, Is.EqualTo(originalConstraints));
+            Assert.That(Physics.GetIgnoreCollision(playerCollider, binderCollider), Is.False);
         }
 
         [UnityTest]
@@ -883,6 +1517,17 @@ namespace BreakNotice.LocomotionCamera.Tests
 
         private IEnumerator LoadScene()
         {
+            Scene existing = SceneManager.GetSceneByPath(ScenePath);
+            if (existing.IsValid() && existing.isLoaded)
+            {
+                AsyncOperation unloadExisting = SceneManager.UnloadSceneAsync(existing);
+                if (unloadExisting != null)
+                {
+                    yield return unloadExisting;
+                }
+                yield return null;
+            }
+
             AsyncOperation load = EditorSceneManager.LoadSceneAsyncInPlayMode(
                 ScenePath,
                 new LoadSceneParameters(LoadSceneMode.Additive));
@@ -891,6 +1536,126 @@ namespace BreakNotice.LocomotionCamera.Tests
             loadedScene = SceneManager.GetSceneByPath(ScenePath);
             Assert.That(loadedScene.IsValid() && loadedScene.isLoaded, Is.True);
             yield return null;
+        }
+
+        private IEnumerator ReloadSceneForAttackMatrixCase()
+        {
+            if (loadedScene.IsValid() && loadedScene.isLoaded)
+            {
+                AsyncOperation unload = SceneManager.UnloadSceneAsync(loadedScene);
+                if (unload != null)
+                {
+                    yield return unload;
+                }
+                loadedScene = default;
+                yield return null;
+            }
+
+            yield return LoadScene();
+        }
+
+        private static void SeedRunnerAttackSelector(
+            ShowcaseRunnerAgent runner,
+            RunnerAttackMatrixCase attackCase)
+        {
+            int modulus = attackCase.KickSlot ? 3 : 8;
+            SetPrivateIntField(runner, "punchesUntilKick",
+                attackCase.KickSlot ? 0 : 1);
+            SetPrivateUIntField(
+                runner,
+                "attackRandomState",
+                FindRandomStateForSlot(attackCase.RandomSlot, modulus));
+        }
+
+        private static void SetPrivateIntField(
+            ShowcaseRunnerAgent runner,
+            string fieldName,
+            int value)
+        {
+            FieldInfo field = typeof(ShowcaseRunnerAgent).GetField(
+                fieldName,
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, $"Missing runner selector field: {fieldName}.");
+            field.SetValue(runner, value);
+        }
+
+        private static void SetPrivateUIntField(
+            ShowcaseRunnerAgent runner,
+            string fieldName,
+            uint value)
+        {
+            FieldInfo field = typeof(ShowcaseRunnerAgent).GetField(
+                fieldName,
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, $"Missing runner selector field: {fieldName}.");
+            field.SetValue(runner, value);
+        }
+
+        private static uint FindRandomStateForSlot(int slot, int modulus)
+        {
+            for (uint seed = 1; seed < 100000; seed++)
+            {
+                uint state = seed;
+                state ^= state << 13;
+                state ^= state >> 17;
+                state ^= state << 5;
+                if (state % (uint)modulus == (uint)slot)
+                {
+                    return seed;
+                }
+            }
+
+            Assert.Fail($"No deterministic selector seed found for slot {slot}/{modulus}.");
+            return 1;
+        }
+
+        private static HumanBodyBones[] ResolveActiveStrikeBones(
+            ShowcaseBoneCombatRig rig)
+        {
+            const BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            FieldInfo countField = typeof(ShowcaseBoneCombatRig).GetField(
+                "activeStrikeCount",
+                Flags);
+            FieldInfo indicesField = typeof(ShowcaseBoneCombatRig).GetField(
+                "activeStrikeIndices",
+                Flags);
+            FieldInfo strikesField = typeof(ShowcaseBoneCombatRig).GetField(
+                "strikes",
+                Flags);
+            Assert.That(countField, Is.Not.Null);
+            Assert.That(indicesField, Is.Not.Null);
+            Assert.That(strikesField, Is.Not.Null);
+
+            int count = (int)countField.GetValue(rig);
+            int[] indices = (int[])indicesField.GetValue(rig);
+            Array strikes = (Array)strikesField.GetValue(rig);
+            HumanBodyBones[] bones = new HumanBodyBones[count];
+            for (int index = 0; index < count; index++)
+            {
+                object strike = strikes.GetValue(indices[index]);
+                PropertyInfo boneProperty = strike.GetType().GetProperty(
+                    "Bone",
+                    BindingFlags.Instance | BindingFlags.Public);
+                Assert.That(boneProperty, Is.Not.Null);
+                bones[index] = (HumanBodyBones)boneProperty.GetValue(strike);
+            }
+            return bones;
+        }
+
+        private static void PositionRunnerAtAttackStandoff(
+            Transform player,
+            ShowcaseRunnerAgent runner)
+        {
+            Vector3 position = player.position +
+                player.forward * runner.AttackStandoffDistance;
+            Quaternion rotation = Quaternion.LookRotation(
+                player.position - position,
+                Vector3.up);
+            Rigidbody body = runner.GetComponent<Rigidbody>();
+            body.position = position;
+            body.rotation = rotation;
+            runner.transform.SetPositionAndRotation(position, rotation);
+            Physics.SyncTransforms();
         }
 
         private static void PlaceRunnerInFront(
@@ -902,6 +1667,40 @@ namespace BreakNotice.LocomotionCamera.Tests
             body.position = position;
             runner.transform.position = position;
             Physics.SyncTransforms();
+        }
+
+        private static void AssertVictimEmissionVisible(Transform victim)
+        {
+            Transform visual = victim.Find("RUNTIME_DESIGNER_A_VISUAL");
+            Assert.That(visual, Is.Not.Null);
+            Renderer[] renderers = visual.GetComponentsInChildren<Renderer>(true);
+            Assert.That(renderers, Is.Not.Empty);
+            int emissionColorId = Shader.PropertyToID("_EmissionColor");
+            int emissionMapId = Shader.PropertyToID("_EmissionMap");
+            bool visibleEmissionFound = false;
+            var block = new MaterialPropertyBlock();
+            var diagnostics = new System.Collections.Generic.List<string>();
+            foreach (Renderer renderer in renderers)
+            {
+                Material[] materials = renderer.sharedMaterials;
+                for (int materialIndex = 0;
+                     materialIndex < materials.Length;
+                     materialIndex++)
+                {
+                    block.Clear();
+                    renderer.GetPropertyBlock(block, materialIndex);
+                    Color emission = block.GetColor(emissionColorId);
+                    Texture emissionMap = block.GetTexture(emissionMapId);
+                    visibleEmissionFound |= emission.maxColorComponent >= 1.5f &&
+                        emissionMap == Texture2D.whiteTexture;
+                    diagnostics.Add(
+                        $"{renderer.name}[{materialIndex}] emission={emission} " +
+                        $"map={(emissionMap != null ? emissionMap.name : "null")}");
+                }
+            }
+            Assert.That(visibleEmissionFound, Is.True,
+                "Accepted victim did not receive the visible full-body emission pulse. " +
+                string.Join("; ", diagnostics));
         }
 
         private static void SubmitMeleeInput(
@@ -920,6 +1719,24 @@ namespace BreakNotice.LocomotionCamera.Tests
                 throwHeld: true));
             interaction.SendMessage("Update", SendMessageOptions.DontRequireReceiver);
             SetInputSnapshot(input, default);
+        }
+
+        private static void CompleteStrapAttachSequence(
+            ShowcaseCargoStrapController cargo)
+        {
+            uint prepareRevision = cargo.AnimationCueRevision;
+            Assert.That(cargo.NotifyAnimationStateEntered(prepareRevision), Is.True);
+            Assert.That(cargo.CompleteAnimationStrapAction(prepareRevision), Is.True);
+
+            uint throwRevision = cargo.AnimationCueRevision;
+            Assert.That(cargo.NotifyAnimationStateEntered(throwRevision), Is.True);
+            Assert.That(cargo.CommitAnimationStrapThrowRelease(throwRevision), Is.True);
+            Assert.That(cargo.CommitAnimationStrapAttachContact(throwRevision), Is.True);
+            Assert.That(cargo.CompleteAnimationStrapAction(throwRevision), Is.True);
+
+            uint pullRevision = cargo.AnimationCueRevision;
+            Assert.That(cargo.NotifyAnimationStateEntered(pullRevision), Is.True);
+            Assert.That(cargo.CommitAnimationStrapPullComplete(pullRevision), Is.True);
         }
 
         private IEnumerator BeginReleasedBinderRelay(

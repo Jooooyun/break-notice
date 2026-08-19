@@ -444,6 +444,8 @@ namespace BreakNotice.Gameplay.Encounter
                     return;
                 }
 
+                Target.RestorePlayerThrowUseBaseline();
+
                 if (Body == null)
                 {
                     Transform.Restore();
@@ -487,7 +489,13 @@ namespace BreakNotice.Gameplay.Encounter
 
             public bool HasDifference()
             {
-                if (Target == null || Transform.HasDifference())
+                if (Target == null ||
+                    Target.CommittedPlayerThrowUses != 0 ||
+                    Target.RemainingPlayerThrowUses != Target.MaximumPlayerThrowUses ||
+                    Target.IsPlayerThrowExhausted ||
+                    Target.IsThrowDepletionPending ||
+                    Target.LastCommittedPlayerThrowSequence != 0 ||
+                    Transform.HasDifference())
                 {
                     return true;
                 }

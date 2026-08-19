@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:50Z" duration="10.9819686">
+  <test-suite type="TestSuite" id="1182" name="Game" fullname="Game" runstate="Runnable" testcasecount="152" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:50Z" duration="10.981969" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1175" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="152" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:50Z" duration="10.967770" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="15052" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1176" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="152" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:50Z" duration="10.965923" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1177" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="152" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:50Z" duration="10.964643" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1178" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="152" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:50Z" duration="10.963217" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1042" name="ContestChr00DirectionalAnimationPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:41Z" duration="2.272233" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1043" name="V007ActualGamepadAim_SelectsDirectionalBaseMotionAndMaskedAimPose" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests.V007ActualGamepadAim_SelectsDirectionalBaseMotionAndMaskedAimPose" methodname="V007ActualGamepadAim_SelectsDirectionalBaseMotionAndMaskedAimPose" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00DirectionalAnimationPlayModeTests" runstate="Runnable" seed="1771670557" result="Passed" start-time="2026-08-18 03:07:39Z" end-time="2026-08-18 03:07:41Z" duration="2.254032" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1046" name="ContestChr00ObjectAnimationSyncPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00ObjectAnimationSyncPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00ObjectAnimationSyncPlayModeTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-18 03:07:41Z" end-time="2026-08-18 03:07:48Z" duration="7.030869" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1047" name="LightPickupCarryAndChargedThrow_UseNaturalEventFrames" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00ObjectAnimationSyncPlayModeTests.LightPickupCarryAndChargedThrow_UseNaturalEventFrames" methodname="LightPickupCarryAndChargedThrow_UseNaturalEventFrames" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00ObjectAnimationSyncPlayModeTests" runstate="Runnable" seed="1602596198" result="Passed" start-time="2026-08-18 03:07:41Z" end-time="2026-08-18 03:07:44Z" duration="3.353891" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1048" name="MediumPickupCarryAndChargedThrow_UseNaturalEventFrames" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr00ObjectAnimationSyncPlayModeTests.MediumPickupCarryAndChargedThrow_UseNaturalEventFrames" methodname="MediumPickupCarryAndChargedThrow_UseNaturalEventFrames" classname="BreakNotice.LocomotionCamera.Tests.ContestChr00ObjectAnimationSyncPlayModeTests" runstate="Runnable" seed="818848169" result="Passed" start-time="2026-08-18 03:07:44Z" end-time="2026-08-18 03:07:48Z" duration="3.655419" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[CHR00 medium carry finalized-pose trace:
+appliedFrame=8342 phase=Carry leftError=0.001118 rightError=0.010315 ikWeight=1.0000 leftHand=(-0.11996, 1.41946, -11.57838) rightHand=(0.12182, 1.42097, -11.58729) leftUpperArm=(-0.10484, 1.52051, -12.03342) rightUpperArm=(0.20378, 1.49959, -12.03743) desiredLeftGrip=(-0.12000, 1.41922, -11.57729) desiredRightGrip=(0.12000, 1.41922, -11.57729) chairRoot=(0.00054, 1.03180, -11.18246) playerRoot=(0.00000, 1.08000, -12.00000) stableAnchor[world=(0.00000, 2.13000, -10.85000) local=(0.00000, 1.05000, 1.15000)] desired[pos=(0.00000, 1.03000, -11.18000) rot=(0.000, 0.000, 0.000) playerLocal=(0.00000, -0.05000, 0.82000)]
+appliedFrame=8343 phase=Carry leftError=0.000707 rightError=0.009617 ikWeight=1.0000 leftHand=(-0.11998, 1.41937, -11.57798) rightHand=(0.12166, 1.42085, -11.58662) leftUpperArm=(-0.10615, 1.51934, -12.03330) rightUpperArm=(0.20190, 1.49940, -12.03709) desiredLeftGrip=(-0.12000, 1.41922, -11.57729) desiredRightGrip=(0.12000, 1.41922, -11.57729) chairRoot=(0.00038, 1.03126, -11.18173) playerRoot=(0.00000, 1.08000, -12.00000) stableAnchor[world=(0.00000, 2.13000, -10.85000) local=(0.00000, 1.05000, 1.15000)] desired[pos=(0.00000, 1.03000, -11.18000) rot=(0.000, 0.000, 0.000) playerLocal=(0.00000, -0.05000, 0.82000)]
+appliedFrame=8344 phase=Carry leftError=0.000517 rightError=0.009084 ikWeight=1.0000 leftHand=(-0.11999, 1.41933, -11.57780) rightHand=(0.12155, 1.42075, -11.58611) leftUpperArm=(-0.10718, 1.51901, -12.03320) rightUpperArm=(0.20058, 1.49916, -12.03681) desiredLeftGrip=(-0.12000, 1.41922, -11.57729) desiredRightGrip=(0.12000, 1.41922, -11.57729) chairRoot=(0.00033, 1.03110, -11.18151) playerRoot=(0.00000, 1.08000, -12.00000) stableAnchor[world=(0.00000, 2.13000, -10.85000) local=(0.00000, 1.05000, 1.15000)] desired[pos=(0.00000, 1.03000, -11.18000) rot=(0.000, 0.000, 0.000) playerLocal=(0.00000, -0.05000, 0.82000)]
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1098" name="ContestShowcaseCombatPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-08-18 03:07:48Z" end-time="2026-08-18 03:07:50Z" duration="1.640237" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1100" name="PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows" methodname="PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="984406987" result="Passed" start-time="2026-08-18 03:07:48Z" end-time="2026-08-18 03:07:50Z" duration="1.630083" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -134,10 +134,15 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             ConfigureLogicalCarry(PrototypeWeightClass.Light);
             float groundedY = GetExpectedGroundedPlayerY();
+            uint takeoffRevisionBefore = locomotion.JumpTakeoffRevision;
 
             ProcessMobilitySnapshotNow(Vector2.up, true, true);
 
             Assert.That(locomotion.IsSprinting, Is.True);
+            Assert.That(
+                locomotion.JumpTakeoffRevision,
+                Is.EqualTo(takeoffRevisionBefore + 1u),
+                "An accepted jump must publish its physical takeoff in the same frame.");
 
             QueueMobilityGamepadState(Vector2.zero, false, false);
             float maximumY = player.transform.position.y;
@@ -178,11 +183,16 @@ namespace BreakNotice.LocomotionCamera.Tests
             ConfigureLogicalCarry(PrototypeWeightClass.Medium);
             Vector3 start = player.transform.position;
             float groundedY = GetExpectedGroundedPlayerY();
+            uint takeoffRevisionBefore = locomotion.JumpTakeoffRevision;
 
             ProcessMobilitySnapshotNow(Vector2.up, true, true);
 
             Assert.That(locomotion.IsSprinting, Is.False);
             Assert.That(locomotion.VerticalVelocity, Is.LessThanOrEqualTo(0f));
+            Assert.That(
+                locomotion.JumpTakeoffRevision,
+                Is.EqualTo(takeoffRevisionBefore),
+                "A blocked Medium-carry jump must not publish a takeoff revision.");
 
             QueueMobilityGamepadState(Vector2.up, true, false);
             float maximumY = player.transform.position.y;

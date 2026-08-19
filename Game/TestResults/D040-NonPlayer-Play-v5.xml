@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="19" result="Failed(Child)" total="19" passed="18" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:01:08Z" duration="38.2279302">
+  <test-suite type="TestSuite" id="1179" name="Game" fullname="Game" runstate="Runnable" testcasecount="149" result="Failed" site="Child" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:01:08Z" duration="38.227930" total="19" passed="18" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1172" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="149" result="Failed" site="Child" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:01:08Z" duration="38.214202" total="19" passed="18" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="19900" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1173" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="149" result="Failed" site="Child" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:01:08Z" duration="38.212431" total="19" passed="18" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1174" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="149" result="Failed" site="Child" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:01:08Z" duration="38.211165" total="19" passed="18" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1175" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="149" result="Failed" site="Child" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:01:08Z" duration="38.209834" total="19" passed="18" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1057" name="ContestChr01SupplyAnimationSyncPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:00:49Z" duration="18.705166" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1058" name="BinderFetchReadyAndRelease_CommitsAtOneOwnedTransitionBoundary" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.BinderFetchReadyAndRelease_CommitsAtOneOwnedTransitionBoundary" methodname="BinderFetchReadyAndRelease_CommitsAtOneOwnedTransitionBoundary" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="840009906" result="Passed" start-time="2026-08-17 17:00:30Z" end-time="2026-08-17 17:00:37Z" duration="6.782222" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+]]></output>
+              </test-case>
+              <test-case id="1059" name="ChairFetchReadyAndFeed_UsesMonotonicPostIkGripWithoutMovingChair" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.ChairFetchReadyAndFeed_UsesMonotonicPostIkGripWithoutMovingChair" methodname="ChairFetchReadyAndFeed_UsesMonotonicPostIkGripWithoutMovingChair" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="304025475" result="Passed" start-time="2026-08-17 17:00:37Z" end-time="2026-08-17 17:00:47Z" duration="10.396569" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+CHR01 CHAIR HOLDING SUMMARY: Samples=3, RawL=0.033514, RawR=0.034194, ContactL=0.000002, ContactR=0.000001.
+CHR01 CHAIR LONG HOLD SUMMARY: AppliedFrames=8149, IdleNormalized=0.050->1.000, GoalStepMax=0.000004, ContactStepMax=0.000004, RawResidualMax=0.034533, RenderedContactErrorMax=0.001546.
+]]></output>
+              </test-case>
+              <test-case id="1060" name="ChairGrip_ResetAndAnimatorDisableClearHoldingState" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.ChairGrip_ResetAndAnimatorDisableClearHoldingState" methodname="ChairGrip_ResetAndAnimatorDisableClearHoldingState" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="612036410" result="Passed" start-time="2026-08-17 17:00:47Z" end-time="2026-08-17 17:00:49Z" duration="1.500444" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+]]></output>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1064" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-17 17:00:49Z" end-time="2026-08-17 17:00:49Z" duration="0.008299" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1061" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(0.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(0.0f)" methodname="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="1831780984" result="Passed" start-time="2026-08-17 17:00:49Z" end-time="2026-08-17 17:00:49Z" duration="0.004114" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1062" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(45.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(45.0f)" methodname="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="1668746666" result="Passed" start-time="2026-08-17 17:00:49Z" end-time="2026-08-17 17:00:49Z" duration="0.000267" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1063" name="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(90.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests.OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws(90.0f)" methodname="OrientedBoxSupportRadius_IsCorrectAtAuthoredChairYaws" classname="BreakNotice.LocomotionCamera.Tests.ContestChr01SupplyAnimationSyncPlayModeTests" runstate="Runnable" seed="49687268" result="Passed" start-time="2026-08-17 17:00:49Z" end-time="2026-08-17 17:00:49Z" duration="0.000226" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestFixture" id="1098" name="ContestShowcaseCombatPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-08-17 17:00:49Z" end-time="2026-08-17 17:01:08Z" duration="19.495407" total="13" passed="12" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1105" name="AllySupply_PhysicalReleaseWaitsForAllyAnimationEvent" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.AllySupply_PhysicalReleaseWaitsForAllyAnimationEvent" methodname="AllySupply_PhysicalReleaseWaitsForAllyAnimationEvent" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1162240393" result="Passed" start-time="2026-08-17 17:00:49Z" end-time="2026-08-17 17:00:55Z" duration="5.684560" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1108" name="AnimatorDisableDuringAcquisition_CleansPlayerTransactionWithinOneSecond" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.AnimatorDisableDuringAcquisition_CleansPlayerTransactionWithinOneSecond" methodname="AnimatorDisableDuringAcquisition_CleansPlayerTransactionWithinOneSecond" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="2021994208" result="Passed" start-time="2026-08-17 17:00:55Z" end-time="2026-08-17 17:00:55Z" duration="0.067803" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SHOWCASE PLAYER PROP RUNTIME UNAVAILABLE: Acquire. The pending action and mobility lock are being cancelled.
+]]></output>
+              </test-case>
+              <test-case id="1103" name="DirectThrow_PhysicalReleaseWaitsForAnimationEvent" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.DirectThrow_PhysicalReleaseWaitsForAnimationEvent" methodname="DirectThrow_PhysicalReleaseWaitsForAnimationEvent" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1577591391" result="Passed" start-time="2026-08-17 17:00:55Z" end-time="2026-08-17 17:00:56Z" duration="1.848292" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1104" name="GroundPickup_PhysicalCarryWaitsForAnimationContactEvent" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.GroundPickup_PhysicalCarryWaitsForAnimationContactEvent" methodname="GroundPickup_PhysicalCarryWaitsForAnimationContactEvent" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="738852083" result="Passed" start-time="2026-08-17 17:00:56Z" end-time="2026-08-17 17:00:58Z" duration="1.266118" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1107" name="OrdinaryRelayCatch_CancelBeforeContactRollsBackInSameFrame" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.OrdinaryRelayCatch_CancelBeforeContactRollsBackInSameFrame" methodname="OrdinaryRelayCatch_CancelBeforeContactRollsBackInSameFrame" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1039204765" result="Passed" start-time="2026-08-17 17:00:58Z" end-time="2026-08-17 17:00:58Z" duration="0.484632" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1106" name="OrdinaryRelayCatch_PreservesExactTransactionUntilNaturalCarryContact" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.OrdinaryRelayCatch_PreservesExactTransactionUntilNaturalCarryContact" methodname="OrdinaryRelayCatch_PreservesExactTransactionUntilNaturalCarryContact" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1832753797" result="Passed" start-time="2026-08-17 17:00:58Z" end-time="2026-08-17 17:00:59Z" duration="0.718798" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1100" name="PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows" methodname="PlayerCombo_DealsFifteenTwentyThirtyFiveOnlyAtBoneOverlapWindows" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1952720792" result="Passed" start-time="2026-08-17 17:00:59Z" end-time="2026-08-17 17:01:01Z" duration="2.391307" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1110" name="PlayerKnockdown_BlocksMovementThroughGetupCompletion" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerKnockdown_BlocksMovementThroughGetupCompletion" methodname="PlayerKnockdown_BlocksMovementThroughGetupCompletion" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1503683123" result="Passed" start-time="2026-08-17 17:01:01Z" end-time="2026-08-17 17:01:06Z" duration="4.728665" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1101" name="PlayerMelee_OpenWindowWithoutBoneOverlapDealsNoDamage" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.PlayerMelee_OpenWindowWithoutBoneOverlapDealsNoDamage" methodname="PlayerMelee_OpenWindowWithoutBoneOverlapDealsNoDamage" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="2145901861" result="Passed" start-time="2026-08-17 17:01:06Z" end-time="2026-08-17 17:01:07Z" duration="0.743525" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1109" name="QueuedRelayThrow_CancelBeforeReleasePreservesTrackedPoseAndClearsInboundVelocity" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.QueuedRelayThrow_CancelBeforeReleasePreservesTrackedPoseAndClearsInboundVelocity" methodname="QueuedRelayThrow_CancelBeforeReleasePreservesTrackedPoseAndClearsInboundVelocity" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1320994528" result="Failed" start-time="2026-08-17 17:01:07Z" end-time="2026-08-17 17:01:07Z" duration="0.501012" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Old inbound angular velocity was relaunched after cancellation. Before=(0.00, 2.00, 0.00); after=(0.64, -0.31, 0.06).
+  Expected: less than or equal to 0.100000001f
+  But was:  0.716535687f
+
+TearDown : Unhandled log message: '[Error] PLAYER PROP COLLISION LEASE QUARANTINED: BINDER-ALLY-01. A pending player collision lease could not be restored during non-deferred cleanup.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                  <stack-trace><![CDATA[BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle:QuarantineCollisionLease (BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle/CarryCollisionLease&,UnityEngine.Rigidbody,string) (at Assets/_Project/Code/Runtime/Player/PrototypePhysicalObjectLifecycle.cs:2008)
+BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle:DrainPendingCollisionLeasesSynchronously () (at Assets/_Project/Code/Runtime/Player/PrototypePhysicalObjectLifecycle.cs:1881)
+BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle:CleanupRuntimePhysicalState (bool) (at Assets/_Project/Code/Runtime/Player/PrototypePhysicalObjectLifecycle.cs:490)
+BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle:CleanupDisabledRuntimeState () (at Assets/_Project/Code/Runtime/Player/PrototypePhysicalObjectLifecycle.cs:401)
+BreakNotice.Gameplay.Interaction.PrototypePhysicalObjectLifecycle:OnDisable () (at Assets/_Project/Code/Runtime/Player/PrototypePhysicalObjectLifecycle.cs:212)
+
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[PLAYER PROP COLLISION LEASE QUARANTINED: BINDER-ALLY-01. A pending player collision lease could not be restored during non-deferred cleanup.
+]]></output>
+              </test-case>
+              <test-case id="1111" name="Reset_RestoresAllThreeHealthOwnersAndCombatState" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.Reset_RestoresAllThreeHealthOwnersAndCombatState" methodname="Reset_RestoresAllThreeHealthOwnersAndCombatState" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1779617248" result="Passed" start-time="2026-08-17 17:01:07Z" end-time="2026-08-17 17:01:07Z" duration="0.061324" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1102" name="RunnerAttack_DamagesPlayerOnlyAtNaturalBoneOverlapWindow" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.RunnerAttack_DamagesPlayerOnlyAtNaturalBoneOverlapWindow" methodname="RunnerAttack_DamagesPlayerOnlyAtNaturalBoneOverlapWindow" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="1001725474" result="Passed" start-time="2026-08-17 17:01:07Z" end-time="2026-08-17 17:01:08Z" duration="0.930841" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1099" name="Scene_ComposesExactPlayerNormalAndEliteHealthContracts" fullname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests.Scene_ComposesExactPlayerNormalAndEliteHealthContracts" methodname="Scene_ComposesExactPlayerNormalAndEliteHealthContracts" classname="BreakNotice.LocomotionCamera.Tests.ContestShowcaseCombatPlayModeTests" runstate="Runnable" seed="54649612" result="Passed" start-time="2026-08-17 17:01:08Z" end-time="2026-08-17 17:01:08Z" duration="0.061442" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

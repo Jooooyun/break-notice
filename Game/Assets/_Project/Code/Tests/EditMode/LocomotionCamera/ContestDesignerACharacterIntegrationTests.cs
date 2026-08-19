@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay.Interaction;
@@ -67,6 +68,15 @@ namespace BreakNotice.LocomotionCamera.Tests
                     Is.LessThan(0.01f), driver.Role.ToString());
                 Assert.That(Vector3.Dot(model.forward, driver.transform.forward),
                     Is.GreaterThan(0.999f), driver.Role.ToString());
+                if (driver.Role == ShowcaseCharacterAnimationRole.EnemyNormal ||
+                    driver.Role == ShowcaseCharacterAnimationRole.EnemyElite)
+                {
+                    Assert.That(
+                        new Vector2(model.localPosition.x, model.localPosition.z).magnitude,
+                        Is.LessThanOrEqualTo(0.001f),
+                        driver.Role +
+                        " Humanoid root must align with the gameplay actor on XZ.");
+                }
                 Assert.That(driver.IsRuntimeConfigured, Is.True, driver.Role.ToString());
                 Assert.That(driver.Animator.applyRootMotion, Is.False, driver.Role.ToString());
                 Assert.That(driver.Animator.stabilizeFeet, Is.False, driver.Role.ToString());
@@ -120,10 +130,10 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             foreach ((string fileName, int stateCount, bool expectsRun) in new[]
                      {
-                         ("CHR00_Player.controller", 29, true),
+                         ("CHR00_Player.controller", 43, true),
                          ("CHR01_Ally.controller", 5, true),
-                         ("ENY01_Normal.controller", 17, false),
-                         ("ENY01_Elite.controller", 20, false)
+                         ("ENY01_Normal.controller", 17, true),
+                         ("ENY01_Elite.controller", 19, true)
                      })
             {
                 AnimatorController controller = LoadController(fileName);
@@ -132,15 +142,22 @@ namespace BreakNotice.LocomotionCamera.Tests
                     .Select(child => child.state)
                     .ToArray();
                 AnimatorState idle = states.Single(state => state.name == "Idle");
-                AnimatorState walk = states.Single(state => state.name == "Walk");
+                string locomotionStateName = fileName.StartsWith(
+                    "ENY01_",
+                    StringComparison.Ordinal)
+                    ? "Run"
+                    : "Walk";
+                AnimatorState locomotion = states.Single(
+                    state => state.name == locomotionStateName);
 
                 Assert.That(states, Has.Length.EqualTo(stateCount), fileName);
                 Assert.That(states.Any(state => state.name == "Run"),
                     Is.EqualTo(expectsRun), fileName);
                 Assert.That(idle.iKOnFeet, Is.False, fileName);
-                Assert.That(walk.iKOnFeet, Is.False, fileName);
-                Assert.That(walk.speedParameterActive, Is.True, fileName);
-                Assert.That(walk.speedParameter, Is.EqualTo("LocomotionPlayback"), fileName);
+                Assert.That(locomotion.iKOnFeet, Is.False, fileName);
+                Assert.That(locomotion.speedParameterActive, Is.True, fileName);
+                Assert.That(locomotion.speedParameter,
+                    Is.EqualTo("LocomotionPlayback"), fileName);
                 Assert.That(controller.parameters.Any(parameter =>
                     parameter.name == "LocomotionPlayback" &&
                     parameter.type == AnimatorControllerParameterType.Float), Is.True, fileName);
@@ -155,16 +172,18 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void PlayerController_UsesDirectionalAimBaseStatesAndMaskedUpperBodyLayer()
+        public void PlayerController_UsesFullBodyMeleeAndDirectionalMovingLegsLayer()
         {
             AnimatorController controller = LoadController("CHR00_Player.controller");
-            Assert.That(controller.layers, Has.Length.EqualTo(2));
+            Assert.That(controller.layers, Has.Length.EqualTo(4));
 
             AnimatorControllerLayer baseLayer = controller.layers[0];
             AnimatorControllerLayer upperBodyLayer = controller.layers[1];
+            AnimatorControllerLayer strapUpperBodyLayer = controller.layers[2];
+            AnimatorControllerLayer meleeMovingLegsLayer = controller.layers[3];
             Assert.That(baseLayer.name, Is.EqualTo("Base Layer"));
             Assert.That(baseLayer.iKPass, Is.True);
-            Assert.That(baseLayer.stateMachine.states, Has.Length.EqualTo(28));
+            Assert.That(baseLayer.stateMachine.states, Has.Length.EqualTo(38));
 
             Dictionary<string, AnimatorState> baseStates = baseLayer.stateMachine.states
                 .Select(child => child.state)
@@ -175,7 +194,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                          "AimBackward",
                          "AimStrafeLeft",
                          "AimStrafeRight",
-                         "WalkStopAction"
+                         "WalkStopAction",
+                         "StrapPrepareAction",
+                         "StrapRollingAction",
+                         "StrapThrowAction",
+                         "StrapPullAction",
+                         "StrapTensionHold",
+                         "StrapAttackLeftAction",
+                         "StrapAttackRightAction"
                      })
             {
                 Assert.That(baseStates, Contains.Key(stateName));
@@ -214,6 +240,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                     locomotionState);
             }
             Assert.That(baseStates["WalkStopAction"].speedParameterActive, Is.False);
+            Assert.That(baseStates["StrapAttackLeftAction"].speed,
+                Is.EqualTo(0.65f).Within(0.001f));
+            Assert.That(baseStates["StrapAttackRightAction"].speed,
+                Is.EqualTo(0.65f).Within(0.001f));
 
             Assert.That(upperBodyLayer.name, Is.EqualTo("Aim Upper Body"));
             Assert.That(upperBodyLayer.blendingMode,
@@ -229,6 +259,141 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Is.EqualTo("AimUpperBodyPose"));
             Assert.That(upperBodyLayer.stateMachine.states[0].state.transitions, Is.Empty);
             Assert.That(upperBodyLayer.stateMachine.anyStateTransitions, Is.Empty);
+
+            Assert.That(strapUpperBodyLayer.name, Is.EqualTo("Strap Upper Body"));
+            Assert.That(strapUpperBodyLayer.blendingMode,
+                Is.EqualTo(AnimatorLayerBlendingMode.Override));
+            Assert.That(strapUpperBodyLayer.defaultWeight,
+                Is.EqualTo(0f).Within(0.001f));
+            Assert.That(strapUpperBodyLayer.iKPass, Is.False);
+            Assert.That(strapUpperBodyLayer.avatarMask, Is.SameAs(upperBodyLayer.avatarMask));
+            Assert.That(strapUpperBodyLayer.stateMachine.states, Has.Length.EqualTo(4));
+            Assert.That(strapUpperBodyLayer.stateMachine.defaultState, Is.Not.Null);
+            Assert.That(strapUpperBodyLayer.stateMachine.defaultState.name,
+                Is.EqualTo("StrapRollingUpperBodyPose"));
+            Dictionary<string, AnimatorState> strapUpperBodyStates =
+                strapUpperBodyLayer.stateMachine.states
+                    .Select(child => child.state)
+                    .ToDictionary(state => state.name, StringComparer.Ordinal);
+            Assert.That(strapUpperBodyStates.Keys, Is.EquivalentTo(new[]
+            {
+                "StrapRollingUpperBodyPose",
+                "StrapTensionUpperBodyPose",
+                "StrapAttackLeftUpperBodyAction",
+                "StrapAttackRightUpperBodyAction"
+            }));
+            AnimatorState strapRollingState =
+                strapUpperBodyStates["StrapRollingUpperBodyPose"];
+            AssertStateMotionPath(
+                strapRollingState,
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strap_Rolling.fbx");
+            AnimatorState strapTensionState =
+                strapUpperBodyStates["StrapTensionUpperBodyPose"];
+            AssertStateMotionPath(
+                strapTensionState,
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strap_Pull.fbx");
+            Assert.That(strapTensionState.motion.name,
+                Is.EqualTo("CHR00_Strap_Tension_Hold_Runtime"));
+            AnimatorState strapAttackLeft =
+                strapUpperBodyStates["StrapAttackLeftUpperBodyAction"];
+            AssertStateMotionPath(
+                strapAttackLeft,
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strap_Attack_L.fbx");
+            Assert.That(strapAttackLeft.motion.name,
+                Is.EqualTo("CHR00_Strap_Attack_L"));
+            Assert.That(strapAttackLeft.speed, Is.EqualTo(0.65f).Within(0.001f));
+            AnimatorState strapAttackRight =
+                strapUpperBodyStates["StrapAttackRightUpperBodyAction"];
+            AssertStateMotionPath(
+                strapAttackRight,
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strap_Attack_R.fbx");
+            Assert.That(strapAttackRight.motion.name,
+                Is.EqualTo("CHR00_Strap_Attack_R"));
+            Assert.That(strapAttackRight.speed, Is.EqualTo(0.65f).Within(0.001f));
+            foreach (AnimatorState attackState in new[]
+                     {
+                         strapAttackLeft,
+                         strapAttackRight
+                     })
+            {
+                AnimationEvent[] attackEvents = AnimationUtility.GetAnimationEvents(
+                    (AnimationClip)attackState.motion);
+                Assert.That(attackEvents.Count(item => item.functionName ==
+                    "ShowcaseStrapAttackImpulse"), Is.EqualTo(1), attackState.name);
+                Assert.That(attackEvents.Count(item => item.functionName ==
+                    "ShowcaseStrapActionComplete"), Is.EqualTo(1), attackState.name);
+            }
+            Assert.That(strapUpperBodyStates.Values.SelectMany(state => state.transitions),
+                Is.Empty);
+            Assert.That(strapUpperBodyLayer.stateMachine.anyStateTransitions, Is.Empty);
+
+            Assert.That(meleeMovingLegsLayer.name, Is.EqualTo("Melee Moving Legs"));
+            Assert.That(meleeMovingLegsLayer.blendingMode,
+                Is.EqualTo(AnimatorLayerBlendingMode.Override));
+            Assert.That(meleeMovingLegsLayer.defaultWeight,
+                Is.EqualTo(0f).Within(0.001f));
+            Assert.That(meleeMovingLegsLayer.avatarMask, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(meleeMovingLegsLayer.avatarMask),
+                Is.EqualTo(ControllerRoot + "/CHR00_MeleeMovingLegs.mask"));
+            Assert.That(meleeMovingLegsLayer.avatarMask,
+                Is.Not.SameAs(upperBodyLayer.avatarMask));
+            Assert.That(meleeMovingLegsLayer.stateMachine.states, Has.Length.EqualTo(6));
+            Assert.That(meleeMovingLegsLayer.stateMachine.defaultState.name,
+                Is.EqualTo("MeleeLegsIdle"));
+            Assert.That(meleeMovingLegsLayer.stateMachine.states
+                .Select(child => child.state.name), Is.EquivalentTo(new[]
+            {
+                "MeleeLegsIdle", "MeleeLegsForward", "MeleeLegsBackward",
+                "MeleeLegsLeft", "MeleeLegsRight", "MeleeLegsRun"
+            }));
+            Assert.That(meleeMovingLegsLayer.stateMachine.states
+                .SelectMany(child => child.state.transitions), Is.Empty);
+            Assert.That(meleeMovingLegsLayer.stateMachine.anyStateTransitions, Is.Empty);
+            Dictionary<string, AnimatorState> meleeLegStates =
+                meleeMovingLegsLayer.stateMachine.states
+                    .Select(child => child.state)
+                    .ToDictionary(state => state.name, StringComparer.Ordinal);
+            AssertStateMotionPath(meleeLegStates["MeleeLegsForward"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Walk_F.fbx");
+            AssertStateMotionPath(meleeLegStates["MeleeLegsBackward"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Walk_F.fbx");
+            Assert.That(meleeLegStates["MeleeLegsBackward"].cycleOffset,
+                Is.EqualTo(1f).Within(0.001f));
+            AssertStateMotionPath(meleeLegStates["MeleeLegsLeft"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strafe_L.fbx");
+            AssertStateMotionPath(meleeLegStates["MeleeLegsRight"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strafe_R.fbx");
+            AssertStateMotionPath(meleeLegStates["MeleeLegsRun"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Run_F.fbx");
+            Assert.That(meleeLegStates.Values.All(state =>
+                    state.speedParameterActive &&
+                    state.speedParameter == "LocomotionPlayback"),
+                Is.True);
+
+            AvatarMask meleeLegMask = meleeMovingLegsLayer.avatarMask;
+            foreach (AvatarMaskBodyPart part in new[]
+                     {
+                         AvatarMaskBodyPart.LeftLeg,
+                         AvatarMaskBodyPart.RightLeg
+                     })
+            {
+                Assert.That(meleeLegMask.GetHumanoidBodyPartActive(part),
+                    Is.True, part.ToString());
+            }
+            foreach (AvatarMaskBodyPart part in new[]
+                     {
+                         AvatarMaskBodyPart.Root,
+                         AvatarMaskBodyPart.Body,
+                         AvatarMaskBodyPart.Head,
+                         AvatarMaskBodyPart.LeftArm,
+                         AvatarMaskBodyPart.RightArm,
+                         AvatarMaskBodyPart.LeftFootIK,
+                         AvatarMaskBodyPart.RightFootIK
+                     })
+            {
+                Assert.That(meleeLegMask.GetHumanoidBodyPartActive(part),
+                    Is.False, part.ToString());
+            }
 
             AvatarMask mask = upperBodyLayer.avatarMask;
             foreach (AvatarMaskBodyPart part in new[]
@@ -265,6 +430,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(path.IndexOf("_ALT", StringComparison.OrdinalIgnoreCase),
                     Is.EqualTo(-1), state.name);
                 Assert.That(path.IndexOf("Turn", StringComparison.OrdinalIgnoreCase),
+                    Is.EqualTo(-1), state.name);
+                Assert.That(path.IndexOf("_REF", StringComparison.OrdinalIgnoreCase),
+                    Is.EqualTo(-1), state.name);
+                Assert.That(path.IndexOf("candidate", StringComparison.OrdinalIgnoreCase),
                     Is.EqualTo(-1), state.name);
             }
         }
@@ -314,6 +483,8 @@ namespace BreakNotice.LocomotionCamera.Tests
                          ("CatchSmallLeftAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_L.fbx"),
                          ("CatchSmallRightAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_R.fbx"),
                          ("CatchMediumAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx"),
+                         ("PickupLowSmallAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Pickup_Low_Small.fbx"),
+                         ("PickupLowMediumAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Pickup_Low_Medium.fbx"),
                          ("ThrowLightAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx"),
                          ("ThrowMediumAction", AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx")
                      })
@@ -321,34 +492,48 @@ namespace BreakNotice.LocomotionCamera.Tests
                 AssertStateMotionPath(states[state], path);
             }
 
-            foreach (string path in new[]
+            foreach ((string path, float contact, float complete) in new[]
                      {
-                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Center.fbx",
-                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_L.fbx",
-                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_R.fbx",
-                         AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx"
+                         (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Pickup_Low_Small.fbx",
+                             ShowcaseChr00AnimationTiming.PickupLowSmallContact,
+                             ShowcaseChr00AnimationTiming.PickupLowSmallComplete),
+                         (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Pickup_Low_Medium.fbx",
+                             ShowcaseChr00AnimationTiming.PickupLowMediumContact,
+                             ShowcaseChr00AnimationTiming.PickupLowMediumComplete),
+                         (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Center.fbx",
+                             ShowcaseChr00AnimationTiming.CatchSmallCenterContact,
+                             ShowcaseChr00AnimationTiming.CatchSmallCenterComplete),
+                         (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_L.fbx",
+                             ShowcaseChr00AnimationTiming.CatchSmallDivingContact,
+                             ShowcaseChr00AnimationTiming.CatchSmallDivingComplete),
+                         (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Small_Diving_R.fbx",
+                             ShowcaseChr00AnimationTiming.CatchSmallDivingContact,
+                             ShowcaseChr00AnimationTiming.CatchSmallDivingComplete),
+                         (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx",
+                             ShowcaseChr00AnimationTiming.CatchMediumContact,
+                             ShowcaseChr00AnimationTiming.CatchMediumComplete)
                      })
             {
                 AssertOwnedEventPair(
                     path,
                     "ShowcaseCarryContact",
-                    0.52f,
+                    contact,
                     "ShowcaseActionComplete",
-                    0.88f);
+                    complete);
             }
 
             AssertOwnedEventPair(
                 AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx",
                 "ShowcaseThrowRelease",
-                0.48f,
+                ShowcaseChr00AnimationTiming.ThrowSmallRelease,
                 "ShowcaseActionComplete",
-                0.88f);
+                ShowcaseChr00AnimationTiming.ThrowSmallComplete);
             AssertOwnedEventPair(
                 AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx",
                 "ShowcaseThrowRelease",
-                0.52f,
+                ShowcaseChr00AnimationTiming.ThrowMediumRelease,
                 "ShowcaseActionComplete",
-                0.88f);
+                ShowcaseChr00AnimationTiming.ThrowMediumComplete);
         }
 
         [Test]
@@ -369,33 +554,305 @@ namespace BreakNotice.LocomotionCamera.Tests
             }));
             AssertStateMotionPath(
                 states["BinderWindupReady"],
-                AnimationRoot +
-                "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Windup.fbx");
+                AnimationRoot + "/CHR01/CHR01_Supply_Binder_Release.fbx");
             AssertStateMotionPath(
                 states["SupplyReleaseAction"],
-                AnimationRoot +
-                "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Release.fbx");
+                AnimationRoot + "/CHR01/CHR01_Supply_Binder_Release.fbx");
+
+            AssertStateMotionPath(
+                states["Idle"],
+                AnimationRoot + "/CHR01/CHR01_Idle.fbx");
+            AssertStateMotionPath(
+                states["Walk"],
+                AnimationRoot + "/CHR01/CHR01_Walk_F.fbx");
+            AssertStateMotionPath(
+                states["Run"],
+                AnimationRoot + "/CHR01/CHR01_Run_F.fbx");
+            Assert.That(states["SupplyReleaseAction"].speed,
+                Is.EqualTo(ShowcaseNonPlayerAnimationTiming
+                    .AllySupplyReleaseStateSpeed).Within(0.0001f));
 
             AnimationClip windup = (AnimationClip)states["BinderWindupReady"].motion;
+            Assert.That(windup.name,
+                Is.EqualTo("CHR01_Supply_Binder_Windup_Runtime"));
+            Assert.That(windup.isHumanMotion, Is.True,
+                "Runtime ready pose must use the valid Humanoid Release source.");
+            Assert.That(windup.isLooping, Is.True);
             Assert.That(AnimationUtility.GetAnimationEvents(windup), Is.Empty,
                 "The one-frame ready pose must not own physical contact timing.");
 
             AnimationClip release = (AnimationClip)states["SupplyReleaseAction"].motion;
+            Assert.That(release.name,
+                Is.EqualTo("CHR01_Supply_Binder_Release_Runtime"));
             AnimationEvent[] releaseEvents = AnimationUtility.GetAnimationEvents(release);
             Assert.That(releaseEvents.Select(item => item.functionName),
-                Is.EquivalentTo(new[]
+                Is.EqualTo(new[] { "ShowcaseAllySupplyRelease" }));
+            Assert.That(releaseEvents, Has.Length.EqualTo(1));
+            Assert.That(releaseEvents[0].time,
+                Is.EqualTo(release.length *
+                    ShowcaseNonPlayerAnimationTiming.AllySupplyRelease)
+                    .Within(Mathf.Max(0.001f, 1f / release.frameRate)));
+        }
+
+        [Test]
+        public void Chr01FlatDelivery_HasExactIndependentHumanoidImportContract()
+        {
+            const string root = AnimationRoot + "/CHR01";
+            string[] expectedNames =
+            {
+                "CHR01_Getup_B",
+                "CHR01_Getup_F",
+                "CHR01_Idle",
+                "CHR01_Idle_Variant_Stretch",
+                "CHR01_Jump",
+                "CHR01_Knockdown_B",
+                "CHR01_Knockdown_F",
+                "CHR01_Melee_Hit_Body",
+                "CHR01_Run_F",
+                "CHR01_Run_Stop",
+                "CHR01_Strafe_L",
+                "CHR01_Strafe_R",
+                "CHR01_Supply_Binder_Release",
+                "CHR01_Supply_Binder_Windup",
+                "CHR01_Turn_180_Running",
+                "CHR01_Turn_180_Walking",
+                "CHR01_Turn_L_90",
+                "CHR01_Turn_R_90",
+                "CHR01_Walk_F",
+                "CHR01_Walk_Stop"
+            };
+            HashSet<string> loopNames = new HashSet<string>(
+                new[]
                 {
-                    "ShowcaseAllySupplyRelease",
-                    "ShowcaseActionComplete"
-                }));
-            Assert.That(releaseEvents, Has.Length.EqualTo(2));
-            AssertOwnedEventPair(
-                AnimationRoot +
-                "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Release.fbx",
-                "ShowcaseAllySupplyRelease",
-                0.48f,
-                "ShowcaseActionComplete",
-                0.88f);
+                    "CHR01_Idle",
+                    "CHR01_Walk_F",
+                    "CHR01_Run_F",
+                    "CHR01_Strafe_L",
+                    "CHR01_Strafe_R",
+                    "CHR01_Supply_Binder_Windup"
+                },
+                StringComparer.Ordinal);
+
+            string[] paths = AssetDatabase.FindAssets("t:Model", new[] { root })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path =>
+                    path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(
+                        Path.GetDirectoryName(path)?.Replace('\\', '/'),
+                        root,
+                        StringComparison.Ordinal))
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            Assert.That(paths, Has.Length.EqualTo(20));
+            Assert.That(paths.Select(Path.GetFileNameWithoutExtension),
+                Is.EquivalentTo(expectedNames));
+
+            foreach (string path in paths)
+            {
+                string sourceName = Path.GetFileNameWithoutExtension(path);
+                bool release = sourceName == "CHR01_Supply_Binder_Release";
+                ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+                Assert.That(importer, Is.Not.Null, path);
+                Assert.That(importer.importAnimation, Is.True, path);
+                Assert.That(importer.animationType,
+                    Is.EqualTo(ModelImporterAnimationType.Human), path);
+                Assert.That(importer.avatarSetup,
+                    Is.EqualTo(ModelImporterAvatarSetup.CreateFromThisModel), path);
+                Assert.That(importer.sourceAvatar, Is.Null, path);
+                Assert.That(importer.humanDescription.hasTranslationDoF, Is.False, path);
+
+                Assert.That(AssetDatabase.LoadAllAssetsAtPath(path).OfType<Mesh>(),
+                    Is.Not.Empty,
+                    path + " must retain its own skinned model/bones.");
+                Avatar[] avatars = AssetDatabase.LoadAllAssetsAtPath(path)
+                    .OfType<Avatar>()
+                    .ToArray();
+                Assert.That(avatars, Has.Length.EqualTo(1), path);
+                Assert.That(avatars[0].isValid, Is.True, path);
+                Assert.That(avatars[0].isHuman, Is.True, path);
+
+                ModelImporterClipAnimation[] defaults = importer.defaultClipAnimations;
+                ModelImporterClipAnimation[] configured = importer.clipAnimations;
+                Assert.That(defaults, Has.Length.EqualTo(1), path);
+                AnimationClip[] activeClips = AssetDatabase.LoadAllAssetsAtPath(path)
+                    .OfType<AnimationClip>()
+                    .Where(clip => !clip.name.StartsWith(
+                        "__preview__",
+                        StringComparison.Ordinal))
+                    .ToArray();
+                if (release)
+                {
+                    Assert.That(configured.Select(clip => clip.name),
+                        Is.EquivalentTo(new[]
+                        {
+                            "CHR01_Supply_Binder_Windup_Runtime",
+                            "CHR01_Supply_Binder_Release_Runtime"
+                        }), path);
+                    Assert.That(activeClips.Select(clip => clip.name),
+                        Is.EquivalentTo(configured.Select(clip => clip.name)), path);
+                    Assert.That(activeClips.All(clip => clip.isHumanMotion),
+                        Is.True, path);
+                    ModelImporterClipAnimation windup = configured.Single(clip =>
+                        clip.name == "CHR01_Supply_Binder_Windup_Runtime");
+                    ModelImporterClipAnimation releaseClip = configured.Single(clip =>
+                        clip.name == "CHR01_Supply_Binder_Release_Runtime");
+                    Assert.That(windup.firstFrame, Is.EqualTo(21f).Within(0.001f));
+                    Assert.That(windup.lastFrame, Is.EqualTo(22f).Within(0.001f));
+                    Assert.That(windup.loopTime, Is.True);
+                    Assert.That(windup.loopPose, Is.True);
+                    Assert.That(windup.events ?? Array.Empty<AnimationEvent>(), Is.Empty);
+                    Assert.That(releaseClip.firstFrame,
+                        Is.EqualTo(21f).Within(0.001f));
+                    Assert.That(releaseClip.lastFrame,
+                        Is.EqualTo(44f).Within(0.001f));
+                    Assert.That(releaseClip.loopTime, Is.False);
+                    Assert.That(releaseClip.loopPose, Is.False);
+                    AnimationEvent[] events = releaseClip.events ??
+                        Array.Empty<AnimationEvent>();
+                    Assert.That(events, Has.Length.EqualTo(1), path);
+                    Assert.That(events[0].functionName,
+                        Is.EqualTo("ShowcaseAllySupplyRelease"), path);
+                    Assert.That(events[0].time,
+                        Is.EqualTo(ShowcaseNonPlayerAnimationTiming
+                            .AllySupplyRelease).Within(0.0001f), path);
+                }
+                else
+                {
+                    Assert.That(configured, Has.Length.EqualTo(1), path);
+                    Assert.That(configured[0].name, Is.EqualTo(sourceName), path);
+                    Assert.That(configured[0].takeName,
+                        Is.EqualTo(defaults[0].takeName), path);
+                    Assert.That(configured[0].firstFrame,
+                        Is.EqualTo(defaults[0].firstFrame).Within(0.001f), path);
+                    Assert.That(configured[0].lastFrame,
+                        Is.EqualTo(defaults[0].lastFrame).Within(0.001f), path);
+                    Assert.That(configured[0].loopTime,
+                        Is.EqualTo(loopNames.Contains(sourceName)), path);
+                    Assert.That(configured[0].loopPose,
+                        Is.EqualTo(loopNames.Contains(sourceName)), path);
+                    Assert.That(configured[0].events ?? Array.Empty<AnimationEvent>(),
+                        Is.Empty, path);
+                    bool dedicatedOneFrameReadyPose = sourceName ==
+                        "CHR01_Supply_Binder_Windup";
+                    Assert.That(
+                        activeClips.All(clip => clip.isHumanMotion) ||
+                        dedicatedOneFrameReadyPose,
+                        Is.True,
+                        path);
+                }
+            }
+        }
+
+        [Test]
+        public void EnyFlatDeliveries_HaveExactIndependentHumanoidImportAndEventContracts()
+        {
+            string[] suffixes =
+            {
+                "Hit_BigHeadHit", "Hit_Body", "Hit_Head", "Hit_Reaction",
+                "Hit_Rib", "Hit_Stomach", "Idle",
+                "Injured_Backwards_Turn_Left", "Injured_Backwards_Turn_Right",
+                "Injured_Hurting_Idle", "Injured_Idle", "Injured_Run_Backwards",
+                "Injured_Run_Backwards_Left_Turn",
+                "Injured_Run_Backwards_Right_Turn", "Injured_Run_Jump",
+                "Injured_Run_Left_Turn", "Injured_Run_Right_Turn", "Injured_Run",
+                "Injured_Standing_Jump", "Injured_Stumble_Idle",
+                "Injured_Turn_Left", "Injured_Turn_Right", "Injured_Walk_Backwards",
+                "Injured_Walk_Left_Turn", "Injured_Walk_Right_Turn", "Injured_Walk",
+                "Injured_Wave_Idle", "Jump", "Left_Strafe",
+                "Left_Strafe_Walking", "Left_Turn_90", "Lod_Mutant_Punch",
+                "Lod_Mutant_Swiping", "Lod_Mutant_Walking",
+                "Lod_One_Hand_Club_Combo", "Melee_Candidate_Boxing",
+                "Melee_Candidate_Boxing_2", "Melee_Candidate_Kicking",
+                "Melee_Candidate_Kicking_2", "Right_Strafe",
+                "Right_Strafe_Walking", "Right_Turn_90", "Run_Backwards",
+                "Standard_Run", "Turn_Left", "Turning_Right_45_Degrees",
+                "Walking", "Walking_Backwards"
+            };
+            HashSet<string> loopSuffixes = new HashSet<string>(new[]
+            {
+                "Idle", "Walking", "Walking_Backwards", "Standard_Run",
+                "Run_Backwards", "Left_Strafe", "Right_Strafe",
+                "Left_Strafe_Walking", "Right_Strafe_Walking",
+                "Lod_Mutant_Walking", "Injured_Hurting_Idle", "Injured_Idle",
+                "Injured_Stumble_Idle", "Injured_Wave_Idle", "Injured_Walk",
+                "Injured_Walk_Backwards", "Injured_Run", "Injured_Run_Backwards"
+            }, StringComparer.Ordinal);
+
+            foreach (string variant in new[] { "Normal", "Elite" })
+            {
+                string root = AnimationRoot + "/ENY01/" + variant;
+                string prefix = "ENY01_" + variant + "_";
+                string[] paths = AssetDatabase.FindAssets("t:Model", new[] { root })
+                    .Select(AssetDatabase.GUIDToAssetPath)
+                    .Where(path =>
+                        path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase) &&
+                        string.Equals(
+                            Path.GetDirectoryName(path)?.Replace('\\', '/'),
+                            root,
+                            StringComparison.Ordinal))
+                    .OrderBy(path => path, StringComparer.Ordinal)
+                    .ToArray();
+                Assert.That(paths, Has.Length.EqualTo(48), variant);
+                Assert.That(paths.Select(Path.GetFileNameWithoutExtension),
+                    Is.EquivalentTo(suffixes.Select(suffix => prefix + suffix)),
+                    variant);
+
+                foreach (string path in paths)
+                {
+                    string sourceName = Path.GetFileNameWithoutExtension(path);
+                    string suffix = sourceName.Substring(prefix.Length);
+                    ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+                    Assert.That(importer, Is.Not.Null, path);
+                    Assert.That(importer.importAnimation, Is.True, path);
+                    Assert.That(importer.animationType,
+                        Is.EqualTo(ModelImporterAnimationType.Human), path);
+                    Assert.That(importer.avatarSetup,
+                        Is.EqualTo(ModelImporterAvatarSetup.CreateFromThisModel), path);
+                    Assert.That(importer.sourceAvatar, Is.Null, path);
+                    Assert.That(importer.humanDescription.hasTranslationDoF, Is.False, path);
+                    Assert.That(importer.importCameras, Is.False, path);
+                    Assert.That(importer.importLights, Is.False, path);
+                    Assert.That(importer.materialImportMode,
+                        Is.EqualTo(ModelImporterMaterialImportMode.None), path);
+
+                    Avatar[] avatars = AssetDatabase.LoadAllAssetsAtPath(path)
+                        .OfType<Avatar>()
+                        .ToArray();
+                    Assert.That(avatars, Has.Length.EqualTo(1), path);
+                    Assert.That(avatars[0].isHuman, Is.True, path);
+                    Assert.That(avatars[0].isValid, Is.True, path);
+
+                    ModelImporterClipAnimation[] defaults = importer.defaultClipAnimations;
+                    ModelImporterClipAnimation[] configured = importer.clipAnimations;
+                    Assert.That(defaults, Has.Length.EqualTo(1), path);
+                    Assert.That(configured, Has.Length.EqualTo(1), path);
+                    Assert.That(configured[0].name, Is.EqualTo(sourceName), path);
+                    Assert.That(configured[0].takeName,
+                        Is.EqualTo(defaults[0].takeName), path);
+                    Assert.That(configured[0].firstFrame,
+                        Is.EqualTo(defaults[0].firstFrame).Within(0.001f), path);
+                    Assert.That(configured[0].lastFrame,
+                        Is.EqualTo(defaults[0].lastFrame).Within(0.001f), path);
+                    Assert.That(configured[0].loopTime,
+                        Is.EqualTo(loopSuffixes.Contains(suffix)), path);
+                    Assert.That(configured[0].loopPose,
+                        Is.EqualTo(loopSuffixes.Contains(suffix)), path);
+
+                    (string functionName, float normalizedTime)[] expectedEvents =
+                        ExpectedEnemyEvents(variant == "Elite", suffix);
+                    AnimationEvent[] actualEvents = configured[0].events ??
+                        Array.Empty<AnimationEvent>();
+                    Assert.That(actualEvents, Has.Length.EqualTo(expectedEvents.Length), path);
+                    foreach ((string functionName, float normalizedTime) in expectedEvents)
+                    {
+                        AnimationEvent actual = actualEvents.Single(item =>
+                            item.functionName == functionName);
+                        Assert.That(actual.time,
+                            Is.EqualTo(normalizedTime).Within(0.0001f),
+                            path + " / " + functionName);
+                    }
+                }
+            }
         }
 
         [Test]
@@ -405,7 +862,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             string[] playerStates = StateNames(player);
             foreach (string state in new[]
                      {
-                         "Run", "JumpAction", "MeleeJabAction", "MeleeCrossAction",
+                         "Run", "JumpAction", "MeleeJabAction", "MeleeJabReturnAction",
+                         "MeleeCrossAction", "PickupLowSmallAction", "PickupLowMediumAction",
                          "MeleeHookAction", "HitBodyAction", "KnockdownBackAction",
                          "KnockdownFrontAction", "GetupBackAction", "GetupFrontAction",
                          "Death1Action", "Death2Action"
@@ -413,6 +871,60 @@ namespace BreakNotice.LocomotionCamera.Tests
             {
                 Assert.That(playerStates, Does.Contain(state));
             }
+
+            const string jabCrossPath = AnimationRoot +
+                "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx";
+            ModelImporter jabCrossImporter = AssetImporter.GetAtPath(jabCrossPath) as
+                ModelImporter;
+            Assert.That(jabCrossImporter, Is.Not.Null);
+            Dictionary<string, ModelImporterClipAnimation> meleeClips =
+                jabCrossImporter.clipAnimations.ToDictionary(clip => clip.name);
+            Assert.That(meleeClips.Keys, Is.EquivalentTo(new[]
+            {
+                "CHR00_Melee_Jab_Runtime",
+                "CHR00_Melee_Jab_Return_Runtime",
+                "CHR00_Melee_Cross_Runtime"
+            }));
+            Assert.That(meleeClips["CHR00_Melee_Jab_Runtime"].firstFrame,
+                Is.EqualTo(1f));
+            Assert.That(meleeClips["CHR00_Melee_Jab_Runtime"].lastFrame,
+                Is.EqualTo(14f));
+            Assert.That(meleeClips["CHR00_Melee_Jab_Return_Runtime"].firstFrame,
+                Is.EqualTo(1f));
+            Assert.That(meleeClips["CHR00_Melee_Jab_Return_Runtime"].lastFrame,
+                Is.EqualTo(14f));
+            Assert.That(meleeClips["CHR00_Melee_Cross_Runtime"].firstFrame,
+                Is.EqualTo(14f));
+            Assert.That(meleeClips["CHR00_Melee_Cross_Runtime"].lastFrame,
+                Is.EqualTo(60f));
+
+            Dictionary<string, AnimatorState> playerBaseStates = player.layers[0]
+                .stateMachine.states.Select(child => child.state)
+                .ToDictionary(state => state.name);
+            AssertStateMotionPath(playerBaseStates["MeleeJabAction"], jabCrossPath);
+            AssertStateMotionPath(playerBaseStates["MeleeJabReturnAction"], jabCrossPath);
+            AssertStateMotionPath(playerBaseStates["MeleeCrossAction"], jabCrossPath);
+            Assert.That(playerBaseStates["MeleeJabReturnAction"].cycleOffset,
+                Is.EqualTo(1f).Within(0.001f));
+            Assert.That(player.layers.Select(layer => layer.name), Is.EqualTo(new[]
+            {
+                "Base Layer", "Aim Upper Body", "Strap Upper Body", "Melee Moving Legs"
+            }));
+            AnimatorControllerLayer meleeLayer = player.layers[3];
+            Assert.That(meleeLayer.avatarMask, Is.Not.SameAs(player.layers[1].avatarMask));
+            Assert.That(meleeLayer.defaultWeight, Is.EqualTo(0f).Within(0.001f));
+            Dictionary<string, AnimatorState> playerMeleeStates = meleeLayer
+                .stateMachine.states.Select(child => child.state)
+                .ToDictionary(state => state.name);
+            Assert.That(playerMeleeStates.Keys, Is.EquivalentTo(new[]
+            {
+                "MeleeLegsIdle", "MeleeLegsForward", "MeleeLegsBackward",
+                "MeleeLegsLeft", "MeleeLegsRight", "MeleeLegsRun"
+            }));
+            AssertStateMotionPath(playerMeleeStates["MeleeLegsForward"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Walk_F.fbx");
+            AssertStateMotionPath(playerMeleeStates["MeleeLegsLeft"],
+                AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Strafe_L.fbx");
 
             foreach (string fileName in new[]
                      {
@@ -422,7 +934,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 string[] states = StateNames(LoadController(fileName));
                 foreach (string state in new[]
                          {
-                             "AttackBoxingAction", "AttackBoxing2Action",
+                             "AttackBoxingAction", "AttackKneeStrikeAction",
                              "AttackKickingAction", "AttackKicking2Action",
                              "HitBodyAction", "HitRibAction", "HitStomachAction",
                              "HitBigHeadAction", "Death1Action", "Death2Action"
@@ -439,7 +951,66 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(normalStates, Does.Not.Contain("EliteJumpAttackAction"));
             Assert.That(eliteStates, Does.Contain("EliteMutantPunchAction"));
             Assert.That(eliteStates, Does.Contain("EliteMutantSwipingAction"));
-            Assert.That(eliteStates, Does.Contain("EliteJumpAttackAction"));
+            Assert.That(eliteStates, Does.Not.Contain("EliteJumpAttackAction"));
+        }
+
+        [Test]
+        public void EnemyControllers_UseOnlyTheirMatchingFlatVariantRuntimeClips()
+        {
+            foreach (string variant in new[] { "Normal", "Elite" })
+            {
+                AnimatorController controller = LoadController(
+                    "ENY01_" + variant + ".controller");
+                Dictionary<string, AnimatorState> states = controller.layers[0]
+                    .stateMachine.states
+                    .Select(child => child.state)
+                    .ToDictionary(state => state.name, StringComparer.Ordinal);
+                var expected = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["Idle"] = "Idle",
+                    ["Run"] = "Standard_Run",
+                    ["HitLightAction"] = "Hit_Head",
+                    ["HitBodyAction"] = "Hit_Body",
+                    ["HitRibAction"] = "Hit_Rib",
+                    ["HitStomachAction"] = "Hit_Stomach",
+                    ["HitBigHeadAction"] = "Hit_BigHeadHit",
+                    ["AttackBoxingAction"] = "Melee_Candidate_Boxing",
+                    ["AttackKneeStrikeAction"] = "Melee_Candidate_Boxing_2",
+                    ["AttackKickingAction"] = "Melee_Candidate_Kicking",
+                    ["AttackKicking2Action"] = "Melee_Candidate_Kicking_2"
+                };
+                if (variant == "Elite")
+                {
+                    expected["EliteMutantPunchAction"] = "Lod_Mutant_Punch";
+                    expected["EliteMutantSwipingAction"] = "Lod_Mutant_Swiping";
+                }
+                string root = AnimationRoot + "/ENY01/" + variant + "/ENY01_" +
+                    variant + "_";
+                foreach (KeyValuePair<string, string> pair in expected)
+                {
+                    AssertStateMotionPath(
+                        states[pair.Key],
+                        root + pair.Value + ".fbx");
+                }
+
+                string[] referencedEnemyPaths = states.Values
+                    .Select(state => AssetDatabase.GetAssetPath(state.motion))
+                    .Where(path => path.Contains("/ENY01/", StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(referencedEnemyPaths, Has.Length.EqualTo(expected.Count), variant);
+                Assert.That(referencedEnemyPaths.All(path => path.StartsWith(
+                    root,
+                    StringComparison.Ordinal)), Is.True, variant);
+                AssertStateMotionPath(
+                    states["Death1Action"],
+                    AnimationRoot +
+                    "/CHR00/DesignerA/Approved/CHR00_Knockdown_F.fbx");
+                AssertStateMotionPath(
+                    states["Death2Action"],
+                    AnimationRoot +
+                    "/CHR00/DesignerA/Approved/CHR00_Knockdown_B.fbx");
+                Assert.That(states.Keys, Does.Not.Contain("EliteJumpAttackAction"), variant);
+            }
         }
 
         [Test]
@@ -466,23 +1037,30 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             foreach ((string path, string clipName, string functionName, float normalizedTime) in new[]
             {
-                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseAttackWindowOpen", 0.42f),
-                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseAttackWindowClose", 0.82f),
-                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseAttackWindowOpen", 0.42f),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseAttackWindowOpen", ShowcaseChr00AnimationTiming.MeleeJabWindowOpen),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseAttackWindowClose", ShowcaseChr00AnimationTiming.MeleeJabWindowClose),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseActionComplete", ShowcaseChr00AnimationTiming.MeleeJabComplete),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Return_Runtime", "ShowcaseActionComplete", ShowcaseChr00AnimationTiming.MeleeJabReturnComplete),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseAttackWindowOpen", ShowcaseChr00AnimationTiming.MeleeCrossWindowOpen),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseActionComplete", ShowcaseChr00AnimationTiming.MeleeCrossComplete),
                 (AnimationRoot + "/CHR00/DesignerA/Legacy/Hook Punch.fbx", null, "ShowcaseAttackWindowOpen", 0.38f),
-                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseComboBufferOpen", 0.52f),
-                (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseComboBufferClose", 0.76f),
-                (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Boxing.fbx", null, "ShowcaseAttackWindowOpen", 0.36f),
-                (AnimationRoot + "/ENY01/DesignerA/EliteOnly/lod@Jump Attack.fbx", null, "ShowcaseAttackWindowClose", 0.60f),
-                (AnimationRoot + "/ENY01/DesignerA/EliteOnly/lod@Jump Attack.fbx", null, "ShowcaseLungeStart", 0.24f),
-                (AnimationRoot + "/ENY01/DesignerA/EliteOnly/lod@Jump Attack.fbx", null, "ShowcaseLungeEnd", 0.62f),
-                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx", null, "ShowcaseCarryContact", 0.52f),
-                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx", null, "ShowcaseThrowRelease", 0.48f),
-                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx", null, "ShowcaseThrowRelease", 0.52f),
-                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Knockdown_B.fbx", null, "ShowcaseActionComplete", 0.88f),
-                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Getup_B.fbx", null, "ShowcaseActionComplete", 0.88f),
-                (AnimationRoot + "/ENY01/DesignerA/ApprovedHit/Hit_Body.fbx", null, "ShowcaseActionComplete", 0.88f),
-                (AnimationRoot + "/CHR01/DesignerA/Approved/CHR01_Supply_Binder_Release.fbx", null, "ShowcaseAllySupplyRelease", 0.48f)
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Runtime", "ShowcaseComboBufferOpen", ShowcaseChr00AnimationTiming.MeleeJabBufferOpen),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Cross_Runtime", "ShowcaseComboBufferClose", ShowcaseChr00AnimationTiming.MeleeCrossBufferClose),
+                (AnimationRoot + "/ENY01/Normal/ENY01_Normal_Melee_Candidate_Boxing.fbx", null, "ShowcaseAttackWindowOpen", ShowcaseNonPlayerAnimationTiming.BoxingWindowOpen),
+                (AnimationRoot + "/ENY01/Normal/ENY01_Normal_Melee_Candidate_Boxing.fbx", null, "ShowcaseAttackWindowClose", ShowcaseNonPlayerAnimationTiming.BoxingWindowClose),
+                (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Melee_Candidate_Boxing_2.fbx", null, "ShowcaseAttackWindowOpen", ShowcaseNonPlayerAnimationTiming.Boxing2WindowOpen),
+                (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Lod_Mutant_Punch.fbx", null, "ShowcaseAttackWindowOpen", ShowcaseNonPlayerAnimationTiming.MutantPunchWindowOpen),
+                (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Lod_Mutant_Swiping.fbx", null, "ShowcaseAttackWindowClose", ShowcaseNonPlayerAnimationTiming.MutantSwipeWindowClose),
+                (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Hit_Head.fbx", null, "ShowcaseActionComplete", ShowcaseNonPlayerAnimationTiming.EnemyHitComplete),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Pickup_Low_Small.fbx", null, "ShowcaseCarryContact", ShowcaseChr00AnimationTiming.PickupLowSmallContact),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Pickup_Low_Medium.fbx", null, "ShowcaseCarryContact", ShowcaseChr00AnimationTiming.PickupLowMediumContact),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Catch_Medium.fbx", null, "ShowcaseCarryContact", ShowcaseChr00AnimationTiming.CatchMediumContact),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Small.fbx", null, "ShowcaseThrowRelease", ShowcaseChr00AnimationTiming.ThrowSmallRelease),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Throw_Medium.fbx", null, "ShowcaseThrowRelease", ShowcaseChr00AnimationTiming.ThrowMediumRelease),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Knockdown_B.fbx", null, "ShowcaseActionComplete", ShowcaseChr00AnimationTiming.KnockdownBackComplete),
+                (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Getup_B.fbx", null, "ShowcaseActionComplete", ShowcaseChr00AnimationTiming.GetupBackComplete),
+                (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Hit_Body.fbx", null, "ShowcaseActionComplete", ShowcaseNonPlayerAnimationTiming.EnemyHitComplete),
+                (AnimationRoot + "/CHR01/CHR01_Supply_Binder_Release.fbx", "CHR01_Supply_Binder_Release_Runtime", "ShowcaseAllySupplyRelease", ShowcaseNonPlayerAnimationTiming.AllySupplyRelease)
             })
             {
                 AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(path)
@@ -528,25 +1106,52 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void EnemyEligibility_NormalExcludesAndEliteUsesOnlyThreeApprovedUnarmedAttacks()
+        public void EnemyEligibility_AllowsEliteTechniquesButExcludesWeaponPropAndReviewMotion()
         {
-            AnimatorController normal = LoadController("ENY01_Normal.controller");
-            AnimatorController elite = LoadController("ENY01_Elite.controller");
-
-            string[] selected =
+            string[] forbiddenStateNames =
             {
-                "EliteMutantPunchAction", "EliteMutantSwipingAction",
-                "EliteJumpAttackAction"
+                "Walk", "AttackBoxing2Action", "EliteJumpAttackAction",
+                "EliteMutantWalkingAction", "EliteClubComboAction",
+                "EliteStabbingAction"
             };
-            Assert.That(StateNames(normal), Has.None.Matches<string>(name =>
-                selected.Contains(name)));
-            Assert.That(StateNames(elite), Does.Contain(selected[0]));
-            Assert.That(StateNames(elite), Does.Contain(selected[1]));
-            Assert.That(StateNames(elite), Does.Contain(selected[2]));
-            Assert.That(StateNames(elite), Has.None.Matches<string>(name =>
-                name.Contains("Walking", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Stabbing", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Club", StringComparison.OrdinalIgnoreCase)));
+            string[] forbiddenSourceSuffixes =
+            {
+                "_Walking.fbx", "_Walking_Backwards.fbx", "_Run_Backwards.fbx",
+                "_Turn_Left.fbx", "_Turning_Right_45_Degrees.fbx",
+                "_Hit_Reaction.fbx", "_Lod_Mutant_Walking.fbx",
+                "_Lod_One_Hand_Club_Combo.fbx"
+            };
+
+            foreach (string fileName in new[]
+                     {
+                         "ENY01_Normal.controller", "ENY01_Elite.controller"
+                     })
+            {
+                AnimatorController controller = LoadController(fileName);
+                string[] stateNames = StateNames(controller);
+                Assert.That(stateNames, Has.None.Matches<string>(name =>
+                    forbiddenStateNames.Contains(name)), fileName);
+                Assert.That(stateNames, Does.Contain("Run"), fileName);
+                Assert.That(stateNames, Does.Contain("AttackKneeStrikeAction"), fileName);
+                bool eliteController = fileName.Contains("Elite", StringComparison.Ordinal);
+                Assert.That(stateNames.Contains("EliteMutantPunchAction"),
+                    Is.EqualTo(eliteController), fileName);
+                Assert.That(stateNames.Contains("EliteMutantSwipingAction"),
+                    Is.EqualTo(eliteController), fileName);
+
+                string[] motionPaths = controller.layers
+                    .SelectMany(layer => layer.stateMachine.states)
+                    .Select(child => AssetDatabase.GetAssetPath(child.state.motion))
+                    .Where(path => !string.IsNullOrEmpty(path))
+                    .ToArray();
+                Assert.That(motionPaths.Any(path => forbiddenSourceSuffixes.Any(
+                    suffix => path.EndsWith(suffix, StringComparison.Ordinal))),
+                    Is.False,
+                    fileName);
+                Assert.That(motionPaths.Any(path => path.Contains(
+                    "/Legacy/Dying",
+                    StringComparison.Ordinal)), Is.False, fileName);
+            }
         }
 
         [Test]
@@ -559,14 +1164,33 @@ namespace BreakNotice.LocomotionCamera.Tests
 
             AssertStateSpeed(player, "ThrowLightAction", 1.6f);
             AssertStateSpeed(player, "ThrowMediumAction", 1.5f);
-            AssertStateSpeed(player, "MeleeHookAction", 1.4f);
-            AssertStateSpeed(normal, "AttackBoxingAction", 1.25f);
-            AssertStateSpeed(normal, "AttackBoxing2Action", 1.3f);
-            AssertStateSpeed(normal, "AttackKickingAction", 1.2f);
-            AssertStateSpeed(normal, "AttackKicking2Action", 1.2f);
-            AssertStateSpeed(elite, "EliteMutantPunchAction", 1f);
-            AssertStateSpeed(elite, "EliteMutantSwipingAction", 1f);
-            AssertStateSpeed(elite, "EliteJumpAttackAction", 1f);
+            AssertStateSpeed(player, "PickupLowSmallAction",
+                ShowcaseChr00AnimationTiming.PickupLowSmallStateSpeed);
+            AssertStateSpeed(player, "PickupLowMediumAction",
+                ShowcaseChr00AnimationTiming.PickupLowMediumStateSpeed);
+            AssertStateSpeed(player, "MeleeJabReturnAction", -1.25f);
+            AssertStateSpeed(player, "MeleeHookAction",
+                ShowcaseChr00AnimationTiming.MeleeHookStateSpeed);
+            AssertStateSpeed(normal, "AttackBoxingAction",
+                ShowcaseNonPlayerAnimationTiming.BoxingStateSpeed);
+            AssertStateSpeed(normal, "AttackKneeStrikeAction",
+                ShowcaseNonPlayerAnimationTiming.Boxing2StateSpeed);
+            AssertStateSpeed(normal, "AttackKickingAction",
+                ShowcaseNonPlayerAnimationTiming.KickingStateSpeed);
+            AssertStateSpeed(normal, "AttackKicking2Action",
+                ShowcaseNonPlayerAnimationTiming.Kicking2StateSpeed);
+            AssertStateSpeed(elite, "AttackBoxingAction",
+                ShowcaseNonPlayerAnimationTiming.BoxingStateSpeed);
+            AssertStateSpeed(elite, "AttackKneeStrikeAction",
+                ShowcaseNonPlayerAnimationTiming.Boxing2StateSpeed);
+            AssertStateSpeed(elite, "AttackKickingAction",
+                ShowcaseNonPlayerAnimationTiming.KickingStateSpeed);
+            AssertStateSpeed(elite, "AttackKicking2Action",
+                ShowcaseNonPlayerAnimationTiming.Kicking2StateSpeed);
+            AssertStateSpeed(elite, "EliteMutantPunchAction",
+                ShowcaseNonPlayerAnimationTiming.MutantPunchStateSpeed);
+            AssertStateSpeed(elite, "EliteMutantSwipingAction",
+                ShowcaseNonPlayerAnimationTiming.MutantSwipeStateSpeed);
             Assert.That(ally.layers[0].iKPass, Is.True);
 
             ShowcaseCharacterAnimationDriver allyDriver = Components<
@@ -608,10 +1232,10 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(animator.isHuman, Is.True);
                 foreach ((string path, string clipName, HumanBodyBones bone) in new[]
                          {
-                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", HumanBodyBones.LeftHand),
-                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Jab_Runtime", HumanBodyBones.RightHand),
-                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", HumanBodyBones.RightHand),
-                             (AnimationRoot + "/CHR00/DesignerA/Legacy/Fist Fight A.fbx", "CHR00_Melee_Cross_Runtime", HumanBodyBones.LeftHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Runtime", HumanBodyBones.LeftHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Jab_Runtime", HumanBodyBones.RightHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Cross_Runtime", HumanBodyBones.RightHand),
+                             (AnimationRoot + "/CHR00/DesignerA/Approved/CHR00_Melee_JabCross_raw.fbx", "CHR00_Melee_Cross_Runtime", HumanBodyBones.LeftHand),
                              (AnimationRoot + "/CHR00/DesignerA/Legacy/Hook Punch.fbx", null, HumanBodyBones.RightHand),
                              (AnimationRoot + "/CHR00/DesignerA/Legacy/Hook Punch.fbx", null, HumanBodyBones.LeftHand)
                          })
@@ -669,11 +1293,13 @@ namespace BreakNotice.LocomotionCamera.Tests
                 Assert.That(animator, Is.Not.Null);
                 foreach ((string path, HumanBodyBones bone) in new[]
                          {
-                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking.fbx", HumanBodyBones.RightFoot),
-                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking.fbx", HumanBodyBones.LeftFoot),
-                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking_2.fbx", HumanBodyBones.RightFoot),
-                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Kicking_2.fbx", HumanBodyBones.LeftFoot),
-                             (AnimationRoot + "/ENY01/DesignerA/MeleeCandidates/Melee_candidate_Boxing.fbx", HumanBodyBones.RightHand)
+                             (AnimationRoot + "/ENY01/Normal/ENY01_Normal_Melee_Candidate_Kicking.fbx", HumanBodyBones.LeftFoot),
+                             (AnimationRoot + "/ENY01/Normal/ENY01_Normal_Melee_Candidate_Kicking_2.fbx", HumanBodyBones.RightFoot),
+                             (AnimationRoot + "/ENY01/Normal/ENY01_Normal_Melee_Candidate_Boxing.fbx", HumanBodyBones.LeftHand),
+                             (AnimationRoot + "/ENY01/Normal/ENY01_Normal_Melee_Candidate_Boxing_2.fbx", HumanBodyBones.RightFoot),
+                             (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Lod_Mutant_Punch.fbx", HumanBodyBones.RightHand),
+                             (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Lod_Mutant_Swiping.fbx", HumanBodyBones.RightHand),
+                             (AnimationRoot + "/ENY01/Elite/ENY01_Elite_Lod_Mutant_Swiping.fbx", HumanBodyBones.LeftHand)
                          })
                 {
                     AnimationClip clip = AssetDatabase.LoadAllAssetsAtPath(path)
@@ -715,7 +1341,213 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [Test]
-        public void ImportedDelivery_ContainsFourModelsAndOneHundredSeventyTwoHumanoidClips()
+        public void Chr00UpdatedAnimationDelivery_HasExactSourceOwnedHumanoidAndClipContract()
+        {
+            const string approvedRoot =
+                AnimationRoot + "/CHR00/DesignerA/Approved";
+            string[] expectedBasenames =
+            {
+                "CHR00_Aim_Idle",
+                "CHR00_Catch_Large",
+                "CHR00_Catch_Medium",
+                "CHR00_Catch_Small_Center",
+                "CHR00_Catch_Small_Diving_L",
+                "CHR00_Catch_Small_Diving_R",
+                "CHR00_Getup_B",
+                "CHR00_Getup_F",
+                "CHR00_Idle",
+                "CHR00_Idle_Variant_Stretch",
+                "CHR00_Jump",
+                "CHR00_Knockdown_B",
+                "CHR00_Knockdown_F",
+                "CHR00_Melee_Hit_Body",
+                "CHR00_Melee_JabCross_raw",
+                "CHR00_Pickup_Low_Medium",
+                "CHR00_Pickup_Low_Small",
+                "CHR00_Run_F",
+                "CHR00_Run_Stop",
+                "CHR00_Strafe_L",
+                "CHR00_Strafe_L_Short_ALT",
+                "CHR00_Strafe_R",
+                "CHR00_Strafe_R_Short_ALT",
+                "CHR00_Strap_Attack_L",
+                "CHR00_Strap_Attack_R",
+                "CHR00_Strap_Prepare",
+                "CHR00_Strap_Pull",
+                "CHR00_Strap_Rolling",
+                "CHR00_Strap_Tension_Loop_candidate",
+                "CHR00_Strap_Throw",
+                "CHR00_Throw_Large",
+                "CHR00_Throw_Medium",
+                "CHR00_Throw_Small",
+                "CHR00_Throw_TwoHand_base_REF",
+                "CHR00_Turn_180_Running",
+                "CHR00_Turn_180_Walking",
+                "CHR00_Turn_L_90",
+                "CHR00_Turn_L_Loop_ALT",
+                "CHR00_Turn_R_90",
+                "CHR00_Turn_R_Loop_ALT",
+                "CHR00_Walk_F",
+                "CHR00_Walk_Stop",
+                "PREVIEW_Strafe_plus_Aim_inplace"
+            };
+            HashSet<string> loopingBasenames = new HashSet<string>(
+                new[]
+                {
+                    "CHR00_Aim_Idle",
+                    "CHR00_Idle",
+                    "CHR00_Idle_Variant_Stretch",
+                    "CHR00_Run_F",
+                    "CHR00_Strafe_L",
+                    "CHR00_Strafe_R",
+                    "CHR00_Strap_Rolling",
+                    "CHR00_Strap_Tension_Loop_candidate",
+                    "CHR00_Turn_L_Loop_ALT",
+                    "CHR00_Turn_R_Loop_ALT",
+                    "CHR00_Walk_F"
+                },
+                StringComparer.Ordinal);
+            (string Name, float FirstFrame, float LastFrame)[] jabSubclips =
+            {
+                ("CHR00_Melee_Jab_Runtime", 1f, 14f),
+                ("CHR00_Melee_Jab_Return_Runtime", 1f, 14f),
+                ("CHR00_Melee_Cross_Runtime", 14f, 60f)
+            };
+
+            string[] paths = AssetDatabase.FindAssets(
+                    "t:Model",
+                    new[] { approvedRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            Assert.That(paths.Select(Path.GetFileNameWithoutExtension),
+                Is.EquivalentTo(expectedBasenames));
+
+            foreach (string basename in expectedBasenames)
+            {
+                string path = approvedRoot + "/" + basename + ".fbx";
+                ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
+                Assert.That(importer, Is.Not.Null, path);
+                Assert.That(importer.importAnimation, Is.True, path);
+                Assert.That(importer.animationType,
+                    Is.EqualTo(ModelImporterAnimationType.Human), path);
+                Assert.That(importer.avatarSetup,
+                    Is.EqualTo(ModelImporterAvatarSetup.CreateFromThisModel), path);
+                Assert.That(importer.sourceAvatar, Is.Null, path);
+                if (basename.StartsWith("CHR00_Strap_", StringComparison.Ordinal) &&
+                    !basename.Contains("candidate", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.That(importer.humanDescription.hasTranslationDoF,
+                        Is.True,
+                        path + " must preserve its source-owned translated joints");
+                }
+
+                Avatar[] avatars = AssetDatabase.LoadAllAssetsAtPath(path)
+                    .OfType<Avatar>()
+                    .ToArray();
+                Assert.That(avatars, Has.Length.EqualTo(1), path);
+                Assert.That(avatars[0].isValid, Is.True, path);
+                Assert.That(avatars[0].isHuman, Is.True, path);
+
+                ModelImporterClipAnimation[] defaults = importer.defaultClipAnimations;
+                Assert.That(defaults, Has.Length.EqualTo(1), path);
+                if (basename != "CHR00_Pickup_Low_Small")
+                {
+                    Assert.That(defaults[0].takeName, Is.EqualTo("Scene"), path);
+                }
+
+                ModelImporterClipAnimation[] configured = importer.clipAnimations;
+                AnimationClip[] activeClips = AssetDatabase.LoadAllAssetsAtPath(path)
+                    .OfType<AnimationClip>()
+                    .Where(clip => !clip.name.StartsWith(
+                        "__preview__",
+                        StringComparison.Ordinal))
+                    .ToArray();
+                Assert.That(activeClips.All(clip => clip.isHumanMotion), Is.True, path);
+
+                if (basename == "CHR00_Melee_JabCross_raw")
+                {
+                    Assert.That(configured.Select(clip => clip.name),
+                        Is.EquivalentTo(jabSubclips.Select(clip => clip.Name)), path);
+                    Assert.That(activeClips.Select(clip => clip.name),
+                        Is.EquivalentTo(jabSubclips.Select(clip => clip.Name)), path);
+                    foreach ((string name, float firstFrame, float lastFrame) in jabSubclips)
+                    {
+                        ModelImporterClipAnimation clip = configured.Single(candidate =>
+                            candidate.name == name);
+                        Assert.That(clip.firstFrame,
+                            Is.EqualTo(firstFrame).Within(0.001f), path + " / " + name);
+                        Assert.That(clip.lastFrame,
+                            Is.EqualTo(lastFrame).Within(0.001f), path + " / " + name);
+                    }
+                }
+                else if (basename == "CHR00_Strap_Pull")
+                {
+                    Assert.That(configured.Select(clip => clip.name),
+                        Is.EquivalentTo(new[]
+                        {
+                            "CHR00_Strap_Pull",
+                            "CHR00_Strap_Tension_Hold_Runtime"
+                        }), path);
+                    Assert.That(activeClips.Select(clip => clip.name),
+                        Is.EquivalentTo(new[]
+                        {
+                            "CHR00_Strap_Pull",
+                            "CHR00_Strap_Tension_Hold_Runtime"
+                        }), path);
+                    ModelImporterClipAnimation hold = configured.Single(clip =>
+                        clip.name == "CHR00_Strap_Tension_Hold_Runtime");
+                    Assert.That(hold.firstFrame, Is.EqualTo(34f).Within(0.001f));
+                    Assert.That(hold.lastFrame, Is.EqualTo(35f).Within(0.001f));
+                    Assert.That(hold.loopTime, Is.True);
+                }
+                else
+                {
+                    Assert.That(configured, Has.Length.EqualTo(1), path);
+                    Assert.That(configured[0].name, Is.EqualTo(basename), path);
+                    Assert.That(activeClips, Has.Length.EqualTo(1), path);
+                    Assert.That(activeClips[0].name, Is.EqualTo(basename), path);
+                    if (basename == "CHR00_Pickup_Low_Small")
+                    {
+                        Assert.That(configured[0].firstFrame,
+                            Is.EqualTo(0f).Within(0.001f), path);
+                        Assert.That(configured[0].lastFrame,
+                            Is.EqualTo(143f).Within(0.001f), path);
+                    }
+                    if (basename == "CHR00_Strap_Attack_L" ||
+                        basename == "CHR00_Strap_Attack_R")
+                    {
+                        float expectedImpulse = basename.EndsWith(
+                            "_L",
+                            StringComparison.Ordinal)
+                                ? 8f / 20f
+                                : 8f / 22f;
+                        AnimationEvent impulse = configured[0].events.Single(item =>
+                            item.functionName == "ShowcaseStrapAttackImpulse");
+                        AnimationEvent complete = configured[0].events.Single(item =>
+                            item.functionName == "ShowcaseStrapActionComplete");
+                        Assert.That(impulse.time,
+                            Is.EqualTo(expectedImpulse).Within(0.0001f), path);
+                        Assert.That(complete.time,
+                            Is.EqualTo(0.95f).Within(0.0001f), path);
+                    }
+                }
+
+                if (basename != "CHR00_Strap_Pull")
+                {
+                    bool expectedLoop = loopingBasenames.Contains(basename);
+                    Assert.That(configured.All(clip =>
+                            clip.takeName == defaults[0].takeName &&
+                            clip.loopTime == expectedLoop &&
+                            clip.loopPose == expectedLoop),
+                        Is.True,
+                        path);
+                }
+            }
+        }
+
+        [Test]
+        public void ImportedDelivery_ContainsFourModelsAndOneHundredEightyOneHumanoidSources()
         {
             string[] models = AssetDatabase.FindAssets(
                     "t:Model",
@@ -731,7 +1563,7 @@ namespace BreakNotice.LocomotionCamera.Tests
                 .ToArray();
 
             Assert.That(models, Has.Length.EqualTo(4));
-            Assert.That(animations, Has.Length.EqualTo(172));
+            Assert.That(animations, Has.Length.EqualTo(181));
             foreach (string path in models.Concat(animations))
             {
                 ModelImporter importer = AssetImporter.GetAtPath(path) as ModelImporter;
@@ -812,6 +1644,56 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(second[0].time,
                 Is.EqualTo(clip.length * secondNormalizedTime).Within(tolerance), path);
             Assert.That(first[0].time, Is.LessThan(second[0].time), path);
+        }
+
+        private static (string functionName, float normalizedTime)[]
+            ExpectedEnemyEvents(bool elite, string suffix)
+        {
+            (float open, float close)? attack = suffix switch
+            {
+                "Melee_Candidate_Boxing" => (
+                    ShowcaseNonPlayerAnimationTiming.BoxingWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.BoxingWindowClose),
+                "Melee_Candidate_Boxing_2" => (
+                    ShowcaseNonPlayerAnimationTiming.Boxing2WindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.Boxing2WindowClose),
+                "Melee_Candidate_Kicking" => (
+                    ShowcaseNonPlayerAnimationTiming.KickingWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.KickingWindowClose),
+                "Melee_Candidate_Kicking_2" => (
+                    ShowcaseNonPlayerAnimationTiming.Kicking2WindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.Kicking2WindowClose),
+                "Lod_Mutant_Punch" when elite => (
+                    ShowcaseNonPlayerAnimationTiming.MutantPunchWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.MutantPunchWindowClose),
+                "Lod_Mutant_Swiping" when elite => (
+                    ShowcaseNonPlayerAnimationTiming.MutantSwipeWindowOpen,
+                    ShowcaseNonPlayerAnimationTiming.MutantSwipeWindowClose),
+                _ => null
+            };
+            if (attack.HasValue)
+            {
+                return new[]
+                {
+                    ("ShowcaseAttackWindowOpen", attack.Value.open),
+                    ("ShowcaseAttackWindowClose", attack.Value.close),
+                    ("ShowcaseActionComplete",
+                        ShowcaseNonPlayerAnimationTiming.EnemyActionComplete)
+                };
+            }
+
+            bool connectedHit = suffix == "Hit_Head" ||
+                suffix == "Hit_Body" ||
+                suffix == "Hit_Rib" ||
+                suffix == "Hit_Stomach" ||
+                suffix == "Hit_BigHeadHit";
+            return connectedHit
+                ? new[]
+                {
+                    ("ShowcaseActionComplete",
+                        ShowcaseNonPlayerAnimationTiming.EnemyHitComplete)
+                }
+                : Array.Empty<(string functionName, float normalizedTime)>();
         }
 
         private static string[] StateNames(AnimatorController controller)

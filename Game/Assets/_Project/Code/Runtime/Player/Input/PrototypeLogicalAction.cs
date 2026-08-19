@@ -9,6 +9,8 @@ namespace BreakNotice.Gameplay.Input
         Aim,
         InteractPrimary,
         Throw,
+        SelectFists,
+        SelectObjectWeapon,
         AllyTask,
         CallAlly,
         RegroupAlly,
