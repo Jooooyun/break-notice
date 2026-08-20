@@ -362,6 +362,12 @@ namespace BreakNotice.Gameplay.Interaction
 
         public event Action<PrototypeInteractionTarget> AssistedAttachCompleted;
 
+        public event Action<PrototypeInteractionTarget> StrapExtendStarted;
+
+        public event Action<PrototypeInteractionTarget> StrapLockCommitted;
+
+        public event Action<PrototypeInteractionTarget> StrapTensionCommitted;
+
         public PrototypeInteractionTarget ActiveTarget => activeTarget != null
             ? activeTarget
             : pendingTarget;
@@ -1081,6 +1087,7 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 DirectAttachCount++;
             }
+            StrapLockCommitted?.Invoke(activeTarget);
             return true;
         }
 
@@ -1242,6 +1249,7 @@ namespace BreakNotice.Gameplay.Interaction
             EnterPhase(
                 ShowcaseCargoStrapPhase.Prepare,
                 ShowcaseCargoStrapAnimationCue.Prepare);
+            StrapExtendStarted?.Invoke(target);
             return true;
         }
 
@@ -1256,6 +1264,7 @@ namespace BreakNotice.Gameplay.Interaction
 
         private bool CompletePull()
         {
+            bool commitsTension = !IsTensioned;
             if (activeTarget == null || interactionOwner == null ||
                 interactionOwner.StrapTarget != activeTarget ||
                 (!IsTensioned &&
@@ -1270,6 +1279,10 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeInteractionTarget completedTarget = activeTarget;
             interactionOwner.TrySelectWeapon(PrototypeWeaponSelection.ObjectWeapon);
             EnterTensioned();
+            if (commitsTension)
+            {
+                StrapTensionCommitted?.Invoke(completedTarget);
+            }
             if (completeAssistedAttach)
             {
                 AssistedAttachCompleted?.Invoke(completedTarget);

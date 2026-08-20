@@ -130,7 +130,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         {
             foreach ((string fileName, int stateCount, bool expectsRun) in new[]
                      {
-                         ("CHR00_Player.controller", 43, true),
+                         ("CHR00_Player.controller", 49, true),
                          ("CHR01_Ally.controller", 5, true),
                          ("ENY01_Normal.controller", 17, true),
                          ("ENY01_Elite.controller", 19, true)
@@ -1649,6 +1649,17 @@ namespace BreakNotice.LocomotionCamera.Tests
         private static (string functionName, float normalizedTime)[]
             ExpectedEnemyEvents(bool elite, string suffix)
         {
+            if (suffix == "Standard_Run")
+            {
+                return new[]
+                {
+                    ("ShowcaseLeftFootstep",
+                        ShowcaseNonPlayerAnimationTiming.EnemyRunLeftFootstep),
+                    ("ShowcaseRightFootstep",
+                        ShowcaseNonPlayerAnimationTiming.EnemyRunRightFootstep)
+                };
+            }
+
             (float open, float close)? attack = suffix switch
             {
                 "Melee_Candidate_Boxing" => (

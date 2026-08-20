@@ -30,6 +30,7 @@ namespace BreakNotice.Gameplay.Combat
 
         public static float ThrowSmallRelease => Normalize(48, 1, 86);
         public static float ThrowSmallComplete => Normalize(86, 1, 86);
+        public static float ThrowMediumSwingWhoosh => Normalize(46, 1, 90);
         public static float ThrowMediumRelease => Normalize(49, 1, 90);
         public static float ThrowMediumComplete => Normalize(90, 1, 90);
 
@@ -55,6 +56,10 @@ namespace BreakNotice.Gameplay.Combat
         public static float GetupBackComplete => Normalize(113, 1, 125);
 
         public static float JumpImpulse => Normalize(10, 1, 21);
+        public static float WalkLeftFootstep => Normalize(10, 1, 32);
+        public static float WalkRightFootstep => Normalize(27, 1, 32);
+        public static float RunLeftFootstep => Normalize(10, 1, 22);
+        public static float RunRightFootstep => Normalize(20, 1, 22);
         public static float RunStopComplete => Normalize(28, 1, 28);
         public static float WalkStopComplete => Normalize(90, 1, 91);
         public static float IdleVariantComplete => Normalize(266, 1, 267);

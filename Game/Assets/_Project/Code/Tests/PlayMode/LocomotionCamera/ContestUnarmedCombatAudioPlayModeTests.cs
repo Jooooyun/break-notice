@@ -36,7 +36,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator PlayerJabCrossHook_PlaysP08P03P09OnlyOnAcceptedContacts()
+        public IEnumerator PlayerRapidCombo_PlaysOnlyAcceptedJabAndCrossContacts()
         {
             yield return LoadScene();
 
@@ -74,11 +74,21 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(audio.ConfirmedImpactPlaybackCount, Is.Zero,
                 "Starting an attack must remain silent until physical contact is accepted.");
             Assert.That(audio.AuthoredVoices.All(voice => voice.clip == null), Is.True);
-            yield return WaitUntilOrFail(
-                () => rig.AcceptedHitCount >= 3 &&
-                      audio.ConfirmedImpactPlaybackCount >= 3,
-                3f,
-                $"The natural Jab/Cross/Hook contacts did not trigger their impact tails. " +
+            float comboDeadline = Time.realtimeSinceStartup + 3f;
+            while ((receiver.AttackWindowOpenInvocationCount < 3 ||
+                    combat.IsActionLocked ||
+                    audio.ConfirmedImpactPlaybackCount < 2) &&
+                   Time.realtimeSinceStartup < comboDeadline)
+            {
+                yield return null;
+            }
+            Assert.That(
+                receiver.AttackWindowOpenInvocationCount >= 3 &&
+                !combat.IsActionLocked &&
+                rig.AcceptedHitCount == 2 &&
+                audio.ConfirmedImpactPlaybackCount == 2,
+                Is.True,
+                $"The natural Jab/Cross/Jab contacts did not trigger their impact tails. " +
                 $"hits={rig.AcceptedHitCount}, contacts={audio.AcceptedContactCount}, " +
                 $"played={audio.ConfirmedImpactPlaybackCount}, cue={combat.AnimationCue}, " +
                 $"step={combat.ActiveMeleeStep}, locked={combat.IsActionLocked}, " +
@@ -90,17 +100,23 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(audio.GetConfirmedTakeCount(
                 ShowcaseUnarmedCombatAudioTake.P03Cross), Is.EqualTo(1));
             Assert.That(audio.GetConfirmedTakeCount(
-                ShowcaseUnarmedCombatAudioTake.P09HeavyHook), Is.EqualTo(1));
-            Assert.That(audio.ConfirmedImpactPlaybackCount, Is.EqualTo(3));
+                ShowcaseUnarmedCombatAudioTake.P09HeavyHook), Is.Zero);
+            Assert.That(audio.ConfirmedImpactPlaybackCount, Is.EqualTo(2));
             Assert.That(audio.VoiceExhaustionCount, Is.Zero);
-            Assert.That(audio.LastConfirmedTake,
-                Is.EqualTo(ShowcaseUnarmedCombatAudioTake.P09HeavyHook));
+            Assert.That(new[]
+            {
+                ShowcaseUnarmedCombatAudioTake.P08Jab,
+                ShowcaseUnarmedCombatAudioTake.P03Cross
+            }, Does.Contain(audio.LastConfirmedTake));
             Assert.That(audio.LastConfirmedStartSample,
-                Is.EqualTo(ShowcaseUnarmedCombatAudioTiming.P09LeadSamples));
+                Is.EqualTo(audio.LastConfirmedTake ==
+                    ShowcaseUnarmedCombatAudioTake.P08Jab
+                        ? ShowcaseUnarmedCombatAudioTiming.P08LeadSamples
+                        : ShowcaseUnarmedCombatAudioTiming.P03LeadSamples));
             Assert.That(audio.LastConfirmedVolume,
                 Is.EqualTo(ShowcaseUnarmedCombatAudioController.
                     ConfirmedImpactVolume));
-            Assert.That(target.Health.CurrentHealth, Is.EqualTo(30));
+            Assert.That(target.Health.CurrentHealth, Is.EqualTo(65));
         }
 
         [UnityTest]
@@ -320,7 +336,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             float deadline = Time.realtimeSinceStartup + timeout;
             while (!predicate() && Time.realtimeSinceStartup < deadline)
             {
-                yield return null;
+                yield return new WaitForSecondsRealtime(0.02f);
             }
             Assert.That(predicate(), Is.True, message);
         }
@@ -384,6 +400,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(field, Is.Not.Null, fieldName);
             field.SetValue(runner, value);
         }
+
 
         private static uint FindRandomStateForSlot(int slot, int modulus)
         {

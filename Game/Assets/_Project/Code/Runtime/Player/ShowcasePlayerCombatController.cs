@@ -1,3 +1,4 @@
+using System;
 using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
@@ -123,6 +124,7 @@ namespace BreakNotice.Gameplay.Combat
         private bool reactionDisplacementActive;
         private float meleeApproachDistance;
         private Vector3 meleeFacingDirection;
+        private bool chairSwingWhooshCommitted;
 
         public ShowcaseCombatHealth Health => health;
         public ShowcasePlayerAnimationCue AnimationCue { get; private set; }
@@ -138,6 +140,15 @@ namespace BreakNotice.Gameplay.Combat
         public bool IsMeleeActionActive => activeAction == ActiveAction.Melee;
         public ShowcaseRunnerAgent ActiveMeleeTarget => meleeTarget;
         public float MeleeApproachDistance => meleeApproachDistance;
+
+        public event Action<PrototypeInteractionTarget, PrototypeInteractionOutcome>
+            AcquisitionCommitted;
+
+        public event Action<PrototypeInteractionTarget> ChairSwingWhooshCommitted;
+
+        public event Action<PrototypeInteractionTarget> QueuedRelayCatchCommitted;
+
+        public event Action<PrototypeInteractionTarget> QueuedRelayCatchCancelled;
 
         private void OnEnable()
         {
@@ -396,6 +407,7 @@ namespace BreakNotice.Gameplay.Combat
             pendingThrowDirection = direction;
             pendingThrowUsesAimPoint = false;
             pendingThrowCharge = Mathf.Clamp01(charge01);
+            chairSwingWhooshCommitted = false;
             activeAction = ActiveAction.DirectThrow;
             actionStartedAt = Time.time;
             actionDuration = target.WeightClass == PrototypeWeightClass.Light ? 1.25f : 1.35f;
@@ -454,6 +466,7 @@ namespace BreakNotice.Gameplay.Combat
             pendingThrowDirection = direction;
             pendingThrowUsesAimPoint = false;
             pendingThrowCharge = Mathf.Clamp01(charge01);
+            chairSwingWhooshCommitted = false;
             activeAction = ActiveAction.QueuedRelayThrow;
             actionStartedAt = Time.time;
             actionDuration = target.WeightClass == PrototypeWeightClass.Light ? 1.25f : 1.35f;
@@ -475,6 +488,7 @@ namespace BreakNotice.Gameplay.Combat
                 CancelPendingGameplayAction();
                 return false;
             }
+            QueuedRelayCatchCommitted?.Invoke(target);
             return true;
         }
 
@@ -602,6 +616,28 @@ namespace BreakNotice.Gameplay.Combat
                 }
             }
             actionEventCommitted = carried;
+            if (carried)
+            {
+                AcquisitionCommitted?.Invoke(
+                    pendingTarget,
+                    pendingAcquisitionOutcome);
+            }
+        }
+
+        public bool CommitAnimationChairSwingWhoosh()
+        {
+            if (chairSwingWhooshCommitted || pendingTarget == null ||
+                (activeAction != ActiveAction.DirectThrow &&
+                 activeAction != ActiveAction.QueuedRelayThrow) ||
+                (pendingTarget.Role != PrototypeInteractionRole.DirectChair &&
+                 pendingTarget.Role != PrototypeInteractionRole.AllyChair))
+            {
+                return false;
+            }
+
+            chairSwingWhooshCommitted = true;
+            ChairSwingWhooshCommitted?.Invoke(pendingTarget);
+            return true;
         }
 
         public void CommitAnimationThrowRelease()
@@ -820,6 +856,7 @@ namespace BreakNotice.Gameplay.Combat
             meleeJabReturnActive = false;
             meleeBufferWindowOpen = false;
             activeMeleeStep = 0;
+            chairSwingWhooshCommitted = false;
             lastMeleeCompletedAt = float.NegativeInfinity;
             nextAttackSequence = 0;
             activeAttackSequence = 0;
@@ -1059,6 +1096,7 @@ namespace BreakNotice.Gameplay.Combat
             pendingThrowAimPoint = Vector3.zero;
             pendingThrowUsesAimPoint = false;
             pendingThrowCharge = 0f;
+            chairSwingWhooshCommitted = false;
             actionEventCommitted = false;
             animationStateAcknowledged = false;
             awaitedAnimationCueRevision = 0;
@@ -1106,6 +1144,7 @@ namespace BreakNotice.Gameplay.Combat
             }
             else if (activeAction == ActiveAction.QueuedRelayThrow && pendingTarget != null)
             {
+                QueuedRelayCatchCancelled?.Invoke(pendingTarget);
                 interactionOwner?.CompleteThrow(pendingTarget);
                 allyRelay?.ResolveCatchFailure(pendingTarget);
                 physicalLifecycle?.CancelPlayerPropAction(pendingTarget, false);

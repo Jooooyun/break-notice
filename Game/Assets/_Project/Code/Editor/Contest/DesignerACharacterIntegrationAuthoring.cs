@@ -966,6 +966,23 @@ namespace BreakNotice.Contest.Editor
             bool elite,
             string suffix)
         {
+            if (suffix == "Standard_Run")
+            {
+                return new[]
+                {
+                    new AnimationEvent
+                    {
+                        functionName = "ShowcaseLeftFootstep",
+                        time = ShowcaseNonPlayerAnimationTiming.EnemyRunLeftFootstep
+                    },
+                    new AnimationEvent
+                    {
+                        functionName = "ShowcaseRightFootstep",
+                        time = ShowcaseNonPlayerAnimationTiming.EnemyRunRightFootstep
+                    }
+                };
+            }
+
             (float open, float close)? attack = suffix switch
             {
                 "Melee_Candidate_Boxing" => (
@@ -1705,6 +1722,11 @@ namespace BreakNotice.Contest.Editor
                 ConfigureAnimationEvent(path, "ShowcaseActionComplete", completeTime);
             }
 
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Throw_Medium.fbx",
+                "ShowcaseChairSwingWhoosh",
+                ShowcaseChr00AnimationTiming.ThrowMediumSwingWhoosh);
+
             foreach ((string path, float completeTime) in new[]
             {
                 (Chr00AnimationRoot + "/Approved/CHR00_Melee_Hit_Body.fbx",
@@ -1769,6 +1791,23 @@ namespace BreakNotice.Contest.Editor
                     0.95f,
                     clipName);
             }
+
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx",
+                "ShowcaseLeftFootstep",
+                ShowcaseChr00AnimationTiming.WalkLeftFootstep);
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Walk_F.fbx",
+                "ShowcaseRightFootstep",
+                ShowcaseChr00AnimationTiming.WalkRightFootstep);
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx",
+                "ShowcaseLeftFootstep",
+                ShowcaseChr00AnimationTiming.RunLeftFootstep);
+            ConfigureAnimationEvent(
+                Chr00AnimationRoot + "/Approved/CHR00_Run_F.fbx",
+                "ShowcaseRightFootstep",
+                ShowcaseChr00AnimationTiming.RunRightFootstep);
         }
 
         private static void ConfigurePlayerMeleeSubclips()

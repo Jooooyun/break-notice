@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ecde81ed8c3da547adbe5b75be093a4, type: 3}
+  m_Name: FinalGameplayAudioProfile
+  m_EditorClassIdentifier: BreakNotice.Presentation::BreakNotice.Presentation.FinalGameplayAudioProfile
+  binderPickupClip: {fileID: 8300000, guid: e9a3a1e0dd4a1144abc0df8bcecc4ece, type: 3}
+  binderThrowClip: {fileID: 8300000, guid: cc7c74745cc346540931904a22eb61b6, type: 3}
+  binderPlaceDownClip: {fileID: 8300000, guid: 473714f0ba89f2a4d8b6ce524cb3b12a, type: 3}
+  binderDirectHitClip: {fileID: 8300000, guid: cfb97bb845ee40f44b251114e3716b1b, type: 3}
+  binderWallHitClip: {fileID: 8300000, guid: e99b7d3c7058bc7409bb3b0b8d0e5430, type: 3}
+  binderFloorDropClip: {fileID: 8300000, guid: 01122ecf73a88b4479a4f517c2cbb4e0, type: 3}
+  binderCatchClip: {fileID: 8300000, guid: 22dfbc952b99a17409164d209c49516b, type: 3}
+  chairPickupClip: {fileID: 8300000, guid: 8b549c4e0deb2f94d83504109afb1bc4, type: 3}
+  chairReleaseClip: {fileID: 8300000, guid: da786f9fe98301c4c82aaac807b1ca1f, type: 3}
+  chairThrowClip: {fileID: 8300000, guid: 1a90e8a8b31efb44db9281841b270510, type: 3}
+  chairSwingWhooshClip: {fileID: 8300000, guid: 419c256ef6aad9d449793587723d1652, type: 3}
+  chairRollLoopClip: {fileID: 8300000, guid: 94159eea93265b64ea0d0818ebcbdd0b, type: 3}
+  chairSkidClip: {fileID: 8300000, guid: bfdb823f1f7af6146ac4ac4de06fe0ad, type: 3}
+  chairEnemyImpactClip: {fileID: 8300000, guid: e6fc8cac64b22e64fb10d61ed9ea6826, type: 3}
+  chairWorldImpactClip: {fileID: 8300000, guid: 869febcf84149384cb34032cf7657365, type: 3}
+  chairStopPool:
+  - {fileID: 8300000, guid: ef69d0fbc7fa7d1409765dd2840a7185, type: 3}
+  - {fileID: 8300000, guid: 44bb292bdd280464d85f766d3c3dd6e4, type: 3}
+  strapExtendPart1Clip: {fileID: 8300000, guid: c0ab9c8d6ffc0254690abe68440300e0, type: 3}
+  strapExtendPart2Clip: {fileID: 8300000, guid: 27730eebf19e191479c6284e84543afd, type: 3}
+  strapLockClip: {fileID: 8300000, guid: 76a41045a0257fc4a97e1fcb974efec0, type: 3}
+  strapTensionClip: {fileID: 8300000, guid: 707221cd9e6efae42b31216133010def, type: 3}
+  footstepPool:
+  - {fileID: 8300000, guid: f775445eb5dbb0f4c917d792ad1a96fb, type: 3}
+  - {fileID: 8300000, guid: 315146077b9bdb8479c45b160955c408, type: 3}
+  - {fileID: 8300000, guid: 06eb486437799344cadd658b6f47a5a3, type: 3}
+  - {fileID: 8300000, guid: cc0ad86abf42d2b48ac31330abd8b224, type: 3}
+  - {fileID: 8300000, guid: 121edd8834b91ee439f1f9dfeeb38440, type: 3}
+  - {fileID: 8300000, guid: 02062fe78607002478d8727c3835257e, type: 3}
+  - {fileID: 8300000, guid: aef8d902610e7044fae88b8e58aec8b6, type: 3}
+  - {fileID: 8300000, guid: 93708ce771bd0294aa7c4988446becf7, type: 3}
+  smallObjectSpinLoopClip: {fileID: 8300000, guid: 725259c8b9c46f14db32a5be357ace2b, type: 3}
+  playerLightHurtPool:
+  - {fileID: 8300000, guid: d1a90be5ea4b01742a286318b4990db4, type: 3}
+  - {fileID: 8300000, guid: b06cd7426b43f3847a27340233ed54fc, type: 3}
+  playerHeavyHurtClip: {fileID: 8300000, guid: 7c95008ef62a1e04abd1a3cdfa338860, type: 3}
+  playerKoPool:
+  - {fileID: 8300000, guid: ad144d5dd87e3d34781452f808a01b97, type: 3}
+  - {fileID: 8300000, guid: eb1e396302acb2144bcb05ab240392f4, type: 3}
+  enemyLightHurtPool:
+  - {fileID: 8300000, guid: 99a93e4015f4fdf4a9337489f8e7d45f, type: 3}
+  - {fileID: 8300000, guid: 18f62e00abedd954b888fca5b3b4998c, type: 3}
+  - {fileID: 8300000, guid: 60a1a37ef4d26314db2660558eee9c17, type: 3}
+  enemyKoPool:
+  - {fileID: 8300000, guid: ffd754d7a3f6c014ba9a5eb4047c70f0, type: 3}
+  - {fileID: 8300000, guid: 69d15a216e265ed4d9dc69bbc2ce2074, type: 3}

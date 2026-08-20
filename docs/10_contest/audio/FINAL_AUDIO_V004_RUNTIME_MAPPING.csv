@@ -1,0 +1,41 @@
+Family,Runtime Event,AudioClip,Playback,Runtime Path,Authority Hook
+Binder,Pickup,BN_FOL_BINDER_PICKUP_03.wav,One-shot,Assets/_Project/Audio/Final_v004/Foley,AcquisitionCommitted Scoop
+Binder,Throw,BN_FOL_BINDER_RELEASE_02.wav,One-shot,Assets/_Project/Audio/Final_v004/Foley,PlayerThrowCommitted or SupplyReleased
+Binder,Place Down,BN_FOL_BINDER_THROW_01.wav,One-shot,Assets/_Project/Audio/Final_v004/Foley,CarriedTargetDropped
+Binder,Direct Enemy Hit,BN_SFX_BINDER_DIRECT_HIT_A.wav,One-shot,Assets/_Project/Audio/Final_v004/Impacts,Accepted CombatContactResolved
+Binder,Wall Hit,BN_SFX_BINDER_WALL_HIT_B.wav,One-shot,Assets/_Project/Audio/Final_v004/Impacts,Deferred CollisionEntered wall route
+Binder,Floor Drop,BN_SFX_BINDER_FLOOR_DROP_B.wav,One-shot first floor contact,Assets/_Project/Audio/Final_v004/Impacts,Deferred CollisionEntered floor route
+Binder,Catch,BN_SFX_BINDER_CATCH_A.wav,One-shot,Assets/_Project/Audio/Final_v004/Impacts,AcquisitionCommitted Catch
+Chair,Pickup,BN_FOL_CHAIR_PICKUP_03.wav,One-shot,Assets/_Project/Audio/Final_v004/Foley,AcquisitionCommitted
+Chair,Release / Place Down,BN_FOL_CHAIR_RELEASE_02.wav,One-shot,Assets/_Project/Audio/Final_v004/Foley,CarriedTargetDropped or floor-supported SupplyReleased
+Chair,Throw,BN_FOL_CHAIR_THROW_02.wav,One-shot,Assets/_Project/Audio/Final_v004/Foley,PlayerThrowCommitted
+Chair,Swing Whoosh,BN_FOL_CHAIR_SWING_WHOOSH_MEDIUM_B.wav,Animation one-shot,Assets/_Project/Audio/Final_v004/Foley,ShowcaseChairSwingWhoosh frame 46
+Chair,Roll,BN_WP01_CHAIR_ROLL_LOOP_02.wav,Object-bound loop,Assets/_Project/Audio/Final_v004/Motion,Grounded planar-speed transition
+Chair,Skid,BN_WP01_CHAIR_SKID_01.wav,State-entry one-shot,Assets/_Project/Audio/Final_v004/Motion,Grounded skid transition
+Chair,Enemy Impact,BN_SFX_CHAIR_ENEMY_MAIN_IMPACT_B.wav,One-shot,Assets/_Project/Audio/Final_v004/Impacts,Accepted CombatContactResolved
+Chair,World Impact,BN_SFX_CHAIR_WORLD_IMPACT_A.wav,One-shot,Assets/_Project/Audio/Final_v004/Impacts,Deferred CollisionEntered world route
+Chair,Stop A,BN_SFX_CHAIR_STOP_A.wav,Random pool one-shot,Assets/_Project/Audio/Final_v004/Impacts,Moving-to-stopped confirmation
+Chair,Stop B,BN_SFX_CHAIR_STOP_B.wav,Random pool one-shot,Assets/_Project/Audio/Final_v004/Impacts,Moving-to-stopped confirmation
+Strap,Extend Part 1,BN_FOL_STRAP_ACTUAL_ZIPPER_Z01_OPEN_FULL.wav,DSP scheduled sequence,Assets/_Project/Audio/Final_v004/Strap,StrapExtendStarted
+Strap,Extend Part 2,BN_FOL_STRAP_ACTUAL_ZIPPER_Z02_CLOSE_FULL.wav,DSP scheduled sequence,Assets/_Project/Audio/Final_v004/Strap,Part 1 sample end
+Strap,Lock,BN_FOL_STRAP_LOCK_02.wav,One-shot,Assets/_Project/Audio/Final_v004/Strap,StrapLockCommitted
+Strap,Tension,BN_FOL_STRAP_TENSION_02.wav,One-shot,Assets/_Project/Audio/Final_v004/Strap,Attached-to-Tensioned commit
+Footstep,Office Hard 01,BN_FOL_FOOTSTEP_OFFICE_HARD_01.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 02,BN_FOL_FOOTSTEP_OFFICE_HARD_02.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 03,BN_FOL_FOOTSTEP_OFFICE_HARD_03.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 04,BN_FOL_FOOTSTEP_OFFICE_HARD_04.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 05,BN_FOL_FOOTSTEP_OFFICE_HARD_05.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 06,BN_FOL_FOOTSTEP_OFFICE_HARD_06.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 07,BN_FOL_FOOTSTEP_OFFICE_HARD_07.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Footstep,Office Hard 08,BN_FOL_FOOTSTEP_OFFICE_HARD_08.wav,Actor-local random one-shot,Assets/_Project/Audio/Final_v004/Foley,Authored foot-contact event
+Small Object,Spin,BN_FOL_SMALL_OBJECT_SPIN_LOOP_A.wav,Object-bound faded loop,Assets/_Project/Audio/Final_v004/Motion,SmallSpinning plus effective angular speed
+Player Voice,Light Hurt A,BN_VOX_PLAYER_LIGHT_HURT_A.wav,Actor voice pool,Assets/_Project/Audio/Final_v004/Voices,DamageAccepted light
+Player Voice,Light Hurt B,BN_VOX_PLAYER_LIGHT_HURT_B.wav,Actor voice pool,Assets/_Project/Audio/Final_v004/Voices,DamageAccepted light
+Player Voice,Heavy Hurt,BN_VOX_PLAYER_HEAVY_HURT_B.wav,Actor voice one-shot,Assets/_Project/Audio/Final_v004/Voices,DamageAccepted knockdown/heavy
+Player Voice,KO A,BN_VOX_PLAYER_KO_DEATH_A.wav,Actor KO pool,Assets/_Project/Audio/Final_v004/Voices,Lethal DamageAccepted
+Player Voice,KO B,BN_VOX_PLAYER_KO_DEATH_B.wav,Actor KO pool,Assets/_Project/Audio/Final_v004/Voices,Lethal DamageAccepted
+Enemy Voice,Light Hurt A,BN_VOX_ENEMY_LIGHT_HURT_A.wav,Per-actor voice pool,Assets/_Project/Audio/Final_v004/Voices,DamageAccepted nonlethal
+Enemy Voice,Light Hurt B,BN_VOX_ENEMY_LIGHT_HURT_B.wav,Per-actor voice pool,Assets/_Project/Audio/Final_v004/Voices,DamageAccepted nonlethal
+Enemy Voice,Light Hurt D,BN_VOX_ENEMY_LIGHT_HURT_D.wav,Per-actor voice pool,Assets/_Project/Audio/Final_v004/Voices,DamageAccepted nonlethal
+Enemy Voice,KO A,BN_VOX_ENEMY_KO_DEATH_A.wav,Per-actor KO pool,Assets/_Project/Audio/Final_v004/Voices,Lethal DamageAccepted
+Enemy Voice,KO B,BN_VOX_ENEMY_KO_DEATH_B.wav,Per-actor KO pool,Assets/_Project/Audio/Final_v004/Voices,Lethal DamageAccepted

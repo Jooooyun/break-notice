@@ -7,6 +7,8 @@ namespace BreakNotice.Gameplay.Combat
     /// </summary>
     public static class ShowcaseNonPlayerAnimationTiming
     {
+        public const float EnemyRunLeftFootstep = 8f / 22f;
+        public const float EnemyRunRightFootstep = 19f / 22f;
         // CHR01 Supply Release is trimmed from Unity source frames 21..44
         // (Blender 22..45). The hand opens at Blender frame 28 / Unity 27.
         public const float AllySupplyReleaseStateSpeed = 1.15f;

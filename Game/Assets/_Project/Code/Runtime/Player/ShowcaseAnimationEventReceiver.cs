@@ -1,3 +1,4 @@
+using System;
 using BreakNotice.Gameplay.Interaction;
 using UnityEngine;
 
@@ -39,7 +40,11 @@ namespace BreakNotice.Gameplay.Combat
         public int StrapPullCompleteInvocationCount { get; private set; }
         public int StrapAttackImpulseInvocationCount { get; private set; }
         public int StrapActionCompleteInvocationCount { get; private set; }
+        public int FootstepInvocationCount { get; private set; }
+        public int ChairSwingWhooshInvocationCount { get; private set; }
         public uint CargoStrapAnimationRevision => cargoStrapAnimationRevision;
+
+        public event Action<ShowcaseAnimationEventReceiver, int> FootstepContact;
 
         private void Awake()
         {
@@ -118,6 +123,33 @@ namespace BreakNotice.Gameplay.Combat
         {
             ThrowReleaseInvocationCount++;
             playerCombat?.CommitAnimationThrowRelease();
+        }
+
+        public void ShowcaseChairSwingWhoosh()
+        {
+            ChairSwingWhooshInvocationCount++;
+            playerCombat?.CommitAnimationChairSwingWhoosh();
+        }
+
+        public void ShowcaseFootstep(int foot)
+        {
+            if (foot < 0 || foot > 1)
+            {
+                return;
+            }
+
+            FootstepInvocationCount++;
+            FootstepContact?.Invoke(this, foot);
+        }
+
+        public void ShowcaseLeftFootstep()
+        {
+            ShowcaseFootstep(0);
+        }
+
+        public void ShowcaseRightFootstep()
+        {
+            ShowcaseFootstep(1);
         }
 
         public void ShowcaseCarryContact()

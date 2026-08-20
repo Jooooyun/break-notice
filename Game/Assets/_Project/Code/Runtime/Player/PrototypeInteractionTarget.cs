@@ -3,6 +3,41 @@ using UnityEngine;
 
 namespace BreakNotice.Gameplay.Interaction
 {
+    public readonly struct PrototypeInteractionCollisionSnapshot
+    {
+        public PrototypeInteractionCollisionSnapshot(
+            PrototypeInteractionTarget target,
+            Collider otherCollider,
+            Vector3 point,
+            Vector3 normal,
+            float relativeSpeed,
+            int frame,
+            uint sequence)
+        {
+            Target = target;
+            OtherCollider = otherCollider;
+            Point = point;
+            Normal = normal;
+            RelativeSpeed = Mathf.Max(0f, relativeSpeed);
+            Frame = frame;
+            Sequence = sequence;
+        }
+
+        public PrototypeInteractionTarget Target { get; }
+
+        public Collider OtherCollider { get; }
+
+        public Vector3 Point { get; }
+
+        public Vector3 Normal { get; }
+
+        public float RelativeSpeed { get; }
+
+        public int Frame { get; }
+
+        public uint Sequence { get; }
+    }
+
     [DisallowMultipleComponent]
     public sealed class PrototypeInteractionTarget : MonoBehaviour
     {
@@ -117,6 +152,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public float LastCollisionRelativeSpeed => lastCollisionRelativeSpeed;
 
+        public event Action<PrototypeInteractionCollisionSnapshot> CollisionEntered;
+
         public bool IsScoopEligible =>
             DirectAcquisitionEligible &&
             (weightClass == PrototypeWeightClass.Light ||
@@ -130,6 +167,21 @@ namespace BreakNotice.Gameplay.Interaction
             lastCollisionRelativeSpeed = collision != null
                 ? collision.relativeVelocity.magnitude
                 : 0f;
+            ContactPoint contact = collision != null && collision.contactCount > 0
+                ? collision.GetContact(0)
+                : default;
+            CollisionEntered?.Invoke(new PrototypeInteractionCollisionSnapshot(
+                this,
+                lastCollisionOther,
+                collision != null && collision.contactCount > 0
+                    ? contact.point
+                    : transform.position,
+                collision != null && collision.contactCount > 0
+                    ? contact.normal
+                    : Vector3.zero,
+                lastCollisionRelativeSpeed,
+                Time.frameCount,
+                collisionSequence));
             TryLatchCargoStrapCollision(
                 lastCollisionOther,
                 lastCollisionRelativeSpeed);

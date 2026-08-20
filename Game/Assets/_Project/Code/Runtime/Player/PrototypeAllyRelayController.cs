@@ -290,6 +290,8 @@ namespace BreakNotice.Gameplay.Interaction
 
         public event Action<PrototypeInteractionTarget> CatchCompleted;
 
+        public event Action<PrototypeInteractionTarget> SupplyReleased;
+
         public int QueuedThrowCount { get; private set; }
 
         public int PhysicalResolutionCount { get; private set; }
@@ -990,6 +992,7 @@ namespace BreakNotice.Gameplay.Interaction
             LastReleasePosition = activeBody.position;
             LastLaunchVelocity = activeBody.linearVelocity;
             ReleaseCount++;
+            SupplyReleased?.Invoke(activeTarget);
         }
 
         public bool CommitAnimationSupplyRelease()

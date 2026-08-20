@@ -174,6 +174,10 @@ namespace BreakNotice.Gameplay.Interaction
 
         public PhysicalReleaseSnapshot LastPhysicalReleaseSnapshot { get; private set; }
 
+        public event System.Action<PrototypeInteractionTarget> CarriedTargetDropped;
+
+        public event System.Action<PhysicalReleaseSnapshot> PlayerThrowCommitted;
+
         public float MaximumThrowSpeedMultiplier => maximumThrowSpeedMultiplier;
 
         public bool IsPlayerPropRuntimeAvailable =>
@@ -691,7 +695,12 @@ namespace BreakNotice.Gameplay.Interaction
             carriedBoxCollider = null;
             AcquisitionPathLength = 0f;
             ResetGripDiagnostics();
-            return interactionOwner.CancelCarry(target);
+            bool ownershipReleased = interactionOwner.CancelCarry(target);
+            if (ownershipReleased)
+            {
+                CarriedTargetDropped?.Invoke(target);
+            }
+            return ownershipReleased;
         }
 
         public bool TryThrow(Vector3 requestedDirection, float charge01 = 0f)
@@ -937,7 +946,9 @@ namespace BreakNotice.Gameplay.Interaction
             body.WakeUp();
 
             nextThrowOriginSequence++;
-            if (!target.TryCommitSuccessfulPlayerThrow(nextThrowOriginSequence))
+            bool useCommitted =
+                target.TryCommitSuccessfulPlayerThrow(nextThrowOriginSequence);
+            if (!useCommitted)
             {
                 Debug.LogError(
                     $"PLAYER THROW USE COMMIT FAILED: {target.RuntimeInstanceKey} / " +
@@ -962,6 +973,10 @@ namespace BreakNotice.Gameplay.Interaction
                 body.linearVelocity,
                 body.angularVelocity,
                 clampedCharge);
+            if (useCommitted)
+            {
+                PlayerThrowCommitted?.Invoke(LastPhysicalReleaseSnapshot);
+            }
         }
 
         private PrototypeThrowSolution CreateThrowSolution(

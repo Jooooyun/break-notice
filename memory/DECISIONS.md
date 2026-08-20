@@ -31,3 +31,7 @@ Connect `CHR00_Pickup_Low_Small` and `CHR00_Pickup_Low_Medium`. For CHR00, objec
 ## D-006 · Use the supplied Picking Up FBX for Pickup Low Small — 2026-08-17 (user-confirmed)
 
 Replace `CHR00_Pickup_Low_Small` with the user-supplied `Picking Up.fbx`. Keep it as an independent Humanoid/Create From This Model source, bind it to `PickupLowSmallAction`, and synchronize contact/stabilization/completion to its own 144-sample motion. `CHR00_Pickup_Low_Medium` remains unchanged.
+
+## D-007 · Integrate FINAL AUDIO v004 through gameplay facts — 2026-08-20 (user, FINAL AUDIO v004 direct task)
+
+Import the 40 approved runtime WAVs unchanged and connect them without manual Inspector work. Preserve the special Binder semantics: `BN_FOL_BINDER_RELEASE_02.wav` is Binder Throw and `BN_FOL_BINDER_THROW_01.wav` is Binder Place Down. Play Strap Extend as DSP-scheduled Z01 OPEN FULL followed by Z02 CLOSE FULL. Use one-shots for discrete facts, object-bound loops for Chair Roll and Small Spin, actor-bound voice sources, per-actor random state, no immediate pool repeat, collision/physics-step deduplication, voice cooldown, and `KO > Heavy Hurt > Light Hurt` priority. Audio must follow successful gameplay/animation/physics facts rather than input attempts; missing audio must remain null-safe and may not be disguised with another clip. The current unarmed accepted-contact audio remains authoritative for its six takes and Final v004 extends rather than replaces it. No commit or push is allowed before Human Owner review.
