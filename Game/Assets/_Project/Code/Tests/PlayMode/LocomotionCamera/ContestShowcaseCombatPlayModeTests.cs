@@ -508,9 +508,10 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(pressure.TryAcquireAttackToken(runner), Is.True);
             runner.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
             int startingHealth = player.Health.CurrentHealth;
-            Assert.That(runner.AnimationCue, Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing));
+            Assert.That(runner.PreparedAttackCue,
+                Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing));
             Assert.That(
-                runner.AnimationCue,
+                runner.PreparedAttackCue,
                 Is.Not.EqualTo(ShowcaseRunnerAnimationCue.EliteJumpAttack));
             Assert.That(rig.IsAttackWindowOpen, Is.False);
             Assert.That(rig.AcceptedHitCount, Is.Zero);
@@ -612,7 +613,7 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
-        public IEnumerator RunnerAttackRecovery_ChainsIntoNextPunchWithoutIdleFrame()
+        public IEnumerator RunnerAttackRecovery_UsesCooldownAndTelegraphBeforeNextPunch()
         {
             yield return LoadScene();
 
@@ -633,8 +634,14 @@ namespace BreakNotice.LocomotionCamera.Tests
                 driver.Animator.GetComponent<ShowcaseAnimationEventReceiver>();
             Assert.That(pressure.TryAcquireAttackToken(runner), Is.True);
             runner.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
-            Assert.That(runner.AnimationCue,
+            Assert.That(runner.PreparedAttackCue,
                 Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing));
+            yield return WaitUntilOrFail(
+                () => runner.AnimationCue ==
+                    ShowcaseRunnerAnimationCue.Boxing &&
+                    !runner.IsAttackWindup,
+                1f,
+                "The prepared Boxing cue did not commit after Telegraph.");
             uint firstRevision = runner.AnimationCueRevision;
 
             yield return WaitUntilOrFail(
@@ -642,19 +649,26 @@ namespace BreakNotice.LocomotionCamera.Tests
                 3f,
                 "The first punch window never closed.");
 
-            bool sawIdle = false;
+            yield return WaitUntilOrFail(
+                () => runner.IsAttackWindup,
+                2f,
+                "The next attack never entered its cooldown-gated Telegraph.");
+            Assert.That(runner.AnimationCueRevision, Is.EqualTo(firstRevision),
+                "The next strike clip must not begin before Telegraph completes.");
+            float telegraphStartedAt = Time.time;
+            float expectedTelegraph = runner.ActiveTelegraphDuration;
             float chainDeadline = Time.realtimeSinceStartup + 2f;
             while (runner.AnimationCueRevision == firstRevision &&
                    Time.realtimeSinceStartup < chainDeadline)
             {
-                sawIdle |= driver.CurrentBaseStateName == "Idle";
                 yield return null;
             }
 
             Assert.That(runner.AnimationCueRevision, Is.GreaterThan(firstRevision),
                 "The next authored punch did not chain from recovery.");
-            Assert.That(sawIdle, Is.False,
-                "Attack recovery dropped through an arms-down Idle frame.");
+            Assert.That(Time.time - telegraphStartedAt,
+                Is.GreaterThanOrEqualTo(expectedTelegraph - 0.06f),
+                "The next strike clip began before the deterministic Telegraph ended.");
             Assert.That(runner.AnimationCue,
                 Is.EqualTo(ShowcaseRunnerAnimationCue.Boxing),
                 "The normal cadence must begin with two or three punches before a kick.");
@@ -777,7 +791,7 @@ namespace BreakNotice.LocomotionCamera.Tests
 
                 Assert.That(pressure.TryAcquireAttackToken(runner), Is.True, attackCase.Name);
                 runner.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
-                Assert.That(runner.AnimationCue,
+                Assert.That(runner.PreparedAttackCue,
                     Is.EqualTo(attackCase.ExpectedCue), attackCase.Name);
                 Assert.That(rig.IsAttackWindowOpen, Is.False, attackCase.Name);
                 Assert.That(rig.AcceptedHitCount, Is.Zero, attackCase.Name);

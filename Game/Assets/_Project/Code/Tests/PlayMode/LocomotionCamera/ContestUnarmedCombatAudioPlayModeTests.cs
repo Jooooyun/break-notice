@@ -164,7 +164,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             PositionRunnerAtAttackStandoff(player.transform, normal);
             Assert.That(pressure.TryAcquireAttackToken(normal), Is.True);
             normal.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
-            Assert.That(normal.AnimationCue, Is.EqualTo(ShowcaseRunnerAnimationCue.Kicking));
+            Assert.That(normal.PreparedAttackCue,
+                Is.EqualTo(ShowcaseRunnerAnimationCue.Kicking));
             yield return WaitUntilOrFail(
                 () => audio.GetConfirmedTakeCount(
                           ShowcaseUnarmedCombatAudioTake.P01DeepBody) == 1 &&
@@ -185,7 +186,8 @@ namespace BreakNotice.LocomotionCamera.Tests
             PositionRunnerAtAttackStandoff(player.transform, normal);
             Assert.That(pressure.TryAcquireAttackToken(normal), Is.True);
             normal.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
-            Assert.That(normal.AnimationCue, Is.EqualTo(ShowcaseRunnerAnimationCue.Kicking2));
+            Assert.That(normal.PreparedAttackCue,
+                Is.EqualTo(ShowcaseRunnerAnimationCue.Kicking2));
             yield return WaitUntilOrFail(
                 () => audio.GetConfirmedTakeCount(
                           ShowcaseUnarmedCombatAudioTake.P10FastBody) == 1 &&
@@ -252,6 +254,11 @@ namespace BreakNotice.LocomotionCamera.Tests
             int startingHealth = combat.Health.CurrentHealth;
             Assert.That(pressure.TryAcquireAttackToken(normal), Is.True);
             normal.SendMessage("CommitNextAttack", SendMessageOptions.RequireReceiver);
+            yield return WaitUntilOrFail(
+                () => !normal.IsAttackWindup &&
+                      normal.AnimationCue != ShowcaseRunnerAnimationCue.None,
+                1f,
+                "The Runner whiff attack did not commit after Telegraph.");
 
             ThirdPersonLocomotion locomotion = combat.GetComponent<ThirdPersonLocomotion>();
             locomotion.enabled = false;

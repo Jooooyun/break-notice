@@ -228,26 +228,7 @@ namespace BreakNotice.Gameplay.Combat
 
         private void LateUpdate()
         {
-            if (!IsAttackWindowOpen || activeStrikeCount <= 0)
-            {
-                return;
-            }
-
-            for (int activeIndex = 0; activeIndex < activeStrikeCount; activeIndex++)
-            {
-                int strikeIndex = activeStrikeIndices[activeIndex];
-                if (strikeIndex < 0 || strikeIndex >= strikes.Length ||
-                    !strikes[strikeIndex].IsBound)
-                {
-                    continue;
-                }
-
-                StrikeBinding strike = strikes[strikeIndex];
-                Vector3 current = strike.WorldCenter +
-                    transform.forward * strike.ForwardOffset;
-                SweepStrike(previousStrikePositions[activeIndex], current, strike.Radius);
-                previousStrikePositions[activeIndex] = current;
-            }
+            CaptureCurrentStrikeContacts();
         }
 
         private void Update()
@@ -276,6 +257,39 @@ namespace BreakNotice.Gameplay.Combat
                 }
             }
             pendingContacts.Clear();
+        }
+
+        internal void CaptureAndResolvePendingContacts()
+        {
+            CaptureCurrentStrikeContacts();
+            ResolvePendingContacts();
+        }
+
+        private void CaptureCurrentStrikeContacts()
+        {
+            if (!IsAttackWindowOpen || activeStrikeCount <= 0)
+            {
+                return;
+            }
+
+            for (int activeIndex = 0; activeIndex < activeStrikeCount; activeIndex++)
+            {
+                int strikeIndex = activeStrikeIndices[activeIndex];
+                if (strikeIndex < 0 || strikeIndex >= strikes.Length ||
+                    !strikes[strikeIndex].IsBound)
+                {
+                    continue;
+                }
+
+                StrikeBinding strike = strikes[strikeIndex];
+                Vector3 current = strike.WorldCenter +
+                    transform.forward * strike.ForwardOffset;
+                SweepStrike(
+                    previousStrikePositions[activeIndex],
+                    current,
+                    strike.Radius);
+                previousStrikePositions[activeIndex] = current;
+            }
         }
 
         public void Configure(
@@ -358,6 +372,120 @@ namespace BreakNotice.Gameplay.Combat
             center = strike.WorldCenter + transform.forward * strike.ForwardOffset;
             radius = strike.Radius;
             return true;
+        }
+
+        public bool TryResolveExternalColliderContact(
+            Collider externalCollider,
+            out Vector3 worldPoint)
+        {
+            Vector3 currentCenter = externalCollider != null
+                ? externalCollider.bounds.center
+                : Vector3.zero;
+            return TryResolveExternalColliderContact(
+                externalCollider,
+                currentCenter,
+                out worldPoint);
+        }
+
+        public bool TryResolveExternalColliderContact(
+            Collider externalCollider,
+            Vector3 previousColliderCenter,
+            out Vector3 worldPoint)
+        {
+            return TryResolveExternalColliderContact(
+                externalCollider,
+                previousColliderCenter,
+                0f,
+                out worldPoint);
+        }
+
+        public bool TryResolveExternalColliderContact(
+            Collider externalCollider,
+            Vector3 previousColliderCenter,
+            float headRadiusExpansion,
+            out Vector3 worldPoint)
+        {
+            worldPoint = default;
+            if (externalCollider == null || !externalCollider.enabled ||
+                hurtboxes == null || hurtboxes.Length == 0)
+            {
+                return false;
+            }
+
+            float nearestDistanceSquared = float.PositiveInfinity;
+            bool resolved = false;
+            Vector3 currentColliderCenter = externalCollider.bounds.center;
+            Vector3 colliderExtents = externalCollider.bounds.extents;
+            float sweepRadius = Mathf.Clamp(
+                Mathf.Max(colliderExtents.x, colliderExtents.z),
+                0.12f,
+                0.55f);
+            Vector3 sweepSegment =
+                currentColliderCenter - previousColliderCenter;
+            float sweepLengthSquared = sweepSegment.sqrMagnitude;
+            for (int index = 0; index < hurtboxes.Length; index++)
+            {
+                HurtboxBinding hurtbox = hurtboxes[index];
+                if (!hurtbox.IsBound)
+                {
+                    continue;
+                }
+
+                Vector3 closestPoint = externalCollider.ClosestPoint(
+                    hurtbox.WorldCenter);
+                float distanceSquared =
+                    (hurtbox.WorldCenter - closestPoint).sqrMagnitude;
+                float resolvedHurtboxRadius = hurtbox.Radius +
+                    (hurtbox.Region == ShowcaseHurtboxRegion.Head
+                        ? Mathf.Max(0f, headRadiusExpansion)
+                        : 0f);
+                float acceptedRadius = resolvedHurtboxRadius +
+                    ContactTolerance;
+                if (distanceSquared <= acceptedRadius * acceptedRadius &&
+                    distanceSquared < nearestDistanceSquared)
+                {
+                    nearestDistanceSquared = distanceSquared;
+                    worldPoint = closestPoint;
+                    resolved = true;
+                }
+
+                if (sweepLengthSquared <= 0.000001f ||
+                    !SweptSphereOverlapsSphere(
+                        previousColliderCenter,
+                        currentColliderCenter,
+                        sweepRadius,
+                        hurtbox.WorldCenter,
+                        resolvedHurtboxRadius))
+                {
+                    continue;
+                }
+
+                float sweep01 = Mathf.Clamp01(Vector3.Dot(
+                    hurtbox.WorldCenter - previousColliderCenter,
+                    sweepSegment) / sweepLengthSquared);
+                Vector3 sweepCenter = previousColliderCenter +
+                    sweepSegment * sweep01;
+                Vector3 towardHurtbox = hurtbox.WorldCenter - sweepCenter;
+                float centerDistance = towardHurtbox.magnitude;
+                float surfaceSeparation = Mathf.Max(
+                    0f,
+                    centerDistance - sweepRadius);
+                float sweptDistanceSquared =
+                    surfaceSeparation * surfaceSeparation;
+                if (sweptDistanceSquared >= nearestDistanceSquared)
+                {
+                    continue;
+                }
+
+                nearestDistanceSquared = sweptDistanceSquared;
+                worldPoint = centerDistance > 0.0001f
+                    ? sweepCenter +
+                      towardHurtbox / centerDistance *
+                      Mathf.Min(sweepRadius, centerDistance)
+                    : sweepCenter;
+                resolved = true;
+            }
+            return resolved;
         }
 
         public void CloseAttackWindow()

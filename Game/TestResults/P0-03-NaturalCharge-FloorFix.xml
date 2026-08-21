@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.1714492">
+  <test-suite type="TestSuite" id="1216" name="Game" fullname="Game" runstate="Runnable" testcasecount="182" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.171449" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1209" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="182" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.158105" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="13584" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1210" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="182" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.156630" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1211" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="182" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.155632" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1212" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="182" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.154541" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1031" name="ContestCargoChargeSlamPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.147474" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1033" name="NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair" methodname="NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1415831329" result="Passed" start-time="2026-08-21 13:11:55Z" end-time="2026-08-21 13:11:58Z" duration="3.129477" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

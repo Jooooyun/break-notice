@@ -23,6 +23,9 @@ namespace BreakNotice.Gameplay.Combat
         private ShowcaseBoneCombatRig boneCombatRig;
 
         private uint cargoStrapAnimationRevision;
+        private bool attackWindowClosePending;
+        private uint pendingClosingAttackSequence;
+        private bool combatActionCompletePending;
 
         public int CombatHitInvocationCount { get; private set; }
         public int ThrowReleaseInvocationCount { get; private set; }
@@ -52,6 +55,42 @@ namespace BreakNotice.Gameplay.Combat
             boneCombatRig ??= GetComponentInParent<ShowcaseBoneCombatRig>();
         }
 
+        private void OnDisable()
+        {
+            attackWindowClosePending = false;
+            pendingClosingAttackSequence = 0;
+            combatActionCompletePending = false;
+        }
+
+        private void LateUpdate()
+        {
+            if (!attackWindowClosePending && !combatActionCompletePending)
+            {
+                return;
+            }
+
+            // Animator events are raised before the final evaluated Humanoid
+            // pose is available to gameplay. BoneCombatRig runs earlier in
+            // LateUpdate, so resolve the closing-frame sweep here before the
+            // window is cleared or the combo advances to a new sequence.
+            boneCombatRig?.CaptureAndResolvePendingContacts();
+
+            if (attackWindowClosePending)
+            {
+                uint closingSequence = pendingClosingAttackSequence;
+                attackWindowClosePending = false;
+                pendingClosingAttackSequence = 0;
+                boneCombatRig?.CloseAttackWindow();
+                runnerAgent?.NotifyAttackWindowClosed(closingSequence);
+            }
+
+            if (combatActionCompletePending)
+            {
+                combatActionCompletePending = false;
+                CompleteActionNow();
+            }
+        }
+
         public void Configure(
             ShowcasePlayerCombatController authoredPlayerCombat,
             ShowcaseRunnerAgent authoredRunnerAgent,
@@ -64,6 +103,9 @@ namespace BreakNotice.Gameplay.Combat
             cargoStrap = authoredCargoStrap ??
                 GetComponentInParent<ShowcaseCargoStrapController>();
             boneCombatRig = GetComponentInParent<ShowcaseBoneCombatRig>();
+            attackWindowClosePending = false;
+            pendingClosingAttackSequence = 0;
+            combatActionCompletePending = false;
         }
 
         public void SetCargoStrapAnimationRevision(uint revision)
@@ -88,11 +130,10 @@ namespace BreakNotice.Gameplay.Combat
         public void ShowcaseAttackWindowClose()
         {
             AttackWindowCloseInvocationCount++;
-            uint closingSequence = boneCombatRig != null
+            pendingClosingAttackSequence = boneCombatRig != null
                 ? boneCombatRig.ActiveAttackSequence
                 : 0;
-            boneCombatRig?.CloseAttackWindow();
-            runnerAgent?.NotifyAttackWindowClosed(closingSequence);
+            attackWindowClosePending = true;
         }
 
         public void ShowcaseComboBufferOpen()
@@ -166,16 +207,28 @@ namespace BreakNotice.Gameplay.Combat
         public void ShowcaseActionComplete()
         {
             ActionCompleteInvocationCount++;
+            if ((playerCombat != null && playerCombat.IsMeleeActionActive) ||
+                (runnerAgent != null &&
+                 (runnerAgent.IsAttackWindup ||
+                  runnerAgent.CanOpenAttackWindow ||
+                  attackWindowClosePending)))
+            {
+                combatActionCompletePending = true;
+                return;
+            }
+
+            CompleteActionNow();
+        }
+
+        private void CompleteActionNow()
+        {
             if (playerCombat != null)
             {
                 playerCombat.CompleteAnimationAction();
             }
-            else
+            else if (runnerAgent != null)
             {
-                if (runnerAgent != null)
-                {
-                    runnerAgent.CompleteAnimationAction();
-                }
+                runnerAgent.CompleteAnimationAction();
             }
         }
 

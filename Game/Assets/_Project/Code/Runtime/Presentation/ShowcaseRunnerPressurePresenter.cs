@@ -5,6 +5,23 @@ using UnityEngine;
 
 namespace BreakNotice.Presentation
 {
+    public readonly struct ShowcaseOffScreenAttackWarning
+    {
+        public ShowcaseOffScreenAttackWarning(
+            ShowcaseRunnerAgent runner,
+            Vector2 viewportEdge,
+            Vector2 direction)
+        {
+            Runner = runner;
+            ViewportEdge = viewportEdge;
+            Direction = direction;
+        }
+
+        public ShowcaseRunnerAgent Runner { get; }
+        public Vector2 ViewportEdge { get; }
+        public Vector2 Direction { get; }
+    }
+
     [DefaultExecutionOrder(205)]
     [DisallowMultipleComponent]
     public sealed class ShowcaseRunnerPressurePresenter : MonoBehaviour
@@ -12,9 +29,13 @@ namespace BreakNotice.Presentation
         [SerializeField]
         private ShowcaseRunnerPressureController pressureController;
 
+        [SerializeField, Range(1, 3)]
+        private int maximumOffScreenWarnings = 3;
+
         private GUIStyle statusStyle;
         private GUIStyle markerStyle;
         private GUIStyle worldMarkerStyle;
+        private GUIStyle offScreenWarningStyle;
         private float contactMarkerUntil;
         private bool contactAccepted;
         private Vector3 contactMarkerWorldPoint;
@@ -23,6 +44,7 @@ namespace BreakNotice.Presentation
         public ShowcaseRunnerPressureController PressureController => pressureController;
         public bool IsContactMarkerVisible => Time.unscaledTime < contactMarkerUntil;
         public Vector3 LastContactMarkerWorldPoint => contactMarkerWorldPoint;
+        public int LastOffScreenWarningCount { get; private set; }
 
         public void Configure(ShowcaseRunnerPressureController pressure)
         {
@@ -69,10 +91,14 @@ namespace BreakNotice.Presentation
             string melee = pressureController.HasPlayerMeleeTarget
                 ? "  |  [LMB] MELEE"
                 : string.Empty;
-            string token = pressureController.AttackTokenOwner != null
-                ? $"  |  ATTACK TOKEN: {pressureController.AttackTokenOwner.RunnerId}"
-                : string.Empty;
-            return health + builder + token + melee;
+            ShowcaseAttackBudgetSnapshot budget =
+                pressureController.CurrentAttackBudget;
+            string attackBudget =
+                $"  |  ATTACK BUDGET N " +
+                $"{budget.ActiveNormalAttackers}/{budget.NormalCapacity}  " +
+                $"E {budget.ActiveEliteAttackers}/{budget.EliteCapacity}  " +
+                $"T {budget.ActiveAttackers}/{budget.TotalCapacity}";
+            return health + builder + attackBudget + melee;
         }
 
         private void OnGUI()
@@ -96,6 +122,7 @@ namespace BreakNotice.Presentation
             DrawPlayerMeleeMarker();
             DrawWorldContactMarker();
             DrawRunnerMarkers();
+            DrawOffScreenAttackWarnings();
         }
 
         public bool TryGetPlayerStrikeMarker(
@@ -193,8 +220,121 @@ namespace BreakNotice.Presentation
                 GUI.Label(
                     new Rect(screen.x - 70f, Screen.height - screen.y - 18f, 140f, 32f),
                     state + hp,
-                    worldMarkerStyle);
+                worldMarkerStyle);
             }
+        }
+
+        public bool TryGetOffScreenAttackWarning(
+            Camera camera,
+            ShowcaseRunnerAgent runner,
+            out ShowcaseOffScreenAttackWarning warning)
+        {
+            if (camera == null || runner == null || runner.IsDead ||
+                !runner.IsAttackWindup || pressureController == null ||
+                !pressureController.CanSimulatePressure())
+            {
+                warning = default;
+                return false;
+            }
+
+            Vector3 viewport = camera.WorldToViewportPoint(
+                runner.transform.position + Vector3.up * 1.45f);
+            bool onScreen = viewport.z > 0f &&
+                viewport.x >= 0f && viewport.x <= 1f &&
+                viewport.y >= 0f && viewport.y <= 1f;
+            if (onScreen)
+            {
+                warning = default;
+                return false;
+            }
+
+            Vector2 direction = new Vector2(
+                viewport.x - 0.5f,
+                viewport.y - 0.5f);
+            if (viewport.z <= 0f)
+            {
+                direction = -direction;
+            }
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                direction = Vector2.up;
+            }
+            direction.Normalize();
+
+            const float margin = 0.08f;
+            const float halfExtent = 0.5f - margin;
+            float horizontalScale = Mathf.Abs(direction.x) > 0.0001f
+                ? halfExtent / Mathf.Abs(direction.x)
+                : float.PositiveInfinity;
+            float verticalScale = Mathf.Abs(direction.y) > 0.0001f
+                ? halfExtent / Mathf.Abs(direction.y)
+                : float.PositiveInfinity;
+            float edgeScale = Mathf.Min(horizontalScale, verticalScale);
+            Vector2 edge = new Vector2(0.5f, 0.5f) +
+                direction * edgeScale;
+            edge.x = Mathf.Clamp(edge.x, margin, 1f - margin);
+            edge.y = Mathf.Clamp(edge.y, margin, 1f - margin);
+            warning = new ShowcaseOffScreenAttackWarning(
+                runner,
+                edge,
+                direction);
+            return true;
+        }
+
+        private void DrawOffScreenAttackWarnings()
+        {
+            LastOffScreenWarningCount = 0;
+            Camera camera = Camera.main;
+            if (camera == null || pressureController == null ||
+                !pressureController.CanSimulatePressure())
+            {
+                return;
+            }
+
+            offScreenWarningStyle ??= new GUIStyle(GUI.skin.box)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 18,
+                fontStyle = FontStyle.Bold
+            };
+            float pulse = 0.72f +
+                0.28f * (0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 10f));
+            offScreenWarningStyle.normal.textColor =
+                new Color(1f, 0.72f, 0.16f, pulse);
+
+            int warningLimit = Mathf.Clamp(maximumOffScreenWarnings, 1, 3);
+            foreach (ShowcaseRunnerAgent runner in pressureController.Runners)
+            {
+                if (LastOffScreenWarningCount >= warningLimit)
+                {
+                    break;
+                }
+                if (!TryGetOffScreenAttackWarning(
+                        camera,
+                        runner,
+                        out ShowcaseOffScreenAttackWarning warning))
+                {
+                    continue;
+                }
+
+                Vector2 screen = new Vector2(
+                    warning.ViewportEdge.x * Screen.width,
+                    (1f - warning.ViewportEdge.y) * Screen.height);
+                GUI.Label(
+                    new Rect(screen.x - 34f, screen.y - 22f, 68f, 44f),
+                    ResolveWarningArrow(warning.Direction) + " !",
+                    offScreenWarningStyle);
+                LastOffScreenWarningCount++;
+            }
+        }
+
+        private static string ResolveWarningArrow(Vector2 direction)
+        {
+            if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
+            {
+                return direction.x >= 0f ? "▶" : "◀";
+            }
+            return direction.y >= 0f ? "▲" : "▼";
         }
 
         private void DrawPlayerMeleeMarker()
@@ -257,10 +397,23 @@ namespace BreakNotice.Presentation
             {
                 return;
             }
-            result.Attacker?.GetComponent<ShowcaseCharacterAnimationDriver>()
-                ?.ApplyLocalHitStop(0.05f);
+            float hitStopSeconds = result.HitStopSeconds;
+            if (hitStopSeconds <= 0f)
+            {
+                return;
+            }
+            ShowcaseCharacterAnimationDriver attackerDriver =
+                result.Attacker?.GetComponent<ShowcaseCharacterAnimationDriver>();
+            if (attackerDriver == null && result.HasObjectImpact &&
+                pressureController != null &&
+                pressureController.PlayerTransform != null)
+            {
+                attackerDriver = pressureController.PlayerTransform
+                    .GetComponent<ShowcaseCharacterAnimationDriver>();
+            }
+            attackerDriver?.ApplyLocalHitStop(hitStopSeconds);
             result.Victim?.GetComponent<ShowcaseCharacterAnimationDriver>()
-                ?.ApplyLocalHitStop(0.05f);
+                ?.ApplyLocalHitStop(hitStopSeconds);
         }
 
         private void HandleBaselineReset()
@@ -268,6 +421,7 @@ namespace BreakNotice.Presentation
             contactMarkerUntil = 0f;
             contactAccepted = false;
             contactMarkerWorldPoint = Vector3.zero;
+            LastOffScreenWarningCount = 0;
         }
 
         private void EnsureWorldMarkerStyle()

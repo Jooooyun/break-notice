@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="9" result="Failed(Child)" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.3956782">
+  <test-suite type="TestSuite" id="1215" name="Game" fullname="Game" runstate="Runnable" testcasecount="181" result="Failed" site="Child" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.395678" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1208" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="181" result="Failed" site="Child" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.382393" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="22760" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1209" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="181" result="Failed" site="Child" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.381145" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1210" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="181" result="Failed" site="Child" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.380267" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1211" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="181" result="Failed" site="Child" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.379356" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1031" name="ContestCargoChargeSlamPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" testcasecount="9" result="Failed" site="Child" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:18Z" duration="15.372629" total="9" passed="4" failed="5" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1032" name="ChargeAllowsReducedMovementAndCancelCreatesNoAttack" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.ChargeAllowsReducedMovementAndCancelCreatesNoAttack" methodname="ChargeAllowsReducedMovementAndCancelCreatesNoAttack" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="420032707" result="Failed" start-time="2026-08-21 13:01:02Z" end-time="2026-08-21 13:01:05Z" duration="2.283702" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Normal enemy body aim must remain a lateral Sweep.
+  Expected: SweepLeft
+  But was:  SweepRight
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests+<ChargeAllowsReducedMovementAndCancelCreatesNoAttack>d__4.MoveNext () [0x001bf] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestCargoChargeSlamPlayModeTests.cs:85
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1039" name="CloseRunnerUsesContextualJabInsteadOfChairCharge" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.CloseRunnerUsesContextualJabInsteadOfChairCharge" methodname="CloseRunnerUsesContextualJabInsteadOfChairCharge" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1644520705" result="Passed" start-time="2026-08-21 13:01:05Z" end-time="2026-08-21 13:01:06Z" duration="1.133695" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="FreeAimWithoutEnemyStillReleasesAndAcceleratesChair" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.FreeAimWithoutEnemyStillReleasesAndAcceleratesChair" methodname="FreeAimWithoutEnemyStillReleasesAndAcceleratesChair" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1040516757" result="Passed" start-time="2026-08-21 13:01:06Z" end-time="2026-08-21 13:01:07Z" duration="1.356736" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1040" name="FullSlamUsesActualContactForDirectOuterAndRecoveryTiming" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.FullSlamUsesActualContactForDirectOuterAndRecoveryTiming" methodname="FullSlamUsesActualContactForDirectOuterAndRecoveryTiming" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1502173135" result="Failed" start-time="2026-08-21 13:01:07Z" end-time="2026-08-21 13:01:10Z" duration="2.606176" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Descending Chair must resolve the runner Head hurtbox even without a physical head collider.
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests+<FullSlamUsesActualContactForDirectOuterAndRecoveryTiming>d__12.MoveNext () [0x00737] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestCargoChargeSlamPlayModeTests.cs:786
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Full Slam release-to-acceleration: 0.121s
+]]></output>
+              </test-case>
+              <test-case id="1036" name="FullSweptBoxHitsThreePathRunnersOnceAndCapsBeforeFourth" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.FullSweptBoxHitsThreePathRunnersOnceAndCapsBeforeFourth" methodname="FullSweptBoxHitsThreePathRunnersOnceAndCapsBeforeFourth" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1894145216" result="Failed" start-time="2026-08-21 13:01:10Z" end-time="2026-08-21 13:01:12Z" duration="2.152133" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests+<FullSweptBoxHitsThreePathRunnersOnceAndCapsBeforeFourth>d__8.MoveNext () [0x0054b] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestCargoChargeSlamPlayModeTests.cs:402
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1037" name="PrimaryCarryEnemyCollisionEmitsOnceAndTerminatesSweep" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.PrimaryCarryEnemyCollisionEmitsOnceAndTerminatesSweep" methodname="PrimaryCarryEnemyCollisionEmitsOnceAndTerminatesSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1683332501" result="Failed" start-time="2026-08-21 13:01:12Z" end-time="2026-08-21 13:01:14Z" duration="2.147592" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests+<PrimaryCarryEnemyCollisionEmitsOnceAndTerminatesSweep>d__9.MoveNext () [0x00393] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestCargoChargeSlamPlayModeTests.cs:496
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1034" name="SlamTargetKeepsChairSupportAboveRecordedFloor" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.SlamTargetKeepsChairSupportAboveRecordedFloor" methodname="SlamTargetKeepsChairSupportAboveRecordedFloor" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="465065408" result="Passed" start-time="2026-08-21 13:01:14Z" end-time="2026-08-21 13:01:15Z" duration="1.118594" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="SweptBoxStopsAtStaticWallBeforeRunnerBehindIt" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.SweptBoxStopsAtStaticWallBeforeRunnerBehindIt" methodname="SweptBoxStopsAtStaticWallBeforeRunnerBehindIt" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1184481867" result="Failed" start-time="2026-08-21 13:01:15Z" end-time="2026-08-21 13:01:17Z" duration="1.235825" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests+<SweptBoxStopsAtStaticWallBeforeRunnerBehindIt>d__10.MoveNext () [0x003a7] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestCargoChargeSlamPlayModeTests.cs:597
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1033" name="TapReleaseCommitsOneQuickAttackWithFastAcceleration" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.TapReleaseCommitsOneQuickAttackWithFastAcceleration" methodname="TapReleaseCommitsOneQuickAttackWithFastAcceleration" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="1682389473" result="Passed" start-time="2026-08-21 13:01:17Z" end-time="2026-08-21 13:01:18Z" duration="1.317976" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Quick release-to-acceleration: 0.121s
+Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

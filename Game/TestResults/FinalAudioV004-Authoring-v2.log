@@ -1,0 +1,594 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.20f1 (c9ba695d4f07) revision 13220457'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys" at "2026-08-19T16:39:34.7432326Z"
+OS: 'Windows 11  (10.0.26200) Core' Language: 'ko' Physical Memory: 32405 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-08-19T16:39:34Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Unity.exe
+-batchmode
+-nographics
+-quit
+-projectPath
+C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+-executeMethod
+BreakNotice.Contest.Editor.ContestFinalAudioV004Authoring.Prepare
+-logFile
+C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/TestResults/FinalAudioV004-Authoring-v2.log
+Successfully changed project path to: C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [2832]  Target information:
+
+Player connection [2832]  * "[IP] 192.168.254.1 [Port] 55504 [Flags] 2 [Guid] 3366593842 [EditorId] 3366593842 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [2832]  * "[IP] 192.168.11.1 [Port] 55504 [Flags] 2 [Guid] 3366593842 [EditorId] 3366593842 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [2832]  * "[IP] 192.168.219.104 [Port] 55504 [Flags] 2 [Guid] 3366593842 [EditorId] 3366593842 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-NVTUU1A) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [2832] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [2832] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-21800" after 0.4 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-jys"
+[Licensing::IpcConnector] LicenseClient-jys channel disconnected successfully.
+[Licensing::IpcConnector] Channel LicenseClient-jys-6000.3.20 doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 11572)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys-6000.3.20" at "2026-08-19T16:39:37.1302278Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 11572, path: "C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              d4cfc0c847ce4142a1da43c70a038568
+  Correlation Id:          a466d4af00152274ffab1db86f2b4ecc
+  External correlation Id: 2162971838168893000
+  Machine Id:              CvP+HZ18afEpqboWGIwFhl4K16Y=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jys-6000.3.20" (connect: 0.85s, validation: 0.28s, handshake: 0.01s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jys-6000.3.20-notifications" at "2026-08-19T16:39:37.4141522Z"
+[Licensing::Module] Connected to LicensingClient (PId: 11572, launch time: 0.01, total connection time: 1.14s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-25T17:37:36Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.02
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-25T17:37:36Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Module] Licensing Background thread has ended after 2.74s
+[Licensing::Module] Licensing is initialized (took 2.05s).
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-25T17:37:36Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Artifact Garbage Collection - Removed 84 unused hashed content files
+Refreshing native plugins compatible for Editor in 0.43 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.20f1 (c9ba695d4f07)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56800
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.20f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.004076 seconds.
+- Loaded All Assemblies, in  0.708 seconds
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.649 seconds
+Domain Reload Profiling: 1352ms
+	BeginReloadAssembly (224ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (4ms)
+	RebuildCommonClasses (67ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (81ms)
+	LoadAllAssembliesAndSetupDomain (309ms)
+		LoadAssemblies (215ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (303ms)
+			TypeCache.Refresh (300ms)
+				TypeCache.ScanAssembly (277ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (650ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (587ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (85ms)
+			SetLoadedEditorAssemblies (6ms)
+			BeforeProcessingInitializeOnLoad (144ms)
+			ProcessInitializeOnLoadAttributes (231ms)
+			ProcessInitializeOnLoadMethodAttributes (120ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-2MJB-59QB-85PY-QJGD-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-09-25T17:39:38Z
+[Licensing::Module] License group:
+  Id: 14569663145074-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 27 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.cinemachine@3.1.7 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.cinemachine@f3f96bcb59af)
+    com.unity.inputsystem@1.20.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.inputsystem@7a4e1a2a8194)
+    com.unity.splines@2.9.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.splines@e6e1d5900acc)
+    com.unity.searcher@4.9.4 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.searcher@d45a78918735)
+    com.unity.burst@1.8.29 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.burst@6bb9aca3ef38)
+    com.unity.mathematics@1.3.3 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.collections@2.6.6 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.collections@9796e5ee0d9e)
+    com.unity.settings-manager@2.1.1 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86)
+    com.unity.nuget.mono-cecil@1.11.6 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.5.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.test-framework.performance@8b56083ec0f0)
+  Built-in packages:
+    com.unity.render-pipelines.universal@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.universal@37e06a5b08b3)
+    com.unity.test-framework@1.6.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.test-framework@bd7f943e9647)
+    com.unity.modules.animation@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.audio@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.ext.nunit@2.0.5 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.modules.imgui@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.render-pipelines.core@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.core@731b06833851)
+    com.unity.shadergraph@17.3.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.shadergraph@fe0f710ccc2d)
+    com.unity.render-pipelines.universal-config@17.0.3 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.render-pipelines.universal-config@8dc1aab4af1d)
+    com.unity.modules.uielements@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.ugui@2.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.ugui@e20f1880fa04)
+    com.unity.modules.physics@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.terrain@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.ui@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Library\PackageCache\com.unity.modules.hierarchycore)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.20f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s424ms
+[586/743    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.37 seconds), 1 items updated, 743 evaluated
+AssetDatabase: script compilation time: 1.144508s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  1.137 seconds
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Refreshing native plugins compatible for Editor in 0.71 ms, found 0 plugins.
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.385 seconds
+Domain Reload Profiling: 5514ms
+	BeginReloadAssembly (426ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (39ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (152ms)
+	RebuildCommonClasses (65ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (46ms)
+	LoadAllAssembliesAndSetupDomain (569ms)
+		LoadAssemblies (494ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (246ms)
+			TypeCache.Refresh (172ms)
+				TypeCache.ScanAssembly (158ms)
+			BuildScriptInfoCaches (55ms)
+			ResolveRequiredComponents (15ms)
+	FinalizeReload (4386ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (4052ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (46ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (246ms)
+			ProcessInitializeOnLoadAttributes (3610ms)
+			ProcessInitializeOnLoadMethodAttributes (135ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (37ms)
+Asset Pipeline Refresh (id=cd452f3a381da174db7194556b738483): Total: 7.518 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=4905 ms
+		Asset DB Callback time: managed=232 ms, native=22 ms
+		Scripting: domain reloads=1, domain reload time=1138 ms, compile time=1148 ms, other=69 ms
+		Project Asset Count: scripts=952, non-scripts=2201
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.002ms
+	InvokePackagesCallback: 25.521ms
+	ApplyChangesToAssetFolders: 0.732ms
+	Scan: 127.864ms
+	OnSourceAssetsModified: 0.003ms
+	CategorizeAssetsWithTransientArtifact: 35.479ms
+	ProcessAssetsWithTransientArtifactChanges: 83.675ms
+	CategorizeAssets: 69.949ms
+	ImportOutOfDateAssets: 4393.600ms (3243.454ms without children)
+		CompileScripts: 1148.416ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 0.189ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.694ms
+		InitializingProgressBar: 0.001ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.845ms
+	PostProcessAllAssets: 233.019ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.006ms
+	UnloadStreamsBegin: 2.377ms
+	PersistCurrentRevisions: 0.204ms
+	UnloadStreamsEnd: 0.002ms
+	GenerateScriptTypeHashes: 4.933ms
+	Untracked: 2545.286ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 2.017ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Game
+Unloading 224 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4138 unused Assets / (9.6 MB). Loaded Objects now: 4899.
+Memory consumption went from 204.2 MB to 194.6 MB.
+Total: 20.666400 ms (FindLiveObjects: 0.614300 ms CreateObjectMapping: 0.676400 ms MarkObjects: 9.437000 ms  DeleteObjects: 9.937100 ms)
+
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_BINDER_PICKUP_03.wav using Guid(e9a3a1e0dd4a1144abc0df8bcecc4ece) (AudioImporter) -> (artifact id: '906bc2f4e14eea550b3fdb73b5c73608') in 0.1023305 seconds
+Refreshing native plugins compatible for Editor in 0.74 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b99ae0dcca533994d87ef7c3080bfc6d): Total: 0.435 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=5 ms, native=200 ms
+		Asset DB Callback time: managed=224 ms, native=3 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=952, non-scripts=2201
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 6
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.127ms
+	Scan: 42.257ms
+	OnSourceAssetsModified: 0.001ms
+	CategorizeAssetsWithTransientArtifact: 0.032ms
+	ProcessAssetsWithTransientArtifactChanges: 0.088ms
+	CategorizeAssets: 43.517ms
+	ImportOutOfDateAssets: 106.442ms (0.390ms without children)
+		ImportManagerImport: 104.503ms (1.524ms without children)
+			ImportInProcess: 102.932ms
+			UpdateCategorizedAssets: 0.046ms
+		ReloadNativeAssets: 0.036ms
+		UnloadImportedAssets: 0.313ms
+		ReloadImportedAssets: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.573ms
+		InitializingProgressBar: 0.007ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.620ms
+	PostProcessAllAssets: 227.314ms
+	Hotreload: 1.081ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.210ms
+	UnloadStreamsBegin: 0.120ms
+	PersistCurrentRevisions: 0.220ms
+	UnloadStreamsEnd: 0.001ms
+	Untracked: 13.246ms
+
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_BINDER_RELEASE_02.wav using Guid(cc7c74745cc346540931904a22eb61b6) (AudioImporter) -> (artifact id: '9f2b56bc4cd3d7bb360973f48c7057ff') in 0.0906582 seconds
+Refreshing native plugins compatible for Editor in 0.86 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=c9f3f65d0d4fa8a4184f5f83ac4062b7): Total: 0.119 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_BINDER_THROW_01.wav using Guid(473714f0ba89f2a4d8b6ce524cb3b12a) (AudioImporter) -> (artifact id: '08a0d059ba15e5008849b1fd96264677') in 0.0906626 seconds
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=a24a82cca96ac5a40a75420d5f96a0ef): Total: 0.117 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_CHAIR_PICKUP_03.wav using Guid(8b549c4e0deb2f94d83504109afb1bc4) (AudioImporter) -> (artifact id: '737f8d81b7a0a1a0358e3bec45d917f0') in 0.0858599 seconds
+Refreshing native plugins compatible for Editor in 0.76 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=e93c54fd64011fb47b46dede0176e3cd): Total: 0.109 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_CHAIR_RELEASE_02.wav using Guid(da786f9fe98301c4c82aaac807b1ca1f) (AudioImporter) -> (artifact id: '2b4fad7bdfdb38f20ac3223aa5a34576') in 0.0831553 seconds
+Refreshing native plugins compatible for Editor in 0.79 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=531c7930ddcbc5b47859583e7690c831): Total: 0.104 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_CHAIR_THROW_02.wav using Guid(1a90e8a8b31efb44db9281841b270510) (AudioImporter) -> (artifact id: '66af206e9b279299d6f187fbb0d8bc06') in 0.0869186 seconds
+Refreshing native plugins compatible for Editor in 0.75 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=ed579bbd7f52e09419723c41c48f990b): Total: 0.109 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_CHAIR_SWING_WHOOSH_MEDIUM_B.wav using Guid(419c256ef6aad9d449793587723d1652) (AudioImporter) -> (artifact id: '28d7fbe9becf2064cceacd6a119374c0') in 0.0896357 seconds
+Refreshing native plugins compatible for Editor in 0.68 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=6ec4fbf5d8c8f5c4c996ba4d97fb0281): Total: 0.112 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_BINDER_CATCH_A.wav using Guid(22dfbc952b99a17409164d209c49516b) (AudioImporter) -> (artifact id: '4d0b77757d18537dd8c7acda5ed4a670') in 0.0929879 seconds
+Refreshing native plugins compatible for Editor in 0.64 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=99f4c043df9072e4c9a96200ea893cbc): Total: 0.115 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_BINDER_DIRECT_HIT_A.wav using Guid(cfb97bb845ee40f44b251114e3716b1b) (AudioImporter) -> (artifact id: 'f4d5c133f593774e5839706bd5b8a05a') in 0.0849086 seconds
+Refreshing native plugins compatible for Editor in 0.75 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=12eabef3f8158cf44b457aaf020c23b2): Total: 0.106 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_BINDER_FLOOR_DROP_B.wav using Guid(01122ecf73a88b4479a4f517c2cbb4e0) (AudioImporter) -> (artifact id: '6222281dcfaf4b6b1d481efe32abd19c') in 0.08919 seconds
+Refreshing native plugins compatible for Editor in 0.80 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=68f2d4db735e2e84b840967953ca3bc9): Total: 0.111 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_BINDER_WALL_HIT_B.wav using Guid(e99b7d3c7058bc7409bb3b0b8d0e5430) (AudioImporter) -> (artifact id: 'e60426a517e85c745879654d2963d702') in 0.1333393 seconds
+Refreshing native plugins compatible for Editor in 0.63 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=c98fc10d0f1202e40abc99fcd6928996): Total: 0.154 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_CHAIR_ENEMY_MAIN_IMPACT_B.wav using Guid(e6fc8cac64b22e64fb10d61ed9ea6826) (AudioImporter) -> (artifact id: '2dad2dfa76fe08bedc37fbc42b9f2a77') in 0.0820004 seconds
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=53ec519bdb1d9a14593752841eddf0c5): Total: 0.103 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_CHAIR_STOP_A.wav using Guid(ef69d0fbc7fa7d1409765dd2840a7185) (AudioImporter) -> (artifact id: '73178c07f772456107fb79c9912d74d5') in 0.1153423 seconds
+Refreshing native plugins compatible for Editor in 1.04 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=31be980dd07adf8428f85a1fbf5074e3): Total: 0.136 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_CHAIR_STOP_B.wav using Guid(44bb292bdd280464d85f766d3c3dd6e4) (AudioImporter) -> (artifact id: '00c86150a930694486cd983b5e50f42f') in 0.0807312 seconds
+Refreshing native plugins compatible for Editor in 0.67 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=cfe20251de795794084808d6218a2be5): Total: 0.102 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Impacts/BN_SFX_CHAIR_WORLD_IMPACT_A.wav using Guid(869febcf84149384cb34032cf7657365) (AudioImporter) -> (artifact id: 'd8c34852e27bfe95b6c03719360d2717') in 0.0910681 seconds
+Refreshing native plugins compatible for Editor in 0.67 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=dd5801fa36a6908428087f6304ddb4dd): Total: 0.112 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Motion/BN_WP01_CHAIR_ROLL_LOOP_02.wav using Guid(94159eea93265b64ea0d0818ebcbdd0b) (AudioImporter) -> (artifact id: '6e39208522e3997c7425417a3a1c39e6') in 0.0982431 seconds
+Refreshing native plugins compatible for Editor in 0.68 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b5d21082a53ffec4cbb4f05d0d57385d): Total: 0.118 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Motion/BN_WP01_CHAIR_SKID_01.wav using Guid(bfdb823f1f7af6146ac4ac4de06fe0ad) (AudioImporter) -> (artifact id: '3abf8fa483de4220ebd32a229ae4fbec') in 0.1137093 seconds
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=33072d0d58f07e1498c5d7b4bb94867d): Total: 0.135 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Motion/BN_FOL_SMALL_OBJECT_SPIN_LOOP_A.wav using Guid(725259c8b9c46f14db32a5be357ace2b) (AudioImporter) -> (artifact id: '6caebfcc7986e55d410cebf56aa28caf') in 0.0967898 seconds
+Refreshing native plugins compatible for Editor in 0.67 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=e91784e39e1a3524087234a38b10fc20): Total: 0.116 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Strap/BN_FOL_STRAP_ACTUAL_ZIPPER_Z01_OPEN_FULL.wav using Guid(c0ab9c8d6ffc0254690abe68440300e0) (AudioImporter) -> (artifact id: 'b6f3a709cfb5f3463ad1f936eddabe61') in 0.0758489 seconds
+Refreshing native plugins compatible for Editor in 0.70 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=cdbea25f3aaba06418a9891afcc55333): Total: 0.096 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Strap/BN_FOL_STRAP_ACTUAL_ZIPPER_Z02_CLOSE_FULL.wav using Guid(27730eebf19e191479c6284e84543afd) (AudioImporter) -> (artifact id: '2f699859648f55117fd82c73f22f6eac') in 0.0829809 seconds
+Refreshing native plugins compatible for Editor in 0.62 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=851c59067cb6b734c9e7b2054162eef8): Total: 0.103 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Strap/BN_FOL_STRAP_LOCK_02.wav using Guid(76a41045a0257fc4a97e1fcb974efec0) (AudioImporter) -> (artifact id: 'f8da635b1c754bb38b887157f629ba26') in 0.0824957 seconds
+Refreshing native plugins compatible for Editor in 0.62 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=c887ddd7a21f81b46bba19bc7509fba6): Total: 0.103 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Strap/BN_FOL_STRAP_TENSION_02.wav using Guid(707221cd9e6efae42b31216133010def) (AudioImporter) -> (artifact id: '8b23dd26bb4ea7c2a9e14d65e6bbd8f3') in 0.0848571 seconds
+Refreshing native plugins compatible for Editor in 0.69 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=f653526800fde734bb449d51aec5c3c4): Total: 0.105 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_PLAYER_HEAVY_HURT_B.wav using Guid(7c95008ef62a1e04abd1a3cdfa338860) (AudioImporter) -> (artifact id: 'f2221d97f9de7629344ab7e0f3161d41') in 0.0869183 seconds
+Refreshing native plugins compatible for Editor in 0.96 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b9a409642a74a9b4086374e65d2cdbc4): Total: 0.108 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_PLAYER_LIGHT_HURT_A.wav using Guid(d1a90be5ea4b01742a286318b4990db4) (AudioImporter) -> (artifact id: '200fd43646f1e13455783259168e3078') in 0.0994424 seconds
+Refreshing native plugins compatible for Editor in 0.61 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=7a00915db50ee4e4d91cdb113b02ee33): Total: 0.120 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_PLAYER_LIGHT_HURT_B.wav using Guid(b06cd7426b43f3847a27340233ed54fc) (AudioImporter) -> (artifact id: '22c4a889e82c1649e905c441bb8f082d') in 0.0784959 seconds
+Refreshing native plugins compatible for Editor in 0.62 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=2fc92bf093ee44c438e35d6366548d0f): Total: 0.098 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_PLAYER_KO_DEATH_A.wav using Guid(ad144d5dd87e3d34781452f808a01b97) (AudioImporter) -> (artifact id: '37d5ed3fc46d05e577a58721e233449a') in 0.0904261 seconds
+Refreshing native plugins compatible for Editor in 0.70 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=fda3f9ff42a406441b2b525537627e38): Total: 0.111 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_PLAYER_KO_DEATH_B.wav using Guid(eb1e396302acb2144bcb05ab240392f4) (AudioImporter) -> (artifact id: '5f1cda32566d5f115747251c93979e61') in 0.0815537 seconds
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=0471a9120e3627842bca7037467a8b81): Total: 0.101 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_ENEMY_LIGHT_HURT_A.wav using Guid(99a93e4015f4fdf4a9337489f8e7d45f) (AudioImporter) -> (artifact id: '61221f092b35313c5ff7d0493f6ce0ea') in 0.0821055 seconds
+Refreshing native plugins compatible for Editor in 0.68 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b6ca71f7fab38a84dbc7535de2e7c9f7): Total: 0.102 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_ENEMY_LIGHT_HURT_B.wav using Guid(18f62e00abedd954b888fca5b3b4998c) (AudioImporter) -> (artifact id: '3fe2110f6f380f828101c4935a26776e') in 0.0880655 seconds
+Refreshing native plugins compatible for Editor in 0.68 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=88cd71f4a1755f04b83e7cfdf806038c): Total: 0.109 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_ENEMY_LIGHT_HURT_D.wav using Guid(60a1a37ef4d26314db2660558eee9c17) (AudioImporter) -> (artifact id: '7165ba7fd7f3be2e38ea41faea5ff541') in 0.0845076 seconds
+Refreshing native plugins compatible for Editor in 0.71 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=eb9dd470ae491ce409e56e4193614944): Total: 0.105 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_ENEMY_KO_DEATH_A.wav using Guid(ffd754d7a3f6c014ba9a5eb4047c70f0) (AudioImporter) -> (artifact id: '479d9d521681c267408e42184c758f2c') in 0.0791361 seconds
+Refreshing native plugins compatible for Editor in 0.85 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=5ba7802636086c34c94b5784488b3d83): Total: 0.101 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Voices/BN_VOX_ENEMY_KO_DEATH_B.wav using Guid(69d15a216e265ed4d9dc69bbc2ce2074) (AudioImporter) -> (artifact id: '64b1940890579ce9847ba1120ec7a74f') in 0.0906921 seconds
+Refreshing native plugins compatible for Editor in 0.75 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=7594c3c3512a4f1428ef62e6ca7c10fe): Total: 0.112 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_01.wav using Guid(f775445eb5dbb0f4c917d792ad1a96fb) (AudioImporter) -> (artifact id: 'ec4286af5db6cfe2eabd750bbae1406e') in 0.0857786 seconds
+Refreshing native plugins compatible for Editor in 0.83 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=d380d691f4401ff47865705b8f2e5517): Total: 0.107 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_02.wav using Guid(315146077b9bdb8479c45b160955c408) (AudioImporter) -> (artifact id: '01caa256a3b30a8f36068ffd12b15ca3') in 0.0857837 seconds
+Refreshing native plugins compatible for Editor in 0.64 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=72a32bd194c6c044bbbe752d39403519): Total: 0.106 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_03.wav using Guid(06eb486437799344cadd658b6f47a5a3) (AudioImporter) -> (artifact id: '529c3337dd6c3e414c6f7cd95282b610') in 0.0876854 seconds
+Refreshing native plugins compatible for Editor in 0.57 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=ff050b2d5018dac4ab0a8ad7887e7922): Total: 0.107 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_04.wav using Guid(cc0ad86abf42d2b48ac31330abd8b224) (AudioImporter) -> (artifact id: '9b04fbb2dc45a689ba7ab49ae7120a68') in 0.0817901 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=0ba2ad36f330f63489e205de9d6ca516): Total: 0.102 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_05.wav using Guid(121edd8834b91ee439f1f9dfeeb38440) (AudioImporter) -> (artifact id: 'a7c50a45a91116cbcedd91a979a92476') in 0.0911606 seconds
+Refreshing native plugins compatible for Editor in 0.84 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=8363265bcdb60b2429a63348f5174111): Total: 0.116 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_06.wav using Guid(02062fe78607002478d8727c3835257e) (AudioImporter) -> (artifact id: '4966f65e2eb22f1647fd5fd3320f47d2') in 0.0803319 seconds
+Refreshing native plugins compatible for Editor in 0.72 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=5afde2f1ec2131646a2e41510659fbaf): Total: 0.102 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_07.wav using Guid(aef8d902610e7044fae88b8e58aec8b6) (AudioImporter) -> (artifact id: '384b5fb3cc61c3b45723c3365202595c') in 0.0877507 seconds
+Refreshing native plugins compatible for Editor in 0.71 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=3ced0554a8c601143bacebff5ea17ca0): Total: 0.108 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Audio/Final_v004/Foley/BN_FOL_FOOTSTEP_OFFICE_HARD_08.wav using Guid(93708ce771bd0294aa7c4988446becf7) (AudioImporter) -> (artifact id: '5f081e522c2b3a3ba50d2c6883b7ca35') in 0.0796964 seconds
+Refreshing native plugins compatible for Editor in 0.68 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=a05a4a9bbe565294b8ab25aa4d7766ca): Total: 0.100 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Opening scene 'Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity'
+Unloading 56 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity'
+	Deserialize:            81.709 ms
+	Integration:            555.732 ms
+	Integration of assets:  0.465 ms
+	Thread Wait Time:       0.075 ms
+	Total Operation Time:   637.981 ms
+Unloading 44 unused Assets / (244.7 KB). Loaded Objects now: 8437.
+Memory consumption went from 252.6 MB to 252.4 MB.
+Total: 10.807800 ms (FindLiveObjects: 0.681500 ms CreateObjectMapping: 0.292700 ms MarkObjects: 9.736200 ms  DeleteObjects: 0.096200 ms)
+
+Start importing Assets/_Project/Audio/Final_v004/Config/FinalGameplayAudioProfile.asset using Guid(e2bf6f733c09545439f7a0d8db7521e6) (NativeFormatImporter) -> (artifact id: 'b966a7cff1719155f50376bc2cac59c8') in 0.0036602 seconds
+Refreshing native plugins compatible for Editor in 0.63 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=fc66711fe32b19847b4c132f9ecdef8d): Total: 0.033 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity using Guid(9d803ab544789784981f13ec04a4b2f4) (DefaultImporter) -> (artifact id: '075a0fa8c0161626168d6da2fe7f3d3c') in 0.0015269 seconds
+Refreshing native plugins compatible for Editor in 0.64 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=b20eb1d9c4c2f78468d9c6ff182f5c31): Total: 0.079 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=838899551aef0b64e981a66e7c2e2617): Total: 0.018 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Final Audio v004 validation passed: 40 clips, one listener, 12 transient sources, two scheduled strap sources, actor-local voice/footstep sources, three chair loops and five small loops.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+BreakNotice.Contest.Editor.ContestFinalAudioV004Authoring:ValidateCurrentIntegration (UnityEngine.SceneManagement.Scene) (at Assets/_Project/Code/Editor/Contest/ContestFinalAudioV004Authoring.cs:540)
+BreakNotice.Contest.Editor.ContestFinalAudioV004Authoring:Prepare () (at Assets/_Project/Code/Editor/Contest/ContestFinalAudioV004Authoring.cs:196)
+
+(Filename: Assets/_Project/Code/Editor/Contest/ContestFinalAudioV004Authoring.cs Line: 540)
+
+Final Audio v004 prepared: 40 approved runtime WAVs, typed profile, 12 transient voices, scheduled strap pair, actor voice/footsteps and object-bound roll/spin loops.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+BreakNotice.Contest.Editor.ContestFinalAudioV004Authoring:Prepare () (at Assets/_Project/Code/Editor/Contest/ContestFinalAudioV004Authoring.cs:197)
+
+(Filename: Assets/_Project/Code/Editor/Contest/ContestFinalAudioV004Authoring.cs Line: 197)
+
+Batchmode quit successfully invoked - shutting down!
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-jys-6000.3.20-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-jys-6000.3.20 channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

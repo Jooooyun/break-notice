@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.9712669">
+  <test-suite type="TestSuite" id="1198" name="Game" fullname="Game" runstate="Runnable" testcasecount="166" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.971267" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1191" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="166" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.957466" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="17072" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1192" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="166" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.955513" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1193" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="166" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.953967" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1194" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="166" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.952293" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1073" name="ContestFinalAudioV004PlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:42Z" duration="2.946238" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1079" name="ChairMotion_RollsStopsWithoutRepeatAndDefersStopAfterWorldImpact" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.ChairMotion_RollsStopsWithoutRepeatAndDefersStopAfterWorldImpact" methodname="ChairMotion_RollsStopsWithoutRepeatAndDefersStopAfterWorldImpact" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="713036041" result="Passed" start-time="2026-08-19 17:36:39Z" end-time="2026-08-19 17:36:41Z" duration="1.881829" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1075" name="DamageAccepted_KoReplacesHurtPerActorAndBaselineResetClearsVoices" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.DamageAccepted_KoReplacesHurtPerActorAndBaselineResetClearsVoices" methodname="DamageAccepted_KoReplacesHurtPerActorAndBaselineResetClearsVoices" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="998030667" result="Passed" start-time="2026-08-19 17:36:41Z" end-time="2026-08-19 17:36:41Z" duration="0.096540" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1078" name="Footsteps_UseGroundedActorLocalStateAndEnemyCommandedSpeed" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.Footsteps_UseGroundedActorLocalStateAndEnemyCommandedSpeed" methodname="Footsteps_UseGroundedActorLocalStateAndEnemyCommandedSpeed" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="25396933" result="Passed" start-time="2026-08-19 17:36:41Z" end-time="2026-08-19 17:36:41Z" duration="0.082939" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1077" name="QueuedBinderCatch_PlaysAtHandCommitBeforeThrowAndNotAtSettlement" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.QueuedBinderCatch_PlaysAtHandCommitBeforeThrowAndNotAtSettlement" methodname="QueuedBinderCatch_PlaysAtHandCommitBeforeThrowAndNotAtSettlement" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="787990966" result="Passed" start-time="2026-08-19 17:36:41Z" end-time="2026-08-19 17:36:41Z" duration="0.078433" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1074" name="Scene_ComposesFinalProfileSourcesAndSingleListenerWithoutAwakePlayback" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.Scene_ComposesFinalProfileSourcesAndSingleListenerWithoutAwakePlayback" methodname="Scene_ComposesFinalProfileSourcesAndSingleListenerWithoutAwakePlayback" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="1655673141" result="Passed" start-time="2026-08-19 17:36:41Z" end-time="2026-08-19 17:36:41Z" duration="0.086218" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1080" name="StrapAndSmallSpin_ScheduleInOrderAndLeaveNoAudioAfterDisableOrReset" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.StrapAndSmallSpin_ScheduleInOrderAndLeaveNoAudioAfterDisableOrReset" methodname="StrapAndSmallSpin_ScheduleInOrderAndLeaveNoAudioAfterDisableOrReset" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="556993287" result="Passed" start-time="2026-08-19 17:36:41Z" end-time="2026-08-19 17:36:42Z" duration="0.623345" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1076" name="TargetPairCollision_UsesAuthoritativeReleasedObjectImpactFamily" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests.TargetPairCollision_UsesAuthoritativeReleasedObjectImpactFamily" methodname="TargetPairCollision_UsesAuthoritativeReleasedObjectImpactFamily" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004PlayModeTests" runstate="Runnable" seed="818150895" result="Passed" start-time="2026-08-19 17:36:42Z" end-time="2026-08-19 17:36:42Z" duration="0.077956" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

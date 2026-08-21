@@ -160,7 +160,7 @@ namespace BreakNotice.LocomotionCamera.Tests
             for (int index = 0; index < cues.Length; index++)
             {
                 commit.Invoke(runner, null);
-                cues[index] = runner.AnimationCue;
+                cues[index] = runner.PreparedAttackCue;
                 commitPrepared.Invoke(runner, null);
                 runner.CompleteAnimationAction();
             }

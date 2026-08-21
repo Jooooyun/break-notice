@@ -208,9 +208,23 @@ namespace BreakNotice.Presentation
                 return;
             }
 
-            Color lineTint = snapshot.IsWarning
-                ? new Color(0.82f, 0.64f, 0.42f, 1f)
-                : Color.white;
+            Color lineTint;
+            if (snapshot.HasCharge)
+            {
+                lineTint = snapshot.Charge01 >=
+                    ShowcaseCargoChargeModel.FullLowerThreshold01
+                        ? new Color(1f, 0.72f, 0.28f, 1f)
+                        : snapshot.Charge01 >=
+                          ShowcaseCargoChargeModel.QuickUpperThreshold01
+                            ? new Color(0.96f, 0.84f, 0.48f, 1f)
+                            : new Color(0.86f, 0.9f, 0.95f, 1f);
+            }
+            else
+            {
+                lineTint = snapshot.IsWarning
+                    ? new Color(0.82f, 0.64f, 0.42f, 1f)
+                    : Color.white;
+            }
             SetClampVisible(true);
             strapLine.startColor = lineTint;
             strapLine.endColor = lineTint;
@@ -655,6 +669,8 @@ namespace BreakNotice.Presentation
                     return 0f;
                 case ShowcaseCargoStrapPhase.AttackLeft:
                 case ShowcaseCargoStrapPhase.AttackRight:
+                case ShowcaseCargoStrapPhase.Charging:
+                case ShowcaseCargoStrapPhase.Slam:
                 case ShowcaseCargoStrapPhase.MediumExtending:
                     return 0f;
                 case ShowcaseCargoStrapPhase.MediumRecovering:

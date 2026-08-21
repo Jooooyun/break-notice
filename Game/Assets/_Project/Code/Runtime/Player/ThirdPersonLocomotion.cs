@@ -66,6 +66,9 @@ namespace BreakNotice.Gameplay
         private PlayerMobilityLockReason mobilityLocks;
         private PlayerMobilityLockReason jumpLocks;
         private PlayerMobilityLockReason facingOverrideLocks;
+        private PlayerMobilityLockReason movementSpeedScaleLocks;
+        private PlayerMobilityLockReason sprintLocks;
+        private float movementSpeedScale = 1f;
         private Vector3 facingOverrideWorldDirection;
         private Vector3 externalPlanarVelocity;
 
@@ -110,6 +113,14 @@ namespace BreakNotice.Gameplay
         public bool IsJumpExternallyBlocked =>
             jumpLocks != PlayerMobilityLockReason.None;
 
+        public float MovementSpeedScale => movementSpeedScaleLocks ==
+                PlayerMobilityLockReason.None
+            ? 1f
+            : movementSpeedScale;
+
+        public bool IsSprintExternallyBlocked =>
+            sprintLocks != PlayerMobilityLockReason.None;
+
         public bool HasFacingOverride =>
             facingOverrideLocks != PlayerMobilityLockReason.None &&
             facingOverrideWorldDirection.sqrMagnitude > 0.0001f;
@@ -142,10 +153,12 @@ namespace BreakNotice.Gameplay
             bool hasMoveInput = moveInput.sqrMagnitude > 0.0001f;
             IsSprinting = !mobilityBlocked &&
                 !mediumCarry &&
+                !IsSprintExternallyBlocked &&
                 !logicalInput.Snapshot.Aim &&
                 logicalInput.Snapshot.Sprint &&
                 hasMoveInput;
-            CurrentHorizontalSpeed = IsSprinting ? sprintSpeed : moveSpeed;
+            CurrentHorizontalSpeed =
+                (IsSprinting ? sprintSpeed : moveSpeed) * MovementSpeedScale;
 
             if (logicalInput.Snapshot.Jump && !jumpBlocked && !mediumCarry)
             {
@@ -165,7 +178,7 @@ namespace BreakNotice.Gameplay
             if (mobilityBlocked || mediumCarry)
             {
                 IsSprinting = false;
-                CurrentHorizontalSpeed = moveSpeed;
+                CurrentHorizontalSpeed = moveSpeed * MovementSpeedScale;
             }
 
             Vector3 forward = cameraTransform != null ? cameraTransform.forward : Vector3.forward;
@@ -347,6 +360,51 @@ namespace BreakNotice.Gameplay
                 (jumpLocks & reason) == reason;
         }
 
+        public void SetMovementSpeedScale(
+            PlayerMobilityLockReason reason,
+            float scale,
+            bool active)
+        {
+            if (reason == PlayerMobilityLockReason.None)
+            {
+                return;
+            }
+
+            if (active)
+            {
+                movementSpeedScaleLocks |= reason;
+                movementSpeedScale = Mathf.Clamp(scale, 0.1f, 1f);
+            }
+            else
+            {
+                movementSpeedScaleLocks &= ~reason;
+                if (movementSpeedScaleLocks == PlayerMobilityLockReason.None)
+                {
+                    movementSpeedScale = 1f;
+                }
+            }
+        }
+
+        public void SetSprintLock(
+            PlayerMobilityLockReason reason,
+            bool locked)
+        {
+            if (reason == PlayerMobilityLockReason.None)
+            {
+                return;
+            }
+
+            if (locked)
+            {
+                sprintLocks |= reason;
+                IsSprinting = false;
+            }
+            else
+            {
+                sprintLocks &= ~reason;
+            }
+        }
+
         public void SetFacingOverride(
             PlayerMobilityLockReason reason,
             Vector3 worldDirection,
@@ -399,6 +457,9 @@ namespace BreakNotice.Gameplay
             mobilityLocks = PlayerMobilityLockReason.None;
             jumpLocks = PlayerMobilityLockReason.None;
             facingOverrideLocks = PlayerMobilityLockReason.None;
+            movementSpeedScaleLocks = PlayerMobilityLockReason.None;
+            sprintLocks = PlayerMobilityLockReason.None;
+            movementSpeedScale = 1f;
             facingOverrideWorldDirection = Vector3.zero;
             AimFacingWorldDirection = Vector3.zero;
             externalPlanarVelocity = Vector3.zero;

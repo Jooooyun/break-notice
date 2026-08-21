@@ -353,6 +353,26 @@ namespace BreakNotice.Gameplay.Interaction
             if (showcaseCargoStrapController != null &&
                 showcaseCargoStrapController.IsActionLocked)
             {
+                if (showcaseCargoStrapController.IsCharging)
+                {
+                    Vector3 chargeAimPoint = ResolveFrozenThrowAimPoint(
+                        interactionOwner.StrapTarget);
+                    showcaseCargoStrapController.TryUpdateChargeAim(
+                        chargeAimPoint);
+                    if (!pointerActionAvailable ||
+                        logicalInput.Snapshot.StrapRelease)
+                    {
+                        showcaseCargoStrapController.TryCancelCharge();
+                    }
+                    else if (logicalInput.Snapshot.ThrowReleased)
+                    {
+                        showcaseCargoStrapController.TryReleaseCharge(
+                            chargeAimPoint);
+                    }
+                    ClearThrowCharge();
+                    return;
+                }
+
                 if (logicalInput.Snapshot.StrapRelease)
                 {
                     ProcessStrapRelease();
@@ -371,14 +391,31 @@ namespace BreakNotice.Gameplay.Interaction
                 showcasePlayerCombatController.BlocksInteraction)
             {
                 if (pointerActionAvailable && logicalInput.Snapshot.Throw &&
-                    WeaponSelection == PrototypeWeaponSelection.Fists &&
                     showcasePlayerCombatController.CanBufferMelee)
                 {
-                    showcaseRunnerPressureController?.TryPlayerShove();
+                    if (showcasePlayerCombatController.IsStrappedMeleeActive)
+                    {
+                        showcasePlayerCombatController.TryRequestStrappedMelee(
+                            showcasePlayerCombatController.ActiveMeleeTarget);
+                    }
+                    else if (WeaponSelection ==
+                             PrototypeWeaponSelection.Fists)
+                    {
+                        showcaseRunnerPressureController?.TryPlayerShove();
+                    }
                 }
                 ClearThrowCharge(
                     throwPresentationPhase !=
                     PrototypeThrowPresentationPhase.ReleaseAccepted);
+                return;
+            }
+
+            if (pointerActionAvailable &&
+                !logicalInput.Snapshot.Throw &&
+                logicalInput.Snapshot.ThrowHeld &&
+                TryBeginHeldMediumCargoCharge())
+            {
+                ClearThrowCharge();
                 return;
             }
 
@@ -587,8 +624,19 @@ namespace BreakNotice.Gameplay.Interaction
                 interactionOwner.StrapTarget != null &&
                 interactionOwner.ObjectWeaponTarget == interactionOwner.StrapTarget)
             {
-                return showcaseCargoStrapController.TryBeginAttack(
-                    ResolveFrozenThrowAimPoint(interactionOwner.StrapTarget));
+                Vector3 aimPoint = ResolveFrozenThrowAimPoint(
+                    interactionOwner.StrapTarget);
+                if (showcaseCargoStrapController.ActiveTarget != null &&
+                    showcaseCargoStrapController.ActiveTarget.WeightClass ==
+                        PrototypeWeightClass.Medium)
+                {
+                    if (TryBeginCloseRangeDisengage())
+                    {
+                        return true;
+                    }
+                    return showcaseCargoStrapController.TryBeginCharge(aimPoint);
+                }
+                return showcaseCargoStrapController.TryBeginAttack(aimPoint);
             }
 
             return WeaponSelection switch
@@ -599,6 +647,57 @@ namespace BreakNotice.Gameplay.Interaction
                 PrototypeWeaponSelection.ObjectWeapon => BeginThrowCharge(),
                 _ => false
             };
+        }
+
+        private bool TryBeginHeldMediumCargoCharge()
+        {
+            if (interactionOwner == null ||
+                interactionOwner.BlocksNewInteraction ||
+                WeaponSelection != PrototypeWeaponSelection.ObjectWeapon ||
+                showcaseCargoStrapController == null ||
+                showcaseCargoStrapController.IsActionLocked ||
+                interactionOwner.StrapTarget == null ||
+                interactionOwner.ObjectWeaponTarget !=
+                    interactionOwner.StrapTarget ||
+                showcaseCargoStrapController.ActiveTarget == null ||
+                showcaseCargoStrapController.ActiveTarget.WeightClass !=
+                    PrototypeWeightClass.Medium)
+            {
+                return false;
+            }
+
+            ShowcaseRunnerAgent closeTarget =
+                showcaseRunnerPressureController != null
+                    ? showcaseRunnerPressureController.
+                        ResolvePlayerMeleeTargetForCombo()
+                    : null;
+            if (closeTarget != null)
+            {
+                return false;
+            }
+
+            Vector3 aimPoint = ResolveFrozenThrowAimPoint(
+                interactionOwner.StrapTarget);
+            return showcaseCargoStrapController.TryBeginCharge(aimPoint);
+        }
+
+        private bool TryBeginCloseRangeDisengage()
+        {
+            if (showcasePlayerCombatController == null ||
+                showcaseRunnerPressureController == null ||
+                showcaseCargoStrapController == null ||
+                !showcaseCargoStrapController.IsTensioned ||
+                showcaseCargoStrapController.IsActionLocked)
+            {
+                return false;
+            }
+
+            ShowcaseRunnerAgent closeTarget =
+                showcaseRunnerPressureController.
+                    ResolvePlayerMeleeTargetForCombo();
+            return closeTarget != null &&
+                showcasePlayerCombatController.
+                    TryRequestStrappedMelee(closeTarget);
         }
 
         public PrototypeInteractionTarget RefreshTarget(bool isAiming)

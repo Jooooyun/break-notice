@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BreakNotice.Gameplay;
+using BreakNotice.Gameplay.Combat;
 using BreakNotice.Gameplay.Encounter;
 using BreakNotice.Gameplay.Input;
 using BreakNotice.Gameplay.Interaction;
@@ -60,6 +61,9 @@ namespace BreakNotice.Contest.Editor
         public const string ShowcaseS6RootName = "SHOWCASE_S6_RUNNER_PRESSURE";
 
         public const string ShowcaseS7RootName = "SHOWCASE_S7_OBJECTIVE_EXIT";
+
+        public const string P003StationaryValidationRootName =
+            "P0_03_STATIONARY_CHAIR_VALIDATION";
 
         private const string V2ReviewCaptureFolderName =
             "break-notice-showcase-v2-readability";
@@ -368,6 +372,30 @@ namespace BreakNotice.Contest.Editor
             Debug.Log(
                 "S7 Showcase prepared: four Drawer solution contracts, physical Parking Bay, " +
                 "pressure failure, EXIT completion and replay result card.");
+        }
+
+        [MenuItem(
+            "BREAK NOTICE/Contest/Add P0-03 Stationary Chair Validation Runners")]
+        public static void PrepareP003StationaryChairValidationRunners()
+        {
+            RequireSceneAsset(ShowcaseS7ScenePath);
+            Scene scene = EditorSceneManager.OpenScene(
+                ShowcaseS7ScenePath,
+                OpenSceneMode.Single);
+            ApplyP003StationaryChairValidationRunners(scene);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene, ShowcaseS7ScenePath))
+            {
+                throw new InvalidOperationException(
+                    $"Could not save {ShowcaseS7ScenePath}.");
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            Debug.Log(
+                "P0-03 stationary Chair validation runners prepared: " +
+                "three right-sweep targets plus one isolated Slam target. " +
+                "Existing two combat runners were preserved.");
         }
 
         [MenuItem("BREAK NOTICE/Contest/Capture Provisional V2 Readability Review")]
@@ -1167,6 +1195,187 @@ namespace BreakNotice.Contest.Editor
             EditorUtility.SetDirty(team);
             EditorUtility.SetDirty(browserInput);
             EditorUtility.SetDirty(presenter);
+        }
+
+        public static void ApplyP003StationaryChairValidationRunners(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                throw new ArgumentException(
+                    "A valid loaded Scene is required.",
+                    nameof(scene));
+            }
+
+            GameObject previousRoot = FindRoot(
+                scene,
+                P003StationaryValidationRootName);
+            if (previousRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(previousRoot);
+            }
+
+            ShowcaseRunnerPressureController pressure =
+                RequireSingleSceneComponent<ShowcaseRunnerPressureController>(scene);
+            GameObject player = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR00_PLAYER",
+                "Player");
+            GameObject ally = RequireRootAny(
+                scene,
+                "GAMEPLAY_CHR01_MOBILE_ALLY",
+                "GAMEPLAY_CHR01_ALLY",
+                "AllyProxy");
+            List<ShowcaseRunnerAgent> originalRunners = pressure.Runners
+                .Where(runner => runner != null)
+                .ToList();
+            ShowcaseRunnerAgent template = originalRunners
+                .FirstOrDefault(runner => !runner.IsElite) ??
+                originalRunners.FirstOrDefault();
+            if (template == null)
+            {
+                throw new InvalidOperationException(
+                    "P0-03 validation requires an existing Runner template.");
+            }
+
+            PrototypeInteractionStateOwner owner =
+                player.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypeInteractionController interaction =
+                player.GetComponent<PrototypeInteractionController>();
+            ThirdPersonLocomotion locomotion =
+                player.GetComponent<ThirdPersonLocomotion>();
+            ShowcaseMobileAllyController mobile =
+                ally.GetComponent<ShowcaseMobileAllyController>();
+            ShowcaseTeamContextController team =
+                player.GetComponent<ShowcaseTeamContextController>();
+            AuthoredEncounterResetController reset =
+                RequireSingleSceneComponent<AuthoredEncounterResetController>(scene);
+            if (owner == null || interaction == null || locomotion == null ||
+                mobile == null || team == null)
+            {
+                throw new InvalidOperationException(
+                    "P0-03 validation requires the accepted S7 player, Ally " +
+                    "and pressure composition.");
+            }
+
+            GameObject validationRoot = CreateRoot(
+                scene,
+                P003StationaryValidationRootName);
+            Vector3[] localOffsets =
+            {
+                new Vector3(2.15f, 0f, -0.85f),
+                new Vector3(2.85f, 0f, 0.65f),
+                new Vector3(2.20f, 0f, 2.30f),
+                new Vector3(-1.85f, 0f, 1.90f)
+            };
+            string[] runnerNames =
+            {
+                "P0_03_STATIONARY_SWEEP_R_01",
+                "P0_03_STATIONARY_SWEEP_R_02",
+                "P0_03_STATIONARY_SWEEP_R_03",
+                "P0_03_STATIONARY_SLAM_01"
+            };
+            var validationRunners = new List<ShowcaseRunnerAgent>(
+                localOffsets.Length);
+            float runnerY = template.transform.position.y;
+            Vector3 playerForward = Vector3.ProjectOnPlane(
+                player.transform.forward,
+                Vector3.up).normalized;
+            Vector3 playerRight = Vector3.ProjectOnPlane(
+                player.transform.right,
+                Vector3.up).normalized;
+            if (playerForward.sqrMagnitude <= 0.001f)
+            {
+                playerForward = Vector3.forward;
+            }
+            if (playerRight.sqrMagnitude <= 0.001f)
+            {
+                playerRight = Vector3.right;
+            }
+
+            for (int index = 0; index < localOffsets.Length; index++)
+            {
+                GameObject clone = UnityEngine.Object.Instantiate(
+                    template.gameObject);
+                clone.name = runnerNames[index];
+                SceneManager.MoveGameObjectToScene(clone, scene);
+                clone.transform.SetParent(validationRoot.transform, true);
+                Vector3 offset = localOffsets[index];
+                Vector3 worldPosition = player.transform.position +
+                    (playerRight * offset.x) +
+                    (playerForward * offset.z);
+                worldPosition.y = runnerY;
+                Vector3 facePlayer = Vector3.ProjectOnPlane(
+                    player.transform.position - worldPosition,
+                    Vector3.up);
+                Quaternion rotation = facePlayer.sqrMagnitude > 0.001f
+                    ? Quaternion.LookRotation(facePlayer.normalized, Vector3.up)
+                    : player.transform.rotation;
+                clone.transform.SetPositionAndRotation(worldPosition, rotation);
+                clone.isStatic = false;
+                GameObjectUtility.SetStaticEditorFlags(
+                    clone,
+                    (StaticEditorFlags)0);
+
+                Rigidbody body = clone.GetComponent<Rigidbody>();
+                ShowcaseCombatHealth health =
+                    clone.GetComponent<ShowcaseCombatHealth>();
+                ShowcaseRunnerAgent agent =
+                    clone.GetComponent<ShowcaseRunnerAgent>();
+                if (body == null || health == null || agent == null)
+                {
+                    UnityEngine.Object.DestroyImmediate(clone);
+                    throw new InvalidOperationException(
+                        "The accepted Runner template is missing Rigidbody, " +
+                        "Health or RunnerAgent.");
+                }
+
+                body.isKinematic = true;
+                body.useGravity = false;
+                body.interpolation = RigidbodyInterpolation.Interpolate;
+                body.collisionDetectionMode =
+                    CollisionDetectionMode.ContinuousSpeculative;
+                agent.Configure(
+                    runnerNames[index],
+                    pressure,
+                    body,
+                    player.transform,
+                    authoredHealth: health,
+                    authoredElite: false);
+                agent.ConfigureAutonomousMovementSuppressed(true);
+                agent.ConfigureBatchModeDisabled(true);
+                validationRunners.Add(agent);
+
+                EditorUtility.SetDirty(clone);
+                EditorUtility.SetDirty(body);
+                EditorUtility.SetDirty(health);
+                EditorUtility.SetDirty(agent);
+                ShowcaseCharacterAnimationDriver driver =
+                    clone.GetComponent<ShowcaseCharacterAnimationDriver>();
+                if (driver != null)
+                {
+                    EditorUtility.SetDirty(driver);
+                }
+            }
+
+            pressure.Configure(
+                owner,
+                player.transform,
+                locomotion,
+                ally.transform,
+                mobile,
+                team,
+                reset,
+                originalRunners.ToArray());
+            pressure.ConfigureStationaryValidationRunners(
+                validationRunners.ToArray());
+            team.ConfigureRunnerPressure(pressure);
+            interaction.ConfigureShowcaseS6(pressure);
+
+            EditorUtility.SetDirty(validationRoot);
+            EditorUtility.SetDirty(pressure);
+            EditorUtility.SetDirty(player);
+            EditorUtility.SetDirty(interaction);
+            EditorUtility.SetDirty(team);
         }
 
         public static void ApplyS7ObjectiveAndExit(Scene scene)

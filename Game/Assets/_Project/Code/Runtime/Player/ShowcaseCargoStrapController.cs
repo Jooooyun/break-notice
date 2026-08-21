@@ -14,9 +14,11 @@ namespace BreakNotice.Gameplay.Interaction
         Throw,
         Pull,
         Tensioned,
+        Charging,
         SmallSpinning,
         AttackLeft,
         AttackRight,
+        Slam,
         MediumExtending,
         MediumRecovering,
         Releasing
@@ -30,7 +32,8 @@ namespace BreakNotice.Gameplay.Interaction
         Throw,
         Pull,
         AttackLeft,
-        AttackRight
+        AttackRight,
+        Slam
     }
 
     public readonly struct ShowcaseCargoStrapPresentationSnapshot
@@ -49,7 +52,12 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeWeaponSelection weaponSelection,
             float effectiveTetherLength = 0f,
             float tension01 = -1f,
-            bool isSmallSpinObstructed = false)
+            bool isSmallSpinObstructed = false,
+            float charge01 = -1f,
+            ShowcaseCargoAttackType resolvedAttackType =
+                ShowcaseCargoAttackType.None,
+            ShowcaseCargoAttackResolutionReason resolutionReason =
+                ShowcaseCargoAttackResolutionReason.None)
         {
             Phase = phase;
             PhaseProgress01 = Mathf.Clamp01(phaseProgress01);
@@ -66,6 +74,10 @@ namespace BreakNotice.Gameplay.Interaction
             HasDynamicTension = tension01 >= 0f;
             Tension01 = Mathf.Clamp01(tension01);
             IsSmallSpinObstructed = isSmallSpinObstructed;
+            HasCharge = charge01 >= 0f;
+            Charge01 = Mathf.Clamp01(charge01);
+            ResolvedAttackType = resolvedAttackType;
+            ResolutionReason = resolutionReason;
         }
 
         public ShowcaseCargoStrapPhase Phase { get; }
@@ -83,6 +95,10 @@ namespace BreakNotice.Gameplay.Interaction
         public bool HasDynamicTension { get; }
         public float Tension01 { get; }
         public bool IsSmallSpinObstructed { get; }
+        public bool HasCharge { get; }
+        public float Charge01 { get; }
+        public ShowcaseCargoAttackType ResolvedAttackType { get; }
+        public ShowcaseCargoAttackResolutionReason ResolutionReason { get; }
     }
 
     [DefaultExecutionOrder(-40)]
@@ -94,11 +110,26 @@ namespace BreakNotice.Gameplay.Interaction
 
         private const int VisibilityHitCapacity = 32;
         private const int SmallOrbitOverlapCapacity = 32;
+        private const int MediumSweepCastCapacity = 48;
+        private const int MediumSweepOverlapCapacity = 48;
         private const float AttackBufferStart01 = 0.65f;
         private const float ReleaseDuration = 0.2f;
         private const float AnimationEventTimeout = 4f;
         private const float AttackCollisionGraceSeconds = 0.4f;
         private const float SmallSpinCycleSeconds = 12f / 30f;
+        private const float LegacyPowerCharge01 = 0.5f;
+        private const float ChargeMovementScale = 0.75f;
+        private const float FullChargeMovementScale = 0.5f;
+        private const float FullChargeAutoFireDelay = 0.65f;
+        private const float MediumControlRecoveryDelay = 0.4f;
+        private const int AttackPreviewMinimumCapacity = 3;
+        private const float SlamFloorSeparation = 0.025f;
+        private const float ExplicitSlamMinimumDownwardDrop = 0.65f;
+        private const float ExplicitSlamMinimumDownwardDot = 0.35f;
+        private const float ExplicitSlamFloorTolerance = 0.35f;
+        private const float MediumSweepCastSkin = 0.015f;
+        private const float MediumSweepFloorTolerance = 0.08f;
+        private const float MediumSweepMinimumTravel = 0.002f;
 
         [SerializeField]
         private PrototypeInteractionStateOwner interactionOwner;
@@ -224,6 +255,12 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(0.1f)]
         private float mediumTargetCorrectionSpeed = 2f;
 
+        [SerializeField, Min(0f)]
+        private float mediumTargetLeadSeconds = 0.42f;
+
+        [SerializeField, Min(0f)]
+        private float mediumTargetLeadMaximumDistance = 1.4f;
+
         [SerializeField, Min(0.01f)]
         private float mediumRearReadyTolerance = 0.3f;
 
@@ -266,10 +303,46 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField, Min(1f)]
         private float anchorFacingSpeedDegrees = 420f;
 
+        [SerializeField, Min(0.1f)]
+        private float mediumChargeDuration = 1f;
+
+        [SerializeField, Min(0.1f)]
+        private float slamSelectionRange = 2.4f;
+
+        [SerializeField, Min(0.1f)]
+        private float slamDirectRadius = 0.65f;
+
+        [SerializeField, Min(0.2f)]
+        private float slamOuterRadius = 1.75f;
+
+        [SerializeField, Min(0.1f)]
+        private float slamApexHeight = 2.2f;
+
+        [SerializeField, Min(0.1f)]
+        private float slamTrackingResponse = 28f;
+
+        [SerializeField, Min(1f)]
+        private float slamMaximumAcceleration = 180f;
+
+        [SerializeField, Min(0.1f)]
+        private float slamMaximumSpeed = 24f;
+
+        [SerializeField, Min(0.1f)]
+        private float slamMinimumDownwardTravel = 0.45f;
+
+        [SerializeField, Min(0f)]
+        private float attackClearancePadding = 0.08f;
+
         private readonly RaycastHit[] visibilityHits =
             new RaycastHit[VisibilityHitCapacity];
         private readonly Collider[] smallOrbitOverlapHits =
             new Collider[SmallOrbitOverlapCapacity];
+        private readonly RaycastHit[] mediumSweepCastHits =
+            new RaycastHit[MediumSweepCastCapacity];
+        private readonly Collider[] mediumSweepOverlapHits =
+            new Collider[MediumSweepOverlapCapacity];
+        private readonly int[] mediumSweepOverlapOrder =
+            new int[MediumSweepOverlapCapacity];
         private PrototypeInteractionTarget activeTarget;
         private Rigidbody activeBody;
         private Collider activeCollider;
@@ -298,6 +371,8 @@ namespace BreakNotice.Gameplay.Interaction
         private bool lastAttackWasLeft;
         private bool attackImpulseCommitted;
         private bool attackUsePending;
+        private bool cargoStrapUseCommitted;
+        private bool depletedReleaseQueued;
         private bool clampReleased;
         private bool animationStateEntered;
         private bool smallThrowLaunchPending;
@@ -322,10 +397,11 @@ namespace BreakNotice.Gameplay.Interaction
         private Vector3 smallSpinCenterVelocity;
         private Vector3 smallSpinPreviousCenterWorld;
         private readonly HashSet<int> mediumSwingHitRunnerIds = new();
+        private readonly Dictionary<int, ShowcaseCargoSweepHitAuthorization>
+            mediumSwingPendingHits = new();
         private bool mediumSwingPlanActive;
         private bool mediumSwingMotionStarted;
         private bool mediumSwingAttackLeft;
-        private bool mediumSwingImpactCommitted;
         private uint nextMediumSwingSequence;
         private uint activeMediumSwingSequence;
         private ShowcaseRunnerAgent mediumSwingTarget;
@@ -340,9 +416,24 @@ namespace BreakNotice.Gameplay.Interaction
         private float mediumSwingDesiredTetherLength;
         private float mediumSwingEffectiveTetherLength;
         private int mediumSwingTrackingFailureSteps;
+        private Vector3 mediumSweepPreviousCenter;
+        private Quaternion mediumSweepPreviousRotation;
+        private Vector3 mediumSweepPreviousHalfExtents;
+        private bool mediumSweepPoseInitialized;
+        private ShowcaseRunnerAgent primarySweptVictim;
+        private float mediumSweepInitialEnergy01;
+        private float mediumSweepReachScale = 1f;
+        private float remainingImpactEnergy01;
+        private int hitOrdinal;
+        private int mediumSweepMaximumTargets;
+        private bool swingTerminated;
+        private ShowcaseCargoSweepTerminationReason mediumSweepTerminationReason;
+        private Collider mediumSweepTerminationObstacle;
+        private Vector3 mediumSweepLastPathDirection;
         private float mediumRecoveryStartedAt;
         private float mediumExtensionStartedAt;
         private float mediumGroundCenterOfMassY;
+        private float mediumGroundSupportOffsetY;
         private float mediumRearDistance;
         private bool mediumRearReady;
         private int mediumRearStableSteps;
@@ -352,6 +443,32 @@ namespace BreakNotice.Gameplay.Interaction
         private float pullStartHeight;
         private float pullTargetPlanarRadius;
         private float pullTargetHeight;
+        private float chargeStartedAt;
+        private float fullChargeReachedAt = -1f;
+        private Vector3 chargeAimWorldPoint;
+        private ShowcaseRunnerAgent chargeResolvedTarget;
+        private Collider chargeResolvedTargetCollider;
+        private Vector3 chargeResolvedTargetPoint;
+        private ShowcaseCargoAttackResolution chargeResolution;
+        private ShowcaseCargoChargeProfile activeChargeProfile;
+        private ShowcaseCargoAttackType activeAttackType;
+        private ShowcaseCargoAttackResolution lastAttackResolution;
+        private float attackReleasedAt = -1f;
+        private float attackAccelerationAt = -1f;
+        private float attackImpactAt = -1f;
+        private float controlRecoveryAt = -1f;
+        private bool mediumControlRecovered = true;
+        private bool slamMotionStarted;
+        private bool slamDescending;
+        private bool slamImpactResolved;
+        private float slamMotionStartedAt;
+        private float slamPreviousCenterY;
+        private float slamDownwardTravel;
+        private Vector3 slamStartWorldPosition;
+        private Vector3 slamApexWorldPosition;
+        private Vector3 slamTargetWorldPosition;
+        private Vector3 slamPreviousColliderCenter;
+        private bool slamColliderSweepInitialized;
 
         public ShowcaseCargoStrapPhase Phase { get; private set; } =
             ShowcaseCargoStrapPhase.Stored;
@@ -388,19 +505,28 @@ namespace BreakNotice.Gameplay.Interaction
             Phase == ShowcaseCargoStrapPhase.Rolling ||
             Phase == ShowcaseCargoStrapPhase.Throw ||
             Phase == ShowcaseCargoStrapPhase.Pull ||
+            Phase == ShowcaseCargoStrapPhase.Charging ||
             Phase == ShowcaseCargoStrapPhase.SmallSpinning ||
             Phase == ShowcaseCargoStrapPhase.AttackLeft ||
             Phase == ShowcaseCargoStrapPhase.AttackRight ||
+            Phase == ShowcaseCargoStrapPhase.Slam ||
             Phase == ShowcaseCargoStrapPhase.MediumExtending ||
             Phase == ShowcaseCargoStrapPhase.MediumRecovering;
 
         public bool IsAttackActive => Phase == ShowcaseCargoStrapPhase.AttackLeft ||
+            Phase == ShowcaseCargoStrapPhase.AttackRight ||
+            Phase == ShowcaseCargoStrapPhase.Slam;
+
+        public bool IsCharging => Phase == ShowcaseCargoStrapPhase.Charging;
+
+        public bool IsSweepAttackActive =>
+            Phase == ShowcaseCargoStrapPhase.AttackLeft ||
             Phase == ShowcaseCargoStrapPhase.AttackRight;
 
         public bool IsSmallSpinning => Phase == ShowcaseCargoStrapPhase.SmallSpinning;
 
         public bool IsMediumSwinging => mediumSwingPlanActive &&
-            IsAttackActive && mediumSwingMotionStarted;
+            IsSweepAttackActive && mediumSwingMotionStarted;
 
         public bool IsMediumRecovering =>
             Phase == ShowcaseCargoStrapPhase.MediumRecovering;
@@ -408,11 +534,13 @@ namespace BreakNotice.Gameplay.Interaction
         public bool IsMediumAttackMobilityPhase =>
             activeTarget != null &&
             activeTarget.WeightClass == PrototypeWeightClass.Medium &&
-            mediumSwingPlanActive &&
-            (Phase == ShowcaseCargoStrapPhase.AttackLeft ||
-             Phase == ShowcaseCargoStrapPhase.AttackRight ||
-             Phase == ShowcaseCargoStrapPhase.MediumExtending ||
-             Phase == ShowcaseCargoStrapPhase.MediumRecovering);
+            (Phase == ShowcaseCargoStrapPhase.Charging ||
+             (mediumSwingPlanActive &&
+              (Phase == ShowcaseCargoStrapPhase.AttackLeft ||
+               Phase == ShowcaseCargoStrapPhase.AttackRight ||
+               Phase == ShowcaseCargoStrapPhase.Slam ||
+               Phase == ShowcaseCargoStrapPhase.MediumExtending ||
+               Phase == ShowcaseCargoStrapPhase.MediumRecovering)));
 
         public bool IsMediumRearReady => mediumRearReady;
 
@@ -454,14 +582,61 @@ namespace BreakNotice.Gameplay.Interaction
 
         public uint ActiveMediumSwingSequence => activeMediumSwingSequence;
 
+        public ShowcaseRunnerAgent PrimarySweptVictim => primarySweptVictim;
+
+        public float RemainingImpactEnergy01 => remainingImpactEnergy01;
+
+        public int MediumSweepHitCount => hitOrdinal;
+
+        public int MediumSweepMaximumTargets => mediumSweepMaximumTargets;
+
+        public bool IsMediumSweepTerminated => swingTerminated;
+
+        public ShowcaseCargoSweepTerminationReason MediumSweepTerminationReason =>
+            mediumSweepTerminationReason;
+
+        public Collider MediumSweepTerminationObstacle =>
+            mediumSweepTerminationObstacle;
+
+        public Vector3 MediumSweepLastPathDirection =>
+            mediumSweepLastPathDirection;
+
         public int MediumSwingStepCount { get; private set; }
 
         public int MediumRecoveryStepCount { get; private set; }
 
         public float PullDistanceReduced { get; private set; }
 
-        public bool AttackBufferWindowOpen => IsAttackActive &&
+        public bool AttackBufferWindowOpen => IsSweepAttackActive &&
             phaseProgress01 >= AttackBufferStart01;
+
+        public float Charge01 => IsCharging
+            ? Mathf.Clamp01(
+                (Time.time - chargeStartedAt) /
+                Mathf.Max(0.1f, mediumChargeDuration))
+            : activeChargeProfile.Charge01;
+
+        public ShowcaseCargoChargeProfile ActiveAttackChargeProfile =>
+            IsCharging
+                ? ShowcaseCargoChargeModel.Evaluate(Charge01)
+                : activeChargeProfile;
+
+        public ShowcaseCargoAttackType ActiveAttackType => activeAttackType;
+
+        public ShowcaseCargoAttackResolution CurrentAttackResolution =>
+            IsCharging ? chargeResolution : lastAttackResolution;
+
+        public ShowcaseRunnerAgent ChargeResolvedTarget =>
+            chargeResolvedTarget;
+
+        public Vector3 ChargeResolvedTargetPoint =>
+            chargeResolvedTargetPoint;
+
+        public float SlamDirectRadius => Mathf.Max(0.1f, slamDirectRadius);
+
+        public float SlamOuterRadius => Mathf.Max(
+            SlamDirectRadius + 0.1f,
+            slamOuterRadius);
 
         public bool IsStrapWeaponSelected => IsTensioned &&
             interactionOwner != null && interactionOwner.WeaponSelection ==
@@ -492,6 +667,19 @@ namespace BreakNotice.Gameplay.Interaction
         public int DepletionCount { get; private set; }
 
         public int BufferedAttackCount { get; private set; }
+
+        public int ChargeCancelCount { get; private set; }
+
+        public int AttackReleaseCount { get; private set; }
+
+        public int SlamImpactCount { get; private set; }
+
+        public float LastReleaseToObjectAccelerationSeconds { get; private set; } =
+            -1f;
+
+        public float LastReleaseToContactSeconds { get; private set; } = -1f;
+
+        public float LastImpactToControlRecoverySeconds { get; private set; } = -1f;
 
         public int RejectedAnimationEventCount { get; private set; }
 
@@ -537,7 +725,10 @@ namespace BreakNotice.Gameplay.Interaction
                     : PrototypeWeaponSelection.Fists,
                 ResolvePresentationEffectiveTetherLength(),
                 ResolvePresentationTension(),
-                smallSpinObstructed);
+                smallSpinObstructed,
+                IsCharging ? Charge01 : -1f,
+                CurrentAttackResolution.AttackType,
+                CurrentAttackResolution.Reason);
 
         private float ResolvePresentationEffectiveTetherLength()
         {
@@ -561,8 +752,11 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 ShowcaseCargoStrapPhase.Pull =>
                     Mathf.Clamp01(phaseProgress01),
+                ShowcaseCargoStrapPhase.Charging =>
+                    Mathf.Lerp(0.7f, 1f, Charge01),
                 ShowcaseCargoStrapPhase.AttackLeft => 1f,
                 ShowcaseCargoStrapPhase.AttackRight => 1f,
+                ShowcaseCargoStrapPhase.Slam => 1f,
                 ShowcaseCargoStrapPhase.MediumExtending => 1f,
                 ShowcaseCargoStrapPhase.MediumRecovering => 0.65f,
                 ShowcaseCargoStrapPhase.Releasing => 0.35f,
@@ -602,9 +796,11 @@ namespace BreakNotice.Gameplay.Interaction
                 SynchronizeLogicalAttachment();
             }
             SynchronizeSmallSpinWithWeaponSelection();
+            UpdateChargeState();
             ObserveAttackCollision();
             ObserveMediumSwingState();
             ObserveBufferedMediumAttack();
+            UpdateMediumControlRecovery();
             ObserveAttachInputRelease();
             if (Phase == ShowcaseCargoStrapPhase.Releasing)
             {
@@ -650,6 +846,9 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 if (mediumSwingPlanActive &&
                     Phase != ShowcaseCargoStrapPhase.MediumRecovering &&
+                    (!mediumSwingMotionStarted ||
+                     activeAttackType ==
+                        ShowcaseCargoAttackType.OverheadSlam) &&
                     !IsMediumSwingTargetWithinRange())
                 {
                     LastMediumAttackRejection =
@@ -660,13 +859,14 @@ namespace BreakNotice.Gameplay.Interaction
                      Phase == ShowcaseCargoStrapPhase.MediumExtending) &&
                     mediumSwingMotionStarted)
                 {
-                    UpdateMediumSwingBody();
+                    UpdateMediumAttackBody();
                 }
                 else if (Phase == ShowcaseCargoStrapPhase.MediumRecovering)
                 {
                     UpdateMediumRecoveryBody();
                 }
                 else if (Phase == ShowcaseCargoStrapPhase.Tensioned ||
+                         Phase == ShowcaseCargoStrapPhase.Charging ||
                          IsAttackActive)
                 {
                     UpdateMediumRearFollower();
@@ -722,6 +922,7 @@ namespace BreakNotice.Gameplay.Interaction
         private void OnDisable()
         {
             ClearLocomotionPolicy();
+            ResetChargeRuntime();
             interactionOwner?.TryReleaseStrap();
             ClearPhysicalAttachment();
             pendingTarget = null;
@@ -814,6 +1015,11 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool TryExplicitRelease()
         {
+            if (IsCharging)
+            {
+                return TryCancelCharge();
+            }
+
             if (Phase == ShowcaseCargoStrapPhase.Stored ||
                 Phase == ShowcaseCargoStrapPhase.Releasing)
             {
@@ -837,6 +1043,12 @@ namespace BreakNotice.Gameplay.Interaction
 
         public void CancelForPlayerInterruption()
         {
+            if (IsCharging)
+            {
+                TryCancelCharge();
+                return;
+            }
+
             if (Phase == ShowcaseCargoStrapPhase.Stored ||
                 Phase == ShowcaseCargoStrapPhase.Releasing)
             {
@@ -888,7 +1100,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return true;
             }
 
-            if (IsAttackActive)
+            if (IsSweepAttackActive)
             {
                 if (mediumSwingPlanActive && AttackBufferWindowOpen &&
                     !bufferedAttack)
@@ -901,6 +1113,11 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
+            if (IsAttackActive || IsCharging)
+            {
+                return false;
+            }
+
             if (Phase != ShowcaseCargoStrapPhase.Tensioned ||
                 !IsStrapWeaponSelected || activeTarget == null ||
                 !activeTarget.gameObject.activeInHierarchy)
@@ -910,48 +1127,227 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             if (activeTarget.WeightClass != PrototypeWeightClass.Medium ||
-                !mediumRearReady ||
-                !TryCreateMediumSwingPlan(aimWorldPoint, out bool attackLeft))
+                !mediumRearReady)
+            {
+                LastMediumAttackRejection = !mediumRearReady
+                    ? "MEDIUM_REAR_NOT_READY"
+                    : "MEDIUM_TARGET_PLAN_REJECTED";
+                return false;
+            }
+
+            ShowcaseCargoChargeProfile powerProfile =
+                ShowcaseCargoChargeModel.Evaluate(LegacyPowerCharge01);
+            if (!TryResolveLegacyMediumAttack(
+                    aimWorldPoint,
+                    out ShowcaseCargoAttackResolution resolution,
+                    out ShowcaseRunnerAgent target,
+                    out Collider targetCollider,
+                    out Vector3 targetPoint) ||
+                !TryCreateMediumAttackPlan(
+                    resolution,
+                    powerProfile,
+                    target,
+                    targetCollider,
+                    targetPoint,
+                    true))
             {
                 if (string.IsNullOrEmpty(LastMediumAttackRejection))
                 {
-                    LastMediumAttackRejection = !mediumRearReady
-                        ? "MEDIUM_REAR_NOT_READY"
-                        : "MEDIUM_TARGET_PLAN_REJECTED";
+                    LastMediumAttackRejection = ResolveAttackRejectionText(
+                        resolution);
                 }
                 return false;
             }
 
-            StartAttack(attackLeft);
+            CommitAttackRelease(powerProfile, resolution);
+            StartResolvedAttack(resolution.AttackType);
             return true;
         }
 
-        private bool TryCreateMediumSwingPlan(
+        private bool TryResolveLegacyMediumAttack(
             Vector3 aimWorldPoint,
-            out bool attackLeft)
+            out ShowcaseCargoAttackResolution resolution,
+            out ShowcaseRunnerAgent target,
+            out Collider targetCollider,
+            out Vector3 targetPoint)
         {
-            attackLeft = false;
+            resolution = default;
+            target = null;
+            targetCollider = null;
+            targetPoint = aimWorldPoint;
             ResolveRunnerPressureController();
             float maximumTargetRange = MediumMaximumAttackRange;
             if (runnerPressure == null || maximumTargetRange <= 0f ||
                 !runnerPressure.TryResolveCargoStrapTarget(
                     aimWorldPoint,
                     maximumTargetRange,
-                    out ShowcaseRunnerAgent target,
-                    out Vector3 targetPoint,
+                    out target,
+                    out targetPoint,
                     out _))
             {
                 LastMediumAttackRejection = "MEDIUM_TARGET_NOT_RESOLVED";
                 return false;
             }
 
-            Collider targetCollider = target.GetComponent<Collider>();
+            targetCollider = target.GetComponent<Collider>();
             if (targetCollider == null || !targetCollider.enabled)
             {
                 LastMediumAttackRejection = "MEDIUM_TARGET_COLLIDER_MISSING";
                 return false;
             }
 
+            bool attackLeft = ResolveAttackLeft(targetPoint);
+            resolution = new ShowcaseCargoAttackResolution(
+                attackLeft
+                    ? ShowcaseCargoAttackType.SweepLeft
+                    : ShowcaseCargoAttackType.SweepRight,
+                ShowcaseCargoAttackResolutionReason.PreferredSweep);
+            return true;
+        }
+
+        public bool TryBeginCharge(Vector3 aimWorldPoint)
+        {
+            LastMediumAttackRejection = string.Empty;
+            if (Phase == ShowcaseCargoStrapPhase.SmallSpinning)
+            {
+                return TryBeginAttack(aimWorldPoint);
+            }
+
+            if (IsCharging)
+            {
+                return TryUpdateChargeAim(aimWorldPoint);
+            }
+
+            if (Phase != ShowcaseCargoStrapPhase.Tensioned ||
+                !IsStrapWeaponSelected || activeTarget == null ||
+                !activeTarget.gameObject.activeInHierarchy ||
+                activeTarget.WeightClass != PrototypeWeightClass.Medium)
+            {
+                LastMediumAttackRejection =
+                    "MEDIUM_CHARGE_STATE_NOT_READY";
+                return false;
+            }
+
+            chargeStartedAt = Time.time;
+            fullChargeReachedAt = -1f;
+            chargeAimWorldPoint = aimWorldPoint;
+            activeChargeProfile = ShowcaseCargoChargeModel.Evaluate(0f);
+            activeAttackType = ShowcaseCargoAttackType.None;
+            mediumControlRecovered = false;
+            chargeResolution = default;
+            RefreshChargeResolution(aimWorldPoint);
+            EnterPhase(
+                ShowcaseCargoStrapPhase.Charging,
+                ShowcaseCargoStrapAnimationCue.None);
+            return true;
+        }
+
+        public bool TryUpdateChargeAim(Vector3 aimWorldPoint)
+        {
+            if (!IsCharging)
+            {
+                return false;
+            }
+
+            chargeAimWorldPoint = aimWorldPoint;
+            RefreshChargeResolution(aimWorldPoint);
+            return true;
+        }
+
+        public bool TryReleaseCharge(Vector3 aimWorldPoint)
+        {
+            if (!IsCharging)
+            {
+                return false;
+            }
+
+            chargeAimWorldPoint = aimWorldPoint;
+            RefreshChargeResolution(aimWorldPoint);
+            ShowcaseCargoChargeProfile profile =
+                ShowcaseCargoChargeModel.Evaluate(Charge01);
+            ShowcaseCargoAttackResolution resolution = chargeResolution;
+            if (!resolution.IsAccepted ||
+                !TryCreateMediumAttackPlan(
+                    resolution,
+                    profile,
+                    chargeResolvedTarget,
+                    chargeResolvedTargetCollider,
+                    chargeResolvedTargetPoint))
+            {
+                LastMediumAttackRejection = ResolveAttackRejectionText(
+                    resolution);
+                CancelCharge(false);
+                return false;
+            }
+
+            CommitAttackRelease(profile, resolution);
+            StartResolvedAttack(resolution.AttackType);
+            return true;
+        }
+
+        public bool TryCancelCharge()
+        {
+            return CancelCharge(true);
+        }
+
+        private bool CancelCharge(bool countCancel)
+        {
+            if (!IsCharging)
+            {
+                return false;
+            }
+
+            if (countCancel)
+            {
+                ChargeCancelCount++;
+            }
+            ResetChargeRuntime();
+            DampRedirectVelocity();
+            EnterPhase(
+                ShowcaseCargoStrapPhase.Tensioned,
+                ShowcaseCargoStrapAnimationCue.None);
+            return true;
+        }
+
+        private void CommitAttackRelease(
+            ShowcaseCargoChargeProfile profile,
+            ShowcaseCargoAttackResolution resolution)
+        {
+            activeChargeProfile = profile;
+            activeAttackType = resolution.AttackType;
+            lastAttackResolution = resolution;
+            attackReleasedAt = Time.time;
+            attackAccelerationAt = -1f;
+            attackImpactAt = -1f;
+            controlRecoveryAt = -1f;
+            mediumControlRecovered = false;
+            LastReleaseToObjectAccelerationSeconds = -1f;
+            LastReleaseToContactSeconds = -1f;
+            LastImpactToControlRecoverySeconds = -1f;
+            AttackReleaseCount++;
+            ResetChargeRuntime(false);
+        }
+
+        private bool TryCreateMediumAttackPlan(
+            ShowcaseCargoAttackResolution resolution,
+            ShowcaseCargoChargeProfile profile,
+            ShowcaseRunnerAgent target,
+            Collider targetCollider,
+            Vector3 targetPoint,
+            bool preserveLegacyReach = false)
+        {
+            bool hasTrackedTarget = target != null;
+            bool hasValidTrackedCollider = hasTrackedTarget &&
+                targetCollider != null && targetCollider.enabled;
+            if (!resolution.IsAccepted || activeBody == null ||
+                playerTransform == null ||
+                (hasTrackedTarget && !hasValidTrackedCollider) ||
+                (!hasTrackedTarget && targetCollider != null))
+            {
+                return false;
+            }
+
+            float maximumTargetRange = MediumMaximumAttackRange;
             Vector3 reel = GetReelPosition();
             Vector3 planarTargetOffset = Vector3.ProjectOnPlane(
                 targetPoint - reel,
@@ -963,15 +1359,39 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            attackLeft = ResolveAttackLeft(targetPoint);
+            bool slamAttack = resolution.AttackType ==
+                ShowcaseCargoAttackType.OverheadSlam;
+            Vector3 plannedTargetPoint = targetPoint;
+            float plannedTargetDistance = targetDistance;
+            mediumSweepReachScale = preserveLegacyReach
+                ? 1f
+                : ShowcaseCargoSweepEnergyModel.ResolveSweepReachScale(profile);
+            if (!slamAttack && targetDistance > 0.001f)
+            {
+                float minimumReach = Mathf.Min(
+                    targetDistance,
+                    mediumSwingMinimumRange);
+                plannedTargetDistance = Mathf.Lerp(
+                    minimumReach,
+                    targetDistance,
+                    mediumSweepReachScale);
+                Vector3 verticalOffset = Vector3.Project(
+                    targetPoint - reel,
+                    Vector3.up);
+                plannedTargetPoint = reel +
+                    (planarTargetOffset.normalized * plannedTargetDistance) +
+                    verticalOffset;
+            }
+
+            bool attackLeft = resolution.AttackType ==
+                ShowcaseCargoAttackType.SweepLeft;
             mediumSwingPlanActive = true;
             mediumSwingMotionStarted = false;
             mediumSwingAttackLeft = attackLeft;
-            mediumSwingImpactCommitted = false;
             mediumSwingTarget = target;
             mediumSwingTargetCollider = targetCollider;
-            mediumSwingSnapshotTargetPoint = targetPoint;
-            mediumSwingCorrectedTargetPoint = targetPoint;
+            mediumSwingSnapshotTargetPoint = plannedTargetPoint;
+            mediumSwingCorrectedTargetPoint = plannedTargetPoint;
             mediumSwingForwardSnapshot = Vector3.ProjectOnPlane(
                 playerTransform.forward,
                 Vector3.up).normalized;
@@ -993,7 +1413,7 @@ namespace BreakNotice.Gameplay.Interaction
                 Vector3.Dot(targetDirection, mediumSwingRightSnapshot),
                 Vector3.Dot(targetDirection, mediumSwingForwardSnapshot));
             mediumSwingDesiredTetherLength = Mathf.Clamp(
-                targetDistance + mediumSwingTrajectoryAllowance,
+                plannedTargetDistance + mediumSwingTrajectoryAllowance,
                 Mathf.Max(mediumSwingMinimumRange, mediumSwingRearRadius),
                 maximumStrapLength - 0.05f);
             mediumSwingEffectiveTetherLength = Mathf.Clamp(
@@ -1003,9 +1423,726 @@ namespace BreakNotice.Gameplay.Interaction
             mediumSwingTrackingFailureSteps = 0;
             activeMediumSwingSequence = ++nextMediumSwingSequence;
             mediumSwingHitRunnerIds.Clear();
+            mediumSwingPendingHits.Clear();
             mediumRearReady = false;
             mediumRearStableSteps = 0;
+            activeChargeProfile = profile;
+            activeAttackType = resolution.AttackType;
+            lastAttackResolution = resolution;
+            InitializeMediumSweepRuntime(profile, resolution.AttackType);
+            InitializeSlamPlan(plannedTargetPoint);
             return true;
+        }
+
+        private void InitializeMediumSweepRuntime(
+            ShowcaseCargoChargeProfile profile,
+            ShowcaseCargoAttackType attackType)
+        {
+            mediumSweepPreviousCenter = Vector3.zero;
+            mediumSweepPreviousRotation = Quaternion.identity;
+            mediumSweepPreviousHalfExtents = Vector3.zero;
+            mediumSweepPoseInitialized = false;
+            primarySweptVictim = null;
+            mediumSweepInitialEnergy01 = 0f;
+            mediumSweepReachScale = 1f;
+            remainingImpactEnergy01 = 0f;
+            hitOrdinal = 0;
+            mediumSweepMaximumTargets = 0;
+            swingTerminated = false;
+            mediumSweepTerminationReason =
+                ShowcaseCargoSweepTerminationReason.None;
+            mediumSweepTerminationObstacle = null;
+            mediumSweepLastPathDirection = Vector3.zero;
+            if (attackType == ShowcaseCargoAttackType.OverheadSlam)
+            {
+                return;
+            }
+
+            ShowcaseCargoSweepEnergyState energyState =
+                ShowcaseCargoSweepEnergyModel.ResolveInitialState(profile);
+            mediumSweepInitialEnergy01 = energyState.InitialEnergy01;
+            remainingImpactEnergy01 = energyState.InitialEnergy01;
+            mediumSweepMaximumTargets = energyState.MaximumTargets;
+        }
+
+        public bool TryBuildAttackTrajectoryPreview(
+            Vector3[] points,
+            out int pointCount)
+        {
+            pointCount = 0;
+            if (!IsCharging || points == null ||
+                points.Length < AttackPreviewMinimumCapacity ||
+                !chargeResolution.IsAccepted || activeBody == null ||
+                playerTransform == null)
+            {
+                return false;
+            }
+
+            int requestedCount = Mathf.Clamp(points.Length, 3, 18);
+            if (chargeResolution.AttackType ==
+                ShowcaseCargoAttackType.OverheadSlam)
+            {
+                Vector3 start = activeBody.worldCenterOfMass;
+                Vector3 end = ResolveSlamTargetPosition(
+                    chargeResolvedTargetPoint);
+                Vector3 apex = ResolveSlamApex(start, end);
+                for (int index = 0; index < requestedCount; index++)
+                {
+                    float t = index / (float)(requestedCount - 1);
+                    float inverse = 1f - t;
+                    points[index] =
+                        (inverse * inverse * start) +
+                        (2f * inverse * t * apex) +
+                        (t * t * end);
+                }
+                pointCount = requestedCount;
+                return true;
+            }
+
+            bool attackLeft = chargeResolution.AttackType ==
+                ShowcaseCargoAttackType.SweepLeft;
+            for (int index = 0; index < requestedCount; index++)
+            {
+                float t = index / (float)(requestedCount - 1);
+                points[index] = ResolvePredictedSweepPoint(
+                    attackLeft,
+                    chargeResolvedTargetPoint,
+                    t);
+            }
+            pointCount = requestedCount;
+            return true;
+        }
+
+        private void UpdateChargeState()
+        {
+            if (!IsCharging)
+            {
+                return;
+            }
+
+            phaseProgress01 = Charge01;
+            activeChargeProfile = ShowcaseCargoChargeModel.Evaluate(Charge01);
+            RefreshChargeResolution(chargeAimWorldPoint);
+            SynchronizeLocomotionPolicy();
+            if (Charge01 < 1f)
+            {
+                fullChargeReachedAt = -1f;
+                return;
+            }
+
+            if (fullChargeReachedAt < 0f)
+            {
+                fullChargeReachedAt = Time.time;
+                return;
+            }
+
+            if (Time.time - fullChargeReachedAt >= FullChargeAutoFireDelay)
+            {
+                TryReleaseCharge(chargeAimWorldPoint);
+            }
+        }
+
+        private void UpdateMediumControlRecovery()
+        {
+            if (mediumControlRecovered || attackImpactAt < 0f ||
+                controlRecoveryAt < 0f || Time.time < controlRecoveryAt)
+            {
+                return;
+            }
+
+            mediumControlRecovered = true;
+            LastImpactToControlRecoverySeconds = Mathf.Max(
+                0f,
+                Time.time - attackImpactAt);
+            SynchronizeLocomotionPolicy();
+        }
+
+        private void MarkAttackImpact()
+        {
+            if (attackImpactAt >= 0f)
+            {
+                return;
+            }
+
+            attackImpactAt = Time.time;
+            LastReleaseToContactSeconds = attackReleasedAt >= 0f
+                ? Mathf.Max(0f, attackImpactAt - attackReleasedAt)
+                : -1f;
+            controlRecoveryAt = attackImpactAt + MediumControlRecoveryDelay;
+            mediumControlRecovered = false;
+        }
+
+        private void ResetChargeRuntime(bool clearActiveProfile = true)
+        {
+            chargeStartedAt = 0f;
+            fullChargeReachedAt = -1f;
+            chargeAimWorldPoint = Vector3.zero;
+            chargeResolvedTarget = null;
+            chargeResolvedTargetCollider = null;
+            chargeResolvedTargetPoint = Vector3.zero;
+            chargeResolution = default;
+            if (clearActiveProfile)
+            {
+                activeChargeProfile = ShowcaseCargoChargeModel.Evaluate(0f);
+                activeAttackType = ShowcaseCargoAttackType.None;
+            }
+        }
+
+        private void RefreshChargeResolution(Vector3 aimWorldPoint)
+        {
+            ResolveRunnerPressureController();
+            chargeResolvedTarget = null;
+            chargeResolvedTargetCollider = null;
+            chargeResolvedTargetPoint = aimWorldPoint;
+
+            ShowcaseCargoChargeProfile chargeProfile =
+                ShowcaseCargoChargeModel.Evaluate(Charge01);
+            Vector3 freeAimPoint = ResolveFreeAimAttackPoint(aimWorldPoint);
+
+            ShowcaseRunnerAgent primaryTarget = null;
+            Vector3 primaryTargetPoint = aimWorldPoint;
+            bool hasPrimaryTarget = runnerPressure != null &&
+                runnerPressure.TryResolveCargoStrapTarget(
+                    aimWorldPoint,
+                    MediumMaximumAttackRange,
+                    out primaryTarget,
+                    out primaryTargetPoint,
+                    out _);
+            Collider primaryCollider = hasPrimaryTarget && primaryTarget != null
+                ? primaryTarget.GetComponent<Collider>()
+                : null;
+            if (primaryCollider == null || !primaryCollider.enabled)
+            {
+                hasPrimaryTarget = false;
+                primaryTarget = null;
+                primaryCollider = null;
+            }
+            else
+            {
+                primaryTargetPoint = ResolvePredictedRunnerTargetPoint(
+                    primaryTarget,
+                    primaryCollider.bounds.center,
+                    chargeProfile,
+                    false);
+            }
+
+            TryResolveNearestSlamTarget(
+                aimWorldPoint,
+                out ShowcaseRunnerAgent nearbyTarget,
+                out Collider nearbyCollider,
+                out Vector3 nearbyPoint,
+                out float nearbyDistance);
+            bool hasNearbySlamTarget = nearbyTarget != null &&
+                nearbyCollider != null && nearbyCollider.enabled &&
+                nearbyDistance <= slamSelectionRange;
+            if (hasNearbySlamTarget)
+            {
+                nearbyPoint = ResolvePredictedRunnerTargetPoint(
+                    nearbyTarget,
+                    nearbyCollider.bounds.center,
+                    chargeProfile,
+                    true);
+            }
+
+            Vector3 sweepPoint = hasPrimaryTarget
+                ? primaryTargetPoint
+                : freeAimPoint;
+            Vector3 slamPoint = hasNearbySlamTarget
+                ? nearbyPoint
+                : freeAimPoint;
+
+            bool floorAim = IsFloorAim(aimWorldPoint);
+            bool downwardAim = IsDeliberateDownwardAim(
+                aimWorldPoint,
+                floorAim);
+            bool leftClear = IsPredictedSweepPathClear(true, sweepPoint);
+            bool rightClear = IsPredictedSweepPathClear(false, sweepPoint);
+            bool overheadClear = IsOverheadPathClear(slamPoint);
+            chargeResolution = ShowcaseCargoAttackResolver.Resolve(
+                new ShowcaseCargoAttackResolverInput(
+                    aimWorldPoint,
+                    sweepPoint,
+                    playerTransform != null
+                        ? playerTransform.position
+                        : transform.position,
+                    playerTransform != null
+                        ? playerTransform.forward
+                        : transform.forward,
+                    playerTransform != null
+                        ? playerTransform.right
+                        : transform.right,
+                    hasPrimaryTarget,
+                    leftClear,
+                    rightClear,
+                    overheadClear,
+                    floorAim,
+                    downwardAim,
+                    nearbyDistance,
+                    slamSelectionRange,
+                    !lastAttackWasLeft));
+
+            bool resolvedSlam = chargeResolution.AttackType ==
+                ShowcaseCargoAttackType.OverheadSlam;
+            if (resolvedSlam)
+            {
+                chargeResolvedTarget = hasNearbySlamTarget
+                    ? nearbyTarget
+                    : null;
+                chargeResolvedTargetCollider = hasNearbySlamTarget
+                    ? nearbyCollider
+                    : null;
+                chargeResolvedTargetPoint = slamPoint;
+            }
+            else
+            {
+                chargeResolvedTarget = hasPrimaryTarget
+                    ? primaryTarget
+                    : null;
+                chargeResolvedTargetCollider = hasPrimaryTarget
+                    ? primaryCollider
+                    : null;
+                chargeResolvedTargetPoint = sweepPoint;
+            }
+        }
+
+        private void TryResolveNearestSlamTarget(
+            Vector3 aimWorldPoint,
+            out ShowcaseRunnerAgent target,
+            out Collider targetCollider,
+            out Vector3 targetPoint,
+            out float distance)
+        {
+            target = null;
+            targetCollider = null;
+            targetPoint = aimWorldPoint;
+            distance = float.PositiveInfinity;
+            if (runnerPressure == null)
+            {
+                return;
+            }
+
+            foreach (ShowcaseRunnerAgent candidate in
+                runnerPressure.TargetableRunners)
+            {
+                if (candidate == null || candidate.IsDead ||
+                    !candidate.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+                Collider candidateCollider = candidate.GetComponent<Collider>();
+                if (candidateCollider == null || !candidateCollider.enabled)
+                {
+                    continue;
+                }
+
+                Vector3 reelClosest = candidateCollider.ClosestPoint(
+                    GetReelPosition());
+                float reelDistance = Vector3.ProjectOnPlane(
+                    reelClosest - GetReelPosition(),
+                    Vector3.up).magnitude;
+                if (reelDistance > MediumMaximumAttackRange + 0.001f)
+                {
+                    continue;
+                }
+
+                Vector3 closest = candidateCollider.ClosestPoint(aimWorldPoint);
+                float candidateDistance = Vector3.ProjectOnPlane(
+                    closest - aimWorldPoint,
+                    Vector3.up).magnitude;
+                if (candidateDistance >= distance)
+                {
+                    continue;
+                }
+
+                target = candidate;
+                targetCollider = candidateCollider;
+                targetPoint = candidateCollider.bounds.center;
+                distance = candidateDistance;
+            }
+        }
+
+        private Vector3 ResolveFreeAimAttackPoint(Vector3 aimWorldPoint)
+        {
+            Vector3 reel = GetReelPosition();
+            Vector3 planarOffset = Vector3.ProjectOnPlane(
+                aimWorldPoint - reel,
+                Vector3.up);
+            Vector3 fallbackForward = playerTransform != null
+                ? Vector3.ProjectOnPlane(playerTransform.forward, Vector3.up)
+                : Vector3.forward;
+            if (fallbackForward.sqrMagnitude <= 0.0001f)
+            {
+                fallbackForward = Vector3.forward;
+            }
+            fallbackForward.Normalize();
+
+            Vector3 direction = planarOffset.sqrMagnitude > 0.0001f
+                ? planarOffset.normalized
+                : fallbackForward;
+            float maximumDistance = Mathf.Max(
+                0.1f,
+                MediumMaximumAttackRange);
+            float minimumDistance = Mathf.Min(
+                maximumDistance,
+                Mathf.Max(0.1f, mediumSwingMinimumRange));
+            float distance = Mathf.Clamp(
+                planarOffset.magnitude,
+                minimumDistance,
+                maximumDistance);
+            Vector3 result = reel + direction * distance;
+            result.y = mediumGroundCenterOfMassY;
+            return result;
+        }
+
+        private Vector3 ResolvePredictedRunnerTargetPoint(
+            ShowcaseRunnerAgent runner,
+            Vector3 currentPoint,
+            ShowcaseCargoChargeProfile profile,
+            bool overheadSlam,
+            float leadScale = 1f)
+        {
+            if (runner == null)
+            {
+                return ClampAttackTargetPoint(currentPoint);
+            }
+
+            float startupSeconds = 0.16f /
+                Mathf.Max(0.1f, profile.AnimationSpeedMultiplier);
+            float travelSeconds = Mathf.Max(0f, mediumTargetLeadSeconds) /
+                Mathf.Max(0.1f, profile.ObjectSpeedMultiplier);
+            if (overheadSlam)
+            {
+                travelSeconds += 0.08f;
+            }
+            Vector3 predictedOffset =
+                Vector3.ProjectOnPlane(
+                    runner.EstimatedPlanarVelocity,
+                    Vector3.up) *
+                (startupSeconds + travelSeconds) *
+                Mathf.Clamp01(leadScale);
+            predictedOffset = Vector3.ClampMagnitude(
+                predictedOffset,
+                Mathf.Max(0f, mediumTargetLeadMaximumDistance));
+            return ClampAttackTargetPoint(currentPoint + predictedOffset);
+        }
+
+        private Vector3 ClampAttackTargetPoint(Vector3 targetPoint)
+        {
+            Vector3 reel = GetReelPosition();
+            Vector3 planarOffset = Vector3.ProjectOnPlane(
+                targetPoint - reel,
+                Vector3.up);
+            float maximumDistance = Mathf.Max(
+                0.1f,
+                MediumMaximumAttackRange);
+            if (planarOffset.magnitude <= maximumDistance ||
+                planarOffset.sqrMagnitude <= 0.0001f)
+            {
+                return targetPoint;
+            }
+
+            Vector3 result = reel +
+                planarOffset.normalized * maximumDistance;
+            result.y = targetPoint.y;
+            return result;
+        }
+
+        private bool IsFloorAim(Vector3 aimWorldPoint)
+        {
+            if (playerTransform == null)
+            {
+                return false;
+            }
+
+            Vector3 planar = Vector3.ProjectOnPlane(
+                aimWorldPoint - playerTransform.position,
+                Vector3.up);
+            float floorHeight = mediumGroundCenterOfMassY -
+                ResolveMediumSupportOffsetY();
+            return aimWorldPoint.y <=
+                       floorHeight + ExplicitSlamFloorTolerance &&
+                planar.magnitude <= slamSelectionRange + 0.75f;
+        }
+
+        private bool IsDeliberateDownwardAim(
+            Vector3 aimWorldPoint,
+            bool floorAim)
+        {
+            if (!floorAim)
+            {
+                return false;
+            }
+
+            Vector3 toAim = aimWorldPoint - GetReelPosition();
+            float distance = toAim.magnitude;
+            if (distance <= 0.001f ||
+                -toAim.y < ExplicitSlamMinimumDownwardDrop)
+            {
+                return false;
+            }
+
+            return Vector3.Dot(toAim / distance, Vector3.down) >=
+                ExplicitSlamMinimumDownwardDot;
+        }
+
+        private bool IsPredictedSweepPathClear(
+            bool attackLeft,
+            Vector3 targetPoint)
+        {
+            if (activeBody == null || activeCollider == null ||
+                playerTransform == null)
+            {
+                return false;
+            }
+
+            Vector3 previous = activeBody.worldCenterOfMass;
+            const int segmentCount = 8;
+            for (int index = 1; index <= segmentCount; index++)
+            {
+                float t = index / (float)segmentCount;
+                Vector3 current = ResolvePredictedSweepPoint(
+                    attackLeft,
+                    targetPoint,
+                    t);
+                if (!IsAttackSegmentClear(previous, current, true))
+                {
+                    return false;
+                }
+                previous = current;
+            }
+            return true;
+        }
+
+        private Vector3 ResolvePredictedSweepPoint(
+            bool attackLeft,
+            Vector3 targetPoint,
+            float normalized01)
+        {
+            float t = Mathf.Clamp01(normalized01);
+            Vector3 forward = Vector3.ProjectOnPlane(
+                playerTransform.forward,
+                Vector3.up).normalized;
+            Vector3 right = Vector3.ProjectOnPlane(
+                playerTransform.right,
+                Vector3.up).normalized;
+            Vector3 reel = GetReelPosition();
+            Vector3 targetOffset = Vector3.ProjectOnPlane(
+                targetPoint - reel,
+                Vector3.up);
+            Vector3 targetDirection = targetOffset.sqrMagnitude > 0.0001f
+                ? targetOffset.normalized
+                : forward;
+            float targetAngle = Mathf.Atan2(
+                Vector3.Dot(targetDirection, right),
+                Vector3.Dot(targetDirection, forward));
+            float startAngle = attackLeft ? -Mathf.PI : Mathf.PI;
+            float angle = Mathf.Lerp(startAngle, targetAngle, t);
+            float rearRadius = Mathf.Max(
+                mediumRearMinimumDistance,
+                Vector3.ProjectOnPlane(
+                    activeBody.worldCenterOfMass - reel,
+                    Vector3.up).magnitude);
+            float targetRadius = Mathf.Clamp(
+                targetOffset.magnitude + mediumSwingTrajectoryAllowance,
+                Mathf.Max(mediumSwingMinimumRange, rearRadius),
+                maximumStrapLength - 0.05f);
+            float extension01 = Mathf.SmoothStep(
+                0f,
+                1f,
+                Mathf.InverseLerp(0.5f, 1f, t));
+            float radius = Mathf.Lerp(rearRadius, targetRadius, extension01);
+            Vector3 radial =
+                (forward * Mathf.Cos(angle)) +
+                (right * Mathf.Sin(angle));
+            Vector3 point = reel + (radial * radius);
+            point.y = mediumGroundCenterOfMassY +
+                (Mathf.Sin(Mathf.PI * t) * mediumSwingArcHeight);
+            float targetBlend = Mathf.SmoothStep(
+                0f,
+                1f,
+                Mathf.InverseLerp(0.65f, 1f, t));
+            return Vector3.Lerp(point, targetPoint, targetBlend);
+        }
+
+        private bool IsOverheadPathClear(Vector3 targetPoint)
+        {
+            if (activeBody == null || activeCollider == null)
+            {
+                return false;
+            }
+
+            Vector3 start = activeBody.worldCenterOfMass;
+            Vector3 end = ResolveSlamTargetPosition(targetPoint);
+            Vector3 apex = ResolveSlamApex(start, end);
+            return IsAttackSegmentClear(start, apex, false) &&
+                IsAttackSegmentClear(apex, end, true);
+        }
+
+        private bool IsAttackSegmentClear(
+            Vector3 start,
+            Vector3 end,
+            bool allowFloor)
+        {
+            Vector3 displacement = end - start;
+            float distance = displacement.magnitude;
+            if (distance <= 0.01f)
+            {
+                return true;
+            }
+
+            Vector3 colliderExtents = activeCollider.bounds.extents;
+            float floorSupportInset = Mathf.Clamp(
+                colliderExtents.y * 0.2f,
+                0.08f,
+                0.16f);
+            Vector3 halfExtents = new Vector3(
+                colliderExtents.x + attackClearancePadding,
+                Mathf.Max(0.05f, colliderExtents.y - floorSupportInset),
+                colliderExtents.z + attackClearancePadding);
+            int hitCount = Physics.BoxCastNonAlloc(
+                start,
+                halfExtents,
+                displacement / distance,
+                visibilityHits,
+                activeBody.rotation,
+                distance,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            if (hitCount >= VisibilityHitCapacity)
+            {
+                return false;
+            }
+
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = visibilityHits[index];
+                Collider candidate = hit.collider;
+                if (candidate == null || candidate.isTrigger ||
+                    BelongsToPlayer(candidate) ||
+                    candidate == activeCollider ||
+                    candidate.transform == activeTarget.transform ||
+                    candidate.transform.IsChildOf(activeTarget.transform) ||
+                    candidate.GetComponentInParent<ShowcaseRunnerAgent>() != null)
+                {
+                    continue;
+                }
+                if (allowFloor && hit.normal.y >= 0.55f)
+                {
+                    continue;
+                }
+                return false;
+            }
+            return true;
+        }
+
+        private Vector3 ResolveSlamTargetPosition(Vector3 targetPoint)
+        {
+            Vector3 result = targetPoint;
+            float supportOffsetY = ResolveMediumSupportOffsetY();
+            float fallbackFloorHeight = mediumGroundCenterOfMassY -
+                supportOffsetY;
+            result.y = fallbackFloorHeight + supportOffsetY +
+                SlamFloorSeparation;
+            if (activeCollider == null)
+            {
+                return result;
+            }
+
+            Vector3 origin = targetPoint + (Vector3.up * 2.5f);
+            int hitCount = Physics.RaycastNonAlloc(
+                origin,
+                Vector3.down,
+                visibilityHits,
+                6f,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            float nearest = float.PositiveInfinity;
+            for (int index = 0; index < hitCount; index++)
+            {
+                RaycastHit hit = visibilityHits[index];
+                Collider candidate = hit.collider;
+                if (candidate == null || candidate.isTrigger ||
+                    BelongsToPlayer(candidate) || candidate == activeCollider ||
+                    candidate.GetComponentInParent<ShowcaseRunnerAgent>() != null ||
+                    hit.normal.y < 0.55f || hit.distance >= nearest)
+                {
+                    continue;
+                }
+                nearest = hit.distance;
+                result.y = hit.point.y + supportOffsetY +
+                    SlamFloorSeparation;
+            }
+            return result;
+        }
+
+        private float ResolveMediumSupportOffsetY()
+        {
+            if (mediumGroundSupportOffsetY > 0.001f)
+            {
+                return mediumGroundSupportOffsetY;
+            }
+
+            if (activeBody != null && activeCollider != null)
+            {
+                return Mathf.Max(
+                    0.01f,
+                    activeBody.worldCenterOfMass.y -
+                    activeCollider.bounds.min.y);
+            }
+
+            return 0.01f;
+        }
+
+        private Vector3 ResolveSlamApex(Vector3 start, Vector3 end)
+        {
+            Vector3 apex = Vector3.Lerp(start, end, 0.5f);
+            apex.y = Mathf.Max(start.y, end.y) + slamApexHeight;
+            return apex;
+        }
+
+        private void InitializeSlamPlan(Vector3 targetPoint)
+        {
+            slamMotionStarted = false;
+            slamDescending = false;
+            slamImpactResolved = false;
+            slamMotionStartedAt = 0f;
+            slamDownwardTravel = 0f;
+            slamStartWorldPosition = Vector3.zero;
+            slamApexWorldPosition = Vector3.zero;
+            slamTargetWorldPosition = Vector3.zero;
+            slamPreviousColliderCenter = Vector3.zero;
+            slamColliderSweepInitialized = false;
+            if (activeAttackType != ShowcaseCargoAttackType.OverheadSlam ||
+                activeBody == null)
+            {
+                return;
+            }
+
+            slamStartWorldPosition = activeBody.worldCenterOfMass;
+            slamTargetWorldPosition = ResolveSlamTargetPosition(targetPoint);
+            slamApexWorldPosition = ResolveSlamApex(
+                slamStartWorldPosition,
+                slamTargetWorldPosition);
+            slamPreviousCenterY = slamStartWorldPosition.y;
+            if (activeCollider != null)
+            {
+                slamPreviousColliderCenter = activeCollider.bounds.center;
+                slamColliderSweepInitialized = true;
+            }
+        }
+
+        private static string ResolveAttackRejectionText(
+            ShowcaseCargoAttackResolution resolution)
+        {
+            return resolution.Reason switch
+            {
+                ShowcaseCargoAttackResolutionReason.NoTarget =>
+                    "MEDIUM_TARGET_NOT_RESOLVED",
+                ShowcaseCargoAttackResolutionReason.AllPathsBlocked =>
+                    "MEDIUM_ALL_ATTACK_PATHS_BLOCKED",
+                _ => "MEDIUM_TARGET_PLAN_REJECTED"
+            };
         }
 
         public bool NotifyAnimationStateEntered(uint revision)
@@ -1105,11 +2242,18 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool CommitAnimationStrapAttackImpulse(uint revision)
         {
-            ShowcaseCargoStrapAnimationCue expected =
-                Phase == ShowcaseCargoStrapPhase.AttackLeft
-                    ? ShowcaseCargoStrapAnimationCue.AttackLeft
-                    : ShowcaseCargoStrapAnimationCue.AttackRight;
+            ShowcaseCargoStrapAnimationCue expected = Phase switch
+            {
+                ShowcaseCargoStrapPhase.AttackLeft =>
+                    ShowcaseCargoStrapAnimationCue.AttackLeft,
+                ShowcaseCargoStrapPhase.AttackRight =>
+                    ShowcaseCargoStrapAnimationCue.AttackRight,
+                ShowcaseCargoStrapPhase.Slam =>
+                    ShowcaseCargoStrapAnimationCue.Slam,
+                _ => ShowcaseCargoStrapAnimationCue.None
+            };
             if (!IsAttackActive || attackImpulseCommitted ||
+                expected == ShowcaseCargoStrapAnimationCue.None ||
                 !IsQualifiedAnimationEvent(revision, expected) ||
                 activeBody == null || activeTarget == null)
             {
@@ -1130,6 +2274,10 @@ namespace BreakNotice.Gameplay.Interaction
                 playerTransform,
                 validCollisionSpeed);
             ApplyAttackImpulse(Phase == ShowcaseCargoStrapPhase.AttackLeft);
+            attackAccelerationAt = Time.time;
+            LastReleaseToObjectAccelerationSeconds = attackReleasedAt >= 0f
+                ? Mathf.Max(0f, attackAccelerationAt - attackReleasedAt)
+                : -1f;
             AttackImpulseCount++;
             RedirectStepCount++;
             LastRedirectedTarget = activeTarget;
@@ -1159,6 +2307,8 @@ namespace BreakNotice.Gameplay.Interaction
                     ShowcaseCargoStrapAnimationCue.AttackLeft,
                 ShowcaseCargoStrapPhase.AttackRight =>
                     ShowcaseCargoStrapAnimationCue.AttackRight,
+                ShowcaseCargoStrapPhase.Slam =>
+                    ShowcaseCargoStrapAnimationCue.Slam,
                 _ => ShowcaseCargoStrapAnimationCue.None
             };
             if (expectedCue == ShowcaseCargoStrapAnimationCue.None ||
@@ -1219,6 +2369,7 @@ namespace BreakNotice.Gameplay.Interaction
 
                 case ShowcaseCargoStrapPhase.AttackLeft:
                 case ShowcaseCargoStrapPhase.AttackRight:
+                case ShowcaseCargoStrapPhase.Slam:
                     CompleteAttack();
                     return true;
 
@@ -1441,11 +2592,35 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void StartAttack(bool attackLeft)
         {
-            lastAttackWasLeft = attackLeft;
+            StartResolvedAttack(
+                attackLeft
+                    ? ShowcaseCargoAttackType.SweepLeft
+                    : ShowcaseCargoAttackType.SweepRight);
+        }
+
+        private void StartResolvedAttack(ShowcaseCargoAttackType attackType)
+        {
+            bool attackLeft = attackType == ShowcaseCargoAttackType.SweepLeft;
+            if (attackType == ShowcaseCargoAttackType.SweepLeft ||
+                attackType == ShowcaseCargoAttackType.SweepRight)
+            {
+                lastAttackWasLeft = attackLeft;
+            }
+            activeAttackType = attackType;
             attackImpulseCommitted = false;
+            cargoStrapUseCommitted = false;
+            depletedReleaseQueued = false;
             bufferedAttack = false;
             bufferedMediumAimWorldPoint = Vector3.zero;
             releaseQueued = false;
+            if (attackType == ShowcaseCargoAttackType.OverheadSlam)
+            {
+                EnterPhase(
+                    ShowcaseCargoStrapPhase.Slam,
+                    ShowcaseCargoStrapAnimationCue.Slam);
+                return;
+            }
+
             EnterPhase(
                 attackLeft
                     ? ShowcaseCargoStrapPhase.AttackLeft
@@ -1466,7 +2641,11 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 bufferedAttack = false;
             }
-            if (releaseQueued)
+            if (depletedReleaseQueued)
+            {
+                BeginRelease(true);
+            }
+            else if (releaseQueued)
             {
                 BeginRelease(false);
             }
@@ -1507,11 +2686,15 @@ namespace BreakNotice.Gameplay.Interaction
             releaseStartWorldPosition = GetAnchorPosition();
             releaseEndWorldPosition = GetReelPosition();
             releaseStartedAt = Time.time;
+            ResetChargeRuntime();
             ClearMediumSwingPlan(false);
             releaseQueued = false;
+            depletedReleaseQueued = false;
             bufferedAttack = false;
             bufferedMediumAimWorldPoint = Vector3.zero;
             attackUsePending = false;
+            cargoStrapUseCommitted = false;
+            depletedReleaseQueued = false;
             smallThrowLaunchPending = false;
             activeTarget.CancelCargoStrapCollisionObservation(
                 activeCargoStrapUseSequence);
@@ -1544,6 +2727,7 @@ namespace BreakNotice.Gameplay.Interaction
                 interactionOwner.TryReleaseStrap();
             }
             ClearPhysicalAttachment();
+            releasedTarget?.FinalizeDeferredCargoStrapDepletion();
             pendingTarget = null;
             clampReleased = false;
             EnterPhase(
@@ -1589,16 +2773,45 @@ namespace BreakNotice.Gameplay.Interaction
                 PlayerMobilityLockReason.PlayerAction,
                 BlocksPlayerMobility);
             bool mediumMovementPhase = IsMediumAttackMobilityPhase;
+            bool chargeActive = IsCharging;
+            bool directedControl = chargeActive || mediumMovementPhase;
+            locomotion.SetMovementSpeedScale(
+                PlayerMobilityLockReason.PlayerAction,
+                ResolveChargeMovementScale(),
+                chargeActive);
+            locomotion.SetSprintLock(
+                PlayerMobilityLockReason.PlayerAction,
+                chargeActive);
             locomotion.SetJumpLock(
                 PlayerMobilityLockReason.PlayerAction,
-                mediumMovementPhase);
-            Vector3 facingDirection = mediumMovementPhase && playerTransform != null
-                ? mediumSwingSnapshotTargetPoint - playerTransform.position
+                chargeActive || mediumMovementPhase);
+            Vector3 facingPoint = chargeActive
+                ? chargeResolvedTargetPoint
+                : mediumSwingSnapshotTargetPoint;
+            Vector3 facingDirection = directedControl && playerTransform != null
+                ? facingPoint - playerTransform.position
                 : Vector3.zero;
             locomotion.SetFacingOverride(
                 PlayerMobilityLockReason.PlayerAction,
                 facingDirection,
-                mediumMovementPhase);
+                directedControl && facingDirection.sqrMagnitude > 0.0001f);
+        }
+
+        private float ResolveChargeMovementScale()
+        {
+            if (!IsCharging)
+            {
+                return ChargeMovementScale;
+            }
+
+            float fullChargeProgress = Mathf.InverseLerp(
+                ShowcaseCargoChargeModel.FullLowerThreshold01,
+                1f,
+                Charge01);
+            return Mathf.Lerp(
+                ChargeMovementScale,
+                FullChargeMovementScale,
+                Mathf.SmoothStep(0f, 1f, fullChargeProgress));
         }
 
         private void ClearLocomotionPolicy()
@@ -1609,6 +2822,13 @@ namespace BreakNotice.Gameplay.Interaction
             }
             locomotion.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, false);
             locomotion.SetJumpLock(PlayerMobilityLockReason.PlayerAction, false);
+            locomotion.SetMovementSpeedScale(
+                PlayerMobilityLockReason.PlayerAction,
+                1f,
+                false);
+            locomotion.SetSprintLock(
+                PlayerMobilityLockReason.PlayerAction,
+                false);
             locomotion.SetFacingOverride(
                 PlayerMobilityLockReason.PlayerAction,
                 Vector3.zero,
@@ -2203,6 +3423,34 @@ namespace BreakNotice.Gameplay.Interaction
             else
             {
                 mediumSwingMotionStarted = mediumSwingPlanActive;
+                if (activeAttackType == ShowcaseCargoAttackType.OverheadSlam &&
+                    mediumSwingMotionStarted)
+                {
+                    slamMotionStarted = true;
+                    slamMotionStartedAt = Time.time;
+                    slamDescending = false;
+                    slamImpactResolved = false;
+                    slamDownwardTravel = 0f;
+                    slamPreviousCenterY = activeBody.worldCenterOfMass.y;
+                    if (activeCollider != null)
+                    {
+                        slamPreviousColliderCenter =
+                            activeCollider.bounds.center;
+                        slamColliderSweepInitialized = true;
+                    }
+                    Vector3 initialDirection =
+                        slamApexWorldPosition - activeBody.worldCenterOfMass;
+                    if (initialDirection.sqrMagnitude > 0.001f)
+                    {
+                        activeBody.linearVelocity = initialDirection.normalized *
+                            (6.5f * activeChargeProfile.ObjectSpeedMultiplier);
+                    }
+                    activeBody.angularVelocity = Vector3.zero;
+                }
+                else if (mediumSwingMotionStarted)
+                {
+                    CaptureMediumSweepPose();
+                }
             }
             activeBody.WakeUp();
         }
@@ -2388,11 +3636,137 @@ namespace BreakNotice.Gameplay.Interaction
             mediumRearReady = mediumRearStableSteps >= 3;
         }
 
+        private void UpdateMediumAttackBody()
+        {
+            if (activeAttackType == ShowcaseCargoAttackType.OverheadSlam)
+            {
+                UpdateSlamBody();
+                return;
+            }
+
+            UpdateMediumSwingBody();
+        }
+
+        private void UpdateSlamBody()
+        {
+            if (!mediumSwingPlanActive || !mediumSwingMotionStarted ||
+                !slamMotionStarted || activeBody == null)
+            {
+                return;
+            }
+
+            float speedMultiplier = Mathf.Max(
+                0.1f,
+                activeChargeProfile.ObjectSpeedMultiplier);
+            float riseDuration = 0.22f / speedMultiplier;
+            float fallDuration = 0.38f / speedMultiplier;
+            float elapsed = Mathf.Max(0f, Time.time - slamMotionStartedAt);
+            if (mediumSwingTarget != null &&
+                mediumSwingTargetCollider != null && elapsed < riseDuration)
+            {
+                float totalFlightDuration = riseDuration + fallDuration;
+                float remainingLeadScale = totalFlightDuration > 0.001f
+                    ? Mathf.Clamp01(
+                        (totalFlightDuration - elapsed) /
+                        totalFlightDuration)
+                    : 0f;
+                Vector3 currentPoint = ResolvePredictedRunnerTargetPoint(
+                    mediumSwingTarget,
+                    mediumSwingTargetCollider.bounds.center,
+                    activeChargeProfile,
+                    true,
+                    remainingLeadScale);
+                Vector3 boundedPoint = mediumSwingSnapshotTargetPoint +
+                    Vector3.ClampMagnitude(
+                        currentPoint - mediumSwingSnapshotTargetPoint,
+                        mediumTargetCorrectionDistance);
+                mediumSwingCorrectedTargetPoint = Vector3.MoveTowards(
+                    mediumSwingCorrectedTargetPoint,
+                    boundedPoint,
+                    mediumTargetCorrectionSpeed * Time.fixedDeltaTime);
+                slamTargetWorldPosition = Vector3.MoveTowards(
+                    slamTargetWorldPosition,
+                    ResolveSlamTargetPosition(
+                        mediumSwingCorrectedTargetPoint),
+                    mediumTargetCorrectionSpeed * Time.fixedDeltaTime);
+                slamApexWorldPosition = ResolveSlamApex(
+                    slamStartWorldPosition,
+                    slamTargetWorldPosition);
+            }
+            Vector3 desiredPoint;
+            if (elapsed < riseDuration)
+            {
+                float rise01 = Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    elapsed / Mathf.Max(0.01f, riseDuration));
+                desiredPoint = Vector3.Lerp(
+                    slamStartWorldPosition,
+                    slamApexWorldPosition,
+                    rise01);
+                slamDescending = false;
+            }
+            else
+            {
+                float fall01 = Mathf.Clamp01(
+                    (elapsed - riseDuration) /
+                    Mathf.Max(0.01f, fallDuration));
+                float acceleratedFall = Mathf.Pow(fall01, 1.35f);
+                desiredPoint = Vector3.Lerp(
+                    slamApexWorldPosition,
+                    slamTargetWorldPosition,
+                    acceleratedFall);
+                if (fall01 >= 1f)
+                {
+                    desiredPoint = slamTargetWorldPosition;
+                }
+                desiredPoint.y = Mathf.Max(
+                    desiredPoint.y,
+                    slamTargetWorldPosition.y);
+                slamDescending = true;
+            }
+
+            if (slamDescending)
+            {
+                float currentY = activeBody.worldCenterOfMass.y;
+                slamDownwardTravel += Mathf.Max(
+                    0f,
+                    slamPreviousCenterY - currentY);
+                slamPreviousCenterY = currentY;
+            }
+            else
+            {
+                slamPreviousCenterY = activeBody.worldCenterOfMass.y;
+            }
+
+            Vector3 feedForward = ResolvePlayerPlanarVelocity();
+            Vector3 error = desiredPoint - activeBody.worldCenterOfMass;
+            Vector3 desiredVelocity = Vector3.ClampMagnitude(
+                error * slamTrackingResponse,
+                slamMaximumSpeed * speedMultiplier) + feedForward;
+            ApplyMediumVelocityServo(
+                desiredVelocity,
+                slamMaximumSpeed * speedMultiplier,
+                slamMaximumAcceleration * speedMultiplier);
+            activeBody.angularVelocity = Vector3.MoveTowards(
+                activeBody.angularVelocity,
+                Vector3.zero,
+                14f * Time.fixedDeltaTime);
+            activeBody.WakeUp();
+            TryResolveSlamHurtboxContact();
+            MediumSwingStepCount++;
+        }
+
         private void UpdateMediumSwingBody()
         {
             if (!mediumSwingPlanActive || !mediumSwingMotionStarted ||
                 activeBody == null || playerTransform == null)
             {
+                return;
+            }
+            if (swingTerminated || ResolveMediumSweepContacts())
+            {
+                BeginMediumRecovery();
                 return;
             }
 
@@ -2458,29 +3832,472 @@ namespace BreakNotice.Gameplay.Interaction
             }
             Vector3 desiredVelocity = Vector3.ClampMagnitude(
                 error * mediumSwingTrackingResponse,
-                mediumSwingMaximumSpeed) + feedForward;
+                mediumSwingMaximumSpeed *
+                    activeChargeProfile.ObjectSpeedMultiplier) + feedForward;
+            float energyMotionScale =
+                ShowcaseCargoSweepEnergyModel.ResolveMotionScale(
+                    remainingImpactEnergy01,
+                    mediumSweepInitialEnergy01);
             ApplyMediumVelocityServo(
                 desiredVelocity,
-                mediumSwingMaximumSpeed,
-                mediumSwingMaximumAcceleration);
+                mediumSwingMaximumSpeed *
+                    activeChargeProfile.ObjectSpeedMultiplier *
+                    energyMotionScale,
+                mediumSwingMaximumAcceleration *
+                    activeChargeProfile.ObjectSpeedMultiplier *
+                    energyMotionScale);
             activeBody.angularVelocity = Vector3.up *
                 (mediumSwingAttackLeft ? -3f : 3f);
             activeBody.WakeUp();
             MediumSwingStepCount++;
         }
 
-        private void UpdateMediumTargetCorrection(float swing01)
+        private void CaptureMediumSweepPose()
         {
-            if (mediumSwingTargetCollider == null || swing01 >= 0.55f)
+            mediumSweepPoseInitialized = TryGetMediumSweepBoxPose(
+                out mediumSweepPreviousCenter,
+                out mediumSweepPreviousRotation,
+                out mediumSweepPreviousHalfExtents);
+        }
+
+        private bool ResolveMediumSweepContacts()
+        {
+            if (activeAttackType == ShowcaseCargoAttackType.OverheadSlam ||
+                !mediumSwingPlanActive || !mediumSwingMotionStarted ||
+                activeBody == null || activeCollider == null ||
+                activeMediumSwingSequence == 0)
+            {
+                return false;
+            }
+
+            if (!TryGetMediumSweepBoxPose(
+                    out Vector3 currentCenter,
+                    out Quaternion currentRotation,
+                    out Vector3 currentHalfExtents))
+            {
+                return false;
+            }
+            if (!mediumSweepPoseInitialized)
+            {
+                mediumSweepPreviousCenter = currentCenter;
+                mediumSweepPreviousRotation = currentRotation;
+                mediumSweepPreviousHalfExtents = currentHalfExtents;
+                mediumSweepPoseInitialized = true;
+                return false;
+            }
+
+            Vector3 displacement = currentCenter - mediumSweepPreviousCenter;
+            float travelDistance = displacement.magnitude;
+            Vector3 pathDirection = travelDistance >= MediumSweepMinimumTravel
+                ? displacement / travelDistance
+                : Vector3.ProjectOnPlane(
+                    activeBody.linearVelocity,
+                    Vector3.up).normalized;
+            if (pathDirection.sqrMagnitude <= 0.001f)
+            {
+                pathDirection = mediumSweepLastPathDirection.sqrMagnitude > 0.001f
+                    ? mediumSweepLastPathDirection
+                    : mediumSwingForwardSnapshot;
+            }
+            pathDirection = Vector3.ProjectOnPlane(
+                pathDirection,
+                Vector3.up).normalized;
+            if (pathDirection.sqrMagnitude <= 0.001f)
+            {
+                pathDirection = playerTransform != null
+                    ? Vector3.ProjectOnPlane(
+                        playerTransform.forward,
+                        Vector3.up).normalized
+                    : Vector3.forward;
+            }
+            mediumSweepLastPathDirection = pathDirection;
+
+            float sweptSpeed = travelDistance > 0f
+                ? travelDistance / Mathf.Max(0.001f, Time.fixedDeltaTime)
+                : 0f;
+            float impactSpeed = Mathf.Max(
+                validCollisionSpeed,
+                sweptSpeed,
+                Vector3.ProjectOnPlane(
+                    activeBody.linearVelocity,
+                    Vector3.up).magnitude);
+
+            if (travelDistance >= MediumSweepMinimumTravel)
+            {
+                Vector3 castHalfExtents = Vector3.Max(
+                    mediumSweepPreviousHalfExtents,
+                    currentHalfExtents);
+                int hitCount = Physics.BoxCastNonAlloc(
+                    mediumSweepPreviousCenter,
+                    castHalfExtents,
+                    displacement / travelDistance,
+                    mediumSweepCastHits,
+                    mediumSweepPreviousRotation,
+                    travelDistance + MediumSweepCastSkin,
+                    Physics.DefaultRaycastLayers,
+                    QueryTriggerInteraction.Ignore);
+                SortMediumSweepCastHits(hitCount);
+                for (int index = 0; index < hitCount && !swingTerminated; index++)
+                {
+                    RaycastHit hit = mediumSweepCastHits[index];
+                    ProcessMediumSweepCollider(
+                        hit.collider,
+                        hit.point,
+                        hit.normal,
+                        pathDirection,
+                        impactSpeed);
+                }
+            }
+
+            if (!swingTerminated)
+            {
+                int overlapCount = Physics.OverlapBoxNonAlloc(
+                    currentCenter,
+                    currentHalfExtents +
+                        (Vector3.one * MediumSweepCastSkin),
+                    mediumSweepOverlapHits,
+                    currentRotation,
+                    Physics.DefaultRaycastLayers,
+                    QueryTriggerInteraction.Ignore);
+                SortMediumSweepOverlapHits(
+                    overlapCount,
+                    mediumSweepPreviousCenter,
+                    pathDirection);
+                for (int orderIndex = 0;
+                     orderIndex < overlapCount && !swingTerminated;
+                     orderIndex++)
+                {
+                    Collider candidate = mediumSweepOverlapHits[
+                        mediumSweepOverlapOrder[orderIndex]];
+                    Vector3 point = candidate != null
+                        ? candidate.ClosestPoint(currentCenter)
+                        : currentCenter;
+                    ProcessMediumSweepCollider(
+                        candidate,
+                        point,
+                        Vector3.zero,
+                        pathDirection,
+                        impactSpeed);
+                }
+            }
+
+            mediumSweepPreviousCenter = currentCenter;
+            mediumSweepPreviousRotation = currentRotation;
+            mediumSweepPreviousHalfExtents = currentHalfExtents;
+            return swingTerminated;
+        }
+
+        private bool TryGetMediumSweepBoxPose(
+            out Vector3 center,
+            out Quaternion rotation,
+            out Vector3 halfExtents)
+        {
+            if (activeCollider == null || !activeCollider.enabled)
+            {
+                center = Vector3.zero;
+                rotation = Quaternion.identity;
+                halfExtents = Vector3.zero;
+                return false;
+            }
+
+            if (activeCollider is BoxCollider boxCollider)
+            {
+                Transform boxTransform = boxCollider.transform;
+                Vector3 scale = boxTransform.lossyScale;
+                scale = new Vector3(
+                    Mathf.Abs(scale.x),
+                    Mathf.Abs(scale.y),
+                    Mathf.Abs(scale.z));
+                center = boxTransform.TransformPoint(boxCollider.center);
+                rotation = boxTransform.rotation;
+                halfExtents = Vector3.Scale(
+                    boxCollider.size * 0.5f,
+                    scale);
+            }
+            else
+            {
+                Bounds bounds = activeCollider.bounds;
+                center = bounds.center;
+                rotation = Quaternion.identity;
+                halfExtents = bounds.extents;
+            }
+
+            halfExtents = new Vector3(
+                Mathf.Max(0.01f, halfExtents.x),
+                Mathf.Max(0.01f, halfExtents.y),
+                Mathf.Max(0.01f, halfExtents.z));
+            return true;
+        }
+
+        private void SortMediumSweepCastHits(int hitCount)
+        {
+            int count = Mathf.Min(hitCount, mediumSweepCastHits.Length);
+            for (int index = 1; index < count; index++)
+            {
+                RaycastHit value = mediumSweepCastHits[index];
+                int insertion = index - 1;
+                while (insertion >= 0 &&
+                       mediumSweepCastHits[insertion].distance > value.distance)
+                {
+                    mediumSweepCastHits[insertion + 1] =
+                        mediumSweepCastHits[insertion];
+                    insertion--;
+                }
+                mediumSweepCastHits[insertion + 1] = value;
+            }
+        }
+
+        private void SortMediumSweepOverlapHits(
+            int hitCount,
+            Vector3 pathOrigin,
+            Vector3 pathDirection)
+        {
+            int count = Mathf.Min(hitCount, mediumSweepOverlapOrder.Length);
+            for (int index = 0; index < count; index++)
+            {
+                mediumSweepOverlapOrder[index] = index;
+            }
+            for (int index = 1; index < count; index++)
+            {
+                int value = mediumSweepOverlapOrder[index];
+                float valueDistance = ResolveMediumSweepPathDistance(
+                    mediumSweepOverlapHits[value],
+                    pathOrigin,
+                    pathDirection);
+                int insertion = index - 1;
+                while (insertion >= 0 &&
+                       ResolveMediumSweepPathDistance(
+                           mediumSweepOverlapHits[
+                               mediumSweepOverlapOrder[insertion]],
+                           pathOrigin,
+                           pathDirection) > valueDistance)
+                {
+                    mediumSweepOverlapOrder[insertion + 1] =
+                        mediumSweepOverlapOrder[insertion];
+                    insertion--;
+                }
+                mediumSweepOverlapOrder[insertion + 1] = value;
+            }
+        }
+
+        private static float ResolveMediumSweepPathDistance(
+            Collider candidate,
+            Vector3 pathOrigin,
+            Vector3 pathDirection)
+        {
+            return candidate == null
+                ? float.PositiveInfinity
+                : Mathf.Max(
+                    0f,
+                    Vector3.Dot(
+                        candidate.bounds.center - pathOrigin,
+                        pathDirection));
+        }
+
+        private void ProcessMediumSweepCollider(
+            Collider candidate,
+            Vector3 worldPoint,
+            Vector3 contactNormal,
+            Vector3 pathDirection,
+            float impactSpeed)
+        {
+            if (candidate == null || !candidate.enabled ||
+                candidate.isTrigger || IsMediumSweepSelfCollider(candidate) ||
+                BelongsToPlayer(candidate) || BelongsToAlly(candidate))
             {
                 return;
             }
 
-            Vector3 currentPoint = mediumSwingTargetCollider.bounds.center;
+            ShowcaseRunnerAgent runner =
+                candidate.GetComponentInParent<ShowcaseRunnerAgent>();
+            if (runner != null)
+            {
+                int runnerId = runner.GetInstanceID();
+                if (runner.IsDead ||
+                    mediumSwingHitRunnerIds.Contains(runnerId) ||
+                    mediumSwingPendingHits.ContainsKey(runnerId))
+                {
+                    return;
+                }
+
+                ResolveRunnerPressureController();
+                if (runnerPressure == null)
+                {
+                    return;
+                }
+                Vector3 resolvedPoint = candidate.ClosestPoint(worldPoint);
+                Vector3 velocity = pathDirection * Mathf.Max(
+                    validCollisionSpeed,
+                    impactSpeed);
+                runnerPressure.TryRegisterCargoSweepImpact(
+                    this,
+                    runner,
+                    activeTarget,
+                    impactSpeed,
+                    velocity,
+                    resolvedPoint);
+                return;
+            }
+
+            if (IsBlockingMediumSweepObstacle(candidate, contactNormal))
+            {
+                TerminateMediumSweep(
+                    ShowcaseCargoSweepTerminationReason.WorldObstacle,
+                    candidate);
+            }
+        }
+
+        private bool IsMediumSweepSelfCollider(Collider candidate)
+        {
+            if (candidate == null || activeTarget == null)
+            {
+                return false;
+            }
+            Transform candidateTransform = candidate.transform;
+            Transform sourceTransform = activeTarget.transform;
+            return candidateTransform == sourceTransform ||
+                   candidateTransform.IsChildOf(sourceTransform) ||
+                   sourceTransform.IsChildOf(candidateTransform);
+        }
+
+        private bool BelongsToAlly(Collider candidate)
+        {
+            return candidate != null && allyTransform != null &&
+                (candidate.transform == allyTransform ||
+                 candidate.transform.IsChildOf(allyTransform));
+        }
+
+        private bool IsBlockingMediumSweepObstacle(
+            Collider candidate,
+            Vector3 contactNormal)
+        {
+            if (candidate == null || activeCollider == null ||
+                IsMediumSweepFloorContact(candidate, contactNormal))
+            {
+                return false;
+            }
+
+            PrototypeInteractionTarget target =
+                candidate.GetComponentInParent<PrototypeInteractionTarget>();
+            if (target != null)
+            {
+                if (target == activeTarget)
+                {
+                    return false;
+                }
+                if (target.WeightClass == PrototypeWeightClass.Heavy ||
+                    target.Role == PrototypeInteractionRole.Drawer)
+                {
+                    return true;
+                }
+
+                Rigidbody targetBody = candidate.attachedRigidbody;
+                if (target.WeightClass == PrototypeWeightClass.Medium)
+                {
+                    return targetBody == null || targetBody.isKinematic ||
+                        activeBody == null ||
+                        targetBody.mass >= activeBody.mass * 1.1f;
+                }
+                return false;
+            }
+
+            Rigidbody obstacleBody = candidate.attachedRigidbody;
+            if (obstacleBody == null)
+            {
+                return true;
+            }
+            if (obstacleBody == activeBody)
+            {
+                return false;
+            }
+            return obstacleBody.isKinematic || activeBody == null ||
+                obstacleBody.mass >= Mathf.Max(12f, activeBody.mass * 1.25f);
+        }
+
+        private bool IsMediumSweepFloorContact(
+            Collider candidate,
+            Vector3 contactNormal)
+        {
+            Bounds chairBounds = activeCollider.bounds;
+            Bounds candidateBounds = candidate.bounds;
+            float recordedSupportY = mediumGroundCenterOfMassY -
+                Mathf.Max(0.01f, mediumGroundSupportOffsetY);
+            float supportBandY = Mathf.Max(
+                chairBounds.min.y,
+                recordedSupportY) + MediumSweepFloorTolerance;
+            bool belowChair = candidateBounds.max.y <= supportBandY;
+            bool upwardSurface = contactNormal.sqrMagnitude > 0.001f &&
+                Vector3.Dot(contactNormal.normalized, Vector3.up) >= 0.7f;
+            bool broadSupportSurface =
+                candidateBounds.center.y < chairBounds.center.y &&
+                candidateBounds.size.x >= chairBounds.size.x * 1.25f &&
+                candidateBounds.size.z >= chairBounds.size.z * 1.25f;
+
+            // A BoxCast that begins flush with the floor can return a lateral
+            // or inverted normal even though the collider is only supporting
+            // the Chair from below. Bounds own that classification; contact
+            // normal is only a secondary allowance for ramps and seams.
+            return belowChair || (upwardSurface && broadSupportSurface);
+        }
+
+        private void TerminateMediumSweep(
+            ShowcaseCargoSweepTerminationReason reason,
+            Collider obstacle = null)
+        {
+            if (swingTerminated ||
+                activeAttackType == ShowcaseCargoAttackType.OverheadSlam)
+            {
+                return;
+            }
+
+            swingTerminated = true;
+            mediumSweepTerminationReason = reason;
+            mediumSweepTerminationObstacle = obstacle;
+            if (reason ==
+                    ShowcaseCargoSweepTerminationReason.WorldObstacle ||
+                reason ==
+                    ShowcaseCargoSweepTerminationReason.PrimaryVictimBlocked)
+            {
+                primarySweptVictim?.CancelCargoSweepCarry(
+                    activeMediumSwingSequence);
+            }
+            if (activeBody != null)
+            {
+                Vector3 planar = Vector3.ProjectOnPlane(
+                    activeBody.linearVelocity,
+                    Vector3.up);
+                float retention = reason ==
+                        ShowcaseCargoSweepTerminationReason.WorldObstacle ||
+                    reason ==
+                        ShowcaseCargoSweepTerminationReason.PrimaryVictimBlocked
+                        ? 0.08f
+                        : 0.22f;
+                activeBody.linearVelocity = (planar * retention) +
+                    (Vector3.up * Mathf.Min(0f, activeBody.linearVelocity.y));
+                activeBody.angularVelocity *= 0.2f;
+            }
+        }
+
+        private void UpdateMediumTargetCorrection(float swing01)
+        {
+            if (mediumSwingTarget == null ||
+                mediumSwingTargetCollider == null || swing01 >= 0.55f)
+            {
+                return;
+            }
+
+            Vector3 currentPoint = ResolvePredictedRunnerTargetPoint(
+                mediumSwingTarget,
+                mediumSwingTargetCollider.bounds.center,
+                activeChargeProfile,
+                false,
+                1f - swing01);
+            float correctionDistance = mediumTargetCorrectionDistance *
+                mediumSweepReachScale;
             Vector3 boundedPoint = mediumSwingSnapshotTargetPoint +
                 Vector3.ClampMagnitude(
                     currentPoint - mediumSwingSnapshotTargetPoint,
-                    mediumTargetCorrectionDistance);
+                    correctionDistance);
             mediumSwingCorrectedTargetPoint = Vector3.MoveTowards(
                 mediumSwingCorrectedTargetPoint,
                 boundedPoint,
@@ -2493,10 +4310,16 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 return;
             }
+            if (swingTerminated &&
+                activeAttackType != ShowcaseCargoAttackType.OverheadSlam &&
+                Phase != ShowcaseCargoStrapPhase.MediumRecovering)
+            {
+                BeginMediumRecovery();
+                return;
+            }
             if (Phase == ShowcaseCargoStrapPhase.MediumExtending &&
-                (mediumSwingImpactCommitted ||
-                 Time.time - mediumExtensionStartedAt >=
-                    mediumExtensionDuration))
+                Time.time - mediumExtensionStartedAt >=
+                    mediumExtensionDuration)
             {
                 BeginMediumRecovery();
             }
@@ -2516,10 +4339,7 @@ namespace BreakNotice.Gameplay.Interaction
             Vector3 aimPoint = bufferedMediumAimWorldPoint;
             bufferedAttack = false;
             bufferedMediumAimWorldPoint = Vector3.zero;
-            if (TryCreateMediumSwingPlan(aimPoint, out bool attackLeft))
-            {
-                StartAttack(attackLeft);
-            }
+            TryBeginAttack(aimPoint);
         }
 
         private void BeginMediumRecovery()
@@ -2527,6 +4347,12 @@ namespace BreakNotice.Gameplay.Interaction
             if (!mediumSwingPlanActive ||
                 Phase == ShowcaseCargoStrapPhase.MediumRecovering)
             {
+                return;
+            }
+
+            if (depletedReleaseQueued)
+            {
+                BeginRelease(true);
                 return;
             }
 
@@ -2545,6 +4371,12 @@ namespace BreakNotice.Gameplay.Interaction
         {
             if (!mediumSwingPlanActive || activeBody == null)
             {
+                return;
+            }
+
+            if (depletedReleaseQueued)
+            {
+                BeginRelease(true);
                 return;
             }
 
@@ -2576,7 +4408,17 @@ namespace BreakNotice.Gameplay.Interaction
             if (mediumRearStableSteps >= 3 ||
                 Time.time - mediumRecoveryStartedAt >= mediumRecoveryTimeout)
             {
-                ClearMediumSwingPlan(false);
+                bool preservePrimaryCarry = primarySweptVictim != null &&
+                    primarySweptVictim.IsCargoSweepCarryActive &&
+                    mediumSweepTerminationReason !=
+                        ShowcaseCargoSweepTerminationReason.WorldObstacle &&
+                    mediumSweepTerminationReason !=
+                        ShowcaseCargoSweepTerminationReason.
+                            PrimaryVictimBlocked;
+                ClearMediumSwingPlan(
+                    false,
+                    preservePendingControlRecovery: true,
+                    preservePrimaryCarry: preservePrimaryCarry);
                 EnterPhase(
                     ShowcaseCargoStrapPhase.Tensioned,
                     ShowcaseCargoStrapAnimationCue.None);
@@ -2613,16 +4455,24 @@ namespace BreakNotice.Gameplay.Interaction
 
         private bool IsMediumSwingTargetWithinRange()
         {
-            if (!mediumSwingPlanActive || mediumSwingTarget == null ||
-                mediumSwingTargetCollider == null ||
-                !mediumSwingTarget.gameObject.activeInHierarchy ||
-                !mediumSwingTargetCollider.enabled)
+            if (!mediumSwingPlanActive)
             {
                 return false;
             }
 
-            Vector3 reelToTarget =
-                mediumSwingTargetCollider.bounds.center - GetReelPosition();
+            Vector3 targetPoint = mediumSwingSnapshotTargetPoint;
+            if (mediumSwingTarget != null)
+            {
+                if (mediumSwingTargetCollider == null ||
+                    !mediumSwingTarget.gameObject.activeInHierarchy ||
+                    !mediumSwingTargetCollider.enabled)
+                {
+                    return false;
+                }
+                targetPoint = mediumSwingTargetCollider.bounds.center;
+            }
+
+            Vector3 reelToTarget = targetPoint - GetReelPosition();
             float planarDistance = Vector3.ProjectOnPlane(
                 reelToTarget,
                 Vector3.up).magnitude;
@@ -2644,14 +4494,26 @@ namespace BreakNotice.Gameplay.Interaction
             activeCargoStrapUseSequence = 0;
         }
 
-        private void ClearMediumSwingPlan(bool dampVelocity)
+        private void ClearMediumSwingPlan(
+            bool dampVelocity,
+            bool preservePendingControlRecovery = false,
+            bool preservePrimaryCarry = false)
         {
             bool wasActive = mediumSwingPlanActive;
+            bool keepControlRecoveryPending =
+                preservePendingControlRecovery &&
+                attackImpactAt >= 0f &&
+                !mediumControlRecovered &&
+                controlRecoveryAt >= 0f;
             CancelActiveAttackObservation();
+            if (!preservePrimaryCarry)
+            {
+                primarySweptVictim?.CancelCargoSweepCarry(
+                    activeMediumSwingSequence);
+            }
             mediumSwingPlanActive = false;
             mediumSwingMotionStarted = false;
             mediumSwingAttackLeft = false;
-            mediumSwingImpactCommitted = false;
             activeMediumSwingSequence = 0;
             mediumSwingTarget = null;
             mediumSwingTargetCollider = null;
@@ -2666,6 +4528,40 @@ namespace BreakNotice.Gameplay.Interaction
             mediumSwingEffectiveTetherLength = 0f;
             mediumSwingTrackingFailureSteps = 0;
             mediumSwingHitRunnerIds.Clear();
+            mediumSwingPendingHits.Clear();
+            mediumSweepPreviousCenter = Vector3.zero;
+            mediumSweepPreviousRotation = Quaternion.identity;
+            mediumSweepPreviousHalfExtents = Vector3.zero;
+            mediumSweepPoseInitialized = false;
+            primarySweptVictim = null;
+            mediumSweepInitialEnergy01 = 0f;
+            mediumSweepReachScale = 1f;
+            remainingImpactEnergy01 = 0f;
+            hitOrdinal = 0;
+            mediumSweepMaximumTargets = 0;
+            swingTerminated = false;
+            mediumSweepTerminationReason =
+                ShowcaseCargoSweepTerminationReason.None;
+            mediumSweepTerminationObstacle = null;
+            mediumSweepLastPathDirection = Vector3.zero;
+            activeAttackType = ShowcaseCargoAttackType.None;
+            activeChargeProfile = ShowcaseCargoChargeModel.Evaluate(0f);
+            slamMotionStarted = false;
+            slamDescending = false;
+            slamImpactResolved = false;
+            slamMotionStartedAt = 0f;
+            slamPreviousCenterY = 0f;
+            slamDownwardTravel = 0f;
+            slamStartWorldPosition = Vector3.zero;
+            slamApexWorldPosition = Vector3.zero;
+            slamTargetWorldPosition = Vector3.zero;
+            slamPreviousColliderCenter = Vector3.zero;
+            slamColliderSweepInitialized = false;
+            if (!keepControlRecoveryPending)
+            {
+                mediumControlRecovered = true;
+                controlRecoveryAt = -1f;
+            }
             if (wasActive && dampVelocity)
             {
                 DampRedirectVelocity();
@@ -2679,15 +4575,42 @@ namespace BreakNotice.Gameplay.Interaction
             out uint swingSequence,
             out string sourceId)
         {
-            swingSequence = 0;
-            sourceId = string.Empty;
+            bool accepted = TryAuthorizeMediumSwingImpact(
+                source,
+                runner,
+                impactSpeed,
+                false,
+                out ShowcaseCargoSweepHitAuthorization authorization);
+            swingSequence = accepted ? authorization.SwingSequence : 0;
+            sourceId = accepted ? authorization.SourceId : string.Empty;
+            return accepted;
+        }
+
+        public bool TryAuthorizeMediumSwingImpact(
+            PrototypeInteractionTarget source,
+            ShowcaseRunnerAgent runner,
+            float impactSpeed,
+            bool isCausalEnemyCollision,
+            out ShowcaseCargoSweepHitAuthorization authorization)
+        {
+            authorization = default;
+            int runnerId = runner != null ? runner.GetInstanceID() : 0;
             if (!mediumSwingPlanActive || !mediumSwingMotionStarted ||
+                swingTerminated ||
+                activeAttackType == ShowcaseCargoAttackType.OverheadSlam ||
                 source == null || source != activeTarget ||
                 source.WeightClass != PrototypeWeightClass.Medium ||
-                runner == null || runner != mediumSwingTarget ||
+                runner == null || runner.IsDead ||
                 impactSpeed < validCollisionSpeed ||
                 activeMediumSwingSequence == 0 ||
-                mediumSwingHitRunnerIds.Contains(runner.GetInstanceID()) ||
+                mediumSweepMaximumTargets <= 0 ||
+                hitOrdinal >= mediumSweepMaximumTargets ||
+                hitOrdinal >=
+                    ShowcaseCargoSweepEnergyModel.AbsoluteMaximumTargets ||
+                remainingImpactEnergy01 <
+                    ShowcaseCargoSweepEnergyModel.ContinueThreshold01 ||
+                mediumSwingHitRunnerIds.Contains(runnerId) ||
+                mediumSwingPendingHits.ContainsKey(runnerId) ||
                 interactionOwner == null ||
                 interactionOwner.GlobalState !=
                     PrototypeGlobalInteractionState.Playable ||
@@ -2698,13 +4621,17 @@ namespace BreakNotice.Gameplay.Interaction
             {
                 return false;
             }
-            if (!IsMediumSwingTargetWithinRange())
-            {
-                return false;
-            }
 
-            swingSequence = activeMediumSwingSequence;
-            sourceId = $"CHR00_STRAP:{source.RuntimeInstanceKey}";
+            ShowcaseCargoSweepHitProfile hitProfile =
+                ShowcaseCargoSweepEnergyModel.ResolveHitProfile(
+                    hitOrdinal + 1);
+            authorization = new ShowcaseCargoSweepHitAuthorization(
+                activeMediumSwingSequence,
+                $"CHR00_STRAP:{source.RuntimeInstanceKey}:SWEEP",
+                hitProfile,
+                primarySweptVictim == null,
+                isCausalEnemyCollision);
+            mediumSwingPendingHits.Add(runnerId, authorization);
             return true;
         }
 
@@ -2713,12 +4640,230 @@ namespace BreakNotice.Gameplay.Interaction
             uint swingSequence)
         {
             if (runner == null || swingSequence == 0 ||
+                swingSequence != activeMediumSwingSequence ||
+                !mediumSwingPendingHits.TryGetValue(
+                    runner.GetInstanceID(),
+                    out ShowcaseCargoSweepHitAuthorization authorization) ||
+                authorization.SwingSequence != swingSequence)
+            {
+                return;
+            }
+
+            int runnerId = runner.GetInstanceID();
+            mediumSwingPendingHits.Remove(runnerId);
+            if (!mediumSwingHitRunnerIds.Add(runnerId))
+            {
+                return;
+            }
+
+            hitOrdinal = authorization.HitProfile.HitOrdinal;
+            if (authorization.IsPrimaryVictim && primarySweptVictim == null)
+            {
+                primarySweptVictim = runner;
+            }
+            CommitAcceptedCargoStrapUse();
+            remainingImpactEnergy01 = Mathf.Max(
+                0f,
+                remainingImpactEnergy01 -
+                    authorization.HitProfile.EnergyCost01);
+            MarkAttackImpact();
+
+            if (activeBody != null)
+            {
+                float energyFraction = mediumSweepInitialEnergy01 > 0.001f
+                    ? Mathf.Clamp01(
+                        remainingImpactEnergy01 /
+                        mediumSweepInitialEnergy01)
+                    : 0f;
+                float velocityRetention = Mathf.Lerp(
+                    0.48f,
+                    0.78f,
+                    energyFraction);
+                Vector3 planar = Vector3.ProjectOnPlane(
+                    activeBody.linearVelocity,
+                    Vector3.up);
+                activeBody.linearVelocity = (planar * velocityRetention) +
+                    Vector3.Project(activeBody.linearVelocity, Vector3.up);
+                activeBody.angularVelocity *= Mathf.Lerp(
+                    0.55f,
+                    0.82f,
+                    energyFraction);
+            }
+
+            if (hitOrdinal >= mediumSweepMaximumTargets ||
+                hitOrdinal >=
+                    ShowcaseCargoSweepEnergyModel.AbsoluteMaximumTargets)
+            {
+                TerminateMediumSweep(
+                    ShowcaseCargoSweepTerminationReason.MaximumTargetsReached);
+            }
+            else if (remainingImpactEnergy01 <
+                     ShowcaseCargoSweepEnergyModel.ContinueThreshold01)
+            {
+                TerminateMediumSweep(
+                    ShowcaseCargoSweepTerminationReason.EnergyDepleted);
+            }
+        }
+
+        private bool CommitAcceptedCargoStrapUse()
+        {
+            if (cargoStrapUseCommitted)
+            {
+                return true;
+            }
+            if (activeTarget == null || activeCargoStrapUseSequence == 0)
+            {
+                RegisterFault("STRAP_USE_SEQUENCE_MISSING");
+                return false;
+            }
+
+            uint useSequence = activeCargoStrapUseSequence;
+            bool committed = activeTarget.
+                TryCommitSuccessfulCargoStrapImpact(useSequence);
+            if (!committed &&
+                activeTarget.LastCommittedCargoStrapSequence != useSequence)
+            {
+                RegisterFault("STRAP_DURABILITY_COMMIT_FAILED");
+                return false;
+            }
+
+            cargoStrapUseCommitted = true;
+            attackUsePending = false;
+            activeTarget.CancelCargoStrapCollisionObservation(useSequence);
+            activeCargoStrapUseSequence = 0;
+            ValidStrapCollisionCount++;
+            if (activeTarget.IsPlayerThrowExhausted)
+            {
+                DepletionCount++;
+                depletedReleaseQueued = true;
+            }
+            return true;
+        }
+
+        public void RejectMediumSwingImpact(
+            ShowcaseRunnerAgent runner,
+            uint swingSequence)
+        {
+            if (runner == null || swingSequence == 0 ||
                 swingSequence != activeMediumSwingSequence)
             {
                 return;
             }
-            mediumSwingHitRunnerIds.Add(runner.GetInstanceID());
-            mediumSwingImpactCommitted = true;
+            mediumSwingPendingHits.Remove(runner.GetInstanceID());
+        }
+
+        public bool NotifyPrimarySweepVictimBlocked(
+            ShowcaseRunnerAgent runner,
+            uint swingSequence,
+            Collider obstacle)
+        {
+            if (runner == null || runner != primarySweptVictim ||
+                swingSequence == 0 ||
+                swingSequence != activeMediumSwingSequence ||
+                activeAttackType == ShowcaseCargoAttackType.OverheadSlam ||
+                !mediumSwingPlanActive)
+            {
+                return false;
+            }
+
+            TerminateMediumSweep(
+                ShowcaseCargoSweepTerminationReason.PrimaryVictimBlocked,
+                obstacle);
+            return true;
+        }
+
+        private bool TryResolveSlamHurtboxContact()
+        {
+            if (activeCollider == null)
+            {
+                return false;
+            }
+
+            Vector3 currentColliderCenter = activeCollider.bounds.center;
+            Vector3 previousColliderCenter = slamColliderSweepInitialized
+                ? slamPreviousColliderCenter
+                : currentColliderCenter;
+            slamPreviousColliderCenter = currentColliderCenter;
+            slamColliderSweepInitialized = true;
+            if (activeAttackType != ShowcaseCargoAttackType.OverheadSlam ||
+                !mediumSwingPlanActive || !mediumSwingMotionStarted ||
+                !slamMotionStarted || !slamDescending || slamImpactResolved ||
+                mediumSwingTarget == null ||
+                activeBody == null || activeMediumSwingSequence == 0 ||
+                slamDownwardTravel < slamMinimumDownwardTravel ||
+                activeBody.linearVelocity.y > -0.35f ||
+                !mediumSwingTarget.TryResolveCargoSlamContact(
+                    activeCollider,
+                    previousColliderCenter,
+                    out Vector3 contactPoint))
+            {
+                return false;
+            }
+
+            CommitSlamImpact(
+                contactPoint,
+                Mathf.Max(
+                    validCollisionSpeed,
+                    activeBody.linearVelocity.magnitude),
+                mediumSwingTarget);
+            return true;
+        }
+
+        private void CommitSlamImpact(
+            Vector3 worldPoint,
+            float impactSpeed,
+            ShowcaseRunnerAgent directContactRunner)
+        {
+            if (slamImpactResolved || activeBody == null || activeTarget == null)
+            {
+                return;
+            }
+
+            slamImpactResolved = true;
+            SlamImpactCount++;
+            MarkAttackImpact();
+            ResolveRunnerPressureController();
+            int acceptedCount = runnerPressure?.ResolveCargoSlamImpact(
+                this,
+                activeTarget,
+                worldPoint,
+                activeBody.linearVelocity,
+                impactSpeed,
+                activeMediumSwingSequence,
+                activeChargeProfile,
+                SlamDirectRadius,
+                SlamOuterRadius,
+                directContactRunner) ?? 0;
+            if (acceptedCount > 0)
+            {
+                CommitAcceptedCargoStrapUse();
+            }
+        }
+
+        private void HandleActiveTargetCollision(
+            PrototypeInteractionCollisionSnapshot snapshot)
+        {
+            if (activeAttackType != ShowcaseCargoAttackType.OverheadSlam ||
+                !mediumSwingPlanActive || !mediumSwingMotionStarted ||
+                !slamMotionStarted || !slamDescending || slamImpactResolved ||
+                snapshot.Target == null || snapshot.Target != activeTarget ||
+                activeMediumSwingSequence == 0 ||
+                slamDownwardTravel < slamMinimumDownwardTravel ||
+                snapshot.RelativeSpeed < validCollisionSpeed * 0.75f ||
+                activeBody == null || activeBody.linearVelocity.y > -0.35f ||
+                snapshot.OtherCollider == null ||
+                BelongsToPlayer(snapshot.OtherCollider))
+            {
+                return;
+            }
+
+            ShowcaseRunnerAgent directContactRunner =
+                snapshot.OtherCollider.GetComponentInParent<
+                    ShowcaseRunnerAgent>();
+            CommitSlamImpact(
+                snapshot.Point,
+                snapshot.RelativeSpeed,
+                directContactRunner);
         }
 
         private void ObserveAttackCollision()
@@ -2754,20 +4899,21 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             attackUsePending = false;
-            if (!activeTarget.TryCommitSuccessfulCargoStrapCollision(
+            if (!activeTarget.TryCommitSuccessfulCargoStrapImpact(
                     activeCargoStrapUseSequence))
             {
                 RegisterFault("STRAP_DURABILITY_COMMIT_FAILED");
                 activeCargoStrapUseSequence = 0;
                 return;
             }
+            cargoStrapUseCommitted = true;
             activeCargoStrapUseSequence = 0;
 
             ValidStrapCollisionCount++;
             if (activeTarget.IsPlayerThrowExhausted)
             {
                 DepletionCount++;
-                BeginRelease(true);
+                depletedReleaseQueued = true;
             }
         }
 
@@ -2859,6 +5005,7 @@ namespace BreakNotice.Gameplay.Interaction
         private void CheckAnimationTimeout()
         {
             if (!IsActionLocked || Phase == ShowcaseCargoStrapPhase.Rolling ||
+                Phase == ShowcaseCargoStrapPhase.Charging ||
                 Phase == ShowcaseCargoStrapPhase.SmallSpinning ||
                 Time.time - phaseStartedAt <= AnimationEventTimeout)
             {
@@ -2881,6 +5028,7 @@ namespace BreakNotice.Gameplay.Interaction
         private void CancelPendingSequence()
         {
             locomotion?.SetMobilityLock(PlayerMobilityLockReason.PlayerAction, false);
+            ResetChargeRuntime();
             interactionOwner?.TryReleaseStrap();
             ClearPhysicalAttachment();
             pendingTarget = null;
@@ -2923,7 +5071,9 @@ namespace BreakNotice.Gameplay.Interaction
 
             Vector3 facingPoint = smallThrowLaunchPending
                 ? smallThrowAimWorldPoint
-                : mediumSwingPlanActive
+                : IsCharging
+                    ? chargeResolvedTargetPoint
+                    : mediumSwingPlanActive
                     ? mediumSwingCorrectedTargetPoint
                     : GetAnchorPosition();
             Vector3 direction = Vector3.ProjectOnPlane(
@@ -2953,6 +5103,7 @@ namespace BreakNotice.Gameplay.Interaction
         public void ResetToRunBaseline()
         {
             ClearLocomotionPolicy();
+            ResetChargeRuntime();
             ClearPhysicalAttachment();
             pendingTarget = null;
             AssistCandidate = null;
@@ -2964,6 +5115,8 @@ namespace BreakNotice.Gameplay.Interaction
             bufferedMediumAimWorldPoint = Vector3.zero;
             attackImpulseCommitted = false;
             attackUsePending = false;
+            cargoStrapUseCommitted = false;
+            depletedReleaseQueued = false;
             clampReleased = false;
             smallThrowLaunchPending = false;
             completedSmallThrowRevision = 0;
@@ -2990,6 +5143,9 @@ namespace BreakNotice.Gameplay.Interaction
             ValidStrapCollisionCount = 0;
             DepletionCount = 0;
             BufferedAttackCount = 0;
+            ChargeCancelCount = 0;
+            AttackReleaseCount = 0;
+            SlamImpactCount = 0;
             RejectedAnimationEventCount = 0;
             AnchorFacingStepCount = 0;
             MediumSwingStepCount = 0;
@@ -3002,6 +5158,15 @@ namespace BreakNotice.Gameplay.Interaction
             activeCargoStrapUseSequence = 0;
             nextMediumSwingSequence = 0;
             activeMediumSwingSequence = 0;
+            lastAttackResolution = default;
+            attackReleasedAt = -1f;
+            attackAccelerationAt = -1f;
+            attackImpactAt = -1f;
+            controlRecoveryAt = -1f;
+            mediumControlRecovered = true;
+            LastReleaseToObjectAccelerationSeconds = -1f;
+            LastReleaseToContactSeconds = -1f;
+            LastImpactToControlRecoverySeconds = -1f;
             RefreshAssistCandidate();
         }
 
@@ -3057,6 +5222,7 @@ namespace BreakNotice.Gameplay.Interaction
             activeTarget = target;
             activeBody = body;
             activeCollider = targetCollider;
+            activeTarget.CollisionEntered += HandleActiveTargetCollision;
             originalConstraints = body.constraints;
             originalCollisionDetection = body.collisionDetectionMode;
             originalInterpolation = body.interpolation;
@@ -3074,6 +5240,9 @@ namespace BreakNotice.Gameplay.Interaction
             if (target.WeightClass == PrototypeWeightClass.Medium)
             {
                 mediumGroundCenterOfMassY = body.worldCenterOfMass.y;
+                mediumGroundSupportOffsetY = Mathf.Max(
+                    0.01f,
+                    body.worldCenterOfMass.y - targetCollider.bounds.min.y);
                 mediumRearDistance = ResolveMediumRearDistance();
                 mediumRearReady = false;
                 mediumRearStableSteps = 0;
@@ -3089,15 +5258,19 @@ namespace BreakNotice.Gameplay.Interaction
         private void ClearPhysicalAttachment()
         {
             ClearLocomotionPolicy();
+            ResetChargeRuntime();
             ResetSmallSpinRuntime();
             ClearMediumSwingPlan(false);
             pullMotionInitialized = false;
             if (activeTarget != null)
             {
+                activeTarget.CollisionEntered -= HandleActiveTargetCollision;
                 activeTarget.CancelCargoStrapCollisionObservation(
                     activeCargoStrapUseSequence);
             }
             activeCargoStrapUseSequence = 0;
+            cargoStrapUseCommitted = false;
+            depletedReleaseQueued = false;
             RestorePlayerCollision();
             if (activeBody != null)
             {
@@ -3112,6 +5285,7 @@ namespace BreakNotice.Gameplay.Interaction
             activeBody = null;
             activeCollider = null;
             mediumGroundCenterOfMassY = 0f;
+            mediumGroundSupportOffsetY = 0f;
             mediumRearDistance = 0f;
             mediumRearReady = false;
             mediumRearStableSteps = 0;

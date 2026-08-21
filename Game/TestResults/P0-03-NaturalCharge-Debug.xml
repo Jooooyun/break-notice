@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.1710817">
+  <test-suite type="TestSuite" id="1216" name="Game" fullname="Game" runstate="Runnable" testcasecount="182" result="Failed" site="Child" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.171082" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1209" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="182" result="Failed" site="Child" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.157785" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="424" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1210" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="182" result="Failed" site="Child" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.156194" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1211" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="182" result="Failed" site="Child" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.155087" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1212" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="182" result="Failed" site="Child" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.153877" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1031" name="ContestCargoChargeSlamPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.146463" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1033" name="NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair" methodname="NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="222034736" result="Failed" start-time="2026-08-21 13:08:26Z" end-time="2026-08-21 13:08:29Z" duration="3.128069" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Chair did not travel; phase=MediumRecovering, termination=WorldObstacle, energy=0.76
+  Expected: greater than 0.25f
+  But was:  0.217263117f
+]]></message>
+                  <stack-trace><![CDATA[at BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests+<NaturalLmbChargeReleaseStartsAnimationImpulseAndMovesChair>d__5.MoveNext () [0x0029f] in C:\Users\jhbjm\Desktop\break-notice-wt-chr00-updated-locomotion\Game\Assets\_Project\Code\Tests\PlayMode\LocomotionCamera\ContestCargoChargeSlamPlayModeTests.cs:190
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@bd7f943e9647\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

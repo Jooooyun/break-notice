@@ -1,0 +1,35 @@
+Mono path[0] = 'C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Builds/Windows/FinalAudioV004Development/BreakNoticeFinalAudioV004_Data/Managed'
+Mono config path = 'C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Builds/Windows/FinalAudioV004Development/MonoBleedingEdge/etc'
+Found 3 interfaces on host : 0) 192.168.254.1 1) 192.168.11.1 2) 192.168.219.104
+Player connection [21656]  Target information:
+
+Player connection [21656]  * "[IP] 192.168.254.1 [Port] 55000 [Flags] 2 [Guid] 277153387 [EditorId] 381864633 [Version] 1048832 [Id] WindowsPlayer(2,DESKTOP-NVTUU1A) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Game" 
+
+Player connection [21656]  * "[IP] 192.168.11.1 [Port] 55000 [Flags] 2 [Guid] 277153387 [EditorId] 381864633 [Version] 1048832 [Id] WindowsPlayer(2,DESKTOP-NVTUU1A) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Game" 
+
+Player connection [21656]  * "[IP] 192.168.219.104 [Port] 55000 [Flags] 2 [Guid] 277153387 [EditorId] 381864633 [Version] 1048832 [Id] WindowsPlayer(2,DESKTOP-NVTUU1A) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Game" 
+
+Player connection [21656] Started UDP target info broadcast (1) on [225.0.0.222:54997].
+
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Initialize engine version: 6000.3.20f1 (c9ba695d4f07)
+[Subsystems] Discovering subsystems at path C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Builds/Windows/FinalAudioV004Development/BreakNoticeFinalAudioV004_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in 12.643 seconds
+- Finished resetting the current domain, in  0.005 seconds
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+UnloadTime: 4.703700 ms

@@ -191,7 +191,11 @@ namespace BreakNotice.Presentation
 
         public ShowcasePlayerCombatController PlayerCombat => playerCombat;
         public ShowcaseRunnerPressureController PressureController => pressureController;
-        public ShowcaseRunnerAgent[] Runners => runners;
+        public ShowcaseRunnerAgent[] Runners =>
+            pressureController != null && pressureController.Runners != null &&
+            pressureController.Runners.Length > 0
+                ? pressureController.Runners
+                : runners;
         public AudioSource[] AuthoredVoices => authoredVoices;
         public AudioClip P01DeepBody => p01DeepBody;
         public AudioClip P03Cross => p03Cross;
@@ -324,9 +328,10 @@ namespace BreakNotice.Presentation
                         out plan);
             }
 
-            if (runners != null)
+            ShowcaseRunnerAgent[] runtimeRunners = Runners;
+            if (runtimeRunners != null)
             {
-                foreach (ShowcaseRunnerAgent candidate in runners)
+                foreach (ShowcaseRunnerAgent candidate in runtimeRunners)
                 {
                     if (candidate == null || attacker != candidate.transform)
                     {

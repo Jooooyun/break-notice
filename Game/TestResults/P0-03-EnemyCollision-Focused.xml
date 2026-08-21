@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.8314249">
+  <test-suite type="TestSuite" id="1221" name="Game" fullname="Game" runstate="Runnable" testcasecount="187" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.831425" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1214" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="187" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.817940" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="7044" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1215" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="187" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.816462" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1216" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="187" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.815294" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1217" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="187" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.814124" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1031" name="ContestCargoChargeSlamPlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.806789" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1043" name="PrimaryCarryEnemyCollisionTransfersHitAndSweepContinues" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests.PrimaryCarryEnemyCollisionTransfersHitAndSweepContinues" methodname="PrimaryCarryEnemyCollisionTransfersHitAndSweepContinues" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeSlamPlayModeTests" runstate="Runnable" seed="659979644" result="Passed" start-time="2026-08-21 15:46:27Z" end-time="2026-08-21 15:46:31Z" duration="3.788098" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

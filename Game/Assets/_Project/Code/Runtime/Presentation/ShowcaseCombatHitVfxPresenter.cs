@@ -119,7 +119,7 @@ namespace BreakNotice.Presentation
                 return;
             }
 
-            ShowcaseHitVfxTier tier = ResolveTier(result.Attacker);
+            ShowcaseHitVfxTier tier = ResolveTier(result);
             int variation = (int)(acceptedImpactSequence % VariationCount);
             acceptedImpactSequence++;
             PoolSlot slot = AcquireSlot(tier, variation);
@@ -235,6 +235,28 @@ namespace BreakNotice.Presentation
             return objectSource != null &&
                    objectSource.WeightClass == PrototypeWeightClass.Light
                 ? ShowcaseHitVfxTier.Light
+                : ShowcaseHitVfxTier.Medium;
+        }
+
+        public static ShowcaseHitVfxTier ResolveTier(
+            ShowcaseCombatContactResult result)
+        {
+            if (result.HasObjectImpact)
+            {
+                return result.ImpactSeverity switch
+                {
+                    ShowcaseObjectImpactSeverity.Light =>
+                        ShowcaseHitVfxTier.Light,
+                    ShowcaseObjectImpactSeverity.Medium =>
+                        ShowcaseHitVfxTier.Medium,
+                    ShowcaseObjectImpactSeverity.Heavy =>
+                        ShowcaseHitVfxTier.Heavy,
+                    _ => ShowcaseHitVfxTier.Medium
+                };
+            }
+
+            return result.Attacker != null
+                ? ResolveTier(result.Attacker)
                 : ShowcaseHitVfxTier.Medium;
         }
 

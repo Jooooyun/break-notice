@@ -110,8 +110,13 @@ namespace BreakNotice.Gameplay.Combat
         {
             team = authoredTeam;
             maximumHealth = Mathf.Max(1, authoredMaximumHealth);
-            invulnerabilitySeconds = Mathf.Max(0f, authoredInvulnerabilitySeconds);
+            SetInvulnerabilitySeconds(authoredInvulnerabilitySeconds);
             ResetToBaseline();
+        }
+
+        public void SetInvulnerabilitySeconds(float authoredSeconds)
+        {
+            invulnerabilitySeconds = Mathf.Max(0f, authoredSeconds);
         }
 
         public bool TryApplyDamage(ShowcaseDamageRequest request)

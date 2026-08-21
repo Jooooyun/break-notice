@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="15" result="Passed" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.0914325">
+  <test-suite type="TestSuite" id="1000" name="Game" fullname="Game" runstate="Runnable" testcasecount="202" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.091433" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1244" name="BreakNotice.LocomotionCamera.EditModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll" runstate="Runnable" testcasecount="185" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.079666" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="15496" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1245" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="185" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.078365" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1246" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="185" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.077411" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1247" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="185" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.076565" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1058" name="ContestCargoChargeResolverContractTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.070231" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1060" name="ChargeCurve_QuickKeepsStartupAdvantageAndFullScalesFeedback" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.ChargeCurve_QuickKeepsStartupAdvantageAndFullScalesFeedback" methodname="ChargeCurve_QuickKeepsStartupAdvantageAndFullScalesFeedback" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="88209197" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.025716" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1059" name="ChargeCurve_UsesLockedQuickPowerAndFullBands" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.ChargeCurve_UsesLockedQuickPowerAndFullBands" methodname="ChargeCurve_UsesLockedQuickPowerAndFullBands" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="842460500" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.002754" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1063" name="FullSweep_TravelDistanceStrictlyDecaysAcrossThreeVictims" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.FullSweep_TravelDistanceStrictlyDecaysAcrossThreeVictims" methodname="FullSweep_TravelDistanceStrictlyDecaysAcrossThreeVictims" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="1338294754" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.001210" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1075" name="Resolver_AllBlockedRejectsInsteadOfRandomlySwitching" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_AllBlockedRejectsInsteadOfRandomlySwitching" methodname="Resolver_AllBlockedRejectsInsteadOfRandomlySwitching" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="1899054698" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.010826" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1070" name="Resolver_BlockedPreferredSweepUsesOpenAlternateBeforeSlam" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_BlockedPreferredSweepUsesOpenAlternateBeforeSlam" methodname="Resolver_BlockedPreferredSweepUsesOpenAlternateBeforeSlam" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="771805694" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000596" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1064" name="Resolver_ExplicitFloorAimUsesOverheadSlamBeforeSweep" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_ExplicitFloorAimUsesOverheadSlamBeforeSweep" methodname="Resolver_ExplicitFloorAimUsesOverheadSlamBeforeSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="319225696" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000354" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1068" name="Resolver_FreeAimWithoutEnemyStillSelectsOpenSweep" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_FreeAimWithoutEnemyStillSelectsOpenSweep" methodname="Resolver_FreeAimWithoutEnemyStillSelectsOpenSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="504901676" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000389" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1069" name="Resolver_FreeFloorAimWithoutEnemyStillSelectsSlam" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_FreeFloorAimWithoutEnemyStillSelectsSlam" methodname="Resolver_FreeFloorAimWithoutEnemyStillSelectsSlam" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="481369661" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000491" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1074" name="Resolver_LowAimWithoutSteepDownwardIntentRemainsSweep" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_LowAimWithoutSteepDownwardIntentRemainsSweep" methodname="Resolver_LowAimWithoutSteepDownwardIntentRemainsSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="452484139" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000302" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1073" name="Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.003325" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1071" name="Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide(-1.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide(-1.0f)" methodname="Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="54112499" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000483" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1072" name="Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide(1.0f)" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide(1.0f)" methodname="Resolver_NarrowCorridorForcesSlamRegardlessOfTargetSide" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="508956778" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000102" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1067" name="Resolver_OpenPreferredSideSelectsDeterministicSweep" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_OpenPreferredSideSelectsDeterministicSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.001325" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1065" name="Resolver_OpenPreferredSideSelectsDeterministicSweep(-1.0f,SweepLeft)" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_OpenPreferredSideSelectsDeterministicSweep(-1.0f,SweepLeft)" methodname="Resolver_OpenPreferredSideSelectsDeterministicSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="1411166243" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000496" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1066" name="Resolver_OpenPreferredSideSelectsDeterministicSweep(1.0f,SweepRight)" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.Resolver_OpenPreferredSideSelectsDeterministicSweep(1.0f,SweepRight)" methodname="Resolver_OpenPreferredSideSelectsDeterministicSweep" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="388845181" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.000114" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1061" name="SweepEnergy_ChargeTierLocksOneTwoAndThreeTargetBudgets" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.SweepEnergy_ChargeTierLocksOneTwoAndThreeTargetBudgets" methodname="SweepEnergy_ChargeTierLocksOneTwoAndThreeTargetBudgets" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="1848753923" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.001875" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1062" name="SweepEnergy_HitOrdinalUsesLockedDamageAndDecayCurve" fullname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests.SweepEnergy_HitOrdinalUsesLockedDamageAndDecayCurve" methodname="SweepEnergy_HitOrdinalUsesLockedDamageAndDecayCurve" classname="BreakNotice.LocomotionCamera.Tests.ContestCargoChargeResolverContractTests" runstate="Runnable" seed="1575262502" result="Passed" start-time="2026-08-21 14:51:11Z" end-time="2026-08-21 14:51:11Z" duration="0.001138" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

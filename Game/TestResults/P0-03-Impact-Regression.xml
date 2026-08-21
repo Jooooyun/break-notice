@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.2294707">
+  <test-suite type="TestSuite" id="1218" name="Game" fullname="Game" runstate="Runnable" testcasecount="184" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.229471" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1211" name="BreakNotice.LocomotionCamera.PlayModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.PlayModeTests.dll" runstate="Runnable" testcasecount="184" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.215391" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="19188" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1212" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="184" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.212925" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1213" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="184" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.210961" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1214" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="184" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.209093" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1094" name="ContestImpactConsequencePlayModeTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="1.202159" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1095" name="BinderFlinch_AndChairMedium_UseDistinctControlledDistances" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests.BinderFlinch_AndChairMedium_UseDistinctControlledDistances" methodname="BinderFlinch_AndChairMedium_UseDistinctControlledDistances" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" seed="1743040715" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:43Z" duration="0.270252" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1098" name="EnemySecondaryCollision_StaggersBoth_DamagesSecondary_AndDeduplicatesPair" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests.EnemySecondaryCollision_StaggersBoth_DamagesSecondary_AndDeduplicatesPair" methodname="EnemySecondaryCollision_StaggersBoth_DamagesSecondary_AndDeduplicatesPair" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" seed="1206218635" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:43Z" duration="0.051241" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1096" name="HeavyChair_FollowsObjectVelocity_AndEntersKnockdown" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests.HeavyChair_FollowsObjectVelocity_AndEntersKnockdown" methodname="HeavyChair_FollowsObjectVelocity_AndEntersKnockdown" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" seed="800901388" result="Passed" start-time="2026-08-21 13:44:43Z" end-time="2026-08-21 13:44:44Z" duration="0.351870" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1097" name="HeavyChair_WallSweepStopsBeforePenetration_AndEmitsSecondaryImpact" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests.HeavyChair_WallSweepStopsBeforePenetration_AndEmitsSecondaryImpact" methodname="HeavyChair_WallSweepStopsBeforePenetration_AndEmitsSecondaryImpact" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" seed="1472688956" result="Passed" start-time="2026-08-21 13:44:44Z" end-time="2026-08-21 13:44:44Z" duration="0.120908" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1099" name="KillingHeavyChair_PreservesControlledDeathMomentumBeforeSettlement" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests.KillingHeavyChair_PreservesControlledDeathMomentumBeforeSettlement" methodname="KillingHeavyChair_PreservesControlledDeathMomentumBeforeSettlement" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" seed="1135910918" result="Passed" start-time="2026-08-21 13:44:44Z" end-time="2026-08-21 13:44:44Z" duration="0.360254" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1100" name="OneThrowSequence_PlaysDamageVfxAndFeedbackExactlyOnce" fullname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests.OneThrowSequence_PlaysDamageVfxAndFeedbackExactlyOnce" methodname="OneThrowSequence_PlaysDamageVfxAndFeedbackExactlyOnce" classname="BreakNotice.LocomotionCamera.Tests.ContestImpactConsequencePlayModeTests" runstate="Runnable" seed="427492607" result="Passed" start-time="2026-08-21 13:44:44Z" end-time="2026-08-21 13:44:44Z" duration="0.029160" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

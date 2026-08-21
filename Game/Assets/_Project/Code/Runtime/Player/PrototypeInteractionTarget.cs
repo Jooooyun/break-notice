@@ -76,6 +76,7 @@ namespace BreakNotice.Gameplay.Interaction
         private uint lastCommittedCargoStrapSequence;
         private bool throwDepletionPending;
         private bool throwDepletionCollisionObserved;
+        private bool deferredCargoStrapDepletion;
         private uint collisionSequence;
         private Collider lastCollisionOther;
         private float lastCollisionRelativeSpeed;
@@ -85,6 +86,8 @@ namespace BreakNotice.Gameplay.Interaction
         private bool cargoStrapCollisionLatched;
         private Collider cargoStrapCollisionOther;
         private float cargoStrapCollisionSpeed;
+        private PhysicalReleaseSnapshot lastPhysicalReleaseImpactSnapshot;
+        private float lastPhysicalReleaseKineticEnergy;
 
         public string ContentDefinitionId => contentDefinitionId;
 
@@ -140,6 +143,9 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool IsThrowDepletionPending => throwDepletionPending;
 
+        public bool IsCargoStrapDepletionDeferred =>
+            deferredCargoStrapDepletion;
+
         public uint LastCommittedPlayerThrowSequence =>
             lastCommittedPlayerThrowSequence;
 
@@ -151,6 +157,12 @@ namespace BreakNotice.Gameplay.Interaction
         public Collider LastCollisionOther => lastCollisionOther;
 
         public float LastCollisionRelativeSpeed => lastCollisionRelativeSpeed;
+
+        public PhysicalReleaseSnapshot LastPhysicalReleaseImpactSnapshot =>
+            lastPhysicalReleaseImpactSnapshot;
+
+        public float LastPhysicalReleaseKineticEnergy =>
+            lastPhysicalReleaseKineticEnergy;
 
         public event Action<PrototypeInteractionCollisionSnapshot> CollisionEntered;
 
@@ -185,7 +197,7 @@ namespace BreakNotice.Gameplay.Interaction
             TryLatchCargoStrapCollision(
                 lastCollisionOther,
                 lastCollisionRelativeSpeed);
-            if (throwDepletionPending)
+            if (throwDepletionPending && !deferredCargoStrapDepletion)
             {
                 throwDepletionCollisionObserved = true;
             }
@@ -256,7 +268,7 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             lastCommittedPlayerThrowSequence = sequence;
-            return CommitSharedPlayerUse(false);
+            return CommitSharedPlayerUse(false, false);
         }
 
         internal bool TryCommitSuccessfulCargoStrapCollision(uint sequence)
@@ -269,7 +281,59 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             lastCommittedCargoStrapSequence = sequence;
-            return CommitSharedPlayerUse(true);
+            return CommitSharedPlayerUse(true, false);
+        }
+
+        internal bool TryCommitSuccessfulCargoStrapImpact(uint sequence)
+        {
+            if (sequence == 0 ||
+                sequence == lastCommittedCargoStrapSequence ||
+                IsPlayerThrowExhausted)
+            {
+                return false;
+            }
+
+            lastCommittedCargoStrapSequence = sequence;
+            return CommitSharedPlayerUse(false, true);
+        }
+
+        internal void FinalizeDeferredCargoStrapDepletion()
+        {
+            if (!deferredCargoStrapDepletion)
+            {
+                return;
+            }
+
+            deferredCargoStrapDepletion = false;
+            if (throwDepletionPending)
+            {
+                throwDepletionCollisionObserved = true;
+            }
+        }
+
+        internal void RecordPhysicalReleaseImpact(
+            PhysicalReleaseSnapshot snapshot,
+            float kineticEnergy)
+        {
+            if (!snapshot.IsValid || snapshot.Target != this || snapshot.Sequence == 0)
+            {
+                return;
+            }
+
+            lastPhysicalReleaseImpactSnapshot = snapshot;
+            lastPhysicalReleaseKineticEnergy = Mathf.Max(0f, kineticEnergy);
+        }
+
+        internal bool TryGetPhysicalReleaseImpact(
+            uint attackSequence,
+            out PhysicalReleaseSnapshot snapshot,
+            out float kineticEnergy)
+        {
+            snapshot = lastPhysicalReleaseImpactSnapshot;
+            kineticEnergy = lastPhysicalReleaseKineticEnergy;
+            return snapshot.IsValid &&
+                   snapshot.Target == this &&
+                   snapshot.Sequence == attackSequence;
         }
 
         internal void BeginCargoStrapCollisionObservation(
@@ -342,7 +406,9 @@ namespace BreakNotice.Gameplay.Interaction
             cargoStrapCollisionSpeed = relativeSpeed;
         }
 
-        private bool CommitSharedPlayerUse(bool collisionAlreadyObserved)
+        private bool CommitSharedPlayerUse(
+            bool collisionAlreadyObserved,
+            bool deferDepletion)
         {
             committedPlayerThrowUses++;
             if (!IsPlayerThrowExhausted)
@@ -351,7 +417,9 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             throwDepletionPending = true;
-            throwDepletionCollisionObserved = collisionAlreadyObserved;
+            deferredCargoStrapDepletion = deferDepletion;
+            throwDepletionCollisionObserved =
+                collisionAlreadyObserved && !deferDepletion;
             return true;
         }
 
@@ -362,9 +430,12 @@ namespace BreakNotice.Gameplay.Interaction
             lastCommittedCargoStrapSequence = 0;
             throwDepletionPending = false;
             throwDepletionCollisionObserved = false;
+            deferredCargoStrapDepletion = false;
             collisionSequence = 0;
             lastCollisionOther = null;
             lastCollisionRelativeSpeed = 0f;
+            lastPhysicalReleaseImpactSnapshot = default;
+            lastPhysicalReleaseKineticEnergy = 0f;
             CancelCargoStrapCollisionObservation(0);
         }
     }

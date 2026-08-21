@@ -1800,6 +1800,12 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(owner.StrapState, Is.EqualTo(PrototypeStrapOwnershipState.Stored));
             Assert.That(binder.CommittedPlayerUses, Is.EqualTo(1));
             Assert.That(body.linearVelocity.magnitude, Is.GreaterThan(4f));
+            Assert.That(binder.LastPhysicalReleaseImpactSnapshot.IsValid, Is.True);
+            Assert.That(binder.LastPhysicalReleaseImpactSnapshot.AttackOriginType,
+                Is.EqualTo(ShowcaseObjectImpactAttackOriginType.LightStrapThrow));
+            Assert.That(binder.LastPhysicalReleaseImpactSnapshot.Charge01,
+                Is.EqualTo(0f).Within(0.001f));
+            Assert.That(binder.LastPhysicalReleaseKineticEnergy, Is.GreaterThan(0f));
 
             float depletionDeadline = Time.time + 2f;
             while (binder.gameObject.activeSelf && Time.time < depletionDeadline)

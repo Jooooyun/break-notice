@@ -353,6 +353,14 @@ namespace BreakNotice.LocomotionCamera.Tests
             body.angularVelocity = Vector3.zero;
             yield return new WaitForFixedUpdate();
 
+            int beforeSidewaysMotion = audio.OneShotPlaybackCount;
+            body.linearVelocity = chair.transform.right * 3f;
+            yield return null;
+            Assert.That(audio.OneShotPlaybackCount,
+                Is.EqualTo(beforeSidewaysMotion),
+                "Sideways Chair movement must not emit the removed Skid " +
+                "one-shot; only the quieter persistent Roll loop remains.");
+
             int beforeFirstStop = audio.OneShotPlaybackCount;
             yield return BeginChairRoll(audio, chair, body);
             body.linearVelocity = Vector3.zero;

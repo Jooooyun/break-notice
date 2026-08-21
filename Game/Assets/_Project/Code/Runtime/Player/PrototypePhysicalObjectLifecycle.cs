@@ -14,7 +14,9 @@ namespace BreakNotice.Gameplay.Interaction
             Quaternion rotation,
             Vector3 linearVelocity,
             Vector3 angularVelocity,
-            float charge01)
+            float charge01,
+            ShowcaseObjectImpactAttackOriginType attackOriginType =
+                ShowcaseObjectImpactAttackOriginType.HandThrow)
         {
             IsValid = target != null && sequence != 0;
             FrameId = frameId;
@@ -28,6 +30,7 @@ namespace BreakNotice.Gameplay.Interaction
             LinearVelocity = linearVelocity;
             AngularVelocity = angularVelocity;
             Charge01 = Mathf.Clamp01(charge01);
+            AttackOriginType = attackOriginType;
         }
 
         public bool IsValid { get; }
@@ -53,6 +56,8 @@ namespace BreakNotice.Gameplay.Interaction
         public Vector3 AngularVelocity { get; }
 
         public float Charge01 { get; }
+
+        public ShowcaseObjectImpactAttackOriginType AttackOriginType { get; }
     }
 
     [DefaultExecutionOrder(-90)]
@@ -909,7 +914,12 @@ namespace BreakNotice.Gameplay.Interaction
             body.isKinematic = false;
             body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             body.interpolation = RigidbodyInterpolation.Interpolate;
-            ApplyPhysicalThrow(target, body, direction, charge01);
+            ApplyPhysicalThrow(
+                target,
+                body,
+                direction,
+                charge01,
+                ShowcaseObjectImpactAttackOriginType.LightStrapThrow);
             QueueCollisionLeaseForRestore(ref releaseLease, body);
             return true;
         }
@@ -918,7 +928,9 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeInteractionTarget target,
             Rigidbody body,
             Vector3 requestedDirection,
-            float charge01)
+            float charge01,
+            ShowcaseObjectImpactAttackOriginType attackOriginType =
+                ShowcaseObjectImpactAttackOriginType.HandThrow)
         {
             Vector3 direction = requestedDirection.sqrMagnitude > 0.0001f
                 ? requestedDirection.normalized
@@ -972,7 +984,11 @@ namespace BreakNotice.Gameplay.Interaction
                 body.rotation,
                 body.linearVelocity,
                 body.angularVelocity,
-                clampedCharge);
+                clampedCharge,
+                attackOriginType);
+            target.RecordPhysicalReleaseImpact(
+                LastPhysicalReleaseSnapshot,
+                LastReleaseKineticEnergy);
             if (useCommitted)
             {
                 PlayerThrowCommitted?.Invoke(LastPhysicalReleaseSnapshot);

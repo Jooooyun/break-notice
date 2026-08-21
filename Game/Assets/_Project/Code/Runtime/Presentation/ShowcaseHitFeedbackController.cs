@@ -133,7 +133,8 @@ namespace BreakNotice.Presentation
             ShowcaseHitVfxTier level,
             Vector3 hitPoint,
             Vector3 hitDirection,
-            Transform victim = null)
+            Transform victim = null,
+            float cameraImpulseMultiplier = 1f)
         {
             if (!isActiveAndEnabled)
             {
@@ -142,15 +143,25 @@ namespace BreakNotice.Presentation
 
             FeedbackProfile profile = ResolveProfile(level);
             Vector3 localDirection = ResolveCameraLocalDirection(hitDirection);
+            float impulseMultiplier = Mathf.Clamp(
+                cameraImpulseMultiplier,
+                0f,
+                2f);
+            float impulseDuration = profile.Duration * Mathf.Lerp(
+                0.85f,
+                1.15f,
+                impulseMultiplier * 0.5f);
 
             feedbackSequence++;
             cameraImpulse?.Play(
-                profile.Duration,
-                profile.PositionAmplitude,
-                profile.RotationAmplitude,
+                impulseDuration,
+                profile.PositionAmplitude * impulseMultiplier,
+                profile.RotationAmplitude * impulseMultiplier,
                 localDirection,
                 feedbackSequence);
-            shakeEndsAt = Mathf.Max(shakeEndsAt, Time.unscaledTime + profile.Duration);
+            shakeEndsAt = Mathf.Max(
+                shakeEndsAt,
+                Time.unscaledTime + impulseDuration);
             StartVictimGlow(
                 victim,
                 profile.VictimGlowIntensity,
@@ -160,7 +171,7 @@ namespace BreakNotice.Presentation
             LastLevel = level;
             LastHitPoint = hitPoint;
             LastHitDirection = hitDirection;
-            LastImpulseDuration = profile.Duration;
+            LastImpulseDuration = impulseDuration;
         }
 
         public bool IsVictimGlowActive(Transform victim)
@@ -228,10 +239,11 @@ namespace BreakNotice.Presentation
                 direction = result.Attacker.forward;
             }
             Play(
-                ShowcaseCombatHitVfxPresenter.ResolveTier(result.Attacker),
+                ShowcaseCombatHitVfxPresenter.ResolveTier(result),
                 result.WorldPoint,
                 direction.normalized,
-                result.Victim);
+                result.Victim,
+                result.CameraImpulseMultiplier);
         }
 
         private FeedbackProfile ResolveProfile(ShowcaseHitVfxTier level)

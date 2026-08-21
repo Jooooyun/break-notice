@@ -35,6 +35,10 @@ namespace BreakNotice.Presentation
         private const float StopAfterImpactGuardSeconds = 0.14f;
         private const float MinimumGroundProbeDistance = 0.22f;
         private const int MaximumGroundHits = 12;
+        private const string EnemyFootstepSourceName =
+            "FINAL_AUDIO_ENEMY_FOOTSTEP";
+        private const string EnemyVoiceSourceName =
+            "FINAL_AUDIO_ENEMY_VOICE";
 
         private static readonly RaycastHit[] GroundHits =
             new RaycastHit[MaximumGroundHits];
@@ -78,8 +82,6 @@ namespace BreakNotice.Presentation
         [SerializeField, Min(0f)] private float chairRollStopSpeed = 0.30f;
         [SerializeField, Min(0.1f)] private float chairRollFullVolumeSpeed = 4.5f;
         [SerializeField, Range(0f, 1f)] private float chairRollMaximumVolume = 0.55f;
-        [SerializeField, Min(0f)] private float chairSkidMinimumSpeed = 2.0f;
-        [SerializeField, Range(0f, 1f)] private float chairSkidSidewaysRatio = 0.48f;
 
         [Header("Small Spin")]
         [SerializeField, Min(0f)] private float smallSpinStartAngularSpeed = 1.2f;
@@ -121,7 +123,7 @@ namespace BreakNotice.Presentation
         public PrototypeAllyRelayController AllyRelay => allyRelay;
         public ShowcaseCargoStrapController CargoStrap => cargoStrap;
         public ShowcaseRunnerPressureController PressureController => pressureController;
-        public ShowcaseRunnerAgent[] Runners => runners;
+        public ShowcaseRunnerAgent[] Runners => ResolveRuntimeRunners();
         public PrototypeInteractionTarget[] Targets => targets;
         public ShowcaseAnimationEventReceiver[] Receivers => receivers;
         public AudioSource[] TransientSources => transientSources;
@@ -164,7 +166,6 @@ namespace BreakNotice.Presentation
             public bool BinderFloorConsumed;
             public bool RollPlaying;
             public bool SpinPlaying;
-            public bool SkidActive;
             public bool WasMoving;
             public bool StopCandidate;
             public float StopCandidateStartedAt;
@@ -338,6 +339,8 @@ namespace BreakNotice.Presentation
             actorRuntime.Clear();
             pendingImpacts.Clear();
 
+            ShowcaseRunnerAgent[] runtimeRunners = ResolveRuntimeRunners();
+
             transientVoices = new TransientVoice[transientSources?.Length ?? 0];
             for (int index = 0; index < transientVoices.Length; index++)
             {
@@ -396,23 +399,33 @@ namespace BreakNotice.Presentation
                 playerVoiceSource,
                 0xC001D00Du);
 
-            for (int index = 0; index < runners.Length; index++)
+            for (int index = 0; index < runtimeRunners.Length; index++)
             {
-                ShowcaseRunnerAgent runner = runners[index];
+                ShowcaseRunnerAgent runner = runtimeRunners[index];
                 if (runner == null)
                 {
                     continue;
                 }
+                AudioSource ownedFootstep = ResolveOwnedSource(
+                    runner.transform,
+                    EnemyFootstepSourceName);
+                AudioSource ownedVoice = ResolveOwnedSource(
+                    runner.transform,
+                    EnemyVoiceSourceName);
                 AddActorRuntime(
                     runner.transform,
                     runner.Health,
                     FindReceiver(runner),
                     null,
                     runner,
-                    index < enemyFootstepSources.Length
+                    ownedFootstep != null
+                        ? ownedFootstep
+                        : index < enemyFootstepSources.Length
                         ? enemyFootstepSources[index]
                         : null,
-                    index < enemyVoiceSources.Length
+                    ownedVoice != null
+                        ? ownedVoice
+                        : index < enemyVoiceSources.Length
                         ? enemyVoiceSources[index]
                         : null,
                     0xE0010001u + (uint)index * 0x9E3779B9u);
@@ -464,7 +477,54 @@ namespace BreakNotice.Presentation
                     return receiver;
                 }
             }
-            return null;
+            return owner.GetComponentInChildren<
+                ShowcaseAnimationEventReceiver>(true);
+        }
+
+        private ShowcaseRunnerAgent[] ResolveRuntimeRunners()
+        {
+            ShowcaseRunnerAgent[] liveRunners = pressureController?.Runners;
+            return liveRunners != null && liveRunners.Length > 0
+                ? liveRunners
+                : runners ?? Array.Empty<ShowcaseRunnerAgent>();
+        }
+
+        private static AudioSource ResolveOwnedSource(
+            Transform owner,
+            string sourceName)
+        {
+            Transform source = owner != null
+                ? owner.Find(sourceName)
+                : null;
+            return source != null
+                ? source.GetComponent<AudioSource>()
+                : null;
+        }
+
+        private IEnumerable<ShowcaseAnimationEventReceiver>
+            EnumerateRuntimeReceivers()
+        {
+            var seen = new HashSet<int>();
+            if (receivers != null)
+            {
+                for (int index = 0; index < receivers.Length; index++)
+                {
+                    ShowcaseAnimationEventReceiver receiver = receivers[index];
+                    if (receiver != null && seen.Add(receiver.GetInstanceID()))
+                    {
+                        yield return receiver;
+                    }
+                }
+            }
+
+            foreach (ActorRuntime actor in actorRuntime.Values)
+            {
+                ShowcaseAnimationEventReceiver receiver = actor.Receiver;
+                if (receiver != null && seen.Add(receiver.GetInstanceID()))
+                {
+                    yield return receiver;
+                }
+            }
         }
 
         private void Subscribe()
@@ -520,7 +580,8 @@ namespace BreakNotice.Presentation
                 target.CollisionEntered -= HandleCollisionEntered;
                 target.CollisionEntered += HandleCollisionEntered;
             }
-            foreach (ShowcaseAnimationEventReceiver receiver in receivers)
+            foreach (ShowcaseAnimationEventReceiver receiver in
+                     EnumerateRuntimeReceivers())
             {
                 if (receiver == null) continue;
                 receiver.FootstepContact -= HandleFootstepContact;
@@ -565,7 +626,8 @@ namespace BreakNotice.Presentation
             {
                 if (target != null) target.CollisionEntered -= HandleCollisionEntered;
             }
-            foreach (ShowcaseAnimationEventReceiver receiver in receivers)
+            foreach (ShowcaseAnimationEventReceiver receiver in
+                     EnumerateRuntimeReceivers())
             {
                 if (receiver != null) receiver.FootstepContact -= HandleFootstepContact;
             }
@@ -1111,24 +1173,6 @@ namespace BreakNotice.Presentation
                     deltaTime,
                     true);
 
-                float forwardAlignment = speed > 0.01f
-                    ? Mathf.Abs(Vector3.Dot(
-                        planarVelocity.normalized,
-                        Vector3.ProjectOnPlane(target.transform.forward, Vector3.up)
-                            .normalized))
-                    : 1f;
-                bool skid = grounded && speed >= chairSkidMinimumSpeed &&
-                    1f - forwardAlignment >= chairSkidSidewaysRatio;
-                if (skid && !state.SkidActive)
-                {
-                    PlayTransient(
-                        profile?.ChairSkidClip,
-                        target.transform.position,
-                        motionOneShotVolume,
-                        80);
-                }
-                state.SkidActive = skid;
-
                 bool moving = speed >= chairRollStartSpeed;
                 bool stopped = grounded && speed <= chairRollStopSpeed;
                 if (moving)
@@ -1454,7 +1498,6 @@ namespace BreakNotice.Presentation
             state.ReleaseAuthorityUntil = float.NegativeInfinity;
             state.StopCandidate = false;
             state.WasMoving = false;
-            state.SkidActive = false;
         }
 
         private static int ImpactPriority(FinalGameplayAudioImpactFamily family)
@@ -1528,7 +1571,6 @@ namespace BreakNotice.Presentation
             {
                 state.BinderFloorConsumed = false;
                 state.BinderFloorArmed = false;
-                state.SkidActive = false;
                 state.WasMoving = false;
                 state.StopCandidate = false;
                 state.LastImpactAt = float.NegativeInfinity;

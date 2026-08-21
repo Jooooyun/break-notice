@@ -87,6 +87,21 @@ namespace BreakNotice.Presentation
                 {
                     return $"GEAR01 APPLYING TENSION: {targetName}";
                 }
+                if (cargoStrap.IsCharging)
+                {
+                    ShowcaseCargoChargeProfile profile =
+                        cargoStrap.ActiveAttackChargeProfile;
+                    ShowcaseCargoAttackResolution resolution =
+                        cargoStrap.CurrentAttackResolution;
+                    string fallback = resolution.IsFallback
+                        ? " | FALLBACK"
+                        : string.Empty;
+                    return $"GEAR01 CHARGE {BuildChargeBar(profile.Charge01)} " +
+                           $"{Mathf.RoundToInt(profile.Charge01 * 100f)}% " +
+                           $"{profile.Tier.ToString().ToUpperInvariant()} | " +
+                           $"{BuildAttackTypeLabel(resolution.AttackType)}" +
+                           $"{fallback} | RELEASE LMB | [R] CANCEL";
+                }
                 if (cargoStrap.Phase == ShowcaseCargoStrapPhase.Releasing)
                 {
                     return "GEAR01 SAFETY RELEASE | CONTROLLED RETRACTION";
@@ -97,8 +112,14 @@ namespace BreakNotice.Presentation
                            "[1] FISTS | [2] SPIN | LMB THROW | [R] RELEASE";
                 }
 
-                string state = cargoStrap.IsMediumSwinging
-                    ? "MEDIUM TETHER SWING"
+                string state = cargoStrap.Phase == ShowcaseCargoStrapPhase.Slam ||
+                               (cargoStrap.Phase ==
+                                    ShowcaseCargoStrapPhase.MediumExtending &&
+                                cargoStrap.ActiveAttackType ==
+                                    ShowcaseCargoAttackType.OverheadSlam)
+                    ? "OVERHEAD SLAM"
+                    : cargoStrap.IsMediumSwinging
+                        ? "MEDIUM TETHER SWING"
                     : cargoStrap.Phase == ShowcaseCargoStrapPhase.MediumExtending
                         ? "MEDIUM EXTEND"
                         : cargoStrap.IsMediumRecovering
@@ -108,7 +129,7 @@ namespace BreakNotice.Presentation
                                 : "REAR FOLLOW";
                 string warning = cargoStrap.IsWarning ? " | LIMIT WARNING" : string.Empty;
                 string weapon = cargoStrap.IsStrapWeaponSelected
-                    ? "[2] STRAP OBJECT | LMB TARGET SWING"
+                    ? "[2] STRAP OBJECT | HOLD LMB CHARGE"
                     : "[1] FISTS | [2] SELECT STRAP OBJECT";
                 return $"GEAR01 {state}: {targetName} | " +
                        $"{cargoStrap.CurrentStrapLength:0.0}/{cargoStrap.MaximumStrapLength:0.0} M" +
@@ -253,6 +274,19 @@ namespace BreakNotice.Presentation
 
         public string BuildReticleText()
         {
+            ShowcaseCargoStrapController cargo =
+                interactionController?.ShowcaseCargoStrapController;
+            if (cargo != null && cargo.IsCharging)
+            {
+                return cargo.CurrentAttackResolution.AttackType switch
+                {
+                    ShowcaseCargoAttackType.SweepLeft => "<",
+                    ShowcaseCargoAttackType.SweepRight => ">",
+                    ShowcaseCargoAttackType.OverheadSlam => "V",
+                    _ => "[!]"
+                };
+            }
+
             PrototypeAllyRelayController relay = interactionController?.AllyRelayController;
             if (relay != null &&
                 relay.IsBinderIncoming &&
@@ -293,6 +327,18 @@ namespace BreakNotice.Presentation
 
         public string BuildReticleLabel()
         {
+            ShowcaseCargoStrapController cargo =
+                interactionController?.ShowcaseCargoStrapController;
+            if (cargo != null && cargo.IsCharging)
+            {
+                ShowcaseCargoAttackResolution resolution =
+                    cargo.CurrentAttackResolution;
+                string label = BuildAttackTypeLabel(resolution.AttackType);
+                return resolution.IsFallback
+                    ? $"{label} - PREDICTED FALLBACK"
+                    : label;
+            }
+
             PrototypeAllyRelayController relay = interactionController?.AllyRelayController;
             if (relay != null &&
                 relay.IsBinderIncoming &&
@@ -470,6 +516,30 @@ namespace BreakNotice.Presentation
                 : "[Q] FOLLOW | [G] REGROUP";
         }
 
+        private static string BuildChargeBar(float charge01)
+        {
+            const int segmentCount = 10;
+            int filled = Mathf.Clamp(
+                Mathf.RoundToInt(Mathf.Clamp01(charge01) * segmentCount),
+                0,
+                segmentCount);
+            return $"[{new string('#', filled)}" +
+                   $"{new string('-', segmentCount - filled)}]";
+        }
+
+        private static string BuildAttackTypeLabel(
+            ShowcaseCargoAttackType attackType)
+        {
+            return attackType switch
+            {
+                ShowcaseCargoAttackType.SweepLeft => "SWEEP LEFT",
+                ShowcaseCargoAttackType.SweepRight => "SWEEP RIGHT",
+                ShowcaseCargoAttackType.OverheadSlam => "OVERHEAD SLAM",
+                ShowcaseCargoAttackType.Rejected => "ATTACK PATH BLOCKED",
+                _ => "NO VALID ATTACK"
+            };
+        }
+
         private void LateUpdate()
         {
             if (interactionController == null)
@@ -516,22 +586,52 @@ namespace BreakNotice.Presentation
 
         private void UpdateThrowTrajectory()
         {
-            if (!Application.isPlaying ||
+            if (!Application.isPlaying)
+            {
+                HideThrowTrajectory();
+                return;
+            }
+
+            ShowcaseCargoStrapController cargo =
+                interactionController.ShowcaseCargoStrapController;
+            int pointCount = 0;
+            bool cargoPreview = cargo != null &&
+                cargo.TryBuildAttackTrajectoryPreview(
+                    throwTrajectoryPoints,
+                    out pointCount);
+            if (!cargoPreview &&
                 !interactionController.TryBuildThrowTrajectoryPreview(
                     throwTrajectoryPoints,
-                    out int pointCount))
+                    out pointCount))
             {
                 HideThrowTrajectory();
                 return;
             }
 
             EnsureThrowTrajectoryLine();
-            PrototypeThrowPresentationSnapshot presentation =
-                interactionController.ThrowPresentation;
-            Color trajectoryColor = Color.Lerp(
-                new Color(0.1f, 0.8f, 1f, 0.92f),
-                new Color(1f, 0.62f, 0.08f, 1f),
-                presentation.Charge01);
+            Color trajectoryColor;
+            if (cargoPreview)
+            {
+                ShowcaseCargoChargeProfile charge =
+                    cargo.ActiveAttackChargeProfile;
+                trajectoryColor = charge.Tier switch
+                {
+                    ShowcaseCargoChargeTier.Quick =>
+                        new Color(0.28f, 0.82f, 1f, 0.92f),
+                    ShowcaseCargoChargeTier.Power =>
+                        new Color(1f, 0.76f, 0.2f, 0.96f),
+                    _ => new Color(1f, 0.28f, 0.08f, 1f)
+                };
+            }
+            else
+            {
+                PrototypeThrowPresentationSnapshot presentation =
+                    interactionController.ThrowPresentation;
+                trajectoryColor = Color.Lerp(
+                    new Color(0.1f, 0.8f, 1f, 0.92f),
+                    new Color(1f, 0.62f, 0.08f, 1f),
+                    presentation.Charge01);
+            }
             throwTrajectoryLine.startColor = trajectoryColor;
             throwTrajectoryLine.endColor = new Color(
                 trajectoryColor.r,

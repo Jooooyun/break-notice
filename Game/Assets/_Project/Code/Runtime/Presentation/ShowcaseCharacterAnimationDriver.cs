@@ -208,6 +208,7 @@ namespace BreakNotice.Presentation
                 SpeedParameter,
                 Mathf.Clamp01(LastPlanarSpeed / 4.5f));
             animator.SetFloat(LocomotionPlaybackParameter, LastPlaybackRate);
+            animator.speed = ResolveCargoActionPlaybackSpeed();
 
             switch (role)
             {
@@ -371,7 +372,9 @@ namespace BreakNotice.Presentation
                         (cargoStrap.AnimationCue ==
                              ShowcaseCargoStrapAnimationCue.AttackLeft ||
                          cargoStrap.AnimationCue ==
-                             ShowcaseCargoStrapAnimationCue.AttackRight);
+                             ShowcaseCargoStrapAnimationCue.AttackRight ||
+                         cargoStrap.AnimationCue ==
+                             ShowcaseCargoStrapAnimationCue.Slam);
                     bool useStrapUpperBody = smallRollingUpperBody ||
                         mediumAttackUpperBody;
                     if (useStrapUpperBody)
@@ -489,8 +492,10 @@ namespace BreakNotice.Presentation
                 string upperBodyState = mediumAttackMobility && cargoStrap.Phase ==
                     ShowcaseCargoStrapPhase.AttackLeft
                         ? StrapAttackLeftUpperBodyStateName
-                        : mediumAttackMobility && cargoStrap.Phase ==
-                          ShowcaseCargoStrapPhase.AttackRight
+                        : mediumAttackMobility &&
+                          (cargoStrap.Phase ==
+                               ShowcaseCargoStrapPhase.AttackRight ||
+                           cargoStrap.Phase == ShowcaseCargoStrapPhase.Slam)
                             ? StrapAttackRightUpperBodyStateName
                             : tensionedStrap || mediumAttackMobility
                                 ? StrapTensionUpperBodyStateName
@@ -936,6 +941,15 @@ namespace BreakNotice.Presentation
                 return;
             }
 
+            if (runnerAgent.IsAttackWindup)
+            {
+                // Telegraph time is gameplay-owned. Do not start the authored
+                // strike clip until the budgeted wind-up has completed, or its
+                // natural contact event can pass before the attack state opens.
+                PlayState("Idle", EnemyActionBlendSeconds, false);
+                return;
+            }
+
             bool actionCueStartedThisFrame = false;
             if (runnerAgent.AnimationCueRevision != observedRunnerCueRevision)
             {
@@ -1254,6 +1268,23 @@ namespace BreakNotice.Presentation
             }
         }
 
+        private float ResolveCargoActionPlaybackSpeed()
+        {
+            if (role != ShowcaseCharacterAnimationRole.Player ||
+                cargoStrap == null || !cargoStrap.IsAttackActive ||
+                cargoStrap.ActiveTarget == null ||
+                cargoStrap.ActiveTarget.WeightClass !=
+                    PrototypeWeightClass.Medium)
+            {
+                return 1f;
+            }
+
+            return Mathf.Clamp(
+                cargoStrap.ActiveAttackChargeProfile.AnimationSpeedMultiplier,
+                1f,
+                1.8f);
+        }
+
         private static bool TryResolveCargoStrapCueState(
             ShowcaseCargoStrapAnimationCue cue,
             out string state)
@@ -1266,6 +1297,10 @@ namespace BreakNotice.Presentation
                 ShowcaseCargoStrapAnimationCue.Pull => "StrapPullAction",
                 ShowcaseCargoStrapAnimationCue.AttackLeft => "StrapAttackLeftAction",
                 ShowcaseCargoStrapAnimationCue.AttackRight => "StrapAttackRightAction",
+                // No approved overhead clip exists. Slam deliberately reuses
+                // the approved right-side upper-body action while the attached
+                // object performs the authored procedural vertical path.
+                ShowcaseCargoStrapAnimationCue.Slam => "StrapAttackRightAction",
                 _ => string.Empty
             };
             return !string.IsNullOrEmpty(state);

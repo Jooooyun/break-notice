@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BreakNotice.Gameplay.Combat;
 using UnityEngine;
 
@@ -37,8 +38,12 @@ namespace BreakNotice.Gameplay.Interaction
         // telegraph at the older broad acquisition radius.
         private const float PlayerStandoffDistance = 0.81f;
         private const float AttackArrivalTolerance = 0.01f;
-        private const float TelegraphSettleSeconds = 0.12f;
+        private const float FallbackTelegraphSeconds = 0.25f;
         private const float PostHitCooldown = 0.65f;
+        // Cargo Slam approaches from above with a broad Chair silhouette, but
+        // the Humanoid Head binding is intentionally small for fist combat.
+        // Expand only this transaction so ordinary strike hurtboxes stay exact.
+        private const float CargoSlamHeadHurtboxExpansion = 0.18f;
         // The Elite right hook travels across the actor's right side instead of
         // straight down its forward axis. A braced stance turns that authored
         // arc into the target without moving either root through the other.
@@ -60,6 +65,12 @@ namespace BreakNotice.Gameplay.Interaction
 
         [SerializeField]
         private bool elite;
+
+        [SerializeField]
+        private bool suppressAutonomousMovement;
+
+        [SerializeField]
+        private bool disableInBatchMode;
 
         [SerializeField]
         private ShowcaseBoneCombatRig boneCombatRig;
@@ -100,6 +111,29 @@ namespace BreakNotice.Gameplay.Interaction
         private float reactionElapsed;
         private bool reactionDisplacementPending;
         private bool reactionDisplacementActive;
+        private ShowcaseObjectImpactEvaluation activeObjectImpact;
+        private Vector3 currentReactionVelocity;
+        private Vector3 commandedPlanarVelocity;
+        private bool deathMomentumActive;
+        private float secondaryStunUntil;
+        private bool cargoSweepCarryActive;
+        private uint cargoSweepCarrySequence;
+        private Collider cargoSweepCarrySourceCollider;
+        private Vector3 cargoSweepCarryDirection;
+        private float cargoSweepCarrySpeed;
+        private float cargoSweepCarryDuration;
+        private float cargoSweepCarryElapsed;
+        private float cargoSweepCarrySeparation;
+        private float cargoSweepCarryMaximumDistance;
+        private float cargoSweepCarryDistanceApplied;
+        private Collider lastCargoSweepCarryBlock;
+        private bool cargoSweepReactionProtected;
+        private readonly HashSet<int> cargoSweepIgnoredRunnerIds = new();
+        private float activeTelegraphDuration = FallbackTelegraphSeconds;
+        private Vector3 lastPressureTarget;
+        private float pressureTravelDistance;
+        private bool maintainingPressureRing;
+        private ShowcaseRunnerAnimationCue preparedAttackCue;
 
         public string RunnerId => runnerId;
 
@@ -120,15 +154,33 @@ namespace BreakNotice.Gameplay.Interaction
 
         public bool IsElite => elite;
 
+        public bool SuppressesAutonomousMovement =>
+            suppressAutonomousMovement;
+
+        public bool DisablesInBatchMode => disableInBatchMode;
+
         public ShowcaseCombatHealth Health => health;
 
         public ShowcaseRunnerAnimationCue AnimationCue { get; private set; }
+
+        public ShowcaseRunnerAnimationCue PreparedAttackCue =>
+            hasPreparedAttack
+                ? preparedAttackCue
+                : ShowcaseRunnerAnimationCue.None;
 
         public uint AnimationCueRevision { get; private set; }
 
         public uint ActiveAttackSequence => activeAttackSequence;
 
         public float StateElapsed => stateElapsed;
+
+        public float ActiveTelegraphDuration => activeTelegraphDuration;
+
+        public Vector3 LastPressureTarget => lastPressureTarget;
+
+        public float PressureTravelDistance => pressureTravelDistance;
+
+        public bool IsMaintainingPressureRing => maintainingPressureRing;
 
         public float AttackStandoffDistance =>
             Mathf.Min(attackRange, PlayerStandoffDistance);
@@ -148,6 +200,66 @@ namespace BreakNotice.Gameplay.Interaction
         public bool IsAttackWindowOpen => boneCombatRig != null &&
             boneCombatRig.IsAttackWindowOpen;
 
+        public ShowcaseObjectImpactEvaluation LastObjectImpactEvaluation
+        {
+            get;
+            private set;
+        }
+
+        public ShowcaseObjectImpactSeverity LastImpactSeverity =>
+            LastObjectImpactEvaluation.IsValid
+                ? LastObjectImpactEvaluation.Severity
+                : ShowcaseObjectImpactSeverity.Light;
+
+        public float RequestedReactionDistance => pendingReactionDistance;
+
+        public float ReactionDistanceApplied => reactionDistanceApplied;
+
+        public Vector3 CurrentReactionVelocity => currentReactionVelocity;
+
+        public Vector3 EstimatedPlanarVelocity
+        {
+            get
+            {
+                Vector3 reactionVelocity = reactionDisplacementActive
+                    ? Vector3.ProjectOnPlane(
+                        currentReactionVelocity,
+                        Vector3.up)
+                    : Vector3.zero;
+                if (reactionVelocity.sqrMagnitude > 0.001f)
+                {
+                    return reactionVelocity;
+                }
+
+                Vector3 actualVelocity = body != null
+                    ? Vector3.ProjectOnPlane(body.linearVelocity, Vector3.up)
+                    : Vector3.zero;
+                return commandedPlanarVelocity.sqrMagnitude >=
+                        actualVelocity.sqrMagnitude
+                    ? commandedPlanarVelocity
+                    : actualVelocity;
+            }
+        }
+
+        public bool IsReactionDisplacementActive =>
+            reactionDisplacementPending || reactionDisplacementActive ||
+            cargoSweepCarryActive;
+
+        public bool IsCargoSweepCarryActive => cargoSweepCarryActive;
+
+        public uint CargoSweepCarrySequence => cargoSweepCarrySequence;
+
+        public Collider LastCargoSweepCarryBlock => lastCargoSweepCarryBlock;
+
+        public int CargoSweepCarryBlockCount { get; private set; }
+
+        public bool IsCargoSweepReactionProtected =>
+            cargoSweepReactionProtected;
+
+        public bool IsDeathMomentumActive => deathMomentumActive;
+
+        public int SecondaryStunCount { get; private set; }
+
         private void Awake()
         {
             body ??= GetComponent<Rigidbody>();
@@ -156,18 +268,42 @@ namespace BreakNotice.Gameplay.Interaction
             ConfigurePlayerCollisionPair();
             CaptureBaseline();
             ResetAttackCadence();
+            if (disableInBatchMode && Application.isBatchMode)
+            {
+                coordinator?.NotifyBatchDisabledValidationRunner(this);
+                UnityEngine.Object.DestroyImmediate(gameObject);
+                return;
+            }
         }
 
         private void FixedUpdate()
         {
             CommandedPlanarSpeed = 0f;
-            if (coordinator == null || playerTransform == null || body == null || IsDead ||
-                !coordinator.CanSimulatePressure())
+            commandedPlanarVelocity = Vector3.zero;
+            maintainingPressureRing = false;
+            if (body == null)
             {
                 return;
             }
 
             float deltaTime = Time.fixedDeltaTime;
+            if (cargoSweepCarryActive)
+            {
+                AdvanceCargoSweepCarry(deltaTime);
+            }
+            else
+            {
+                AdvanceReactionDisplacement(deltaTime);
+            }
+            if (IsDead)
+            {
+                return;
+            }
+            if (coordinator == null || playerTransform == null ||
+                !coordinator.CanSimulatePressure())
+            {
+                return;
+            }
             if (!animationStateAcknowledged && awaitedAnimationCueRevision != 0)
             {
                 if (State != ShowcaseRunnerState.Dead &&
@@ -184,7 +320,6 @@ namespace BreakNotice.Gameplay.Interaction
 
             stateElapsed += deltaTime;
             cooldownRemaining = Mathf.Max(0f, cooldownRemaining - deltaTime);
-            AdvanceReactionDisplacement(deltaTime);
             switch (State)
             {
                 case ShowcaseRunnerState.OffBalance:
@@ -214,14 +349,24 @@ namespace BreakNotice.Gameplay.Interaction
                             AttackStandoffDistance + AttackArrivalTolerance)
                         {
                             EnterState(ShowcaseRunnerState.Approach);
-                            AdvanceTowardPlayer(approachSpeed, deltaTime);
+                            if (ShouldUsePressureRing(recoveryDistance))
+                            {
+                                AdvancePressureRing(approachSpeed, deltaTime);
+                            }
+                            else
+                            {
+                                AdvanceTowardPlayer(approachSpeed, deltaTime);
+                            }
                             return;
                         }
                         if (cooldownRemaining <= 0f &&
+                            coordinator.CanRunnerAutonomouslyAttack(this) &&
                             coordinator.TryAcquireAttackToken(this))
                         {
                             CommitNextAttack();
+                            return;
                         }
+                        AdvancePressureRing(approachSpeed, deltaTime);
                         return;
                     }
                     if (stateElapsed >= 0.45f)
@@ -247,7 +392,7 @@ namespace BreakNotice.Gameplay.Interaction
                     return;
                 case ShowcaseRunnerState.Telegraph:
                     FacePlayer(deltaTime);
-                    if (stateElapsed >= TelegraphSettleSeconds)
+                    if (stateElapsed >= activeTelegraphDuration)
                     {
                         CommitPreparedAttack();
                     }
@@ -274,6 +419,14 @@ namespace BreakNotice.Gameplay.Interaction
                     return;
             }
 
+            if (suppressAutonomousMovement)
+            {
+                // Validation runners remain fully damageable and keep authored
+                // hit/carry displacement, but never approach, rotate toward,
+                // telegraph or attack the player on their own.
+                return;
+            }
+
             float distance = DistanceToPlayer();
             if (distance > activationRange)
             {
@@ -284,14 +437,25 @@ namespace BreakNotice.Gameplay.Interaction
             if (distance > AttackStandoffDistance + AttackArrivalTolerance)
             {
                 EnterState(ShowcaseRunnerState.Approach, false);
-                AdvanceTowardPlayer(approachSpeed, deltaTime);
+                if (ShouldUsePressureRing(distance))
+                {
+                    AdvancePressureRing(approachSpeed, deltaTime);
+                }
+                else
+                {
+                    AdvanceTowardPlayer(approachSpeed, deltaTime);
+                }
                 return;
             }
 
-            if (cooldownRemaining <= 0f && coordinator.TryAcquireAttackToken(this))
+            if (cooldownRemaining <= 0f &&
+                coordinator.CanRunnerAutonomouslyAttack(this) &&
+                coordinator.TryAcquireAttackToken(this))
             {
                 CommitNextAttack();
+                return;
             }
+            AdvancePressureRing(approachSpeed, deltaTime);
         }
 
         public void Configure(
@@ -324,6 +488,63 @@ namespace BreakNotice.Gameplay.Interaction
         public void ConfigureBoneCombatRig(ShowcaseBoneCombatRig rig)
         {
             boneCombatRig = rig;
+        }
+
+        public void ConfigureAutonomousMovementSuppressed(bool suppressed)
+        {
+            suppressAutonomousMovement = suppressed;
+            if (!suppressed)
+            {
+                return;
+            }
+
+            InterruptAttack();
+            cooldownRemaining = Mathf.Max(cooldownRemaining, 0.3f);
+            if (!IsDead && State != ShowcaseRunnerState.OffBalance &&
+                State != ShowcaseRunnerState.Staggered &&
+                State != ShowcaseRunnerState.KnockedDown &&
+                State != ShowcaseRunnerState.GettingUp)
+            {
+                EnterState(ShowcaseRunnerState.Patrol);
+            }
+            CommandedPlanarSpeed = 0f;
+            commandedPlanarVelocity = Vector3.zero;
+        }
+
+        public void ConfigureBatchModeDisabled(bool disabled)
+        {
+            disableInBatchMode = disabled;
+        }
+
+        public bool TryResolveCargoSlamContact(
+            Collider cargoCollider,
+            out Vector3 worldPoint)
+        {
+            Vector3 currentCenter = cargoCollider != null
+                ? cargoCollider.bounds.center
+                : Vector3.zero;
+            return TryResolveCargoSlamContact(
+                cargoCollider,
+                currentCenter,
+                out worldPoint);
+        }
+
+        public bool TryResolveCargoSlamContact(
+            Collider cargoCollider,
+            Vector3 previousColliderCenter,
+            out Vector3 worldPoint)
+        {
+            if (IsDead || boneCombatRig == null)
+            {
+                worldPoint = default;
+                return false;
+            }
+
+            return boneCombatRig.TryResolveExternalColliderContact(
+                cargoCollider,
+                previousColliderCenter,
+                CargoSlamHeadHurtboxExpansion,
+                out worldPoint);
         }
 
         public bool TryCommitShortGrab()
@@ -391,6 +612,26 @@ namespace BreakNotice.Gameplay.Interaction
             }
         }
 
+        public void ConfigureTemporaryValidationBaseline(
+            Vector3 worldPosition,
+            Quaternion worldRotation)
+        {
+            coordinator?.ReleaseAttackToken(this);
+            if (body != null)
+            {
+                body.position = worldPosition;
+                body.rotation = worldRotation;
+                if (!body.isKinematic)
+                {
+                    body.linearVelocity = Vector3.zero;
+                    body.angularVelocity = Vector3.zero;
+                }
+            }
+            transform.SetPositionAndRotation(worldPosition, worldRotation);
+            CaptureBaseline();
+            ResetToRunBaseline();
+        }
+
         public void ResetToRunBaseline()
         {
             coordinator?.ReleaseAttackToken(this);
@@ -418,14 +659,25 @@ namespace BreakNotice.Gameplay.Interaction
             activeAttackSequence = 0;
             ResetAttackCadence();
             hasPreparedAttack = false;
+            preparedAttackCue = ShowcaseRunnerAnimationCue.None;
             attackTokenReleasedAtWindowClose = false;
+            activeTelegraphDuration = FallbackTelegraphSeconds;
+            lastPressureTarget = baselinePosition;
+            pressureTravelDistance = 0f;
+            maintainingPressureRing = false;
             getupUsesBackVariant = false;
             animationRequestedAt = 0f;
             animationStateAcknowledged = false;
             awaitedAnimationCueRevision = 0;
             ClearReactionDisplacement();
+            LastObjectImpactEvaluation = default;
+            secondaryStunUntil = 0f;
+            SecondaryStunCount = 0;
+            CargoSweepCarryBlockCount = 0;
+            lastCargoSweepCarryBlock = null;
             AttackCommitCount = 0;
             CommandedPlanarSpeed = 0f;
+            commandedPlanarVelocity = Vector3.zero;
             AnimationCue = ShowcaseRunnerAnimationCue.None;
             AnimationCueRevision++;
             boneCombatRig?.ResetRuntimeState();
@@ -487,6 +739,224 @@ namespace BreakNotice.Gameplay.Interaction
                 damage,
                 ShowcaseHitReaction.Body,
                 impactDirection);
+        }
+
+        public bool ReceivePlayerObjectImpact(
+            string sourceId,
+            ShowcaseObjectImpactEvaluation evaluation)
+        {
+            if (health == null || IsDead || string.IsNullOrWhiteSpace(sourceId) ||
+                !evaluation.IsValid)
+            {
+                return false;
+            }
+
+            Vector3 planarImpactDirection = Vector3.ProjectOnPlane(
+                evaluation.Context.PrimaryImpactDirection,
+                Vector3.up).normalized;
+            if (planarImpactDirection.sqrMagnitude <= 0.001f)
+            {
+                planarImpactDirection = transform.forward;
+            }
+            ShowcaseHitReaction reaction = evaluation.CausesKnockdown
+                ? ShowcaseHitReaction.Knockdown
+                : evaluation.Severity == ShowcaseObjectImpactSeverity.Light
+                    ? ShowcaseHitReaction.Light
+                    : ShowcaseHitReaction.Body;
+            bool accepted = health.TryApplyDamage(new ShowcaseDamageRequest(
+                ShowcaseCombatTeam.Player,
+                sourceId,
+                evaluation.Context.AttackSequence,
+                evaluation.Damage,
+                reaction,
+                planarImpactDirection));
+            if (!accepted)
+            {
+                return false;
+            }
+
+            LastObjectImpactEvaluation = evaluation;
+            InterruptAttack();
+            cooldownRemaining = Mathf.Max(cooldownRemaining, PostHitCooldown);
+            if (health.IsDead)
+            {
+                EnterDeath(evaluation);
+                return true;
+            }
+
+            if (evaluation.CausesKnockdown)
+            {
+                getupUsesBackVariant = Vector3.Dot(
+                    transform.forward,
+                    planarImpactDirection) < 0f;
+                SetAnimationCue(getupUsesBackVariant
+                    ? ShowcaseRunnerAnimationCue.KnockdownBack
+                    : ShowcaseRunnerAnimationCue.KnockdownFront);
+                EnterState(ShowcaseRunnerState.KnockedDown);
+            }
+            else if (evaluation.Severity == ShowcaseObjectImpactSeverity.Light)
+            {
+                SetAnimationCue(ShowcaseRunnerAnimationCue.HitLight);
+                EnterState(ShowcaseRunnerState.OffBalance);
+            }
+            else
+            {
+                SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
+                EnterState(ShowcaseRunnerState.Staggered);
+            }
+            QueueReactionDisplacement(
+                planarImpactDirection,
+                evaluation.DisplacementDistance,
+                evaluation.DisplacementDuration,
+                evaluation,
+                true,
+                false);
+            return true;
+        }
+
+        public bool BeginCargoSweepCarry(
+            Collider sourceCollider,
+            Vector3 pathDirection,
+            float pathSpeed,
+            float duration,
+            float separation,
+            ShowcaseObjectImpactEvaluation evaluation)
+        {
+            Vector3 planarDirection = Vector3.ProjectOnPlane(
+                pathDirection,
+                Vector3.up).normalized;
+            if (IsDead || body == null || runnerCollider == null ||
+                sourceCollider == null || !sourceCollider.enabled ||
+                planarDirection.sqrMagnitude <= 0.001f ||
+                !evaluation.IsValid ||
+                evaluation.Context.AttackOriginType !=
+                    ShowcaseObjectImpactAttackOriginType.CargoStrapMediumSwing)
+            {
+                return false;
+            }
+
+            ClearReactionDisplacement();
+            cargoSweepIgnoredRunnerIds.Clear();
+            cargoSweepCarryActive = true;
+            cargoSweepReactionProtected = true;
+            cargoSweepCarrySequence = evaluation.Context.AttackSequence;
+            cargoSweepCarrySourceCollider = sourceCollider;
+            cargoSweepCarryDirection = planarDirection;
+            cargoSweepCarryDuration = Mathf.Clamp(duration, 0.15f, 0.35f);
+            cargoSweepCarryElapsed = 0f;
+            cargoSweepCarrySeparation = Mathf.Max(0.02f, separation);
+            cargoSweepCarryMaximumDistance = Mathf.Max(
+                0.05f,
+                evaluation.DisplacementDistance);
+            cargoSweepCarryDistanceApplied = 0f;
+            cargoSweepCarrySpeed = cargoSweepCarryMaximumDistance /
+                cargoSweepCarryDuration;
+            lastCargoSweepCarryBlock = null;
+            pendingReactionDirection = planarDirection;
+            activeObjectImpact = evaluation;
+            currentReactionVelocity =
+                cargoSweepCarryDirection * cargoSweepCarrySpeed;
+            ResolveInitialCargoSweepSeparation();
+            return true;
+        }
+
+        public void CancelCargoSweepCarry(uint swingSequence)
+        {
+            if (!cargoSweepCarryActive ||
+                (swingSequence != 0 &&
+                 swingSequence != cargoSweepCarrySequence))
+            {
+                return;
+            }
+            CompleteCargoSweepCarry();
+        }
+
+        public bool ReceiveSecondaryObjectImpact(
+            string sourceId,
+            uint authoredAttackSequence,
+            int damage,
+            Vector3 impactDirection,
+            float displacementDistance,
+            float displacementDuration,
+            float stunSeconds)
+        {
+            if (health == null || IsDead || string.IsNullOrWhiteSpace(sourceId) ||
+                authoredAttackSequence == 0 || damage <= 0)
+            {
+                return false;
+            }
+
+            Vector3 planarDirection = Vector3.ProjectOnPlane(
+                impactDirection,
+                Vector3.up).normalized;
+            if (planarDirection.sqrMagnitude <= 0.001f)
+            {
+                planarDirection = transform.forward;
+            }
+            bool accepted = health.TryApplyDamage(new ShowcaseDamageRequest(
+                ShowcaseCombatTeam.Player,
+                sourceId,
+                authoredAttackSequence,
+                damage,
+                ShowcaseHitReaction.Body,
+                planarDirection));
+            if (!accepted)
+            {
+                return false;
+            }
+
+            InterruptAttack();
+            cooldownRemaining = Mathf.Max(
+                cooldownRemaining,
+                Mathf.Max(PostHitCooldown, stunSeconds));
+            secondaryStunUntil = Mathf.Max(
+                secondaryStunUntil,
+                Time.time + Mathf.Max(0f, stunSeconds));
+            SecondaryStunCount++;
+            if (health.IsDead)
+            {
+                EnterDeath();
+                return true;
+            }
+
+            SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
+            EnterState(ShowcaseRunnerState.Staggered);
+            QueueReactionDisplacement(
+                planarDirection,
+                displacementDistance,
+                displacementDuration,
+                default,
+                true,
+                false);
+            return true;
+        }
+
+        public void ApplySecondaryImpactStun(float stunSeconds)
+        {
+            if (IsDead)
+            {
+                return;
+            }
+
+            InterruptAttack();
+            cooldownRemaining = Mathf.Max(
+                cooldownRemaining,
+                Mathf.Max(PostHitCooldown, stunSeconds));
+            secondaryStunUntil = Mathf.Max(
+                secondaryStunUntil,
+                Time.time + Mathf.Max(0f, stunSeconds));
+            SecondaryStunCount++;
+            if (State == ShowcaseRunnerState.KnockedDown ||
+                State == ShowcaseRunnerState.GettingUp)
+            {
+                return;
+            }
+
+            if (State != ShowcaseRunnerState.Staggered)
+            {
+                SetAnimationCue(ShowcaseRunnerAnimationCue.HitBody);
+            }
+            EnterState(ShowcaseRunnerState.Staggered);
         }
 
         private bool ReceivePlayerHit(
@@ -666,10 +1136,18 @@ namespace BreakNotice.Gameplay.Interaction
                 collision.collider.GetComponentInParent<PrototypeInteractionTarget>();
             if (source != null)
             {
+                Rigidbody sourceBody = source.GetComponent<Rigidbody>();
+                Vector3 worldPoint = collision.contactCount > 0
+                    ? collision.GetContact(0).point
+                    : transform.position + Vector3.up;
                 coordinator?.RegisterPhysicalImpact(
                     this,
                     source,
-                    collision.relativeVelocity.magnitude);
+                    collision.relativeVelocity.magnitude,
+                    sourceBody != null
+                        ? sourceBody.linearVelocity
+                        : Vector3.zero,
+                    worldPoint);
             }
         }
 
@@ -685,12 +1163,17 @@ namespace BreakNotice.Gameplay.Interaction
             LastAttackKind = IsKickCue(cue)
                 ? ShowcaseRunnerAttackKind.BodyCheck
                 : ShowcaseRunnerAttackKind.Shove;
+            preparedAttackCue = cue;
             attackSequence++;
             hitApplied = false;
             activeAttackSequence++;
+            activeTelegraphDuration = coordinator != null
+                ? coordinator.ResolveTelegraphDuration(
+                    this,
+                    activeAttackSequence)
+                : FallbackTelegraphSeconds;
             attackTokenReleasedAtWindowClose = false;
             AttackCommitCount++;
-            SetAnimationCue(cue);
 
             hasPreparedAttack = true;
             EnterState(ShowcaseRunnerState.Telegraph);
@@ -704,10 +1187,13 @@ namespace BreakNotice.Gameplay.Interaction
                 return;
             }
 
+            ShowcaseRunnerAnimationCue cue = preparedAttackCue;
             hasPreparedAttack = false;
+            preparedAttackCue = ShowcaseRunnerAnimationCue.None;
             EnterState(LastAttackKind == ShowcaseRunnerAttackKind.BodyCheck
                 ? ShowcaseRunnerState.BodyCheck
                 : ShowcaseRunnerState.Shove);
+            SetAnimationCue(cue);
         }
 
         public void NotifyAttackWindowClosed(uint closingAttackSequence)
@@ -729,6 +1215,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             boneCombatRig?.CloseAttackWindow();
             hasPreparedAttack = false;
+            preparedAttackCue = ShowcaseRunnerAnimationCue.None;
             coordinator?.ReleaseAttackToken(this);
             if (!attackTokenReleasedAtWindowClose)
             {
@@ -741,6 +1228,7 @@ namespace BreakNotice.Gameplay.Interaction
         {
             boneCombatRig?.CloseAttackWindow();
             hasPreparedAttack = false;
+            preparedAttackCue = ShowcaseRunnerAnimationCue.None;
             coordinator?.ReleaseAttackToken(this);
             attackTokenReleasedAtWindowClose = false;
         }
@@ -758,12 +1246,14 @@ namespace BreakNotice.Gameplay.Interaction
             float planarDistance = direction.magnitude;
             direction.Normalize();
             CommandedPlanarSpeed = Mathf.Max(0f, speed);
+            commandedPlanarVelocity = direction * CommandedPlanarSpeed;
             float distance = Mathf.Min(
                 speed * deltaTime,
                 Mathf.Max(0f, planarDistance - PlayerStandoffDistance));
             if (distance <= 0.0001f)
             {
                 CommandedPlanarSpeed = 0f;
+                commandedPlanarVelocity = Vector3.zero;
                 return 0f;
             }
             if (body.SweepTest(direction, out RaycastHit hit, distance + 0.08f,
@@ -772,6 +1262,7 @@ namespace BreakNotice.Gameplay.Interaction
                 !hit.transform.IsChildOf(playerTransform))
             {
                 CommandedPlanarSpeed = 0f;
+                commandedPlanarVelocity = Vector3.zero;
                 return 0f;
             }
 
@@ -781,6 +1272,103 @@ namespace BreakNotice.Gameplay.Interaction
                 Quaternion.LookRotation(direction, Vector3.up),
                 540f * deltaTime));
             return distance;
+        }
+
+        private bool ShouldUsePressureRing(float distanceToPlayer)
+        {
+            return distanceToPlayer <= 2.35f && coordinator != null &&
+                coordinator.ShouldMaintainPressureRing(this);
+        }
+
+        private float AdvancePressureRing(float speed, float deltaTime)
+        {
+            if (coordinator == null ||
+                !coordinator.TryResolvePressurePosition(
+                    this,
+                    out Vector3 pressureTarget,
+                    out float speedScale))
+            {
+                return 0f;
+            }
+
+            maintainingPressureRing = true;
+            lastPressureTarget = pressureTarget;
+            float distance = AdvanceTowardPoint(
+                pressureTarget,
+                Mathf.Max(0.1f, speed * speedScale),
+                deltaTime,
+                0.06f);
+            pressureTravelDistance += distance;
+            return distance;
+        }
+
+        private float AdvanceTowardPoint(
+            Vector3 worldPoint,
+            float speed,
+            float deltaTime,
+            float stopDistance)
+        {
+            Vector3 direction = Vector3.ProjectOnPlane(
+                worldPoint - body.position,
+                Vector3.up);
+            if (direction.sqrMagnitude <= 0.001f)
+            {
+                return 0f;
+            }
+
+            float planarDistance = direction.magnitude;
+            direction.Normalize();
+            float distance = Mathf.Min(
+                Mathf.Max(0f, speed) * deltaTime,
+                Mathf.Max(0f, planarDistance - Mathf.Max(0f, stopDistance)));
+            if (distance <= 0.0001f)
+            {
+                return 0f;
+            }
+
+            Vector3 moveDirection = direction;
+            float moveDistance = distance;
+            if (IsPlanarMoveBlocked(moveDirection, moveDistance))
+            {
+                Vector3 tangent = Vector3.Cross(Vector3.up, direction).normalized;
+                if ((CreateAttackRandomSeed() & 1u) != 0u)
+                {
+                    tangent = -tangent;
+                }
+                moveDistance *= 0.72f;
+                if (IsPlanarMoveBlocked(tangent, moveDistance))
+                {
+                    tangent = -tangent;
+                }
+                if (IsPlanarMoveBlocked(tangent, moveDistance))
+                {
+                    CommandedPlanarSpeed = 0f;
+                    commandedPlanarVelocity = Vector3.zero;
+                    return 0f;
+                }
+                moveDirection = tangent;
+            }
+
+            CommandedPlanarSpeed = Mathf.Max(0f, speed);
+            commandedPlanarVelocity = moveDirection * CommandedPlanarSpeed;
+            body.MovePosition(body.position + moveDirection * moveDistance);
+            body.MoveRotation(Quaternion.RotateTowards(
+                body.rotation,
+                Quaternion.LookRotation(moveDirection, Vector3.up),
+                540f * deltaTime));
+            return moveDistance;
+        }
+
+        private bool IsPlanarMoveBlocked(Vector3 direction, float distance)
+        {
+            return body.SweepTest(
+                       direction,
+                       out RaycastHit hit,
+                       distance + 0.08f,
+                       QueryTriggerInteraction.Ignore) &&
+                   hit.transform != playerTransform &&
+                   (playerTransform == null ||
+                    !hit.transform.IsChildOf(playerTransform));
         }
 
         private void ConfigurePlayerCollisionPair()
@@ -810,7 +1398,9 @@ namespace BreakNotice.Gameplay.Interaction
                 Quaternion targetRotation = Quaternion.LookRotation(
                     direction.normalized,
                     Vector3.up);
-                if (AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantPunch)
+                if (AnimationCue == ShowcaseRunnerAnimationCue.EliteMutantPunch ||
+                    preparedAttackCue ==
+                        ShowcaseRunnerAnimationCue.EliteMutantPunch)
                 {
                     targetRotation *= Quaternion.Euler(
                         0f,
@@ -832,16 +1422,268 @@ namespace BreakNotice.Gameplay.Interaction
             }
         }
 
-        private void QueueReactionDisplacement(Vector3 direction, float distance, float duration)
+        private void QueueReactionDisplacement(
+            Vector3 direction,
+            float distance,
+            float duration)
         {
-            pendingReactionDirection = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
+            QueueReactionDisplacement(
+                direction,
+                distance,
+                duration,
+                default,
+                false,
+                false);
+        }
+
+        private void QueueReactionDisplacement(
+            Vector3 direction,
+            float distance,
+            float duration,
+            ShowcaseObjectImpactEvaluation objectImpact,
+            bool activateImmediately,
+            bool preserveDeathMomentum)
+        {
+            pendingReactionDirection = Vector3.ProjectOnPlane(
+                direction,
+                Vector3.up).normalized;
             pendingReactionDistance = Mathf.Max(0f, distance);
             pendingReactionDuration = Mathf.Max(0.01f, duration);
             reactionDistanceApplied = 0f;
             reactionElapsed = 0f;
-            reactionDisplacementPending = pendingReactionDirection.sqrMagnitude > 0.001f &&
+            activeObjectImpact = objectImpact;
+            cargoSweepIgnoredRunnerIds.Clear();
+            bool hasDisplacement =
+                pendingReactionDirection.sqrMagnitude > 0.001f &&
                 pendingReactionDistance > 0f;
-            reactionDisplacementActive = false;
+            cargoSweepReactionProtected = hasDisplacement &&
+                objectImpact.IsValid &&
+                objectImpact.Context.AttackOriginType ==
+                    ShowcaseObjectImpactAttackOriginType.CargoStrapMediumSwing;
+            reactionDisplacementPending = hasDisplacement && !activateImmediately;
+            reactionDisplacementActive = hasDisplacement && activateImmediately;
+            deathMomentumActive = hasDisplacement && preserveDeathMomentum;
+            currentReactionVelocity = hasDisplacement
+                ? pendingReactionDirection *
+                  (pendingReactionDistance / pendingReactionDuration)
+                : Vector3.zero;
+        }
+
+        private void ResolveInitialCargoSweepSeparation()
+        {
+            if (!cargoSweepCarryActive || body == null ||
+                runnerCollider == null ||
+                cargoSweepCarrySourceCollider == null)
+            {
+                return;
+            }
+
+            Bounds runnerBounds = runnerCollider.bounds;
+            Bounds sourceBounds = cargoSweepCarrySourceCollider.bounds;
+            float requiredCenterGap =
+                ProjectBoundsRadius(
+                    runnerBounds.extents,
+                    cargoSweepCarryDirection) +
+                ProjectBoundsRadius(
+                    sourceBounds.extents,
+                    cargoSweepCarryDirection) +
+                cargoSweepCarrySeparation;
+            float currentCenterGap = Vector3.Dot(
+                runnerBounds.center - sourceBounds.center,
+                cargoSweepCarryDirection);
+            float correction = Mathf.Max(
+                0f,
+                requiredCenterGap - currentCenterGap);
+
+            if (Physics.ComputePenetration(
+                    runnerCollider,
+                    runnerCollider.transform.position,
+                    runnerCollider.transform.rotation,
+                    cargoSweepCarrySourceCollider,
+                    cargoSweepCarrySourceCollider.transform.position,
+                    cargoSweepCarrySourceCollider.transform.rotation,
+                    out Vector3 separationDirection,
+                    out float separationDistance) &&
+                Vector3.Dot(
+                    separationDirection,
+                    cargoSweepCarryDirection) > -0.2f)
+            {
+                correction = Mathf.Max(
+                    correction,
+                    separationDistance + cargoSweepCarrySeparation);
+            }
+
+            correction = Mathf.Min(
+                correction,
+                Mathf.Min(
+                    0.35f,
+                    cargoSweepCarryMaximumDistance * 0.5f));
+            if (correction <= 0.001f ||
+                TryResolveReactionBlock(correction, out _))
+            {
+                return;
+            }
+
+            body.MovePosition(
+                body.position + cargoSweepCarryDirection * correction);
+            reactionDistanceApplied += correction;
+            cargoSweepCarryDistanceApplied += correction;
+        }
+
+        private void AdvanceCargoSweepCarry(float deltaTime)
+        {
+            if (!cargoSweepCarryActive || body == null)
+            {
+                return;
+            }
+            if (IsDead || cargoSweepCarrySourceCollider == null ||
+                !cargoSweepCarrySourceCollider.enabled ||
+                cargoSweepCarryElapsed >= cargoSweepCarryDuration ||
+                cargoSweepCarryDistanceApplied >=
+                    cargoSweepCarryMaximumDistance - 0.001f)
+            {
+                CompleteCargoSweepCarry();
+                return;
+            }
+
+            Rigidbody sourceBody =
+                cargoSweepCarrySourceCollider.attachedRigidbody;
+            Vector3 sourceVelocity = sourceBody != null
+                ? Vector3.ProjectOnPlane(
+                    sourceBody.linearVelocity,
+                    Vector3.up)
+                : Vector3.zero;
+            if (sourceVelocity.sqrMagnitude > 0.25f)
+            {
+                cargoSweepCarryDirection = Vector3.Slerp(
+                    cargoSweepCarryDirection,
+                    sourceVelocity.normalized,
+                    0.35f).normalized;
+            }
+            pendingReactionDirection = cargoSweepCarryDirection;
+
+            Bounds runnerBounds = runnerCollider.bounds;
+            Bounds sourceBounds = cargoSweepCarrySourceCollider.bounds;
+            float requiredCenterGap =
+                ProjectBoundsRadius(
+                    runnerBounds.extents,
+                    cargoSweepCarryDirection) +
+                ProjectBoundsRadius(
+                    sourceBounds.extents,
+                    cargoSweepCarryDirection) +
+                cargoSweepCarrySeparation;
+            float currentCenterGap = Vector3.Dot(
+                runnerBounds.center - sourceBounds.center,
+                cargoSweepCarryDirection);
+            float gapCorrection = Mathf.Clamp(
+                requiredCenterGap - currentCenterGap,
+                0f,
+                cargoSweepCarrySpeed * deltaTime * 0.5f);
+            float stepDistance =
+                (cargoSweepCarrySpeed * deltaTime) + gapCorrection;
+            stepDistance = Mathf.Min(
+                stepDistance,
+                Mathf.Max(
+                    0f,
+                    cargoSweepCarryMaximumDistance -
+                    cargoSweepCarryDistanceApplied));
+
+            if (stepDistance > 0f &&
+                TryResolveReactionBlock(
+                    stepDistance,
+                    out RaycastHit blockingHit))
+            {
+                if (TryContinueCargoSweepThroughRunner(
+                        blockingHit.collider,
+                        activeObjectImpact))
+                {
+                    cargoSweepCarryElapsed = Mathf.Min(
+                        cargoSweepCarryDuration,
+                        cargoSweepCarryElapsed + deltaTime);
+                    currentReactionVelocity =
+                        cargoSweepCarryDirection * cargoSweepCarrySpeed;
+                    return;
+                }
+
+                float permittedDistance = Mathf.Clamp(
+                    blockingHit.distance - 0.02f,
+                    0f,
+                    stepDistance);
+                if (permittedDistance > 0f)
+                {
+                    body.MovePosition(
+                        body.position +
+                        cargoSweepCarryDirection * permittedDistance);
+                    reactionDistanceApplied += permittedDistance;
+                    cargoSweepCarryDistanceApplied += permittedDistance;
+                }
+
+                ShowcaseObjectImpactEvaluation collisionImpact =
+                    activeObjectImpact;
+                Collider obstacle = blockingHit.collider;
+                lastCargoSweepCarryBlock = obstacle;
+                CargoSweepCarryBlockCount++;
+                CompleteCargoSweepCarry(preserveLastBlock: true);
+                if (collisionImpact.IsValid && obstacle != null)
+                {
+                    coordinator?.RegisterSecondaryImpact(
+                        this,
+                        obstacle,
+                        collisionImpact);
+                }
+                return;
+            }
+
+            if (stepDistance > 0f)
+            {
+                body.MovePosition(
+                    body.position +
+                    cargoSweepCarryDirection * stepDistance);
+                reactionDistanceApplied += stepDistance;
+                cargoSweepCarryDistanceApplied += stepDistance;
+            }
+            cargoSweepCarryElapsed = Mathf.Min(
+                cargoSweepCarryDuration,
+                cargoSweepCarryElapsed + deltaTime);
+            currentReactionVelocity =
+                cargoSweepCarryDirection * cargoSweepCarrySpeed;
+            if (cargoSweepCarryElapsed >= cargoSweepCarryDuration)
+            {
+                CompleteCargoSweepCarry();
+            }
+        }
+
+        private static float ProjectBoundsRadius(
+            Vector3 extents,
+            Vector3 direction)
+        {
+            Vector3 absoluteDirection = new Vector3(
+                Mathf.Abs(direction.x),
+                Mathf.Abs(direction.y),
+                Mathf.Abs(direction.z));
+            return Vector3.Dot(extents, absoluteDirection);
+        }
+
+        private void CompleteCargoSweepCarry(bool preserveLastBlock = false)
+        {
+            cargoSweepCarryActive = false;
+            cargoSweepCarrySequence = 0;
+            cargoSweepCarrySourceCollider = null;
+            cargoSweepCarryDirection = Vector3.zero;
+            cargoSweepCarrySpeed = 0f;
+            cargoSweepCarryDuration = 0f;
+            cargoSweepCarryElapsed = 0f;
+            cargoSweepCarrySeparation = 0f;
+            cargoSweepCarryMaximumDistance = 0f;
+            cargoSweepCarryDistanceApplied = 0f;
+            cargoSweepReactionProtected = false;
+            cargoSweepIgnoredRunnerIds.Clear();
+            currentReactionVelocity = Vector3.zero;
+            activeObjectImpact = default;
+            if (!preserveLastBlock)
+            {
+                lastCargoSweepCarryBlock = null;
+            }
         }
 
         private void AdvanceReactionDisplacement(float deltaTime)
@@ -857,16 +1699,40 @@ namespace BreakNotice.Gameplay.Interaction
             float stepDistance = Mathf.Max(0f, targetDistance - reactionDistanceApplied);
             if (stepDistance > 0f)
             {
-                bool blocked = body.SweepTest(
-                    pendingReactionDirection,
-                    out RaycastHit hit,
-                    stepDistance + 0.02f,
-                    QueryTriggerInteraction.Ignore) &&
-                    hit.transform != playerTransform &&
-                    (playerTransform == null || !hit.transform.IsChildOf(playerTransform));
-                if (blocked)
+                if (TryResolveReactionBlock(
+                        stepDistance,
+                        out RaycastHit blockingHit))
                 {
-                    reactionDisplacementActive = false;
+                    if (TryContinueCargoSweepThroughRunner(
+                            blockingHit.collider,
+                            activeObjectImpact))
+                    {
+                        return;
+                    }
+
+                    float permittedDistance = Mathf.Clamp(
+                        blockingHit.distance - 0.02f,
+                        0f,
+                        stepDistance);
+                    if (permittedDistance > 0f)
+                    {
+                        body.MovePosition(
+                            body.position +
+                            pendingReactionDirection * permittedDistance);
+                        reactionDistanceApplied += permittedDistance;
+                    }
+
+                    ShowcaseObjectImpactEvaluation collisionImpact =
+                        activeObjectImpact;
+                    Collider obstacle = blockingHit.collider;
+                    CompleteReactionDisplacement();
+                    if (collisionImpact.IsValid && obstacle != null)
+                    {
+                        coordinator?.RegisterSecondaryImpact(
+                            this,
+                            obstacle,
+                            collisionImpact);
+                    }
                     return;
                 }
 
@@ -876,12 +1742,124 @@ namespace BreakNotice.Gameplay.Interaction
 
             if (reactionElapsed >= pendingReactionDuration)
             {
-                reactionDisplacementActive = false;
+                CompleteReactionDisplacement();
             }
+        }
+
+        private bool TryContinueCargoSweepThroughRunner(
+            Collider obstacle,
+            ShowcaseObjectImpactEvaluation collisionImpact)
+        {
+            if (!cargoSweepReactionProtected || obstacle == null ||
+                !collisionImpact.IsValid || coordinator == null)
+            {
+                return false;
+            }
+
+            ShowcaseRunnerAgent otherRunner =
+                obstacle.GetComponentInParent<ShowcaseRunnerAgent>();
+            if (otherRunner == null || otherRunner == this)
+            {
+                return false;
+            }
+
+            int otherId = otherRunner.GetInstanceID();
+            if (cargoSweepIgnoredRunnerIds.Add(otherId) &&
+                !otherRunner.IsDead)
+            {
+                coordinator.RegisterSecondaryImpact(
+                    this,
+                    obstacle,
+                    collisionImpact);
+            }
+            return true;
+        }
+
+        private bool TryResolveReactionBlock(
+            float stepDistance,
+            out RaycastHit blockingHit)
+        {
+            blockingHit = default;
+            RaycastHit[] hits = body.SweepTestAll(
+                pendingReactionDirection,
+                stepDistance + 0.02f,
+                QueryTriggerInteraction.Ignore);
+            float nearestDistance = float.PositiveInfinity;
+            foreach (RaycastHit hit in hits)
+            {
+                if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.up)) >= 0.75f ||
+                    ShouldIgnoreReactionHit(hit.collider) ||
+                    hit.distance >= nearestDistance)
+                {
+                    continue;
+                }
+
+                nearestDistance = hit.distance;
+                blockingHit = hit;
+            }
+            return blockingHit.collider != null;
+        }
+
+        private bool ShouldIgnoreReactionHit(Collider candidate)
+        {
+            if (candidate == null || !candidate.enabled)
+            {
+                return true;
+            }
+
+            Transform candidateTransform = candidate.transform;
+            if (candidateTransform == transform ||
+                candidateTransform.IsChildOf(transform) ||
+                transform.IsChildOf(candidateTransform))
+            {
+                return true;
+            }
+            if (playerTransform != null &&
+                (candidateTransform == playerTransform ||
+                 candidateTransform.IsChildOf(playerTransform)))
+            {
+                return true;
+            }
+
+            ShowcaseRunnerAgent candidateRunner =
+                candidate.GetComponentInParent<ShowcaseRunnerAgent>();
+            if (cargoSweepReactionProtected && candidateRunner != null &&
+                cargoSweepIgnoredRunnerIds.Contains(
+                    candidateRunner.GetInstanceID()))
+            {
+                return true;
+            }
+
+            PrototypeInteractionTarget source =
+                activeObjectImpact.IsValid
+                    ? activeObjectImpact.Context.SourceObject
+                    : null;
+            return source != null &&
+                   (candidateTransform == source.transform ||
+                    candidateTransform.IsChildOf(source.transform) ||
+                    source.transform.IsChildOf(candidateTransform));
+        }
+
+        private void CompleteReactionDisplacement()
+        {
+            reactionDisplacementPending = false;
+            reactionDisplacementActive = false;
+            cargoSweepReactionProtected = false;
+            cargoSweepIgnoredRunnerIds.Clear();
+            currentReactionVelocity = Vector3.zero;
+            activeObjectImpact = default;
+            if (!deathMomentumActive)
+            {
+                return;
+            }
+
+            deathMomentumActive = false;
+            CompleteDeathSettlement();
         }
 
         private void ClearReactionDisplacement()
         {
+            CompleteCargoSweepCarry();
             pendingReactionDirection = Vector3.zero;
             pendingReactionDistance = 0f;
             pendingReactionDuration = 0f;
@@ -889,11 +1867,19 @@ namespace BreakNotice.Gameplay.Interaction
             reactionElapsed = 0f;
             reactionDisplacementPending = false;
             reactionDisplacementActive = false;
+            cargoSweepReactionProtected = false;
+            cargoSweepIgnoredRunnerIds.Clear();
+            activeObjectImpact = default;
+            currentReactionVelocity = Vector3.zero;
+            deathMomentumActive = false;
         }
 
         private void CancelAnimationBoundState()
         {
-            ClearReactionDisplacement();
+            if (!cargoSweepCarryActive && !cargoSweepReactionProtected)
+            {
+                ClearReactionDisplacement();
+            }
             awaitedAnimationCueRevision = 0;
             animationStateAcknowledged = false;
             switch (State)
@@ -1019,6 +2005,11 @@ namespace BreakNotice.Gameplay.Interaction
 
         private void EnterDeath()
         {
+            EnterDeath(default);
+        }
+
+        private void EnterDeath(ShowcaseObjectImpactEvaluation killingImpact)
+        {
             ClearReactionDisplacement();
             boneCombatRig?.CloseAttackWindow();
             InterruptAttack();
@@ -1026,11 +2017,37 @@ namespace BreakNotice.Gameplay.Interaction
                 ? ShowcaseRunnerAnimationCue.Death2
                 : ShowcaseRunnerAnimationCue.Death1);
             EnterState(ShowcaseRunnerState.Dead);
+            bool preserveChairMomentum =
+                killingImpact.IsValid &&
+                killingImpact.Context.WeightClass == PrototypeWeightClass.Medium &&
+                killingImpact.DisplacementDistance > 0f &&
+                (killingImpact.Severity ==
+                     ShowcaseObjectImpactSeverity.Heavy ||
+                 killingImpact.Context.AttackOriginType ==
+                     ShowcaseObjectImpactAttackOriginType.
+                         CargoStrapMediumSwing);
+            if (preserveChairMomentum)
+            {
+                QueueReactionDisplacement(
+                    killingImpact.Context.PrimaryImpactDirection,
+                    killingImpact.DisplacementDistance,
+                    killingImpact.DisplacementDuration,
+                    killingImpact,
+                    true,
+                    true);
+                return;
+            }
+
+            CompleteDeathSettlement();
+        }
+
+        private void CompleteDeathSettlement()
+        {
             if (runnerCollider != null)
             {
                 runnerCollider.enabled = false;
             }
-            if (body != null)
+            if (body != null && !body.isKinematic)
             {
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;

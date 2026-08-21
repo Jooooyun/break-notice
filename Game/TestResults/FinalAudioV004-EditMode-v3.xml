@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.880509">
+  <test-suite type="TestSuite" id="1000" name="Game" fullname="Game" runstate="Runnable" testcasecount="186" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.880509" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1225" name="BreakNotice.LocomotionCamera.EditModeTests.dll" fullname="C:/Users/jhbjm/Desktop/break-notice-wt-chr00-updated-locomotion/Game/Library/ScriptAssemblies/BreakNotice.LocomotionCamera.EditModeTests.dll" runstate="Runnable" testcasecount="169" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.867870" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="19352" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1226" name="BreakNotice" fullname="BreakNotice" runstate="Runnable" testcasecount="169" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.866022" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1227" name="LocomotionCamera" fullname="BreakNotice.LocomotionCamera" runstate="Runnable" testcasecount="169" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.864465" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1228" name="Tests" fullname="BreakNotice.LocomotionCamera.Tests" runstate="Runnable" testcasecount="169" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.862783" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1107" name="ContestFinalAudioV004ContractTests" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:19Z" duration="2.856300" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1114" name="ApplyToSceneTwice_PreservesFinalAudioSourceAndComponentCounts" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.ApplyToSceneTwice_PreservesFinalAudioSourceAndComponentCounts" methodname="ApplyToSceneTwice_PreservesFinalAudioSourceAndComponentCounts" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="281716966" result="Passed" start-time="2026-08-19 17:36:17Z" end-time="2026-08-19 17:36:18Z" duration="1.168727" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Final Audio v004 validation passed: 40 clips, one listener, 12 transient sources, two scheduled strap sources, actor-local voice/footstep sources, three chair loops and five small loops.
+]]></output>
+              </test-case>
+              <test-case id="1112" name="GameplaySources_ExposeAndCommitAllFinalAudioEventHooks" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.GameplaySources_ExposeAndCommitAllFinalAudioEventHooks" methodname="GameplaySources_ExposeAndCommitAllFinalAudioEventHooks" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="85825650" result="Passed" start-time="2026-08-19 17:36:18Z" end-time="2026-08-19 17:36:18Z" duration="0.013623" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1111" name="LocomotionAndChairWhooshEvents_UseOwnedNormalizedTiming" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.LocomotionAndChairWhooshEvents_UseOwnedNormalizedTiming" methodname="LocomotionAndChairWhooshEvents_UseOwnedNormalizedTiming" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="335520053" result="Passed" start-time="2026-08-19 17:36:18Z" end-time="2026-08-19 17:36:18Z" duration="0.013474" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1110" name="NonRepeatingSelector_IsExhaustiveAndNeverRepeatsValidPrevious" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.NonRepeatingSelector_IsExhaustiveAndNeverRepeatsValidPrevious" methodname="NonRepeatingSelector_IsExhaustiveAndNeverRepeatsValidPrevious" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="1843582935" result="Passed" start-time="2026-08-19 17:36:18Z" end-time="2026-08-19 17:36:19Z" duration="1.270113" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1108" name="Profile_MapsExactlyFortyDistinctApprovedRuntimeClips" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.Profile_MapsExactlyFortyDistinctApprovedRuntimeClips" methodname="Profile_MapsExactlyFortyDistinctApprovedRuntimeClips" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="1970167181" result="Passed" start-time="2026-08-19 17:36:19Z" end-time="2026-08-19 17:36:19Z" duration="0.006040" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1109" name="RuntimeFolder_HasExactlyFortyClipsNoReelAndPcmImportContract" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.RuntimeFolder_HasExactlyFortyClipsNoReelAndPcmImportContract" methodname="RuntimeFolder_HasExactlyFortyClipsNoReelAndPcmImportContract" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="1307573906" result="Passed" start-time="2026-08-19 17:36:19Z" end-time="2026-08-19 17:36:19Z" duration="0.023269" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1113" name="S7Scene_PassesFinalAudioAuthoringValidation" fullname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests.S7Scene_PassesFinalAudioAuthoringValidation" methodname="S7Scene_PassesFinalAudioAuthoringValidation" classname="BreakNotice.LocomotionCamera.Tests.ContestFinalAudioV004ContractTests" runstate="Runnable" seed="1375390297" result="Passed" start-time="2026-08-19 17:36:19Z" end-time="2026-08-19 17:36:19Z" duration="0.339820" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Final Audio v004 validation passed: 40 clips, one listener, 12 transient sources, two scheduled strap sources, actor-local voice/footstep sources, three chair loops and five small loops.
+Saving results to: C:/Users/jhbjm/AppData/LocalLow/DefaultCompany/Game\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
