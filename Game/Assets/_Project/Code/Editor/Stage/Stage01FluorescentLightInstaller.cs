@@ -105,7 +105,7 @@ namespace BreakNotice.Stage.Editor
             light.useColorTemperature = true;
             light.colorTemperature = 4000f;
             light.intensity = 4f;
-            light.range = 4.5f;
+            light.range = 6f;
             light.spotAngle = 160f;
             light.innerSpotAngle = 120f;
             light.bounceIntensity = 0f;
