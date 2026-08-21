@@ -975,7 +975,7 @@ namespace BreakNotice.Stage.Editor
         {
             Materials.Clear();
             CreateMaterial("Floor", new Color(0.34f, 0.35f, 0.35f), 0.08f, 0.28f);
-            CreateMaterial("Wall", new Color(0.55f, 0.54f, 0.50f), 0f, 0.18f);
+            CreateMaterial("Wall", new Color(0.55f, 0.54f, 0.50f), 0f, 0f);
             CreateMaterial("Partition", new Color(0.32f, 0.39f, 0.42f), 0.1f, 0.3f);
             CreateMaterial("Door", new Color(0.36f, 0.22f, 0.13f), 0f, 0.25f,
                 EnvironmentRoot + "/Textures/ENV_door_BaseColor_v001.jpg");
