@@ -1,6 +1,6 @@
 # CHR00 애니메이션 전체 목록
 
-`updatedAnimation/`에 있는 41개 fbx 전부 — 각각 스킨 메쉬+Armature+애니메이션이 한 파일에 통째로 들어있음(완전 독립적, 다른 파일이랑 Avatar 맞출 필요 없음). Humanoid로 임포트해도 정상 동작 확인됨(각 fbx가 자기 자신에서 Avatar를 새로 만드는 방식이라 Copy From Other Avatar류 에러 없음).
+`updatedAnimation/CHR00/`에 있는 46개 fbx 전부 — 각각 스킨 메쉬+Armature+애니메이션이 한 파일에 통째로 들어있음(완전 독립적). Humanoid로 임포트할 때 각 fbx의 Avatar Definition을 `Create From This Model`로 두면 된다. 실제 캐릭터에는 FBX 안의 Animation Clip만 연결하면 Unity Humanoid가 리타게팅한다. 자세한 절차는 `../UNITY_HUMANOID_INTEGRATION_GUIDE.md` 참고.
 
 ---
 
@@ -41,6 +41,14 @@ CHR00_Knockdown_F / CHR00_Knockdown_B - 앞/뒤 넉백. 데미지 방향에 따�
 CHR00_Getup_F - 앞으로 넘어진 데미지 후 기상(70프레임, 빠르게 조정됨). Knockdown_F 후 자동 재생.
 
 CHR00_Getup_B - 뒤로 넘어진 데미지 후 기상. Knockdown_B 후 자동 재생.
+
+CHR00_RollGetup_B_Front - Knockdown_B 계열 시작 자세에서 전방 회전 동작을 이용해 빠르게 일어나는 기상.
+
+CHR00_RollGetup_B_Side - Knockdown_B 계열 시작 자세에서 옆 회전을 이용해 빠르게 일어나는 기상.
+
+CHR00_RollGetup_F_Front - Knockdown_F 계열 시작 자세에서 전방 회전 동작을 이용해 빠르게 일어나는 기상.
+
+CHR00_RollGetup_F_Side - Knockdown_F 계열 시작 자세에서 옆 회전을 이용해 빠르게 일어나는 기상.
 
 ---
 
@@ -100,6 +108,8 @@ CHR00_Strap_Pull - 스트랩을 당겨서 장력(텐션)을 거는 동작(35프�
 
 CHR00_Strap_Attack_L / CHR00_Strap_Attack_R - 스트랩에 힘을 주는 동작 배리언트, 좌/우로 스윙 궤적이 다름(각각 20/22프레임, 루프). Pull 이후 대기 자세에서 시작/종료. 정확히 어느 상황에서 L이 쓰이고 R이 쓰이는지는 디자인 쪽 확인 필요 — 포즈상으로는 텐션 조정/반복 당김 동작으로 보임.
 
+CHR00_Strap_Attack_F - 정면 방향 스트랩 공격 동작(66프레임, 2~67). Pull 이후 공격 상태에서 사용.
+
 CHR00_Strap_Tension_Loop_candidate - 스트랩 당긴 채 유지하는 루프(195프레임), 미확정 후보. 정식 승인 전까지 Runtime 연결하지 말 것.
 
 ---
@@ -109,3 +119,23 @@ CHR00_Strap_Tension_Loop_candidate - 스트랩 당긴 채 유지하는 루프(19
 CHR00_Catch_Large, CHR00_Throw_Large - 프로듀서 결정으로 스코프 아웃, 이 배포에 없음.
 
 상체 전용 Carry 루프, Carry_Medium_Idle/Walk, Pickup 데미지/접촉 마커, ENY01_Grab_Hold/Release, Grapple 계열 - 전부 미제작.
+
+---
+
+## CHR00_FallingToRoll.blend 재추출 내역
+
+2026-08-21 기준 Blender 원본의 Action 11개를 30 FPS로 재추출했다. 기존 파일 6개(`CHR00_Getup_B`, `CHR00_Getup_F`, `CHR00_Idle`, `CHR00_Knockdown_B`, `CHR00_Knockdown_F`, `CHR00_Strap_Pull`)는 현재 Blender 내용으로 교체했고, Roll Getup 4개와 `CHR00_Strap_Attack_F`를 새로 추가했다.
+
+| Action | Frame |
+|---|---:|
+| CHR00_Getup_B | 2–126 |
+| CHR00_Getup_F | 2–71 |
+| CHR00_Idle | 3–253 |
+| CHR00_Knockdown_B | 2–34 |
+| CHR00_Knockdown_F | 2–40 |
+| CHR00_RollGetup_B_Front | 1–50 |
+| CHR00_RollGetup_B_Side | 2–50 |
+| CHR00_RollGetup_F_Front | 1–70 |
+| CHR00_RollGetup_F_Side | 1–50 |
+| CHR00_Strap_Attack_F | 2–67 |
+| CHR00_Strap_Pull | 2–36 |
