@@ -71,6 +71,9 @@ namespace BreakNotice.Gameplay.Interaction
         [SerializeField]
         private Transform strapClampSocket;
 
+        [SerializeField]
+        private bool allowDeferredAcquisitionContact;
+
         private int committedPlayerThrowUses;
         private uint lastCommittedPlayerThrowSequence;
         private uint lastCommittedCargoStrapSequence;
@@ -88,6 +91,9 @@ namespace BreakNotice.Gameplay.Interaction
         private float cargoStrapCollisionSpeed;
         private PhysicalReleaseSnapshot lastPhysicalReleaseImpactSnapshot;
         private float lastPhysicalReleaseKineticEnergy;
+        private Rigidbody observedBody;
+        private Vector3 preCollisionLinearVelocity;
+        private Vector3 preCollisionAngularVelocity;
 
         public string ContentDefinitionId => contentDefinitionId;
 
@@ -111,6 +117,9 @@ namespace BreakNotice.Gameplay.Interaction
         public Transform StrapClampSocket => strapClampSocket;
 
         public bool HasStrapClampSocket => strapClampSocket != null;
+
+        public bool AllowDeferredAcquisitionContact =>
+            allowDeferredAcquisitionContact;
 
         public bool IsCargoStrapEligible => StrapEligible &&
             weightClass != PrototypeWeightClass.Heavy &&
@@ -164,6 +173,9 @@ namespace BreakNotice.Gameplay.Interaction
         public float LastPhysicalReleaseKineticEnergy =>
             lastPhysicalReleaseKineticEnergy;
 
+        public Vector3 PreCollisionLinearVelocity =>
+            preCollisionLinearVelocity;
+
         public event Action<PrototypeInteractionCollisionSnapshot> CollisionEntered;
 
         public bool IsScoopEligible =>
@@ -171,6 +183,47 @@ namespace BreakNotice.Gameplay.Interaction
             (weightClass == PrototypeWeightClass.Light ||
              weightClass == PrototypeWeightClass.Medium) &&
             role != PrototypeInteractionRole.Drawer;
+
+        private void Awake()
+        {
+            observedBody = GetComponent<Rigidbody>();
+            CapturePreCollisionVelocity();
+        }
+
+        private void FixedUpdate()
+        {
+            CapturePreCollisionVelocity();
+        }
+
+        public Vector3 ResolvePreCollisionPointVelocity(Vector3 worldPoint)
+        {
+            if (observedBody == null)
+            {
+                observedBody = GetComponent<Rigidbody>();
+            }
+            if (observedBody == null)
+            {
+                return Vector3.zero;
+            }
+
+            Vector3 centerOffset = worldPoint - observedBody.worldCenterOfMass;
+            return preCollisionLinearVelocity +
+                Vector3.Cross(preCollisionAngularVelocity, centerOffset);
+        }
+
+        private void CapturePreCollisionVelocity()
+        {
+            if (observedBody == null)
+            {
+                observedBody = GetComponent<Rigidbody>();
+            }
+            preCollisionLinearVelocity = observedBody != null
+                ? observedBody.linearVelocity
+                : Vector3.zero;
+            preCollisionAngularVelocity = observedBody != null
+                ? observedBody.angularVelocity
+                : Vector3.zero;
+        }
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -256,6 +309,11 @@ namespace BreakNotice.Gameplay.Interaction
         public void ConfigureStrapClampSocket(Transform socket)
         {
             strapClampSocket = socket;
+        }
+
+        public void ConfigureDeferredAcquisitionContact(bool allowDeferred)
+        {
+            allowDeferredAcquisitionContact = allowDeferred;
         }
 
         internal bool TryCommitSuccessfulPlayerThrow(uint sequence)

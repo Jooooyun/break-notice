@@ -59,7 +59,7 @@ namespace BreakNotice.Gameplay.Combat
         private const float AnimatorStateEntryTimeout = 0.15f;
         private const int MinimumAnimatorStateEntryFrames = 2;
         private const float MaximumMeleeApproachDistance = 0.36f;
-        private const float MeleeContactStandoff = 0.533f;
+        private const float MeleeContactStandoff = 0.84f;
         private const float MeleeApproachSpeed = 5f;
 
         [SerializeField]
@@ -733,10 +733,15 @@ namespace BreakNotice.Gameplay.Combat
 
         public void CommitAnimationCarryContact()
         {
+            TryCommitAnimationCarryContact();
+        }
+
+        private bool TryCommitAnimationCarryContact()
+        {
             if (activeAction != ActiveAction.Acquire || actionEventCommitted ||
                 pendingTarget == null)
             {
-                return;
+                return actionEventCommitted;
             }
             bool ownershipCompleted = interactionOwner != null &&
                 interactionOwner.TryCompleteAcquisition(pendingTarget);
@@ -771,6 +776,7 @@ namespace BreakNotice.Gameplay.Combat
                     pendingTarget,
                     pendingAcquisitionOutcome);
             }
+            return carried;
         }
 
         public bool CommitAnimationChairSwingWhoosh()
@@ -867,6 +873,19 @@ namespace BreakNotice.Gameplay.Combat
                 boneCombatRig?.CaptureAndResolvePendingContacts();
             }
 
+            // A severe frame hitch can cross both authored pickup events in one
+            // Animator evaluation and deliver ActionComplete without the earlier
+            // CarryContact callback. ActionComplete is still proof that the exact
+            // acquisition clip reached its terminal authored frame, so perform one
+            // bounded late contact settlement before treating the transaction as
+            // corrupt. Throw and combat actions deliberately keep their stricter
+            // event-only authority.
+            if (activeAction == ActiveAction.Acquire &&
+                !actionEventCommitted)
+            {
+                TryCommitAnimationCarryContact();
+            }
+
             if (RequiresGameplayCommit(activeAction) && !actionEventCommitted)
             {
                 Debug.LogError(
@@ -890,9 +909,7 @@ namespace BreakNotice.Gameplay.Combat
                 ShowcaseRunnerAgent nextTarget = meleeTarget;
                 if (nextTarget == null || nextTarget.IsDead)
                 {
-                    nextTarget = runnerPressure != null
-                        ? runnerPressure.ResolvePlayerMeleeTargetForCombo()
-                        : null;
+                    nextTarget = ResolveReticleMeleeTarget();
                 }
                 bool finisherReady = ShouldUseMeleeFinisher(nextTarget);
                 int nextStep = finisherReady
@@ -1102,10 +1119,7 @@ namespace BreakNotice.Gameplay.Combat
             ApplyMeleeFacing(meleeFacingDirection, true);
             if (target == null && runnerPressure != null)
             {
-                // Target selection historically used the actor's previous movement
-                // yaw. Align to the optical reticle first, then give the existing
-                // melee selector one deterministic chance to acquire that lane.
-                target = runnerPressure.ResolvePlayerMeleeTargetForCombo();
+                target = ResolveReticleMeleeTarget();
                 if (target != null)
                 {
                     meleeFacingDirection = ResolveMeleeFacingDirection(target);
@@ -1198,6 +1212,21 @@ namespace BreakNotice.Gameplay.Combat
             return direction.sqrMagnitude > 0.001f
                 ? direction.normalized
                 : Vector3.forward;
+        }
+
+        private ShowcaseRunnerAgent ResolveReticleMeleeTarget()
+        {
+            if (runnerPressure == null)
+            {
+                return null;
+            }
+
+            interactionController ??=
+                GetComponent<PrototypeInteractionController>();
+            return interactionController != null &&
+                   interactionController.TryGetReticleRay(out Ray reticleRay)
+                ? runnerPressure.ResolvePlayerMeleeTargetForReticle(reticleRay)
+                : runnerPressure.ResolvePlayerMeleeTargetForCombo();
         }
 
         private void ApplyMeleeFacing(Vector3 direction, bool snapImmediately)

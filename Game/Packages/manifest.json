@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "com.breaknotice.environment.officecore": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Art/Environment/OfficeCore",
+    "com.breaknotice.props.gameplay": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Art/Props/Gameplay",
+    "com.breaknotice.stage01.preview-character": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Art/Characters/CHR00",
+    "com.breaknotice.stage01.scene": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Scenes/20_VerticalSlice",
     "com.unity.cinemachine": "3.1.7",
     "com.unity.inputsystem": "1.20.0",
     "com.unity.render-pipelines.universal": "17.3.0",

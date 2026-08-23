@@ -236,6 +236,75 @@ namespace BreakNotice.LocomotionCamera.Tests
         }
 
         [UnityTest]
+        public IEnumerator PlayerMelee_ReticleRayOwnsTargetOverPreviousActorYaw()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            ShowcaseRunnerPressureController pressure =
+                SceneComponents<ShowcaseRunnerPressureController>().Single();
+            ThirdPersonCameraRig cameraRig =
+                SceneComponents<ThirdPersonCameraRig>().Single();
+            ShowcaseRunnerAgent target = pressure.Runners.First(item => !item.IsElite);
+            ShowcaseRunnerAgent other = pressure.Runners.First(item => item.IsElite);
+            foreach (ShowcaseRunnerAgent runner in pressure.Runners)
+            {
+                runner.enabled = false;
+            }
+
+            Vector3 playerForward = Vector3.ProjectOnPlane(
+                combat.transform.forward,
+                Vector3.up).normalized;
+            Vector3 reticleDirection = Quaternion.AngleAxis(
+                80f,
+                Vector3.up) * playerForward;
+            SetRunnerPose(
+                target,
+                combat.transform.position + reticleDirection * 0.89f,
+                Quaternion.LookRotation(-reticleDirection, Vector3.up));
+            SetRunnerPose(
+                other,
+                combat.transform.position - playerForward * 4f,
+                Quaternion.LookRotation(playerForward, Vector3.up));
+            Physics.SyncTransforms();
+
+            Assert.That(
+                pressure.ResolvePlayerMeleeTargetForCombo(),
+                Is.Null,
+                "The legacy actor-forward selector unexpectedly owned the side target.");
+            Collider targetCollider = target.GetComponent<Collider>();
+            Assert.That(targetCollider, Is.Not.Null);
+            Vector3 reticleOrigin = cameraRig.OutputCamera.transform.position;
+            Vector3 belowTarget = targetCollider.bounds.center -
+                Vector3.up * (targetCollider.bounds.extents.y + 1.5f);
+            Assert.That(
+                pressure.ResolvePlayerMeleeTargetForReticle(new Ray(
+                    reticleOrigin,
+                    belowTarget - reticleOrigin)),
+                Is.Null,
+                "A ray visibly below the victim still acquired the melee target.");
+            Ray reticleRay = new(
+                reticleOrigin,
+                targetCollider.bounds.center - reticleOrigin);
+
+            Assert.That(
+                pressure.ResolvePlayerMeleeTargetForReticle(reticleRay),
+                Is.SameAs(target),
+                "The centered optical ray did not own the melee target.");
+            Assert.That(pressure.TryPlayerShove(reticleRay), Is.True);
+            Assert.That(combat.ActiveMeleeTarget, Is.SameAs(target));
+            Assert.That(
+                Vector3.Dot(
+                    Vector3.ProjectOnPlane(
+                        combat.transform.forward,
+                        Vector3.up).normalized,
+                    reticleDirection.normalized),
+                Is.GreaterThan(0.99f),
+                "CHR00 did not snap the authored punch lane to the centered reticle target.");
+        }
+
+        [UnityTest]
         public IEnumerator PlayerCombo_RepeatsJabCrossAndUsesHookOnlyAsLethalFinisher()
         {
             yield return LoadScene();
@@ -277,6 +346,18 @@ namespace BreakNotice.LocomotionCamera.Tests
             }
             Assert.That(pressure.PlayerGrabbed, Is.False);
             PlaceRunnerInFront(combat.transform, target);
+            Collider comboTargetCollider = target.GetComponent<Collider>();
+            Assert.That(comboTargetCollider, Is.Not.Null);
+            cameraRig.OutputCamera.transform.rotation = Quaternion.LookRotation(
+                comboTargetCollider.bounds.center -
+                    cameraRig.OutputCamera.transform.position,
+                Vector3.up);
+            Assert.That(
+                pressure.ResolvePlayerMeleeTargetForReticle(new Ray(
+                    cameraRig.OutputCamera.transform.position,
+                    cameraRig.OutputCamera.transform.forward)),
+                Is.SameAs(target),
+                "The combo fixture must place its first victim under the optical reticle.");
 
             Assert.That(interaction.WeaponSelection,
                 Is.EqualTo(PrototypeWeaponSelection.Fists));
@@ -953,6 +1034,44 @@ namespace BreakNotice.LocomotionCamera.Tests
             Assert.That(lifecycle.GripSeparation, Is.LessThanOrEqualTo(0.18f),
                 "The carried Binder must remain on the CHR00 bone-tracked grip socket.");
             Assert.That(lifecycle.IsGripBlocked, Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator GroundPickup_ActionCompleteSettlesOneMissingCarryContactDuringHitch()
+        {
+            yield return LoadScene();
+
+            ShowcasePlayerCombatController combat =
+                SceneComponents<ShowcasePlayerCombatController>().Single();
+            PrototypeInteractionStateOwner owner =
+                combat.GetComponent<PrototypeInteractionStateOwner>();
+            PrototypePhysicalObjectLifecycle lifecycle =
+                combat.GetComponent<PrototypePhysicalObjectLifecycle>();
+            PrototypeInteractionTarget chair =
+                SceneComponents<PrototypeInteractionTarget>()
+                    .First(item =>
+                        item.IsScoopEligible &&
+                        item.WeightClass == PrototypeWeightClass.Medium);
+
+            DisableRunners();
+            chair.ConfigureDeferredAcquisitionContact(true);
+            Assert.That(owner.TryCommit(PrototypeInteractionDecision.Accept(
+                PrototypeInteractionOutcome.Scoop,
+                chair)), Is.True);
+            Assert.That(combat.TryBeginAcquisition(
+                chair,
+                PrototypeInteractionOutcome.Scoop), Is.True);
+            Assert.That(lifecycle.CarriedTarget, Is.Null);
+
+            combat.CompleteAnimationAction();
+
+            Assert.That(lifecycle.CarriedTarget, Is.SameAs(chair),
+                "Acquire ActionComplete must settle one skipped CarryContact " +
+                "callback even when a hitch delivers completion before LateUpdate " +
+                "can acknowledge the new Animator state.");
+            Assert.That(owner.HandState,
+                Is.EqualTo(PrototypeHandOwnershipState.Carrying));
+            Assert.That(combat.IsActionLocked, Is.False);
         }
 
         [UnityTest]
@@ -1670,6 +1789,17 @@ namespace BreakNotice.LocomotionCamera.Tests
             body.rotation = rotation;
             runner.transform.SetPositionAndRotation(position, rotation);
             Physics.SyncTransforms();
+        }
+
+        private static void SetRunnerPose(
+            ShowcaseRunnerAgent runner,
+            Vector3 position,
+            Quaternion rotation)
+        {
+            Rigidbody body = runner.GetComponent<Rigidbody>();
+            body.position = position;
+            body.rotation = rotation;
+            runner.transform.SetPositionAndRotation(position, rotation);
         }
 
         private static void PlaceRunnerInFront(

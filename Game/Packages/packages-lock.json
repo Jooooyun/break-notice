@@ -1,5 +1,29 @@
 {
   "dependencies": {
+    "com.breaknotice.environment.officecore": {
+      "version": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Art/Environment/OfficeCore",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.breaknotice.props.gameplay": {
+      "version": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Art/Props/Gameplay",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.breaknotice.stage01.preview-character": {
+      "version": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Art/Characters/CHR00",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.breaknotice.stage01.scene": {
+      "version": "file:C:/Users/jhbjm/Desktop/break-notice-env-runtime-223d48d/Game/Assets/_Project/Scenes/20_VerticalSlice",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.burst": {
       "version": "1.8.29",
       "depth": 2,

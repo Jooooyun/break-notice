@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_Stage01.unity
+    guid: 3f3d6e9e969d4d4fbda3473450d9f7bf
+  - enabled: 1
+    path: Assets/_Project/Scenes/20_Showcase/Contest_OperationsFloor_Showcase_v007.unity
+    guid: 9d803ab544789784981f13ec04a4b2f4
+  - enabled: 1
+    path: Packages/com.breaknotice.stage01.scene/Stage01_OfficeMap.unity
+    guid: f1cc13ff499a5c34b8bf36287ba94871
+  - enabled: 1
     path: Assets/_Project/Scenes/10_Prototype/Contest_SingleRoomGraybox.unity
     guid: 908a03439088db742ab6b684805ff1bc
   m_configObjects: {}

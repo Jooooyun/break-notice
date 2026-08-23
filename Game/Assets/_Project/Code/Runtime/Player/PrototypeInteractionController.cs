@@ -131,6 +131,9 @@ namespace BreakNotice.Gameplay.Interaction
         private float throwPresentationReleasedAt;
         private PrototypeInteractionTarget presentedTargetSnapshot;
         private bool hasPresentedTargetSnapshot;
+        private Func<Ray, float, PrototypeInteractionTarget>
+            runtimeReticleTargetResolver;
+        private bool currentTargetUsesRuntimeResolver;
 #if UNITY_WEBGL && !UNITY_EDITOR
         private bool pointerWasLocked;
 #endif
@@ -148,11 +151,71 @@ namespace BreakNotice.Gameplay.Interaction
 
         public PrototypeInteractionDecision LastDecision { get; private set; }
 
+        public InputSystemLogicalInputAdapter LogicalInputAdapter => logicalInput;
+
+        public ShowcasePlayerCombatController ShowcasePlayerCombatController =>
+            showcasePlayerCombatController;
+
         public float InteractionRange => interactionRange;
 
         public float CurrentTargetDistance { get; private set; } = float.PositiveInfinity;
 
         public bool CurrentTargetUsesPickupAssist { get; private set; }
+
+        public bool CurrentTargetUsesRuntimeResolver =>
+            currentTargetUsesRuntimeResolver;
+
+        public bool CanScoopCurrentTarget
+        {
+            get
+            {
+                return TryResolveCurrentInteractionDecision(
+                           out PrototypeInteractionDecision decision) &&
+                       decision.Outcome == PrototypeInteractionOutcome.Scoop;
+            }
+        }
+
+        public bool CanStrapCurrentTarget
+        {
+            get
+            {
+                return TryResolveCurrentInteractionDecision(
+                           out PrototypeInteractionDecision decision) &&
+                       decision.Outcome ==
+                           PrototypeInteractionOutcome.AttachStrap;
+            }
+        }
+
+        private bool TryResolveCurrentInteractionDecision(
+            out PrototypeInteractionDecision decision)
+        {
+            decision = default;
+            if (interactionOwner == null || CurrentTarget == null ||
+                (showcaseCargoStrapController != null &&
+                 showcaseCargoStrapController.IsActionLocked) ||
+                (showcasePlayerCombatController != null &&
+                 showcasePlayerCombatController.BlocksInteraction))
+            {
+                return false;
+            }
+
+            bool isAiming = logicalInput != null &&
+                            logicalInput.Snapshot.Aim;
+            bool explicitStrapContext =
+                strapContextEnabled &&
+                isAiming &&
+                CurrentTarget.IsCargoStrapEligible &&
+                interactionOwner.RelayState ==
+                    PrototypeRelayReservationState.None &&
+                (showcaseCargoStrapController == null ||
+                 showcaseCargoStrapController.CanDirectAttach(
+                     CurrentTarget));
+            decision = arbitrator.Decide(
+                interactionOwner.CreateContext(
+                    explicitStrapContext,
+                    CurrentTarget));
+            return decision.IsAccepted;
+        }
 
         public float PickupAssistHorizontalAngle => pickupAssistHorizontalAngle;
 
@@ -163,6 +226,24 @@ namespace BreakNotice.Gameplay.Interaction
             PrototypeInteractionTarget ignoredTarget =
                 physicalObjectLifecycle?.CarriedTarget ?? interactionOwner?.CarriedTarget;
             return ResolveFrozenThrowAimPoint(ignoredTarget);
+        }
+
+        public bool TryGetReticleRay(out Ray ray)
+        {
+            Vector3 origin = viewTransform != null
+                ? viewTransform.position
+                : transform.position + Vector3.up;
+            Vector3 direction = viewTransform != null
+                ? viewTransform.forward
+                : transform.forward;
+            if (direction.sqrMagnitude <= 0.0001f)
+            {
+                ray = default;
+                return false;
+            }
+
+            ray = new Ray(origin, direction.normalized);
+            return true;
         }
 
         public float PickupAssistDownwardAngle => pickupAssistDownwardAngle;
@@ -401,7 +482,7 @@ namespace BreakNotice.Gameplay.Interaction
                     else if (WeaponSelection ==
                              PrototypeWeaponSelection.Fists)
                     {
-                        showcaseRunnerPressureController?.TryPlayerShove();
+                        TryProcessFistAttack();
                     }
                 }
                 ClearThrowCharge(
@@ -557,6 +638,12 @@ namespace BreakNotice.Gameplay.Interaction
             targets = authoredTargets ?? Array.Empty<PrototypeInteractionTarget>();
         }
 
+        public void ConfigureRuntimeReticleTargetResolver(
+            Func<Ray, float, PrototypeInteractionTarget> resolver)
+        {
+            runtimeReticleTargetResolver = resolver;
+        }
+
         public void ConfigureShowcaseS4(ShowcaseTeamContextController teamContextController)
         {
             showcaseTeamContextController = teamContextController;
@@ -642,11 +729,36 @@ namespace BreakNotice.Gameplay.Interaction
             return WeaponSelection switch
             {
                 PrototypeWeaponSelection.Fists =>
-                    showcaseRunnerPressureController != null &&
-                    showcaseRunnerPressureController.TryPlayerShove(),
+                    TryProcessFistAttack(),
                 PrototypeWeaponSelection.ObjectWeapon => BeginThrowCharge(),
                 _ => false
             };
+        }
+
+        private bool TryProcessFistAttack()
+        {
+            if (showcaseRunnerPressureController == null)
+            {
+                return false;
+            }
+
+            return TryGetReticleRay(out Ray reticleRay)
+                ? showcaseRunnerPressureController.TryPlayerShove(reticleRay)
+                : showcaseRunnerPressureController.TryPlayerShove();
+        }
+
+        private ShowcaseRunnerAgent ResolveReticleMeleeTarget()
+        {
+            if (showcaseRunnerPressureController == null)
+            {
+                return null;
+            }
+
+            return TryGetReticleRay(out Ray reticleRay)
+                ? showcaseRunnerPressureController.
+                    ResolvePlayerMeleeTargetForReticle(reticleRay)
+                : showcaseRunnerPressureController.
+                    ResolvePlayerMeleeTargetForCombo();
         }
 
         private bool TryBeginHeldMediumCargoCharge()
@@ -666,11 +778,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            ShowcaseRunnerAgent closeTarget =
-                showcaseRunnerPressureController != null
-                    ? showcaseRunnerPressureController.
-                        ResolvePlayerMeleeTargetForCombo()
-                    : null;
+            ShowcaseRunnerAgent closeTarget = ResolveReticleMeleeTarget();
             if (closeTarget != null)
             {
                 return false;
@@ -692,9 +800,7 @@ namespace BreakNotice.Gameplay.Interaction
                 return false;
             }
 
-            ShowcaseRunnerAgent closeTarget =
-                showcaseRunnerPressureController.
-                    ResolvePlayerMeleeTargetForCombo();
+            ShowcaseRunnerAgent closeTarget = ResolveReticleMeleeTarget();
             return closeTarget != null &&
                 showcasePlayerCombatController.
                     TryRequestStrappedMelee(closeTarget);
@@ -714,6 +820,7 @@ namespace BreakNotice.Gameplay.Interaction
                     out float interactionDistance))
             {
                 ClearCurrentTarget();
+                TryResolveRuntimeReticleTarget(interactionOrigin);
                 TryApplyIncomingCatchAssist(interactionOrigin);
                 return CurrentTarget;
             }
@@ -725,9 +832,13 @@ namespace BreakNotice.Gameplay.Interaction
                 ? interactionDistance
                 : float.PositiveInfinity;
             CurrentTargetUsesPickupAssist = false;
+            currentTargetUsesRuntimeResolver = false;
             if (CurrentTarget == null)
             {
-                TryResolveManualPickupAssist(interactionOrigin);
+                if (!TryResolveRuntimeReticleTarget(interactionOrigin))
+                {
+                    TryResolveManualPickupAssist(interactionOrigin);
+                }
             }
 
             TryApplyIncomingCatchAssist(interactionOrigin);
@@ -744,11 +855,17 @@ namespace BreakNotice.Gameplay.Interaction
             }
 
             RefreshTarget(isAiming);
-            if (hasPresentedTargetSnapshot && CurrentTarget != presentedTargetSnapshot)
+            bool exactRuntimeReticlePromotion =
+                currentTargetUsesRuntimeResolver &&
+                presentedTargetSnapshot == null;
+            if (hasPresentedTargetSnapshot &&
+                CurrentTarget != presentedTargetSnapshot &&
+                !exactRuntimeReticlePromotion)
             {
                 CurrentTarget = null;
                 CurrentTargetDistance = float.PositiveInfinity;
                 CurrentTargetUsesPickupAssist = false;
+                currentTargetUsesRuntimeResolver = false;
                 return RecordDecision(PrototypeInteractionDecision.Reject(
                     PrototypeInteractionRejection.NoValidTarget,
                     presentedTargetSnapshot));
@@ -1225,12 +1342,11 @@ namespace BreakNotice.Gameplay.Interaction
             out PrototypeInteractionTarget nearestTarget,
             out float nearestInteractionDistance)
         {
-            Vector3 viewOrigin = viewTransform != null
-                ? viewTransform.position
-                : interactionOrigin;
-            Vector3 forward = viewTransform != null
-                ? viewTransform.forward
-                : transform.forward;
+            Ray reticleRay = TryGetReticleRay(out Ray resolvedRay)
+                ? resolvedRay
+                : new Ray(interactionOrigin, transform.forward);
+            Vector3 viewOrigin = reticleRay.origin;
+            Vector3 forward = reticleRay.direction;
             int hitCount = Physics.RaycastNonAlloc(
                 viewOrigin,
                 forward.normalized,
@@ -1290,14 +1406,51 @@ namespace BreakNotice.Gameplay.Interaction
             return true;
         }
 
+        private bool TryResolveRuntimeReticleTarget(Vector3 interactionOrigin)
+        {
+            if (runtimeReticleTargetResolver == null ||
+                !TryGetReticleRay(out Ray reticleRay))
+            {
+                return false;
+            }
+
+            PrototypeInteractionTarget resolvedTarget =
+                runtimeReticleTargetResolver(reticleRay, interactionRange);
+            if (resolvedTarget == null ||
+                !resolvedTarget.gameObject.activeInHierarchy ||
+                resolvedTarget == interactionOwner?.CarriedTarget)
+            {
+                return false;
+            }
+
+            Collider targetCollider = resolvedTarget.GetComponent<Collider>();
+            if (targetCollider == null || !targetCollider.enabled)
+            {
+                return false;
+            }
+
+            float interactionDistance = Vector3.Distance(
+                interactionOrigin,
+                targetCollider.ClosestPoint(interactionOrigin));
+            if (interactionDistance > interactionRange)
+            {
+                return false;
+            }
+
+            CurrentTarget = resolvedTarget;
+            CurrentTargetDistance = interactionDistance;
+            CurrentTargetUsesPickupAssist = false;
+            currentTargetUsesRuntimeResolver = true;
+            return true;
+        }
+
         private Vector3 ResolveFrozenThrowAimPoint(PrototypeInteractionTarget ignoredTarget)
         {
-            Vector3 origin = viewTransform != null
-                ? viewTransform.position
-                : transform.position + Vector3.up;
-            Vector3 forward = viewTransform != null
-                ? viewTransform.forward.normalized
-                : transform.forward;
+            Ray reticleRay = TryGetReticleRay(out Ray resolvedRay)
+                ? resolvedRay
+                : new Ray(transform.position + Vector3.up, transform.forward);
+            Vector3 origin = reticleRay.origin;
+            Vector3 forward = reticleRay.direction;
             int hitCount = Physics.RaycastNonAlloc(
                 origin,
                 forward,
@@ -1480,6 +1633,7 @@ namespace BreakNotice.Gameplay.Interaction
             CurrentTarget = bestTarget;
             CurrentTargetDistance = bestInteractionDistance;
             CurrentTargetUsesPickupAssist = true;
+            currentTargetUsesRuntimeResolver = false;
             return true;
         }
 
@@ -1488,6 +1642,7 @@ namespace BreakNotice.Gameplay.Interaction
             CurrentTarget = null;
             CurrentTargetDistance = float.PositiveInfinity;
             CurrentTargetUsesPickupAssist = false;
+            currentTargetUsesRuntimeResolver = false;
             return null;
         }
 
@@ -1532,6 +1687,7 @@ namespace BreakNotice.Gameplay.Interaction
                 interactionOrigin,
                 targetCollider.ClosestPoint(interactionOrigin));
             CurrentTargetUsesPickupAssist = false;
+            currentTargetUsesRuntimeResolver = false;
             return true;
         }
 

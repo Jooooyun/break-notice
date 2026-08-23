@@ -644,7 +644,12 @@ namespace BreakNotice.Gameplay.Interaction
                         MaximumAcquisitionPositionError &&
                     playerPropGripRig.CurrentGripRotationError <=
                         MaximumAcquisitionRotationError;
-                if (!reachedContactPose)
+                bool canConvergeAfterContact =
+                    !reachedContactPose &&
+                    target.AllowDeferredAcquisitionContact &&
+                    IsFinitePose(actualPose) &&
+                    playerPropGripRig.IsAuthoritative;
+                if (!reachedContactPose && !canConvergeAfterContact)
                 {
                     RollbackFailedCarryContact(
                         target,
