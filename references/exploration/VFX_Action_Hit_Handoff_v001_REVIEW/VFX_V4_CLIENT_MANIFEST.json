@@ -1,0 +1,133 @@
+{
+  "schema": "VFX_V4_CLIENT_HANDOFF_1.0",
+  "unity_tested": "6000.3.20f1",
+  "urp_tested": "17.3.0",
+  "runtime_application_file": "VFX_V4_ClientReady_Trail_Hit.unitypackage",
+  "runtime_asset_types": {
+    "animation": "FBX",
+    "trajectory": "Unity prefab with two TrailRenderer components",
+    "impact": "Unity prefab with immediate one-shot ParticleSystem",
+    "texture": "PNG referenced by prefab material or ParticleSystem",
+    "review_only": [
+      "GIF",
+      "MP4"
+    ]
+  },
+  "runtime_interface": [
+    "BeginAttack",
+    "ConfirmHit",
+    "EndAttack"
+  ],
+  "attacks": [
+    {
+      "id": "Jab",
+      "source_animation": "Punch_Jab",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_Jab.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_Jab.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_Jab.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_Jab.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_Jab.gif",
+      "socket": "FX_TrailSocket_Jab",
+      "fallback_humanoid_bone": "LeftHand",
+      "trail_begin_frame_30fps": 3,
+      "contact_frame_30fps": 8,
+      "trail_end_frame_30fps": 10,
+      "hit_trigger": "confirmed combat contact only"
+    },
+    {
+      "id": "Cross",
+      "source_animation": "Punch_Cross",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_Cross.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_Cross.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_Cross.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_Cross.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_Cross.gif",
+      "socket": "FX_TrailSocket_Cross",
+      "fallback_humanoid_bone": "RightHand",
+      "trail_begin_frame_30fps": 10,
+      "contact_frame_30fps": 15,
+      "trail_end_frame_30fps": 17,
+      "hit_trigger": "confirmed combat contact only"
+    },
+    {
+      "id": "Kick",
+      "source_animation": "Melee_Unarmed_Attack_Kick",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_Kick.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_Kick.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_Kick.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_Kick.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_Kick.gif",
+      "socket": "FX_TrailSocket_Kick",
+      "fallback_humanoid_bone": "RightFoot",
+      "trail_begin_frame_30fps": 8,
+      "contact_frame_30fps": 14,
+      "trail_end_frame_30fps": 17,
+      "hit_trigger": "confirmed combat contact only"
+    },
+    {
+      "id": "BodyCheck",
+      "source_animation": "Shield_Dash",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_BodyCheck.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_BodyCheck.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_BodyCheck.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_BodyCheck.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_BodyCheck.gif",
+      "socket": "FX_ContactSocket",
+      "fallback_humanoid_bone": "Chest",
+      "trail_begin_frame_30fps": 10,
+      "contact_frame_30fps": 17,
+      "trail_end_frame_30fps": 19,
+      "hit_trigger": "confirmed combat contact only"
+    },
+    {
+      "id": "StrapSweepL",
+      "source_animation": "Sword_Regular_A + Sword_Regular_A_Rec",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_Strap_Sweep_L.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_StrapSweepL.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_StrapSweepL.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_StrapSweepL.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_StrapSweepL.gif",
+      "socket": "FX_StrapTip",
+      "fallback_humanoid_bone": "RightHand",
+      "trail_begin_frame_30fps": 1,
+      "contact_frame_30fps": 8,
+      "trail_end_frame_30fps": 11,
+      "hit_trigger": "confirmed combat contact only"
+    },
+    {
+      "id": "StrapSweepR",
+      "source_animation": "Sword_Regular_B + Sword_Regular_B_Rec",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_Strap_Sweep_R.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_StrapSweepR.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_StrapSweepR.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_StrapSweepR.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_StrapSweepR.gif",
+      "socket": "FX_StrapTip",
+      "fallback_humanoid_bone": "RightHand",
+      "trail_begin_frame_30fps": 1,
+      "contact_frame_30fps": 8,
+      "trail_end_frame_30fps": 11,
+      "hit_trigger": "confirmed combat contact only"
+    },
+    {
+      "id": "StrapSlam",
+      "source_animation": "OverhandThrow",
+      "fbx": "Assets/VFX_V4_Client/Animations/BN_Action_Strap_Slam.fbx",
+      "trail_prefab": "Assets/VFX_V4_Client/Prefabs/Trails/VFX_V4_Trail_StrapSlam.prefab",
+      "hit_prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_StrapSlam.prefab",
+      "trail_preview_gif": "Previews/Trails/VFX_V4_Trail_StrapSlam.gif",
+      "hit_preview_gif": "Previews/Hits/VFX_V4_Hit_StrapSlam.gif",
+      "socket": "FX_StrapTip",
+      "fallback_humanoid_bone": "RightHand",
+      "trail_begin_frame_30fps": 14,
+      "contact_frame_30fps": 19,
+      "trail_end_frame_30fps": 22,
+      "hit_trigger": "confirmed combat contact only"
+    }
+  ],
+  "reaction_hit": {
+    "id": "KnockdownReaction",
+    "prefab": "Assets/VFX_V4_Client/Prefabs/Hits/VFX_V4_Hit_KnockdownReaction.prefab",
+    "preview_gif": "Previews/Hits/VFX_V4_Hit_KnockdownReaction.gif"
+  }
+}
