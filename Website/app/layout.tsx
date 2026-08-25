@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s — BREAK NOTICE",
   },
   description:
-    "평범한 사무용 물체와 한 명의 동료를 활용하는 3인칭 물리 액션 프로토타입 BREAK NOTICE의 공식 Showcase 사이트.",
+    "야근 중인 시설 직원이 사무실 물건을 집어 던지고 동료와 함께 난장판을 헤쳐 나가는 3인칭 물리 액션 게임, BREAK NOTICE의 공식 Showcase 사이트입니다.",
   applicationName: "BREAK NOTICE Showcase",
   alternates: {
     canonical: "/",
@@ -25,13 +25,13 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "BREAK NOTICE",
     title: "BREAK NOTICE — Showcase",
-    description: "Grounded world. Absurd physics. 현재 검증된 브라우저 프로토타입 기반 Showcase.",
+    description: "Grounded world. Absurd physics. 사무실 물건과 동료를 활용하는 3인칭 물리 액션 Showcase.",
     images: [
       {
         url: "/media/PGT_01_Gameplay_Camera_v002_FINAL.png",
         width: 1672,
         height: 941,
-        alt: "BREAK NOTICE 승인 프로덕션 비주얼 레퍼런스",
+        alt: "BREAK NOTICE의 3인칭 사무실 액션 콘셉트 이미지",
       },
     ],
   },

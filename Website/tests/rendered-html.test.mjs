@@ -82,16 +82,17 @@ test("server-renders the Korean Showcase release page", async () => {
   assert.match(html, /PICK IT UP/);
   assert.match(html, /CALL IT IN/);
   assert.match(html, /LET IT FLY/);
-  assert.match(html, /자동 Fetch/);
-  assert.match(html, /FOLLOW \/ HOLD \/ SUPPLY/i);
-  assert.match(html, /Regroup/);
+  assert.match(html, /동료에게 가까운 물건을 가져오게 하기/);
+  assert.match(html, /따라오기 \/ 대기 \/ 물건 건네기/);
+  assert.match(html, /동료를 내 위치로 다시 부르기/);
   assert.match(html, /Designer A/);
   assert.match(html, /href="\/play\/"/);
   assert.doesNotMatch(html, /BUILD PREPARING|disabled=""/);
-  assert.match(html, /AI-GENERATED PRODUCTION VISUAL REFERENCE/);
-  assert.match(html, /실제 런타임 캡처 아님/);
+  assert.match(html, /AI 콘셉트 이미지/);
+  assert.match(html, /실제 게임 화면이 아닙니다/);
   assert.doesNotMatch(html, /100 \/ 100|72 \/ 72|VERIFIED INSTEAD|RUNTIME MEDIA|지금 구현된 플레이/);
   assert.doesNotMatch(html, /FULL GAME COMPLETE|CARGO STRAP.*IMPLEMENTED/i);
+  assert.doesNotMatch(html, /범위만 담습니다|물리적으로 협업하는|자동 Fetch|마지막 승인 browser baseline|Human Owner가 승인한|실제 gameplay 캡처|구현 완료 증거/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
   assert.doesNotMatch(html, /https?:\/\/(?:127\.0\.0\.1|localhost)/i);
 });
@@ -101,7 +102,7 @@ test("returns an explicit 404 page for unknown routes", async () => {
   assert.equal(response.status, 404);
   const html = await response.text();
   assert.match(html, /PAGE NOT FOUND/);
-  assert.match(html, /BREAK NOTICE로 돌아가기/);
+  assert.match(html, /BREAK NOTICE 홈으로 돌아가기/);
   assert.match(html, /<meta name="robots" content="noindex, nofollow"/i);
 });
 
