@@ -1,66 +1,37 @@
-const controls = [
-  { key: "W A S D", ko: "이동", en: "MOVE", detail: "Operations Floor를 이동합니다." },
-  { key: "MOUSE", ko: "시점", en: "LOOK", detail: "3인칭 카메라를 조작합니다." },
-  { key: "RMB", ko: "조준", en: "AIM", detail: "우클릭을 누르는 동안 조준합니다." },
-  { key: "E", ko: "습득 / 캐치", en: "PICKUP / CATCH", detail: "Binder·Chair를 집거나 날아오는 Binder를 받습니다." },
-  { key: "HOLD LMB", ko: "차지 던지기", en: "CHARGE THROW", detail: "누르고 충전한 뒤 놓아 던집니다." },
-  { key: "F", ko: "자동 회수", en: "AUTO FETCH", detail: "동료가 가장 가까운 도달 가능 Binder·Chair를 스스로 선택해 회수합니다." },
-  { key: "Q", ko: "동료 명령", en: "FOLLOW / HOLD / SUPPLY", detail: "상황에 따라 Follow·Hold를 전환하거나 준비된 물체 공급을 요청합니다." },
-  { key: "G", ko: "재집결", en: "REGROUP", detail: "동료를 authored regroup 위치로 복귀시킵니다." },
-  { key: "BACKSPACE", ko: "리셋", en: "RESET", detail: "작성된 시작 상태로 Encounter를 복구합니다." },
-];
-
-const statusRows = [
+const controlGroups = [
   {
-    label: "CONTEST SHOWCASE S1–S3",
-    state: "OWNER-APPROVED / VERIFIED",
-    tone: "good",
-    detail: "Operations Floor, 동료 Follow·Regroup, 자동 Fetch, Binder Toss, Chair Feed와 Reset이 검증됐습니다.",
+    label: "MOVE",
+    title: "공간을 장악한다",
+    items: [
+      { key: "WASD", action: "이동" },
+      { key: "MOUSE", action: "시점" },
+      { key: "RMB", action: "조준" },
+    ],
   },
   {
-    label: "CHARACTERS / ANIMATION",
-    state: "RUNTIME-INTEGRATED / VERIFIED",
-    tone: "good",
-    detail: "Designer A의 텍스처 Humanoid 4종과 애니메이션 FBX 172개가 승인된 S3 런타임에 연결됐습니다.",
+    label: "HANDLE",
+    title: "물체를 무기로 바꾼다",
+    items: [
+      { key: "E", action: "습득 / Binder 캐치" },
+      { key: "HOLD LMB", action: "차지 후 릴리스 투척" },
+    ],
   },
   {
-    label: "PUBLIC WEBGL",
-    state: "LIVE / UNCHANGED",
-    tone: "neutral",
-    detail: "PLAY는 기존 versioned WebGL 릴리스를 엽니다. 이번 사이트 갱신은 WebGL 빌드와 latest 포인터를 변경하지 않습니다.",
+    label: "COMMAND",
+    title: "동료에게 일을 맡긴다",
+    items: [
+      { key: "F", action: "가장 가까운 물체 자동 Fetch" },
+      { key: "Q", action: "Follow / Hold / Supply" },
+      { key: "G", action: "Regroup" },
+    ],
   },
   {
-    label: "S4–S9 / C5",
-    state: "NOT AUTHORIZED",
-    tone: "warn",
-    detail: "Cargo Strap, final combat, Drawer/Exit, Production VFX·Audio·BGM·Cinematic 완료를 주장하지 않습니다.",
-  },
-];
-
-const loopSteps = [
-  {
-    number: "01",
-    en: "READ THE FLOOR",
-    ko: "공간을 읽는다",
-    copy: "이동·시점·조준으로 바닥의 Binder와 Chair, 벽과 공급 경로를 확인합니다.",
-  },
-  {
-    number: "02",
-    en: "PICK A TOOL",
-    ko: "사무용 물체를 든다",
-    copy: "E로 Light Binder 또는 Medium Chair를 실제 공간에서 습득하고 운반합니다.",
-  },
-  {
-    number: "03",
-    en: "COMMIT THE THROW",
-    ko: "차지하고 던진다",
-    copy: "LMB를 누르는 시간으로 투척을 충전한 뒤 놓습니다. 물체는 실제 궤적과 충돌을 유지합니다.",
-  },
-  {
-    number: "04",
-    en: "COMMAND / CATCH / RESET",
-    ko: "동료와 루프를 이어간다",
-    copy: "F로 자동 Fetch, Q로 Follow·Hold·Supply, G로 Regroup합니다. E Catch와 Reset으로 물리 루프를 이어갑니다.",
+    label: "RECOVER",
+    title: "즉시 다시 시작한다",
+    items: [
+      { key: "BACKSPACE", action: "Encounter Reset" },
+      { key: "ESC", action: "브라우저 포인터 해제" },
+    ],
   },
 ];
 
@@ -81,23 +52,23 @@ export default function Home() {
         </a>
 
         <nav className="site-nav" aria-label="주요 탐색">
-          <a href="#core-loop">Core Loop</a>
+          <a href="#showcase">Showcase</a>
           <a href="#controls">Controls</a>
-          <a href="#media">Media</a>
+          <a href="#visual">Visual</a>
           <a href="#status">Status</a>
           <a href="#credits">Credits</a>
         </nav>
 
         <a className="header-status" href="/play/">
           <span aria-hidden="true" />
-          PLAY WEBGL
+          PLAY SHOWCASE
         </a>
       </header>
 
       <main id="main-content">
         <section className="hero" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="eyebrow">THIRD-PERSON PHYSICS ACTION PROTOTYPE</p>
+            <p className="eyebrow">A THIRD-PERSON OFFICE PHYSICS SHOWCASE</p>
             <h1 id="hero-title">
               BREAK
               <span>NOTICE</span>
@@ -111,15 +82,15 @@ export default function Home() {
             <div className="hero-actions" id="play">
               <a className="play-button" href="/play/" aria-describedby="play-status">
                 <span>PLAY NOW</span>
-                <small>PUBLIC WEBGL / UNCHANGED</small>
+                <small>DESKTOP / FULLSCREEN</small>
               </a>
-              <a className="secondary-action" href="#core-loop">
-                구현된 루프 보기 <span aria-hidden="true">↓</span>
+              <a className="secondary-action" href="#showcase">
+                SHOWCASE CUT <span aria-hidden="true">↓</span>
               </a>
             </div>
             <p className="play-status" id="play-status">
-              <strong>CONTEST-0002 S3 — OPERATIONS FLOOR V003</strong><br />
-              전용 전체 화면 WebGL 경로를 엽니다. 사이트 설명은 승인된 S1–S3 기준이며 WebGL 릴리스는 이번 작업에서 변경하지 않았습니다.
+              <strong>OPERATIONS FLOOR / KEYBOARD + MOUSE</strong><br />
+              전용 전체 화면 브라우저 빌드를 엽니다.
             </p>
           </div>
 
@@ -144,139 +115,67 @@ export default function Home() {
           </figure>
         </section>
 
-        <section className="evidence-strip" aria-label="검증 상태 요약">
-          <div>
-            <span className="evidence-value">100 / 100</span>
-            <span className="evidence-label">EDITMODE PASS</span>
-          </div>
-          <div>
-            <span className="evidence-value">72 / 72</span>
-            <span className="evidence-label">PLAYMODE PASS</span>
-          </div>
-          <div>
-            <span className="evidence-value">S1–S3</span>
-            <span className="evidence-label">OWNER-APPROVED</span>
-          </div>
-          <div>
-            <span className="evidence-value">0 / 0</span>
-            <span className="evidence-label">UNITY WARNINGS / ERRORS</span>
-          </div>
-        </section>
-
-        <section className="section-shell intro-section" aria-labelledby="experience-title">
-          <div className="section-index" aria-hidden="true">00 / EXPERIENCE</div>
-          <div className="intro-heading">
-            <p className="eyebrow">THE CURRENT PLAYABLE FOUNDATION</p>
-            <h2 id="experience-title">일은 끝나지 않았다.<br />사무실만 움직이기 시작했다.</h2>
-          </div>
-          <div className="intro-copy">
-            <p>
-              BREAK NOTICE는 초능력이나 총기 대신 Binder와 Wheeled Office Chair를
-              물리 도구로 사용합니다. 습득, 차지 투척, 자동 Fetch, 물리 공급과 Reset이 검증된 핵심 루프입니다.
-            </p>
-            <p>
-              현재 승인 범위는 Operations Floor의 S1–S3 Showcase입니다. S4 이후 기능, final combat,
-              Cargo Strap, Production VFX·Audio·BGM 또는 최종 제품 완성을 주장하지 않습니다.
-            </p>
-          </div>
-        </section>
-
-        <section className="section-shell loop-section" id="core-loop" aria-labelledby="loop-title">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">01 / CORE LOOP</p>
-              <h2 id="loop-title">지금 구현된 플레이</h2>
+        <section className="showcase-statement" id="showcase" aria-labelledby="showcase-title">
+          <div className="showcase-statement-inner">
+            <div className="showcase-kicker">
+              <span>THE SHOWCASE CUT</span>
+              <span>ONE FLOOR / ONE ALLY / PHYSICS FIRST</span>
             </div>
-            <p className="section-summary">
-              C0–C4 기반 위에서 Human Owner가 승인한 CONTEST-0002 S1–S3만 설명합니다.
+            <h2 id="showcase-title">
+              <span>PICK IT UP.</span>
+              <span>CALL IT IN.</span>
+              <span className="outline">LET IT FLY.</span>
+            </h2>
+            <p className="showcase-copy">
+              총도, 마법도 없다. Binder와 Chair를 직접 들고 던지고,
+              동료에게 가장 가까운 물체를 회수시켜 다음 물리적 선택을 만든다.
             </p>
+            <div className="showcase-flow" aria-label="핵심 플레이 흐름">
+              <span>MOVE</span><i aria-hidden="true">→</i>
+              <span>PICKUP</span><i aria-hidden="true">→</i>
+              <span>FETCH</span><i aria-hidden="true">→</i>
+              <span>THROW</span>
+            </div>
           </div>
-
-          <ol className="loop-grid">
-            {loopSteps.map((step) => (
-              <li key={step.number}>
-                <span className="loop-number">{step.number}</span>
-                <span className="loop-en">{step.en}</span>
-                <h3>{step.ko}</h3>
-                <p>{step.copy}</p>
-              </li>
-            ))}
-          </ol>
         </section>
 
         <section className="controls-section" id="controls" aria-labelledby="controls-title">
           <div className="section-shell">
             <div className="section-heading controls-heading">
               <div>
-                <p className="eyebrow">02 / CONTROLS</p>
-                <h2 id="controls-title">키보드와 마우스</h2>
+                <p className="eyebrow">01 / CONTROL DECK</p>
+                <h2 id="controls-title">생각보다 먼저 움직여라</h2>
               </div>
               <p className="section-summary">
-                Desktop browser baseline. 브라우저 포인터 해제는 <kbd>ESC</kbd>입니다.
+                DESKTOP / KEYBOARD + MOUSE
               </p>
             </div>
 
-            <dl className="control-grid">
-              {controls.map((control) => (
-                <div className="control-card" key={control.en}>
-                  <dt>
-                    <kbd>{control.key}</kbd>
-                    <span>{control.en}</span>
-                  </dt>
-                  <dd>
-                    <strong>{control.ko}</strong>
-                    <span>{control.detail}</span>
-                  </dd>
-                </div>
+            <div className="control-deck">
+              {controlGroups.map((group, index) => (
+                <article className="control-group" key={group.label}>
+                  <div className="control-group-heading">
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <div>
+                      <p>{group.label}</p>
+                      <h3>{group.title}</h3>
+                    </div>
+                  </div>
+                  <dl>
+                    {group.items.map((item) => (
+                      <div key={item.key}>
+                        <dt><kbd>{item.key}</kbd></dt>
+                        <dd>{item.action}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </article>
               ))}
-            </dl>
+            </div>
           </div>
         </section>
 
-        <section className="section-shell media-section" id="media" aria-labelledby="media-title">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">03 / GAMEPLAY MEDIA</p>
-              <h2 id="media-title">증거 없는 장면은 재생하지 않는다</h2>
-            </div>
-            <p className="section-summary">
-              공개 가능한 tracked runtime capture가 준비될 때 이 영역이 실제 영상으로 교체됩니다.
-            </p>
-          </div>
-
-          <div className="runtime-media-grid">
-            <div className="runtime-slot" aria-label="실제 런타임 캡처 준비 상태">
-              <div className="runtime-slot-topline">
-                <span>RUNTIME CAPTURE / SLOT A</span>
-                <span>00:00:00</span>
-              </div>
-              <div className="runtime-slot-center">
-                <span className="crosshair" aria-hidden="true" />
-                <p>RUNTIME MEDIA<br /><strong>PREPARING</strong></p>
-                <small>NO PLACEHOLDER FOOTAGE USED</small>
-              </div>
-              <div className="runtime-slot-footer">
-                <span>SOURCE: NOT YET PUBLIC</span>
-                <span>STATUS: HONEST HOLD</span>
-              </div>
-            </div>
-
-            <aside className="media-evidence" aria-labelledby="media-evidence-title">
-              <p className="eyebrow" id="media-evidence-title">VERIFIED INSTEAD</p>
-              <ul>
-                <li><strong>100 / 100</strong><span>EditMode tests</span></li>
-                <li><strong>72 / 72</strong><span>PlayMode tests</span></li>
-                <li><strong>4 / 172</strong><span>Humanoids / animation FBX</span></li>
-              </ul>
-              <p>
-                승인된 S3 소스와 Designer A 캐릭터 통합의 검증 수치입니다. 공개 WebGL 릴리스는
-                별도 snapshot이며 이번 사이트 콘텐츠 갱신에서 변경하지 않았습니다.
-              </p>
-            </aside>
-          </div>
-        </section>
-
-        <section className="trailer-section" aria-labelledby="trailer-title">
+        <section className="trailer-section" id="visual" aria-labelledby="trailer-title">
           <figure className="trailer-visual">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -288,10 +187,11 @@ export default function Home() {
               decoding="async"
             />
             <div className="trailer-overlay">
-              <p className="eyebrow">04 / TRAILER &amp; CINEMATIC</p>
-              <h2 id="trailer-title">TRAILER<br />NOT RELEASED</h2>
+              <p className="eyebrow">02 / AFTER-HOURS VISUAL DIRECTION</p>
+              <h2 id="trailer-title">THE NIGHT SHIFT<br />HITS DIFFERENT.</h2>
               <p>
-                공개 Trailer나 Cinematic 영상은 아직 없습니다. 가짜 재생 버튼이나 미공개 영상 링크를 제공하지 않습니다.
+                차가운 형광등, 지친 직원, 평범한 사무실. 그리고 예상보다 훨씬 큰 물리적 결과.
+                공개 Trailer·Cinematic은 아직 준비 중입니다.
               </p>
             </div>
             <figcaption>
@@ -300,23 +200,26 @@ export default function Home() {
           </figure>
         </section>
 
-        <section className="section-shell status-section" id="status" aria-labelledby="status-title">
-          <div className="section-heading">
+        <section className="current-cut" id="status" aria-labelledby="status-title">
+          <div className="section-shell current-cut-grid">
             <div>
-              <p className="eyebrow">05 / DEVELOPMENT STATUS</p>
-              <h2 id="status-title">무엇이 됐고, 무엇이 아직 아닌가</h2>
+              <p className="eyebrow">03 / CURRENT CUT</p>
+              <h2 id="status-title">ONE FLOOR.<br />ONE ALLY.<br /><span>PHYSICS FIRST.</span></h2>
             </div>
-            <p className="section-summary">ACCEPTED SHOWCASE SCOPE / S1–S3</p>
+            <div className="current-cut-copy">
+              <p>
+                현재 공개 설명은 Human Owner가 승인한 Operations Floor S1–S3와
+                Designer A 캐릭터 런타임 통합 범위만 담습니다.
+              </p>
+              <p className="current-cut-boundary">
+                S4+ 전투·Cargo Strap·Drawer/Exit·Production VFX·Audio·BGM은 이 Showcase 설명에 포함하지 않습니다.
+              </p>
+            </div>
           </div>
-
-          <div className="status-table" role="list">
-            {statusRows.map((row) => (
-              <article className="status-row" role="listitem" key={row.label}>
-                <h3>{row.label}</h3>
-                <p className={`status-chip status-${row.tone}`}>{row.state}</p>
-                <p>{row.detail}</p>
-              </article>
-            ))}
+          <div className="current-cut-meta" aria-label="현재 Showcase 상태">
+            <span>S1–S3 / OWNER-APPROVED</span>
+            <span>WEBGL / SEPARATE RELEASE</span>
+            <span>AI VISUALS / REFERENCE ONLY</span>
           </div>
         </section>
 
@@ -324,7 +227,7 @@ export default function Home() {
           <div className="section-shell">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">06 / TEAM &amp; CREDITS</p>
+                <p className="eyebrow">04 / TEAM &amp; CREDITS</p>
                 <h2 id="credits-title">한 명의 책임, 명확한 도움</h2>
               </div>
               <p className="section-summary">숨겨진 기여자 없이 실제 역할만 기록합니다.</p>
@@ -380,7 +283,7 @@ export default function Home() {
         <section className="notice-section" aria-labelledby="notice-title">
           <div className="section-shell notice-grid">
             <div className="notice-heading">
-              <p className="eyebrow">07 / RELEASE NOTICE</p>
+              <p className="eyebrow">05 / RELEASE NOTICE</p>
               <h2 id="notice-title">접속 전 확인</h2>
             </div>
 
@@ -422,7 +325,7 @@ export default function Home() {
       <footer className="site-footer">
         <a className="footer-wordmark" href="#top">BREAK NOTICE</a>
         <p>ZERO DEFECT / PUBLIC SHOWCASE RELEASE SITE</p>
-        <p>WEBGL: <strong>LIVE / 89900EAA</strong></p>
+        <p><strong>PLAYABLE IN BROWSER</strong></p>
       </footer>
     </>
   );
