@@ -1,49 +1,39 @@
 const controls = [
-  { key: "W A S D", ko: "이동", en: "MOVE", detail: "작업 구역을 이동합니다." },
+  { key: "W A S D", ko: "이동", en: "MOVE", detail: "Operations Floor를 이동합니다." },
   { key: "MOUSE", ko: "시점", en: "LOOK", detail: "3인칭 카메라를 조작합니다." },
   { key: "RMB", ko: "조준", en: "AIM", detail: "우클릭을 누르는 동안 조준합니다." },
-  { key: "E", ko: "습득", en: "PICKUP", detail: "가까운 Binder 또는 Chair를 집습니다." },
+  { key: "E", ko: "습득 / 캐치", en: "PICKUP / CATCH", detail: "Binder·Chair를 집거나 날아오는 Binder를 받습니다." },
   { key: "HOLD LMB", ko: "차지 던지기", en: "CHARGE THROW", detail: "누르고 충전한 뒤 놓아 던집니다." },
-  { key: "Q", ko: "동료 공급", en: "Q SUPPLY", detail: "준비된 동료에게 실제 물체 공급을 요청합니다." },
+  { key: "F", ko: "자동 회수", en: "AUTO FETCH", detail: "동료가 가장 가까운 도달 가능 Binder·Chair를 스스로 선택해 회수합니다." },
+  { key: "Q", ko: "동료 명령", en: "FOLLOW / HOLD / SUPPLY", detail: "상황에 따라 Follow·Hold를 전환하거나 준비된 물체 공급을 요청합니다." },
+  { key: "G", ko: "재집결", en: "REGROUP", detail: "동료를 authored regroup 위치로 복귀시킵니다." },
   { key: "BACKSPACE", ko: "리셋", en: "RESET", detail: "작성된 시작 상태로 Encounter를 복구합니다." },
 ];
 
 const statusRows = [
   {
-    label: "C0–C4 FOUNDATION",
-    state: "IMPLEMENTED / ACCEPTED",
+    label: "CONTEST SHOWCASE S1–S3",
+    state: "OWNER-APPROVED / VERIFIED",
     tone: "good",
-    detail: "이동, 카메라, 상호작용, Binder·Chair 습득·운반·던지기, Reset, 동료 물리 공급.",
+    detail: "Operations Floor, 동료 Follow·Regroup, 자동 Fetch, Binder Toss, Chair Feed와 Reset이 검증됐습니다.",
   },
   {
-    label: "THROW / PICKUP TUNING",
-    state: "IMPLEMENTED / VERIFIED",
+    label: "CHARACTERS / ANIMATION",
+    state: "RUNTIME-INTEGRATED / VERIFIED",
     tone: "good",
-    detail: "LMB 차지 던지기, 바닥 물체 습득 보조, 동료 Binder 공급 속도 변주.",
-  },
-  {
-    label: "CONTEST-0002 S3",
-    state: "IMPLEMENTED / VERIFIED WEBGL",
-    tone: "good",
-    detail: "Operations Floor v003에서 authored fetch/supply gameplay를 제공합니다. C4 accepted foundation은 보존됩니다.",
-  },
-  {
-    label: "S4+ / FINAL COMBAT",
-    state: "NOT IN THIS BUILD",
-    tone: "warn",
-    detail: "Production Art, premium VFX·Audio·BGM과 Cinematic을 포함해 구현 완료로 홍보하지 않습니다.",
+    detail: "Designer A의 텍스처 Humanoid 4종과 애니메이션 FBX 172개가 승인된 S3 런타임에 연결됐습니다.",
   },
   {
     label: "PUBLIC WEBGL",
-    state: "LIVE / VERSIONED",
-    tone: "good",
-    detail: "검증된 S3 WebGL을 새 immutable Build GUID 경로로 공개하고 이전 릴리스 기록을 보존합니다.",
+    state: "LIVE / UNCHANGED",
+    tone: "neutral",
+    detail: "PLAY는 기존 versioned WebGL 릴리스를 엽니다. 이번 사이트 갱신은 WebGL 빌드와 latest 포인터를 변경하지 않습니다.",
   },
   {
-    label: "PRODUCTION ART",
-    state: "NOT INTEGRATED",
-    tone: "neutral",
-    detail: "이 사이트의 이미지는 승인된 AI 생성 프로덕션 비주얼 레퍼런스이며 런타임 캡처가 아닙니다.",
+    label: "S4–S9 / C5",
+    state: "NOT AUTHORIZED",
+    tone: "warn",
+    detail: "Cargo Strap, final combat, Drawer/Exit, Production VFX·Audio·BGM·Cinematic 완료를 주장하지 않습니다.",
   },
 ];
 
@@ -68,9 +58,9 @@ const loopSteps = [
   },
   {
     number: "04",
-    en: "CALL / FETCH / SUPPLY",
-    ko: "동료에게 공급을 요청한다",
-    copy: "Q로 요청하면 동료가 Operations Floor v003의 authored fetch/supply 행동으로 실제 물체를 가져와 전달합니다.",
+    en: "COMMAND / CATCH / RESET",
+    ko: "동료와 루프를 이어간다",
+    copy: "F로 자동 Fetch, Q로 Follow·Hold·Supply, G로 Regroup합니다. E Catch와 Reset으로 물리 루프를 이어갑니다.",
   },
 ];
 
@@ -121,7 +111,7 @@ export default function Home() {
             <div className="hero-actions" id="play">
               <a className="play-button" href="/play/" aria-describedby="play-status">
                 <span>PLAY NOW</span>
-                <small>CONTEST-0002 S3 / VERIFIED</small>
+                <small>PUBLIC WEBGL / UNCHANGED</small>
               </a>
               <a className="secondary-action" href="#core-loop">
                 구현된 루프 보기 <span aria-hidden="true">↓</span>
@@ -129,7 +119,7 @@ export default function Home() {
             </div>
             <p className="play-status" id="play-status">
               <strong>CONTEST-0002 S3 — OPERATIONS FLOOR V003</strong><br />
-              전용 전체 화면 WebGL 경로를 엽니다. S4+ / FINAL COMBAT / PRODUCTION ART NOT IN THIS BUILD.
+              전용 전체 화면 WebGL 경로를 엽니다. 사이트 설명은 승인된 S1–S3 기준이며 WebGL 릴리스는 이번 작업에서 변경하지 않았습니다.
             </p>
           </div>
 
@@ -156,20 +146,20 @@ export default function Home() {
 
         <section className="evidence-strip" aria-label="검증 상태 요약">
           <div>
-            <span className="evidence-value">166 / 166</span>
-            <span className="evidence-label">S3 SOURCE TESTS</span>
+            <span className="evidence-value">100 / 100</span>
+            <span className="evidence-label">EDITMODE PASS</span>
+          </div>
+          <div>
+            <span className="evidence-value">72 / 72</span>
+            <span className="evidence-label">PLAYMODE PASS</span>
+          </div>
+          <div>
+            <span className="evidence-value">S1–S3</span>
+            <span className="evidence-label">OWNER-APPROVED</span>
           </div>
           <div>
             <span className="evidence-value">0 / 0</span>
             <span className="evidence-label">UNITY WARNINGS / ERRORS</span>
-          </div>
-          <div>
-            <span className="evidence-value">C0–C4</span>
-            <span className="evidence-label">HUMAN-ACCEPTED FOUNDATION</span>
-          </div>
-          <div>
-            <span className="evidence-value">S4+</span>
-            <span className="evidence-label">NOT IN THIS BUILD</span>
           </div>
         </section>
 
@@ -182,11 +172,11 @@ export default function Home() {
           <div className="intro-copy">
             <p>
               BREAK NOTICE는 초능력이나 총기 대신 Binder와 Wheeled Office Chair를
-              물리 도구로 사용합니다. 습득, 운반, 투척, 동료 공급과 Reset이 현재 검증된 루프입니다.
+              물리 도구로 사용합니다. 습득, 차지 투척, 자동 Fetch, 물리 공급과 Reset이 검증된 핵심 루프입니다.
             </p>
             <p>
-              현재 공개 빌드는 Operations Floor v003의 bounded S3 authored fetch/supply gameplay를 포함합니다.
-              이 페이지는 S4 이후 기능, final combat, Production Art 또는 최종 제품을 약속하지 않습니다.
+              현재 승인 범위는 Operations Floor의 S1–S3 Showcase입니다. S4 이후 기능, final combat,
+              Cargo Strap, Production VFX·Audio·BGM 또는 최종 제품 완성을 주장하지 않습니다.
             </p>
           </div>
         </section>
@@ -198,7 +188,7 @@ export default function Home() {
               <h2 id="loop-title">지금 구현된 플레이</h2>
             </div>
             <p className="section-summary">
-              C4 accepted foundation과 검증된 CONTEST-0002 S3 bounded behavior만 설명합니다.
+              C0–C4 기반 위에서 Human Owner가 승인한 CONTEST-0002 S1–S3만 설명합니다.
             </p>
           </div>
 
@@ -274,13 +264,13 @@ export default function Home() {
             <aside className="media-evidence" aria-labelledby="media-evidence-title">
               <p className="eyebrow" id="media-evidence-title">VERIFIED INSTEAD</p>
               <ul>
-                <li><strong>96 / 96</strong><span>EditMode tests</span></li>
-                <li><strong>70 / 70</strong><span>PlayMode tests</span></li>
-                <li><strong>19 / 19</strong><span>HTTP build files</span></li>
+                <li><strong>100 / 100</strong><span>EditMode tests</span></li>
+                <li><strong>72 / 72</strong><span>PlayMode tests</span></li>
+                <li><strong>4 / 172</strong><span>Humanoids / animation FBX</span></li>
               </ul>
               <p>
-                검증된 S3 Development WebGL을 새 immutable 경로로 공개합니다. 자동 브라우저 검증은
-                로드와 캔버스 준비 상태를 확인하며, 전체 gameplay 수동 체크리스트 통과는 별도로 추론하지 않습니다.
+                승인된 S3 소스와 Designer A 캐릭터 통합의 검증 수치입니다. 공개 WebGL 릴리스는
+                별도 snapshot이며 이번 사이트 콘텐츠 갱신에서 변경하지 않았습니다.
               </p>
             </aside>
           </div>
@@ -316,7 +306,7 @@ export default function Home() {
               <p className="eyebrow">05 / DEVELOPMENT STATUS</p>
               <h2 id="status-title">무엇이 됐고, 무엇이 아직 아닌가</h2>
             </div>
-            <p className="section-summary">STATUS SNAPSHOT / 2026.08.13 KST</p>
+            <p className="section-summary">ACCEPTED SHOWCASE SCOPE / S1–S3</p>
           </div>
 
           <div className="status-table" role="list">
@@ -381,7 +371,8 @@ export default function Home() {
             </div>
 
             <p className="credits-note">
-              현재 공개 기준은 Codex를 활용한 1인 Human 프로젝트입니다. Designer 후보 전달물은 기술·권리 검토와 Owner 승인 전이며 이 사이트에 통합하지 않았습니다.
+              조윤성의 1인 개발 프로젝트입니다. Designer A가 캐릭터·애니메이션 자산을 제공했고,
+              OpenAI Codex가 구현·검증·빌드·웹사이트 작업을 지원했습니다.
             </p>
           </div>
         </section>
